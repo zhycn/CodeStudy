@@ -2,61 +2,73 @@
 
 HTML（超文本标记语言——HyperText Markup Language）是构成 Web 世界的一砖一瓦。它定义了网页内容的含义和结构。除 HTML 以外的其他技术则通常用来描述一个网页的表现与展示效果（如 CSS），或功能与行为（如 JavaScript）。
 
-## 快速上手HTML5开发
+## 快速上手 HTML5 开发
 
-1. **获取基础模板**  
-   推荐使用业界标准的[HTML5 ★ Boilerplate](https://html5boilerplate.com/)作为起点，这个模板已经包含了：
-   - 符合HTML5标准的文档结构
-   - 移动端优化的meta标签配置
-   - 现代化的CSS重置方案
-   - 基础性能优化配置
+### 1. 获取基础模板
 
-2. **开始使用**  
-   你可以直接下载压缩包或Fork项目仓库：
+推荐使用业界标准的 <https://html5boilerplate.com/> 作为起点，这个模板已经包含：
 
-   ```bash
-   # 通过git获取最新版本
-   git clone https://github.com/h5bp/html5-boilerplate.git
-   ```
+- 符合 HTML5 标准的文档结构
+- 移动端优化的 meta 标签配置
+- 现代化的 CSS 重置方案
+- 基础性能优化配置
 
-3. **项目结构说明**  
-   解压后你会看到预置的目录结构：
-   - `index.html` - 主入口文件
-   - `css/` - 样式表目录
-   - `js/` - JavaScript脚本目录
-   - `img/` - 图片资源目录
+### 2. 开始使用
 
-4. **立即开发**  
-   打开`index.html`即可开始编写你的HTML代码，模板已包含：
-   - 响应式viewport设置
-   - 现代浏览器特性检测
-   - 最佳实践的基础CSS样式
+你可以直接下载压缩包或 Fork 项目仓库：
 
-5. **项目构建**  
-   HTML5 ★ Boilerplate 项目通常需要以下构建步骤：
+```bash
+# 通过 git 获取最新版本
+git clone https://github.com/h5bp/html5-boilerplate.git
+```
 
-    ```bash
-    # 1. 安装依赖
-    npm install
+### 3. 项目结构说明
 
-    # 2. 代码构建
-    npm run build
+解压后你会看到预置的目录结构：
 
-    # 3. 代码格式化
-    npm run prettier
+- `index.html` - 主入口文件
+- `css/` - 样式表目录
+- `js/` - JavaScript 脚本目录
+- `img/` - 图片资源目录
 
-    # 4. 代码测试
-    npm run test
-    ```
+### 4. 立即开发
 
-现在，你已经准备好开始HTML5开发之旅了。虽然理论上创建一个简单的.html文件就可以学习HTML基础知识，但这种方式缺乏工程化思维和最佳实践。使用这个专业模板不仅能让你快速上手，还能帮助你：
+打开 `index.html` 即可开始编写你的 HTML 代码，模板已包含：
+
+- 响应式 viewport 设置
+- 现代浏览器特性检测
+- 最佳实践的基础 CSS 样式
+
+### 5. 项目构建
+
+HTML5 Boilerplate 项目通常需要以下构建步骤：
+
+```bash
+# 1. 安装依赖
+npm install
+
+# 2. 代码构建
+npm run build
+
+# 3. 代码格式化
+npm run prettier
+
+# 4. 代码测试
+npm run test
+```
+
+### 开始你的 HTML5 开发之旅
+
+现在，你已经准备好开始 HTML5 开发了。虽然理论上创建一个简单的 `.html` 文件就可以学习 HTML 基础知识，但使用专业模板能带来更多优势：
 
 1. 建立标准化的开发习惯
-2. 理解现代Web开发的最佳实践
-3. 掌握HTML5的核心特性
+2. 理解现代 Web 开发的最佳实践
+3. 掌握 HTML5 的核心特性
 4. 构建可维护的项目结构
 
-通过模板学习，你将在专业环境中深入理解HTML的方方面面，为后续进阶开发打下坚实基础。
+通过模板学习，你将在专业环境中深入理解 HTML 的方方面面，为后续进阶开发打下坚实基础。
+
+---
 
 - [MDN Web Docs (Mozilla)​](https://developer.mozilla.org/zh-CN/) - Mozilla官方维护的Web开发权威文档，全球开发者首选参考资料
 - [MDN - Web技术概览](https://developer.mozilla.org/zh-CN/docs/Web) - 系统化Web开发知识体系，包含HTML5、CSS3、JavaScript等核心技术文档
