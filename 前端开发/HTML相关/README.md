@@ -70,15 +70,38 @@ npm run test
 
 ---
 
+## HTML 学习资源
+
+对于HTML学习，以下是一些建议和资源推荐：
+
+1\. 入门学习：
+
+- W3school网站的HTML系列教程是经典的学习资源，结构清晰、示例丰富
+- 现代AI代码编辑器(如VS Code)提供了智能提示和自动补全功能，大大提升了开发效率
+
+2\. 学习建议：
+
+- HTML语言本身并不复杂，核心是理解文档结构和语义化标签
+- 初学者不必强记100多个标签和属性，掌握常用30-40个核心标签即可应对大多数开发场景
+- 建议采用"边学边用"的方式，在实际项目中遇到特定需求时再查阅相关标签的详细用法
+
+3\. 学习曲线：
+
+- 初期可能会对标签多样性感到压力，这是正常现象
+- 随着实践积累，会自然形成对HTML结构的直觉理解
+- 重点培养语义化思维，而非死记硬背标签
+
+以下是一些精选的优质学习资源推荐：
+
+- [W3school - HTML系列教程](https://www.w3school.com.cn/h.asp) - 涵盖HTML5、CSS3、Bootstrap5、TCP/IP等学习资料
+- [HTML5 ★ Boilerplate](https://html5boilerplate.com/) - HTML5模板项目
 - [MDN Web Docs (Mozilla)​](https://developer.mozilla.org/zh-CN/) - Mozilla官方维护的Web开发权威文档，全球开发者首选参考资料
 - [MDN - Web技术概览](https://developer.mozilla.org/zh-CN/docs/Web) - 系统化Web开发知识体系，包含HTML5、CSS3、JavaScript等核心技术文档
 - [MDN - HTML文档](https://developer.mozilla.org/zh-CN/docs/Web/HTML) - 从基础语法到高级特性的完整HTML开发指南
 - [Google HTML/CSS Style Guide](https://google.github.io/styleguide/htmlcssguide.html) - Google官方HTML/CSS代码风格指南
 - [W3C HTML规范](https://www.w3.org/TR/html52/) - W3C官方HTML5.2规范文档
 - [WHATWG HTML标准](https://html.spec.whatwg.org/) - HTML最新标准文档
-- [W3school - HTML系列教程](https://www.w3school.com.cn/h.asp) - 涵盖HTML5、CSS3、Bootstrap5、TCP/IP等学习资料
 - [W3CSchool - HTML参考手册](https://www.w3cschool.cn/htmltags/) - HTML标签完整参考手册
-- [W3CSchool - HTML速查词典](https://www.w3cschool.cn/html/dict) - HTML常用标签速查表
 - [W3CSchool - HTML5教程](https://www.w3cschool.cn/html5/) - HTML5新特性系统教程
 - [菜鸟教程 - HTML教程](https://www.runoob.com/html/html-tutorial.html) - 适合新手的HTML入门教程
 - [HTML5 Rocks](https://www.html5rocks.com/) - Google维护的HTML5技术资源站
@@ -89,7 +112,6 @@ npm run test
 - [HTML Validator](https://validator.w3.org/) - W3C官方HTML验证工具
 - [HTML Cheat Sheet](https://htmlcheatsheet.com/) - HTML速查表(含代码示例)
 - [HTML5 Game Development](https://html5gamedevelopment.com/) - HTML5游戏开发资源
-- [HTML5 ★ Boilerplate](https://html5boilerplate.com/) - HTML5模板项目
 - [HTML & CSS Is Hard](https://internetingishard.netlify.app/) - 图文并茂的HTML/CSS入门教程
 - [HTML Dog](https://htmldog.com/) - 简洁易懂的HTML/CSS/JavaScript教程
 - [HTML.com](https://html.com/) - 从入门到精通的HTML学习资源
