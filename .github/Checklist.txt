@@ -12,6 +12,6 @@
 [ok].prettierrc
 [ok]CHANGELOG.md
 [ok]LICENSE.txt
-package.json
+[ok]package.json
 [ok]pnpm-lock.yaml
 [ok]README.md

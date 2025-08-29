@@ -6,6 +6,9 @@ node_modules/
 dist/
 build/
 coverage/
+docs/.vitepress/cache/
+docs/.vitepress/temp/
+docs/.vitepress/dist/
 
 # 包管理器文件
 package-lock.json
