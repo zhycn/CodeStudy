@@ -159,15 +159,15 @@ SDKMAN! 提供了一个非常实用的功能，可以根据项目目录下的 `.
 
 1. 打开 SDKMAN! 的配置文件：
 
-    ```bash
-    vim ~/.sdkman/etc/config
-    ```
+   ```bash
+   vim ~/.sdkman/etc/config
+   ```
 
 2. 找到 `sdkman_auto_env` 这一行，将其值从 `false` 修改为 `true`：
 
-    ```ini
-    sdkman_auto_env=true
-    ```
+   ```ini
+   sdkman_auto_env=true
+   ```
 
 **项目配置示例：**
 

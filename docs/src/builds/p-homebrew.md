@@ -650,16 +650,16 @@ brew link --force <formula>
 
 1. **查看详细文档**：
 
-    ```bash
-    brew help
-    man brew
-    ```
+   ```bash
+   brew help
+   man brew
+   ```
 
 2. **查看故障排除指南**：
 
-    ```bash
-    brew doctor  # 提供详细诊断信息
-    ```
+   ```bash
+   brew doctor  # 提供详细诊断信息
+   ```
 
 3. **查看GitHub Issues**：访问Homebrew的GitHub仓库，查看是否有类似问题解决方案。
 

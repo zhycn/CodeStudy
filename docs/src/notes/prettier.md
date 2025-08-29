@@ -74,17 +74,17 @@ Prettier 支持多种配置文件格式，允许开发者根据项目需求定�
 
 ```json
 {
-    "semi": true,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "useTabs": false,
-    "printWidth": 80,
-    "trailingComma": "es5",
-    "bracketSpacing": true,
-    "jsxSingleQuote": false,
-    "arrowParens": "avoid",
-    "endOfLine": "lf",
-    "proseWrap": "preserve"
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "useTabs": false,
+  "printWidth": 80,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "jsxSingleQuote": false,
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "proseWrap": "preserve"
 }
 ```
 
@@ -134,32 +134,32 @@ Prettier 会自动根据文件类型选择适当的解析器，但您也可以�
 ```javascript
 // 显式配置解析器示例
 module.exports = {
-    overrides: [
-        {
-            files: "*.js",
-            options: {
-                parser: "babel",
-            },
-        },
-        {
-            files: "*.ts",
-            options: {
-                parser: "typescript",
-            },
-        },
-        {
-            files: "*.json",
-            options: {
-                parser: "json",
-            },
-        },
-        {
-            files: "*.vue",
-            options: {
-                parser: "vue",
-            },
-        },
-    ],
+  overrides: [
+    {
+      files: '*.js',
+      options: {
+        parser: 'babel',
+      },
+    },
+    {
+      files: '*.ts',
+      options: {
+        parser: 'typescript',
+      },
+    },
+    {
+      files: '*.json',
+      options: {
+        parser: 'json',
+      },
+    },
+    {
+      files: '*.vue',
+      options: {
+        parser: 'vue',
+      },
+    },
+  ],
 };
 ```
 
@@ -169,21 +169,21 @@ Prettier 允许您为不同的文件类型或目录定义不同的规则：
 
 ```json
 {
-    "semi": true,
-    "overrides": [
-        {
-            "files": "*.test.js",
-            "options": {
-                "semi": false
-            }
-        },
-        {
-            "files": ["*.html", "legacy/**/*.js"],
-            "options": {
-                "tabWidth": 4
-            }
-        }
-    ]
+  "semi": true,
+  "overrides": [
+    {
+      "files": "*.test.js",
+      "options": {
+        "semi": false
+      }
+    },
+    {
+      "files": ["*.html", "legacy/**/*.js"],
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
 }
 ```
 
@@ -205,43 +205,43 @@ npm install --save-dev eslint-config-prettier eslint-plugin-prettier
 ```javascript
 // .eslintrc.js
 module.exports = {
-    root: true,
-    env: {
-        browser: true,
-        es2021: true,
-    },
-    extends: [
-        "plugin:vue/vue3-recommended",
-        "eslint:recommended",
-        "prettier", // 确保这是最后一个扩展
-    ],
-    plugins: ["prettier"],
-    rules: {
-        "prettier/prettier": "error",
-        "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-        "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-        "no-var": "error",
-        eqeqeq: ["error", "always", { null: "ignore" }],
-    },
-    parserOptions: {
-        ecmaVersion: 2021,
-        sourceType: "module",
-    },
+  root: true,
+  env: {
+    browser: true,
+    es2021: true,
+  },
+  extends: [
+    'plugin:vue/vue3-recommended',
+    'eslint:recommended',
+    'prettier', // 确保这是最后一个扩展
+  ],
+  plugins: ['prettier'],
+  rules: {
+    'prettier/prettier': 'error',
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-var': 'error',
+    eqeqeq: ['error', 'always', { null: 'ignore' }],
+  },
+  parserOptions: {
+    ecmaVersion: 2021,
+    sourceType: 'module',
+  },
 };
 ```
 
 ```javascript
 // .prettierrc.js
 module.exports = {
-    semi: true,
-    singleQuote: true,
-    tabWidth: 2,
-    useTabs: false,
-    printWidth: 80,
-    trailingComma: "es5",
-    bracketSpacing: true,
-    arrowParens: "avoid",
-    endOfLine: "lf",
+  semi: true,
+  singleQuote: true,
+  tabWidth: 2,
+  useTabs: false,
+  printWidth: 80,
+  trailingComma: 'es5',
+  bracketSpacing: true,
+  arrowParens: 'avoid',
+  endOfLine: 'lf',
 };
 ```
 
@@ -262,19 +262,15 @@ npm install --save-dev husky lint-staged
 
 ```json
 {
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "*.{js,jsx,ts,tsx,vue}": [
-            "prettier --write",
-            "eslint --fix",
-            "git add"
-        ],
-        "*.{json,md,html,css,scss,less}": ["prettier --write", "git add"]
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,vue}": ["prettier --write", "eslint --fix", "git add"],
+    "*.{json,md,html,css,scss,less}": ["prettier --write", "git add"]
+  }
 }
 ```
 
@@ -285,15 +281,15 @@ npm install --save-dev husky lint-staged
 ```javascript
 // .lintstagedrc.js
 module.exports = {
-    "*.{js,jsx,ts,tsx}": (files) => [
-        `npx prettier --write ${files.join(" ")}`,
-        `npx eslint --fix ${files.join(" ")}`,
-        `git add ${files.join(" ")}`,
-    ],
-    "*.{json,md,html,css,scss,less}": (files) => [
-        `npx prettier --write ${files.join(" ")}`,
-        `git add ${files.join(" ")}`,
-    ],
+  '*.{js,jsx,ts,tsx}': (files) => [
+    `npx prettier --write ${files.join(' ')}`,
+    `npx eslint --fix ${files.join(' ')}`,
+    `git add ${files.join(' ')}`,
+  ],
+  '*.{json,md,html,css,scss,less}': (files) => [
+    `npx prettier --write ${files.join(' ')}`,
+    `git add ${files.join(' ')}`,
+  ],
 };
 ```
 
@@ -305,13 +301,13 @@ module.exports = {
 2. **版本控制**：将Prettier配置纳入版本控制，确保所有团队成员使用相同的规则。
 3. **文档化配置决策**：对特殊配置选择添加注释说明原因，例如：
 
-    ```json
-    {
-        "arrowParens": "avoid"
-        // 使用"avoid"更符合JavaScript社区的普遍风格
-        // 但TypeScript项目可能更喜欢"always"
-    }
-    ```
+   ```json
+   {
+     "arrowParens": "avoid"
+     // 使用"avoid"更符合JavaScript社区的普遍风格
+     // 但TypeScript项目可能更喜欢"always"
+   }
+   ```
 
 ### 6.2 IDE 集成与编辑器配置
 
@@ -320,19 +316,14 @@ module.exports = {
 ```json
 // VS Code 的 .vscode/settings.json
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-    "prettier.requireConfig": true,
-    // 尊重项目中的Prettier配置
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-    ]
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "prettier.requireConfig": true,
+  // 尊重项目中的Prettier配置
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }
 ```
 
@@ -345,16 +336,16 @@ module.exports = {
 name: Code Check
 on: [push, pull_request]
 jobs:
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - name: Install Dependencies
-              run: npm install
-            - name: Check Formatting
-              run: npx prettier --check "src/**/*.{js,ts,jsx,tsx,vue}"
-            - name: Run Linter
-              run: npx eslint "src/**/*.{js,ts,jsx,tsx,vue}"
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm install
+      - name: Check Formatting
+        run: npx prettier --check "src/**/*.{js,ts,jsx,tsx,vue}"
+      - name: Run Linter
+        run: npx eslint "src/**/*.{js,ts,jsx,tsx,vue}"
 ```
 
 ### 6.4 大型项目中的渐进式采用
@@ -367,24 +358,24 @@ jobs:
 
 ```json
 {
-    "overrides": [
-        {
-            "files": ["src/legacy/**/*.js"],
-            "options": {
-                "printWidth": 100,
-                "tabWidth": 4,
-                "semi": true
-            }
-        },
-        {
-            "files": ["src/modern/**/*.js"],
-            "options": {
-                "printWidth": 80,
-                "tabWidth": 2,
-                "semi": false
-            }
-        }
-    ]
+  "overrides": [
+    {
+      "files": ["src/legacy/**/*.js"],
+      "options": {
+        "printWidth": 100,
+        "tabWidth": 4,
+        "semi": true
+      }
+    },
+    {
+      "files": ["src/modern/**/*.js"],
+      "options": {
+        "printWidth": 80,
+        "tabWidth": 2,
+        "semi": false
+      }
+    }
+  ]
 }
 ```
 

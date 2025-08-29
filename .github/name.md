@@ -38,35 +38,35 @@
 ### 2.4 状态或版本 (可选)
 
 - **格式**：
-    - **状态**： `draft`, `review`, `final`
-    - **版本**： `v1.0`, `v2.1`
+  - **状态**： `draft`, `review`, `final`
+  - **版本**： `v1.0`, `v2.1`
 - **目的**： 标识文档的当前状态或版本号，适用于需迭代或评审的文档。
 - **示例**： `draft`, `v1.2`
 
 ## 3. 完整命名示例
 
 1. **会议纪要**
-    - `20231027-project-alpha-sprint-planning-meeting.md`
-    - `20231026-team-weekly-standup-notes.md`
+   - `20231027-project-alpha-sprint-planning-meeting.md`
+   - `20231026-team-weekly-standup-notes.md`
 
 2. **技术文档/设计稿**
-    - `backend-api-auth-flow-design-draft.md`
-    - `database-schema-v2.1-final.md`
-    - `ui-component-button-specification.md`
+   - `backend-api-auth-flow-design-draft.md`
+   - `database-schema-v2.1-final.md`
+   - `ui-component-button-specification.md`
 
 3. **个人笔记或知识库**
-    - `git-advanced-commands-cheatsheet.md`
-    - `how-to-setup-react-project-with-vite.md`
+   - `git-advanced-commands-cheatsheet.md`
+   - `how-to-setup-react-project-with-vite.md`
 
 4. **报告**
-    - `2023-Q3-marketing-campaign-performance-report.md`
+   - `2023-Q3-marketing-campaign-performance-report.md`
 
 ## 4. 附加规则与建议
 
 1. **字符限制**： 尽量保持文件名长度在 50 个字符以内，确保可读性。
 2. **避免使用的字符**：
-    - 空格（请使用短横线 `-` 或下划线 `_` 代替，但本规范推荐统一使用 `-`）
-    - 特殊字符： `~ ! @ # $ % ^ & * ( ) + = { } [ ] | : ; " ' < > , . ? / \`
+   - 空格（请使用短横线 `-` 或下划线 `_` 代替，但本规范推荐统一使用 `-`）
+   - 特殊字符： `~ ! @ # $ % ^ & * ( ) + = { } [ ] | : ; " ' < > , . ? / \`
 3. **语言**： 建议主要使用**英文**命名，以确保跨平台兼容性和代码仓库的一致性。若仅内部使用且团队有要求，可使用拼音或特定缩写，但需在团队内明确规范。
 4. **大小写**： 统一使用**小写字母**，避免在不同操作系统（如 Linux 和 Windows）下出现大小写敏感问题。
 5. **唯一性**： 确保在同一目录下文件名的唯一性。

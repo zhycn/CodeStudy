@@ -34,29 +34,29 @@ jenv 的工作机制基于 **shims** 和 **环境变量管理**。
 
 - **macOS**: 推荐使用 Homebrew Cask。
 
-    ```bash
-    # 搜索可用的 JDK 版本
-    brew search openjdk
-    # 安装 JDK 17
-    brew install openjdk@17
-    # 安装其他版本，例如 JDK 8
-    brew install openjdk@8
-    ```
+  ```bash
+  # 搜索可用的 JDK 版本
+  brew search openjdk
+  # 安装 JDK 17
+  brew install openjdk@17
+  # 安装其他版本，例如 JDK 8
+  brew install openjdk@8
+  ```
 
 - **Linux**:
-    - **Ubuntu/Debian**: 使用 `apt`。
-        <!-- end list -->
+  - **Ubuntu/Debian**: 使用 `apt`。
+      <!-- end list -->
 
-        ```bash
-        sudo apt update
-        sudo apt install openjdk-11-jdk
-        ```
+    ```bash
+    sudo apt update
+    sudo apt install openjdk-11-jdk
+    ```
 
-    - **Fedora/CentOS**: 使用 `yum` 或 `dnf`。
-        <!-- end list -->
-        ```bash
-        sudo dnf install java-17-openjdk-devel
-        ```
+  - **Fedora/CentOS**: 使用 `yum` 或 `dnf`。
+      <!-- end list -->
+    ```bash
+    sudo dnf install java-17-openjdk-devel
+    ```
 
 - **Windows**: jenv 官方不支持 Windows，但可以通过 WSL (Windows Subsystem for Linux) 来使用。在 WSL 环境中，安装步骤与 Linux 相同。
 
@@ -102,14 +102,14 @@ jenv enable-plugin export
 - 如果你使用 Oh My Zsh，`eval "$(jenv init -)"` 可能会导致一些问题。一个更可靠的方案是，将 jenv 作为一个插件启用。在 `.zshrc` 中找到 `plugins` 配置，并添加 `jenv`：`plugins=(git jenv ...)`。
 - 配置完成后，需要重新加载 shell 配置：
 
-    ```bash
-    # Zsh
-    source ~/.zshrc
-    # Bash
-    source ~/.bash_profile
-    ```
+  ```bash
+  # Zsh
+  source ~/.zshrc
+  # Bash
+  source ~/.bash_profile
+  ```
 
-    或者直接重启你的终端。
+  或者直接重启你的终端。
 
 ### 3.4. 验证安装
 
