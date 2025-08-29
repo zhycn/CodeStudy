@@ -3,10 +3,27 @@
 # top-most EditorConfig file
 root = true
 
+# 所有文件的默认配置
 [*]
-indent_style = space
+indent_style = space          # 缩进风格：空格
+indent_size = 4              # 缩进大小：4个空格
+end_of_line = lf            # 换行符：LF
+charset = utf-8             # 字符集：UTF-8
+trim_trailing_whitespace = true   # 删除行尾空格
+insert_final_newline = true      # 文件末尾插入空行
+
+# Java文件配置
+[*.{java,gradle}]
 indent_size = 4
-end_of_line = lf
-charset = utf-8
+
+# Web前端文件配置
+[*.{js,jsx,ts,tsx,mts,vue,css,scss,less,html,htm}]
+indent_size = 2
+
+# 配置文件
+[*.{json,yml,yaml,xml}]
+indent_size = 2
+
+# Markdown文件配置
+[*.md]
 trim_trailing_whitespace = false
-insert_final_newline = false
