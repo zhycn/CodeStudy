@@ -2,8 +2,8 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "My Awesome Project",
-  description: "A VitePress Site",
+  title: "CodeStudy",
+  description: "专注于编程指南、书单、课程与工具，以构建系统化的学习路径。",
   base: "/CodeStudy/",
   srcDir: "./src",
   themeConfig: {

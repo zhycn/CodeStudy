@@ -1,4 +1,10 @@
 {
+  "name": "codestudy",
+  "version": "1.0.0",
+  "description": "开发者工具与技术文档集合",
+  "author": "zhycn",
+  "license": "MIT",
+  "type": "module",
   "devDependencies": {
     "vitepress": "2.0.0-alpha.12"
   },

@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "My Awesome Project"
-  text: "A VitePress Site"
-  tagline: My great project tagline
+  name: "CodeStudy"
+  text: "始于编程，不止于编程​"
+  tagline: "系统化整合编程指南、精选书单、视频课程与效率工具，打造个人的高效学习和工作路径。"
   actions:
     - theme: brand
       text: Markdown Examples
