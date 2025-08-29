@@ -12,10 +12,10 @@ SDKMAN! 是一个强大的命令行工具，它可以在绝大多数基于 Unix 
 
 SDKMAN! 是一个开源的工具，它提供了一个方便的命令行接口（CLI）来自动化以下任务：
 
-* **安装和卸载：** 轻松安装各种 SDK，无需手动下载、解压和配置。
-* **版本切换：** 在多个已安装的版本之间快速切换，满足不同项目的依赖需求。
-* **版本管理：** 罗列已安装和可用的 SDK 版本，方便管理。
-* **环境变量管理：** 自动处理 `PATH` 和 `JAVA_HOME` 等环境变量，告别手动配置的烦恼。
+- **安装和卸载：** 轻松安装各种 SDK，无需手动下载、解压和配置。
+- **版本切换：** 在多个已安装的版本之间快速切换，满足不同项目的依赖需求。
+- **版本管理：** 罗列已安装和可用的 SDK 版本，方便管理。
+- **环境变量管理：** 自动处理 `PATH` 和 `JAVA_HOME` 等环境变量，告别手动配置的烦恼。
 
 SDKMAN! 支持的“候选”SDK 种类繁多，不仅限于 Java，还包括 Groovy, Scala, Kotlin, Maven, Gradle, Spring Boot CLI, Vert.x 等等。
 
@@ -23,9 +23,9 @@ SDKMAN! 支持的“候选”SDK 种类繁多，不仅限于 Java，还包括 Gr
 
 在开始安装之前，请确保你的系统满足以下基本要求：
 
-* **操作系统：** macOS、Linux 或 Windows Subsystem for Linux (WSL)。
-* **Shell：** Bash、Zsh 或 Fish Shell。
-* **工具：** `curl`, `zip`, `unzip`。这些通常在大多数系统上都是预装的。
+- **操作系统：** macOS、Linux 或 Windows Subsystem for Linux (WSL)。
+- **Shell：** Bash、Zsh 或 Fish Shell。
+- **工具：** `curl`, `zip`, `unzip`。这些通常在大多数系统上都是预装的。
 
 ### 2.1. 安装步骤
 
@@ -144,10 +144,10 @@ sdk uninstall java 11.0.21-zulu
 
 ### 3.7. 其他常用命令
 
-* `sdk help`: 查看所有可用命令。
-* `sdk flush archives`: 清理下载的归档文件，释放磁盘空间。
-* `sdk flush temp`: 清理临时文件。
-* `sdk selfupdate`: 更新 SDKMAN! 自身到最新版本。
+- `sdk help`: 查看所有可用命令。
+- `sdk flush archives`: 清理下载的归档文件，释放磁盘空间。
+- `sdk flush temp`: 清理临时文件。
+- `sdk selfupdate`: 更新 SDKMAN! 自身到最新版本。
 
 ## 4. 高级配置与最佳实践
 
@@ -197,16 +197,16 @@ maven=3.9.6
 
 在团队开发中，确保所有成员都使用相同的工具版本至关重要。
 
-* **使用 `.sdkmanrc` 文件：** 将 `.sdkmanrc` 文件添加到你的项目版本控制中（例如 Git）。这确保了每个开发者进入项目目录时都能使用正确的 SDK 版本。
-* **文档说明：** 在项目的 `README.md` 或开发指南中明确说明使用 SDKMAN! 管理 SDK，并提供 `.sdkmanrc` 文件的作用。
-* **版本锁定：** 推荐在 `.sdkmanrc` 中锁定具体的版本号，而不是使用最新版本（`latest`），以避免不兼容的更新。
+- **使用 `.sdkmanrc` 文件：** 将 `.sdkmanrc` 文件添加到你的项目版本控制中（例如 Git）。这确保了每个开发者进入项目目录时都能使用正确的 SDK 版本。
+- **文档说明：** 在项目的 `README.md` 或开发指南中明确说明使用 SDKMAN! 管理 SDK，并提供 `.sdkmanrc` 文件的作用。
+- **版本锁定：** 推荐在 `.sdkmanrc` 中锁定具体的版本号，而不是使用最新版本（`latest`），以避免不兼容的更新。
 
 ## 5. 常见问题与排查
 
-* **SDKMAN! 命令找不到：** 这通常是因为环境变量没有正确加载。请确保你已经关闭并重新打开了终端，或者手动执行了 `source "$HOME/.sdkman/bin/sdkman-init.sh"`。
-* **安装失败：** 检查你的网络连接，确保 `curl`, `zip`, `unzip` 等工具可用，并且你的系统有足够的磁盘空间。
-* **`sdk list` 列表为空或不完整：** 这可能是网络问题导致无法连接到 SDKMAN! 的服务器。你可以尝试运行 `sdk selfupdate` 来更新 SDKMAN! 并重新同步列表。
-* **在 Windows 上使用：** SDKMAN! 仅支持基于 Unix 的系统。如果你在 Windows 上，请使用 Windows Subsystem for Linux (WSL) 来安装和运行 SDKMAN!，它将提供最佳的体验。
+- **SDKMAN! 命令找不到：** 这通常是因为环境变量没有正确加载。请确保你已经关闭并重新打开了终端，或者手动执行了 `source "$HOME/.sdkman/bin/sdkman-init.sh"`。
+- **安装失败：** 检查你的网络连接，确保 `curl`, `zip`, `unzip` 等工具可用，并且你的系统有足够的磁盘空间。
+- **`sdk list` 列表为空或不完整：** 这可能是网络问题导致无法连接到 SDKMAN! 的服务器。你可以尝试运行 `sdk selfupdate` 来更新 SDKMAN! 并重新同步列表。
+- **在 Windows 上使用：** SDKMAN! 仅支持基于 Unix 的系统。如果你在 Windows 上，请使用 Windows Subsystem for Linux (WSL) 来安装和运行 SDKMAN!，它将提供最佳的体验。
 
 ## 总结
 

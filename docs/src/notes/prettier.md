@@ -20,13 +20,13 @@ Prettier 的工作流程基于 **AST（抽象语法树）** 技术，其处理�
 
 许多开发者困惑于Prettier和ESLint的角色区别。以下是它们的核心差异：
 
-| **特性** | **Prettier** | **ESLint** |
-| :--- | :--- | :--- |
-| **主要关注点** | 代码格式与风格 | 代码质量与错误预防 |
-| **处理方式** | 重写代码格式 | 报告规则违规 |
-| **可配置性** | 有限且一致的选项 | 高度可配置 |
-| **修复能力** | 完全格式化 | 部分自动修复 |
-| **适用语言** | 多语言支持 | 主要JavaScript/TS |
+| **特性**       | **Prettier**     | **ESLint**         |
+| :------------- | :--------------- | :----------------- |
+| **主要关注点** | 代码格式与风格   | 代码质量与错误预防 |
+| **处理方式**   | 重写代码格式     | 报告规则违规       |
+| **可配置性**   | 有限且一致的选项 | 高度可配置         |
+| **修复能力**   | 完全格式化       | 部分自动修复       |
+| **适用语言**   | 多语言支持       | 主要JavaScript/TS  |
 
 简单来说，**Prettier管外表"（格式）**，像"整理房间"，确保所有东西摆放整齐（缩进、引号、行宽）；**ESLint管"内在"（质量）**，像"管家"，检查有没有危险物品（如未使用的变量）、有没有违规行为。
 
@@ -74,17 +74,17 @@ Prettier 支持多种配置文件格式，允许开发者根据项目需求定�
 
 ```json
 {
-  "semi": true,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "useTabs": false,
-  "printWidth": 80,
-  "trailingComma": "es5",
-  "bracketSpacing": true,
-  "jsxSingleQuote": false,
-  "arrowParens": "avoid",
-  "endOfLine": "lf",
-  "proseWrap": "preserve"
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "useTabs": false,
+    "printWidth": 80,
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "jsxSingleQuote": false,
+    "arrowParens": "avoid",
+    "endOfLine": "lf",
+    "proseWrap": "preserve"
 }
 ```
 
@@ -134,32 +134,32 @@ Prettier 会自动根据文件类型选择适当的解析器，但您也可以�
 ```javascript
 // 显式配置解析器示例
 module.exports = {
-  overrides: [
-    {
-      files: "*.js",
-      options: {
-        parser: "babel"
-      }
-    },
-    {
-      files: "*.ts",
-      options: {
-        parser: "typescript"
-      }
-    },
-    {
-      files: "*.json",
-      options: {
-        parser: "json"
-      }
-    },
-    {
-      files: "*.vue",
-      options: {
-        parser: "vue"
-      }
-    }
-  ]
+    overrides: [
+        {
+            files: "*.js",
+            options: {
+                parser: "babel",
+            },
+        },
+        {
+            files: "*.ts",
+            options: {
+                parser: "typescript",
+            },
+        },
+        {
+            files: "*.json",
+            options: {
+                parser: "json",
+            },
+        },
+        {
+            files: "*.vue",
+            options: {
+                parser: "vue",
+            },
+        },
+    ],
 };
 ```
 
@@ -169,21 +169,21 @@ Prettier 允许您为不同的文件类型或目录定义不同的规则：
 
 ```json
 {
-  "semi": true,
-  "overrides": [
-    {
-      "files": "*.test.js",
-      "options": {
-        "semi": false
-      }
-    },
-    {
-      "files": ["*.html", "legacy/**/*.js"],
-      "options": {
-        "tabWidth": 4
-      }
-    }
-  ]
+    "semi": true,
+    "overrides": [
+        {
+            "files": "*.test.js",
+            "options": {
+                "semi": false
+            }
+        },
+        {
+            "files": ["*.html", "legacy/**/*.js"],
+            "options": {
+                "tabWidth": 4
+            }
+        }
+    ]
 }
 ```
 
@@ -205,43 +205,43 @@ npm install --save-dev eslint-config-prettier eslint-plugin-prettier
 ```javascript
 // .eslintrc.js
 module.exports = {
-  root: true,
-  env: {
-    browser: true,
-    es2021: true,
-  },
-  extends: [
-    'plugin:vue/vue3-recommended',
-    'eslint:recommended',
-    'prettier', // 确保这是最后一个扩展
-  ],
-  plugins: ['prettier'],
-  rules: {
-    'prettier/prettier': 'error',
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-var': 'error',
-    'eqeqeq': ['error', 'always', { null: 'ignore' }],
-  },
-  parserOptions: {
-    ecmaVersion: 2021,
-    sourceType: 'module'
-  }
+    root: true,
+    env: {
+        browser: true,
+        es2021: true,
+    },
+    extends: [
+        "plugin:vue/vue3-recommended",
+        "eslint:recommended",
+        "prettier", // 确保这是最后一个扩展
+    ],
+    plugins: ["prettier"],
+    rules: {
+        "prettier/prettier": "error",
+        "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+        "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+        "no-var": "error",
+        eqeqeq: ["error", "always", { null: "ignore" }],
+    },
+    parserOptions: {
+        ecmaVersion: 2021,
+        sourceType: "module",
+    },
 };
 ```
 
 ```javascript
 // .prettierrc.js
 module.exports = {
-  semi: true,
-  singleQuote: true,
-  tabWidth: 2,
-  useTabs: false,
-  printWidth: 80,
-  trailingComma: 'es5',
-  bracketSpacing: true,
-  arrowParens: 'avoid',
-  endOfLine: 'lf'
+    semi: true,
+    singleQuote: true,
+    tabWidth: 2,
+    useTabs: false,
+    printWidth: 80,
+    trailingComma: "es5",
+    bracketSpacing: true,
+    arrowParens: "avoid",
+    endOfLine: "lf",
 };
 ```
 
@@ -262,22 +262,19 @@ npm install --save-dev husky lint-staged
 
 ```json
 {
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx,vue}": [
+            "prettier --write",
+            "eslint --fix",
+            "git add"
+        ],
+        "*.{json,md,html,css,scss,less}": ["prettier --write", "git add"]
     }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,vue}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ],
-    "*.{json,md,html,css,scss,less}": [
-      "prettier --write",
-      "git add"
-    ]
-  }
 }
 ```
 
@@ -288,15 +285,15 @@ npm install --save-dev husky lint-staged
 ```javascript
 // .lintstagedrc.js
 module.exports = {
-  '*.{js,jsx,ts,tsx}': files => [
-    `npx prettier --write ${files.join(' ')}`,
-    `npx eslint --fix ${files.join(' ')}`,
-    `git add ${files.join(' ')}`
-  ],
-  '*.{json,md,html,css,scss,less}': files => [
-    `npx prettier --write ${files.join(' ')}`,
-    `git add ${files.join(' ')}`
-  ]
+    "*.{js,jsx,ts,tsx}": (files) => [
+        `npx prettier --write ${files.join(" ")}`,
+        `npx eslint --fix ${files.join(" ")}`,
+        `git add ${files.join(" ")}`,
+    ],
+    "*.{json,md,html,css,scss,less}": (files) => [
+        `npx prettier --write ${files.join(" ")}`,
+        `git add ${files.join(" ")}`,
+    ],
 };
 ```
 
@@ -310,9 +307,9 @@ module.exports = {
 
     ```json
     {
-      "arrowParens": "avoid",
-      // 使用"avoid"更符合JavaScript社区的普遍风格
-      // 但TypeScript项目可能更喜欢"always"
+        "arrowParens": "avoid"
+        // 使用"avoid"更符合JavaScript社区的普遍风格
+        // 但TypeScript项目可能更喜欢"always"
     }
     ```
 
@@ -323,19 +320,19 @@ module.exports = {
 ```json
 // VS Code 的 .vscode/settings.json
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "prettier.requireConfig": true,
-  // 尊重项目中的Prettier配置
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ]
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "prettier.requireConfig": true,
+    // 尊重项目中的Prettier配置
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ]
 }
 ```
 
@@ -348,16 +345,16 @@ module.exports = {
 name: Code Check
 on: [push, pull_request]
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: npm install
-      - name: Check Formatting
-        run: npx prettier --check "src/**/*.{js,ts,jsx,tsx,vue}"
-      - name: Run Linter
-        run: npx eslint "src/**/*.{js,ts,jsx,tsx,vue}"
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install Dependencies
+              run: npm install
+            - name: Check Formatting
+              run: npx prettier --check "src/**/*.{js,ts,jsx,tsx,vue}"
+            - name: Run Linter
+              run: npx eslint "src/**/*.{js,ts,jsx,tsx,vue}"
 ```
 
 ### 6.4 大型项目中的渐进式采用
@@ -370,24 +367,24 @@ jobs:
 
 ```json
 {
-  "overrides": [
-    {
-      "files": ["src/legacy/**/*.js"],
-      "options": {
-        "printWidth": 100,
-        "tabWidth": 4,
-        "semi": true
-      }
-    },
-    {
-      "files": ["src/modern/**/*.js"],
-      "options": {
-        "printWidth": 80,
-        "tabWidth": 2,
-        "semi": false
-      }
-    }
-  ]
+    "overrides": [
+        {
+            "files": ["src/legacy/**/*.js"],
+            "options": {
+                "printWidth": 100,
+                "tabWidth": 4,
+                "semi": true
+            }
+        },
+        {
+            "files": ["src/modern/**/*.js"],
+            "options": {
+                "printWidth": 80,
+                "tabWidth": 2,
+                "semi": false
+            }
+        }
+    ]
 }
 ```
 

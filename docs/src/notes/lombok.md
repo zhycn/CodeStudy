@@ -12,13 +12,13 @@ Lombok 的核心价值在于解决了 Java 语言长期存在的冗余代码问�
 
 尽管 Lombok 带来了巨大便利，但它也有其两面性，下表总结了其主要优点和需要注意的缺点：
 
-| **优点** | **缺点** |
-|----------|----------|
-| 大幅减少样板代码，提升开发效率 | 强制要求团队成员安装 IDE 插件 |
-| 提高代码可读性和可维护性 | 自动生成的方法不可见，调试困难 |
-| 自动生成的方法经过测试，更加稳定可靠 | 过度使用可能违反封装原则 |
-| 灵活注解组合，满足不同场景需求 | 与某些重构工具可能存在兼容性问题 |
-| 支持日志自动化和其他高级特性 | 序列化时可能存在隐藏风险 |
+| **优点**                             | **缺点**                         |
+| ------------------------------------ | -------------------------------- |
+| 大幅减少样板代码，提升开发效率       | 强制要求团队成员安装 IDE 插件    |
+| 提高代码可读性和可维护性             | 自动生成的方法不可见，调试困难   |
+| 自动生成的方法经过测试，更加稳定可靠 | 过度使用可能违反封装原则         |
+| 灵活注解组合，满足不同场景需求       | 与某些重构工具可能存在兼容性问题 |
+| 支持日志自动化和其他高级特性         | 序列化时可能存在隐藏风险         |
 
 需要注意的是，Lombok 在某些特定场景下需要谨慎使用。例如，`@Data` 注解默认使用 `@EqualsAndHashCode(callSuper=false)`，这意味着生成的 `equals()` 方法只会比较子类的属性，不会考虑从父类继承的属性，这可能导致意想不到的行为。此外，在跨系统协作时，如果上游系统提供的 Feign client 使用了 Lombok，下游系统也必须使用 Lombok，从而形成了强依赖关系。
 
@@ -68,7 +68,7 @@ import lombok.Data;
 public class TestClass {
     private String name;
     private int value;
-    
+
     public static void main(String[] args) {
         TestClass test = new TestClass();
         test.setName("Test");
@@ -235,7 +235,7 @@ public class Employee extends Person {
 public class SecureEntity {
     @Getter(onMethod = @__(@JsonIgnore)) // 序列化时忽略敏感字段
     private String sensitiveData;
-    
+
     // 其他字段...
 }
 ```
@@ -272,13 +272,13 @@ public class Example {
 
 下表总结了团队中使用 Lombok 的推荐规范：
 
-| **方面** | **推荐规范** | **反模式** |
-|----------|--------------|------------|
-| 注解使用 | 优先使用细粒度注解组合 | 过度依赖 `@Data` |
-| 继承处理 | 总是使用 `callSuper=true` | 忽略父类字段 |
-| 敏感数据 | 使用 `exclude` 排除敏感字段 | 暴露敏感数据 |
-| 代码文档 | 为生成的 API 添加注释 | 假设生成的代码自解释 |
-| 版本管理 | 固定 Lombok 版本 | 使用不同版本 |
+| **方面** | **推荐规范**                | **反模式**           |
+| -------- | --------------------------- | -------------------- |
+| 注解使用 | 优先使用细粒度注解组合      | 过度依赖 `@Data`     |
+| 继承处理 | 总是使用 `callSuper=true`   | 忽略父类字段         |
+| 敏感数据 | 使用 `exclude` 排除敏感字段 | 暴露敏感数据         |
+| 代码文档 | 为生成的 API 添加注释       | 假设生成的代码自解释 |
+| 版本管理 | 固定 Lombok 版本            | 使用不同版本         |
 
 ## 5. 高级特性与进阶用法
 
@@ -293,10 +293,10 @@ Lombok 的 `@ExtensionMethod` 注解允许为任何类型（包括第三方库�
 public class StringUtils {
     public static String toTitleCase(String str) {
         if (str == null || str.isEmpty()) return str;
-        return Character.toUpperCase(str.charAt(0)) + 
+        return Character.toUpperCase(str.charAt(0)) +
                (str.length() > 1 ? str.substring(1) : "");
     }
-    
+
     public static boolean isNotBlank(String str) {
         return str != null && !str.trim().isEmpty();
     }
@@ -310,7 +310,7 @@ public class ExtensionExample {
         // 可以像调用实例方法一样调用静态方法
         String titleCase = name.toTitleCase(); // 转换为 "John doe"
         boolean notBlank = name.isNotBlank();   // 检查是否非空
-        
+
         System.out.println(titleCase);
         System.out.println(notBlank);
     }
@@ -342,7 +342,7 @@ public class CombinedExtensions {
         String text = "hello";
         List<String> items = Arrays.asList("a", "b", "c");
         int number = 5;
-        
+
         if (text.isNotBlank() && items.isNotEmpty()) {
             int result = number.squared(); // 25
             System.out.println(result);
@@ -363,7 +363,7 @@ public class ExceptionExample {
     public void readFile(String path) {
         Files.readAllBytes(Paths.get(path)); // 不需要处理或声明 IOException
     }
-    
+
     // 编译后相当于：
     public void readFile(String path) {
         try {
@@ -383,14 +383,14 @@ public class ResourceExample {
     public void copyFile(String src, String dest) {
         @Cleanup InputStream in = new FileInputStream(src);
         @Cleanup OutputStream out = new FileOutputStream(dest);
-        
+
         byte[] buffer = new byte[1024];
         int length;
         while ((length = in.read(buffer)) != -1) {
             out.write(buffer, 0, length);
         }
     }
-    
+
     // 资源会在作用域结束时自动关闭，即使发生异常
 }
 ```
@@ -413,7 +413,7 @@ Lombok 的 `@Builder` 注解支持高级用法，满足复杂对象创建需求�
 public class Order {
     private String orderId;
     @Singular private List<String> items;
-    
+
     // 使用示例：
     public static void main(String[] args) {
         Order order = Order.builder()
@@ -432,7 +432,7 @@ public class Order {
 @Builder(builderClassName = "CustomBuilder", buildMethodName = "create", builderMethodName = "prepare")
 public class CustomEntity {
     private String value;
-    
+
     // 使用示例：
     public static void main(String[] args) {
         CustomEntity entity = CustomEntity.prepare()

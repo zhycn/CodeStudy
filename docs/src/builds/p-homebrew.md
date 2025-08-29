@@ -29,13 +29,13 @@ Homebrew通过称为**Formula**的Ruby脚本来定义软件包的编译和安装
 
 与传统下载dmg/pkg文件手动安装的方式相比，Homebrew提供了以下优势：
 
-| 特性 | 传统安装方式 | Homebrew |
-|------|-------------|----------|
-| **依赖管理** | 需要手动处理 | 自动解决 |
-| **软件更新** | 需要逐个检查 | 统一更新 |
-| **卸载清理** | 往往有文件残留 | 彻底清理 |
+| 特性           | 传统安装方式   | Homebrew |
+| -------------- | -------------- | -------- |
+| **依赖管理**   | 需要手动处理   | 自动解决 |
+| **软件更新**   | 需要逐个检查   | 统一更新 |
+| **卸载清理**   | 往往有文件残留 | 彻底清理 |
 | **多版本管理** | 复杂且容易冲突 | 简单支持 |
-| **自动化程度** | 完全手动 | 可脚本化 |
+| **自动化程度** | 完全手动       | 可脚本化 |
 
 ## 2 安装与配置
 
@@ -214,11 +214,11 @@ brew untap heroku/brew      # 移除Heroku Tap
 
 下表总结了Homebrew中不同类型的软件包的特点：
 
-| 类型 | 安装目标 | 安装位置 | 示例命令 |
-|------|----------|----------|----------|
-| **Formula** | 命令行工具 | `/usr/local/Cellar` | `brew install git` |
-| **Cask** | GUI应用程序 | `/Applications` | `brew install --cask firefox` |
-| **Tap** | 扩展仓库 | `$(brew --repository)/Library/Taps` | `brew tap user/repo` |
+| 类型        | 安装目标    | 安装位置                            | 示例命令                      |
+| ----------- | ----------- | ----------------------------------- | ----------------------------- |
+| **Formula** | 命令行工具  | `/usr/local/Cellar`                 | `brew install git`            |
+| **Cask**    | GUI应用程序 | `/Applications`                     | `brew install --cask firefox` |
+| **Tap**     | 扩展仓库    | `$(brew --repository)/Library/Taps` | `brew tap user/repo`          |
 
 理解这些核心概念有助于更好地组织和管理通过Homebrew安装的软件，并在遇到问题时能够更准确地定位和解决。
 
@@ -347,18 +347,18 @@ brew deps --tree --installed  # 以树形结构查看已安装包的依赖
 
 下表总结了最常用的Homebrew命令及其功能：
 
-| 命令 | 功能描述 | 示例 |
-|------|----------|------|
-| `brew install` | 安装软件包 | `brew install git` |
-| `brew uninstall` | 卸载软件包 | `brew uninstall git` |
-| `brew list` | 列出已安装的包 | `brew list --versions` |
-| `brew search` | 搜索软件包 | `brew search python` |
-| `brew update` | 更新Homebrew自身 | `brew update` |
-| `brew upgrade` | 升级软件包 | `brew upgrade git` |
-| `brew outdated` | 查看过时的包 | `brew outdated` |
-| `brew info` | 查看包信息 | `brew info git` |
-| `brew doctor` | 诊断问题 | `brew doctor` |
-| `brew cleanup` | 清理旧版本 | `brew cleanup` |
+| 命令             | 功能描述         | 示例                   |
+| ---------------- | ---------------- | ---------------------- |
+| `brew install`   | 安装软件包       | `brew install git`     |
+| `brew uninstall` | 卸载软件包       | `brew uninstall git`   |
+| `brew list`      | 列出已安装的包   | `brew list --versions` |
+| `brew search`    | 搜索软件包       | `brew search python`   |
+| `brew update`    | 更新Homebrew自身 | `brew update`          |
+| `brew upgrade`   | 升级软件包       | `brew upgrade git`     |
+| `brew outdated`  | 查看过时的包     | `brew outdated`        |
+| `brew info`      | 查看包信息       | `brew info git`        |
+| `brew doctor`    | 诊断问题         | `brew doctor`          |
+| `brew cleanup`   | 清理旧版本       | `brew cleanup`         |
 
 这些基础命令涵盖了Homebrew的日常使用需求，熟练掌握它们将大大提高软件管理效率。
 
@@ -635,14 +635,14 @@ brew link --force <formula>
 
 下表总结了常见问题及解决方法：
 
-| 问题现象 | 可能原因 | 解决方案 |
-|---------|---------|---------|
-| **Permission denied** | 权限设置错误 | `sudo chown -R $(whoami) $(brew --prefix)/*` |
-| **下载速度慢** | 网络连接问题 | 配置国内镜像源或使用代理 |
-| **更新失败** | GitHub连接问题 | 检查网络连接或手动更新 |
-| **依赖冲突** | 版本不兼容 | 安装特定版本或解决冲突 |
-| **链接冲突** | 文件已存在 | 删除冲突文件或强制链接 |
-| **命令不存在** | 路径未配置 | 检查shell配置文件中的PATH设置 |
+| 问题现象              | 可能原因       | 解决方案                                     |
+| --------------------- | -------------- | -------------------------------------------- |
+| **Permission denied** | 权限设置错误   | `sudo chown -R $(whoami) $(brew --prefix)/*` |
+| **下载速度慢**        | 网络连接问题   | 配置国内镜像源或使用代理                     |
+| **更新失败**          | GitHub连接问题 | 检查网络连接或手动更新                       |
+| **依赖冲突**          | 版本不兼容     | 安装特定版本或解决冲突                       |
+| **链接冲突**          | 文件已存在     | 删除冲突文件或强制链接                       |
+| **命令不存在**        | 路径未配置     | 检查shell配置文件中的PATH设置                |
 
 ### 6.5 获取更多帮助
 

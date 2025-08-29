@@ -8,12 +8,12 @@
 
 它的核心优势在于：
 
-* **项目级版本管理**: 在特定项目目录下，jenv 可以自动切换到该项目指定的 JDK 版本，无需手动操作。
-* **全局与局部**: 支持设置全局默认 JDK，也可以为特定项目、甚至特定的终端会话设置独立的 JDK 版本。
-* **简洁轻量**: jenv 本身是一个 shell 脚本，非常小巧，不会引入额外的依赖。
-* **自动设置 `JAVA_HOME`**: 这是 jenv 最强大的功能之一。通过其 `export` 插件，它能确保 `JAVA_HOME` 环境变量在切换版本时自动更新，这对 Maven、Gradle 等构建工具至关重要。
+- **项目级版本管理**: 在特定项目目录下，jenv 可以自动切换到该项目指定的 JDK 版本，无需手动操作。
+- **全局与局部**: 支持设置全局默认 JDK，也可以为特定项目、甚至特定的终端会话设置独立的 JDK 版本。
+- **简洁轻量**: jenv 本身是一个 shell 脚本，非常小巧，不会引入额外的依赖。
+- **自动设置 `JAVA_HOME`**: 这是 jenv 最强大的功能之一。通过其 `export` 插件，它能确保 `JAVA_HOME` 环境变量在切换版本时自动更新，这对 Maven、Gradle 等构建工具至关重要。
 
------
+---
 
 ## 2\. 核心原理
 
@@ -24,7 +24,7 @@ jenv 的工作机制基于 **shims** 和 **环境变量管理**。
 3. **路径重定向**: 找到正确的 JDK 版本后，shim 脚本会将命令重定向到实际的 JDK 安装路径下的 `bin` 目录，从而执行正确的 `java` 命令。
 4. **`JAVA_HOME` 自动更新**: 配合 `export` 插件，jenv 会在每次版本切换时，自动更新 `JAVA_HOME` 环境变量，指向当前生效的 JDK 路径。
 
------
+---
 
 ## 3\. 安装与配置
 
@@ -32,7 +32,7 @@ jenv 的工作机制基于 **shims** 和 **环境变量管理**。
 
 如前所述，jenv 不负责安装 JDK。你需要使用适合你操作系统的包管理器或手动下载 JDK。
 
-* **macOS**: 推荐使用 Homebrew Cask。
+- **macOS**: 推荐使用 Homebrew Cask。
 
     ```bash
     # 搜索可用的 JDK 版本
@@ -43,21 +43,22 @@ jenv 的工作机制基于 **shims** 和 **环境变量管理**。
     brew install openjdk@8
     ```
 
-* **Linux**:
-  * **Ubuntu/Debian**: 使用 `apt`。
-    <!-- end list -->
-    ```bash
-    sudo apt update
-    sudo apt install openjdk-11-jdk
-    ```
+- **Linux**:
+    - **Ubuntu/Debian**: 使用 `apt`。
+        <!-- end list -->
 
-  * **Fedora/CentOS**: 使用 `yum` 或 `dnf`。
-    <!-- end list -->
-    ```bash
-    sudo dnf install java-17-openjdk-devel
-    ```
+        ```bash
+        sudo apt update
+        sudo apt install openjdk-11-jdk
+        ```
 
-* **Windows**: jenv 官方不支持 Windows，但可以通过 WSL (Windows Subsystem for Linux) 来使用。在 WSL 环境中，安装步骤与 Linux 相同。
+    - **Fedora/CentOS**: 使用 `yum` 或 `dnf`。
+        <!-- end list -->
+        ```bash
+        sudo dnf install java-17-openjdk-devel
+        ```
+
+- **Windows**: jenv 官方不支持 Windows，但可以通过 WSL (Windows Subsystem for Linux) 来使用。在 WSL 环境中，安装步骤与 Linux 相同。
 
 ### 3.2. 安装 jenv
 
@@ -81,8 +82,8 @@ git clone https://github.com/jenv/jenv.git ~/.jenv
 
 这是最关键的一步。你需要将 jenv 相关的配置添加到你的 shell 配置文件中。
 
-* **Zsh**: 编辑 `~/.zshrc`
-* **Bash**: 编辑 `~/.bash_profile` 或 `~/.bashrc`
+- **Zsh**: 编辑 `~/.zshrc`
+- **Bash**: 编辑 `~/.bash_profile` 或 `~/.bashrc`
 
 在文件末尾添加以下内容：
 
@@ -98,8 +99,8 @@ jenv enable-plugin export
 
 **⚠️ 注意:**
 
-* 如果你使用 Oh My Zsh，`eval "$(jenv init -)"` 可能会导致一些问题。一个更可靠的方案是，将 jenv 作为一个插件启用。在 `.zshrc` 中找到 `plugins` 配置，并添加 `jenv`：`plugins=(git jenv ...)`。
-* 配置完成后，需要重新加载 shell 配置：
+- 如果你使用 Oh My Zsh，`eval "$(jenv init -)"` 可能会导致一些问题。一个更可靠的方案是，将 jenv 作为一个插件启用。在 `.zshrc` 中找到 `plugins` 配置，并添加 `jenv`：`plugins=(git jenv ...)`。
+- 配置完成后，需要重新加载 shell 配置：
 
     ```bash
     # Zsh
@@ -120,7 +121,7 @@ jenv doctor
 
 如果一切正常，你会看到类似的输出，提示你已安装的 JDK 版本和 jenv 的配置状态。如果存在问题，`jenv doctor` 会给出明确的提示。
 
------
+---
 
 ## 4\. 日常使用
 
@@ -164,9 +165,9 @@ jenv versions
   17.0.6
 ```
 
-* 带 `*` 的行表示当前正在使用的 JDK 版本。
-* `system` 表示系统默认的 JDK。
-* `11`, `17` 等是 jenv 自动生成的别名。
+- 带 `*` 的行表示当前正在使用的 JDK 版本。
+- `system` 表示系统默认的 JDK。
+- `11`, `17` 等是 jenv 自动生成的别名。
 
 ### 4.3. 切换 JDK 版本
 
@@ -205,7 +206,7 @@ jenv shell 8
 
 这个设置的优先级最高，即使该项目目录有 `.java-version` 文件，也会被 `shell` 设置覆盖。
 
------
+---
 
 ## 5\. 最佳实践与高级配置
 
@@ -232,9 +233,9 @@ jenv enable-plugin gradle
 
 **IntelliJ IDEA**
 
-* **自动识别**: IntelliJ IDEA 能够读取项目目录下的 `.java-version` 文件，自动推荐使用相应的 JDK。
-* **手动配置**: 在 `File -> Project Structure -> Project Settings -> Project` 中，你可以手动选择项目使用的 JDK。推荐在这里配置，因为这能确保 IDE 内部编译和运行环境与 jenv 管理的一致。
-* **最佳实践**: 在 IDE 中，为每个项目手动配置其正确的 JDK 路径。这比依赖 jenv 插件更稳定，因为它直接配置了 IDE 的构建环境。jenv 主要用于命令行和脚本。
+- **自动识别**: IntelliJ IDEA 能够读取项目目录下的 `.java-version` 文件，自动推荐使用相应的 JDK。
+- **手动配置**: 在 `File -> Project Structure -> Project Settings -> Project` 中，你可以手动选择项目使用的 JDK。推荐在这里配置，因为这能确保 IDE 内部编译和运行环境与 jenv 管理的一致。
+- **最佳实践**: 在 IDE 中，为每个项目手动配置其正确的 JDK 路径。这比依赖 jenv 插件更稳定，因为它直接配置了 IDE 的构建环境。jenv 主要用于命令行和脚本。
 
 ### 5.3. 别名与版本命名
 
@@ -250,19 +251,19 @@ jenv local openjdk-17-openj9
 
 这对于区分不同厂商（如 Oracle、OpenJDK、Adoptium）的 JDK 版本非常有用。
 
------
+---
 
 ## 6\. jenv vs. SDKMAN\
 
 这是 jenv 社区中一个常见的问题。两者各有优劣，但可以互补使用。
 
-| 特性 | **jenv** | **SDKMAN\!** |
-| :--- | :--- | :--- |
-| **核心功能** | **管理**已安装的 JDK 版本 | **安装与管理**各种 SDK (包括 JDK) |
-| **安装方式** | Git 或 Homebrew | Curl 脚本 |
-| **适用场景** | 专注于 JDK 版本切换，特别是项目级管理 | 一站式解决方案，用于管理 JDK、Maven、Gradle、Kotlin 等多种工具 |
-| **优劣** | 极简、轻量、只做一件事，**对现有 JDK 环境无侵入** | 功能强大、方便快捷、无需手动下载，但可能引入更多依赖 |
-| **互补性** | **完美互补**！使用 SDKMAN\! 下载和安装 JDK，再用 jenv 管理它们。 |
+| 特性         | **jenv**                                                         | **SDKMAN\!**                                                   |
+| :----------- | :--------------------------------------------------------------- | :------------------------------------------------------------- |
+| **核心功能** | **管理**已安装的 JDK 版本                                        | **安装与管理**各种 SDK (包括 JDK)                              |
+| **安装方式** | Git 或 Homebrew                                                  | Curl 脚本                                                      |
+| **适用场景** | 专注于 JDK 版本切换，特别是项目级管理                            | 一站式解决方案，用于管理 JDK、Maven、Gradle、Kotlin 等多种工具 |
+| **优劣**     | 极简、轻量、只做一件事，**对现有 JDK 环境无侵入**                | 功能强大、方便快捷、无需手动下载，但可能引入更多依赖           |
+| **互补性**   | **完美互补**！使用 SDKMAN\! 下载和安装 JDK，再用 jenv 管理它们。 |
 
 ### 推荐工作流
 
@@ -272,7 +273,7 @@ jenv local openjdk-17-openj9
 
 这种组合方式，既享受了 SDKMAN\! 一键安装的便利，又利用了 jenv 在项目级别切换的精确控制。
 
------
+---
 
 ## 7\. 常见问题排查 (FAQs)
 

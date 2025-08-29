@@ -1,16 +1,17 @@
 {
-  "name": "codestudy",
-  "version": "1.0.0",
-  "description": "开发者工具与技术文档集合",
-  "author": "zhycn",
-  "license": "MIT",
-  "type": "module",
-  "devDependencies": {
-    "vitepress": "2.0.0-alpha.12"
-  },
-  "scripts": {
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
-  }
+    "name": "codestudy",
+    "version": "1.0.0",
+    "description": "开发者工具与技术文档集合",
+    "author": "zhycn",
+    "license": "MIT",
+    "type": "module",
+    "devDependencies": {
+        "prettier": "3.6.2",
+        "vitepress": "2.0.0-alpha.12"
+    },
+    "scripts": {
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:preview": "vitepress preview docs"
+    }
 }
