@@ -18,6 +18,11 @@
 *.css text eol=lf
 *.html text eol=lf
 *.svg text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.mts text eol=lf
+*.jsx text eol=lf
+*.vue text eol=lf
 
 # 二进制文件
 *.jar binary

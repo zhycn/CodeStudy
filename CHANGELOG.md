@@ -1,6 +1,17 @@
-# CHANGELOG
+# Changelog
 
-## 2025年08月
+> 本文档基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/) 的格式编写。
+> 本项目遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/) 语义化版本规范。
 
-- 新增 [开发者工具清单](./开发者工具/README.md) - 收录主流开发工具，包含AI编程助手、前端开发套件、Java/Python开发环境等专业工具集合
-- 新增 [HTML开发指南](./前端开发/HTML相关/README.md) - 提供HTML5学习路径、最佳实践模板及权威参考资料，涵盖从入门到进阶的完整资源
+格式说明：
+
+- `Added` 新添加的功能
+- `Changed` 对现有功能的变更
+- `Deprecated` 已经不建议使用，准备很快移除的功能
+- `Removed` 已经移除的功能
+- `Fixed` 对bug的修复
+- `Security` 对安全的改进
+
+## v2025.08
+
+- Added：项目初始化。

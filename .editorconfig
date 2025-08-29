@@ -5,25 +5,48 @@ root = true
 
 # 所有文件的默认配置
 [*]
-indent_style = space          # 缩进风格：空格
-indent_size = 4              # 缩进大小：4个空格
-end_of_line = lf            # 换行符：LF
-charset = utf-8             # 字符集：UTF-8
-trim_trailing_whitespace = true   # 删除行尾空格
-insert_final_newline = true      # 文件末尾插入空行
+indent_style = space           # 缩进风格：空格
+indent_size = 4               # 缩进大小：4空格
+end_of_line = lf             # 换行符：LF (Linux/macOS 兼容)
+charset = utf-8              # 字符集：UTF-8
+trim_trailing_whitespace = true    # 自动删除行尾空格
+insert_final_newline = true       # 文件末尾自动插入空行
+max_line_length = 120          # 单行长度限制（推荐值）
 
-# Java文件配置
-[*.{java,gradle}]
-indent_size = 4
+# Java相关文件配置
+[*.{java,kt,gradle}]
+indent_size = 4               # Java系保持4空格缩进
 
-# Web前端文件配置
-[*.{js,jsx,ts,tsx,mts,vue,css,scss,less,html,htm}]
+# 前端开发文件配置
+[*.{js,jsx,ts,tsx,cts,mts,vue}]
+indent_size = 2               # JS/TS推荐2空格缩进
+
+# 样式文件配置
+[*.{css,scss,less,sass}]
+indent_size = 2               # 样式文件统一2空格
+
+# HTML模板配置
+[*.{html,htm}]
+indent_size = 2               # HTML缩进2空格
+
+# 配置文件格式
+[*.{json,yml,yaml}]
+indent_size = 2               # 配置文件缩进2空格
+
+# XML文件配置
+[*.{xml,xsd,xslt}]
 indent_size = 2
 
-# 配置文件
-[*.{json,yml,yaml,xml}]
-indent_size = 2
-
-# Markdown文件配置
+# Markdown特殊配置
 [*.md]
-trim_trailing_whitespace = false
+trim_trailing_whitespace = false   # 保留行尾空格（MD换行需两个空格）
+insert_final_newline = true        # 仍需保留末尾空行
+max_line_length = 0             # 禁用行长限制（适合自由格式文本）
+
+# 特定文件例外处理
+[Makefile]
+indent_style = tab            # Makefile必须用制表符
+
+[*.min.{js,css}]
+trim_trailing_whitespace = false   # 压缩文件不做格式处理
+insert_final_newline = false

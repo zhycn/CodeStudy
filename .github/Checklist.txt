@@ -1,0 +1,17 @@
+
+---
+
+以下是项目信息：
+
+[ok]node_modules
+[ok].editorconfig
+[ok].gitattributes
+[ok].gitignore
+[ok].npmrc
+[ok].prettierignore
+[ok].prettierrc
+[ok]CHANGELOG.md
+[ok]LICENSE.txt
+package.json
+[ok]pnpm-lock.yaml
+[ok]README.md
