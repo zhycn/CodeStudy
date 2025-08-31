@@ -1,22 +1,23 @@
-好的，没有问题。作为一名编程技术专家和Markdown技术文档大师，我将为你生成一篇关于Spring Data JPA的详尽指南。
-
-在撰写本文之前，我深入分析了Spring Data JPA官方文档、Hibernate文档、Jakarta Persistence规范以及超过20篇关于JPA性能优化、N+1问题解决、事务管理和审计的中英文权威文章和实践案例，最终整合出当前（2024年初）最为推荐和稳定的实践方案。
-
+---
+title: Spring Data JPA 详解与最佳实践
+description: 详细介绍了 Spring Data JPA 的使用方法、最佳实践和性能优化技巧。
 ---
 
 # Spring Data JPA 详解与最佳实践
 
-## 文档元数据
+- Spring Data JPA 官方文档：<https://spring.io/projects/spring-data-jpa>
+- Hibernate 官方文档：<https://hibernate.org/>
+- Jakarta Persistence 规范：<https://jakarta.ee/specifications/persistence/>
+- QueryDSL 官方文档：<https://querydsl.com/>
+- Flyway 官方文档：<https://flywaydb.org/>
+- Liquibase 官方文档：<https://www.liquibase.org/>
 
-| 项目                     | 内容                                        |
-| :----------------------- | :------------------------------------------ |
-| **文档版本**             | v2.5                                        |
-| **目标框架**             | Spring Boot 3.2.x (基于 Spring Framework 6) |
-| **JDK 版本**             | JDK 17+                                     |
-| **Spring Data JPA 版本** | 3.2.x (由 Spring Boot 3.2.x 自动管理)       |
-| **JPA 提供商**           | Hibernate 6.4+ (默认)                       |
-| **最后更新时间**         | 2024-01-25                                  |
-| **作者**                 | 技术文档专家                                |
+| 项目                     | 内容                                      |
+| :----------------------- | :---------------------------------------- |
+| **目标框架**             | Spring Boot 3.x (基于 Spring Framework 6) |
+| **JDK 版本**             | JDK 17+                                   |
+| **Spring Data JPA 版本** | 3.x (由 Spring Boot 3.x 自动管理)         |
+| **JPA 提供商**           | Hibernate 6.4+ (默认)                     |
 
 ## 1. 引言
 
@@ -506,24 +507,48 @@ N+1问题是JPA最常见的性能陷阱。当访问LAZY加载的关联集合时�
 
 ### 5.3 审计（Auditing）
 
-自动填充创建人、创建时间、最后修改人等字段。
+自动填充创建人、创建时间、最后修改人、最后修改时间等字段。
 
-1. **启用审计**：在主应用类上添加`@EnableJpaAuditing`。
+1. **启用审计**：在主应用类或配置类上添加`@EnableJpaAuditing`注解。
 2. **在实体字段上添加注解**：
+   - `@CreatedDate`：自动填充创建时间。
+   - `@LastModifiedDate`：自动填充最后修改时间。
+   - `@CreatedBy`：自动填充创建人。
+   - `@LastModifiedBy`：自动填充最后修改人。
 
-   ```java
-   @CreatedDate
-   private LocalDateTime createdDate;
+```java
+@CreatedDate
+private LocalDateTime createdDate;
 
-   @LastModifiedDate
-   private LocalDateTime lastModifiedDate;
+@LastModifiedDate
+private LocalDateTime lastModifiedDate;
 
-   // 如果需要用户信息，需实现 AuditorAware<String> Bean 来提供当前用户
-   @CreatedBy
-   private String createdBy;
-   ```
+// 如果需要用户信息，需实现 AuditorAware<String> Bean 来提供当前用户
+@CreatedBy
+private String createdBy;
 
-### 5.4 projections）
+// 如果需要用户信息，需实现 AuditorAware<String> Bean 来提供当前用户
+@LastModifiedBy
+private String lastModifiedBy;
+```
+
+3\. **实现 AuditorAware\<String\> 接口**：如果需要自动填充创建人、最后修改人，需实现此接口。
+
+```java
+@Configuration
+@EnableJpaAuditing
+public class JpaAuditingConfig implements AuditorAware<String> {
+
+    @Override
+    public Optional<String> getCurrentAuditor() {
+        // 这里返回当前登录用户的用户名
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                .map(Authentication::getName);
+    }
+}
+```
+
+### 5.4 投影（Projections）
 
 当只需要实体的部分字段时，使用Projection（投影）来减少数据传输量，提升查询性能。
 
@@ -574,12 +599,14 @@ public Page<User> findUsersByCriteria(String username, String email, Pageable pa
 ## 6. 常见问题与解决方案 (FAQ)
 
 **Q1: `LazyInitializationException: could not initialize proxy - no Session`**
+
 **A**: 这是最常见的错误。尝试在**事务外部**（如Controller层）访问LAZY加载的关联对象。解决方案：
 
 1. **在Service层的事务方法中预先加载**：使用`FETCH JOIN`或`EntityGraph`。
 2. **使用Open Session in View (OSIV)模式**（不推荐）：延长Session生命周期到View渲染结束，但可能带来性能和数据一致性问题。Spring Boot默认禁用此模式。
 
 **Q2: 查询性能慢**
+
 **A**:
 
 1. 检查是否产生N+1查询，并使用`FETCH JOIN`解决。
@@ -588,6 +615,7 @@ public Page<User> findUsersByCriteria(String username, String email, Pageable pa
 4. 启用SQL日志(`show-sql: true`)和绑定参数日志(`org.hibernate.orm.jdbc.bind: TRACE`)来分析慢查询。
 
 **Q3: 如何调试生成的SQL？**
+
 **A**: 在`application.yml`中配置：
 
 ```yaml
@@ -598,6 +626,7 @@ logging:
 ```
 
 **Q4: 如何在生产环境管理数据库Schema？**
+
 **A**: **绝对不要使用`ddl-auto: update`**。使用专业的数据库迁移工具：
 
 - **Flyway**：基于SQL脚本，版本控制简单明了。
