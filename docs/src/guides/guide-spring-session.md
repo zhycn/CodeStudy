@@ -1,21 +1,21 @@
-好的，没有问题。作为一名编程技术专家和Markdown技术文档大师，我将为你生成一篇关于Spring Session的详尽指南。
-
-在撰写本文之前，我深入分析了Spring Session官方文档、Spring Security官方文档、Redis以及JDBC官方文档，并参考了超过15篇关于分布式会话管理、安全最佳实践、性能优化和云原生部署的中英文权威文章和实践案例，最终整合出当前（2024年初）最为推荐和稳定的集成与最佳实践方案。
-
+---
+title: Spring Session 详解与最佳实践
+description: 详细介绍了 Spring Session 的原理、配置和使用场景，以及与 Spring Security 的集成。
 ---
 
 # Spring Session 详解与最佳实践
 
-## 文档元数据
+- Spring Session 官方文档：<https://spring.io/projects/spring-session>
+- Spring Security 官方文档：<https://spring.io/projects/spring-security>
+- Redis 官方文档：<https://redis.io/documentation>
+- JDBC 官方文档：<https://docs.oracle.com/javase/tutorial/jdbc/>
 
-| 项目                    | 内容                                        |
-| :---------------------- | :------------------------------------------ |
-| **文档版本**            | v2.2                                        |
-| **目标框架**            | Spring Boot 3.2.x (基于 Spring Framework 6) |
-| **JDK 版本**            | JDK 17+                                     |
-| **Spring Session 版本** | 3.2.x (由 Spring Boot 3.2.x 自动管理)       |
-| **最后更新时间**        | 2024-01-25                                  |
-| **作者**                | 技术文档专家                                |
+| 项目                     | 内容                                      |
+| :----------------------- | :---------------------------------------- |
+| **目标框架**             | Spring Boot 3.x (基于 Spring Framework 6) |
+| **JDK 版本**             | JDK 17+                                   |
+| **Spring Session 版本**  | 3.x (由 Spring Boot 3.x 自动管理)         |
+| **Spring Security 版本** | 6.x (由 Spring Boot 3.x 自动管理)         |
 
 ## 1. 引言
 
@@ -430,6 +430,7 @@ public class SessionEventListener {
 ## 5. 常见问题与解决方案 (FAQ)
 
 **Q1: 集成后会话不生效？**
+
 **A**: 按以下步骤排查：
 
 1. 检查依赖是否正确引入（如`spring-session-data-redis`）。
@@ -438,9 +439,11 @@ public class SessionEventListener {
 4. 查看应用启动日志，是否有Spring Session相关的自动配置报告。
 
 **Q2: 序列化错误，如`java.lang.ClassNotFoundException`或`Cannot deserialize ...`？**
+
 **A**: 这是使用默认JDK序列化的常见问题。**最佳解决方案是切换到JSON序列化**（如使用`GenericJackson2JsonRedisSerializer`）。这确保了会话数据的可读性和兼容性。
 
 **Q3: 性能瓶颈？**
+
 **A**:
 
 - 确保使用Redis这样的高性能存储，而不是数据库。
@@ -448,6 +451,7 @@ public class SessionEventListener {
 - 避免在会话中存储过大或过多的对象。会话应尽量保持轻量。
 
 **Q4: 如何手动管理或查询会话？**
+
 **A**: 可以注入`SessionRepository`或Redis特有的`RedisIndexedSessionRepository`来进行高级操作。
 
 ```java

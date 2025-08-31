@@ -40,6 +40,10 @@ Apollo（阿波罗）是携程框架部门研发的**开源分布式配置中心
     <artifactId>apollo-client</artifactId>
     <version>2.0.1</version>
 </dependency>
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-context</artifactId>
+</dependency>
 ```
 
 对于 Maven 项目，如果需要明确管理依赖版本，可以在 `<dependencyManagement>` 部分引入：
