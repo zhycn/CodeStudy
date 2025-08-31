@@ -1,16 +1,18 @@
+---
+title: Springdoc OpenAPI 与 Spring Boot 3 集成详解与最佳实践
+description: 详细介绍了如何在 Spring Boot 3 项目中集成 Springdoc OpenAPI 3.1，包括基本配置、注解使用、自定义文档等。
+---
+
 # Springdoc OpenAPI 与 Spring Boot 3 集成详解与最佳实践
 
-## 文档元数据
+- Springdoc OpenAPI 官方文档: <https://springdoc.org/>
 
-| 项目                       | 内容                                        |
-| :------------------------- | :------------------------------------------ |
-| **文档版本**               | v2.3                                        |
-| **目标框架**               | Spring Boot 3.2.x (基于 Spring Framework 6) |
-| **JDK 版本**               | JDK 17+                                     |
-| **Springdoc OpenAPI 版本** | 2.3.0+                                      |
-| **支持规范**               | OpenAPI 3.1                                 |
-| **最后更新时间**           | 2024-01-25                                  |
-| **作者**                   | 技术文档专家                                |
+| 项目                       | 内容                                      |
+| :------------------------- | :---------------------------------------- |
+| **目标框架**               | Spring Boot 3.x (基于 Spring Framework 6) |
+| **JDK 版本**               | JDK 17+                                   |
+| **Springdoc OpenAPI 版本** | 2.3.0+                                    |
+| **支持规范**               | OpenAPI 3.1                               |
 
 ## 1. 引言
 
@@ -24,7 +26,7 @@ OpenAPI 规范（原 Swagger 规范）是一个用于描述 RESTful API 的标�
 - **自动化测试**
 - **生成交互式文档**
 
-> OpenAPI 3.0 是目前主流版本，而 OpenAPI 3.1 增加了对 JSON Schema 更好的支持
+> OpenAPI 3.0 是目前主流版本，而 OpenAPI 3.1 增加了对 JSON Schema 更好的支持。
 
 ### 1.2 什么是 Springdoc OpenAPI？
 
@@ -58,18 +60,26 @@ Springdoc OpenAPI 是一个基于 OpenAPI 3 规范的开源库，它能：
 <dependency>
     <groupId>org.springdoc</groupId>
     <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    <version>2.3.0</version> <!-- 使用最新版本 -->
+    <version>2.8.11</version> <!-- 使用最新版本 -->
 </dependency>
 
 <!-- 可选：如果需要WebFlux支持 -->
 <dependency>
     <groupId>org.springdoc</groupId>
     <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
-    <version>2.3.0</version>
+    <version>2.8.11</version>
 </dependency>
 ```
 
 ### 2.2 基本配置 (application.yml)
+
+以下均为可选配置，可根据实际需求进行调整：
+
+- `api-docs` 配置组：控制 OpenAPI 文档的生成和访问
+- `swagger-ui` 配置组：自定义 Swagger UI 界面的展示
+- `cache` 配置组：管理文档缓存机制
+- `default-*` 配置：设置默认的媒体类型
+- `servers` 配置：定义可用的服务器环境
 
 ```yaml
 # application.yml
