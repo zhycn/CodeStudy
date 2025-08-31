@@ -89,7 +89,7 @@ export default defineConfig({
     },
     
     outline: {
-      level: [1, 2],
+      level: [2, 3],
       label: '本页目录'
     },
     

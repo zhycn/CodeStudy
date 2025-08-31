@@ -1,6 +1,6 @@
 # SDKMAN! 的使用指南与最佳实践
 
-官方网站：<https://sdkman.io/>
+官方网站：[https://sdkman.io/](https://sdkman.io/){target="\_blank"}
 
 ## 摘要
 

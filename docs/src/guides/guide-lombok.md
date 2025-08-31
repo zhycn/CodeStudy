@@ -1,6 +1,6 @@
 # Lombok 详解与最佳实践：全面提升 Java 开发效率
 
-官方网站：<https://projectlombok.org/>
+官方网站：[https://projectlombok.org/](https://projectlombok.org/){target="\_blank"}
 
 ## 1. Lombok 概述
 
@@ -88,23 +88,29 @@ Lombok 提供了一系列注解来简化 Java 开发，根据功能可以将其�
 
 **数据模型注解**：
 
-- `@Getter`/`@Setter`：自动生成字段的 get/set 方法
-- `@ToString`：生成 toString() 方法，支持排除字段或调用父类方法
-- `@EqualsAndHashCode`：基于字段生成 equals() 和 hashCode() 方法
+- `@Getter`/`@Setter`：自动生成字段的 get/set 方法，支持访问级别控制和懒加载
+- `@ToString`：生成 toString() 方法，支持排除字段、调用父类方法和自定义格式
+- `@EqualsAndHashCode`：基于字段生成 equals() 和 hashCode() 方法，可配置父类属性包含
 - `@Data`：综合注解，包含 `@Getter`、`@Setter`、`@ToString`、`@EqualsAndHashCode` 和 `@RequiredArgsConstructor`
+- `@Value`：不可变类的注解，生成私有构造器、final 字段和 getter 方法
 
 **构造器相关注解**：
 
-- `@NoArgsConstructor`：生成无参构造函数
-- `@AllArgsConstructor`：生成全参构造函数
+- `@NoArgsConstructor`：生成无参构造函数，支持访问级别控制
+- `@AllArgsConstructor`：生成全参构造函数，可自定义参数顺序
 - `@RequiredArgsConstructor`：生成包含 final 字段和 `@NonNull` 字段的构造方法
+- `@NonNull`：参数空值检查，自动生成非空校验代码
 
 **其他实用注解**：
 
-- `@Builder`：生成 Builder 模式代码，简化对象创建
-- `@Slf4j`/`@Log` 等：自动生成日志对象
+- `@Builder`：生成 Builder 模式代码，支持链式调用和集合处理
+- `@Slf4j`/`@Log`/`@CommonsLog`/`@Log4j2`：自动生成各类日志对象（建议只使用 `@Slf4j`）
 - `@SneakyThrows`：自动抛出受检异常，无需显式声明 throws
-- `@Synchronized`：为方法添加同步锁
+- `@Synchronized`：为方法添加同步锁，比 synchronized 关键字更灵活
+- `@Cleanup`：自动资源管理，确保资源正确关闭
+- `@With`：生成对象不可变拷贝方法
+- `@Accessors`：配置链式调用和字段访问方式
+- `@Delegate`：实现委托模式，自动生成代理方法
 
 ### 3.2 构造器相关注解
 
