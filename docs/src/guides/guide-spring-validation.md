@@ -1,22 +1,20 @@
-好的，没有问题。作为一名编程技术专家和Markdown技术文档大师，我将为你生成一篇关于Spring Validation的详尽指南。
-
-在撰写本文之前，我深入分析了Bean Validation 3.0 (Jakarta EE) 规范、Spring Framework官方文档、Hibernate Validator官方文档以及超过15篇关于验证最佳实践、自定义约束、性能考虑和REST API错误处理的中英文权威文章和实践案例，最终整合出当前（2024年初）最为推荐和稳定的集成与最佳实践方案。
-
+---
+title: Spring Validation 详解与最佳实践
+description: 了解 Spring Validation 是如何工作的，以及如何在 Spring 应用程序中使用它来验证数据。
 ---
 
 # Spring Validation 详解与最佳实践
 
-## 文档元数据
+- Spring 官方文档: [Java Bean Validation](https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html)
+- Jakarta Validation 官方文档: <https://beanvalidation.org/>
+- Hibernate Validator 官方文档: <https://hibernate.org/validator/>
 
-| 项目             | 内容                                        |
-| :--------------- | :------------------------------------------ |
-| **文档版本**     | v2.3                                        |
-| **目标框架**     | Spring Boot 3.2.x (基于 Spring Framework 6) |
-| **JDK 版本**     | JDK 17+                                     |
-| **验证规范**     | Bean Validation 3.0 (Jakarta EE 10)         |
-| **验证提供商**   | Hibernate Validator 8.x (默认)              |
-| **最后更新时间** | 2024-01-25                                  |
-| **作者**         | 技术文档专家                                |
+| 项目           | 内容                                      |
+| :------------- | :---------------------------------------- |
+| **目标框架**   | Spring Boot 3.x (基于 Spring Framework 6) |
+| **JDK 版本**   | JDK 17+                                   |
+| **验证规范**   | Bean Validation 3.0 (Jakarta EE 10)       |
+| **验证提供商** | Hibernate Validator 8.x (默认)            |
 
 ## 1. 引言
 
@@ -95,18 +93,23 @@ Spring Framework 并不提供自己的验证实现，而是**完美地集成并�
 
 Bean Validation 提供了一系列开箱即用的约束注解。以下是一些最常用的：
 
-| 注解                              | 适用类型                             | 描述                                                                            |
-| :-------------------------------- | :----------------------------------- | :------------------------------------------------------------------------------ |
-| **`@NotNull`**                    | 任意                                 | 验证注解元素不能是`null`。                                                      |
-| **`@NotBlank`**                   | `String`                             | 验证字符串不能为`null`，且必须包含至少一个非空白字符。                          |
-| **`@NotEmpty`**                   | `String`, `Collection`, `Map`, Array | 验证元素不能为`null`且不能为空（字符串长度>0，集合size>0）。                    |
-| **`@Size`**                       | `String`, `Collection`, `Map`, Array | 验证元素大小在指定范围内（如`@Size(min=2, max=10)`）。                          |
-| **`@Email`**                      | `String`                             | 验证字符串是否是合法的电子邮件地址。                                            |
-| **`@Min`** / **`@Max`**           | 数值类型                             | 验证数值是否大于等于/小于等于指定值。                                           |
-| **`@Positive`** / **`@Negative`** | 数值类型                             | 验证数值是正数（不包括0）/负数。                                                |
-| **`@Pattern`**                    | `String`                             | 验证字符串是否匹配指定的正则表达式（如`@Pattern(regexp = "^[a-zA-Z0-9]+$")`）。 |
-| **`@Past`** / **`@Future`**       | 时间日期类型                         | 验证日期是否在当前时间之前/之后。                                               |
-| **`@Valid`**                      | 任意对象                             | **Spring常用**，用于触发嵌套属性的级联验证。                                    |
+| 注解                                          | 适用类型                             | 描述                                                                            |
+| :-------------------------------------------- | :----------------------------------- | :------------------------------------------------------------------------------ |
+| **`@NotNull`**                                | 任意                                 | 验证注解元素不能是`null`。                                                      |
+| **`@NotBlank`**                               | `String`                             | 验证字符串不能为`null`，且必须包含至少一个非空白字符。                          |
+| **`@NotEmpty`**                               | `String`, `Collection`, `Map`, Array | 验证元素不能为`null`且不能为空（字符串长度>0，集合size>0）。                    |
+| **`@Size`**                                   | `String`, `Collection`, `Map`, Array | 验证元素大小在指定范围内（如`@Size(min=2, max=10)`）。                          |
+| **`@Email`**                                  | `String`                             | 验证字符串是否是合法的电子邮件地址。                                            |
+| **`@Min`** / **`@Max`**                       | 数值类型                             | 验证数值是否大于等于/小于等于指定值。                                           |
+| **`@DecimalMin`** / **`@DecimalMax`**         | 数值类型                             | 验证数值是否大于等于/小于等于指定值（支持小数）。                               |
+| **`@Positive`** / **`@Negative`**             | 数值类型                             | 验证数值是正数（不包括0）/负数。                                                |
+| **`@PositiveOrZero`** / **`@NegativeOrZero`** | 数值类型                             | 验证数值是正数或零/负数或零。                                                   |
+| **`@Pattern`**                                | `String`                             | 验证字符串是否匹配指定的正则表达式（如`@Pattern(regexp = "^[a-zA-Z0-9]+$")`）。 |
+| **`@Past`** / **`@Future`**                   | 时间日期类型                         | 验证日期是否在当前时间之前/之后。                                               |
+| **`@PastOrPresent`** / **`@FutureOrPresent`** | 时间日期类型                         | 验证日期是否在当前时间之前或现在/之后或现在。                                   |
+| **`@Valid`**                                  | 任意对象                             | **Spring常用**，用于触发嵌套属性的级联验证。                                    |
+| **`@AssertTrue`** / **`@AssertFalse`**        | `boolean`                            | 验证布尔值是否为true/false。                                                    |
+| **`@Digits`**                                 | 数值类型                             | 验证数值的整数位数和小数位数是否在指定范围内。                                  |
 
 ## 3. 集成与实战示例
 
@@ -543,6 +546,7 @@ public class MyService {
 ## 6. 常见问题与解决方案 (FAQ)
 
 **Q1: 验证不生效？**
+
 **A**: 按以下步骤排查：
 
 1. 确保引入了`spring-boot-starter-validation`依赖。
@@ -550,12 +554,15 @@ public class MyService {
 3. 对于`@RequestParam`和`@PathVariable`，确保在Controller类上添加了`@Validated`注解。
 
 **Q2: 如何忽略某些字段的验证？**
+
 **A**: 使用`@Valid`注解的组（Groups）功能。可以为不同场景创建不同的验证组。
 
 **Q3: 如何验证一个对象列表？**
+
 **A**: 使用`List<@Valid YourDto> yourList`。注意`@Valid`注解的位置。
 
 **Q4: 自定义验证器中如何注入Spring Bean？**
+
 **A**: 你的验证器默认不是Spring管理的Bean。要让Spring管理它，可以通过在自定义约束注解上使用`@Constraint(validatedBy = {})`并在配置类中注册Bean来实现，或者使用`SpringConstraintValidatorFactory`（高级用法）。
 
 ## 7. 总结

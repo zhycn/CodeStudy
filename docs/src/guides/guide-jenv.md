@@ -3,7 +3,7 @@ title: jEnv 详解与最佳实践
 description: 了解 jEnv 是如何管理和切换多个 Java 版本的，以及它的最佳实践。
 ---
 
-# {{ $frontmatter.title }}
+# jEnv 详解与最佳实践
 
 官网地址：<https://www.jEnv.be/>
 
