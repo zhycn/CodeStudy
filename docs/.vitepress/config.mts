@@ -16,7 +16,7 @@ export default defineConfig({
   themeConfig: {
     // logo: '/logo.svg', // 添加站点Logo
     // siteTitle: false, // 隐藏标题文本（用Logo替代）
-    
+
     // 增强的本地搜索配置
     search: {
       provider: 'local',
@@ -29,12 +29,12 @@ export default defineConfig({
             footer: {
               selectText: '选择',
               navigateText: '切换',
-              closeText: '关闭'
-            }
-          }
+              closeText: '关闭',
+            },
+          },
         },
         // detailedView: true // 显示详细搜索结果
-      }
+      },
     },
 
     // 优化的导航菜单
@@ -78,40 +78,38 @@ export default defineConfig({
     },
 
     // 增强的社交链接
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/zhycn/CodeStudy' }
-    ],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/zhycn/CodeStudy' }],
 
     // 新增功能配置
     editLink: {
       pattern: 'https://github.com/zhycn/CodeStudy/edit/main/docs/src/:path',
-      text: '在 GitHub 上编辑此页'
+      text: '在 GitHub 上编辑此页',
     },
-    
+
     outline: {
       level: [2, 3],
-      label: '本页目录'
+      label: '本页目录',
     },
-    
+
     docFooter: {
       prev: '上一节',
-      next: '下一节'
+      next: '下一节',
     },
-    
+
     footer: {
       message: '基于 MIT 许可发布',
-      copyright: `版权所有 © 2023-${new Date().getFullYear()} CodeStudy`
+      copyright: `版权所有 © 2023-${new Date().getFullYear()} CodeStudy`,
     },
-    
+
     darkModeSwitchLabel: '主题切换',
     returnToTopLabel: '返回顶部',
     lastUpdatedText: '最后更新',
-    sidebarMenuLabel: '菜单'
+    sidebarMenuLabel: '菜单',
   },
-  
+
   markdown: {
     theme: 'material-theme-palenight',
     lineNumbers: true,
-    toc: { level: [2, 3] }
-  }
+    toc: { level: [2, 3] },
+  },
 });

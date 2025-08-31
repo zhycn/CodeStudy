@@ -1,6 +1,11 @@
-# SDKMAN! 的使用指南与最佳实践
+---
+title: SDKMAN! 的使用指南与最佳实践
+description: SDKMAN! 是一个强大的命令行工具，用于管理和切换不同版本的 SDK（Software Development Kits），如 Java、Maven、Gradle 等。它提供了简单的命令来安装、卸载、切换和管理不同版本的 SDK，极大地简化了开发环境的配置和管理。
+---
 
-官方网站：[https://sdkman.io/](https://sdkman.io/){target="\_blank"}
+# {{ $frontmatter.title }}
+
+官方网站：[https://sdkman.io/](https://sdkman.io/)
 
 ## 摘要
 
