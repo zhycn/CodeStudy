@@ -10,6 +10,7 @@
 - [MapStruct 与 Spring Boot 3 集成详解与最佳实践](./guide-mapstruct.md)
 - [SDKMAN! 的使用指南与最佳实践](./guide-sdkman.md)
 - [Spring Data JPA 详解与最佳实践](./guide-spring-data-jpa.md)
+- [Spring Retry 详解与最佳实践](./guide-spring-retry.md)
 - [Spring Session 详解与最佳实践](./guide-spring-session.md)
 - [Spring Validation 详解与最佳实践](./guide-spring-validation.md)
 - [Springdoc OpenAPI 与 Spring Boot 3 集成详解与最佳实践](./guide-springdoc.md)
