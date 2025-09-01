@@ -6,6 +6,7 @@
 - [Fastjson2 过滤器详解与最佳实践](./guide-fastjson2-filter.md)
 - [Fastjson2 与 Spring Boot 3 集成详解与最佳实践](./guide-fastjson2.md)
 - [H2 与 Spring Boot 3 集成的详解与最佳实践](./guide-h2.md)
+- [Homebrew 详解与最佳实践](./guide-homebrew.md)
 - [jEnv 详解与最佳实践](./guide-jenv.md)
 - [MapStruct 与 Spring Boot 3 集成详解与最佳实践](./guide-mapstruct.md)
 - [SDKMAN! 的使用指南与最佳实践](./guide-sdkman.md)
