@@ -40,7 +40,7 @@ export default defineConfig({
     // 优化的导航菜单
     nav: [
       { text: '首页', link: '/', activeMatch: '/' },
-      // { text: '学习指南', link: '/guides/', activeMatch: '/guides/' },
+      { text: '编程指南', link: '/guides/', activeMatch: '/guides/' },
       // { text: '书单推荐', link: '/books/', activeMatch: '/books/' },
       // { text: '工具资源', link: '/tools/', activeMatch: '/tools/' },
       // { text: '视频课程', link: '/courses/', activeMatch: '/courses/' }
