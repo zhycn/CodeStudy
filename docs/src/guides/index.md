@@ -1,6 +1,7 @@
 # 编程指南
 
 - [Lombok 详解与最佳实践：全面提升 Java 开发效率](./guide-lombok.md)
+- [Apache Maven 详解与最佳实践](./guide-apache-maven.md)
 - [Apollo Client 与 Spring Boot 3 集成详解与最佳实践](./guide-apollo-client.md)
 - [Fastjson2 详解与最佳实践](./guide-fastjson2-core.md)
 - [Fastjson2 过滤器详解与最佳实践](./guide-fastjson2-filter.md)
