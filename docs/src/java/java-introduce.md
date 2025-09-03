@@ -5,13 +5,11 @@ description: 介绍 Java 编程语言的基本概念、历史、特性和应用�
 
 # Java 编程语言简介
 
-Java 官方网站：<https://www.java.com/zh-CN/>
-
 ## 1. 什么是 Java？
 
-Java 是一门流行的、高级的、**面向对象**的编程语言，也是一种**平台**，最初由 Sun Microsystems（现为 Oracle Corporation 的一部分）于 **1995年5月**正式推出。它的设计目标是让开发者能够"**一次编写，到处运行**"（Write Once, Run Anywhere, WORA），这意味着编译后的Java代码（字节码）可以在所有支持Java的平台上运行，而无需重新编译。
+Java 是一门流行的、高级的、面向对象的编程语言，也是一种平台，最初由 Sun Microsystems（现为 Oracle Corporation 的一部分）于1995年5月正式推出。它的设计目标是让开发者能够"**一次编写，到处运行**"（Write Once, Run Anywhere, WORA），这意味着编译后的 Java 代码（字节码）可以在所有支持 Java 的平台上运行，而无需重新编译。
 
-Java 不仅是一种语言，还包括一个庞大的生态系统，涵盖开发工具、丰富的类库（API）、运行时环境等。目前全球有超过 **30亿台设备** 运行着 Java，它被广泛应用于企业级应用、移动应用（尤其是Android）、Web应用、服务器、游戏、大数据技术等领域。
+Java 不仅是一种编程语言，更是一个完整的技术生态系统。它包含了强大的开发工具（如 IDE、构建工具）、丰富的标准类库（Java API）、高性能的运行时环境（JRE）以及活跃的开源社区。据统计，全球已有超过 **150亿台设备** 运行 Java 程序，应用范围涵盖企业软件、Android 移动应用、云计算、微服务、大数据处理、人工智能等众多领域，是当今最受欢迎的编程语言之一。
 
 ## 2. Java 的历史与起源
 
@@ -21,11 +19,11 @@ Java 的故事始于 **1991年**。当时 Sun Microsystems 的一个团队（Gre
 
 1995年，Oak 正式更名为 **Java**（据说是因为这个名字来自于开发团队成员常喝的咖啡，因此标志也是一杯热气腾腾的咖啡），并于同年正式发布。Java 的跨平台能力和为 Web 带来的交互性，使其迅速流行起来。
 
-**Java 版本发展历程**:
+::: info Java 版本发展历程
 
 - **JDK 1.0 (1996)**: Java 正式发布的第一个版本。
 - **JDK 1.1 (1997)**: 引入了内部类、JavaBeans、JDBC、RMI、反射等。
-- **J2SE 1.2 (1998)**: 引入集合框架、JIT编译器、Swing GUI工具包。版本号改用"Java 2"。
+- **J2SE 1.2 (1998)**: 引入集合框架、JIT编译器、Swing GUI工具包。
 - **J2SE 1.3 (2000)**: 引入 HotSpot JVM、JNDI、JPDA、JavaSound。
 - **J2SE 1.4 (2002)**: 引入 assert、正则表达式、NIO、日志API、XML解析器。
 - **J2SE 5.0 (2004)**: 增加泛型、注解、枚举、可变参数、foreach循环、自动装箱/拆箱等。
@@ -45,12 +43,16 @@ Java 的故事始于 **1991年**。当时 Sun Microsystems 的一个团队（Gre
 - **Java SE 19 (2022)**: 虚拟线程预览、结构化并发预览。
 - **Java SE 20 (2023)**: 作用域值预览、记录模式预览。
 - **Java SE 21 (2023)**: LTS版本。虚拟线程正式版、字符串模板预览、序列集合。
+- **Java SE 22 (2024)**: 未命名变量和模式（预览）、String 模板（第二次预览）。
+- **Java SE 23 (2024)**: 未命名模式和变量（预览）、未命名类和实例主方法（预览）、数学函数增强。
+- **Java SE 24 (2025)**: 模式匹配扩展、字符串模板（正式版）、ZGC 改进。
+  :::
 
 **重要说明**：
 
-- 从Java 9开始，Oracle采用每六个月发布一个特性版本的节奏。
-- LTS（长期支持）版本包括Java 8、11、17、21，提供更长期的更新支持。
-- 2009年Oracle收购Sun后，Java的开发和维护由Oracle负责。
+- 从 Java 9 开始，Oracle 采用每六个月发布一个特性版本的节奏。
+- LTS（长期支持）版本包括 Java 8、11、17、21，提供更长期的更新支持。
+- 2009 年 Oracle 收购 Sun 后，Java 的开发和维护由 Oracle 负责。
 
 ## 3. Java 的主要特性
 
@@ -120,7 +122,7 @@ flowchart TD
     - **其他工具**：如打包工具 (jar)、文档生成工具 (javadoc)、调试工具 (jdb) 等。
 
 - **JRE (Java Runtime Environment) - Java 运行时环境**
-  - **功能**：用于**运行**已编译的 Java 程序（字节码）。如果你不需要开发，只需要运行Java程序，安装JRE即可。
+  - **功能**：用于**运行**已编译的 Java 程序（字节码）。如果你不需要开发，只需要运行 Java 程序，安装 JRE 即可。
   - **包含**：
     - **JVM**。
     - **Java 核心类库 (API)**：程序运行时需要的基础库文件。
@@ -131,7 +133,7 @@ flowchart TD
     - **垃圾回收 (Garbage Collection, GC)**：自动管理内存分配和回收，释放不再使用的对象所占用的内存。
     - **即时编译 (Just-In-Time Compilation, JIT)**：将频繁执行的字节码编译成本地机器码并缓存，大幅提升执行效率。
 
-**关系总结**：JDK > JRE > JVM。开发者安装 **JDK**；用户运行程序只需安装 **JRE**（但现在许多JDK安装包也自带JRE，且对于简单应用，Oracle也倾向于推荐用户直接安装完整的JDK）。
+**关系总结**：JDK > JRE > JVM。开发者安装 **JDK**；用户运行程序只需安装 **JRE**（但现在大多数 JDK 安装包也自带 JRE，且对于简单应用，Oracle 也倾向于推荐用户直接安装完整的 JDK）。
 
 ## 6. 第一个 Java 程序
 
@@ -177,7 +179,7 @@ flowchart TD
 Java 是一门多功能语言，其应用非常广泛：
 
 - **企业级应用 (Enterprise Applications)**：Java EE (Jakarta EE) 是开发大型、分布式企业系统的首选平台之一。常用框架如 Spring, Hibernate。
-- **Android 应用开发 (Android App Development)**：Android 官方应用开发语言，虽然现在也有 Kotlin，但Java仍是其基础。
+- **Android 应用开发 (Android App Development)**：Android 官方应用开发语言，虽然现在也有 Kotlin，但 Java 仍是其基础。
 - **Web 应用程序 (Web Applications)**：通过 Servlets, JSP, Spring MVC 等技术开发服务器端应用。
 - **大数据技术 (Big Data)**：Hadoop, Spark, Flink 等大数据处理框架大量使用 Java 或其衍生语言（如Scala）。
 - **服务器端程序与中间件 (Server-side Programs & Middleware)**：广泛应用于 Web 服务器、应用服务器、消息中间件等。
