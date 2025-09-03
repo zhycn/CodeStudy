@@ -22,22 +22,6 @@
 
 ---
 
-- [Java 基础语法](./doc-java-basic.md)
-- [Java 面向对象编程](./doc-java-oop.md)
-- [Java 异常处理](./doc-java-exception.md)
-- [Java 集合框架](./doc-java-collection.md)
-- [Java 输入输出](./doc-java-io.md)
-- [Java 多线程](./doc-java-thread.md)
-- [Java 网络编程](./doc-java-network.md)
-- [Java 数据库编程](./doc-java-database.md)
-- [Java 反射机制](./doc-java-reflection.md)
-- [Java 注解](./doc-java-annotation.md)
-- [Java 8 新特性](./doc-java-8.md)
-- [Java 9 新特性](./doc-java-9.md)
-- [Java 10 新特性](./doc-java-10.md)
-- [Java 11 新特性](./doc-java-11.md)
-- [Java 12 新特性](./doc-java-12.md)
-
 ### **第一阶段：Java基础与核心（文章1-10）**
 
 这是你Java大厦的根基，每一篇文章都至关重要。
