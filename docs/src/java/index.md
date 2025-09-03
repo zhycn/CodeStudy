@@ -46,17 +46,44 @@ Oracle 提供了丰富的 Java 相关资源：
   - JDK 下载：<https://www.oracle.com/cn/java/technologies/downloads/>
   - OpenJDK 下载：<https://jdk.java.net/>
 
+- **开发工具**
+  - IntelliJ IDEA：<https://www.jetbrains.com/idea/>
+  - Eclipse：<https://www.eclipse.org/>
+  - NetBeans：<https://netbeans.apache.org/>
+  - Visual Studio Code：<https://code.visualstudio.com/>
+
 - **技术文档**
   - Java SE 文档中心：<https://docs.oracle.com/en/java/javase/>
   - Java API 文档：[JDK 8](https://docs.oracle.com/javase/8/docs/api/index.html) | [JDK 11](https://docs.oracle.com/javase/11/docs/api/index.html) | [JDK 17](https://docs.oracle.com/javase/17/docs/api/index.html) | [JDK 21](https://docs.oracle.com/en/java/javase/21/docs/api/index.html) | [JDK 24](https://docs.oracle.com/javase/24/docs/api/index.html)
   - Java 语言规范：<https://docs.oracle.com/javase/specs/>
   - Java 官方教程：<https://docs.oracle.com/javase/tutorial/>
-    :::
+
+:::
 
 ## 文档列表
 
-- [Java 编程语言简介](./java-introduce.md)
+- [Java 编程语言简介](./java-introduction.md)
 - [Java 各版本主要特性详解](./java-version-features.md)
 - [Java 基础语法详解](./java-basic-syntax.md)
+- [Java 注释详解](./java-comments.md)
 - [Java 修饰符详解](./java-modifier.md)
+- [Java 运算符详解](./java-operators.md)
 - [Java 包（Package）详解与最佳实践](./java-package.md)
+- [Java 基本数据类型详解](./java-datatypes.md)
+- [Java 构造方法详解与最佳实践](./java-constructor.md)
+- [Java 异常处理详解](./java-exception.md)
+- [Java 注解详解](./java-annotation.md)
+<!-- - [Java 反射详解](./java-reflection.md)
+- [Java 多线程详解](./java-multi-threading.md)
+- [Java 集合框架详解](./java-collection-framework.md)
+- [Java 输入输出（I/O）详解](./java-io.md)
+- [Java 网络编程详解](./java-networking.md)
+- [Java 数据库编程详解](./java-database.md)
+- [Java 反射详解](./java-reflection.md)
+- [Java 注解详解](./java-annotation.md)
+- [Java 反射详解](./java-reflection.md)
+- [Java 多线程详解](./java-multi-threading.md)
+- [Java 集合框架详解](./java-collection-framework.md)
+- [Java 输入输出（I/O）详解](./java-io.md)
+- [Java 网络编程详解](./java-networking.md)
+- [Java 数据库编程详解](./java-database.md) -->

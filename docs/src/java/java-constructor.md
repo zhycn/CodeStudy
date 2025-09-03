@@ -571,7 +571,7 @@ public record User(String username, String email) {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("用户名不能为空");
         }
-        if (!email.contains("@")) {
+        if (email != null && !email.contains("@")) {
             throw new IllegalArgumentException("邮箱格式错误");
         }
     }
