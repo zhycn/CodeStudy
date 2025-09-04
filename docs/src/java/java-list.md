@@ -1,28 +1,28 @@
 ---
-title: Java List集合详解与最佳实践
-description: 这篇文章详细介绍了Java List集合的核心概念、常用方法、性能优化技巧以及最佳实践。通过学习，你将能够理解List的工作原理，掌握其在实际开发中的应用，避免常见的问题。
+title: Java List 集合详解与最佳实践
+description: 这篇文章详细介绍了 Java List 集合的核心概念、常用方法、性能优化技巧以及最佳实践。通过学习，你将能够理解 List 的工作原理，掌握其在实际开发中的应用，避免常见的问题。
 ---
 
-# Java List集合详解与最佳实践
+# Java List 集合详解与最佳实践
 
-## 1 List接口概述
+## 1. List 接口概述
 
-Java List接口是Java集合框架（Java Collections Framework）中最重要的接口之一，它继承自Collection接口，专门用于存储有序的元素集合。List的核心特性包括：
+Java List 接口是 Java 集合框架（Java Collections Framework）中最重要的接口之一，它继承自 Collection 接口，专门用于存储有序的元素集合。List 的核心特性包括：
 
-- **有序性**：List中的元素按照插入顺序存储，每个元素都有对应的索引位置
+- **有序性**：List 中的元素按照插入顺序存储，每个元素都有对应的索引位置
 - **可重复性**：允许存储相同的元素，即重复值
-- **可索引访问**：支持通过整数索引（从0开始）访问元素
+- **可索引访问**：支持通过整数索引（从 0 开始）访问元素
 - **动态扩容**：自动处理容量调整，无需手动管理大小
 
-List与Set、Queue等其他集合类型的区别在于它保持了元素的插入顺序并允许重复值，这使其在需要维持元素顺序的场景中特别有用。
+List 与 Set、Queue 等其他集合类型的区别在于它保持了元素的插入顺序并允许重复值，这使其在需要维持元素顺序的场景中特别有用。
 
-## 2 List核心实现类对比
+## 2. List 核心实现类对比
 
-Java提供了多个List接口的实现类，每个都有其特定的应用场景和性能特征。
+Java 提供了多个 List 接口的实现类，每个都有其特定的应用场景和性能特征。
 
 ### 2.1 ArrayList
 
-ArrayList是基于**动态数组**的实现，是最常用的List实现类。
+ArrayList 是基于**动态数组**的实现，是最常用的 List 实现类。
 
 ```java
 // 创建ArrayList的几种方式
@@ -40,7 +40,7 @@ List<String> arrayList3 = new ArrayList<>(existingList); // 从现有集合创�
 
 ### 2.2 LinkedList
 
-LinkedList是基于**双向链表**的实现。
+LinkedList 是基于**双向链表**的实现。
 
 ```java
 // 创建LinkedList及特有操作
@@ -59,11 +59,11 @@ linkedList.removeLast();       // 移除并返回最后一个元素
 - 非线程安全
 - 内存开销较大（需要存储前后节点的引用）
 
-### 2.3 Vector与CopyOnWriteArrayList
+### 2.3 Vector 与 CopyOnWriteArrayList
 
-**Vector**是早期版本的线程安全列表，与ArrayList类似但所有方法都同步，性能较低，现在一般不推荐使用。
+**Vector** 是早期版本的线程安全列表，与 ArrayList 类似但所有方法都同步，性能较低，现在一般不推荐使用。
 
-**CopyOnWriteArrayList**是Java并发包中的线程安全实现，采用"写时复制"技术，适合读多写少的并发场景。
+**CopyOnWriteArrayList** 是 Java 并发包中的线程安全实现，采用 "写时复制" 技术，适合读多写少的并发场景。
 
 ```java
 // 线程安全List的创建方式
@@ -86,11 +86,11 @@ List<String> copyOnWriteList = new CopyOnWriteArrayList<>(); // 写时复制技�
 | **线程安全**      | 否            | 否               | 是（同步方法）         | 是（写时复制）           |
 | **适用场景**      | 频繁随机访问  | 频繁头尾插入删除 | 线程安全需求（不推荐） | 读多写少的并发场景       |
 
-## 3 List核心操作与方法
+## 3. List 核心操作与方法
 
 ### 3.1 基础操作
 
-List接口提供了丰富的方法来操作元素：
+List 接口提供了丰富的方法来操作元素：
 
 ```java
 // 创建List
@@ -123,7 +123,7 @@ list.clear();                   // 清空列表
 
 ### 3.2 遍历方式
 
-List提供了多种遍历方式，适用于不同场景：
+List 接口提供了多种遍历方式，适用于不同场景：
 
 ```java
 List<String> languages = Arrays.asList("Java", "Python", "C++", "JavaScript");
@@ -163,7 +163,7 @@ languages.stream()
 
 ### 3.3 高级操作
 
-List支持多种高级操作，用于复杂数据处理：
+List 支持多种高级操作，用于复杂数据处理：
 
 ```java
 List<Integer> numbers = Arrays.asList(3, 1, 4, 1, 5, 9, 2, 6);
@@ -195,7 +195,7 @@ int min = Collections.min(numbers); // 最小值
 Collections.replaceAll(numbers, 1, 100); // 替换所有匹配元素
 ```
 
-## 4 性能分析与优化
+## 4. 性能分析与优化
 
 ### 4.1 时间复杂度分析
 
@@ -215,7 +215,7 @@ Collections.replaceAll(numbers, 1, 100); // 替换所有匹配元素
 
 ### 4.2 容量优化
 
-对于ArrayList，合理的初始容量设置可以避免多次扩容，提升性能：
+对于 ArrayList，合理的初始容量设置可以避免多次扩容，提升性能：
 
 ```java
 // 不佳实践：默认初始容量小，可能多次扩容
@@ -229,7 +229,7 @@ List<String> bulkData = Arrays.asList("a", "b", "c", "d", "e"); // 已有数据
 list2.addAll(bulkData); // 批量添加效率更高
 ```
 
-ArrayList扩容机制：当添加元素时容量不足，会创建新数组（通常为原容量的1.5倍），然后复制原有元素到新数组。
+ArrayList 扩容机制：当添加元素时容量不足，会创建新数组（通常为原容量的1.5倍），然后复制原有元素到新数组。
 
 ### 4.3 遍历性能优化
 
@@ -256,11 +256,11 @@ largeList.parallelStream() // 并行处理
          .collect(Collectors.toList());
 ```
 
-## 5 线程安全与并发处理
+## 5. 线程安全与并发处理
 
 ### 5.1 线程安全问题
 
-ArrayList和LinkedList都是非线程安全的，在多线程环境下同时进行修改和遍历可能导致：
+ArrayList 和 LinkedList 都是非线程安全的，在多线程环境下同时进行修改和遍历可能导致：
 
 - **ConcurrentModificationException**：迭代过程中检测到结构修改
 - **数据不一致**：多个线程同时修改导致数据丢失或错误
@@ -299,16 +299,16 @@ synchronized(manualSyncList) {
 
 ### 5.3 并发最佳实践
 
-1. **读多写少**：选择`CopyOnWriteArrayList`，避免读操作阻塞
-2. **写多读少**：选择`Collections.synchronizedList`，性能开销较小
+1. **读多写少**：选择 `CopyOnWriteArrayList`，避免读操作阻塞
+2. **写多读少**：选择 `Collections.synchronizedList`，性能开销较小
 3. **复杂操作**：使用显式同步保证原子性操作
-4. **避免在迭代中修改**：使用迭代器的remove方法而非集合的remove方法
+4. **避免在迭代中修改**：使用迭代器的 remove 方法而非集合的 remove 方法
 
-## 6 最佳实践与应用场景
+## 6. 最佳实践与应用场景
 
 ### 6.1 实现类选择指南
 
-根据具体需求选择合适的List实现类：
+根据具体需求选择合适的 List 实现类：
 
 | **应用场景**       | **推荐实现**                 | **理由**                 |
 | ------------------ | ---------------------------- | ------------------------ |
@@ -359,7 +359,7 @@ public List<User> getUsersByIds(@RequestParam List<Long> ids) {
 }
 ```
 
-#### 场景3：使用List实现缓存
+#### 场景3：使用 List 实现缓存
 
 ```java
 // 简单的最近使用（LRU）缓存实现
@@ -501,7 +501,7 @@ List<String> hrNames = employees.stream()
    boolean contains = people.contains(new Person("Alice", 25)); // 需要正确实现equals方法
    ```
 
-## 7 常见问题与解决方案
+## 7. 常见问题与解决方案
 
 ### 7.1 常见异常处理
 
@@ -538,9 +538,9 @@ List<String> hrNames = employees.stream()
 
 ### 7.2 性能问题排查
 
-1. **频繁扩容**：使用初始容量适当的ArrayList
-2. **中间插入过多**：考虑使用LinkedList
-3. **大量查询操作**：使用ArrayList提高随机访问性能
+1. **频繁扩容**：使用初始容量适当的 ArrayList 可以避免频繁扩容，提升性能
+2. **中间插入过多**：考虑使用 LinkedList
+3. **大量查询操作**：使用 ArrayList 提高随机访问性能
 4. **内存占用过大**：考虑使用更紧凑的数据结构或分页处理
 
 ### 7.3 调试与诊断技巧
@@ -561,16 +561,16 @@ int index = Collections.indexOfSubList(numbers, Arrays.asList(1, 4));
 int lastIndex = Collections.lastIndexOfSubList(numbers, Arrays.asList(1, 4));
 ```
 
-## 8 总结
+## 8. 总结
 
-Java List集合是日常开发中最常用的数据结构之一，正确选择和使用List实现类对应用性能至关重要。通过本文的详细讲解，我们可以总结出以下关键点：
+Java List 集合是日常开发中最常用的数据结构之一，正确选择和使用 List 实现类对应用性能至关重要。通过本文的详细讲解，我们可以总结出以下关键点：
 
 1. **ArrayList** 是大多数场景下的默认选择，特别适合随机访问频繁的应用
 2. **LinkedList** 适合头尾插入删除频繁的场景，可以用作队列或双端队列
 3. **CopyOnWriteArrayList** 适合读多写少的并发场景
-4. 合理预分配容量可以显著提升ArrayList性能
+4. 合理预分配容量可以显著提升 ArrayList 性能
 5. 在多线程环境中选择合适的线程安全方案
 6. 使用泛型保证类型安全，避免运行时错误
 7. 掌握正确的遍历和元素操作方式，避免常见异常
 
-List集合的强大功能使其成为Java开发中不可或缺的工具，深入理解其特性和适用场景有助于编写出更高效、健壮的代码。
+List 集合的强大功能使其成为 Java 开发中不可或缺的工具，深入理解其特性和适用场景有助于编写出更高效、健壮的代码。

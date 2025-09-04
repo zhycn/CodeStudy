@@ -1,41 +1,82 @@
 ---
 title: Java 集合框架详解与最佳实践
-description: 这篇文章详细介绍了Java集合框架的核心组件、实现原理、性能特征及最佳实践。通过学习，你将能够理解集合框架的工作原理，掌握集合操作的技巧，避免常见的并发问题。
+description: 这篇文章详细介绍了 Java 集合框架的核心组件、实现原理、性能特征及最佳实践。通过学习，你将能够理解集合框架的工作原理，掌握集合操作的技巧，避免常见的并发问题。
 ---
 
 # Java 集合框架详解与最佳实践
 
-Java集合框架是Java语言中用于存储和操作数据的一组类和接口，它提供了多种数据结构实现，极大地简化了数据处理复杂度。本文将全面解析Java集合框架的核心组件、实现原理、性能特征及最佳实践。
+Java 集合框架是 Java 语言中用于存储和操作数据的一组类和接口，它提供了多种数据结构实现，极大地简化了数据处理复杂度。本文将全面解析 Java 集合框架的核心组件、实现原理、性能特征及最佳实践。
 
 ## 1. 集合框架概述
 
-Java集合框架（Java Collections Framework）是Java提供的一组用于存储和操作对象的类和接口，位于`java.util`包中。它提供了一种统一的方式来处理对象集合，取代了传统的数组处理方式，具有动态扩容、类型安全和丰富API等优势。
+Java 集合框架（Java Collections Framework）是 Java 提供的一组用于存储和操作对象的类和接口，位于 `java.util` 包中。它提供了一种统一的方式来处理对象集合，取代了传统的数组处理方式，具有动态扩容、类型安全和丰富 API 等优势。
 
 ### 1.1 核心架构
 
 Java集合框架主要分为两大体系：
 
-- **Collection接口**：存储单个元素的集合，主要子接口包括List、Set、Queue
-- **Map接口**：存储键值对(key-value)的集合，常用实现类有HashMap、TreeMap等
+- **Collection接口**：存储单个元素的集合，主要子接口包括 List、Set、Queue等
+- **Map接口**：存储键值对(key-value)的集合，常用实现类有 HashMap、TreeMap 等
 
-### 1.2 主要接口层次
+### 1.2 Collection 接口体系
 
-```
-Collection
-├── List (有序、可重复)
-├── Set (无序、不可重复)
-└── Queue (队列结构)
+Collection 是单列集合的根接口，下面有三个主要子接口：List、Set 和 Queue。
 
-Map
-├── SortedMap (键有序)
-└── ConcurrentMap (并发访问)
-```
+#### 1.2.1. List (有序、可重复)
+
+List 接口的主要实现类包括：
+
+| 实现类     | 底层结构 | 特点                                                                          | 线程安全 | 适用场景                                                                          |
+| :--------- | :------- | :---------------------------------------------------------------------------- | :------- | :-------------------------------------------------------------------------------- |
+| ArrayList  | 动态数组 | 查询快（通过索引直接访问），增删慢（需移动元素）                              | 否       | 需要频繁随机访问元素的场景                                                        |
+| LinkedList | 双向链表 | 增删快（只需修改前后元素的引用），查询慢（需从头/尾遍历），可作为队列或栈使用 | 否       | 需要频繁插入删除操作，或需要队列、栈功能的场景                                    |
+| Vector     | 动态数组 | 类似 ArrayList，但线程安全（使用 synchronized）                               | 是       | 多线程环境（但更推荐用 `Collections.synchronizedList` 或 `CopyOnWriteArrayList`） |
+
+#### 1.2.2. Set (无序、不可重复)
+
+Set 接口的主要实现类包括：
+
+| 实现类              | 底层结构             | 特点                                                   | 线程安全 | 适用场景                           |
+| :------------------ | :------------------- | :----------------------------------------------------- | :------- | :--------------------------------- |
+| HashSet             | 哈希表               | 无序，允许 `null` 元素，查找和插入效率高（O(1)）       | 否       | 需要快速查找且不关心元素顺序的场景 |
+| LinkedHashSet       | 哈希表 + 双向链表    | 维护元素的**插入顺序**                                 | 否       | 需要保持元素插入顺序的场景         |
+| TreeSet             | 红黑树               | 元素**有序**（自然顺序或定制排序），不允许 `null` 元素 | 否       | 需要元素自动排序的场景             |
+| CopyOnWriteArraySet | 动态数组（写时复制） | 线程安全，读操作远多于写操作的场景                     | 是       | 多线程环境下，读多写少的场景       |
+
+#### 1.2.3. Queue & Deque (队列/双端队列)
+
+Queue 和 Deque 接口的主要实现类包括：
+
+| 实现类                | 底层结构 | 特点                                                     | 线程安全 | 适用场景                               |
+| :-------------------- | :------- | :------------------------------------------------------- | :------- | :------------------------------------- |
+| LinkedList            | 双向链表 | 可作为队列、双端队列(Deque)或列表使用，允许null元素      | 否       | 需要队列、双端队列或栈功能的通用场景   |
+| PriorityQueue         | 二叉堆   | 元素按优先级出队（自然顺序或定制排序）                   | 否       | 任务调度等需要按优先级处理元素的场景   |
+| ArrayDeque            | 循环数组 | 性能通常优于 LinkedList，不允许 null 元素                | 否       | 需要高效实现队列或栈，且容量已知的场景 |
+| ArrayBlockingQueue    | 数组     | **有界**、**阻塞**、线程安全                             | 是       | 生产者-消费者模型                      |
+| ConcurrentLinkedQueue | 链表     | **无界**、**非阻塞**、线程安全（CAS）                    | 是       | 高并发环境下的无锁队列场景             |
+| LinkedBlockingQueue   | 链表     | **有界**、**阻塞**、线程安全（ReentrantLock）            | 是       | 高并发环境下的有界队列场景             |
+| PriorityBlockingQueue | 数组     | **无界**、**阻塞**、线程安全（ReentrantLock + 优先队列） | 是       | 高并发环境下的优先队列场景             |
+
+### 1.3 Map 接口体系
+
+Map 是存储键值对（Key-Value）的双列集合接口。
+
+#### 1.3.1 Map 主要实现类
+
+| 实现类                | 底层结构                   | 特点                                                                | 线程安全 | 适用场景                                               |
+| :-------------------- | :------------------------- | :------------------------------------------------------------------ | :------- | :----------------------------------------------------- |
+| HashMap               | 哈希表（数组+链表/红黑树） | 无序，允许 `null` 键和 `null` 值，查找效率高                        | 否       | 大多数需要键值对存储的场景                             |
+| LinkedHashMap         | 哈希表 + 双向链表          | 维护元素的**插入顺序**或**访问顺序**                                | 否       | 需要保持键的插入顺序或实现LRU缓存                      |
+| TreeMap               | 红黑树                     | 键**有序**（自然顺序或定制排序），不支持 `null` 键                  | 否       | 需要键按自然顺序或定制排序的场景                       |
+| Hashtable             | 哈希表                     | 线程安全（synchronized），不允许 `null` 键和 `null` 值，性能较低    | 是       | 多线程环境（但已过时，更推荐使用 `ConcurrentHashMap`） |
+| ConcurrentHashMap     | 哈希表（分段锁/CAS）       | 线程安全，高并发性能优于 Hashtable 和 `Collections.synchronizedMap` | 是       | 高并发环境下需要线程安全的HashMap                      |
+| ConcurrentSkipListMap | 跳表                       | 线程安全，键有序                                                    | 是       | 高并发环境下需要键有序的线程安全Map                    |
 
 ## 2. 核心接口详解
 
-### 2.1 Collection接口
+### 2.1 Collection 接口
 
-Collection接口是所有单列集合的根接口，定义了添加、删除、遍历等基本操作：
+Collection 接口是所有单列集合的根接口，定义了添加、删除、遍历等基本操作：
 
 ```java
 public interface Collection<E> extends Iterable<E> {
@@ -49,9 +90,9 @@ public interface Collection<E> extends Iterable<E> {
 }
 ```
 
-### 2.2 List接口
+### 2.2 List 接口
 
-List是有序集合，允许重复元素，支持按索引访问：
+List 是有序集合，允许重复元素，支持按索引访问：
 
 ```java
 List<String> list = new ArrayList<>();
@@ -64,7 +105,7 @@ list.remove(0); // 删除元素
 
 ### 2.3 Set接口
 
-Set是不允许重复元素的集合，基于equals()和hashCode()判断元素唯一性：
+Set 是不允许重复元素的集合，基于 equals() 和 hashCode() 判断元素唯一性：
 
 ```java
 Set<String> set = new HashSet<>();
@@ -74,9 +115,9 @@ set.add("Apple"); // 重复元素将被忽略
 System.out.println(set.size()); // 输出: 2
 ```
 
-### 2.4 Map接口
+### 2.4 Map 接口
 
-Map用于存储键值对，键唯一，值可重复：
+Map 用于存储键值对，键唯一，值可重复：
 
 ```java
 Map<String, Integer> map = new HashMap<>();
@@ -86,9 +127,9 @@ int value = map.get("Apple"); // 获取值
 map.remove("Banana"); // 删除键值对
 ```
 
-### 2.5 Queue接口
+### 2.5 Queue 接口
 
-Queue用于在处理之前保存元素的集合，通常遵循FIFO(先进先出)原则：
+Queue 用于在处理之前保存元素的集合，通常遵循 FIFO(先进先出) 原则：
 
 ```java
 Queue<String> queue = new LinkedList<>();
@@ -99,7 +140,7 @@ String task = queue.poll(); // 获取并移除队首元素
 
 ## 3. 常用实现类详解
 
-### 3.1 List实现类对比
+### 3.1 List 实现类对比
 
 #### 3.1.1 ArrayList
 
@@ -126,7 +167,7 @@ String item = list.get(50);
 - **特点**：
   - 插入删除快(O(1))
   - 随机访问慢(O(n))
-  - 实现了List和Deque接口
+  - 实现了 List 和 Deque 接口
 
 ```java
 LinkedList<String> list = new LinkedList<>();
@@ -138,7 +179,7 @@ String last = list.removeLast(); // 删除尾部元素
 
 #### 3.1.3 Vector
 
-- **特点**：线程安全的ArrayList，但性能较低
+- **特点**：线程安全的 ArrayList，但性能较低
 - **扩容机制**：默认扩容为原容量的2倍
 
 ```java
@@ -153,11 +194,11 @@ List<String> syncedList = Collections.synchronizedList(new ArrayList<>());
 
 #### 3.2.1 HashSet
 
-- **底层实现**：基于HashMap(使用HashMap的key存储元素)
+- **底层实现**：基于 HashMap(使用 HashMap 的 key 存储元素)
 - **特点**：
   - 无序
   - 添加、删除、查找操作快(O(1))
-  - 允许null元素
+  - 允许 null 元素
 
 ```java
 Set<String> set = new HashSet<>();
@@ -169,7 +210,7 @@ System.out.println(set); // 输出: [Apple, Banana]
 
 #### 3.2.2 LinkedHashSet
 
-- **特点**：继承HashSet，维护插入顺序
+- **特点**：继承 HashSet，维护插入顺序
 - **适用场景**：需要保持插入顺序的去重场景
 
 ```java
@@ -184,9 +225,9 @@ System.out.println(linkedSet); // 输出: [Banana, Apple, Orange] (保持插入�
 
 - **底层实现**：基于红黑树
 - **特点**：
-  - 元素按自然顺序或Comparator排序
+  - 元素按自然顺序或 Comparator 排序
   - 添加、删除、查找操作时间复杂度O(log n)
-  - 不允许null元素
+  - 不允许 null 元素
 
 ```java
 // 自然排序(String实现了Comparable接口)
@@ -203,11 +244,11 @@ customSet.add("Peach");
 System.out.println(customSet); // 输出: [Peach, Apple] (长度相同的只保留一个)
 ```
 
-### 3.3 Map实现类对比
+### 3.3 Map 实现类对比
 
 #### 3.3.1 HashMap
 
-- **底层实现**：JDK 1.8后采用数组+链表+红黑树结构
+- **底层实现**：JDK 1.8 后采用数组+链表+红黑树结构
 - **核心参数**：
   - 初始容量：16
   - 负载因子：0.75(当元素数量达到容量×负载因子时触发扩容)
@@ -233,8 +274,8 @@ map.computeIfPresent("Apple", (k, v) -> v + 1); // 值更新
 
 #### 3.3.2 LinkedHashMap
 
-- **特点**：继承HashMap，维护插入顺序或访问顺序
-- **适用场景**：需要保持顺序的映射表(如LRU缓存)
+- **特点**：继承 HashMap，维护插入顺序或访问顺序
+- **适用场景**：需要保持顺序的映射表(如 LRU 缓存)
 
 ```java
 // 保持插入顺序
@@ -256,7 +297,7 @@ Map<String, Integer> lruCache = new LinkedHashMap<>(16, 0.75f, true) {
 
 - **底层实现**：基于红黑树
 - **特点**：
-  - 按键的自然顺序或Comparator排序
+  - 按键的自然顺序或 Comparator 排序
   - 增删改查操作时间复杂度O(log n)
   - 支持范围查询
 
@@ -277,8 +318,8 @@ System.out.println(customTreeMap); // 输出: {Banana=2, Apple=1} (逆序)
 #### 3.3.4 ConcurrentHashMap
 
 - **特点**：
-  - 线程安全的HashMap
-  - JDK 1.8采用CAS+synchronized实现细粒度锁
+  - 线程安全的 HashMap
+  - JDK 1.8 采用 CAS+synchronized 实现细粒度锁
   - 支持高并发操作，性能优异
 
 ```java
@@ -322,7 +363,7 @@ Runnable task = () -> {
 选择合适的集合类型应根据具体需求决定：
 
 1. **是否需要键值对存储？**
-   - 是 → 选择Map接口实现类
+   - 是 → 选择 Map 接口实现类
      - 需要排序 → TreeMap
      - 需要保持插入顺序 → LinkedHashMap
      - 多线程环境 → ConcurrentHashMap
@@ -478,7 +519,7 @@ for (String s : cowList) {
 
 ### 5.5 对象相等性要求
 
-当使用HashSet、HashMap等基于哈希的集合时，必须正确实现hashCode()和equals()方法：
+当使用 HashSet、HashMap 等基于哈希的集合时，必须正确实现 hashCode() 和 equals() 方法：
 
 ```java
 class Person {
@@ -500,9 +541,9 @@ class Person {
 }
 ```
 
-### 5.6 使用Stream API进行数据处理
+### 5.6 使用 Stream API 进行数据处理
 
-Java 8引入的Stream API可以极大简化集合操作：
+Java 8 引入的 Stream API 可以极大简化集合操作：
 
 ```java
 List<String> names = Arrays.asList("John", "Alice", "Bob", "Anna", "Tom");
@@ -531,7 +572,7 @@ List<String> parallelResult = names.parallelStream()
 
 ## 6. 常见问题与解决方案
 
-### 6.1 如何选择List的实现类？
+### 6.1 如何选择合适的 List 的实现类？
 
 - **ArrayList**：频繁随机访问、数据量相对固定（如商品列表展示）
 - **LinkedList**：频繁在头部/尾部插入删除、实现队列/栈（如消息队列实现）
@@ -546,7 +587,7 @@ List<String> parallelResult = names.parallelStream()
 | Null键值 | 允许      | 不允许    |
 | 迭代器   | Fail-Fast | Fail-Safe |
 
-### 6.3 如何避免ConcurrentModificationException？
+### 6.3 如何避免 ConcurrentModificationException？
 
 ```java
 // 错误示例
@@ -611,7 +652,7 @@ public static <T extends Serializable> T deepClone(T object) {
 
 ## 7. 总结
 
-Java集合框架是Java开发的核心基础，提供了丰富的数据结构和算法。选择合适的集合类需要考虑以下因素：
+Java 集合框架是 Java 开发的核心基础，提供了丰富的数据结构和算法。选择合适的集合类需要考虑以下因素：
 
 1. **数据特性**：是否需要有序、允许重复、键值对存储
 2. **操作模式**：频繁随机访问还是插入删除
@@ -625,6 +666,6 @@ Java集合框架是Java开发的核心基础，提供了丰富的数据结构和
 - 初始化时指定合适容量减少扩容
 - 根据场景选择合适的遍历方式
 - 多线程环境下使用并发集合
-- 正确实现hashCode()和equals()方法
+- 正确实现 hashCode() 和 equals() 方法
 
-通过深入理解Java集合框架的原理和特性，开发者可以编写出更高效、健壮的Java应用程序。
+通过深入理解 Java 集合框架的原理和特性，开发者可以编写出更高效、健壮的 Java 应用程序。

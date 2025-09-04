@@ -1,38 +1,38 @@
 ---
-title: Java Map集合详解与最佳实践
-description: 这篇文章详细介绍了Java Map集合的核心概念、常用实现类、操作方法以及最佳实践。通过学习，你将能够理解Map集合的工作原理，掌握其在实际开发中的应用，避免常见的问题。
+title: Java Map 集合详解与最佳实践
+description: 这篇文章详细介绍了 Java Map 集合的核心概念、常用实现类、操作方法以及最佳实践。通过学习，你将能够理解 Map 集合的工作原理，掌握其在实际开发中的应用，避免常见的问题。
 ---
 
-# Java Map集合详解与最佳实践
+# Java Map 集合详解与最佳实践
 
-## 1 Map集合概述
+## 1. Map 集合概述
 
-Java Map是Java集合框架中用于处理**键值对（Key-Value Pair）**的核心接口，它存储键值对映射关系，其中每个键是唯一的，值可以重复。Map接口提供了高效的数据查找和操作机制，广泛应用于缓存、配置管理、对象映射、数据库结果封装等场景。
+Java Map 集合是 Java 集合框架中用于处理 **键值对（Key-Value Pair）** 的核心接口，它存储键值对映射关系，其中每个键是唯一的，值可以重复。Map 接口提供了高效的数据查找和操作机制，广泛应用于缓存、配置管理、对象映射、数据库结果封装等场景。
 
 ### 1.1 核心特性
 
-Map接口的主要特性包括：
+Map 接口的主要特性包括：
 
-- **键唯一性**：同一个Map中不能包含重复的键，每个键最多映射一个值
+- **键唯一性**：同一个 Map 中不能包含重复的键，每个键最多映射一个值
 - **值可重复**：不同的键可以映射到相同的值
 - **无索引访问**：不支持通过数值索引访问元素
-- **泛型支持**：推荐使用泛型来保证类型安全
+- **泛型支持**：推荐使用泛型来保证类型安全，避免类型转换异常
 - **可遍历**：支持遍历所有键、值或键值对
 
-### 1.2 Map体系结构
+### 1.2 Map 体系结构
 
-Map是Java集合框架的根接口之一，与Collection接口并列。其常用实现类包括：
+Map 接口是 Java 集合框架的根接口之一，与 Collection 接口并列。其常用实现类包括：
 
 - **HashMap**：基于哈希表实现，无序，查找性能最佳
-- **LinkedHashMap**：继承HashMap，维护插入/访问顺序
+- **LinkedHashMap**：继承 HashMap，维护插入/访问顺序
 - **TreeMap**：基于红黑树实现，按键排序
 - **ConcurrentHashMap**：线程安全的高并发实现
 
-## 2 Map核心实现类对比
+## 2. Map 核心实现类对比
 
 ### 2.1 实现类特性比较
 
-以下表格展示了主要Map实现类的特性对比：
+以下表格展示了主要 Map 实现类的特性对比：
 
 | 特性           | HashMap    | LinkedHashMap   | TreeMap        | ConcurrentHashMap |
 | -------------- | ---------- | --------------- | -------------- | ----------------- |
@@ -43,12 +43,12 @@ Map是Java集合框架的根接口之一，与Collection接口并列。其常用
 | **时间复杂度** | O(1)       | O(1)            | O(log n)       | O(1)              |
 | **适用场景**   | 大多数场景 | 保持顺序的场景  | 需要排序的场景 | 高并发环境        |
 
-### 2.2 HashMap深度解析
+### 2.2 HashMap 深度解析
 
-HashMap是最常用的Map实现，基于哈希表实现。在JDK8之前，HashMap底层采用数组+链表的结构；JDK8及以后，当链表长度超过阈值（默认为8）时，会将链表转换为红黑树，以提升查询效率。
+HashMap 是最常用的 Map 实现，基于哈希表实现。在 JDK8 之前，HashMap 底层采用数组+链表的结构；JDK8 及以后，当链表长度超过阈值（默认为8）时，会将链表转换为红黑树，以提升查询效率。
 
 ```java
-// HashMap创建示例
+// HashMap 创建示例
 Map<String, Integer> hashMap = new HashMap<>();
 hashMap.put("Java", 1);
 hashMap.put("Python", 2);
@@ -61,11 +61,11 @@ Integer value = hashMap.get("Java"); // 返回1
 hashMap.remove("Python");
 ```
 
-HashMap的**初始容量**默认为16，**负载因子**默认为0.75。当元素数量达到容量与负载因子的乘积时，会自动扩容为原来的2倍，并重新哈希所有元素。
+HashMap 的**初始容量**默认为16，**负载因子**默认为0.75。当元素数量达到容量与负载因子的乘积时，会自动扩容为原来的2倍，并重新哈希所有元素。
 
-### 2.3 LinkedHashMap有序实现
+### 2.3 LinkedHashMap 有序实现
 
-LinkedHashMap继承自HashMap，通过维护一个双向链表来保持元素的插入顺序或访问顺序。
+LinkedHashMap 继承自 HashMap，通过维护一个双向链表来保持元素的插入顺序或访问顺序。
 
 ```java
 // 保持插入顺序的LinkedHashMap
@@ -88,9 +88,9 @@ accessOrderMap.put("C", 3);
 accessOrderMap.get("A"); // 访问A后，A会被移动到链表末尾
 ```
 
-### 2.4 TreeMap排序实现
+### 2.4 TreeMap 排序实现
 
-TreeMap基于红黑树实现，保证键值对按照键的顺序排列。键必须实现Comparable接口或在构造时提供Comparator。
+TreeMap 基于红黑树实现，保证键值对按照键的顺序排列。键必须实现 Comparable 接口或在构造时提供 Comparator。
 
 ```java
 // 自然顺序排序的TreeMap
@@ -113,12 +113,12 @@ customTreeMap.put("Banana", 4);
 // 遍历顺序: Orange->Banana->Apple
 ```
 
-### 2.5 ConcurrentHashMap并发实现
+### 2.5 ConcurrentHashMap 并发实现
 
-ConcurrentHashMap是线程安全的Map实现，适合高并发环境。在JDK7中采用分段锁机制，JDK8及以后改为CAS+synchronized实现，进一步提升了并发性能。
+ConcurrentHashMap 是线程安全的 Map 实现，适合高并发环境。在 JDK7 中采用分段锁机制，JDK8 及以后改为 CAS+synchronized 实现，进一步提升了并发性能。
 
 ```java
-// ConcurrentHashMap使用示例
+// ConcurrentHashMap 使用示例
 Map<String, Integer> concurrentMap = new ConcurrentHashMap<>();
 concurrentMap.put("Java", 1);
 concurrentMap.put("Python", 2);
@@ -135,11 +135,11 @@ while (it.hasNext()) {
 }
 ```
 
-## 3 Map基本操作与遍历
+## 3. Map 基本操作与遍历
 
 ### 3.1 基本操作方法
 
-Map接口提供了丰富的操作方法：
+Map 接口提供了丰富的操作方法：
 
 ```java
 Map<String, Integer> map = new HashMap<>();
@@ -171,9 +171,9 @@ map.clear();
 
 ### 3.2 遍历方式对比
 
-Map提供了多种遍历方式，各有其适用场景：
+Map 接口提供了多种遍历方式，各有其适用场景：
 
-#### 3.2.1 KeySet遍历（键找值）
+#### 3.2.1 KeySet 遍历（键找值）
 
 ```java
 // 通过键集合遍历
@@ -188,7 +188,7 @@ for (String key : map.keySet()) {
 
 **特点**：需要额外查找值，效率相对较低，适合只需要键或需要同时操作键和值的场景。
 
-#### 3.2.2 EntrySet遍历（键值对）
+#### 3.2.2 EntrySet 遍历（键值对）
 
 ```java
 // 通过键值对集合遍历
@@ -201,7 +201,7 @@ for (Map.Entry<String, Integer> entry : map.entrySet()) {
 
 **特点**：**推荐使用的方式**，直接获取键值对，效率较高。
 
-#### 3.2.3 Values遍历（仅值）
+#### 3.2.3 Values 遍历（仅值）
 
 ```java
 // 仅遍历值集合
@@ -212,7 +212,7 @@ for (Integer value : map.values()) {
 
 **特点**：只关心值而不需要键时的简便方式。
 
-#### 3.2.4 forEach遍历（Java 8+）
+#### 3.2.4 forEach 遍历（Java 8+）
 
 ```java
 // 使用forEach方法遍历
@@ -253,13 +253,13 @@ while (iterator.hasNext()) {
 | **forEach**  | 高         | 高                 | Java 8+简洁遍历    |
 | **Iterator** | 低         | 高                 | 需要边遍历边删除   |
 
-## 4 Map高级特性与Java 8新方法
+## 4. Map 高级特性与 Java 8 新方法
 
-### 4.1 Java 8增强方法
+### 4.1 Java 8 增强方法
 
-Java 8为Map接口添加了一系列强大方法：
+Java 8 为 Map 接口添加了一系列强大方法：
 
-#### 4.1.1 computeIfAbsent与computeIfPresent
+#### 4.1.1 computeIfAbsent 与 computeIfPresent
 
 ```java
 Map<String, List<String>> multiValueMap = new HashMap<>();
@@ -275,7 +275,7 @@ multiValueMap.computeIfPresent("Java", (k, v) -> {
 });
 ```
 
-#### 4.1.2 merge方法
+#### 4.1.2 merge 方法
 
 ```java
 Map<String, Integer> wordCounts = new HashMap<>();
@@ -287,16 +287,16 @@ wordCounts.merge("Java", 1, Integer::sum);
 System.out.println(wordCounts.get("Java")); // 输出2
 ```
 
-#### 4.1.3 getOrDefault方法
+#### 4.1.3 getOrDefault 方法
 
 ```java
 // 获取值，如果键不存在返回默认值
 Integer count = wordCounts.getOrDefault("Python", 0);
 ```
 
-### 4.2 不可变Map
+### 4.2 不可变 Map
 
-创建不可变Map可以防止意外修改：
+创建不可变 Map 可以防止意外修改：
 
 ```java
 // Java 9之前的方式
@@ -320,7 +320,7 @@ Map<String, Integer> largerMap = Map.ofEntries(
 );
 ```
 
-## 5 Map最佳实践与应用场景
+## 5. Map 最佳实践与应用场景
 
 ### 5.1 最佳实践原则
 
@@ -338,7 +338,7 @@ Map<String, Integer> largerMap = Map.ofEntries(
    Map<String, Integer> map = new HashMap<>(expectedSize);
    ```
 
-3. **正确重写hashCode和equals**
+3. **正确重写 hashCode 和 equals**
 
    ```java
    public class Person {
@@ -497,9 +497,9 @@ public class Configuration {
 }
 ```
 
-## 6 总结
+## 6. 总结
 
-Java Map集合是开发中最常用且功能强大的数据结构之一。选择合适的Map实现类、遵循最佳实践、熟练掌握各种操作方法和遍历方式，对于编写高效、可维护的Java代码至关重要。
+Java Map 集合是开发中最常用且功能强大的数据结构之一。选择合适的 Map 实现类、遵循最佳实践、熟练掌握各种操作方法和遍历方式，对于编写高效、可维护的 Java 代码至关重要。
 
 ### 6.1 核心选择指南
 
@@ -511,10 +511,10 @@ Java Map集合是开发中最常用且功能强大的数据结构之一。选择
 
 ### 6.2 常见误区避免
 
-1. **忘记重写hashCode和equals**：自定义类作为键时必须重写
-2. **误用==比较键**：应使用equals()方法比较键
-3. **遍历中修改Map**：应使用Iterator.remove()或ConcurrentHashMap
+1. **忘记重写 hashCode 和 equals**：自定义类作为键时必须重写
+2. **误用 == 比较键**：应使用 equals() 方法比较键
+3. **遍历中修改 Map**：应使用 Iterator.remove() 或 ConcurrentHashMap
 4. **忽略线程安全**：多线程环境使用线程安全实现
 5. **不指定初始容量**：预估大小避免频繁扩容
 
-Map集合的正确使用能够显著提升代码质量和性能，是Java开发者必须掌握的核心技能之一。
+Map 集合的正确使用能够显著提升代码质量和性能，是 Java 开发者必须掌握的核心技能之一。

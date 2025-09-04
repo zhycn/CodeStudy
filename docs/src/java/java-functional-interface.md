@@ -1,8 +1,13 @@
+---
+title: Java 函数式接口详解与最佳实践
+description: 了解 Java 函数式接口的定义、特性和最佳实践，掌握 Lambda 表达式和方法引用的使用。
+---
+
 # Java 函数式接口详解与最佳实践
 
 ## 1. 概述
 
-函数式接口（Functional Interface）是 Java 8 引入的核心特性之一，它是 Lambda 表达式和方法引用的目标类型，为 Java 带来了函数式编程的能力。函数式接口允许我们将行为参数化，使代码更简洁、灵活和可读。
+Java 函数式接口（Functional Interface）是 Java 8 引入的核心特性之一，它是 Lambda 表达式和方法引用的目标类型，为 Java 带来了函数式编程的能力。函数式接口允许我们将行为参数化，使代码更简洁、灵活和可读。
 
 ## 2. 什么是函数式接口
 
@@ -40,7 +45,7 @@ interface StringProcessor {
 
 Java 在 `java.util.function` 包中提供了一系列常用的函数式接口，以下是四大核心接口：
 
-### 3.1 Function<T, R> - 函数型接口
+### 3.1 `Function<T, R>` - 函数型接口
 
 接受一个输入参数 T，返回结果 R。
 
@@ -57,7 +62,7 @@ Integer result = strToInt.apply("123"); // 输出: 123
 Function<String, Integer> strToIntRef = Integer::parseInt;
 ```
 
-### 3.2 Consumer<T> - 消费型接口
+### 3.2 `Consumer<T>` - 消费型接口
 
 接受一个输入参数 T，无返回值。
 
@@ -79,7 +84,7 @@ Consumer<String> appendSuffix = str -> System.out.println(" [Suffix]");
 appendPrefix.andThen(appendSuffix).accept("Hello"); // 输出: [Prefix] Hello [Suffix]
 ```
 
-### 3.3 Supplier<T> - 供给型接口
+### 3.3 `Supplier<T>` - 供给型接口
 
 无输入参数，返回一个结果 T。
 
@@ -106,7 +111,7 @@ String result = process(() -> {
 });
 ```
 
-### 3.4 Predicate<T> - 断言型接口
+### 3.4 `Predicate<T>` - 断言型接口
 
 接受一个输入参数 T，返回布尔值。
 
@@ -437,10 +442,10 @@ observers.forEach(observer -> observer.accept("Event occurred"));
 
 ### 8.1 异常处理
 
-Lambda 表达式内部不能直接抛出受检异常（Checked Exception），需要特殊处理。
+Lambda 表达式内部不能直接抛出检查异常（Checked Exception），需要特殊处理。
 
 ```java
-// 包装受检异常的技巧
+// 包装检查异常的技巧
 @FunctionalInterface
 interface CheckedFunction<T, R> {
     R apply(T t) throws Exception;
