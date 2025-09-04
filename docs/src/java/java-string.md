@@ -1,21 +1,23 @@
 ---
-title: Java 字符串详解：从基础到高级应用
-description: 详细介绍了Java字符串的基础概念、创建方式、不可变性以及字符串池机制。
+title: Java 字符串详解
+description: 详细介绍了 Java 字符串的基础概念、创建方式、不可变性以及字符串池机制。
 ---
 
-# Java 字符串详解：从基础到高级应用
+# Java 字符串详解
 
 ## 1. 字符串基础与创建方式
 
 ### 1.1 字符串基本概念
 
-Java字符串是`java.lang.String`类的对象，用于存储和操作文本数据。从概念上讲，Java字符串是Unicode字符的序列。例如字符串`"Java\u2122"`由5个Unicode字符组成：J、a、v、a和™（商标符号，Unicode编码为U+2122）。
+Java 字符串是 `java.lang.String` 类的对象，用于存储和操作文本数据。从概念上讲，Java 字符串是 Unicode 字符的序列。例如字符串 `"Java\u2122"` 由 5 个 Unicode 字符组成：J、a、v、a 和 ™（商标符号，Unicode 编码为 U+2122）。
 
-字符串在Java中是不可变的，任何修改操作都会生成新的字符串对象。这一特性带来了诸多优势，包括线程安全、字符串池优化和安全性能保障。
+**字符串的不可变性**：
+
+字符串在 Java 中是不可变的，任何修改操作都会生成新的字符串对象。这一特性带来了诸多优势，包括线程安全、字符串池优化和安全性能保障。
 
 ### 1.2 字符串创建方式
 
-Java提供了多种创建字符串的方式：
+Java 提供了多种创建字符串的方式：
 
 ```java
 // 方式1：直接赋值（推荐）
@@ -29,7 +31,7 @@ System.out.println(s1 + " " + s2); // 输出: Hello World
 
 **内存分配差异**：
 
-- **直接赋值**：JVM会检查字符串常量池是否存在相同内容，避免重复创建
+- **直接赋值**：JVM 会检查字符串常量池是否存在相同内容，避免重复创建
 - **构造函数**：通过`new`关键字创建新对象，每次都会在堆内存中分配新空间
 
 ```java
@@ -46,10 +48,10 @@ System.out.println(s3 == s4); // false
 
 ### 2.1 不可变性的实现与好处
 
-Java字符串的不可变性是通过以下机制实现的：
+Java 字符串的不可变性是通过以下机制实现的：
 
-1. **String类是final的**：不能被继承，确保不可变性不会被子类破坏
-2. **内部使用final修饰的字符数组**（Java 9后改为byte[]）
+1. **String 类是 final 的**：不能被继承，确保不可变性不会被子类破坏
+2. **内部使用 final 修饰的字符数组**（Java 9 后改为 byte[]）
 3. **不提供修改方法**：所有操作字符串内容的方法都返回新对象
 
 **不可变性的优势**：
@@ -61,7 +63,7 @@ Java字符串的不可变性是通过以下机制实现的：
 
 ### 2.2 字符串池机制
 
-字符串池是Java堆内存中一个特殊的存储区域，用于存储所有字符串字面量，以减少创建相同内容的字符串对象。
+字符串池是 Java 堆内存中一个特殊的存储区域，用于存储所有字符串字面量，以减少创建相同内容的字符串对象。
 
 ```java
 String str1 = "Hello";
@@ -69,7 +71,7 @@ String str2 = "Hello"; // 引用了池中的同一字符串对象
 System.out.println(str1 == str2); // true，引用同一池中的对象
 ```
 
-使用`intern()`方法可以手动将字符串添加到池中：
+使用 `intern()` 方法可以手动将字符串添加到池中：
 
 ```java
 String str1 = "Hello";
@@ -78,7 +80,7 @@ str2 = str2.intern(); // 将字符串添加到池中
 System.out.println(str1 == str2); // true
 ```
 
-## 3. 字符串常用API方法
+## 3. 字符串常用 API 方法
 
 ### 3.1 长度与空值检查
 
@@ -176,7 +178,7 @@ String upperCase = text.toUpperCase(); // "ASDF"
 
 ### 4.1 格式化字符串
 
-Java提供了多种字符串格式化方式：
+Java 提供了多种字符串格式化方式：
 
 ```java
 String name = "Alice";
@@ -204,7 +206,7 @@ String formattedPrice = String.format("Product: %s, Price: %.2f", productName, p
 
 ### 4.2 字符串拼接
 
-Java提供了多种字符串拼接方式：
+Java 提供了多种字符串拼接方式：
 
 ```java
 String firstName = "John";
@@ -226,7 +228,7 @@ String[] parts = {"S", "M", "L", "XL"};
 String sizes = String.join(" / ", parts); // "S / M / L / XL"
 ```
 
-**性能考虑**：对于单次拼接，`+`运算符更简洁；对于循环拼接，必须使用`StringBuilder`以避免性能问题。
+**性能考虑**：对于单次拼接，`+` 运算符更简洁；对于循环拼接，必须使用 `StringBuilder` 以避免性能问题。
 
 ## 5. 字符串与正则表达式
 
@@ -260,11 +262,11 @@ String[] fruits = text.split(","); // 分割字符串
 String updatedText = text.replaceAll("banana", "grape"); // 替换字符串
 ```
 
-## 6. StringBuilder与StringBuffer
+## 6. StringBuilder 与 StringBuffer
 
-### 6.1 为什么需要StringBuilder和StringBuffer
+### 6.1 为什么需要 StringBuilder 和 StringBuffer
 
-由于字符串不可变，频繁修改或连接字符串会生成大量临时对象，造成内存和性能浪费。StringBuilder和StringBuffer是可变的字符序列，允许在原始字符串上进行操作，而不会创建新的对象，从而提高了效率。
+由于字符串不可变，频繁修改或连接字符串会生成大量临时对象，造成内存和性能浪费。StringBuilder 和 StringBuffer 是可变的字符序列，允许在原始字符串上进行操作，而不会创建新的对象，从而提高了效率。
 
 ### 6.2 区别与选择
 
@@ -310,7 +312,7 @@ String result = sb.toString();
 
 ### 7.1 避免性能陷阱
 
-**1. 避免在循环中使用`+`拼接字符串**：
+**1. 避免在循环中使用 `+` 拼接字符串**：
 
 ```java
 // 低效方式（产生大量临时对象）
@@ -327,7 +329,17 @@ for (int i = 0; i < 1000; i++) {
 String result = builder.toString();
 ```
 
-**2. 使用StringJoiner进行更优雅的连接**：
+**2. 使用 StringBuilder 进行字符串拼接**：
+
+```java
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i < 1000; i++) {
+    sb.append(i); // 在原有对象上修改
+}
+String result = sb.toString();
+```
+
+**3. 使用 StringJoiner 进行更优雅的连接**：
 
 ```java
 StringJoiner joiner = new StringJoiner(", ");
@@ -339,7 +351,7 @@ String fruits = joiner.toString(); // "Apple, Banana, Orange"
 
 ### 7.2 字符串比较最佳实践
 
-**永远不要使用`==`比较字符串内容**，这是初学者最容易犯的错误之一：
+**永远不要使用 `==` 比较字符串内容**，这是初学者最容易犯的错误之一：
 
 ```java
 String s1 = "Hello";
@@ -349,9 +361,9 @@ s1 == s2; // false（比较引用，不是内容）
 s1.equals(s2); // true（比较内容）
 ```
 
-### 7.3 正确处理Unicode字符
+### 7.3 正确处理 Unicode 字符
 
-Java字符串由char序列组成，char采用UTF-16编码表示Unicode码点：
+Java 字符串由 char 序列组成，char 采用 UTF-16 编码表示 Unicode 码点：
 
 ```java
 String s = "𝄞"; // 音乐符号，U+1D11E
@@ -376,23 +388,23 @@ for (int cp : codePoints) {
 
 ## 8. 总结
 
-Java字符串处理是编程中最常用的技能之一。通过本文的学习，你应该掌握：
+Java 字符串处理是编程中最常用的技能之一。通过本文的学习，你应该掌握：
 
-1. Java字符串的不可变性及其优势
+1. Java 字符串的不可变性及其优势
 2. 字符串池机制及其内存优化原理
-3. 各种字符串操作API的正确使用方法
+3. 各种字符串操作 API 的正确使用方法
 4. 字符串格式化与拼接的最佳实践
 5. 正则表达式在字符串处理中的应用
-6. StringBuilder和StringBuffer的区别与使用场景
+6. StringBuilder 与 StringBuffer 的区别与使用场景
 7. 字符串性能优化的关键技巧
 
 **最佳实践总结**：
 
-- 优先使用`equals`方法比较字符串内容
-- 处理可能为null的字符串时，先检查null
-- 频繁拼接字符串时使用`StringBuilder`
-- 注意区分代码单元和码点，正确处理Unicode字符
+- 优先使用 `equals` 方法比较字符串内容
+- 处理可能为 null 的字符串时，先检查 null
+- 频繁拼接字符串时使用 `StringBuilder`
+- 注意区分代码单元和码点，正确处理 Unicode 字符
 - 避免创建不必要的字符串对象
-- 字符串常量优先使用字面量形式（`"abc"`）而非`new String("abc")`
+- 字符串常量优先使用字面量形式（`"abc"`）而非 `new String("abc")`
 
-掌握Java字符串处理不仅能提高代码质量和效率，也是理解Java面向对象特性的重要一步。字符串的不可变性、常量池机制等设计思想，在Java其他部分也有广泛应用。
+掌握 Java 字符串处理不仅能提高代码质量和效率，也是理解 Java 面向对象特性的重要一步。字符串的不可变性、常量池机制等设计思想，在 Java 其他部分也有广泛应用。
