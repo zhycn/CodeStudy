@@ -1,9 +1,9 @@
 ---
-title: Java 迭代器详解与最佳实践
+title: Java 迭代器（Iterator）详解与最佳实践
 description: 这篇文章详细介绍了 Java 迭代器的核心概念、工作原理、使用方法和最佳实践，内容涵盖从基础到高级的各个方面，并提供丰富的代码示例和性能优化建议。
 ---
 
-# Java 迭代器详解与最佳实践
+# Java 迭代器（Iterator）详解与最佳实践
 
 本文旨在全面介绍 Java 迭代器的核心概念、工作原理、使用方法和最佳实践，内容涵盖从基础到高级的各个方面，并提供丰富的代码示例和性能优化建议。
 
@@ -46,20 +46,20 @@ public interface Iterator<E> {
 ### 2.1 方法详解
 
 1. **hasNext()**：检查迭代中是否还有更多元素，不移动指针，仅检查状态，时间复杂度通常为O(1)。
-2. **next()**：返回迭代中的下一个元素，移动指针到下一个位置，如果没有元素则抛出NoSuchElementException。
-3. **remove()**：删除迭代器最后返回的元素，是唯一安全删除元素的方式，必须在next()后调用，每次只能调用一次。
-4. **forEachRemaining()**：Java 8新增方法，使用Consumer处理剩余元素，更高效的批量操作。
+2. **next()**：返回迭代中的下一个元素，移动指针到下一个位置，如果没有元素则抛出 `NoSuchElementException`。
+3. **remove()**：删除迭代器最后返回的元素，是唯一安全删除元素的方式，必须在 `next()` 后调用，每次只能调用一次。
+4. **forEachRemaining()**：Java 8 新增方法，使用 `Consumer` 处理剩余元素，更高效的批量操作。
 
 ## 3. 迭代器的工作原理与内部机制
 
 ### 3.1 快速失败机制（Fail-Fast）
 
-Java集合框架中的大多数迭代器实现了快速失败机制，这意味着在迭代过程中，如果集合被非迭代器方法修改，迭代器会立即抛出ConcurrentModificationException。
+Java 集合框架中的大多数迭代器实现了快速失败机制，这意味着在迭代过程中，如果集合被非迭代器方法修改，迭代器会立即抛出 `ConcurrentModificationException`。
 
 **底层原理**：
 
-- 集合内部维护一个`modCount`字段记录修改次数
-- 迭代器初始化时保存当前的`modCount`值（作为`expectedModCount`）
+- 集合内部维护一个 `modCount` 字段记录修改次数
+- 迭代器初始化时保存当前的 `modCount` 值（作为 `expectedModCount`）
 - 每次操作前检查是否一致
 
 ```java
@@ -86,7 +86,7 @@ list.removeIf(s -> "B".equals(s));
 
 ### 3.2 迭代器的内部实现
 
-以ArrayList迭代器为例：
+以 ArrayList 迭代器为例：
 
 ```java
 private class Itr implements Iterator<E> {
@@ -181,7 +181,7 @@ String s = it.next(); // ConcurrentModificationException
 
 ### 5.1 ListIterator
 
-ListIterator是Iterator的增强版，支持双向遍历和修改操作：
+ListIterator 是 Iterator 的增强版，支持双向遍历和修改操作：
 
 ```java
 List<Integer> numbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
@@ -210,7 +210,7 @@ System.out.println("\n修改后列表: " + numbers);
 
 ### 5.2 Spliterator
 
-Java 8引入的分割迭代器(Spliterator)支持并行遍历：
+Java 8 引入的分割迭代器 (Spliterator) 支持并行遍历：
 
 ```java
 List<String> data = Arrays.asList("A", "B", "C", "D", "E", "F");
@@ -230,13 +230,13 @@ spliterator.forEachRemaining(System.out::println);
 
 ### 6.1 不同遍历方式性能对比
 
-| **遍历方式**        | **时间复杂度** | **内存占用** | **线程安全** | **适用场景**      |
-| ------------------- | -------------- | ------------ | ------------ | ----------------- |
-| 传统迭代器          | O(n)           | 低           | 否           | 通用遍历          |
-| 增强for循环         | O(n)           | 低           | 否           | 简单遍历          |
-| 索引for循环         | O(n)           | 最低         | 否           | ArrayList随机访问 |
-| forEach + Lambda    | O(n)           | 中           | 否           | 函数式编程        |
-| Spliterator并行处理 | O(n)/p         | 高           | 需同步       | 大数据集并行处理  |
+| **遍历方式**         | **时间复杂度** | **内存占用** | **线程安全** | **适用场景**       |
+| -------------------- | -------------- | ------------ | ------------ | ------------------ |
+| 传统迭代器           | O(n)           | 低           | 否           | 通用遍历           |
+| 增强 for 循环        | O(n)           | 低           | 否           | 简单遍历           |
+| 索引 for 循环        | O(n)           | 最低         | 否           | ArrayList 随机访问 |
+| forEach + Lambda     | O(n)           | 中           | 否           | 函数式编程         |
+| Spliterator 并行处理 | O(n)/p         | 高           | 需同步       | 大数据集并行处理   |
 
 ### 6.2 不同集合类型迭代性能特征
 
@@ -252,7 +252,7 @@ spliterator.forEachRemaining(System.out::println);
 
 ### 6.3 性能优化技巧
 
-1. **预分配容量**：对于ArrayList等基于数组的集合，初始化时预估容量
+1\. **预分配容量**：对于 ArrayList 等基于数组的集合，初始化时预估容量
 
 ```java
 // 优化前：频繁扩容
@@ -268,7 +268,7 @@ for (int i = 0; i < 1000000; i++) {
 }
 ```
 
-2. **批量操作替代单元素操作**
+2\. **批量操作替代单元素操作**
 
 ```java
 // 低效方式
@@ -281,11 +281,11 @@ for (Integer num : sourceList) {
 Set<Integer> optimizedSet = new HashSet<>(sourceList);
 ```
 
-3. **避免多次迭代同一个集合**：在循环外获取迭代器，并使用它一次性遍历集合
+3\. **避免多次迭代同一个集合**：在循环外获取迭代器，并使用它一次性遍历集合
 
-4. **最小化创建迭代器的次数**：创建一个迭代器是一个相对昂贵的操作，尽可能重用迭代器
+4\. **最小化创建迭代器的次数**：创建一个迭代器是一个相对昂贵的操作，尽可能重用迭代器
 
-5. **使用forEachRemaining替代循环**：更高效的批量操作
+5\. **使用 forEachRemaining 替代循环**：更高效的批量操作
 
 ```java
 // 优化前
@@ -308,13 +308,13 @@ it.forEachRemaining(this::process);
 - **并发场景**：
   - 高读低写：CopyOnWriteArrayList
   - 高并发读写：ConcurrentHashMap
-- **大数据集**：使用Spliterator并行处理
+- **大数据集**：使用 Spliterator 并行处理
 
 ### 7.2 并发环境下的迭代器
 
-在并发环境下，迭代器面临的主要问题是"快速失败"机制导致的ConcurrentModificationException。以下是几种解决方案：
+在并发环境下，迭代器面临的主要问题是"快速失败"机制导致的 ConcurrentModificationException。以下是几种解决方案：
 
-1. **CopyOnWrite策略**：读操作完全无锁，适合读多写少场景
+1\. **CopyOnWrite 策略**：读操作完全无锁，适合读多写少场景
 
 ```java
 public class CopyOnWriteIterator<T> implements Iterator<T> {
@@ -328,7 +328,7 @@ public class CopyOnWriteIterator<T> implements Iterator<T> {
 }
 ```
 
-2. **读写锁方案**：平衡读写性能，适合中等并发
+2\. **读写锁方案**：平衡读写性能，适合中等并发
 
 ```java
 public class RWLockIterator<T> implements Iterator<T> {
@@ -347,7 +347,7 @@ public class RWLockIterator<T> implements Iterator<T> {
 }
 ```
 
-3. **弱一致性迭代器**：某些并发集合（如ConcurrentHashMap、CopyOnWriteArrayList）的迭代器具有弱一致性，允许在遍历过程中修改集合
+3\. **弱一致性迭代器**：某些并发集合（如 ConcurrentHashMap、CopyOnWriteArrayList）的迭代器具有弱一致性，允许在遍历过程中修改集合
 
 ```java
 List<String> list = new CopyOnWriteArrayList<>(List.of("A", "B"));
@@ -359,9 +359,9 @@ while (it.hasNext()) {
 }
 ```
 
-### 7.3 利用Stream API简化遍历
+### 7.3 利用 Stream API 简化遍历
 
-Java 8引入的Stream API可以大大简化集合操作：
+Java 8 引入的 Stream API 可以大大简化集合操作：
 
 ```java
 // 过滤和映射
@@ -474,14 +474,14 @@ public class FilteringIterator<T> implements Iterator<T> {
 
 ## 9. 总结
 
-Java迭代器是集合框架的核心组件，提供了统一的方式来遍历各种集合类型。通过深入理解迭代器的工作原理和特性，我们可以编写出更健壮、高效的代码。
+Java 迭代器是集合框架的核心组件，提供了统一的方式来遍历各种集合类型。通过深入理解迭代器的工作原理和特性，我们可以编写出更健壮、高效的代码。
 
 **核心要点**：
 
-1. 优先使用迭代器的`remove()`方法避免ConcurrentModificationException
+1. 优先使用迭代器的 `remove()` 方法避免 ConcurrentModificationException
 2. 根据集合类型选择最合适的迭代方式
 3. 在并发环境下选择合适的并发集合和迭代策略
-4. 利用Stream API和批量操作简化代码并提升性能
-5. 对于大型数据集，考虑使用Spliterator进行并行处理
+4. 利用 Stream API 和批量操作简化代码并提升性能
+5. 对于大型数据集，考虑使用 Spliterator 进行并行处理
 
 迭代器模式通过抽象遍历逻辑，为异构数据结构的统一访问提供了优雅方案，其核心价值在于解耦客户端与集合实现，提升代码可维护性和扩展性。

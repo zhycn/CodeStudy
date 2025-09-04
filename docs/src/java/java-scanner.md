@@ -1,15 +1,15 @@
 ---
 title: Java Scanner 类详解与最佳实践
-description: 详细介绍Java Scanner类的功能、使用方法和最佳实践，帮助开发者正确、高效地使用Scanner类进行输入处理。
+description: 详细介绍 Java Scanner 类的功能、使用方法和最佳实践，帮助开发者正确、高效地使用 Scanner 类进行输入处理。
 ---
 
 # Java Scanner 类详解与最佳实践
 
 ## 1. 概述与核心功能
 
-Java中的`Scanner`类是`java.util`包中一个极其实用的工具类，用于解析基本类型和字符串的简单文本扫描器。它可以将输入文本（如文件、字符串或标准输入流）分解为标记（tokens），然后使用各种`next`方法将其转换为不同类型的值。
+Java 中的 `Scanner` 类是 `java.util` 包中一个极其实用的工具类，用于解析基本类型和字符串的简单文本扫描器。它可以将输入文本（如文件、字符串或标准输入流）分解为标记（tokens），然后使用各种 `next` 方法将其转换为不同类型的值。
 
-Scanner类的核心功能包括：
+Scanner 类的核心功能包括：
 
 - 从多种输入源读取数据（控制台、文件、字符串等）
 - 将输入分解为标记（默认以空白符分隔）
@@ -17,11 +17,11 @@ Scanner类的核心功能包括：
 - 支持正则表达式匹配
 - 提供丰富的输入验证方法
 
-Scanner类的设计理念是简单、灵活，适合处理各种不同的数据源，包括控制台输入、文件输入、字符串等。它使用正则表达式来解析原始输入流，从而读取不同类型的值。
+Scanner 类的设计理念是简单、灵活，适合处理各种不同的数据源，包括控制台输入、文件输入、字符串等。它使用正则表达式来解析原始输入流，从而读取不同类型的值。
 
-## 2. 创建Scanner对象
+## 2. 创建 Scanner 对象
 
-Scanner类提供了多个构造函数，可以根据不同的需求来创建Scanner对象。
+Scanner 类提供了多个构造函数，可以根据不同的需求来创建 Scanner 对象。
 
 ### 2.1 从标准输入（控制台）创建
 
@@ -59,7 +59,7 @@ try {
 }
 ```
 
-注意：文件扫描器使用后必须关闭，推荐使用try-with-resources：
+注意：文件扫描器使用后必须关闭，推荐使用 try-with-resources：
 
 ```java
 try (Scanner fileScanner = new Scanner(new File("data.txt"))) {
@@ -74,11 +74,11 @@ InputStream inputStream = socket.getInputStream();
 Scanner socketScanner = new Scanner(inputStream);
 ```
 
-Scanner类可以适配各种输入流。
+Scanner 类可以适配各种输入流。
 
 ## 3. 读取不同类型的数据
 
-Scanner类提供了一系列方法来处理不同类型的数据。
+Scanner 类提供了一系列方法来处理不同类型的数据。
 
 ### 3.1 读取基本数据类型
 
@@ -145,7 +145,7 @@ String name = scanner.nextLine();
 
 ### 4.1 分隔符控制
 
-默认情况下，Scanner使用空白符作为分隔符，但可以自定义：
+默认情况下，Scanner 使用空白符作为分隔符，但可以自定义：
 
 ```java
 String input = "one,two,three,four";
@@ -164,7 +164,7 @@ while (scanner.hasNext()) {
 
 ### 4.2 使用正则表达式匹配
 
-Scanner支持强大的正则表达式功能：
+Scanner 类支持强大的正则表达式功能：
 
 ```java
 String input = "1 fish 2 fish red fish blue fish";
@@ -207,7 +207,7 @@ int num = scanner.nextInt();
 
 ## 5. 异常处理与边界情况
 
-Scanner在解析输入时可能会遇到无效数据，例如在读取整数时遇到非数字字符。这时，Scanner会抛出`InputMismatchException`异常。
+Scanner 类在解析输入时可能会遇到无效数据，例如在读取整数时遇到非数字字符。这时，Scanner 会抛出 `InputMismatchException` 异常。
 
 ### 5.1 处理输入不匹配异常
 
@@ -238,9 +238,9 @@ try {
 
 ### 6.1 资源管理
 
-Scanner对象在使用完成后需要关闭，以释放相关的资源。对于文件扫描器，这一点尤其重要。
+Scanner 对象在使用完成后需要关闭，以释放相关的资源。对于文件扫描器，这一点尤其重要。
 
-**推荐使用try-with-resources**：
+**推荐使用 try-with-resources**：
 
 ```java
 try (Scanner scanner = new Scanner(new File("data.txt"))) {
@@ -253,25 +253,25 @@ try (Scanner scanner = new Scanner(new File("data.txt"))) {
 }
 ```
 
-注意：如果Scanner是从System.in创建的，关闭它会同时关闭System.in，可能导致后续无法再使用标准输入。
+注意：如果 Scanner 是从 System.in 创建的，关闭它会同时关闭 System.in，可能导致后续无法再使用标准输入。
 
 ### 6.2 性能优化建议
 
-- **缓冲大型文件**：对于大文件，可以包装在BufferedReader中
+- **缓冲大型文件**：对于大文件，可以包装在 BufferedReader 中
 
   ```java
   Scanner fileScanner = new Scanner(new BufferedReader(new FileReader("bigfile.txt")));
   ```
 
-- **重用Scanner对象**：避免频繁创建和销毁
+- **重用 Scanner 对象**：避免频繁创建和销毁
 
 - **选择合适的输入源**：根据数据来源选择最合适的构造方法
 
-- **及时关闭资源**：使用try-with-resources确保资源释放
+- **及时关闭资源**：使用 try-with-resources 确保资源释放
 
 ### 6.3 多线程考虑
 
-Scanner不是线程安全的。在多线程环境中，应该为每个线程创建独立的Scanner实例或进行同步控制。
+Scanner 类不是线程安全的。在多线程环境中，应该为每个线程创建独立的 Scanner 实例或进行同步控制。
 
 ## 7. 实战应用案例
 
@@ -367,7 +367,7 @@ public class GradeStatistics {
 
 ### 7.3 配置文件解析
 
-假设有一个配置文件`config.properties`：
+假设有一个配置文件 `config.properties`：
 
 ```properties
 # config.properties
@@ -411,16 +411,16 @@ public class ConfigParser {
 
 ## 8. 总结
 
-Scanner是Java中处理输入数据的一个非常有用的工具。它的灵活性使得它在各种应用场景下都表现出色，无论是从控制台读取用户输入，还是从文件中解析数据。
+Scanner 类是 Java 中处理输入数据的一个非常有用的工具。它的灵活性使得它在各种应用场景下都表现出色，无论是从控制台读取用户输入，还是从文件中解析数据。
 
-**Scanner的最佳实践**：
+**Scanner 的最佳实践**：
 
-- **始终验证输入**：使用`hasNextXxx()`方法确保输入类型正确
-- **正确处理混合输入**：注意`nextLine()`的行为，适当消耗换行符
-- **及时关闭资源**：使用try-with-resources语句确保资源释放
+- **始终验证输入**：使用 `hasNextXxx()` 方法确保输入类型正确
+- **正确处理混合输入**：注意 `nextLine()` 的行为，适当消耗换行符
+- **及时关闭资源**：使用 try-with-resources 语句确保资源释放
 - **合理选择输入源**：根据场景选择最合适的构造方法
 - **异常处理**：考虑输入可能出错的情况，提高程序健壮性
 
-掌握了Scanner类的使用技巧，可以显著提高你在开发过程中处理数据输入的效率。无论是简单的控制台应用还是复杂的文件处理，Scanner都能成为你的得力助手。
+掌握了 Scanner 类的使用技巧，可以显著提高你在开发过程中处理数据输入的效率。无论是简单的控制台应用还是复杂的文件处理，Scanner 都能成为你的得力助手。
 
-希望本文能帮助你全面掌握Java Scanner类的使用技巧，在实际开发中更加高效地处理输入数据。
+希望本文能帮助你全面掌握 Java Scanner 类的使用技巧，在实际开发中更加高效地处理输入数据。

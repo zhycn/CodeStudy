@@ -1,6 +1,6 @@
 ---
 title: Java Lambda 表达式详解与最佳实践
-description: 这篇文章详细介绍了Java Lambda表达式的基础概念、语法结构、优势以及最佳实践。通过学习，你将能够理解Lambda表达式的工作原理，掌握其在实际开发中的应用，避免常见的问题。
+description: 这篇文章详细介绍了 Java Lambda 表达式的基础概念、语法结构、优势以及最佳实践。通过学习，你将能够理解 Lambda 表达式的工作原理，掌握其在实际开发中的应用，避免常见的问题。
 ---
 
 # Java Lambda 表达式详解与最佳实践
@@ -79,13 +79,19 @@ interface NoParameterNoReturn {
 
 _表：Java 常用内置函数式接口_
 
-| 接口名称            | 方法定义            | 典型用途                       |
-| ------------------- | ------------------- | ------------------------------ |
-| `Consumer<T>`       | `void accept(T t)`  | 消费数据（如打印、存储）       |
-| `Supplier<T>`       | `T get()`           | 提供数据（如生成随机数）       |
-| `Function<T, R>`    | `R apply(T t)`      | 转换数据（如字符串转大写）     |
-| `Predicate<T>`      | `boolean test(T t)` | 判定条件（如判断是否为偶数）   |
-| `BiFunction<T,U,R>` | `R apply(T t, U u)` | 双参数转换（如计算两个数的和） |
+| 接口名称            | 方法定义                 | 典型用途                           |
+| ------------------- | ------------------------ | ---------------------------------- |
+| `Consumer<T>`       | `void accept(T t)`       | 消费数据（如打印、存储）           |
+| `BiConsumer<T,U>`   | `void accept(T t, U u)`  | 消费两个参数（如键值对处理）       |
+| `Supplier<T>`       | `T get()`                | 提供数据（如生成随机数）           |
+| `Function<T,R>`     | `R apply(T t)`           | 转换数据（如字符串转大写）         |
+| `BiFunction<T,U,R>` | `R apply(T t, U u)`      | 双参数转换（如计算两个数的和）     |
+| `Predicate<T>`      | `boolean test(T t)`      | 判定条件（如判断是否为偶数）       |
+| `BiPredicate<T,U>`  | `boolean test(T t, U u)` | 双参数判定（如比较两个值是否相等） |
+| `UnaryOperator<T>`  | `T apply(T t)`           | 一元操作（如数字自增）             |
+| `BinaryOperator<T>` | `T apply(T t1, T t2)`    | 二元操作（如两个数相加）           |
+| `Runnable`          | `void run()`             | 无参数无返回值的任务执行           |
+| `Callable<V>`       | `V call()`               | 可返回结果的任务执行               |
 
 ## 3. Lambda 表达式语法详解
 
@@ -96,8 +102,8 @@ Lambda 表达式的简化规则基于类型推断和语法糖，有以下明确�
 1. **参数类型推断**：若参数类型可由上下文推断，可省略类型声明
 2. **单参数省略括号**：若参数列表仅有一个参数，可省略参数外的括号
 3. **无参数保留空括号**：若参数列表为空，必须保留空括号
-4. **单表达式省略大括号和return**：若表达式主体是单条表达式，可省略{}和return
-5. **多行语句保留大括号和return**：若表达式主体是多条语句，必须使用{}包裹，并显式return
+4. **单表达式省略大括号和 return**：若表达式主体是单条表达式，可省略{}和 return
+5. **多行语句保留大括号和 return**：若表达式主体是多条语句，必须使用{}包裹，并显式 return
 
 ### 3.2 语法简化示例
 
