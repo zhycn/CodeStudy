@@ -1,11 +1,11 @@
 ---
 title: Java Math 类详解与最佳实践
-description: 这篇文章详细介绍了Java Math类的基础概念、常用方法、性能优化策略以及选择建议。通过学习，你将能够充分利用Math类进行数学计算，避免常见的数值计算陷阱。
+description: 这篇文章详细介绍了 Java Math 类的基础概念、常用方法、性能优化策略以及选择建议。通过学习，你将能够充分利用 Math 类进行数学计算，避免常见的数值计算陷阱。
 ---
 
 # Java Math 类详解与最佳实践
 
-## 1 Math 类概述与设计理念
+## 1. Math 类概述与设计理念
 
 Java 的 `java.lang.Math` 类是 Java 开发中不可或缺的数学工具类，它提供了一系列用于执行常见数学运算的静态方法。这个类位于 `java.lang` 包下，因此无需显式导入即可使用。Math 类被设计为 **final 类**，且构造方法为**私有（private）**，这意味着开发者无法通过 new 关键字创建其实例，也无法通过继承扩展该类。
 
@@ -37,7 +37,7 @@ Math 类通过以下设计解决这些问题：
 - 符合 IEEE 754 标准的浮点运算
 - 线程安全的实现（所有方法均为 static）
 
-## 2 核心方法详解
+## 2. 核心方法详解
 
 Math 类提供了丰富的方法，涵盖了数学运算的多个方面。以下分类详解其核心方法。
 
@@ -138,7 +138,7 @@ int exactDecrement = Math.decrementExact(5);    // 精确递减
 long exactNegate = Math.negateExact(10L);       // 精确取反
 ```
 
-## 3 重要常量说明
+## 3. 重要常量说明
 
 Math 类定义了两个重要的数学常量：
 
@@ -152,7 +152,7 @@ double circumference = 2 * Math.PI * radius;  // 周长公式 C = 2πr
 double area = Math.PI * radius * radius;       // 面积公式 S = πr²
 ```
 
-## 4 实战应用场景
+## 4. 实战应用场景
 
 ### 4.1 游戏开发：坐标与距离计算
 
@@ -235,7 +235,7 @@ public static void findNarcissisticNumbers() {
 }
 ```
 
-## 5 高级特性与最佳实践
+## 5. 高级特性与最佳实践
 
 ### 5.1 精确计算与舍入控制
 
@@ -312,7 +312,7 @@ double negativeInfinity = Double.NEGATIVE_INFINITY;
 boolean isEqual = Math.equals(0.1 + 0.2, 0.3, 1e-9);  // JDK 14+
 ```
 
-## 6 性能优化策略
+## 6. 性能优化策略
 
 ### 6.1 幂运算优化
 
@@ -350,9 +350,9 @@ double sinValue = SIN_CACHE[angle];
 double cosValue = COS_CACHE[angle];
 ```
 
-### 6.3 现代Java版本的性能特性
+### 6.3 现代 Java 版本的性能特性
 
-从JDK 9开始，Math类利用了FMA（Fused Multiply-Add）指令加速计算：
+从 JDK 9 开始，Math 类利用了 FMA（Fused Multiply-Add）指令加速计算：
 
 ```java
 // 利用CPU指令融合乘加
@@ -362,7 +362,7 @@ double fmaResult = Math.fma(a, b, c);  // 等效于a*b + c，但更精确快速
 boolean isEqual = Math.equals(0.1 + 0.2, 0.3, 1e-9);
 ```
 
-## 7 总结与展望
+## 7. 总结与展望
 
 Java Math 类是一个强大而全面的数学工具库，涵盖了绝大多数日常开发中的数学需求。通过合理运用 Math 类，可以避免90%的数值计算陷阱。
 
@@ -385,7 +385,7 @@ Java Math 类是一个强大而全面的数学工具库，涵盖了绝大多数�
 
 ### 7.3 未来展望
 
-随着Java版本的更新，Math类持续增强：
+随着 Java 版本的更新，Math 类持续增强：
 
 - JDK 8+ 添加了精确计算方法（如 `addExact`）
 - JDK 9+ 利用FMA指令提升性能
@@ -393,4 +393,4 @@ Java Math 类是一个强大而全面的数学工具库，涵盖了绝大多数�
 
 掌握 Math 类的细节不仅能解决日常开发中的数学问题，更能为高性能计算和复杂算法实现奠定坚实基础。
 
-> **温馨提示**：本文档基于Java 17特性编写，部分特性在旧版本中可能不可用。在实际开发中，请根据目标运行环境的Java版本选择合适的API。
+> **温馨提示**：本文档基于 Java 17 特性编写，部分特性在旧版本中可能不可用。在实际开发中，请根据目标运行环境的 Java 版本选择合适的 API。
