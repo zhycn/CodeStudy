@@ -20,6 +20,25 @@
 - [前端性能优化与最佳实践](./guide-performance.md)
 - [前端安全与最佳实践](./guide-security.md)
 
+<!--
+- [Java 内存管理详解与最佳实践](./java-memory-management.md)
+- [Java 性能优化详解与最佳实践](./java-performance-optimization.md)
+- [Java 内存泄漏（Memory Leak）详解与最佳实践](./java-memory-leak.md)
+- [Java 内存溢出（Out of Memory）详解与最佳实践](./java-out-of-memory.md)
+- [Java 垃圾回收（Garbage Collection）详解与最佳实践](./java-garbage-collection.md)
+- [Java 类加载机制详解与最佳实践](./java-class-loading.md)
+- [Java 设计模式详解与最佳实践](./java-design-pattern.md) 
+- Java 单元测试详解与最佳实践 (JUnit 5, Mockito)
+- Java 构建工具详解 (Maven, Gradle)
+- Java 代码规范与静态代码分析 (Checkstyle, SonarQube)
+- Java 服务端调试技巧与性能分析工具 (Arthas, JConsole)
+- Java 邮件发送详解 (JavaMail)
+- Java XML与JSON处理详解 (JAXB, DOM/SAX, Jackson)
+- Java 与消息队列集成详解 (JMS, Kafka Client)
+- Java 响应式编程详解 (Reactor, RxJava)
+- Java 云原生开发详解 (Docker集成, K8s Operator)
+-->
+
 ---
 
 ### **第一阶段：Java基础与核心（文章1-10）**
