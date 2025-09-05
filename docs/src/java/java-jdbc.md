@@ -1,9 +1,9 @@
 ---
-title: Java JDBC 详解与最佳实践
+title: Java 数据库编程（JDBC）详解与最佳实践
 description: 本文旨在全面介绍 Java JDBC (Java Database Connectivity) 技术，涵盖其核心概念、API 使用、代码示例以及在实际开发中的最佳实践，帮助你编写高效、安全且易于维护的数据库应用程序。
 ---
 
-# Java JDBC 详解与最佳实践
+# Java 数据库编程（JDBC）详解与最佳实践
 
 本文旨在全面介绍 Java JDBC (Java Database Connectivity) 技术，涵盖其核心概念、API 使用、代码示例以及在实际开发中的最佳实践，帮助你编写高效、安全且易于维护的数据库应用程序。
 
@@ -456,7 +456,7 @@ public class DataAccessException extends RuntimeException {
 }
 ```
 
-## 总结
+## 9. 总结
 
 JDBC 是 Java 生态中稳定且强大的数据库访问标准。掌握其核心 API 和正确使用模式是 Java 开发者的基本功。
 

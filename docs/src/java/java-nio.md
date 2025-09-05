@@ -1,11 +1,11 @@
 ---
 title: Java NIO 详解与最佳实践
-description: 详细介绍了Java NIO的核心概念、使用方法和最佳实践。
+description: 详细介绍了 Java NIO 的核心概念、使用方法和最佳实践。
 ---
 
 # Java NIO 详解与最佳实践
 
-## 1 概述：NIO 与传统 I/O 的对比
+## 1. 概述：NIO 与传统 I/O 的对比
 
 Java NIO（New Input/Output）是 Java 1.4 版本引入的一套新的 I/O API，旨在提供**高性能**、**高吞吐量**的 I/O 操作解决方案，特别适用于高并发场景。与传统 I/O（BIO, Blocking I/O）相比，NIO 采用了根本不同的架构理念。
 
@@ -30,7 +30,7 @@ Java NIO（New Input/Output）是 Java 1.4 版本引入的一套新的 I/O API�
 - **选择器（Selector）**：
   这是 NIO 独有的概念，允许单线程监听多个通道（Channel）的事件（如连接就绪、读就绪、写就绪），从而实现**IO多路复用**，用一个线程管理多个网络连接。
 
-## 2 NIO 三大核心组件
+## 2. NIO 三大核心组件
 
 ### 2.1 Buffer（缓冲区）
 
@@ -285,7 +285,7 @@ public class SelectorExample {
 }
 ```
 
-## 3 NIO 最佳实践与性能优化
+## 3. NIO 最佳实践与性能优化
 
 ### 3.1 缓冲区优化策略
 
@@ -444,7 +444,7 @@ try {
 }
 ```
 
-## 4 实战案例：NIO Echo 服务器
+## 4. 实战案例：NIO Echo 服务器
 
 下面是一个完整的 NIO Echo 服务器示例，演示了如何结合使用 Buffer、Channel 和 Selector：
 
@@ -530,7 +530,7 @@ public class NioEchoServer {
 }
 ```
 
-## 5 总结
+## 5. 总结
 
 Java NIO 提供了高性能的 I/O 处理能力，特别适用于高并发场景。通过理解并正确使用 NIO 的三大核心组件（Buffer、Channel、Selector），结合本文介绍的最佳实践，可以构建出高效、可扩展的网络应用程序。
 

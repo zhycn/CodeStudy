@@ -1,6 +1,6 @@
 ---
 title: Java 多线程编程详解与最佳实践
-description: 这篇文章详细介绍了Java多线程的基础概念、实现方式、常见问题与最佳实践。通过学习，你将能够理解多线程的工作原理，掌握多线程编程的技巧，避免常见的并发问题。
+description: 这篇文章详细介绍了 Java 多线程的基础概念、实现方式、常见问题与最佳实践。通过学习，你将能够理解多线程的工作原理，掌握多线程编程的技巧，避免常见的并发问题。
 ---
 
 # Java 多线程编程详解与最佳实践
@@ -11,7 +11,7 @@ description: 这篇文章详细介绍了Java多线程的基础概念、实现方
 
 多线程是指在同一个进程内，同时存在多个执行线程（Thread），它们共享进程的内存空间但拥有独立的执行路径。多线程可以并行执行任务，尤其在I/O密集型和高并发场景中，能显著提高应用性能。
 
-在现代高并发系统中，Java多线程技术是提升吞吐量和响应速度的核心手段。根据性能报告，合理使用多线程可使系统吞吐量提升300%-500%。实际项目中主要解决两类问题：
+在现代高并发系统中，Java 多线程技术是提升吞吐量和响应速度的核心手段。根据性能报告，合理使用多线程可使系统吞吐量提升300%-500%。实际项目中主要解决两类问题：
 
 - **CPU密集型任务**：通过并行计算缩短处理时间
 - **I/O密集型任务**：利用线程等待I/O时的空闲时间执行其他操作
@@ -28,21 +28,21 @@ description: 这篇文章详细介绍了Java多线程的基础概念、实现方
 
 ### 1.3 线程状态模型
 
-Java线程生命周期包括以下几种状态：
+Java 线程生命周期包括以下几种状态：
 
 - **新建（New）**：线程被创建但尚未启动
-- **就绪（Runnable）**：线程已启动，等待CPU调度
+- **就绪（Runnable）**：线程已启动，等待 CPU 调度
 - **运行（Running）**：线程正在执行任务
 - **阻塞（Blocked）**：线程等待监视器锁（进入同步块）
 - **等待（Waiting）**：无限期等待其他线程执行特定操作
 - **超时等待（Timed Waiting）**：有限时间等待
 - **终止（Terminated）**：线程执行完毕或异常终止
 
-## 2. Java中的多线程实现
+## 2. Java 中的多线程实现
 
 ### 2.1 创建线程的方式
 
-#### 2.1.1 继承Thread类
+#### 2.1.1 继承 Thread 类
 
 ```java
 class MyThread extends Thread {
@@ -61,7 +61,7 @@ public class Main {
 }
 ```
 
-#### 2.1.2 实现Runnable接口
+#### 2.1.2 实现 Runnable 接口
 
 ```java
 class MyRunnable implements Runnable {
@@ -80,7 +80,7 @@ public class Main {
 }
 ```
 
-#### 2.1.3 实现Callable接口 + FutureTask
+#### 2.1.3 实现 Callable 接口 + FutureTask
 
 ```java
 import java.util.concurrent.Callable;
@@ -107,7 +107,7 @@ public class Main {
 
 ### 2.2 线程池
 
-频繁创建和销毁线程开销大，线程池通过复用线程提升效率。Java通过`java.util.concurrent`包提供了强大的线程池支持。
+频繁创建和销毁线程开销大，线程池通过复用线程提升效率。Java 提供了`java.util.concurrent`包，通过`ExecutorService`和`Executors`类实现线程池。
 
 ```java
 import java.util.concurrent.ExecutorService;
@@ -203,7 +203,7 @@ public synchronized void increment() {
 
 `synchronized`保证同一时刻只有一个线程进入同步代码块，避免竞态条件。
 
-### 3.3 显式锁Lock接口
+### 3.3 显式锁 Lock 接口
 
 相比`synchronized`，`Lock`接口提供更多灵活性。
 
@@ -228,7 +228,7 @@ class Counter {
 
 ### 3.4 原子类
 
-Java提供了原子变量类（`AtomicInteger`、`AtomicLong`等），基于CAS实现无锁线程安全。
+Java 提供了原子变量类（`AtomicInteger`、`AtomicLong`等），基于 CAS 实现无锁线程安全。
 
 ```java
 import java.util.concurrent.atomic.AtomicInteger;
@@ -272,7 +272,7 @@ public void updateUser(String userId) {
 
 用户服务优化后，TPS从120提升到850，竞争减少效果显著。
 
-#### 3.5.2 StampedLock高性能读写控制
+#### 3.5.2 StampedLock 高性能读写控制
 
 ```java
 import java.util.concurrent.locks.StampedLock;
@@ -305,7 +305,7 @@ class Point {
 
 ## 4. 并发工具类
 
-Java的`java.util.concurrent`包提供多种高级并发工具：
+Java 提供的`java.util.concurrent`包提供多种高级并发工具：
 
 ### 4.1 CountDownLatch
 
@@ -391,7 +391,7 @@ public class SemaphoreExample {
 }
 ```
 
-### 4.4 CompletableFuture异步编排
+### 4.4 CompletableFuture 异步编排
 
 ```java
 import java.util.concurrent.CompletableFuture;
@@ -449,7 +449,7 @@ public void transaction() {
 }
 ```
 
-配合jstack工具定期检测，某交易系统死锁发生率从月均1.5次降至0。
+配合`jstack`工具定期检测，某交易系统死锁发生率从月均1.5次降至0。
 
 ### 5.2 线程泄漏
 
@@ -458,7 +458,7 @@ public void transaction() {
 **解决办法**：
 
 - 使用线程池管理线程生命周期
-- 及时关闭ExecutorService
+- 及时关闭`ExecutorService`
 
 ### 5.3 线程安全设计原则
 
@@ -497,7 +497,7 @@ public class ConcurrentCollectionExample {
 
 #### 5.5.1 上下文切换优化
 
-通过JMC监控发现：当线程数超过32时（4核CPU），上下文切换开销占比达15%。优化措施：
+通过`JMC`监控发现：当线程数超过32时（4核CPU），上下文切换开销占比达15%。优化措施：
 
 - 将线程池核心线程数从40调整为16
 - 使用协程(Quasar Fiber)替代部分线程
@@ -570,7 +570,7 @@ CompletableFuture<Void> all = CompletableFuture.allOf(
 
 ### 6.3 批量数据处理
 
-大数据量Excel解析、批量文件处理等场景。
+大数据量 Excel 解析、批量文件处理等场景。
 
 ```java
 List<DataChunk> chunks = splitData(data, 1000); // 数据分片
@@ -621,9 +621,9 @@ executor.execute(() -> {
 
 ## 7. 前沿并发模型探索
 
-### 7.1 Project Loom虚拟线程
+### 7.1 Project Loom 虚拟线程
 
-Project Loom虚拟线程实测：在文件解析任务中，10,000个虚拟线程仅需40MB内存，而传统线程需要10GB。
+Project Loom 虚拟线程实测：在文件解析任务中，10,000个虚拟线程仅需40MB内存，而传统线程需要10GB。
 
 同步代码直接转换为异步：
 
@@ -635,17 +635,17 @@ try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 }
 ```
 
-在IO密集型场景，资源消耗仅为传统线程池的5%。
+在 IO 密集型场景，资源消耗仅为传统线程池的 5%。
 
 ## 8. 总结
 
-Java多线程编程是提升应用性能的重要技术，但开发难度较大，需要掌握线程生命周期、同步机制、并发工具以及常见问题的防范。
+Java 多线程编程是提升应用性能的重要技术，但开发难度较大，需要掌握线程生命周期、同步机制、并发工具以及常见问题的防范。
 
 **核心建议**：
 
 1. **优先使用线程池管理资源**：合理配置线程池参数，根据任务类型选择合适线程池
 2. **根据场景选择并发工具**：对于复杂异步流程，使用`CompletableFuture`进行编排
 3. **最小化锁竞争范围**：采用细粒度锁、读写锁分离、无锁算法减少竞争
-4. **持续监控性能指标**：使用JMX、JMC等工具监控线程池状态和系统性能
+4. **持续监控性能指标**：使用`JMX`、`JMC`等工具监控线程池状态和系统性能
 
-某云平台统计显示，合理实施多线程优化后，平均响应时间降低65%，服务器成本减少40%。随着Project Loom等新技术落地，Java并发编程将进入更高效率阶段。
+某云平台统计显示，合理实施多线程优化后，平均响应时间降低65%，服务器成本减少40%。随着 Project Loom 等新技术落地，Java 并发编程将进入更高效率阶段。
