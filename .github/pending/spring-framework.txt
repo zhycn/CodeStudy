@@ -1,0 +1,93 @@
+好的，为你量身打造一份全面、系统且符合当下技术潮流的 **Spring Framework 6** 学习路线图。这份规划将严格遵循你要求的标题格式，并确保内容深度、最佳实践以及与 Spring 6 新特性的结合。
+
+### 学习路线图核心思想
+
+1.  **循序渐进**：从核心概念到应用整合，再到高级特性。
+2.  **注重本质**：不仅讲解“怎么用”，更深入“为什么”，理解设计理念。
+3.  **拥抱现代**：重点突出基于 Java 配置、响应式编程等 Spring 6 推荐的现代开发方式。
+4.  **最佳实践**：每篇文章都会包含“最佳实践”部分，分享如何正确、高效地使用该技术。
+
+---
+
+### Spring Framework 6 终极学习路线图（技术文章系列）
+
+#### **第一阶段：核心基石 (The Foundation)**
+
+这一阶段的目标是彻底理解 Spring 的设计哲学和核心容器，这是所有其他功能的基础。
+
+1.  **《Spring Framework 6 核心容器与 IoC 详解与最佳实践》**
+    *   **内容要点**：Spring 生态概述、IoC (控制反转) 和 DI (依赖注入) 思想详解。Spring 6 的新特性预览（如 JDK 基线提升至 17+）。基于 Java 的配置 (`@Configuration`, `@Bean`) 与传统 XML 配置的对比与抉择。`ApplicationContext` 体系结构剖析。
+    *   **最佳实践**：**强烈推荐并完全使用 Java 配置**；如何设计良好的组件层次结构；使用 `@Profile` 进行环境隔离；利用 `@Import` 和 `@Conditional` 进行条件化配置。
+
+2.  **《Spring Bean 生命周期与管理详解与最佳实践》**
+    *   **内容要点**：Bean 的作用域（Singleton, Prototype, Request, Session, Application）及适用场景。Bean 的完整生命周期（实例化、属性填充、Aware 接口、BeanPostProcessor、初始化、销毁）。`FactoryBean` 的特殊用途。
+    *   **最佳实践**：如何正确选择作用域以避免状态混乱；使用 `@PostConstruct` 和 `@PreDestroy` 进行初始化和清理；实现自定义 `BeanPostProcessor` 进行bean加工（如日志、代理）；避免循环依赖的陷阱与解决方案。
+
+3.  **《Spring 注解驱动开发详解与最佳实践》**
+    *   **内容要点**： Stereotype 注解 (`@Component`, `@Service`, `@Repository`, `@Controller`) 的精确用法与区别。自动装配 (`@Autowired`) 的各种模式（byType, byName, `@Qualifier`）、可选依赖 (`required=false`) 及构造器注入推荐。`@ComponentScan` 的过滤机制。
+    *   **最佳实践**：**强制推荐使用构造器注入**（不可变依赖、避免NPE、易于测试）；`@Repository` 与持久化异常转换；如何创建和使用自定义 Stereotype 注解。
+
+#### **第二阶段：数据访问与事务 (Data Access & Transaction)**
+
+掌握 Spring 如何优雅地简化数据库操作和管理事务。
+
+4.  **《Spring JDBC 与 DataSource 配置详解与最佳实践》**
+    *   **内容要点**：`JdbcTemplate` 核心 API 详解（query, update, batchUpdate）。多种 `DataSource` 配置方式（HikariCP, Tomcat JDBC Pool）。`RowMapper` 和 `ResultSetExtractor` 的使用与对比。
+    *   **最佳实践**：如何配置高性能的连接池（HikariCP）；使用 `NamedParameterJdbcTemplate` 提高SQL可读性；将数据访问逻辑清晰地封装在 `@Repository` 类中。
+
+5.  **《Spring 事务管理详解与最佳实践》**
+    *   **内容要点**：Spring 事务抽象核心接口 (`PlatformTransactionManager`, `TransactionDefinition`, `TransactionStatus`)。声明式事务管理 (`@Transactional`) 详解（传播行为、隔离级别、超时、只读、回滚规则）。编程式事务管理 (`TransactionTemplate`) 的使用场景。
+    *   **最佳实践**：`@Transactional` 应该放在 Service 层还是 Dao 层？事务方法调用的坑（代理机制、AOP、自调用失效问题及解决方案）。在不同数据源/事务管理器下如何切换（`@Qualifier`）。
+
+#### **第三阶段：Web 开发 (Web Development)**
+
+学习 Spring 强大的 MVC 模式和最新的响应式 Web 栈。
+
+6.  **《Spring MVC 核心原理与控制器详解与最佳实践》**
+    *   **内容要点**：DispatcherServlet 请求处理流程深度剖析。控制器注解 (`@Controller`, `@RestController`) 。请求映射 (`@RequestMapping` 及其变体)。处理方法的参数解析与返回值处理（`@RequestParam`, `@PathVariable`, `@RequestBody`, `@ResponseBody`）。
+    *   **最佳实践**：RESTful API 设计规范；使用 ResponseEntity 进行精细化的HTTP响应控制；全局异常处理（`@ControllerAdvice`, `@ExceptionHandler`）。
+
+7.  **《Spring MVC 视图解析、拦截器与表单处理详解与最佳实践》**
+    *   **内容要点**：`ViewResolver` 体系（虽然RESTful中较少用，但需了解）。拦截器 (`HandlerInterceptor`) 的实现与应用（日志、鉴权、性能监控）。数据绑定与验证 (`@InitBinder`, `@Valid`, `Validator` 接口)。
+    *   **最佳实践**：实现登录校验拦截器；使用 Hibernate Validator 进行服务端数据校验并返回统一格式的错误信息。
+
+8.  **《Spring Framework 6 响应式Web开发：WebFlux 详解与最佳实践》**
+    *   **内容要点**：响应式编程基础（Reactor 库核心概念：Mono, Flux）。Spring WebFlux 介绍（与 MVC 的对比、适用场景）。注解式 reactive 控制器和函数式端点 (`RouterFunction`)。
+    *   **最佳实践**：如何将阻塞式服务改造为响应式；背压(Backpressure)处理；测试 Reactive 端点；在 IO 密集型、高并发场景下的技术选型思考。
+
+#### **第四阶段：进阶与集成 (Advanced Topics & Integration)**
+
+深入理解 Spring 的强大能力，如 AOP、测试、与其他技术的集成。
+
+9.  **《Spring AOP 面向切面编程详解与最佳实践》**
+    *   **内容要点**：AOP 概念（切面 Aspect、连接点 Joinpoint、通知 Advice、切点 Pointcut）。基于代理的 AOP 实现原理（JDK 动态代理 vs. CGLIB）。五种通知类型（Before, After, AfterReturning, AfterThrowing, Around）。
+    *   **最佳实践**：使用 `@AspectJ` 注解风格；常见的切面应用（日志记录、性能监控、声明式事务原理、安全控制）；避免切面拦截失效；理解 AOP 的局限性。
+
+10. **《Spring 测试框架详解与最佳实践》**
+    *   **内容要点**：单元测试与集成测试。Spring TestContext 框架 (`@SpringJUnitConfig`, `@SpringJUnitWebConfig`)。Mock 环境 (`@MockBean`)。测试切片 (`@WebMvcTest`, `@DataJpaTest`, `@JsonTest`)。
+    *   **最佳实践**：如何编写快速、隔离的单元测试；如何编写集成测试来验证配置和组件协作；使用 `Testcontainers` 进行数据库集成测试。
+
+11. **《Spring 表达式语言 (SpEL) 详解与最佳实践》**
+    *   **内容要点**：SpEL 语法详解（字面量、属性、方法调用、操作符、正则表达式、安全导航操作符）。在注解（如 `@Value`）、XML 配置中的使用。自定义函数扩展。
+    *   **最佳实践**：使用 `@Value` 进行灵活的属性注入；在安全规则等场景下的高级应用；避免过度复杂化的 SpEL 表达式。
+
+12. **《Spring 资源抽象与环境配置详解与最佳实践》**
+    *   **内容要点**：Resource 接口及其实现（ClassPath, FileSystem, URL 等）。`PropertySource` 抽象与加载顺序。Profile (`@Profile`) 的多环境配置管理。
+    *   **最佳实践**：外部化配置（如何优雅地管理 `application.properties` 和 `application-{profile}.properties`）；使用 `@PropertySource` 导入自定义配置；加密敏感配置信息。
+
+#### **第五阶段：总结与升华 (Culmination)**
+
+13. **《构建一个基于 Spring Framework 6 的现代化应用：综合实战与架构考量》**
+    *   **内容要点**：**综合运用前面所有知识**。从一个干净的架构开始（分层：Controller -> Service -> Repository）。集成 JDBC、事务、Web MVC。编写单元和集成测试。打包部署。
+    *   **最佳实践**：总结**纯 Spring Framework** 项目的最佳项目结构、配置方式、依赖管理（Gradle/Maven）和部署注意事项。与 Spring Boot 进行对比，理解 Boot 是如何将这些手动配置自动化的，从而更深刻地理解 Spring Boot 的“约定大于配置”理念。
+
+---
+
+### 学习建议
+
+*   **动手实践**：每学完一篇文章，务必亲手敲代码实现，并尝试改造和破坏它，以加深理解。
+*   **官方文档**：Spring 的官方文档是极好的参考资料，在学习每个模块时，都应将其作为首要参考。
+*   **版本一致**：确保所有实验都基于 **Spring Framework 6.x** 和 **JDK 17+** 环境，以体验其全部新特性。
+*   **先理解，再记忆**：理解 IoC、AOP、事务抽象等设计思想，远比记住几个注解的拼写更重要。
+
+这份路线图为你提供了一个从入门到精通的清晰路径。祝你写作顺利，创作出高质量的技术文章系列！
