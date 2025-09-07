@@ -14,6 +14,8 @@
 
 ## v2025.09
 
+- Added: [Java 各版本主要特性详解](./docs/src/java/java-version-features.md)
+- Added: [Java Enum 枚举详解与最佳实践](./docs/src/java/java-enum.md)
 - Added: [Java Base64 详解与最佳实践](./docs/src/java/java-base64.md)
 - Added: [Apollo Client 与 Spring Boot 集成详解与最佳实践](./docs/src/guides/guide-apollo-client.md)
 - Added: [SDKMAN! 的使用指南与最佳实践](./docs/src/guides/guide-sdkman.md)

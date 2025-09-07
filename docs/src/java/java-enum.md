@@ -1,9 +1,9 @@
 ---
-title: Java 枚举详解
+title: Java Enum 枚举详解与最佳实践
 description: 枚举是 Java 中一种特殊的数据类型，用于定义固定的命名常量集合。它提供了类型安全、可读性强的方式来表示固定的常量，并且具备面向对象的特性。
 ---
 
-# Java 枚举详解
+# Java Enum 枚举详解与最佳实践
 
 ## 1. 枚举概述
 
@@ -361,6 +361,8 @@ Java 为枚举提供了两个高性能集合类：`EnumSet` 和 `EnumMap`。
 
 ### 5.1 EnumSet
 
+枚举集合 `EnumSet` 是一个高性能的枚举类型集合，它提供了快速的添加、删除和包含检查操作。
+
 ```java
 import java.util.EnumSet;
 
@@ -387,6 +389,8 @@ public class EnumSetExample {
 ```
 
 ### 5.2 EnumMap
+
+枚举映射 `EnumMap` 是一个高性能的枚举类型映射，它提供了快速的添加、删除和包含检查操作。
 
 ```java
 import java.util.EnumMap;
