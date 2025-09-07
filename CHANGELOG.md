@@ -14,6 +14,8 @@
 
 ## v2025.09
 
+- Added: [Java Base64 详解与最佳实践](./docs/src/java/java-base64.md)
+- Added: [Apollo Client 与 Spring Boot 集成详解与最佳实践](./docs/src/guides/guide-apollo-client.md)
 - Added: [SDKMAN! 的使用指南与最佳实践](./docs/src/guides/guide-sdkman.md)
 - Added: [jEnv 详解与最佳实践](./docs/src/guides/guide-jenv.md)
 - Added: [Lombok 详解与最佳实践：全面提升 Java 开发效率](./docs/src/guides/guide-lombok.md)

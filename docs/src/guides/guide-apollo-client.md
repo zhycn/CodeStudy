@@ -1,9 +1,9 @@
 ---
-title: Apollo Client 与 Spring Boot 3 集成详解与最佳实践
-description: 本文详细介绍了如何将 Apollo Client 集成到 Spring Boot 3 项目中，包括配置中心的概述、环境准备、依赖配置、初始化配置中心、客户端集成、动态刷新配置、灰度发布与回滚、权限控制与审计等方面。通过本文，您将掌握 Apollo Client 在 Spring Boot 3 项目中的最佳实践，确保配置管理的高效、安全和可靠。
+title: Apollo Client 与 Spring Boot 集成详解与最佳实践
+description: 本文详细介绍了如何将 Apollo Client 集成到 Spring Boot 项目中，包括配置中心的概述、环境准备、依赖配置、初始化配置中心、客户端集成、动态刷新配置、灰度发布与回滚、权限控制与审计等方面。通过本文，你将掌握 Apollo Client 在 Spring Boot 项目中的最佳实践，确保配置管理的高效、安全和可靠。
 ---
 
-# Apollo Client 与 Spring Boot 3 集成详解与最佳实践
+# Apollo Client 与 Spring Boot 集成详解与最佳实践
 
 ApolloConfig 官方文档：<https://www.apolloconfig.com/>
 
@@ -23,23 +23,24 @@ Apollo（阿波罗）是携程框架部门研发的**开源分布式配置中心
 
 ### 2.1 环境要求
 
-在开始集成之前，请确保您的系统满足以下要求：
+在开始集成之前，请确保你的系统满足以下要求：
 
-- **Java 17** 或更高版本（Spring Boot 3 要求）
-- **Spring Boot 3**.x.x
-- **Apollo Client 2.0**.0 或更高版本（支持 Java 17）
-- **Maven 3**.5+ 或 Gradle 7.x
+- **Java 8** 或更高版本
+- **Spring Boot 2.x** 或更高版本
+- **Apollo Client 2.0.0** 或更高版本（支持 Java 17）
 
 ### 2.2 依赖配置
 
-在 Spring Boot 3 项目中，需要在 `pom.xml` 中添加以下依赖：
+在 Spring Boot 项目中，需要在 `pom.xml` 中添加以下依赖：
 
 ```xml
+<!-- 引入 Apollo Client 依赖 -->
 <dependency>
     <groupId>com.ctrip.framework.apollo</groupId>
     <artifactId>apollo-client</artifactId>
     <version>2.0.1</version>
 </dependency>
+<!-- 引入 Spring Cloud 上下文依赖 -->
 <dependency>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-context</artifactId>
@@ -51,10 +52,19 @@ Apollo（阿波罗）是携程框架部门研发的**开源分布式配置中心
 ```xml
 <dependencyManagement>
     <dependencies>
+        <!-- 引入 Apollo Client 依赖管理 -->
         <dependency>
             <groupId>com.ctrip.framework.apollo</groupId>
             <artifactId>apollo-client</artifactId>
             <version>2.0.1</version>
+        </dependency>
+        <!-- 管理 Spring Cloud 相关依赖版本，需匹配 Spring Boot 版本 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
     </dependencies>
 </dependencyManagement>
@@ -126,7 +136,17 @@ apollo:
     namespaces: application, micro_service.spring-boot-http, datasource.mysql
 ```
 
-对于不同环境的配置，可以在 `apollo-env.properties` 文件中指定各环境 Meta Server 地址：
+对于不同环境的配置，Apollo Client 会按照以下优先级查找 Meta Server 地址：
+
+1. 通过 Java System Property `apollo.meta` 指定，如 `-Dapollo.meta=http://config-service-url`
+2. 通过 Spring Boot 配置文件 `application.yml` 中的 `apollo.meta` 属性指定
+3. 通过操作系统环境变量 `APOLLO_META` 指定
+4. 通过 `apollo-env.properties` 文件指定，该文件需要放在以下目录之一:
+   - `/opt/settings/server.properties`（推荐）
+   - classpath:/META-INF/app.properties
+   - classpath:/apollo-env.properties
+
+配置示例如下:
 
 ```properties
 # Apollo多环境配置
@@ -138,7 +158,7 @@ pro.meta=http://pro-apollo-config:8080
 
 ### 3.3 启动类配置
 
-在 Spring Boot 3 应用启动类上添加 `@EnableApolloConfig` 注解：
+在 Spring Boot 应用启动类上添加 `@EnableApolloConfig` 注解：
 
 ```java
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
@@ -213,37 +233,53 @@ public class AppConfig {
 Apollo 支持配置变更的实时监听，可以在配置发生变化时执行自定义逻辑：
 
 ```java
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
-import com.ctrip.framework.apollo.spring.annotation.ApolloConfig;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfigChangeListener;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.environment.EnvironmentChangeEvent;
 import org.springframework.cloud.context.scope.refresh.RefreshScope;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ApolloConfigChangeHandler {
 
-    @ApolloConfig
-    private Config config;
+  @Autowired
+  private RefreshScope refreshScope;
 
-    @Autowired
-    private RefreshScope refreshScope;
+  // 全量更新
+  // 监听指定命名空间的配置变更
+  @ApolloConfigChangeListener(value = {"application", "datasource.mysql"})
+  public void onFullConfigChange(ConfigChangeEvent changeEvent) {
 
-    // 监听指定命名空间的配置变更
-    @ApolloConfigChangeListener(value = {"application", "datasource.mysql"})
-    private void onConfigChange(ConfigChangeEvent changeEvent) {
-        // 打印变更的配置项
-        changeEvent.changedKeys().forEach(key -> {
-            System.out.println("配置项变更: " + key + ", 旧值: " +
-                changeEvent.getChange(key).getOldValue() +
-                ", 新值: " + changeEvent.getChange(key).getNewValue());
-        });
+    // 打印变更的配置项
+    changeEvent.changedKeys().forEach(key -> {
+      String oldValue = changeEvent.getChange(key).getOldValue();
+      String newValue = changeEvent.getChange(key).getNewValue();
+      log.info("配置项变更: {}, 旧值: {}, 新值: {}", key, oldValue, newValue);
+    });
 
-        // 刷新Spring Bean（针对@RefreshScope注解的Bean）
-        refreshScope.refreshAll();
-    }
+    // 刷新Spring Bean（针对@RefreshScope注解的Bean）
+    refreshScope.refreshAll();
+  }
+
+  // 增量更新
+  // 监听指定命名空间的配置变更
+  @ApolloConfigChangeListener(value = {"application", "datasource.mysql"})
+  public void onIncrementalConfigChange(
+    ConfigurableApplicationContext applicationContext, ConfigChangeEvent changeEvent) {
+    // 打印变更的配置项
+    changeEvent.changedKeys().forEach(key -> {
+      String oldValue = changeEvent.getChange(key).getOldValue();
+      String newValue = changeEvent.getChange(key).getNewValue();
+      log.info("配置项变更: {}, 旧值: {}, 新值: {}", key, oldValue, newValue);
+    });
+
+    // 发布环境变更事件触发配置刷新
+    applicationContext.publishEvent(new EnvironmentChangeEvent(changeEvent.changedKeys()));
+  }
 }
 ```
 
@@ -297,52 +333,50 @@ public class AppProperties {
 Apollo 可以托管日志配置，并实现日志级别的动态调整：
 
 ```java
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.context.annotation.Configuration;
-import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfigChangeListener;
 
-import javax.annotation.PostConstruct;
 import java.util.Set;
 
+@Slf4j
 @Configuration
 public class LoggerConfig {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoggerConfig.class);
-    private static final String LOGGER_TAG = "logging.level.";
+  private static final String LOGGER_TAG = "logging.level.";
 
-    @Autowired
-    private LoggingSystem loggingSystem;
+  @Autowired
+  private LoggingSystem loggingSystem;
 
-    @ApolloConfigChangeListener
-    private void configChangeListener(ConfigChangeEvent changeEvent) {
-        refreshLoggingLevels(changeEvent);
-    }
+  @ApolloConfigChangeListener
+  public void configChangeListener(ConfigChangeEvent changeEvent) {
+    refreshLoggingLevels(changeEvent);
+  }
 
-    private void refreshLoggingLevels(ConfigChangeEvent changeEvent) {
-        Set<String> changedKeys = changeEvent.changedKeys();
+  private void refreshLoggingLevels(ConfigChangeEvent changeEvent) {
+    Set<String> changedKeys = changeEvent.changedKeys();
 
-        for (String key : changedKeys) {
-            if (key.startsWith(LOGGER_TAG)) {
-                String loggerName = key.substring(LOGGER_TAG.length());
-                String newLevel = changeEvent.getChange(key).getNewValue();
+    for (String key : changedKeys) {
+      if (key.startsWith(LOGGER_TAG)) {
+        String loggerName = key.substring(LOGGER_TAG.length());
+        String newLevel = changeEvent.getChange(key).getNewValue();
 
-                // 动态更新日志级别
-                if ("null".equalsIgnoreCase(newLevel)) {
-                    loggingSystem.setLogLevel(loggerName, null);
-                } else {
-                    loggingSystem.setLogLevel(loggerName,
-                        org.springframework.boot.logging.LogLevel.valueOf(newLevel.toUpperCase()));
-                }
-
-                logger.info("已更新日志级别: {} = {}", loggerName, newLevel);
-            }
+        // 动态更新日志级别
+        if ("null".equalsIgnoreCase(newLevel)) {
+          loggingSystem.setLogLevel(loggerName, null);
+        } else {
+          loggingSystem.setLogLevel(loggerName,
+            LogLevel.valueOf(newLevel.toUpperCase()));
         }
+
+        log.info("已更新日志级别: {} = {}", loggerName, newLevel);
+      }
     }
+  }
 }
 ```
 
@@ -495,6 +529,6 @@ Spring Boot 3 需要 Apollo Client 2.0.0 及以上版本（支持 Java 17）。�
 
 ## 总结
 
-通过本文的详细介绍，您应该已经了解了如何将 Apollo Client 与 Spring Boot 3 集成，并掌握了一些最佳实践和高级用法。Apollo 作为一款强大的分布式配置中心，能够显著提升微服务架构下的配置管理效率和应用可靠性。
+通过本文的详细介绍，你应该已经了解了如何将 Apollo Client 与 Spring Boot 集成，并掌握了一些最佳实践和高级用法。Apollo 作为一款强大的分布式配置中心，能够显著提升微服务架构下的配置管理效率和应用可靠性。
 
-集成 Apollo 后，您的应用将获得**实时配置更新**、**多环境支持**、**灰度发布能力**和**完善的权限管理**等特性，大大提升了应用的灵活性和可维护性。
+集成 Apollo 后，你的应用将获得**实时配置更新**、**多环境支持**、**灰度发布能力**和**完善的权限管理**等特性，大大提升了应用的灵活性和可维护性。
