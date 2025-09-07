@@ -12,6 +12,12 @@
 - `Fixed` 对bug的修复
 - `Security` 对安全的改进
 
+## v2025.09
+
+- Added: [SDKMAN! 的使用指南与最佳实践](./docs/src/guides/guide-sdkman.md)
+- Added: [jEnv 详解与最佳实践](./docs/src/guides/guide-jenv.md)
+- Added: [Lombok 详解与最佳实践：全面提升 Java 开发效率](./docs/src/guides/guide-lombok.md)
+
 ## v2025.08
 
 - Added：项目初始化。

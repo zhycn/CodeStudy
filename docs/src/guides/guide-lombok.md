@@ -25,7 +25,9 @@ Lombok 的核心价值在于解决了 Java 语言长期存在的冗余代码问�
 | 灵活注解组合，满足不同场景需求       | 与某些重构工具可能存在兼容性问题 |
 | 支持日志自动化和其他高级特性         | 序列化时可能存在隐藏风险         |
 
-需要注意的是，Lombok 在某些特定场景下需要谨慎使用。例如，`@Data` 注解默认使用 `@EqualsAndHashCode(callSuper=false)`，这意味着生成的 `equals()` 方法只会比较子类的属性，不会考虑从父类继承的属性，这可能导致意想不到的行为。此外，在跨系统协作时，如果上游系统提供的 Feign client 使用了 Lombok，下游系统也必须使用 Lombok，从而形成了强依赖关系。
+:::tip 提示
+需要注意的是，Lombok 在某些特定场景下需要谨慎使用。例如，`@Data` 注解默认使用 `@EqualsAndHashCode(callSuper=false)`，这意味着生成的 `equals()` 方法只会比较当前类的属性，不会考虑从父类继承的属性，这可能导致意想不到的行为。此外，在跨系统协作时，如果上游系统提供的 Feign client 使用了 Lombok，下游系统也必须使用 Lombok，从而形成了强依赖关系。
+:::
 
 ## 2. 环境配置与安装
 
@@ -37,7 +39,7 @@ Lombok 的核心价值在于解决了 Java 语言长期存在的冗余代码问�
 <dependency>
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
-    <version>1.18.30</version> <!-- 使用最新稳定版本 -->
+    <version>1.18.38</version> <!-- 使用最新稳定版本 -->
     <scope>provided</scope>
 </dependency>
 ```
@@ -46,12 +48,14 @@ Lombok 的核心价值在于解决了 Java 语言长期存在的冗余代码问�
 
 ```gradle
 dependencies {
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok:1.18.38'
+    annotationProcessor 'org.projectlombok:lombok:1.18.38'
 }
 ```
 
-需要注意的是，Lombok 版本需与 Java 版本和构建工具兼容，建议使用最新稳定版（如 1.18.28）。对于 Spring Boot 项目，通常无需指定版本和 scope，Spring Boot 已经自动适配好。
+:::tip 提示
+需要注意的是，Lombok 版本需与 Java 版本和构建工具兼容，建议使用最新稳定版（如 1.18.38）。对于 Spring Boot 项目，通常无需指定版本和 scope，Spring Boot 已经自动适配好。
+:::
 
 ### 2.2 IDE 插件安装
 
@@ -59,6 +63,8 @@ dependencies {
 
 - **IntelliJ IDEA**：通过 `Settings -> Plugins` 搜索 "Lombok" 并安装，重启 IDE
 - **Eclipse**：通过 `Help -> Eclipse Marketplace` 搜索 "Lombok" 并安装，重启 IDE
+- **NetBeans**：通过 `Tools -> Plugins` 搜索 "Lombok" 并安装，重启 IDE
+- **VS Code**：通过 `Extensions` 搜索 "Lombok" 并安装，重启 IDE
 
 安装完成后，还需在 IntelliJ IDEA 中启用注解处理功能：依次进入 `Build, Execution, Deployment -> Compiler -> Annotation Processors`，勾选 `Enable annotation processing` 选项。
 
@@ -104,10 +110,10 @@ Lombok 提供了一系列注解来简化 Java 开发，根据功能可以将其�
 - `@NoArgsConstructor`：生成无参构造函数，支持访问级别控制
 - `@AllArgsConstructor`：生成全参构造函数，可自定义参数顺序
 - `@RequiredArgsConstructor`：生成包含 final 字段和 `@NonNull` 字段的构造方法
-- `@NonNull`：参数空值检查，自动生成非空校验代码
 
 **其他实用注解**：
 
+- `@NonNull`：参数空值检查，自动生成非空校验代码
 - `@Builder`：生成 Builder 模式代码，支持链式调用和集合处理
 - `@Slf4j`/`@Log`/`@CommonsLog`/`@Log4j2`：自动生成各类日志对象（建议只使用 `@Slf4j`）
 - `@SneakyThrows`：自动抛出受检异常，无需显式声明 throws
@@ -115,7 +121,7 @@ Lombok 提供了一系列注解来简化 Java 开发，根据功能可以将其�
 - `@Cleanup`：自动资源管理，确保资源正确关闭
 - `@With`：生成对象不可变拷贝方法
 - `@Accessors`：配置链式调用和字段访问方式
-- `@Delegate`：实现委托模式，自动生成代理方法
+- `@UtilityClass`：生成工具类，包含静态方法，不允许实例化
 
 ### 3.2 构造器相关注解
 
@@ -190,7 +196,7 @@ public class Example {
 }
 ```
 
-除了 `@Slf4j`，Lombok 还支持多种日志框架注解，如 `@Log`（Java 自带 Logger）、`@CommonsLog`（Apache Commons Logging）等。
+除了 `@Slf4j`，Lombok 还支持多种日志框架注解，如 `@Log`（Java 自带 Logger）、`@CommonsLog`（Apache Commons Logging）等。建议只使用 `@Slf4j` 注解，因为它与 SLF4J 日志框架高度集成，提供更好的日志管理和配置选项。
 
 ## 4. Lombok 最佳实践
 
@@ -471,8 +477,11 @@ Lombok 是一款革命性的 Java 开发工具，通过注解自动化生成样�
 - **特定场景**（如序列化、继承）需要特殊处理；
 - **调试困难**需要开发者适应。
 
-对于 Lombok 的使用，建议采取以下策略：在新项目中积极采用 Lombok，享受其开发效率提升的优势；在老项目中渐进式引入，避免大规模改造风险；在团队中建立统一规范，确保代码一致性；结合具体场景选择合适注解，避免一刀切使用 `@Data`。
+对于 Lombok 的使用，建议采取以下策略：
+
+- **新项目**：在新项目中积极采用 Lombok，享受其开发效率提升的优势；
+- **老项目**：在老项目中渐进式引入，避免大规模改造风险；
+- **团队协作**：在团队中建立统一规范，确保代码一致性；
+- **具体场景**：结合具体场景选择合适注解，避免一刀切使用 `@Data`。
 
 随着 Java 语言的不断发展，Lombok 这样的代码生成工具将继续演变，为开发者提供更加优雅高效的编程体验。明智而审慎地使用 Lombok，可以让你的 Java 代码更加简洁、健壮和可维护。
-
-> **温馨提示**：本文基于 Lombok 1.18.30 版本，不同版本可能存在特性差异。建议始终使用最新稳定版本，并参考[官方文档](https://projectlombok.org/)获取最新信息。

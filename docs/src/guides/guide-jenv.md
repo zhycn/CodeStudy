@@ -24,7 +24,7 @@ description: 了解 jEnv 是如何管理和切换多个 Java 版本的，以及�
 
 jEnv 的工作机制基于 **shims** 和 **环境变量管理**。
 
-1. **Shims (垫片)**: jEnv 在 `$PATH` 的最前端插入其 `~/.jEnv/shims` 目录。这个目录包含了 `java`, `javac`, `jar` 等可执行文件的"垫片"。当你执行 `java -version` 时，首先找到的是 jEnv 的 shim 脚本，而不是系统默认的 `java`。
+1. **Shims (垫片)**: jEnv 在 `$PATH` 的最前端插入其 `~/.jenv/shims` 目录。这个目录包含了 `java`, `javac`, `jar` 等可执行文件的"垫片"。当你执行 `java -version` 时，首先找到的是 jEnv 的 shim 脚本，而不是系统默认的 `java`。
 2. **版本解析**: jEnv 的 shim 脚本会根据你当前所在目录、全局配置或会话配置，解析出应该使用的 JDK 版本。
 3. **路径重定向**: 找到正确的 JDK 版本后，shim 脚本会将命令重定向到实际的 JDK 安装路径下的 `bin` 目录，从而执行正确的 `java` 命令。
 4. **`JAVA_HOME` 自动更新**: 配合 `export` 插件，jEnv 会在每次版本切换时，自动更新 `JAVA_HOME` 环境变量，指向当前生效的 JDK 路径。
@@ -156,19 +156,24 @@ jenv versions
 
 输出示例：
 
-```text
+```bash
   system
-  11
-  11.0
-  11.0.2
-* 17 (set by /Users/user/.jEnv/version)
+  1.8
+  1.8.0.202
+  17
   17.0
-  17.0.6
+  17.0.12
+  21
+  21.0
+* 21.0.8 (set by /Users/lakala/.jenv/version)
+  oracle64-1.8.0.202
+  oracle64-17.0.12
+  oracle64-21.0.8
 ```
 
 - 带 `*` 的行表示当前正在使用的 JDK 版本。
 - `system` 表示系统默认的 JDK。
-- `11`, `17` 等是 jEnv 自动生成的别名。
+- `1.8`, `17`, `21` 等是 jEnv 自动生成的别名。
 
 ### 4.3. 切换 JDK 版本
 
@@ -190,10 +195,10 @@ jenv global 17
 
 ```bash
 cd /path/to/your/project
-jenv local 11
+jenv local 21.0.8
 ```
 
-这个命令会在当前目录下创建一个 `.java-version` 文件，内容就是 `11`。当你进入这个目录时，jEnv 会自动切换到 JDK 11。离开这个目录时，又会自动恢复到全局或上级目录的配置。
+这个命令会在当前目录下创建一个 `.java-version` 文件，内容就是 `21.0.8`。当你进入这个目录时，jEnv 会自动切换到 JDK 21.0.8。离开这个目录时，又会自动恢复到全局或上级目录的配置。
 
 **⚠️ 注意**: 推荐将 `.java-version` 文件加入 Git 版本控制，这样团队成员可以共享项目的 JDK 版本配置。
 
@@ -202,7 +207,7 @@ jenv local 11
 仅在当前终端会话中临时切换 JDK 版本，不会影响其他终端会话。
 
 ```bash
-jenv shell 8
+jenv shell 1.8
 ```
 
 这个设置的优先级最高，即使该项目目录有 `.java-version` 文件，也会被 `shell` 设置覆盖。
@@ -238,7 +243,7 @@ jenv enable-plugin gradle
 
 ### 5.3. 别名与版本命名
 
-jEnv 自动为 JDK 生成别名，如 `1.8`, `11`, `17`。但你也可以使用更具描述性的名称。
+jEnv 自动为 JDK 生成别名，如 `1.8`, `17`, `21`。但你也可以使用更具描述性的名称。
 
 ```bash
 # 添加时指定别名
@@ -249,8 +254,6 @@ jenv local openjdk-17-openj9
 ```
 
 这对于区分不同厂商（如 Oracle、OpenJDK、Adoptium）的 JDK 版本非常有用。
-
----
 
 ## 6. jEnv vs. SDKMAN
 
@@ -266,9 +269,9 @@ jenv local openjdk-17-openj9
 
 ### 推荐工作流
 
-1. **使用 SDKMAN! 安装 JDK**：`sdk install java 17.0.8-tem`
-2. **将 SDKMAN! 安装的 JDK 添加到 jEnv**：`jenv add ~/.sdkman/candidates/java/17.0.8-tem`
-3. **使用 jEnv 进行版本切换和项目管理**：`jenv local 17.0.8-tem`
+1. **使用 SDKMAN! 安装 JDK**：`sdk install java 17.0.12-tem`
+2. **将 SDKMAN! 安装的 JDK 添加到 jEnv**：`jenv add ~/.sdkman/candidates/java/17.0.12-tem`
+3. **使用 jEnv 进行版本切换和项目管理**：`jenv local 17.0.12-tem`
 
 这种组合方式，既享受了 SDKMAN! 一键安装的便利，又利用了 jEnv 在项目级别切换的精确控制。
 
