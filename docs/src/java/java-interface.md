@@ -1,9 +1,9 @@
 ---
-title: Java 接口（interface）详解与最佳实践
+title: Java Interface 接口详解与最佳实践
 description: 接口是 Java 语言的一种重要机制，它定义了对象之间的交互契约。接口专注于声明"应该做什么"而非规定"具体怎么做"，体现了面向对象设计中的"面向接口编程"原则。
 ---
 
-# Java 接口（interface）详解与最佳实践
+# Java Interface 接口详解与最佳实践
 
 ## 1. 接口的本质与核心概念
 
@@ -11,7 +11,7 @@ Java 接口（Interface）是一种完全抽象的引用类型，它定义了对
 
 接口的核心特征包括：
 
-- **完全抽象的行为规范**（Java 8前）
+- **完全抽象的行为规范**（Java 8 之前）
 - **静态常量容器**
 - **多继承支持机制**
 - **类型标识角色**
@@ -32,6 +32,10 @@ public interface Animal {
 ## 2. 接口的定义与实现
 
 ### 2.1 接口定义语法
+
+接口定义了一组方法签名，类可以实现这些方法。接口可以包含抽象方法（Java 8 之前）、默认方法（Java 8+）、静态方法（Java 8+）和私有方法（Java 9+）。
+
+使用 `interface` 关键字定义接口。
 
 ```java
 // 接口定义
@@ -56,6 +60,10 @@ public interface DataProcessor {
 
 ### 2.2 接口实现
 
+接口实现类必须实现接口中所有的抽象方法。
+
+使用 `implements` 关键字实现接口。
+
 ```java
 // 实现接口
 public class ImageProcessor implements DataProcessor {
@@ -74,6 +82,10 @@ public class ImageProcessor implements DataProcessor {
 ```
 
 ### 2.3 多接口实现
+
+类可以实现多个接口，从而获得多个接口的功能。
+
+使用 `implements` 关键字实现多个接口。
 
 ```java
 // 多接口实现
@@ -97,6 +109,8 @@ public class SmartDevice implements NetworkConnectable, PowerManageable {
 
 默认方法允许接口提供方法实现，确保向后兼容性。
 
+使用 `default` 关键字定义默认方法。
+
 ```java
 public interface Vehicle {
     // 抽象方法
@@ -116,6 +130,8 @@ public interface Vehicle {
 ```
 
 ### 3.2 静态方法（Static Methods）
+
+使用 `static` 关键字定义静态方法。
 
 ```java
 public interface MathUtils {
@@ -139,6 +155,10 @@ public class Calculator {
 ```
 
 ### 3.3 私有方法（Java 9+）
+
+私有方法允许在接口中定义辅助方法，提高代码复用性和维护性。
+
+使用 `private` 关键字定义私有方法。
 
 ```java
 public interface Database {

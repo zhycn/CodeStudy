@@ -14,6 +14,10 @@
 
 ## v2025.09
 
+- Added: [Java Interface 接口详解与最佳实践](./docs/src/java/java-interface.md)
+- Added: [Java 构造方法详解与最佳实践](./docs/src/java/java-constructor.md)
+- Added: [Java Annotation 注解详解与最佳实践](./docs/src/java/java-annotation.md)
+- Added: [Java 修饰符详解与最佳实践](./docs/src/java/java-modifier.md)
 - Added: [Java 编程语言简介](./docs/src/java/java-introduction.md)
 - Added: [Java 注释详解与最佳实践](./docs/src/java/java-comments.md)
 - Added: [Java 变量命名规则详解](./docs/src/java/java-variable-naming.md)

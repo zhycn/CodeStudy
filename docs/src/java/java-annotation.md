@@ -1,9 +1,9 @@
 ---
-title: Java 注解详解
+title: Java Annotation 注解详解与最佳实践
 description: 详细介绍 Java 注解的基本概念、作用、分类、使用方法、自定义注解、元注解、处理机制、应用场景等。
 ---
 
-# Java 注解详解
+# Java Annotation 注解详解与最佳实践
 
 ## 1. 注解的基本概念
 
@@ -84,15 +84,24 @@ class Example {
 
 `@SuppressWarnings`可取值及其作用：
 
-| 参数        | 作用                             |
-| ----------- | -------------------------------- |
-| all         | 抑制所有警告                     |
-| boxing      | 抑制装箱、拆箱操作时候的警告     |
-| cast        | 抑制映射相关的警告               |
-| dep-ann     | 抑制启用注释的警告               |
-| deprecation | 抑制过期方法警告                 |
-| fallthrough | 抑制确在switch中缺失breaks的警告 |
-| finally     | 抑制finally模块没有返回的警告    |
+| 参数                     | 作用                                         |
+| ------------------------ | -------------------------------------------- |
+| all                      | 抑制所有警告                                 |
+| boxing                   | 抑制装箱、拆箱操作时候的警告                 |
+| cast                     | 抑制映射相关的警告                           |
+| dep-ann                  | 抑制启用注释的警告                           |
+| deprecation              | 抑制过期方法警告                             |
+| fallthrough              | 抑制确在 switch 语句中缺失 breaks 语句的警告 |
+| finally                  | 抑制 finally 模块没有返回值的警告            |
+| resource                 | 抑制与资源相关的警告                         |
+| serial                   | 抑制与 serialVersionUID 字段相关的警告       |
+| static                   | 抑制与静态变量相关的警告                     |
+| synthetic-access         | 抑制内部类访问外部类的警告                   |
+| unchecked                | 抑制未检查的转换警告                         |
+| unqualified-field-access | 抑制未限定的字段访问警告                     |
+| varargs                  | 抑制使用可变参数方法或构造函数时的警告       |
+| void-return              | 抑制没有返回值的方法的警告                   |
+| rawtypes                 | 抑制使用原始类型的警告                       |
 
 ### 2.4 其他内置注解
 
@@ -151,7 +160,7 @@ public @interface MyAnnotation {
 
 **注意事项**：`@Inherited`元注解只影响注解的继承行为，它不会改变注解的保留策略或目标元素。此外，`@Inherited`只能用于修饰类型为TYPE（类、接口或枚举）的注解。
 
-### 3.5 @Repeatable（Java 8引入）
+### 3.5 @Repeatable（Java 8 引入）
 
 `@Repeatable`用于声明标记的注解为可重复类型注解。在 Java 8 之前，同一个程序元素前最多只能有一个相同类型的注解。但是，通过 `@Repeatable` 元注解，可以在同一个元素前多次使用相同的注解类型。
 
@@ -250,7 +259,7 @@ public class LogProcessor extends AbstractProcessor {
 
 ### 5.2 运行时处理
 
-运行时处理通过Java反射机制读取注解信息。只有保留策略为`RetentionPolicy.RUNTIME`的注解才能在运行时被访问。
+运行时处理通过 Java 反射机制读取注解信息。只有保留策略为 `RetentionPolicy.RUNTIME` 的注解才能在运行时被访问。
 
 **示例：**
 
@@ -272,7 +281,7 @@ for (Method method : clazz.getMethods()) {
 
 ### 5.3 注解与反射的关系
 
-Java 反射（Reflection）是 Java 语言提供的一种API，用于在程序运行期间检查和操作类、方法、字段等成员信息。注解和反射在Java中密切相关，它们共同提供了一种强大的机制来动态地处理代码和元数据。
+Java 反射（Reflection）是 Java 语言提供的一种 API，用于在程序运行期间检查和操作类、方法、字段等成员信息。注解和反射在 Java 中密切相关，它们共同提供了一种强大的机制来动态地处理代码和元数据。
 
 **结合注解和反射实现的能力：**
 
@@ -437,15 +446,19 @@ public class Example {
 
 2. **注解继承问题**：
    - 问题：默认情况下，注解不会被继承
-   - 解决方案：使用`@Inherited`元注解使注解可继承
+   - 解决方案：使用 `@Inherited` 元注解使注解可继承
 
-3. **重复注解**（Java 8之前）：
+3. **重复注解**（Java 8 之前）：
    - 问题：Java 8 之前同一个元素不能多次使用相同注解
    - 解决方案：Java 8 引入 `@Repeatable` 元注解支持重复注解
 
 4. **注解参数限制**：
    - 问题：注解参数只能使用基本类型、String、Class、枚举、注解类型或这些类型的数组
    - 解决方案：使用嵌套注解或字符串编码复杂数据结构
+
+5. **注解处理**：
+   - 问题：注解信息在运行时不可直接访问，需要通过反射机制获取
+   - 解决方案：使用 Java 反射 API 读取注解信息
 
 ### 7.3 常见面试题解析
 
@@ -470,7 +483,7 @@ if (method.isAnnotationPresent(MyAnnotation.class)) {
 }
 ```
 
-## 总结
+## 8. 总结
 
 **Java 注解** 是一种强大的工具，它提供了一种灵活的方式来为代码添加元数据，而无需改变代码逻辑。通过合理使用注解，可以显著提高代码的可读性、可维护性和可扩展性。
 
