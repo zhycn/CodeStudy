@@ -271,7 +271,7 @@ Runnable r = () -> System.out.println("捕获变量:" + b);
 
 ### 6.1 最佳实践
 
-1. **使用合适的函数式接口**：根据具体需求选择合适的函数式接口，如 `Predicate`、`Function`、`Consumer` 等。
+1. **使用合适的函数式接口**：根据具体需求选择合适的函数式接口，如 `Predicate`、`Function`、`Consumer`、`Supplier` 等。
 
 2. **适当使用方法引用**：当 Lambda 表达式只调用一个现有方法时，使用方法引用可以使代码更简洁。
 
@@ -299,7 +299,7 @@ Lambda 表达式可以使用任何类型的参数，包括基本数据类型和�
 
 ### 7.2 如何选择合适的函数式接口？
 
-Java 标准库提供了许多预定义的函数式接口，例如 `Predicate`、`Function`、`Consumer` 等，开发者可以根据需求选择合适的接口。
+Java 标准库提供了许多预定义的函数式接口，例如 `Predicate`、`Function`、`Consumer`、`Supplier` 等，开发者可以根据需求选择合适的接口。
 
 ### 7.3 Lambda 表达式与匿名内部类的区别是什么？
 

@@ -14,6 +14,11 @@
 
 ## v2025.09
 
+- Added: [Java Package 包详解与最佳实践](./docs/src/java/java-package.md)
+- Added: [Java 运算符详解](./docs/src/java/java-operators.md)
+- Added: [Java Lambda 表达式详解与最佳实践](./docs/src/java/java-lambda.md)
+- Added: [Java 函数式接口详解与最佳实践](./docs/src/java/java-functional-interface.md)
+- Added: [Java 基本数据类型详解](./docs/src/java/java-datatypes.md)
 - Added: [Java 泛型详解与最佳实践](./docs/src/java/java-generics.md)
 - Added: [Java 异常处理详解与最佳实践](./docs/src/java/java-exception.md)
 - Added: [Java Interface 接口详解与最佳实践](./docs/src/java/java-interface.md)

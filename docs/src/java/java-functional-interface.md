@@ -43,7 +43,7 @@ interface StringProcessor {
 
 ## 3. Java 内置核心函数式接口
 
-Java 在 `java.util.function` 包中提供了一系列常用的函数式接口，以下是四大核心接口：
+Java 在 `java.util.function` 包中提供了一系列常用的函数式接口，以下是六大核心接口：
 
 ### 3.1 `Function<T, R>` - 函数型接口
 
@@ -61,6 +61,25 @@ Integer result = strToInt.apply("123"); // 输出: 123
 // 方法引用形式
 Function<String, Integer> strToIntRef = Integer::parseInt;
 ```
+
+_常见变种：_
+
+- `BiFunction<T, U, R>`: 双参数函数。接受两个输入参数 T 和 U，返回结果 R
+- `DoubleFunction<R>`: 接受一个 double 类型参数，返回结果 R
+- `DoubleToIntFunction`: 接受一个 double 类型参数，返回 int 类型结果
+- `DoubleToLongFunction`: 接受一个 double 类型参数，返回 long 类型结果
+- `IntFunction<R>`: 接受一个 int 类型参数，返回结果 R
+- `IntToDoubleFunction`: 接受一个 int 类型参数，返回 double 类型结果
+- `IntToLongFunction`: 接受一个 int 类型参数，返回 long 类型结果
+- `LongFunction<R>`: 接受一个 long 类型参数，返回结果 R
+- `LongToDoubleFunction`: 接受一个 long 类型参数，返回 double 类型结果
+- `LongToIntFunction`: 接受一个 long 类型参数，返回 int 类型结果
+- `ToDoubleBiFunction<T, U>`: 双参数函数。接受两个输入参数 T 和 U，返回 double 类型结果
+- `ToDoubleFunction<T>`: 接受一个输入参数 T，返回 double 类型结果
+- `ToIntBiFunction<T, U>`: 双参数函数。接受两个输入参数 T 和 U，返回 int 类型结果
+- `ToIntFunction<T>`: 接受一个输入参数 T，返回 int 类型结果
+- `ToLongBiFunction<T, U>`: 双参数函数。接受两个输入参数 T 和 U，返回 long 类型结果
+- `ToLongFunction<T>`: 接受一个输入参数 T，返回 long 类型结果
 
 ### 3.2 `Consumer<T>` - 消费型接口
 
@@ -83,6 +102,16 @@ Consumer<String> appendPrefix = str -> System.out.print("[Prefix] " + str);
 Consumer<String> appendSuffix = str -> System.out.println(" [Suffix]");
 appendPrefix.andThen(appendSuffix).accept("Hello"); // 输出: [Prefix] Hello [Suffix]
 ```
+
+_常见变种：_
+
+- `BiConsumer<T, U>`: 双参数消费者。接受两个输入参数 T 和 U，无返回值
+- `DoubleConsumer`: 接受一个 double 类型参数，无返回值
+- `IntConsumer`: 接受一个 int 类型参数，无返回值
+- `LongConsumer`: 接受一个 long 类型参数，无返回值
+- `ObjDoubleConsumer<T>`: 接受一个输入参数 T 和一个 double 类型参数，无返回值
+- `ObjIntConsumer<T>`: 接受一个输入参数 T 和一个 int 类型参数，无返回值
+- `ObjLongConsumer<T>`: 接受一个输入参数 T 和一个 long 类型参数，无返回值
 
 ### 3.3 `Supplier<T>` - 供给型接口
 
@@ -111,6 +140,13 @@ String result = process(() -> {
 });
 ```
 
+_常见变种：_
+
+- `BooleanSupplier`: 无输入参数，返回 boolean 类型结果
+- `DoubleSupplier`: 无输入参数，返回 double 类型结果
+- `IntSupplier`: 无输入参数，返回 int 类型结果
+- `LongSupplier`: 无输入参数，返回 long 类型结果
+
 ### 3.4 `Predicate<T>` - 断言型接口
 
 接受一个输入参数 T，返回布尔值。
@@ -137,19 +173,64 @@ Predicate<Integer> isOdd = isEven.negate();
 System.out.println(isOdd.test(3)); // true
 ```
 
-### 3.5 其他重要函数式接口
+_常见变种：_
 
-除了四大核心接口，Java 还提供了其他有用的函数式接口：
+- `BiPredicate<T, U>`: 双参数断言。接受两个输入参数 T 和 U，返回 boolean 类型结果
+- `DoublePredicate`: 接受一个 double 类型参数，返回 boolean 类型结果
+- `IntPredicate`: 接受一个 int 类型参数，返回 boolean 类型结果
+- `LongPredicate`: 接受一个 long 类型参数，返回 boolean 类型结果
 
-| 接口名              | 参数类型 | 返回类型 | 抽象方法                 | 用途描述                       |
-| ------------------- | -------- | -------- | ------------------------ | ------------------------------ |
-| `UnaryOperator<T>`  | T        | T        | `T apply(T t)`           | 一元操作，输入输出类型相同     |
-| `BinaryOperator<T>` | T, T     | T        | `T apply(T t1, T t2)`    | 二元操作，两个同类型参数的运算 |
-| `BiFunction<T,U,R>` | T, U     | R        | `R apply(T t, U u)`      | 接受两个不同类型参数，返回结果 |
-| `BiConsumer<T,U>`   | T, U     | void     | `void accept(T t, U u)`  | 接受两个参数，无返回值         |
-| `BiPredicate<T,U>`  | T, U     | boolean  | `boolean test(T t, U u)` | 接受两个参数，返回布尔值       |
+### 3.5 `UnaryOperator<T>` - 一元操作接口
 
-**基本类型特化的函数式接口**：为了避免自动装箱/拆箱的开销，Java 提供了针对基本类型的函数式接口，如 `IntFunction`、`LongFunction`、`DoubleFunction`、`ToIntFunction`、`ToLongFunction`、`ToDoubleFunction` 等。
+_继承 `Function<T,T>`，输入输出类型相同。_
+
+**方法**：`T apply(T t)`
+
+**典型应用**：对象修改、基础类型运算
+
+```java
+// 字符串转大写
+UnaryOperator<String> toUpper = String::toUpperCase;
+System.out.println(toUpper.apply("lambda")); // LAMBDA
+
+// 数值自增
+IntUnaryOperator increment = x -> x + 1;
+System.out.println(increment.applyAsInt(5)); // 6
+```
+
+_常见变种：_
+
+- `DoubleUnaryOperator`: 接受一个 double 类型参数，返回 double 类型结果
+- `IntUnaryOperator`: 接受一个 int 类型参数，返回 int 类型结果
+- `LongUnaryOperator`: 接受一个 long 类型参数，返回 long 类型结果
+
+### 3.6 `BinaryOperator<T>` - 二元操作接口
+
+_继承 `BiFunction<T,T,T>`，输入输出类型相同。_
+
+**方法**：`T apply(T t1, T t2)`
+
+**典型应用**：集合归约、数值运算
+
+```java
+// 字符串连接
+BinaryOperator<String> concat = String::concat;
+System.out.println(concat.apply("Func", "tional")); // Functional
+
+// 求最小值
+BinaryOperator<Integer> min = Math::min;
+System.out.println(min.apply(8, 5)); // 5
+
+// 数值求和
+IntBinaryOperator sum = (a, b) -> a + b;
+System.out.println(sum.applyAsInt(3, 7)); // 10
+```
+
+_常见变种：_
+
+- `DoubleBinaryOperator`: 接受两个 double 类型参数，返回 double 类型结果
+- `IntBinaryOperator`: 接受两个 int 类型参数，返回 int 类型结果
+- `LongBinaryOperator`: 接受两个 long 类型参数，返回 long 类型结果
 
 ## 4. 自定义函数式接口
 
