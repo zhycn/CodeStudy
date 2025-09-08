@@ -1,9 +1,10 @@
 ---
-title: Java 记录类 (Record) 详解与最佳实践
+title: Java Record 记录类详解与最佳实践
 description: 记录类是 Java 14 引入的一种新的类类型，用于表示不可变的数据传输对象（DTO）或值对象。它自动提供了构造器、getter 方法、equals、hashCode 和 toString 方法，大大简化了数据类的编写。
+author: zhycn
 ---
 
-# Java 记录类 (Record) 详解与最佳实践
+# Java Record 记录类详解与最佳实践
 
 ## 1. 引言
 

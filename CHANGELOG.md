@@ -14,6 +14,9 @@
 
 ## v2025.09
 
+- Added: [Java 密封类 (Sealed Class) 详解与最佳实践](./docs/src/java/java-sealed-class.md)
+- Added: [Java Record 记录类详解与最佳实践](./docs/src/java/java-record.md)
+- Added: [Java Reflection 反射详解与最佳实践](./docs/src/java/java-reflection.md)
 - Added: [Bun 详解与最佳实践](./docs/src/frontend/guide-bun.md)
 - Added: [Homebrew 详解与最佳实践](./docs/src/guides/guide-homebrew.md)
 - Added: [Java 基础语法详解](./docs/src/java/java-basic-syntax.md)
