@@ -14,6 +14,9 @@
 
 ## v2025.09
 
+- Added: [Java 编程语言简介](./docs/src/java/java-introduction.md)
+- Added: [Java 注释详解与最佳实践](./docs/src/java/java-comments.md)
+- Added: [Java 变量命名规则详解](./docs/src/java/java-variable-naming.md)
 - Added: [Java 各版本主要特性详解](./docs/src/java/java-version-features.md)
 - Added: [Java Enum 枚举详解与最佳实践](./docs/src/java/java-enum.md)
 - Added: [Java Base64 详解与最佳实践](./docs/src/java/java-base64.md)

@@ -65,7 +65,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 编程语言简介](./java-introduction.md)
 - [Java 各版本主要特性详解](./java-version-features.md)
 - [Java 基础语法详解](./java-basic-syntax.md)
-- [Java 注释详解](./java-comments.md)
+- [Java 注释详解与最佳实践](./java-comments.md)
 - [Java 修饰符详解](./java-modifier.md)
 - [Java 运算符详解](./java-operators.md)
 - [Java 包（Package）详解与最佳实践](./java-package.md)
