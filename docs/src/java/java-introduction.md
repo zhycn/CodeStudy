@@ -1,6 +1,7 @@
 ---
 title: Java 编程语言简介
 description: 介绍 Java 编程语言的基本概念、历史、特性和应用场景。
+author: zhycn
 ---
 
 # Java 编程语言简介

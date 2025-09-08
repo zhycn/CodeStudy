@@ -1,6 +1,7 @@
 ---
 title: Java 函数式接口详解与最佳实践
 description: 了解 Java 函数式接口的定义、特性和最佳实践，掌握 Lambda 表达式和方法引用的使用。
+author: zhycn
 ---
 
 # Java 函数式接口详解与最佳实践

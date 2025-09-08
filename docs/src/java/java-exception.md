@@ -1,6 +1,7 @@
 ---
 title: Java 异常处理详解与最佳实践
 description: 详细介绍 Java 异常的基本概念、体系结构、分类、处理机制、自定义异常、最佳实践等。
+author: zhycn
 ---
 
 # Java 异常处理详解与最佳实践

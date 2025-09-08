@@ -1,6 +1,7 @@
 ---
 title: Lombok 详解与最佳实践：全面提升 Java 开发效率
 description: Lombok 是一个 Java 库，通过注解机制在编译阶段自动生成代码，显著减少 Java 开发中的样板代码，提升开发效率和代码可读性。
+author: zhycn
 ---
 
 # Lombok 详解与最佳实践：全面提升 Java 开发效率

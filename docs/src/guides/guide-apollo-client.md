@@ -1,6 +1,7 @@
 ---
 title: Apollo Client 与 Spring Boot 集成详解与最佳实践
 description: 本文详细介绍了如何将 Apollo Client 集成到 Spring Boot 项目中，包括配置中心的概述、环境准备、依赖配置、初始化配置中心、客户端集成、动态刷新配置、灰度发布与回滚、权限控制与审计等方面。通过本文，你将掌握 Apollo Client 在 Spring Boot 项目中的最佳实践，确保配置管理的高效、安全和可靠。
+author: zhycn
 ---
 
 # Apollo Client 与 Spring Boot 集成详解与最佳实践

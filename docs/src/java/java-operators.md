@@ -1,6 +1,7 @@
 ---
 title: Java 运算符详解
 description: 详细介绍 Java 中的运算符，包括算术运算符、关系运算符、逻辑运算符、位运算符、赋值运算符、条件运算符和其他运算符。
+author: zhycn
 ---
 
 # Java 运算符详解

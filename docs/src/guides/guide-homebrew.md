@@ -1,6 +1,7 @@
 ---
 title: Homebrew 详解与最佳实践
 description: 了解 Homebrew 的基本概念、安装方法、常用命令以及最佳实践，帮助您高效管理 macOS 和 Linux 系统上的软件包。
+author: zhycn
 ---
 
 # Homebrew 详解与最佳实践

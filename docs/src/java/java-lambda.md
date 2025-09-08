@@ -1,6 +1,7 @@
 ---
 title: Java Lambda 表达式详解与最佳实践
 description: 这篇文章详细介绍了 Java Lambda 表达式的基础概念、语法结构、优势以及最佳实践。通过学习，你将能够理解 Lambda 表达式的工作原理，掌握其在实际开发中的应用，避免常见的问题。
+author: zhycn
 ---
 
 # Java Lambda 表达式详解与最佳实践

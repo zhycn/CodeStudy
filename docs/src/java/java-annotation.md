@@ -1,6 +1,7 @@
 ---
 title: Java Annotation 注解详解与最佳实践
 description: 详细介绍 Java 注解的基本概念、作用、分类、使用方法、自定义注解、元注解、处理机制、应用场景等。
+author: zhycn
 ---
 
 # Java Annotation 注解详解与最佳实践

@@ -1,6 +1,7 @@
 ---
 title: Bun 详解与最佳实践
 description: 了解 Bun 运行时的详细信息，包括安装、配置、使用和最佳实践。
+author: zhycn
 ---
 
 # Bun 详解与最佳实践

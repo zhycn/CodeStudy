@@ -1,6 +1,7 @@
 ---
 title: Java Interface 接口详解与最佳实践
 description: 接口是 Java 语言的一种重要机制，它定义了对象之间的交互契约。接口专注于声明"应该做什么"而非规定"具体怎么做"，体现了面向对象设计中的"面向接口编程"原则。
+author: zhycn
 ---
 
 # Java Interface 接口详解与最佳实践

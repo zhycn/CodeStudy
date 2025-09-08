@@ -1,6 +1,7 @@
 ---
 title: Java Enum 枚举详解与最佳实践
 description: 枚举是 Java 中一种特殊的数据类型，用于定义固定的命名常量集合。它提供了类型安全、可读性强的方式来表示固定的常量，并且具备面向对象的特性。
+author: zhycn
 ---
 
 # Java Enum 枚举详解与最佳实践

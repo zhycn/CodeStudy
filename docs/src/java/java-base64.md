@@ -1,6 +1,7 @@
 ---
 title: Java Base64 详解与最佳实践
 description: 这篇文章详细介绍了 Java 中 Base64 编码与解码的技术细节、实现方法和最佳实践，帮助开发者深入理解并有效应用这一重要技术。
+author: zhycn
 ---
 
 # Java Base64 详解与最佳实践

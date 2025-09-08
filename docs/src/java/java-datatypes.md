@@ -1,6 +1,7 @@
 ---
 title: Java 基本数据类型详解
 description: 详细介绍 Java 中的基本数据类型，包括整数、浮点数、字符和布尔值。
+author: zhycn
 ---
 
 # Java 基本数据类型详解

@@ -1,6 +1,7 @@
 ---
 title: Java Package 包详解与最佳实践
 description: 了解 Java 包的基本概念、作用、定义与使用，以及最佳实践。
+author: zhycn
 ---
 
 # Java Package 包详解与最佳实践

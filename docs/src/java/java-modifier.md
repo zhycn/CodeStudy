@@ -1,6 +1,7 @@
 ---
 title: Java 修饰符详解与最佳实践
 description: 详细介绍 Java 中的修饰符，包括访问控制修饰符和非访问控制修饰符，以及它们的使用场景和注意事项。
+author: zhycn
 ---
 
 # Java 修饰符详解与最佳实践
