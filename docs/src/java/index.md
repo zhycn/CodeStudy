@@ -73,7 +73,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 基本数据类型详解](./java-datatypes.md)
 - [Java 字符串详解](./java-string.md)
 - [Java 构造方法详解与最佳实践](./java-constructor.md)
-- [Java 异常处理详解](./java-exception.md)
+- [Java 异常处理详解与最佳实践](./java-exception.md)
 - [Java Enum 枚举详解与最佳实践](./java-enum.md)
 - [Java 集合框架详解](./java-collection-framework.md)
 - [Java List 集合详解与最佳实践](./java-list.md)

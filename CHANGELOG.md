@@ -14,6 +14,8 @@
 
 ## v2025.09
 
+- Added: [Java 泛型详解与最佳实践](./docs/src/java/java-generics.md)
+- Added: [Java 异常处理详解与最佳实践](./docs/src/java/java-exception.md)
 - Added: [Java Interface 接口详解与最佳实践](./docs/src/java/java-interface.md)
 - Added: [Java 构造方法详解与最佳实践](./docs/src/java/java-constructor.md)
 - Added: [Java Annotation 注解详解与最佳实践](./docs/src/java/java-annotation.md)
