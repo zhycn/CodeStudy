@@ -7,11 +7,11 @@ description: 详细介绍 Node.js 的核心概念、事件循环、模块系统�
 
 NodeJS 官方网站：<https://nodejs.org/>
 
-## 1. Node.js简介
+## 1. Node.js 简介
 
 Node.js 是一个基于 **Chrome V8 JavaScript 引擎** 构建的开源、跨平台的 JavaScript 运行时环境，专为构建高性能、可扩展的网络应用而设计。Node.js 采用 **事件驱动**、**非阻塞I/O模型**，使其能够处理大量并发连接，同时保持轻量级和高效。
 
-Node.js 的重要性在于它革新了后端开发方式，允许开发者使用 JavaScript 同时编写前端和后端代码，实现了全栈JavaScript开发。其模块化体系和活跃的 npm 生态极大加速了开发效率，广泛应用于 API 服务器、实时应用、微服务架构等场景。
+Node.js 的重要性在于它革新了后端开发方式，允许开发者使用 JavaScript 同时编写前端和后端代码，实现了全栈 JavaScript 开发。其模块化体系和活跃的 npm 生态极大加速了开发效率，广泛应用于 API 服务器、实时应用、微服务架构等场景。
 
 ### 核心特点
 
@@ -27,8 +27,8 @@ Node.js 特别适合以下类型的应用：
 - **实时应用程序**（聊天应用、实时协作工具）
 - **API 服务器和微服务架构**
 - **数据流式处理应用程序**
-- **单页应用程序**(SPA)的后端
-- **I/O密集型应用程序**
+- **单页应用程序 SPA 后端**
+- **I/O 密集型应用程序**
 
 _表：Node.js 与其他服务器端技术的比较_
 
@@ -45,13 +45,13 @@ _表：Node.js 与其他服务器端技术的比较_
 
 Node.js 环境搭建是一个相对直接的过程，适用于多种操作系统。以下是主要操作系统的安装方法：
 
-**Windows/macOS安装**：
+**Windows/macOS 安装**：
 
-1. 访问 [Node.js 官方网站](https://nodejs.org/) 下载LTS(长期支持)版本
+1. 访问 [Node.js 官方网站](https://nodejs.org/) 下载最新版或LTS(长期支持)版本
 2. 运行安装程序，确保勾选"Add to PATH"选项
 3. 完成安装向导流程
 
-**macOS (使用Homebrew)**：
+**macOS (使用 Homebrew)**：
 
 ```bash
 # 安装Homebrew(如果尚未安装)
@@ -61,7 +61,7 @@ Node.js 环境搭建是一个相对直接的过程，适用于多种操作系统
 brew install node
 ```
 
-**Linux (Ubuntu示例)**：
+**Linux (Ubuntu 示例)**：
 
 ```bash
 # 使用apt安装Node.js
@@ -71,14 +71,14 @@ sudo apt-get install -y nodejs
 
 ### 2.2 验证安装
 
-安装完成后，通过以下命令验证Node.js和npm是否安装成功：
+安装完成后，通过以下命令验证 Node.js 和 npm 是否安装成功：
 
 ```bash
 node -v
 npm -v
 ```
 
-这两个命令应分别输出Node.js和npm的版本号。
+这两个命令应分别输出 Node.js 和 npm 的版本号。
 
 ### 2.3 项目初始化
 
@@ -104,7 +104,7 @@ npm install express --save --save-exact
 npm config set save-exact=true
 ```
 
-**配置npm源**(加速下载，可选)：
+**配置 npm 源**(加速下载，可选)：
 
 ```bash
 # 设置淘宝NPM镜像
@@ -113,7 +113,7 @@ npm config set registry https://registry.npmmirror.com/
 
 ### 2.5 开发工具配置
 
-**ESLint配置**：
+**ESLint 配置**：
 
 ```bash
 # 安装ESLint
@@ -123,7 +123,7 @@ npm install eslint --save-dev
 npx eslint --init
 ```
 
-**Prettier配置**：
+**Prettier 配置**：
 
 ```bash
 # 安装Prettier
@@ -177,11 +177,11 @@ my-system/
 
 ### 3.2 分层设计原则
 
-- **入口层(Entry-point)**：处理HTTP请求、消息队列消费等外部交互
+- **入口层(Entry-point)**：处理 HTTP 请求、消息队列消费等外部交互
 - **领域层(Domain)**：核心业务逻辑，不依赖具体技术栈
-- **数据访问层(Data-access)**：封装数据库操作，隔离ORM细节
+- **数据访问层(Data-access)**：封装数据库操作，隔离 ORM 细节
 
-**反模式规避**：避免将HTTP请求对象(如Express的req/res)传入领域层，确保逻辑可复用性。
+**反模式规避**：避免将 HTTP 请求对象(如 Express 的 req/res)传入领域层，确保逻辑可复用性。
 
 ### 3.3 配置管理
 
@@ -228,7 +228,7 @@ _表：多环境配置方案_
 
 ### 4.1 异步编程模式
 
-Node.js 的核心优势在于其异步非阻塞I/O模型。处理异步操作的正确方式：
+Node.js 的核心优势在于其异步非阻塞 I/O 模型。处理异步操作的正确方式：
 
 **Promise 与 Async/Await**：
 
@@ -364,7 +364,7 @@ app.get('/api/users/:id', async (req, res, next) => {
 });
 ```
 
-**始终使用Error对象**：
+**始终使用 Error 对象**：
 
 ```javascript
 // 错误做法
@@ -374,7 +374,7 @@ throw 'Something went wrong'; // 字符串错误会导致堆栈信息丢失
 throw new Error('Something went wrong'); // 保持完整的堆栈跟踪
 ```
 
-**未处理的Promise rejection**：
+**未处理的 Promise rejection**：
 
 ```javascript
 // 处理未捕获的Promise rejection
@@ -396,8 +396,8 @@ _表：错误类型及处理策略_
 
 ### 5.1 性能优化策略
 
-**利用多核CPU**：
-Node.js 单线程实例无法充分利用多核CPU，使用集群模式提高性能：
+**利用多核 CPU**：
+Node.js 单线程实例无法充分利用多核 CPU，使用集群模式提高性能：
 
 ```javascript
 const cluster = require('cluster');
@@ -430,7 +430,7 @@ if (cluster.isMaster) {
 ```
 
 **静态资源处理**：
-避免通过Node.js服务器提供静态文件，使用专业中间件或反向代理：
+避免通过 Node.js 服务器提供静态文件，使用专业中间件或反向代理：
 
 ```javascript
 // 使用Express静态中间件优化
@@ -447,7 +447,7 @@ app.use(
 );
 ```
 
-**使用Gzip压缩**：
+**使用 Gzip 压缩**：
 
 ```javascript
 const compression = require('compression');
@@ -480,13 +480,13 @@ app.post('/users', async (req, res, next) => {
 });
 ```
 
-**安全HTTP头**：
-使用Helmet.js设置安全HTTP头：
+**安全 HTTP 头**：
+使用 Helmet.js 设置安全 HTTP 头：
 
 ```javascript
 const helmet = require('helmet');
 
-// 使用helmet中间件
+// 使用 helmet 中间件
 app.use(helmet());
 ```
 
@@ -494,7 +494,7 @@ app.use(helmet());
 定期检查依赖包的安全性：
 
 ```bash
-# 使用npm审计依赖
+# 使用 npm 审计依赖
 npm audit
 
 # 自动修复漏洞
@@ -568,7 +568,7 @@ test('subtracts 5 - 3 to equal 2', () => {
 });
 ```
 
-**API集成测试**：
+**API 集成测试**：
 
 ```javascript
 const request = require('supertest');
@@ -589,7 +589,7 @@ describe('GET /api/users', () => {
 ```
 
 **测试覆盖率**：
-在package.json中添加测试脚本：
+在 `package.json` 中添加测试脚本：
 
 ```json
 {
@@ -602,9 +602,9 @@ describe('GET /api/users', () => {
 
 ### 6.3 持续集成
 
-在CI/CD管道中集成测试，确保代码质量：
+在 CI/CD 管道中集成测试，确保代码质量：
 
-**.github/workflows/node.js.yml**示例：
+**.github/workflows/node.js.yml** 示例：
 
 ```yaml
 name: Node.js CI
@@ -673,7 +673,7 @@ pm2 startup
 
 ### 7.2 日志管理
 
-使用专业日志库代替console.log：
+使用专业日志库代替 console.log：
 
 ```javascript
 const winston = require('winston');
@@ -699,16 +699,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 ### 7.3 容器化部署
 
-创建Dockerfile优化容器镜像：
+创建 Dockerfile 优化容器镜像：
 
 ```dockerfile
-# 使用官方Node.js运行时作为父镜像
+# 使用官方 Node.js 运行时作为父镜像
 FROM node:18-alpine
 
 # 设置工作目录
 WORKDIR /usr/src/app
 
-# 复制package.json和package-lock.json
+# 复制 package.json 和 package-lock.json
 COPY package*.json ./
 
 # 安装生产依赖
@@ -728,7 +728,7 @@ USER node
 CMD ["node", "app.js"]
 ```
 
-创建.dockerignore文件：
+创建 `.dockerignore` 文件：
 
 ```bash
 node_modules
@@ -755,15 +755,15 @@ app.get('/health', (req, res) => {
 ```
 
 **性能监控**：
-使用APM工具监控应用性能：
+使用 APM 工具监控应用性能：
 
 ```bash
-# 安装APM工具
+# 安装 APM 工具
 npm install elastic-apm-node --save
 ```
 
 ```javascript
-// 启动APM
+// 启动 APM
 const apm = require('elastic-apm-node').start({
   serviceName: 'my-node-service',
   serverUrl: process.env.APM_SERVER_URL || 'http://localhost:8200',
@@ -772,22 +772,22 @@ const apm = require('elastic-apm-node').start({
 
 _表：关键监控指标_
 
-| 指标类型 | 具体指标              | 告警阈值              |
-| -------- | --------------------- | --------------------- |
-| 资源指标 | CPU使用率、内存使用量 | CPU > 80%, 内存 > 85% |
-| 性能指标 | 响应时间、吞吐量      | 响应时间 > 500ms      |
-| 业务指标 | 错误率、请求量        | 错误率 > 1%           |
+| 指标类型 | 具体指标               | 告警阈值              |
+| -------- | ---------------------- | --------------------- |
+| 资源指标 | CPU 使用率、内存使用量 | CPU > 80%, 内存 > 85% |
+| 性能指标 | 响应时间、吞吐量       | 响应时间 > 500ms      |
+| 业务指标 | 错误率、请求量         | 错误率 > 1%           |
 
 ## 总结
 
-本文全面介绍了Node.js的核心概念和最佳实践，涵盖了从项目初始化到生产部署的全生命周期。遵循这些实践可以帮助开发者构建高效、可靠且安全的Node.js应用程序。
+本文全面介绍了 Node.js 的核心概念和最佳实践，涵盖了从项目初始化到生产部署的全生命周期。遵循这些实践可以帮助开发者构建高效、可靠且安全的 Node.js 应用程序。
 
 **关键要点**：
 
 1. 采用合理的项目结构，按组件分层，提高可维护性
-2. 充分利用Node.js的异步特性，避免阻塞事件循环
+2. 充分利用 Node.js 的异步特性，避免阻塞事件循环
 3. 实施全面的错误处理和日志记录策略
 4. 重视安全性，定期审计依赖和代码
 5. 建立自动化测试和部署流程
 
-Node.js生态不断发展，开发者应保持学习心态，关注新技术和最佳实践的演进，持续提升应用质量和开发效率。
+Node.js 生态不断发展，开发者应保持学习心态，关注新技术和最佳实践的演进，持续提升应用质量和开发效率。

@@ -7,7 +7,7 @@ description: 本文是一篇关于 Java 基础语法的详细教程，包含 Jav
 
 本文是一篇关于 Java 基础语法的详细教程。
 
-- **Java概述与开发环境配置**：介绍 Java 语言的特点、JDK 安装和第一个 Java 程序。
+- **Java 概述与开发环境配置**：介绍 Java 语言的特点、JDK 安装和第一个 Java 程序。
 - **基本语法与数据类型详解**：讲解 Java 程序结构、变量、常量和 8 种基本数据类型，包含代码示例。
 - **运算符与流程控制**：详细说明 Java 中的算术、关系、逻辑运算符和条件、循环语句，附实际应用场景。
 - **数组与字符串操作**：涵盖数组声明初始化、字符串常用方法和不可变性特性，包含性能优化建议。
@@ -227,7 +227,7 @@ public class ArithmeticOperators {
 
 #### 3.1.2 关系运算符
 
-关系运算符用于比较两个值，返回布尔结果（true或false）。
+关系运算符用于比较两个值，返回布尔结果（true 或 false）。
 
 ```java
 public class RelationalOperators {
@@ -303,7 +303,7 @@ public class AssignmentOperators {
 
 条件语句允许程序根据不同的条件执行不同的代码块。
 
-#### 3.2.1 if-else语句
+#### 3.2.1 if-else 语句
 
 ```java
 public class IfElseDemo {
@@ -339,9 +339,9 @@ public class IfElseDemo {
 }
 ```
 
-#### 3.2.2 switch语句
+#### 3.2.2 switch 语句
 
-switch语句用于根据一个变量的不同值来执行不同的代码块。
+switch 语句用于根据一个变量的不同值来执行不同的代码块。
 
 ```java
 public class SwitchDemo {
@@ -398,7 +398,7 @@ public class SwitchDemo {
 
 循环语句允许程序重复执行某段代码，直到满足特定条件为止。
 
-#### 3.3.1 for循环
+#### 3.3.1 for 循环
 
 ```java
 public class ForLoopDemo {
@@ -427,7 +427,7 @@ public class ForLoopDemo {
 }
 ```
 
-#### 3.3.2 while循环
+#### 3.3.2 while 循环
 
 ```java
 public class WhileLoopDemo {
@@ -619,7 +619,7 @@ public class MethodDemo {
 
 ### 5.2 参数传递机制
 
-Java中的参数传递是**值传递**，即将参数的副本传递给方法。
+Java 中的参数传递是**值传递**，即将参数的副本传递给方法。
 
 ```java
 public class ParameterPassing {

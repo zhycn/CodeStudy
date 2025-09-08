@@ -14,6 +14,9 @@
 
 ## v2025.09
 
+- Added: [Bun 详解与最佳实践](./docs/src/frontend/guide-bun.md)
+- Added: [Homebrew 详解与最佳实践](./docs/src/guides/guide-homebrew.md)
+- Added: [Java 基础语法详解](./docs/src/java/java-basic-syntax.md)
 - Added: [Java Package 包详解与最佳实践](./docs/src/java/java-package.md)
 - Added: [Java 运算符详解](./docs/src/java/java-operators.md)
 - Added: [Java Lambda 表达式详解与最佳实践](./docs/src/java/java-lambda.md)
