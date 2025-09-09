@@ -1,6 +1,7 @@
 ---
 title: Java 日期时间详解与最佳实践
 description: 详细介绍了 Java 8 引入的新日期时间 API（`java.time`包），包括其设计原理、主要类（如`LocalDate`、`LocalTime`、`LocalDateTime`、`ZonedDateTime`等）、常用方法（如解析、格式化、计算等）以及与旧 API 的对比。
+author: zhycn
 ---
 
 # Java 日期时间详解与最佳实践
@@ -443,20 +444,20 @@ System.out.println("从sql.Timestamp转换回: " + fromSqlTimestamp);
 
 根据具体需求选择合适的日期时间类：
 
-- 只需要日期时，使用**LocalDate**
-- 只需要时间时，使用**LocalTime**
-- 需要日期和时间但不需要时区时，使用**LocalDateTime**
-- 需要处理时区时，使用**ZonedDateTime**
-- 需要记录时间戳或与旧代码交互时，使用**Instant**
-- 需要计算时间量时，使用**Duration**（基于时间）和**Period**（基于日期）
+- 只需要日期时，使用 **LocalDate**
+- 只需要时间时，使用 **LocalTime**
+- 需要日期和时间但不需要时区时，使用 **LocalDateTime**
+- 需要处理时区时，使用 **ZonedDateTime**
+- 需要记录时间戳或与旧代码交互时，使用 **Instant**
+- 需要计算时间量时，使用 **Duration**（基于时间）和 **Period**（基于日期）
 
 ### 7.2 性能优化
 
 对于性能敏感的应用，可以考虑以下优化措施：
 
-- **重用Formatter实例**：`DateTimeFormatter`是线程安全的，可以创建静态常量重用。
+- **重用 Formatter 实例**：`DateTimeFormatter` 是线程安全的，可以创建静态常量重用。
 - **使用不可变对象**：充分利用不可变对象的特性，避免不必要的防御性拷贝。
-- **选择适当的表示**：在内部使用`Instant`作为时间表示，仅在需要时转换为人类可读格式。
+- **选择适当的表示**：在内部使用 `Instant` 作为时间表示，仅在需要时转换为人类可读格式。
 
 ```java
 // 性能优化示例

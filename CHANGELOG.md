@@ -14,6 +14,11 @@
 
 ## v2025.09
 
+- Added: [Java Iterator 迭代器详解与最佳实践](./docs/src/java/java-iterator.md)
+- Added: [Java Stream API 详解与最佳实践](./docs/src/java/java-stream.md)
+- Added: [Java Optional 详解与最佳实践](./docs/src/java/java-optional.md)
+- Added: [Java 日期时间详解与最佳实践](./docs/src/java/java-date-time.md)
+- Added: [Java 数组详解与最佳实践](./docs/src/java/java-array.md)
 - Added: [Java Comparator 比较器接口详解与最佳实践](./docs/src/java/java-comparator.md)
 - Added: [Java Objects 工具类详解与最佳实践](./docs/src/java/java-objects.md)
 - Added: [Java Collectors 工具类详解与最佳实践](./docs/src/java/java-collectors.md)
