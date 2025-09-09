@@ -1,6 +1,7 @@
 ---
 title: Java 模块化详解与最佳实践
 description: 这篇文章详细介绍了 Java 模块化的概念、核心特性和最佳实践。
+author: zhycn
 ---
 
 # Java 模块化详解与最佳实践
@@ -162,7 +163,7 @@ java --module-path out -m com.example.ui/com.example.ui.UserInterface
 
 **Maven 多模块项目结构：**
 
-```
+```java
 project/
 ├── pom.xml（父POM）
 ├── user-center/
@@ -189,7 +190,7 @@ project/
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-dependencies</artifactId>
-            <version>2.7.0</version>
+            <version>3.4.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -378,13 +379,13 @@ module com.example.payments.impl {
 
 ## 6. 常见问题与解决方案
 
-1. **什么是自动模块？**  
+1. **什么是自动模块？**
    如果一个 JAR 文件没有 `module-info.class` 文件，它被称为自动模块。自动模块的名称基于 JAR 文件的文件名，并且具有一些默认的依赖关系。
 
-2. **如何处理非模块化库？**  
+2. **如何处理非模块化库？**
    如果使用了非模块化的 JAR 文件，可以将其包装为自动模块或创建模块化的版本。非模块化库的依赖关系可能会引入复杂性。
 
-3. **反射访问问题**  
+3. **反射访问问题**
    许多框架（如 Spring、Hibernate）依赖反射，需要在模块描述文件中明确开放反射访问权限。
 
    ```java
@@ -394,7 +395,7 @@ module com.example.payments.impl {
    }
    ```
 
-4. **模块化开发的学习曲线**  
+4. **模块化开发的学习曲线**
    虽然模块化开发初期可能会有一定的学习曲线，但随着经验的积累，开发者会发现它的优点不断显现，长期来看，开发效率和代码质量都会有明显提升。
 
 ## 7. 总结

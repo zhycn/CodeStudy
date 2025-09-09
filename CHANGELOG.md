@@ -14,6 +14,12 @@
 
 ## v2025.09
 
+- Added: [Java Math 类详解与最佳实践](./docs/src/java/java-math.md)
+- Added: [Java 压缩与解压缩 API 详解与最佳实践](./docs/src/java/java-compression.md)
+- Added: [Java 模块化详解与最佳实践](./docs/src/java/java-modularity.md)
+- Added: [Java 本地方法接口 (JNI) 详解与最佳实践](./docs/src/java/java-jni.md)
+- Added: [Java 国际化 (i18n) 与本地化 (l10n) 详解与最佳实践](./docs/src/java/java-i18n.md)
+- Added: [Java 资源绑定（Resource Bundle）详解与最佳实践](./docs/src/java/java-resource-bundle.md)
 - Added: [Java 面向对象编程（OOP）核心思想详解与最佳实践](./docs/src/java/java-oop.md)
 - Added: [Java 序列化与反序列化详解与最佳实践](./docs/src/java/java-serializable.md)
 - Added: [Java Scanner 类详解与最佳实践（知道就好）](./docs/src/java/java-scanner.md)

@@ -1,11 +1,12 @@
 ---
 title: Java 国际化 (i18n) 与本地化 (l10n) 详解与最佳实践
 description: 本文详细介绍了 Java 国际化 (i18n) 与本地化 (l10n) 的概念、区别、实现步骤和最佳实践，帮助开发者构建全球化的软件应用。
+author: zhycn
 ---
 
 # Java 国际化 (i18n) 与本地化 (l10n) 详解与最佳实践
 
-## 1 国际化与本地化概述
+## 1. 国际化与本地化概述
 
 ### 1.1 基本概念与区别
 
@@ -31,7 +32,7 @@ _表：国际化与本地化的核心区别_
 - **增强市场竞争力**：在全球市场竞争中，具备国际化能力的产品往往更具吸引力
 - **满足合规要求**：部分国家/地区的法律法规要求软件提供本地语言支持
 
-## 2 Java 国际化核心组件
+## 2. Java 国际化核心组件
 
 Java 提供了一套完整的 API 支持国际化与本地化，主要集中在 `java.util` 和 `java.text` 包中。
 
@@ -118,7 +119,7 @@ public class FormattingExample {
 }
 ```
 
-## 3 实现步骤与代码示例
+## 3. 实现步骤与代码示例
 
 ### 3.1 创建资源文件
 
@@ -296,7 +297,7 @@ welcome.message=\u6b22\u8fce\u56de\u6765, {0}!
 error.invalid=\u7528\u6237\u767b\u5f55\u5931\u8d25: {0}
 ```
 
-## 4 高级特性与注意事项
+## 4. 高级特性与注意事项
 
 ### 4.1 资源文件编码处理
 
@@ -450,7 +451,7 @@ public class DateTimeI18nExample {
 2. **文件位置**：资源文件应放在 classpath 下，通常位于 `src/main/resources` 或 `src/main/java` 目录
 3. **包结构**：对于大型项目，可按模块组织资源文件
 
-```
+```java
 resources/
   ├── com/
   │   └── myapp/
@@ -468,7 +469,7 @@ resources/
 ResourceBundle bundle = ResourceBundle.getBundle("com.myapp.LoginMessages", locale);
 ```
 
-## 5 最佳实践总结
+## 5. 最佳实践总结
 
 根据多年 Java 国际化经验，以下是最佳实践建议：
 
@@ -568,7 +569,7 @@ public class InternationalizationTest {
 }
 ```
 
-## 6 常见问题解答
+## 6. 常见问题解答
 
 1. **Java 中国际化和本地化的主要区别是什么？**
    国际化是设计软件以支持多语言，而本地化是针对特定语言和地区进行调整的过程。
