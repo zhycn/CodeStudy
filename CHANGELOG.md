@@ -14,6 +14,21 @@
 
 ## v2025.09
 
+- Added: [Java Comparator 比较器接口详解与最佳实践](./docs/src/java/java-comparator.md)
+- Added: [Java Objects 工具类详解与最佳实践](./docs/src/java/java-objects.md)
+- Added: [Java Collectors 工具类详解与最佳实践](./docs/src/java/java-collectors.md)
+- Added: [Java Timer 详解与最佳实践（不推荐使用）](./docs/src/java/java-timer.md)
+- Added: [Java Collections 工具类详解与最佳实践](./docs/src/java/java-collections.md)
+- Added: [Java Arrays 工具类详解与最佳实践](./docs/src/java/java-arrays.md)
+- Added: [Java Map 集合详解与最佳实践](./docs/src/java/java-map.md)
+- Added: [Java Deque 双端队列详解与最佳实践](./docs/src/java/java-deque.md)
+- Added: [Java Queue 队列详解与最佳实践](./docs/src/java/java-queue.md)
+- Added: [Java Set 集合详解与最佳实践](./docs/src/java/java-set.md)
+- Added: [Java List 集合详解与最佳实践](./docs/src/java/java-list.md)
+- Added: [Java 对象和类详解](./docs/src/java/java-object-classes.md)
+- Added: [Java 集合框架详解与最佳实践](./docs/src/java/java-collection-framework.md)
+- Added: [Java String 字符串详解](./docs/src/java/java-string.md)
+- Added: [Java 日志框架详解与最佳实践](./docs/src/java/java-logging.md)
 - Added: [Java 密封类 (Sealed Class) 详解与最佳实践](./docs/src/java/java-sealed-class.md)
 - Added: [Java Record 记录类详解与最佳实践](./docs/src/java/java-record.md)
 - Added: [Java Reflection 反射详解与最佳实践](./docs/src/java/java-reflection.md)
