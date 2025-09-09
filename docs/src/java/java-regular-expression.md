@@ -1,18 +1,19 @@
 ---
 title: Java 正则表达式详解
 description: 正则表达式是一种用于描述字符串匹配规则的文本模式，通过特殊字符和语法实现高效的文本处理。
+author: zhycn
 ---
 
 # Java 正则表达式详解
 
 ## 1. 正则表达式基础概念
 
-正则表达式（Regular Expression，简称Regex）是一种用于描述字符串匹配规则的文本模式，通过特殊字符和语法实现高效的文本处理。正则表达式由一系列字符和特殊字符组成，用于定义搜索模式，它可以用于字符串匹配、搜索、替换和验证，是文本处理和模式匹配的常见工具。
+正则表达式（Regular Expression，简称 Regex）是一种用于描述字符串匹配规则的文本模式，通过特殊字符和语法实现高效的文本处理。正则表达式由一系列字符和特殊字符组成，用于定义搜索模式，它可以用于字符串匹配、搜索、替换和验证，是文本处理和模式匹配的常见工具。
 
-在 Java 中，正则表达式通过`java.util.regex`包实现，该包提供了完整的正则表达式支持。Java 正则表达式的核心类包括：
+在 Java 中，正则表达式通过 `java.util.regex` 包实现，该包提供了完整的正则表达式支持。Java 正则表达式的核心类包括：
 
-- **Pattern类**：用于编译正则表达式，生成一个模式对象
-- **Matcher类**：用于执行匹配操作，解释模式并对输入字符串进行匹配操作
+- **Pattern 类**：用于编译正则表达式，生成一个模式对象
+- **Matcher 类**：用于执行匹配操作，解释模式并对输入字符串进行匹配操作
 - **PatternSyntaxException**：表示正则表达式模式中的语法错误
 
 正则表达式的主要用途包括：
@@ -107,7 +108,7 @@ if (reluctantMatcher.find()) {
 
 **主要方法**：
 
-- `static Pattern compile(String regex)`：编译正则表达式，创建Pattern对象
+- `static Pattern compile(String regex)`：编译正则表达式，创建 Pattern 对象
 - `static Pattern compile(String regex, int flags)`：带标志编译正则表达式
 - `Matcher matcher(CharSequence input)`：创建匹配器对象
 - `static boolean matches(String regex, CharSequence input)`：快速匹配整个字符串
@@ -159,12 +160,12 @@ while (matcher.find()) {
 // 找到: 456, 位置: 26-29
 ```
 
-**匹配标志**：Pattern类支持以下标志以改变匹配行为：
+**匹配标志**：Pattern 类支持以下标志以改变匹配行为：
 
 - `Pattern.CASE_INSENSITIVE`：不区分大小写匹配
 - `Pattern.MULTILINE`：多行模式（^和$匹配行首行尾）
 - `Pattern.DOTALL`：点号匹配所有字符包括换行符
-- `Pattern.UNICODE_CASE`：Unicode感知的大小写折叠
+- `Pattern.UNICODE_CASE`：Unicode 感知的大小写折叠
 
 ```java
 // 示例：使用匹配标志
@@ -439,7 +440,7 @@ public class TextSplitter {
 }
 ```
 
-## 总结
+## 7. 总结
 
 Java 正则表达式是一个强大而灵活的文本处理工具，通过 Pattern 和 Matcher 类提供了完整的正则表达式支持。掌握正则表达式需要理解其核心语法（元字符、字符类、量词等）、分组与捕获技术以及各种匹配模式。
 

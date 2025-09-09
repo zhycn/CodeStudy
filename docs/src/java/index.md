@@ -98,7 +98,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java IO 详解与最佳实践](./java-io.md)
 - [Java NIO 详解与最佳实践](./java-nio.md)
 - [Java Base64 详解与最佳实践](./java-base64.md)
-- [Java Scanner 类详解与最佳实践](./java-scanner.md)
+- [Java Scanner 类详解与最佳实践（知道就好）](./java-scanner.md)
 - [Java Reflection 反射详解与最佳实践](./java-reflection.md)
 - [Java 数据库编程（JDBC）详解与最佳实践](./java-jdbc.md)
 - [Java Math 类详解与最佳实践](./java-math.md)

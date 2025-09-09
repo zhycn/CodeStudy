@@ -14,6 +14,10 @@
 
 ## v2025.09
 
+- Added: [Java 面向对象编程（OOP）核心思想详解与最佳实践](./docs/src/java/java-oop.md)
+- Added: [Java 序列化与反序列化详解与最佳实践](./docs/src/java/java-serializable.md)
+- Added: [Java Scanner 类详解与最佳实践（知道就好）](./docs/src/java/java-scanner.md)
+- Added: [Java 正则表达式详解](./docs/src/java/java-regular-expression.md)
 - Added: [Java Iterator 迭代器详解与最佳实践](./docs/src/java/java-iterator.md)
 - Added: [Java Stream API 详解与最佳实践](./docs/src/java/java-stream.md)
 - Added: [Java Optional 详解与最佳实践](./docs/src/java/java-optional.md)

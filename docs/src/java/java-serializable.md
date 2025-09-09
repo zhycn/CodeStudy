@@ -1,6 +1,7 @@
 ---
 title: Java 序列化与反序列化详解与最佳实践
 description: 详细解析 Java 序列化与反序列化的机制、实现步骤、最佳实践和注意事项。
+author: zhycn
 ---
 
 # Java 序列化与反序列化详解与最佳实践
@@ -372,7 +373,7 @@ public class RpcClient {
 
 ### 5.2 会话持久化
 
-在Web应用中，将HttpSession对象序列化后存储到Redis等缓存中：
+在Web应用中，将 HttpSession 对象序列化后存储到 Redis 等缓存中：
 
 ```java
 // 简化的会话序列化存储示例
