@@ -68,7 +68,7 @@ flowchart TD
   docker run -d --name some-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:3-management
   ```
 
-  管理界面：<http://localhost:15672> (用户名/密码：guest/guest)
+  管理界面：`http://localhost:15672` (用户名/密码：guest/guest)
 
 ### 3.2 添加依赖
 
