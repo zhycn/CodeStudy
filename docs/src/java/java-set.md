@@ -1,6 +1,7 @@
 ---
 title: Java Set 集合详解与最佳实践
 description: 这篇文章详细介绍了 Java Set 集合的核心概念、核心特性、主要实现类以及使用注意事项。通过学习，你将能够理解 Set 集合的工作原理，掌握其在实际开发中的应用，避免常见的问题。
+author: zhycn
 ---
 
 # Java Set 集合详解与最佳实践
@@ -21,7 +22,7 @@ Set 接口的主要特性可以概括为以下几点：
 
 ### 1.2 在集合框架中的位置
 
-Set接口继承自Collection接口，其主要实现类包括：
+Set 接口继承自 Collection 接口，其主要实现类包括：
 
 - **HashSet**：基于哈希表实现，提供最优性能
 - **LinkedHashSet**：基于哈希表和链表实现，保持插入顺序
@@ -56,7 +57,7 @@ HashSet 内部使用 HashMap 来存储元素，每个元素作为 HashMap 的 ke
 **特性**：
 
 - 无序性：不保证元素的迭代顺序
-- 允许一个null元素
+- 允许一个 null 元素
 - 基本操作（add、remove、contains）的时间复杂度为O(1)
 - 不是线程安全的
 
@@ -467,7 +468,7 @@ public class DataSynchronization {
 }
 ```
 
-### 5.4 实现LRU缓存
+### 5.4 实现 LRU 缓存
 
 利用 LinkedHashSet 可以实现简单的 LRU（最近最少使用）缓存：
 
@@ -653,7 +654,7 @@ public class ConcurrentSetExample {
    Set<String> unmodifiableSet = Collections.unmodifiableSet(new HashSet<>(Arrays.asList("A", "B", "C")));
    ```
 
-4. **利用Stream API**：使用Stream操作简化集合处理
+4. **利用 Stream API**：使用 Stream 操作简化集合处理
 
    ```java
    // 使用Stream去重和过滤
@@ -665,7 +666,7 @@ public class ConcurrentSetExample {
 
 ### 7.2 对象设计注意事项
 
-1. **正确重写equals和hashCode方法**：作为 Set 元素的自定义类必须正确实现这两个方法
+1. **正确重写 equals 和 hashCode 方法**：作为 Set 元素的自定义类必须正确实现这两个方法
 
    ```java
    public class Person {
@@ -689,7 +690,7 @@ public class ConcurrentSetExample {
    }
    ```
 
-2. **实现Comparable接口**：用于 TreeSet 的元素应该实现 Comparable 接口
+2. **实现 Comparable 接口**：用于 TreeSet 的元素应该实现 Comparable 接口
 
    ```java
    public class Person implements Comparable<Person> {
@@ -711,13 +712,13 @@ public class ConcurrentSetExample {
 
 ### 7.3 常见误区与避免方法
 
-| 误区                  | 后果                            | 正确做法                   |
-| --------------------- | ------------------------------- | -------------------------- |
-| 未重写equals/hashCode | 重复元素无法正确识别            | 始终同时重写这两个方法     |
-| 在遍历中修改集合      | ConcurrentModificationException | 使用Iterator的remove方法   |
-| 忽略线程安全问题      | 多线程环境下数据不一致          | 使用线程安全实现或同步包装 |
-| 过度使用TreeSet       | 性能下降（O(log n) vs O(1)）    | 仅在需要排序时使用TreeSet  |
-| 使用==代替equals      | 对象比较错误                    | 始终使用equals方法比较内容 |
+| 误区                   | 后果                            | 正确做法                     |
+| ---------------------- | ------------------------------- | ---------------------------- |
+| 未重写 equals/hashCode | 重复元素无法正确识别            | 始终同时重写这两个方法       |
+| 在遍历中修改集合       | ConcurrentModificationException | 使用 Iterator 的 remove 方法 |
+| 忽略线程安全问题       | 多线程环境下数据不一致          | 使用线程安全实现或同步包装   |
+| 过度使用 TreeSet       | 性能下降（O(log n) vs O(1)）    | 仅在需要排序时使用 TreeSet   |
+| 使用==代替 equals      | 对象比较错误                    | 始终使用 equals 方法比较内容 |
 
 ```java
 // 错误示例：在遍历中修改集合
@@ -740,7 +741,11 @@ while (iterator.hasNext()) {
 
 ## 8. 总结
 
-Java Set 集合是处理**唯一元素集合**的强大工具，提供了多种实现以满足不同场景需求。HashSet 以其卓越的性能成为大多数情况下的首选，LinkedHashSet 在需要保持插入顺序时非常有用，而 TreeSet 则提供了有序集合的功能。
+Java Set 集合是处理**唯一元素集合**的强大工具，提供了多种实现以满足不同场景需求。
+
+- HashSet 以其卓越的性能成为大多数情况下的首选。
+- LinkedHashSet 在需要保持插入顺序时非常有用。
+- TreeSet 则提供了有序集合的功能。
 
 在实际开发中，应根据具体需求选择合适的 Set 实现，注意正确实现对象的 equals 和 hashCode 方法，并在多线程环境下采取适当的同步措施。遵循这些最佳实践，可以编写出高效、可靠且易于维护的 Java 代码。
 

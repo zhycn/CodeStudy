@@ -1,6 +1,7 @@
 ---
 title: Java Map 集合详解与最佳实践
 description: 这篇文章详细介绍了 Java Map 集合的核心概念、常用实现类、操作方法以及最佳实践。通过学习，你将能够理解 Map 集合的工作原理，掌握其在实际开发中的应用，避免常见的问题。
+author: zhycn
 ---
 
 # Java Map 集合详解与最佳实践

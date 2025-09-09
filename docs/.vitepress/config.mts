@@ -39,7 +39,7 @@ export default defineConfig({
 
     // 优化的导航菜单
     nav: [
-      { text: '首页', link: '/'},
+      { text: '首页', link: '/' },
       { text: 'Java', link: '/java/', activeMatch: '/java/' },
       { text: '编程指南', link: '/guides/', activeMatch: '/guides/' },
       // { text: '书单推荐', link: '/books/', activeMatch: '/books/' },

@@ -1,9 +1,10 @@
 ---
-title: Java 数组详解
+title: Java 数组详解与最佳实践
 description: 详细介绍 Java 数组的概念、特性、分类、声明与初始化、访问与修改元素、遍历与排序等内容。
+author: zhycn
 ---
 
-# Java 数组详解
+# Java 数组详解与最佳实践
 
 ## 1. 数组概述
 

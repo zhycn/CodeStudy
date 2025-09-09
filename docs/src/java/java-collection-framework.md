@@ -1,6 +1,7 @@
 ---
 title: Java 集合框架详解与最佳实践
 description: 这篇文章详细介绍了 Java 集合框架的核心组件、实现原理、性能特征及最佳实践。通过学习，你将能够理解集合框架的工作原理，掌握集合操作的技巧，避免常见的并发问题。
+author: zhycn
 ---
 
 # Java 集合框架详解与最佳实践
@@ -13,10 +14,10 @@ Java 集合框架（Java Collections Framework）是 Java 提供的一组用于�
 
 ### 1.1 核心架构
 
-Java集合框架主要分为两大体系：
+Java 集合框架主要分为两大体系：
 
-- **Collection接口**：存储单个元素的集合，主要子接口包括 List、Set、Queue等
-- **Map接口**：存储键值对(key-value)的集合，常用实现类有 HashMap、TreeMap 等
+- **Collection 接口**：存储单个元素的集合，主要子接口包括 List、Set、Queue 等
+- **Map 接口**：存储键值对(key-value)的集合，常用实现类有 HashMap、TreeMap 等
 
 ### 1.2 Collection 接口体系
 
@@ -578,7 +579,7 @@ List<String> parallelResult = names.parallelStream()
 - **LinkedList**：频繁在头部/尾部插入删除、实现队列/栈（如消息队列实现）
 - **CopyOnWriteArrayList**：高并发读操作、极少写操作（如配置信息）
 
-### 6.2 HashMap与HashTable的区别？
+### 6.2 HashMap 与 HashTable 的区别？
 
 | 特性     | HashMap   | HashTable |
 | -------- | --------- | --------- |

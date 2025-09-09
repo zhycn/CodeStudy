@@ -1,6 +1,7 @@
 ---
 title: Java Stream API 详解与最佳实践
 description: 详细介绍 Java Stream API 的概念、工作原理、常用操作方法以及最佳实践，帮助开发者更好地理解和使用 Stream。
+author: zhycn
 ---
 
 # Java Stream API 详解与最佳实践
@@ -13,7 +14,7 @@ Java Stream 是 Java 8 中引入的一个重要特性，它提供了一种声明
 
 - **代码简洁性**：Stream 操作通常比传统循环减少 50% 以上的代码量
 - **声明式编程**：关注"做什么"而非"如何做"，更符合业务表达
-- **并行处理能力**：只需将`stream()`改为`parallelStream()`即可利用多核处理器优势
+- **并行处理能力**：只需将 `stream()` 改为 `parallelStream()` 即可利用多核处理器优势
 - **无状态操作**：减少临时变量使用，降低出错可能性
 
 ```java
@@ -242,7 +243,7 @@ List<String> page = names.stream()
 
 ## 5. 常用终端操作
 
-终端操作触发实际计算，返回结果或副作用。终端操作后，Stream不能再使用。
+终端操作触发实际计算，返回结果或副作用。终端操作后，Stream 不能再使用。
 
 ### 5.1 收集操作（collect）
 
@@ -398,7 +399,7 @@ names.parallelStream()
     .forEachOrdered(System.out::println);
 ```
 
-**注意**：`forEach`与`peek`的区别在于，`forEach`是终端操作，而`peek`是中间操作，主要用于调试。
+**注意**：`forEach` 与 `peek` 的区别在于，`forEach` 是终端操作，而 `peek` 是中间操作，主要用于调试。
 
 ### 5.5 其他终端操作
 

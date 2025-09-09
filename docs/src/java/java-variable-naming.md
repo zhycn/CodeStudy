@@ -1,6 +1,7 @@
 ---
 title: Java 变量命名规则详解
 description: 详细介绍了 Java 变量命名的规则、约定和最佳实践，帮助您编写出专业且易于理解的 Java 代码。
+author: zhycn
 ---
 
 # Java 变量命名规则详解

@@ -1,6 +1,7 @@
 ---
 title: Java Queue 队列详解与最佳实践
 description: 本文深入剖析 Java 集合框架中的 Queue 接口及其实现类，结合源码分析和实战案例，为开发者提供全面的队列使用指南。
+author: zhycn
 ---
 
 # Java Queue 队列详解与最佳实践

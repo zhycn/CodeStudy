@@ -1,6 +1,7 @@
 ---
 title: Java Deque 双端队列详解与最佳实践
 description: 本文详细介绍了 Java Deque 双端队列的核心特性、实现机制、使用场景和最佳实践。通过多个代码示例，帮助读者深入理解 Deque 的工作原理和在实际开发中的应用。
+author: zhycn
 ---
 
 # Java Deque 双端队列详解与最佳实践

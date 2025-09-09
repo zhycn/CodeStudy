@@ -1,13 +1,14 @@
 ---
 title: Java Base64 详解与最佳实践
 description: 这篇文章详细介绍了 Java 中 Base64 编码与解码的技术细节、实现方法和最佳实践，帮助开发者深入理解并有效应用这一重要技术。
+author: zhycn
 ---
 
 # Java Base64 详解与最佳实践
 
 本文全面介绍 Java 中 Base64 编码与解码的技术细节、实现方法和最佳实践，帮助开发者深入理解并有效应用这一重要技术。
 
-::: info 关于 Base64 工具类的选择
+::: tip 关于 Base64 工具类的选择
 Spring Boot 从 2.x 版本开始已经废弃了自身提供的 Base64 工具类（`org.springframework.util.Base64Utils`），推荐使用 Java 8 及以上版本提供的标准 `java.util.Base64` 工具类。
 :::
 
@@ -185,7 +186,7 @@ public class UrlBase64Example {
 
         // URL安全编码
         String encodedUrl = Base64.getUrlEncoder().encodeToString(url.getBytes());
-        System.out.println("URL安全Base64编码: " + encodedUrl);
+        System.out.println("URL安全Base64 编码: " + encodedUrl);
 
         // URL安全解码
         byte[] decodedBytes = Base64.getUrlDecoder().decode(encodedUrl);
@@ -208,12 +209,12 @@ public class MimeBase64Example {
 
         // MIME编码
         String encodedMime = Base64.getMimeEncoder().encodeToString(longText.getBytes());
-        System.out.println("MIME Base64编码:\n" + encodedMime);
+        System.out.println("MIME Base64 编码:\n" + encodedMime);
 
         // MIME解码
         byte[] decodedBytes = Base64.getMimeDecoder().decode(encodedMime);
         String decodedMime = new String(decodedBytes);
-        System.out.println("MIME Base64解码: " + decodedMime);
+        System.out.println("MIME Base64解码:\n" + decodedMime);
     }
 }
 ```
@@ -236,7 +237,7 @@ public class BinaryBase64Example {
 
         // 编码为Base64字符串
         String encodedImage = Base64.getEncoder().encodeToString(imageBytes);
-        System.out.println("图片Base64编码 (前100字符): " +
+        System.out.println("图片Base64 编码 (前100字符): " +
                           encodedImage.substring(0, 100) + "...");
 
         // 解码回字节数组
@@ -267,7 +268,7 @@ public class EncryptionWithBase64 {
         // 生成密钥
         SecretKey key = new SecretKeySpec(secret.getBytes(), "AES");
 
-        // 加密并Base64编码
+        // 加密并Base64 编码
         String encryptedAndEncoded = encryptAndEncode(originalData, key);
         System.out.println("加密并编码后: " + encryptedAndEncoded);
 
@@ -277,7 +278,7 @@ public class EncryptionWithBase64 {
     }
 
     /**
-     * 加密后Base64编码
+     * 加密后Base64 编码
      */
     public static String encryptAndEncode(String data, SecretKey key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -437,7 +438,7 @@ public class BufferedBase64Example {
             }
         }
 
-        System.out.println("大文件Base64编码完成");
+        System.out.println("大文件Base64 编码完成");
     }
 }
 ```
@@ -578,7 +579,7 @@ public class CharsetBase64Example {
    String base64Encoded = Base64.getEncoder().encodeToString(sensitiveData.getBytes());
    // base64Encoded可以被轻松解码，没有安全性可言
 
-   // 正确：先加密再Base64编码
+   // 正确：先加密再Base64 编码
    public String secureEncode(String data, SecretKey key) throws Exception {
        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
        cipher.init(Cipher.ENCRYPT_MODE, key);
