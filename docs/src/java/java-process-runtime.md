@@ -1,5 +1,6 @@
 ---
-title:
+title: Java 进程与 Runtime 类详解与最佳实践
+author: zhycn
 ---
 
 # Java 进程与 Runtime 类详解与最佳实践
@@ -332,7 +333,7 @@ public class ProcessPermissionExample {
 
 权限配置示例（在 `JDK_HOME/conf/security/java.policy` 文件中添加）：
 
-```
+```java
 grant {
     // 允许进程管理操作
     permission java.lang.RuntimePermission "manageProcess";
@@ -481,8 +482,8 @@ public class ProcessHandleExample {
 3. **使用高效的进程间通信方式**
    考虑使用共享内存或消息队列等高效的进程间通信方式，减少通信开销。
 
-4. **合理配置JVM参数**
-   根据应用需求调整JVM内存设置，优化性能：
+4. **合理配置 JVM 参数**
+   根据应用需求调整 JVM 内存设置，优化性能：
 
    ```bash
    java -Xms512m -Xmx2g -XX:+UseG1GC -jar your-application.jar

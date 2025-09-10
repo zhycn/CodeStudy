@@ -14,6 +14,11 @@
 
 ## v2025.09
 
+- Added: [Java 安全编程：加密、解密、哈希与数字签名详解与最佳实践](./docs/src/java/java-encryption.md)
+- Added: [Java 类加载机制详解与最佳实践](./docs/src/java/java-class-loading.md)
+- Added: [Java 进程与 Runtime 类详解与最佳实践](./docs/src/java/java-process-runtime.md)
+- Added: [Java 设计模式精讲：代理模式与模板方法模式](./docs/src/java/java-design-pattern-p2.md)
+- Added: [Java 设计模式精讲：单例模式与工厂模式](./docs/src/java/java-design-pattern-p1.md)
 - Added: [Java HttpClient 详解与最佳实践](./docs/src/java/java-httpclient.md)
 - Added: [Java 系统属性（System Properties）详解与最佳实践](./docs/src/java/java-system-properties.md)
 - Added: [Java 网络编程详解与最佳实践](./docs/src/java/java-network.md)
