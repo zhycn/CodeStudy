@@ -1,6 +1,7 @@
 ---
 title: Java 数据库编程（JDBC）详解与最佳实践
 description: 本文旨在全面介绍 Java JDBC (Java Database Connectivity) 技术，涵盖其核心概念、API 使用、代码示例以及在实际开发中的最佳实践，帮助你编写高效、安全且易于维护的数据库应用程序。
+author: zhycn
 ---
 
 # Java 数据库编程（JDBC）详解与最佳实践

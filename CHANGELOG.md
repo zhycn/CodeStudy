@@ -14,6 +14,10 @@
 
 ## v2025.09
 
+- Added: [Java HttpClient 详解与最佳实践](./docs/src/java/java-httpclient.md)
+- Added: [Java 系统属性（System Properties）详解与最佳实践](./docs/src/java/java-system-properties.md)
+- Added: [Java 网络编程详解与最佳实践](./docs/src/java/java-network.md)
+- Added: [Java 数据库编程（JDBC）详解与最佳实践](./docs/src/java/java-jdbc.md)
 - Added: [Java 高效图片处理详解与最佳实践](./docs/src/java/java-imageio.md)
 - Added: [Java 关键字与保留字完整指南](./docs/src/java/java-keywords.md)
 - Added: [Java NIO 详解与最佳实践](./docs/src/java/java-nio.md)

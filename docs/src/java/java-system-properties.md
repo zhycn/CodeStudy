@@ -1,6 +1,7 @@
 ---
 title: Java 系统属性（System Properties）详解与最佳实践
 description: 系统属性是 Java 平台维护的一组键值对配置信息，用于描述当前运行时环境和操作系统配置。
+author: zhycn
 ---
 
 # Java 系统属性（System Properties）详解与最佳实践

@@ -134,3 +134,4 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java Comparator 比较器接口详解与最佳实践](./java-comparator.md)
 - [Java 高效图片处理详解与最佳实践](./java-imageio.md)
 - [Java 关键字与保留字完整指南](./java-keywords.md)
+- [Java HttpClient 详解与最佳实践](./java-httpclient.md)
