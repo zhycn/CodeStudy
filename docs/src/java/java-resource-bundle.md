@@ -1,6 +1,7 @@
 ---
 title: Java 资源绑定（Resource Bundle）详解与最佳实践
 description: 本文详细介绍了 Java 资源绑定（Resource Bundle）的概念、作用、实现步骤和最佳实践，帮助开发者构建全球化的软件应用。
+author: zhycn
 ---
 
 # Java 资源绑定（Resource Bundle）详解与最佳实践
@@ -344,15 +345,14 @@ public class I18nServlet extends HttpServlet {
 
 在 JSP 页面中使用：
 
-```jsp
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="webMessages" var="messages"/>
+```html
+<%@ page contentType="text/html;charset=UTF-8" %> <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setBundle basename="webMessages" var="messages" />
 <html>
-<body>
-    <h1><fmt:message key="welcome.message" bundle="${messages}"/></h1>
-    <button><fmt:message key="login.button" bundle="${messages}"/></button>
-</body>
+  <body>
+    <h1><fmt:message key="welcome.message" bundle="${messages}" /></h1>
+    <button><fmt:message key="login.button" bundle="${messages}" /></button>
+  </body>
 </html>
 ```
 

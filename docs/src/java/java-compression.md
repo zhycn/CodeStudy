@@ -1,6 +1,7 @@
 ---
 title: Java 压缩与解压缩 API 详解与最佳实践
 description: 压缩与解压缩是数据处理中常见的操作，Java 提供了丰富的 API 来支持这些功能。
+author: zhycn
 ---
 
 # Java 压缩与解压缩 API 详解与最佳实践

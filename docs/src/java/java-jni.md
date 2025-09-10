@@ -1,6 +1,7 @@
 ---
 title: Java 本地方法接口 (JNI) 详解与最佳实践
 description: 这篇文章详细介绍了 Java 本地方法接口 (JNI) 的概念、工作原理、使用场景和开发流程。
+author: zhycn
 ---
 
 # Java 本地方法接口 (JNI) 详解与最佳实践
@@ -198,7 +199,7 @@ JNIEXPORT void JNICALL Java_StringProcessor_processString
 
 ### 3.4 数组处理示例
 
-数组处理也需要特别注意，因为Java数组与本地数组的内存布局可能不同。
+数组处理也需要特别注意，因为 Java 数组与本地数组的内存布局可能不同。
 
 ```c
 JNIEXPORT jint JNICALL Java_ArrayProcessor_sumArray
@@ -229,7 +230,7 @@ JNIEXPORT jint JNICALL Java_ArrayProcessor_sumArray
 
 ### 4.1 内存管理最佳实践
 
-**1. 及时释放资源**：确保对获取的字符串、数组和其他JNI资源在使用后立即释放，防止内存泄漏。
+**1. 及时释放资源**：确保对获取的字符串、数组和其他 JNI 资源在使用后立即释放，防止内存泄漏。
 
 ```c
 // 正确做法：使用后立即释放
@@ -242,7 +243,7 @@ if (cStr != NULL) {
 }
 ```
 
-**2. 使用局部引用**：在本地代码中，优先使用局部引用而不是全局引用，除非需要跨多个JNI调用保持引用。
+**2. 使用局部引用**：在本地代码中，优先使用局部引用而不是全局引用，除非需要跨多个 JNI 调用保持引用。
 
 ```c
 JNIEXPORT void JNICALL Java_ProcessObjects_process
@@ -281,9 +282,9 @@ JNIEXPORT void JNICALL Java_processLargeArray
 
 ### 4.2 异常处理
 
-JNI 异常处理需要特别注意，因为本地代码中的异常不会自动传播到Java层。
+JNI 异常处理需要特别注意，因为本地代码中的异常不会自动传播到 Java 层。
 
-**1. 检查异常**：在调用可能抛出异常的JNI函数后，检查是否有异常发生。
+**1. 检查异常**：在调用可能抛出异常的 JNI 函数后，检查是否有异常发生。
 
 ```c
 JNIEXPORT void JNICALL Java_SomeClass_someMethod
@@ -307,7 +308,7 @@ JNIEXPORT void JNICALL Java_SomeClass_someMethod
 }
 ```
 
-**2. 抛出异常**：在本地代码中检测到错误时，可以抛出Java异常。
+**2. 抛出异常**：在本地代码中检测到错误时，可以抛出 Java 异常。
 
 ```c
 JNIEXPORT void JNICALL Java_FileProcessor_openFile
@@ -365,7 +366,7 @@ JNIEXPORT void JNICALL Java_nativeProcessBuffer
 }
 ```
 
-**3. 缓存字段ID和方法ID**：字段ID和方法ID查找开销较大，应在初始化时缓存它们。
+**3. 缓存字段 ID 和方法 ID**：字段 ID 和方法 ID 查找开销较大，应在初始化时缓存它们。
 
 ```c
 // 全局变量缓存ID
@@ -393,9 +394,9 @@ JNIEXPORT void JNICALL Java_SomeClass_useCachedIds
 
 ### 5.1 线程管理
 
-JNI 支持多线程环境，但需要注意线程安全和JNIEnv的使用。
+JNI 支持多线程环境，但需要注意线程安全和 JNIEnv 的使用。
 
-**1. 附加本地线程到JVM**：在本地创建的线程中调用JNI函数前，需要先将线程附加到JVM。
+**1. 附加本地线程到JVM**：在本地创建的线程中调用 JNI 函数前，需要先将线程附加到 JVM。
 
 ```c
 void* threadFunction(void* arg) {
@@ -436,9 +437,9 @@ void deleteGlobalRef(JNIEnv *env, jobject globalRef) {
 }
 ```
 
-### 5.2 调用Java方法
+### 5.2 调用 Java 方法
 
-从本地代码中调用Java方法是JNI的高级用法。
+从本地代码中调用 Java 方法是 JNI 的高级用法。
 
 ```c
 JNIEXPORT void JNICALL Java_Caller_callJavaMethod
@@ -476,11 +477,11 @@ JNIEXPORT void JNICALL Java_Caller_callJavaMethod
 
 - **内存泄漏**：手动管理内存分配和释放可能导致内存泄漏。
 - **缓冲区溢出**：未正确检查输入参数可能导致缓冲区溢出。
-- **恶意代码注入**：本地代码可能访问或修改Java虚拟机的内部状态。
+- **恶意代码注入**：本地代码可能访问或修改 Java 虚拟机的内部状态。
 
 ### 6.2 安全最佳实践
 
-**1. 输入验证**：对所有从Java传递到本地代码的参数进行严格验证。
+**1. 输入验证**：对所有从 Java 传递到本地代码的参数进行严格验证。
 
 ```c
 JNIEXPORT void JNICALL Java_ProcessArray_process
@@ -504,7 +505,7 @@ JNIEXPORT void JNICALL Java_ProcessArray_process
 }
 ```
 
-**2. 使用安全函数**：避免使用不安全的C函数，如strcpy、sprintf等。
+**2. 使用安全函数**：避免使用不安全的 C 函数，如 strcpy、sprintf 等。
 
 ```c
 // 不安全的方式
@@ -544,14 +545,14 @@ public class JNAExample {
 
 ### 7.2 Java Native Runtime (JNR)
 
-JNR 是另一个简化本地代码访问的库，提供了更自然的Java API。
+JNR 是另一个简化本地代码访问的库，提供了更自然的 Java API。
 
 ### 7.3 性能考虑
 
 在选择 JNI 或其替代方案时，需要考虑以下性能因素：
 
-- **JNI 调用开销**：每次JNI调用都有固定的开销，应尽量减少调用次数。
-- **数据转换开销**：在Java和本地代码间传递数据需要转换格式，可能带来开销。
+- **JNI 调用开销**：每次 JNI 调用都有固定的开销，应尽量减少调用次数。
+- **数据转换开销**：在 Java 和本地代码间传递数据需要转换格式，可能带来开销。
 - **内存占用**：本地代码可能占用大量内存，需要仔细管理。
 
 ## 8. 总结

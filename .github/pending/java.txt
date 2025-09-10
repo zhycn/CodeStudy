@@ -27,7 +27,7 @@
 - [Java 内存溢出（Out of Memory）详解与最佳实践](./java-out-of-memory.md)
 - [Java 垃圾回收（Garbage Collection）详解与最佳实践](./java-garbage-collection.md)
 - [Java 类加载机制详解与最佳实践](./java-class-loading.md)
-- [Java 设计模式详解与最佳实践](./java-design-pattern.md) 
+- [Java 设计模式详解与最佳实践](./java-design-pattern.md)
 - Java 单元测试详解与最佳实践 (JUnit 5, Mockito)
 - Java 构建工具详解 (Maven, Gradle)
 - Java 代码规范与静态代码分析 (Checkstyle, SonarQube)
@@ -175,3 +175,98 @@
     * **要点**：使用Docker打包应用，将镜像推送到云仓库，在云服务器上部署运行。
 
 这是一个涵盖面极广、深度足够的学习路线图。每篇文章都可以作为你深入学习和总结的起点。通过这个路线图的学习和实践，你将构建起一个庞大而坚实的知识体系，并产出高质量的技术内容。
+
+---
+
+您提供的文档列表非常全面，覆盖了 Java SE 的绝大部分核心内容。作为一名Java技术专家，我认为可以从**现代开发范式、核心生态工具、高级主题和软技能**四个维度进行补充，使其成为一个真正完整的Java开发者知识体系。
+
+以下是详细的补充列表：
+
+### 一、 现代企业级开发与框架 (Modern Enterprise Development & Frameworks)
+这是当前Java开发岗位最核心的要求，您的列表中几乎未涉及。
+1.  **Spring Framework 核心**
+    -   **Spring Core:** IoC 容器、依赖注入 (DI)、Bean 生命周期、AOP 编程详解与最佳实践。
+    -   **Spring MVC:** Web MVC 模型、控制器、视图解析器、RESTful API 设计与实现。
+    -   **Spring Boot:** 自动配置、起步依赖 (Starters)、嵌入式容器、Actuator 监控、配置文件详解与最佳实践。
+    -   **Spring Data:** JPA、Redis、MongoDB 等数据访问技术的统一抽象和简化。
+    -   **Spring Security:** 认证 (Authentication)、授权 (Authorization)、OAuth 2.0、JWT 详解与最佳实践。
+    -   **Spring Cloud (微服务):** 服务发现 (Eureka/Nacos)、配置中心、网关 (Gateway)、熔断器 (Hystrix/Sentinel)、链路追踪 (Sleuth/Zipkin) 详解。
+
+2.  **响应式编程**
+    -   **Project Reactor 核心:** Mono 和 Flux、操作符、背压 (Backpressure) 详解。
+    -   **Spring WebFlux:** 响应式 Web 框架，与传统 Servlet 栈的对比与选型。
+
+3.  **其他流行框架**
+    -   **Jakarta EE (原 Java EE):** 核心概念及其与 Spring 的关系。
+    -   **Micronaut/Quarkus:** 新兴的轻量级、云原生框架，与 Spring Boot 的对比。
+
+### 二、 构建工具与依赖管理 (Build Tools & Dependency Management)
+这是项目开发的基石，必须掌握。
+1.  **Maven 详解与最佳实践:** POM 文件结构、生命周期、依赖管理、插件使用、私服搭建。
+2.  **Gradle 详解与最佳实践:** 与 Maven 的对比、Groovy/Kotlin DSL、构建脚本编写、性能优势。
+
+### 三、 测试 (Testing)
+保证软件质量的关键，文档中缺少专门章节。
+1.  **单元测试:** JUnit 5 详解（与 JUnit 4 的区别、扩展模型、参数化测试）。
+2.  **Mock 与 Stub:** Mockito 或 EasyMock 详解与最佳实践。
+3.  **集成测试:** @SpringBootTest 的使用、Testcontainers 进行数据库/中间件集成测试。
+4.  **行为驱动开发 (BDD):** Cucumber 简介。
+
+### 四、 持久化与数据库 (Persistence & Databases)
+虽然提到了 JDBC，但需要更深入和现代化。
+1.  **ORM 框架:**
+    -   **Hibernate 详解与最佳实践:** 会话、缓存、抓取策略、N+1 问题优化。
+    -   **MyBatis 详解与最佳实践:** 与 Hibernate 的对比选型、动态 SQL。
+2.  **数据库连接池:** HikariCP、Druid 等的工作原理与配置优化。
+3.  **NoSQL 数据库:**
+    -   **Redis:** 数据结构、持久化、哨兵/集群模式、与 Java 的集成。
+    -   **MongoDB:** 文档模型、聚合查询、与 Spring Data MongoDB 的集成。
+    -   **Elasticsearch:** 基本概念、查询 DSL、与 Java 的集成。
+
+### 五、 高级主题与性能优化 (Advanced Topics & Performance)
+1.  **Java 性能调优实战:**
+    -   应用层调优：算法、数据结构、池化技术。
+    -   JVM 层调优：内存分配、GC 选择与参数优化（比 JVM 理论更进阶）。
+    -   数据库层调优：索引、SQL 优化、慢查询分析。
+    -   工具使用：Arthas、JMeter、Async-Profiler 等实战指南。
+2.  **问题诊断与排查:**
+    -   CPU 100% 问题排查思路。
+    -   内存泄漏 (Memory Leak) 问题排查思路。
+    -   死锁 (Dead Lock) 问题排查思路。
+
+### 六、 开发运维 (DevOps) 与部署
+1.  **容器化:**
+    -   **Docker:** Dockerfile 编写最佳实践、多阶段构建、与 Java 应用的整合。
+    -   **Kubernetes:** 核心概念 (Pod, Deployment, Service)、Helm Chart、Java 应用在 K8s 中的部署与配置管理。
+2.  **CI/CD (持续集成/持续部署):** Jenkins Pipeline 脚本编写、GitLab CI/CD 的使用。
+3.  **监控与可观测性 (Observability):**
+    -   日志聚合：ELK/EFK 栈介绍。
+    -   指标监控：Prometheus + Grafana 搭建与应用监控。
+    -   APM 工具：SkyWalking、Pinpoint 的使用。
+
+### 七、 软件设计与架构 (Software Design & Architecture)
+1.  **设计原则:** SOLID 原则详解与实战案例。
+2.  **更多设计模式:**
+    -   结构型模式：适配器、装饰器、外观。
+    -   行为型模式：观察者、策略、状态。
+3.  **系统架构:**
+    -   单体架构、分布式架构、微服务架构的演进与取舍。
+    -   **DDD (领域驱动设计):** 核心概念、限界上下文、实体/值对象。
+    -   常用分布式解决方案：分布式事务 (Seata)、分布式锁 (Redis/ZK)、分布式ID生成。
+
+### 八、 其他重要技术点
+1.  **Web 服务器:** Tomcat、Jetty、Undertow 的工作原理与调优。
+2.  **消息队列:** Kafka、RocketMQ、RabbitMQ 的核心概念、API 使用与可靠性保证。
+3.  **API 文档:** Swagger/OpenAPI 的使用与集成。
+4.  **代码质量:** SonarQube 静态代码分析、代码规范 (Checkstyle, PMD)。
+
+### 总结
+
+您原有的文档列表是一个**出色的 Java SE 知识库**。要将其扩展为一个**企业级 Java 开发者全景图**，需要重点补充：
+
+*   **核心框架:** 特别是 Spring 全家桶。
+*   **工程实践:** 构建工具、测试、CI/CD。
+*   **数据层:** ORM、连接池、NoSQL。
+*   **架构与运维:** 微服务、DDD、容器化、监控。
+
+这些补充内容将把知识体系从“**掌握 Java 语言**”提升到“**能胜任现代 Java 后端开发**”的层次。

@@ -1,6 +1,7 @@
 ---
 title: Java Math 类详解与最佳实践
 description: 这篇文章详细介绍了 Java Math 类的基础概念、常用方法、性能优化策略以及选择建议。通过学习，你将能够充分利用 Math 类进行数学计算，避免常见的数值计算陷阱。
+author: zhycn
 ---
 
 # Java Math 类详解与最佳实践
@@ -239,7 +240,7 @@ public static void findNarcissisticNumbers() {
 
 ### 5.1 精确计算与舍入控制
 
-对于金融计算或需要高精度的场景，Math类的浮点运算可能不够精确，推荐使用BigDecimal类：
+对于金融计算或需要高精度的场景，Math 类的浮点运算可能不够精确，推荐使用 BigDecimal 类：
 
 ```java
 import java.math.BigDecimal;

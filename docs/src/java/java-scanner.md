@@ -1,9 +1,10 @@
 ---
-title: Java Scanner 类详解与最佳实践
+title: Java Scanner 类详解与最佳实践（知道就好）
 description: 详细介绍 Java Scanner 类的功能、使用方法和最佳实践，帮助开发者正确、高效地使用 Scanner 类进行输入处理。
+author: zhycn
 ---
 
-# Java Scanner 类详解与最佳实践
+# Java Scanner 类详解与最佳实践（知道就好）
 
 ## 1. 概述与核心功能
 
