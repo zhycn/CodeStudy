@@ -14,6 +14,8 @@
 
 ## v2025.09
 
+- Added: [Java 已过时的技术清单（不要再学了）](./docs/src/java/java-outdated.md)
+- Added: [Java Fork/Join 框架详解与最佳实践](./docs/src/java/java-fork-join.md)
 - Added: [Java 开发环境配置详解与最佳实践](./docs/src/java/java-development-environment.md)
 - Added: [JVM 垃圾回收（GC）机制详解与最佳实践](./docs/src/java/java-gc.md)
 - Added: [JVM 调优与常用工具详解及最佳实践](./docs/src/java/java-jvm-tuning.md)
