@@ -1,9 +1,10 @@
 ---
-title: Java 文件操作详解
+title: Java File 文件操作详解
 description: 详细介绍 Java 文件操作的基础概念、核心类与接口，以及传统 I/O 操作的详细示例。
+author: zhycn
 ---
 
-# Java 文件操作详解
+# Java File 文件操作详解
 
 ## 1. 文件操作基础
 
@@ -11,9 +12,9 @@ Java 文件操作是编程中不可或缺的重要组成部分，它使程序能
 
 ### 1.1 核心类与接口
 
-- **File类**：位于 `java.io` 包中，是传统 I/O 操作中最常用的类，用于表示文件和目录路径名的抽象表示。它可以用于创建、删除文件，获取文件元数据（如文件大小、最后修改时间）等操作。
-- **Path接口**：Java 7 引入的 `java.nio.file` 包中的核心接口，用于表示文件系统路径，提供了更灵活和强大的路径操作方法，替代了 File 类的部分功能。
-- **Files工具类**：Java 7 引入的 `java.nio.file` 包中的工具类，提供了大量静态方法用于文件操作，包括读取、写入、复制、移动、删除和文件属性查询等，是现代 Java 文件操作的首选方式。
+- **File 类**：位于 `java.io` 包中，是传统 I/O 操作中最常用的类，用于表示文件和目录路径名的抽象表示。它可以用于创建、删除文件，获取文件元数据（如文件大小、最后修改时间）等操作。
+- **Path 接口**：Java 7 引入的 `java.nio.file` 包中的核心接口，用于表示文件系统路径，提供了更灵活和强大的路径操作方法，替代了 File 类的部分功能。
+- **Files 工具类**：Java 7 引入的 `java.nio.file` 包中的工具类，提供了大量静态方法用于文件操作，包括读取、写入、复制、移动、删除和文件属性查询等，是现代 Java 文件操作的首选方式。
 
 ### 1.2 文件与路径表示
 
@@ -311,7 +312,7 @@ public class BufferedOptimization {
 
 ### 4.2 NIO 性能优化
 
-对于大文件操作，NIO提供了显著的性能优势。
+对于大文件操作，NIO 提供了显著的性能优势。
 
 ```java
 import java.nio.file.Files;
@@ -355,7 +356,7 @@ import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
-import.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BatchOperationExample {

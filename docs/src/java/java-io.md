@@ -1,6 +1,7 @@
 ---
 title: Java IO 详解与最佳实践
 description: 详细介绍了 Java IO 流操作的基础概念、分类、使用方法和最佳实践。无论您是初学者还是经验丰富的开发者，都能从本文中找到有价值的信息。
+author: zhycn
 ---
 
 # Java IO 详解与最佳实践
@@ -27,10 +28,32 @@ Java IO（Input/Output）是 Java 编程语言中用于处理输入和输出操�
 
 Java IO 库采用了**装饰器模式**，允许动态地为流添加功能。这种设计使得基础流可以被各种功能流（如缓冲流、转换流等）包装，从而灵活地组合各种功能。
 
-Java IO 的核心抽象类包括：
+**Java IO 的核心抽象类包括：**
 
 - `InputStream` 和 `OutputStream`：所有字节流的父类
 - `Reader` 和 `Writer`：所有字符流的父类
+
+**Java 提供了丰富的内置流类，主要分为以下几类：**
+
+1. **字节流**：
+   - 基础字节流：`FileInputStream`、`FileOutputStream`
+   - 缓冲字节流：`BufferedInputStream`、`BufferedOutputStream`
+   - 数据字节流：`DataInputStream`、`DataOutputStream`
+   - 对象序列化流：`ObjectInputStream`、`ObjectOutputStream`
+   - 字节数组流：`ByteArrayInputStream`、`ByteArrayOutputStream`
+   - 管道流：`PipedInputStream`、`PipedOutputStream`
+
+2. **字符流**：
+   - 基础字符流：`FileReader`、`FileWriter`
+   - 缓冲字符流：`BufferedReader`、`BufferedWriter`
+   - 转换流：`InputStreamReader`、`OutputStreamWriter`
+   - 字符数组流：`CharArrayReader`、`CharArrayWriter`
+   - 字符串流：`StringReader`、`StringWriter`
+   - 打印流：`PrintStream`、`PrintWriter`
+
+3. **NIO 流**：
+   - `FileChannel`、`SocketChannel`、`ServerSocketChannel`
+   - `Selector`、`ByteBuffer`、`Charset`
 
 ## 2. 核心类与API
 
@@ -409,12 +432,12 @@ Apache Commons IO 和 Google Guava 等第三方库提供了更多有用的工具
 
 ```java
 // 使用Apache Commons IO
-// FileUtils.copyFile(new File("source.txt"), new File("destination.txt"));
-// String content = FileUtils.readFileToString(new File("file.txt"), StandardCharsets.UTF_8);
+FileUtils.copyFile(new File("source.txt"), new File("destination.txt"));
+String content = FileUtils.readFileToString(new File("file.txt"), StandardCharsets.UTF_8);
 
 // 使用Google Guava
-// Files.copy(new File("source.txt"), new File("destination.txt"));
-// String content = Files.toString(new File("file.txt"), StandardCharsets.UTF_8);
+Files.copy(new File("source.txt"), new File("destination.txt"));
+String content = Files.toString(new File("file.txt"), StandardCharsets.UTF_8);
 ```
 
 ## 4. 最佳实践总结
@@ -442,10 +465,10 @@ Apache Commons IO 和 Google Guava 等第三方库提供了更多有用的工具
 
 ### 4.3 常见问题处理
 
-1. **资源泄漏**：始终使用try-with-resources语句确保资源被正确关闭。
+1. **资源泄漏**：始终使用 try-with-resources 语句确保资源被正确关闭。
 2. **字符编码问题**：明确指定字符编码（如UTF-8），避免依赖平台默认编码。
 3. **大文件处理**：使用流式处理或分块处理，避免将整个文件加载到内存中。
-4. **性能瓶颈**：识别IO密集型操作，使用缓冲和合适的缓冲区大小优化。
+4. **性能瓶颈**：识别 IO 密集型操作，使用缓冲和合适的缓冲区大小优化。
 
 ### 4.4 最佳实践清单
 

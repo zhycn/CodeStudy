@@ -1,6 +1,7 @@
 ---
 title: Java 多线程编程详解与最佳实践
 description: 这篇文章详细介绍了 Java 多线程的基础概念、实现方式、常见问题与最佳实践。通过学习，你将能够理解多线程的工作原理，掌握多线程编程的技巧，避免常见的并发问题。
+author: zhycn
 ---
 
 # Java 多线程编程详解与最佳实践
@@ -9,12 +10,12 @@ description: 这篇文章详细介绍了 Java 多线程的基础概念、实现�
 
 ### 1.1 什么是多线程？
 
-多线程是指在同一个进程内，同时存在多个执行线程（Thread），它们共享进程的内存空间但拥有独立的执行路径。多线程可以并行执行任务，尤其在I/O密集型和高并发场景中，能显著提高应用性能。
+多线程是指在同一个进程内，同时存在多个执行线程（Thread），它们共享进程的内存空间但拥有独立的执行路径。多线程可以并行执行任务，尤其在 I/O 密集型和高并发场景中，能显著提高应用性能。
 
 在现代高并发系统中，Java 多线程技术是提升吞吐量和响应速度的核心手段。根据性能报告，合理使用多线程可使系统吞吐量提升300%-500%。实际项目中主要解决两类问题：
 
-- **CPU密集型任务**：通过并行计算缩短处理时间
-- **I/O密集型任务**：利用线程等待I/O时的空闲时间执行其他操作
+- **CPU 密集型任务**：通过并行计算缩短处理时间
+- **I/O 密集型任务**：利用线程等待 I/O 时的空闲时间执行其他操作
 
 ### 1.2 多线程与多进程的区别
 
@@ -39,6 +40,14 @@ Java 线程生命周期包括以下几种状态：
 - **终止（Terminated）**：线程执行完毕或异常终止
 
 ## 2. Java 中的多线程实现
+
+Java 提供了三种主要的多线程实现方式，每种方式都有其适用场景和特点：
+
+1. **继承 Thread 类** - 最基础的方式，适合简单场景
+2. **实现 Runnable 接口** - 更灵活，推荐方式
+3. **实现 Callable 接口** - 支持返回值，适合需要结果返回的场景
+
+现代 Java 开发中，更推荐使用线程池 (ExecutorService) 来管理线程，而非直接创建 Thread 对象。
 
 ### 2.1 创建线程的方式
 
@@ -107,7 +116,7 @@ public class Main {
 
 ### 2.2 线程池
 
-频繁创建和销毁线程开销大，线程池通过复用线程提升效率。Java 提供了`java.util.concurrent`包，通过`ExecutorService`和`Executors`类实现线程池。
+频繁创建和销毁线程开销大，线程池通过复用线程提升效率。Java 提供了 `java.util.concurrent` 包，通过 `ExecutorService` 和 `Executors` 类实现线程池。
 
 ```java
 import java.util.concurrent.ExecutorService;
@@ -133,10 +142,13 @@ public class ThreadPoolExample {
 
 **线程池类型包括**：
 
-- **FixedThreadPool**：固定线程数量
-- **CachedThreadPool**：按需创建线程，适合短生命周期任务
-- **ScheduledThreadPool**：定时任务
-- **SingleThreadExecutor**：单线程执行任务，保证顺序执行
+- **FixedThreadPool**：固定线程数量的线程池，适用于负载较重的服务器场景
+- **CachedThreadPool**：按需创建线程的线程池，适合执行大量短生命周期的异步任务
+- **ScheduledThreadPool**：支持定时及周期性任务执行的线程池
+- **SingleThreadExecutor**：单线程的线程池，保证任务按提交顺序执行
+- **WorkStealingPool**（JDK7+）：基于工作窃取算法的线程池，适合计算密集型任务
+- **ForkJoinPool**：分治任务专用线程池，支持工作窃取和大任务拆分
+- **ThreadPoolExecutor**：可自定义参数的线程池，提供最大灵活性
 
 #### 2.2.1 线程池参数配置黄金法则
 
@@ -191,9 +203,9 @@ class Counter {
 }
 ```
 
-多个线程同时调用`increment()`，可能导致最终count值小于预期。
+多个线程同时调用`increment()`，可能导致最终 count 值小于预期。
 
-### 3.2 同步关键字synchronized
+### 3.2 同步关键字 synchronized
 
 ```java
 public synchronized void increment() {
@@ -201,11 +213,18 @@ public synchronized void increment() {
 }
 ```
 
-`synchronized`保证同一时刻只有一个线程进入同步代码块，避免竞态条件。
+`synchronized` 保证同一时刻只有一个线程进入同步代码块，避免竞态条件。
 
 ### 3.3 显式锁 Lock 接口
 
-相比`synchronized`，`Lock`接口提供更多灵活性。
+相比 `synchronized`，`Lock` 接口提供更多灵活性。
+
+**Lock 接口的主要实现类包括：**
+
+- ReentrantLock：可重入锁，最常用的实现类
+- ReentrantReadWriteLock.ReadLock：读锁
+- ReentrantReadWriteLock.WriteLock：写锁
+- StampedLock：JDK8 新增的锁实现，支持乐观读模式
 
 ```java
 import java.util.concurrent.locks.Lock;
@@ -228,7 +247,33 @@ class Counter {
 
 ### 3.4 原子类
 
-Java 提供了原子变量类（`AtomicInteger`、`AtomicLong`等），基于 CAS 实现无锁线程安全。
+Java 提供了原子变量类，基于 CAS 实现无锁线程安全，位于 `java.util.concurrent.atomic` 包中。主要原子类包括：
+
+- 基本类型原子类：
+  - `AtomicBoolean`：原子布尔类型
+  - `AtomicInteger`：原子整型
+  - `AtomicLong`：原子长整型
+
+- 数组类型原子类：
+  - `AtomicIntegerArray`：原子整型数组
+  - `AtomicLongArray`：原子长整型数组
+  - `AtomicReferenceArray`：原子引用类型数组
+
+- 引用类型原子类：
+  - `AtomicReference`：原子引用类型
+  - `AtomicStampedReference`：带版本号的原子引用（解决 ABA 问题）
+  - `AtomicMarkableReference`：带标记位的原子引用
+
+- 字段更新器：
+  - `AtomicIntegerFieldUpdater`：原子整型字段更新器
+  - `AtomicLongFieldUpdater`：原子长整型字段更新器
+  - `AtomicReferenceFieldUpdater`：原子引用字段更新器
+
+- 累加器（JDK8+ 高性能实现）：
+  - `LongAdder`：高并发下比 AtomicLong 性能更好
+  - `DoubleAdder`：双精度浮点累加器
+  - `LongAccumulator`：自定义运算的累加器
+  - `DoubleAccumulator`：双精度自定义运算累加器
 
 ```java
 import java.util.concurrent.atomic.AtomicInteger;
@@ -305,9 +350,23 @@ class Point {
 
 ## 4. 并发工具类
 
-Java 提供的`java.util.concurrent`包提供多种高级并发工具：
+Java 提供的 `java.util.concurrent` 包提供多种高级并发工具：
 
 ### 4.1 CountDownLatch
+
+CountDownLatch 是一个同步辅助类，允许一个或多个线程等待其他线程完成操作。它通过一个计数器实现，计数器的初始值由构造函数指定。每当一个线程完成了自己的任务后，计数器会减1。当计数器值到达0时，表示所有需要等待的线程都已经完成了任务，此时等待的线程就可以恢复执行。
+
+**主要特点：**
+
+- 一次性使用：计数器不能被重置，如果需要重复使用，考虑使用 CyclicBarrier
+- 线程安全：内部基于 AQS 实现，保证线程安全
+- 灵活等待：提供带超时和不带超时的等待方法
+
+**典型应用场景：**
+
+1. 主线程等待多个子线程完成初始化
+2. 多个线程等待某个外部条件就绪
+3. 并行计算任务的分阶段控制
 
 ```java
 import java.util.concurrent.CountDownLatch;
@@ -340,6 +399,29 @@ public class CountDownLatchExample {
 
 ### 4.2 CyclicBarrier
 
+CyclicBarrier 是一个同步辅助类，它允许一组线程互相等待，直到所有线程都到达某个公共屏障点。与 CountDownLatch 不同，CyclicBarrier 可以重复使用（通过重置计数器），并且可以在所有线程到达屏障时执行一个预定义的操作。
+
+**主要特点：**
+
+- 可重用性：当所有等待线程都到达屏障后，屏障会自动重置，可以再次使用
+- 屏障操作：支持在所有线程到达屏障后执行一个 Runnable 任务
+- 线程安全：内部基于 ReentrantLock 实现，保证线程安全
+- 灵活等待：提供带超时和不带超时的等待方法
+
+**典型应用场景：**
+
+1. 多线程分阶段处理任务，需要等待所有线程完成当前阶段
+2. 并行计算中，需要等待所有子任务完成才能进行结果合并
+3. 多线程测试场景，需要同时启动多个线程进行压力测试
+
+**工作原理：**
+
+1. 初始化时指定参与线程数和可选的屏障操作
+2. 每个线程调用 await() 方法表示已到达屏障点
+3. 当指定数量的线程都调用 await() 后，执行屏障操作（如果有）
+4. 所有线程继续执行后续任务
+5. 屏障自动重置，可以开始下一轮使用
+
 ```java
 import java.util.concurrent.CyclicBarrier;
 
@@ -365,6 +447,30 @@ public class CyclicBarrierExample {
 ```
 
 ### 4.3 Semaphore
+
+Semaphore 是一个计数信号量，用于控制同时访问特定资源的线程数量。它通过维护一组许可证来实现资源访问控制，线程必须先获取许可证才能访问资源，使用完后释放许可证。
+
+**主要特点：**
+
+- 资源限制：限制可以同时访问共享资源的线程数量
+- 公平性：支持公平和非公平两种模式获取许可证
+- 可中断：提供可中断和不可中断的获取方法
+- 尝试获取：支持尝试获取许可证和带超时的获取方法
+
+**典型应用场景：**
+
+1. 资源池管理（如数据库连接池）
+2. 限流控制（限制并发请求数）
+3. 生产者-消费者模式中的缓冲区控制
+4. 需要限制访问量的共享资源
+
+**工作原理：**
+
+1. 初始化时指定许可证数量
+2. 线程调用 acquire() 方法获取许可证，如果没有可用许可证则阻塞
+3. 线程访问共享资源
+4. 线程调用 release() 方法释放许可证
+5. 其他等待的线程可以获取被释放的许可证
 
 ```java
 import java.util.concurrent.Semaphore;
@@ -392,6 +498,27 @@ public class SemaphoreExample {
 ```
 
 ### 4.4 CompletableFuture 异步编排
+
+CompletableFuture 是 Java 8 引入的强大异步编程工具，它实现了 Future 和 CompletionStage 接口，提供了丰富的异步编程能力。相比传统 Future，它支持：
+
+- **链式调用**：通过 thenApply/thenAccept/thenRun 等方法实现任务流水线
+- **组合操作**：支持 thenCombine/thenCompose 等组合多个异步任务
+- **异常处理**：通过 exceptionally/handle 等方法优雅处理异常
+- **线程池控制**：可指定自定义线程池执行异步任务
+
+**核心优势**：
+
+1. 非阻塞式编程模型
+2. 函数式编程风格
+3. 灵活的异步任务编排能力
+4. 完善的异常处理机制
+
+**典型应用场景**：
+
+1. 多服务并行调用与结果聚合
+2. 异步任务流水线处理
+3. 超时控制与回退机制
+4. 复杂业务逻辑的异步编排
 
 ```java
 import java.util.concurrent.CompletableFuture;
