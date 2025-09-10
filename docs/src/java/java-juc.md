@@ -1,6 +1,7 @@
 ---
 title: Java 并发编程（JUC）详解与最佳实践
 description: 这篇文章详细介绍了 Java 并发包（JUC）的原子类与并发集合。通过学习，你将能够理解 JUC 的工作原理，掌握其在实际开发中的应用，避免常见的问题。
+author: zhycn
 ---
 
 # Java 并发编程（JUC）详解与最佳实践

@@ -129,10 +129,9 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 类加载机制详解与最佳实践](./java-class-loading.md)
 - [Java 进程与 Runtime 类详解与最佳实践](./java-process-runtime.md)
 - [Java 安全编程：加密、解密、哈希与数字签名详解与最佳实践](./java-encryption.md)
-
 - [Java 虚拟机（JVM）详解与最佳实践](./java-jvm.md)
+- [Java 并发编程（JUC）详解与最佳实践](./java-juc.md)
 - [JVM 垃圾回收（GC）机制详解与最佳实践](./java-gc.md)
+- [Java 开发环境配置详解与最佳实践](./java-development-environment.md)
 - [Java 内存模型（JMM）详解与最佳实践](./java-jmm.md)
 - [JVM 调优与常用工具详解及最佳实践](./java-jvm-tuning.md)
-- [Java 并发编程（JUC）详解与最佳实践](./java-juc.md)
-- [Java 开发环境配置详解与最佳实践](./java-development-environment.md)

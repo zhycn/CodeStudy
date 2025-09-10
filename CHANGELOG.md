@@ -14,6 +14,12 @@
 
 ## v2025.09
 
+- Added: [Java 开发环境配置详解与最佳实践](./docs/src/java/java-development-environment.md)
+- Added: [JVM 垃圾回收（GC）机制详解与最佳实践](./docs/src/java/java-gc.md)
+- Added: [JVM 调优与常用工具详解及最佳实践](./docs/src/java/java-jvm-tuning.md)
+- Added: [Java 内存模型（JMM）详解与最佳实践](./docs/src/java/java-jmm.md)
+- Added: [Java 并发编程（JUC）详解与最佳实践](./docs/src/java/java-juc.md)
+- Added: [Java 虚拟机（JVM）详解与最佳实践](./docs/src/java/java-jvm.md)
 - Added: [Java 安全编程：加密、解密、哈希与数字签名详解与最佳实践](./docs/src/java/java-encryption.md)
 - Added: [Java 类加载机制详解与最佳实践](./docs/src/java/java-class-loading.md)
 - Added: [Java 进程与 Runtime 类详解与最佳实践](./docs/src/java/java-process-runtime.md)
