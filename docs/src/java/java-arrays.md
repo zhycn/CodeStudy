@@ -5,7 +5,7 @@ author: zhycn
 
 # Java Arrays 工具类详解与最佳实践
 
-## 1. Arrays 工具类概述
+## 1 Arrays 工具类概述
 
 Java `Arrays` 类位于 `java.util` 包中，是一个专门用于操作数组的强大工具类，自 JDK 1.2 版本引入。它提供了一系列静态方法，用于实现数组的排序、搜索、填充、比较等常见操作，大大简化了数组处理的复杂度。
 
@@ -22,7 +22,7 @@ Arrays 工具类遵循了工具类的通用设计原则：
 
 需要注意的是，Apache Commons Lang 库中的 `ArrayUtils` 提供了更多辅助功能，但在标准 Java 环境中，`Arrays` 类仍然是核心选择。
 
-## 2. 核心方法详解
+## 2 核心方法详解
 
 ### 2.1 数组输出与字符串转换：toString() 与 deepToString()
 
@@ -271,7 +271,7 @@ int[] squares = Arrays.stream(numbers)
 System.out.println("平方数组: " + Arrays.toString(squares)); // 输出 [1, 4, 9, 16, 25]
 ```
 
-## 3. 高级应用与最佳实践
+## 3 高级应用与最佳实践
 
 ### 3.1 性能优化技巧
 
@@ -351,7 +351,7 @@ System.out.println(mainList); // 输出[99, 2, 3]！影响原集合
 List<Integer> safeCopy = new ArrayList<>(mainList.subList(0, 2));
 ```
 
-## 4. 综合应用示例
+## 4 综合应用示例
 
 ### 4.1 数组统计工具类
 
@@ -574,7 +574,7 @@ public class Example {
 }
 ```
 
-## 5. 总结
+## 5 总结
 
 Java Arrays 工具类是一个功能强大、性能优异的数组操作工具，合理使用可以大大提高开发效率和代码质量。以下是关键要点总结：
 

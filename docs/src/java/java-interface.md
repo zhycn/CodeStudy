@@ -6,7 +6,7 @@ author: zhycn
 
 # Java Interface 接口详解与最佳实践
 
-## 1. 接口的本质与核心概念
+## 1 接口的本质与核心概念
 
 Java 接口（Interface）是一种完全抽象的引用类型，它定义了对象之间的交互契约。接口专注于声明"应该做什么"而非规定"具体怎么做"，体现了面向对象设计中的"面向接口编程"原则。
 
@@ -30,7 +30,7 @@ public interface Animal {
 }
 ```
 
-## 2. 接口的定义与实现
+## 2 接口的定义与实现
 
 ### 2.1 接口定义语法
 
@@ -104,7 +104,7 @@ public class SmartDevice implements NetworkConnectable, PowerManageable {
 }
 ```
 
-## 3. Java 8+ 接口增强特性
+## 3 Java 8+ 接口增强特性
 
 ### 3.1 默认方法（Default Methods）
 
@@ -178,7 +178,7 @@ public interface Database {
 }
 ```
 
-## 4. 接口的设计原则与最佳实践
+## 4 接口的设计原则与最佳实践
 
 ### 4.1 SOLID 原则应用
 
@@ -287,7 +287,7 @@ public interface Collection<T> {
 }
 ```
 
-## 5. 接口的多继承与冲突解决
+## 5 接口的多继承与冲突解决
 
 Java 支持多接口继承，但可能产生默认方法冲突。
 
@@ -349,7 +349,7 @@ class C implements A, B {
 }
 ```
 
-## 6. 接口的高级应用模式
+## 6 接口的高级应用模式
 
 ### 6.1 策略模式
 
@@ -483,7 +483,7 @@ public class DownloadManager implements DownloadCallback {
 }
 ```
 
-## 7. 接口性能优化技巧
+## 7 接口性能优化技巧
 
 ### 7.1 避免过度抽象
 
@@ -585,7 +585,7 @@ public class ObjectPool<T extends Poolable> {
 }
 ```
 
-## 8. 接口在 API 设计中的应用
+## 8 接口在 API 设计中的应用
 
 ### 8.1 REST API 接口设计
 
@@ -644,7 +644,7 @@ public interface UserServiceV2 extends UserServiceV1 {
 }
 ```
 
-## 9. 接口与抽象类的选择指南
+## 9 接口与抽象类的选择指南
 
 | 特性       | 接口（Interface）   | 抽象类（Abstract Class）   |
 | ---------- | ------------------- | -------------------------- |
@@ -664,7 +664,7 @@ public interface UserServiceV2 extends UserServiceV1 {
 - 定义行为契约时使用接口
 - 表示"is-a"关系时使用抽象类，表示"has-ability"关系时使用接口
 
-## 10. 总结
+## 10 总结
 
 Java 接口是面向对象编程的核心概念之一，它提供了定义行为契约的机制，是实现多态、解耦和组件化设计的关键工具。
 

@@ -8,7 +8,7 @@ author: zhycn
 
 本文旨在全面介绍 Java JDBC (Java Database Connectivity) 技术，涵盖其核心概念、API 使用、代码示例以及在实际开发中的最佳实践，帮助你编写高效、安全且易于维护的数据库应用程序。
 
-## 1. JDBC 概述
+## 1 JDBC 概述
 
 **JDBC (Java Database Connectivity)** 是 Java 语言中用于执行 SQL 语句的 API，它为多种关系型数据库提供了一个标准的访问方法。JDBC API 是独立于数据库厂商的，意味着开发者可以用同一套代码（只需更换驱动）与不同的数据库（如 MySQL, Oracle, PostgreSQL 等）进行交互。
 
@@ -23,7 +23,7 @@ JDBC 通过驱动程序（Driver）与特定数据库通信，驱动程序负责
 
 在实际开发中，**类型 4 的纯 Java 驱动程序**因其高性能和平台无关性而被广泛采用。
 
-## 2. 环境配置与基础流程
+## 2 环境配置与基础流程
 
 ### 2.1 引入 JDBC 驱动
 
@@ -83,7 +83,7 @@ public class JdbcBasicExample {
 }
 ```
 
-## 3. 核心 API 详解
+## 3 核心 API 详解
 
 ### 3.1 DriverManager
 
@@ -169,7 +169,7 @@ try (Connection conn = DriverManager.getConnection(url, user, password);
 
 `ResultSet` 还可以配置为可滚动和可更新的，但这会带来额外的开销，默认的只进、只读类型通常性能更好。
 
-## 4. 事务管理
+## 4 事务管理
 
 事务是作为单个逻辑工作单元执行的一系列操作，要么全部成功，要么全部失败（ACID 属性）。
 
@@ -223,7 +223,7 @@ private static void updateAccountBalance(Connection conn, String name, double am
 }
 ```
 
-## 5. 异常处理
+## 5 异常处理
 
 JDBC 操作可能会抛出 `SQLException`，这是一个检查性异常，必须处理。
 
@@ -275,7 +275,7 @@ public class JdbcWithLogging {
 }
 ```
 
-## 6. 性能优化与最佳实践
+## 6 性能优化与最佳实践
 
 ### 6.1 使用连接池
 
@@ -373,7 +373,7 @@ try (Connection conn = DriverManager.getConnection(url, user, password);
 3. **选择合适的事务隔离级别**：根据业务需求选择最低的必要隔离级别（如 `READ_COMMITTED`），更高的级别（如 `SERIALIZABLE`）会带来更多锁和性能开销。
 4. **使用应用层缓存**：对不常变化但频繁访问的数据（如配置信息），使用 Redis、Memcached 等缓存工具，减少直接访问数据库的次数。
 
-## 7. 安全考量
+## 7 安全考量
 
 1. **永远使用 PreparedStatement 防止 SQL 注入**：这是最重要的安全实践。切勿使用字符串拼接来构造 SQL 语句。
    - **错误示范**：`"SELECT * FROM users WHERE name = '" + userName + "'"` （危险！）
@@ -381,7 +381,7 @@ try (Connection conn = DriverManager.getConnection(url, user, password);
 2. **保护数据库凭证**：连接数据库的用户名和密码不应硬编码在源代码中。应使用安全的配置管理方式，如外部属性文件、环境变量或密钥管理服务（KMS），并严格控制访问权限。
 3. **最小权限原则**：为应用程序使用的数据库账户分配其所需的最小权限，避免使用超级用户（如 root）账户。例如，如果应用只需要读取某个表，就只授予 SELECT 权限。
 
-## 8. 架构建议：DAO 模式
+## 8 架构建议：DAO 模式
 
 在实际项目（尤其是 Web 应用）中，**避免在 Servlet 或 Controller 中直接编写 JDBC 代码**。推荐使用 **DAO (Data Access Object) 模式** 将数据访问逻辑抽象出来，封装在一个独立的层中。
 
@@ -457,7 +457,7 @@ public class DataAccessException extends RuntimeException {
 }
 ```
 
-## 9. 总结
+## 9 总结
 
 JDBC 是 Java 生态中稳定且强大的数据库访问标准。掌握其核心 API 和正确使用模式是 Java 开发者的基本功。
 

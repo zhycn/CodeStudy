@@ -5,7 +5,7 @@ author: zhycn
 
 # Java JNDI 详解与最佳实践
 
-## 1. 概述与核心概念
+## 1 概述与核心概念
 
 Java Naming and Directory Interface（JNDI）是 Java 平台提供的一套标准 API，用于访问各种命名和目录服务。通过统一的接口，JNDI 允许 Java 应用程序与多种不同的命名和目录服务（如 LDAP、RMI、DNS、DNS 等）进行交互，而无需关心底层服务的具体实现细节。
 
@@ -28,7 +28,7 @@ JNDI 架构由两个主要部分组成：**应用程序编程接口（API）** �
 | `javax.naming.ldap`  | 提供对 LDAP 版本 3 扩展的操作和控制的支持                      |
 | `javax.naming.spi`   | 提供一种方法，通过它可动态插入不同实现以支持访问命名和目录服务 |
 
-## 2. JNDI API 详解
+## 2 JNDI API 详解
 
 ### 2.1 核心类与接口
 
@@ -111,7 +111,7 @@ public class JNDIBasicOperations {
 }
 ```
 
-## 3. JNDI 与目录服务
+## 3 JNDI 与目录服务
 
 JNDI 不仅能访问命名服务，还能访问目录服务（如 LDAP）。目录服务是命名服务的扩展，允许对象具有属性。
 
@@ -181,7 +181,7 @@ public class DirectoryOperations {
 }
 ```
 
-## 4. JNDI 在 Java EE 中的应用
+## 4 JNDI 在 Java EE 中的应用
 
 在 Java EE 环境中，JNDI 用于查找各种资源，如数据源、EJB、消息队列等。
 
@@ -285,7 +285,7 @@ public class ServiceLocator {
 }
 ```
 
-## 5. 安全机制与漏洞防护
+## 5 安全机制与漏洞防护
 
 ### 5.1 JNDI 安全限制
 
@@ -402,7 +402,7 @@ public class SecureJNDIExample {
 }
 ```
 
-## 6. 性能优化与最佳实践
+## 6 性能优化与最佳实践
 
 ### 6.1 连接池与缓存
 
@@ -614,7 +614,7 @@ public class JNDIAsyncExample {
 }
 ```
 
-## 7. 实战应用示例
+## 7 实战应用示例
 
 ### 7.1 在 Spring 框架中使用 JNDI
 
@@ -734,7 +734,7 @@ public class JNDIWithErrorHandling {
 }
 ```
 
-## 8. 总结
+## 8 总结
 
 Java JNDI 提供了强大而灵活的方式来访问各种命名和目录服务。通过遵循本文介绍的最佳实践，您可以构建出安全、高效且易于维护的 JNDI 应用程序。
 

@@ -5,13 +5,13 @@ author: zhycn
 
 # Java StringJoiner 详解与最佳实践
 
-## 1. 概述
+## 1 概述
 
 StringJoiner 是 Java 8 中引入的一个实用工具类，位于 `java.util` 包中，用于构造由分隔符分隔的字符序列，并能选择性地添加前缀和后缀。它提供了一种更优雅、简洁的方式来处理字符串拼接操作，特别适用于需要特定格式（如 CSV、JSON 等）输出的场景。
 
 与传统使用 `StringBuilder` 或字符串连接操作相比，StringJoiner 的主要优势在于自动处理分隔符的添加，避免了手动检查和处理末尾多余分隔符的麻烦，使代码更加简洁和易读。
 
-## 2. 核心特性
+## 2 核心特性
 
 StringJoiner 具有以下核心特性：
 
@@ -21,7 +21,7 @@ StringJoiner 具有以下核心特性：
 - **合并功能**：能够将另一个 StringJoiner 的内容合并到当前实例中
 - **链式调用**：所有修改方法都返回 StringJoiner 实例本身，支持链式编程
 
-## 3. 类声明与构造方法
+## 3 类声明与构造方法
 
 StringJoiner 类声明如下：
 
@@ -63,7 +63,7 @@ joiner.add("Apple").add("Banana").add("Cherry");
 System.out.println(joiner.toString()); // 输出: [Apple, Banana, Cherry]
 ```
 
-## 4. 核心方法详解
+## 4 核心方法详解
 
 ### 4.1 add(CharSequence newElement)
 
@@ -120,7 +120,7 @@ joiner.add("Name").add("Age").add("City");
 System.out.println(joiner.toString()); // 输出: { Name, Age, City }
 ```
 
-## 5. 内部实现机制
+## 5 内部实现机制
 
 StringJoiner 内部使用 StringBuilder 来构建最终的字符串。它维护了几个关键字段：
 
@@ -132,7 +132,7 @@ StringJoiner 内部使用 StringBuilder 来构建最终的字符串。它维护�
 
 当首次调用 add() 方法时，StringJoiner 会初始化内部的 StringBuilder 实例并先追加前缀。后续添加元素时，会先追加分隔符，再追加元素内容。只有在调用 toString() 方法时，才会追加后缀。
 
-## 6. 使用场景与示例
+## 6 使用场景与示例
 
 ### 6.1 拼接列表或数组中的字符串
 
@@ -182,7 +182,7 @@ String result = cities.stream()
 System.out.println(result); // 输出: { Beijing; Shanghai; Guangzhou }
 ```
 
-## 7. 性能分析与注意事项
+## 7 性能分析与注意事项
 
 ### 7.1 性能特点
 
@@ -196,7 +196,7 @@ StringJoiner 的性能表现接近于 StringBuilder，特别是在处理大量�
 4. **元素中的分隔符**：StringJoiner 不会自动转义元素中包含的分隔符字符，需要开发者自行处理。
 5. **大数据量处理**：对于超大数据量的拼接操作，建议直接使用 StringBuilder 以获得更好的性能。
 
-## 8. 与相关技术的对比
+## 8 与相关技术的对比
 
 ### 8.1 StringJoiner vs StringBuilder
 
@@ -251,7 +251,7 @@ list.forEach(joiner::add);
 System.out.println(joiner.toString()); // 输出: [Apple, Banana, Cherry]
 ```
 
-## 9. 最佳实践
+## 9 最佳实践
 
 1. **选择合适的技术**：
     - 简单分隔符拼接：使用 `String.join()`
@@ -303,7 +303,7 @@ System.out.println(joiner.toString()); // 输出: [Apple, Banana, Cherry]
     // 输出: Names: Alice, Bob, Charlie and David are programmers
     ```
 
-## 10. 总结
+## 10 总结
 
 StringJoiner 是 Java 8 引入的一个非常实用的类，它简化了字符串拼接操作，尤其是在处理需要定界符、前缀、后缀的场景时非常方便。通过理解 StringJoiner 的工作原理和应用场景，开发者可以更高效地处理字符串拼接任务，同时保持代码的简洁性和可读性。
 

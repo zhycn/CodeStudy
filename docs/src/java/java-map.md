@@ -6,7 +6,7 @@ author: zhycn
 
 # Java Map 集合详解与最佳实践
 
-## 1. Map 集合概述
+## 1 Map 集合概述
 
 Java Map 集合是 Java 集合框架中用于处理 **键值对（Key-Value Pair）** 的核心接口，它存储键值对映射关系，其中每个键是唯一的，值可以重复。Map 接口提供了高效的数据查找和操作机制，广泛应用于缓存、配置管理、对象映射、数据库结果封装等场景。
 
@@ -29,7 +29,7 @@ Map 接口是 Java 集合框架的根接口之一，与 Collection 接口并列�
 - **TreeMap**：基于红黑树实现，按键排序
 - **ConcurrentHashMap**：线程安全的高并发实现
 
-## 2. Map 核心实现类对比
+## 2 Map 核心实现类对比
 
 ### 2.1 实现类特性比较
 
@@ -136,7 +136,7 @@ while (it.hasNext()) {
 }
 ```
 
-## 3. Map 基本操作与遍历
+## 3 Map 基本操作与遍历
 
 ### 3.1 基本操作方法
 
@@ -254,7 +254,7 @@ while (iterator.hasNext()) {
 | **forEach**  | 高         | 高                 | Java 8+简洁遍历    |
 | **Iterator** | 低         | 高                 | 需要边遍历边删除   |
 
-## 4. Map 高级特性与 Java 8 新方法
+## 4 Map 高级特性与 Java 8 新方法
 
 ### 4.1 Java 8 增强方法
 
@@ -321,7 +321,7 @@ Map<String, Integer> largerMap = Map.ofEntries(
 );
 ```
 
-## 5. Map 最佳实践与应用场景
+## 5 Map 最佳实践与应用场景
 
 ### 5.1 最佳实践原则
 
@@ -498,7 +498,7 @@ public class Configuration {
 }
 ```
 
-## 6. 总结
+## 6 总结
 
 Java Map 集合是开发中最常用且功能强大的数据结构之一。选择合适的 Map 实现类、遵循最佳实践、熟练掌握各种操作方法和遍历方式，对于编写高效、可维护的 Java 代码至关重要。
 

@@ -7,7 +7,7 @@ author: zhycn
 
 本文将全面探讨 Java Security 框架的核心组件、工作原理和最佳实践，帮助开发者构建更安全的 Java 应用程序。
 
-## 1. Java Security 架构概述
+## 1 Java Security 架构概述
 
 Java Security 架构是 Java 平台安全性的核心基础，提供了密码学服务、访问控制、密钥管理、证书路径验证、安全随机数生成等关键功能。其设计目标是构建一个**可扩展、可插拔、权限驱动**的安全框架。
 
@@ -21,7 +21,7 @@ Java 安全体系由以下几个关键部分组成：
 - **JSSE (Java Secure Socket Extension)** - SSL/TLS 安全套接字扩展
 - **PKI (Public Key Infrastructure) APIs** - 公钥基础设施 API，处理数字证书
 
-## 2. `java.security` 核心接口详解
+## 2 `java.security` 核心接口详解
 
 ### 2.1 安全提供者 (`Provider`)
 
@@ -379,7 +379,7 @@ public class CertificateExample {
 }
 ```
 
-## 3. Java Security 最佳实践
+## 3 Java Security 最佳实践
 
 ### 3.1 输入验证和清理
 
@@ -709,7 +709,7 @@ public class SecureCommunication {
 }
 ```
 
-## 4. 实际应用场景
+## 4 实际应用场景
 
 ### 4.1 防止 SQL 注入
 

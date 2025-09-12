@@ -5,7 +5,7 @@ author: zhycn
 
 # Java ThreadLocal 深度解析与最佳实践
 
-## 1. ThreadLocal 简介
+## 1 ThreadLocal 简介
 
 ThreadLocal 是 Java 提供的一个线程局部变量存储类，位于 `java.lang` 包中。它通过为每个线程提供独立的变量副本，实现了线程之间的数据隔离，从而避免多线程环境下的资源共享冲突。这种机制是一种典型的"空间换安全"策略，与传统的同步机制（如 synchronized 和 Lock）形成互补。
 
@@ -34,7 +34,7 @@ public class Thread implements Runnable {
 }
 ```
 
-## 2. ThreadLocal 实现原理
+## 2 ThreadLocal 实现原理
 
 ### 2.1 数据结构与存储机制
 
@@ -119,7 +119,7 @@ WeakReference → ThreadLocal (键)
 
 这种复杂的引用关系意味着如果使用不当，可能会导致内存泄漏，我们将在第 4 节详细讨论这个问题。
 
-## 3. ThreadLocal 使用场景
+## 3 ThreadLocal 使用场景
 
 ### 3.1 线程不安全工具类封装
 
@@ -263,7 +263,7 @@ public class TransactionManager {
 }
 ```
 
-## 4. ThreadLocal 的内存泄漏问题
+## 4 ThreadLocal 的内存泄漏问题
 
 ### 4.1 内存泄漏原因分析
 
@@ -316,7 +316,7 @@ ThreadLocal 的内存泄漏问题主要源于其特殊的引用结构。Entry �
 
 3. **查找僵尸 Entry**：关注 key 为 null 但 value 不为 null 的 Entry 对象。
 
-## 5. ThreadLocal 最佳实践
+## 5 ThreadLocal 最佳实践
 
 ### 5.1 清理时机与模式
 
@@ -385,7 +385,7 @@ private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT =
 
 4. **考虑替代方案**：对于复杂场景，考虑使用 TransmittableThreadLocal 或 Scoped Values（JDK 21+）。
 
-## 6. ThreadLocal 的替代方案
+## 6 ThreadLocal 的替代方案
 
 ### 6.1 InheritableThreadLocal
 
@@ -454,7 +454,7 @@ public class ScopedValueDemo {
 }
 ```
 
-## 7. 总结
+## 7 总结
 
 ThreadLocal 是 Java 并发编程中一个强大但需要谨慎使用的工具。它通过线程局部存储机制解决了多线程环境下的数据隔离问题，但同时也带来了内存泄漏的风险。
 

@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 异常处理详解与最佳实践
 
-## 1. Java 异常概念与体系结构
+## 1 Java 异常概念与体系结构
 
 ### 1.1 异常的基本概念
 
@@ -58,7 +58,7 @@ Throwable (所有异常基类)
 - `getCause()`: 返回导致此异常的原因
 - `getStackTrace()`: 获取栈轨迹数组
 
-## 2. 异常处理机制
+## 2 异常处理机制
 
 ### 2.1 try-catch-finally 语句
 
@@ -170,7 +170,7 @@ try (FileInputStream fis = new FileInputStream("data.txt");
 
 try-with-resources 语句的原理是资源实现了 AutoCloseable 接口，编译器会自动生成 finally 块来关闭资源。这种方式不仅代码更简洁，而且能确保资源正确关闭，避免资源泄漏。
 
-## 3. 抛出异常与自定义异常
+## 3 抛出异常与自定义异常
 
 ### 3.1 throw 和 throws 关键字
 
@@ -293,7 +293,7 @@ public class OrderProcessException extends BusinessException {
 }
 ```
 
-## 4. 异常处理最佳实践
+## 4 异常处理最佳实践
 
 ### 4.1 异常处理原则
 
@@ -488,7 +488,7 @@ class ErrorResponse {
 }
 ```
 
-## 5. 总结
+## 5 总结
 
 Java 异常处理是编写健壮、可靠应用程序的关键部分。通过理解和正确应用 Java 异常体系结构、处理机制和最佳实践，可以大大提高代码质量和可维护性。以下是关键要点的总结：
 

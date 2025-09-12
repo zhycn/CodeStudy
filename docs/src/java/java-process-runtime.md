@@ -5,7 +5,7 @@ author: zhycn
 
 # Java 进程与 Runtime 类详解与最佳实践
 
-## 1. 概述
+## 1 概述
 
 在 Java 开发中，进程管理和运行时环境交互是高级编程的重要领域。Java 提供了 `Runtime` 类和 `ProcessBuilder` 类来支持这些功能，使 Java 应用程序能够与底层操作系统进行交互，执行系统命令并管理子进程。
 
@@ -13,7 +13,7 @@ Java 运行时环境（Java Runtime Environment, JRE）是 Java 程序运行的�
 
 **进程**（Process）是操作系统进行资源分配和调度的基本单位，是执行中的程序的实例。在 Java 中，每个进程都有自己的 Java 虚拟机（JVM）实例，拥有独立的内存空间，这使得进程之间的内存空间是隔离的。
 
-## 2. Runtime 类核心概念
+## 2 Runtime 类核心概念
 
 ### 2.1 单例设计模式
 
@@ -36,7 +36,7 @@ Runtime runtime = Runtime.getRuntime();
 - **资源回收**：建议 JVM 执行垃圾回收
 - **程序终止**：注册关闭钩子（Shutdown Hook）
 
-## 3. Runtime 类的功能详解
+## 3 Runtime 类的功能详解
 
 ### 3.1 内存管理与监控
 
@@ -191,7 +191,7 @@ public class ShutdownHookExample {
 - `kill -9` 强制终止
 - 硬件故障
 
-## 4. ProcessBuilder 类详解
+## 4 ProcessBuilder 类详解
 
 ### 4.1 ProcessBuilder 与 Runtime 的对比
 
@@ -297,7 +297,7 @@ public class ProcessInputOutputExample {
 }
 ```
 
-## 5. 进程管理高级特性
+## 5 进程管理高级特性
 
 ### 5.1 进程权限管理
 
@@ -396,7 +396,7 @@ public class ProcessHandleExample {
 }
 ```
 
-## 6. 最佳实践与性能优化
+## 6 最佳实践与性能优化
 
 ### 6.1 进程管理最佳实践
 
@@ -520,7 +520,7 @@ public class ProcessHandleExample {
 3. **输入验证与转义**
    对所有用户输入进行验证和适当的转义处理。
 
-## 7. 典型应用场景
+## 7 典型应用场景
 
 ### 7.1 系统监控工具开发
 
@@ -638,7 +638,7 @@ public class BatchDataProcessor {
 }
 ```
 
-## 8. 总结
+## 8 总结
 
 Java 的 `Runtime` 类和进程管理功能提供了强大的系统交互能力，使 Java 应用程序能够执行外部命令、管理系统资源并与底层操作系统进行交互。本文详细介绍了 `Runtime` 类的核心功能、`ProcessBuilder` 的使用、进程管理高级特性以及最佳实践。
 

@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 压缩与解压缩 API 详解与最佳实践
 
-## 1. 压缩技术基础与 Java 支持概览
+## 1 压缩技术基础与 Java 支持概览
 
 数据压缩是通过特定的算法减少数据存储所需的空间的过程，它能显著减少存储空间占用和网络传输时间。Java 提供了多种压缩解决方案，从标准库到第三方库，可以满足不同场景的需求。
 
@@ -17,7 +17,7 @@ Java 标准库中的 `java.util.zip` 包提供了对主流压缩格式的支持�
 - **无损压缩**：保留所有原始信息，如 ZIP、GZIP：适用于文本、代码等
 - **有损压缩**：舍弃部分信息以获得更高压缩率，如 JPEG、MP3：适用于多媒体文件
 
-## 2. 核心 API 与代码示例
+## 2 核心 API 与代码示例
 
 ### 2.1 ZIP 格式压缩与解压
 
@@ -206,7 +206,7 @@ public class ZLibUtils {
 }
 ```
 
-## 3. 高级特性与最佳实践
+## 3 高级特性与最佳实践
 
 ### 3.1 使用第三方库
 
@@ -360,7 +360,7 @@ public void compressLargeFile(File source, File destination, int bufferSize) thr
 }
 ```
 
-## 4. 性能优化与安全考量
+## 4 性能优化与安全考量
 
 ### 4.1 性能对比与选型建议
 
@@ -461,7 +461,7 @@ public void compressWithChecksum(File source, File target) throws IOException {
 }
 ```
 
-## 5. 总结与选型建议
+## 5 总结与选型建议
 
 Java 提供了多种压缩解压解决方案，每种方案都有其适用的场景。在选择压缩工具时，应考虑以下因素：
 

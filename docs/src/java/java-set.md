@@ -6,7 +6,7 @@ author: zhycn
 
 # Java Set 集合详解与最佳实践
 
-## 1. Set 集合概述与核心特性
+## 1 Set 集合概述与核心特性
 
 Java Set 接口是 Java 集合框架（Java Collections Framework）的核心组成部分，它继承自 Collection 接口，用于表示 **不包含重复元素** 的集合。Set 集合遵循数学中集合的定义，确保了其中元素的 **唯一性**，同时不保证维护元素的插入顺序（尽管某些实现如 LinkedHashSet 例外）。
 
@@ -45,7 +45,7 @@ NavigableSet<E> (接口)
 TreeSet<E> (实现类)
 ```
 
-## 2. 主要实现类详解
+## 2 主要实现类详解
 
 ### 2.1 HashSet
 
@@ -186,7 +186,7 @@ public class TreeSetExample {
 }
 ```
 
-## 3. 性能对比与选型指南
+## 3 性能对比与选型指南
 
 ### 3.1 性能对比表
 
@@ -218,7 +218,7 @@ public class TreeSetExample {
   - 需要范围查询或导航操作
   - 可以接受略低的性能（对数时间操作）
 
-## 4. 常用操作与代码示例
+## 4 常用操作与代码示例
 
 ### 4.1 基础操作
 
@@ -368,7 +368,7 @@ public class SetConversion {
 }
 ```
 
-## 5. 应用场景与实战案例
+## 5 应用场景与实战案例
 
 ### 5.1 去重处理
 
@@ -523,7 +523,7 @@ public class LRUCache<K> {
 }
 ```
 
-## 6. 线程安全与并发处理
+## 6 线程安全与并发处理
 
 标准的 Set 实现（HashSet、LinkedHashSet、TreeSet）都不是**线程安全**的。在多线程环境中，需要采取额外的同步措施。
 
@@ -632,7 +632,7 @@ public class ConcurrentSetExample {
 - **Collections.synchronizedSet**：需要手动同步迭代操作
 - **性能权衡**：并发安全性通常带来性能开销，需要根据具体场景选择合适方案
 
-## 7. 最佳实践与常见误区
+## 7 最佳实践与常见误区
 
 ### 7.1 性能优化建议
 
@@ -739,7 +739,7 @@ while (iterator.hasNext()) {
 }
 ```
 
-## 8. 总结
+## 8 总结
 
 Java Set 集合是处理**唯一元素集合**的强大工具，提供了多种实现以满足不同场景需求。
 

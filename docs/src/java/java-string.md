@@ -6,7 +6,7 @@ author: zhycn
 
 # Java String 字符串详解
 
-## 1. 字符串基础与创建方式
+## 1 字符串基础与创建方式
 
 ### 1.1 字符串基本概念
 
@@ -45,7 +45,7 @@ String s4 = new String("Java");
 System.out.println(s3 == s4); // false
 ```
 
-## 2. 字符串不可变性与字符串池
+## 2 字符串不可变性与字符串池
 
 ### 2.1 不可变性的实现与好处
 
@@ -81,7 +81,7 @@ str2 = str2.intern(); // 将字符串添加到池中
 System.out.println(str1 == str2); // true
 ```
 
-## 3. 字符串常用 API 方法
+## 3 字符串常用 API 方法
 
 ### 3.1 长度与空值检查
 
@@ -175,7 +175,7 @@ String lowerCase = text.toLowerCase(); // "asdf"
 String upperCase = text.toUpperCase(); // "ASDF"
 ```
 
-## 4. 字符串格式化与拼接
+## 4 字符串格式化与拼接
 
 ### 4.1 格式化字符串
 
@@ -234,7 +234,7 @@ String sizes = String.join(" / ", parts); // "S / M / L / XL"
 
 **性能考虑**：对于单次拼接，`+` 运算符更简洁；对于循环拼接，必须使用 `StringBuilder` 以避免性能问题。
 
-## 5. 字符串与正则表达式
+## 5 字符串与正则表达式
 
 ### 5.1 正则匹配
 
@@ -266,7 +266,7 @@ String[] fruits = text.split(","); // 分割字符串
 String updatedText = text.replaceAll("banana", "grape"); // 替换字符串
 ```
 
-## 6. StringBuilder 与 StringBuffer
+## 6 StringBuilder 与 StringBuffer
 
 ### 6.1 为什么需要 StringBuilder 和 StringBuffer
 
@@ -312,7 +312,7 @@ sb.setCharAt(0, 'A'); // AvaJ olleH
 String result = sb.toString();
 ```
 
-## 7. 性能优化与最佳实践
+## 7 性能优化与最佳实践
 
 ### 7.1 避免性能陷阱
 
@@ -390,7 +390,7 @@ for (int cp : codePoints) {
 | 多线程环境修改 | StringBuffer  | 线程安全             |
 | 只读操作       | String        | 不可变特性保证安全性 |
 
-## 8. 总结
+## 8 总结
 
 Java 字符串处理是编程中最常用的技能之一。通过本文的学习，你应该掌握：
 

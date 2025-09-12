@@ -12,7 +12,7 @@ author: zhycn
 Spring Boot 从 2.x 版本开始已经废弃了自身提供的 Base64 工具类（`org.springframework.util.Base64Utils`），推荐使用 Java 8 及以上版本提供的标准 `java.util.Base64` 工具类。
 :::
 
-## 1. Base64 概述
+## 1 Base64 概述
 
 ### 1.1 什么是 Base64
 
@@ -47,7 +47,7 @@ Base64 编码广泛应用于以下场景：
 - **电子邮件**：通过 MIME 协议传输附件和非 ASCII 内容
 - **Web 开发**：将图片转换为 Data URL 直接嵌入网页中
 
-## 2. Java 中的 Base64 实现
+## 2 Java 中的 Base64 实现
 
 ### 2.1 Java 8 之前的实现
 
@@ -219,7 +219,7 @@ public class MimeBase64Example {
 }
 ```
 
-## 3. 高级用法与实战应用
+## 3 高级用法与实战应用
 
 ### 3.1 处理二进制数据
 
@@ -401,7 +401,7 @@ class User implements Serializable {
 }
 ```
 
-## 4. 性能优化与注意事项
+## 4 性能优化与注意事项
 
 ### 4.1 性能考量
 
@@ -516,7 +516,7 @@ public class CharsetBase64Example {
 }
 ```
 
-## 5. 最佳实践
+## 5 最佳实践
 
 根据 Base64 的特性和实际应用经验，以下是 Java 中使用 Base64 的最佳实践：
 
@@ -611,7 +611,7 @@ public class CharsetBase64Example {
    }
    ```
 
-## 6. 总结
+## 6 总结
 
 Base64 是 Java 开发中不可或缺的编码工具，广泛应用于数据传输、存储和表示等领域。Java 8 引入的标准 `java.util.Base64` API 提供了强大且易用的 Base64 编码解码功能，支持基本、URL 安全和 MIME 三种编码变体。
 

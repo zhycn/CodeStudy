@@ -7,7 +7,7 @@ author: zhycn
 
 在 Java 应用开发中，定时任务是常见需求，如数据清理、日志记录和状态检查等。Java 提供了多种实现定时任务的方式，`java.util.Timer` 是其中之一，但由于其局限性，在实际项目中需谨慎使用。本文将深入探讨 Java Timer 的工作原理、使用方法和最佳实践，并介绍更优秀的替代方案。
 
-## 1. Timer 概述
+## 1 Timer 概述
 
 `java.util.Timer` 是 Java 1.3 引入的定时任务调度工具，用于在后台线程中调度延迟或周期性任务。任务通过继承 `java.util.TimerTask` 抽象类（实现 `Runnable` 接口）来定义。
 
@@ -41,7 +41,7 @@ public class BasicTimerExample {
 }
 ```
 
-## 2. Timer 原理与工作机制
+## 2 Timer 原理与工作机制
 
 Timer 内部由两个核心组件构成：
 
@@ -56,7 +56,7 @@ Timer 内部由两个核心组件构成：
 | `schedule(TimerTask task, long delay, long period)`            | 在指定延迟后开始固定延迟重复执行 | 下次执行时间 = 上次执行结束时间 + period |
 | `scheduleAtFixedRate(TimerTask task, long delay, long period)` | 在指定延迟后开始固定速率重复执行 | 下次执行时间 = 上次开始执行时间 + period |
 
-## 3. Timer 的缺陷与局限性
+## 3 Timer 的缺陷与局限性
 
 尽管 `Timer` 使用简单，但在生产环境中存在以下严重问题：
 
@@ -157,7 +157,7 @@ Timer 内部由两个核心组件构成：
 4. **资源管理问题**
    Timer 线程不会自动销毁，即使所有任务已完成，除非调用 `cancel()` 方法或发生异常，否则可能导致应用程序无法正常退出。
 
-## 4. Timer 的最佳实践（如必须使用）
+## 4 Timer 的最佳实践（如必须使用）
 
 在某些简单场景下仍需使用 Timer 时，应遵循以下实践：
 
@@ -190,7 +190,7 @@ Timer 内部由两个核心组件构成：
    }));
    ```
 
-## 5. Timer 的替代方案
+## 5 Timer 的替代方案
 
 由于 Timer 的诸多缺陷，JDK 1.5+ 推荐使用 `ScheduledThreadPoolExecutor`，它提供了更健壮和灵活的定时任务调度能力。
 
@@ -335,7 +335,7 @@ scheduler.scheduleJob(jobDetail, trigger);
 scheduler.start();
 ```
 
-## 6. 总结与推荐
+## 6 总结与推荐
 
 | 场景         | 推荐方案                      | 理由                               |
 | ------------ | ----------------------------- | ---------------------------------- |

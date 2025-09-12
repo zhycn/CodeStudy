@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 本地方法接口 (JNI) 详解与最佳实践
 
-## 1. JNI 概述与核心概念
+## 1 JNI 概述与核心概念
 
 Java Native Interface (JNI) 是 Java 平台的标准组成部分，它提供了一个强大的机制，允许 Java 代码与其他语言（主要是 C 和 C++）编写的代码进行交互。JNI 充当了 Java 虚拟机（JVM）与本地代码之间的桥梁，使得 Java 程序能够利用本地代码的性能优势和系统级能力。
 
@@ -31,7 +31,7 @@ JNI 通常在以下场景中使用：
 
 虽然 JNI 提供了强大的功能，但它也增加了复杂性，因此只有在真正需要时才应使用。
 
-## 2. JNI 开发流程与示例
+## 2 JNI 开发流程与示例
 
 ### 2.1 基础开发步骤
 
@@ -138,7 +138,7 @@ cl -I"%JAVA_HOME%/include" -I"%JAVA_HOME%/include/win32" -LD JniCalculator.c -Fe
 java -Djava.library.path=. JniCalculator
 ```
 
-## 3. JNI 数据类型与映射
+## 3 JNI 数据类型与映射
 
 JNI 定义了 Java 数据类型与本地数据类型之间的映射关系，确保数据在两种环境间正确传递。
 
@@ -224,7 +224,7 @@ JNIEXPORT jint JNICALL Java_ArrayProcessor_sumArray
 }
 ```
 
-## 4. JNI 最佳实践与性能优化
+## 4 JNI 最佳实践与性能优化
 
 正确使用 JNI 对于确保应用程序的性能和稳定性至关重要。以下是关键的最佳实践和性能优化技巧。
 
@@ -390,7 +390,7 @@ JNIEXPORT void JNICALL Java_SomeClass_useCachedIds
 }
 ```
 
-## 5. JNI 高级特性
+## 5 JNI 高级特性
 
 ### 5.1 线程管理
 
@@ -469,7 +469,7 @@ JNIEXPORT void JNICALL Java_Caller_callJavaMethod
 }
 ```
 
-## 6. JNI 安全考虑
+## 6 JNI 安全考虑
 
 使用 JNI 时需要注意以下安全问题：
 
@@ -520,7 +520,7 @@ buffer[sizeof(buffer) - 1] = '\0';
 
 **3. 最小权限原则**：限制本地代码的访问权限，只授予必要的权限。
 
-## 7. JNI 替代方案
+## 7 JNI 替代方案
 
 虽然 JNI 功能强大，但也有其他一些与本地代码交互的替代方案：
 
@@ -555,7 +555,7 @@ JNR 是另一个简化本地代码访问的库，提供了更自然的 Java API�
 - **数据转换开销**：在 Java 和本地代码间传递数据需要转换格式，可能带来开销。
 - **内存占用**：本地代码可能占用大量内存，需要仔细管理。
 
-## 8. 总结
+## 8 总结
 
 Java Native Interface (JNI) 是一个强大的工具，允许 Java 程序与本地代码交互，提供了访问系统级功能和优化性能的途径。然而，使用 JNI 也带来了复杂性、性能开销和安全风险。通过遵循本文介绍的最佳实践，开发者可以更安全、高效地使用 JNI，充分发挥其优势 while mitigating potential issues。
 

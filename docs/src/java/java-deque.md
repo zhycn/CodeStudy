@@ -6,13 +6,13 @@ author: zhycn
 
 # Java Deque 双端队列详解与最佳实践
 
-## 1. 引言
+## 1 引言
 
 Deque（Double Ended Queue，双端队列）是 Java 集合框架中一个极其重要且功能强大的接口，它允许在队列的头部和尾部都高效地进行插入、删除和访问操作。这种独特的设计使 Deque 能够同时胜任队列（FIFO）和栈（LIFO）的角色，为各种复杂场景提供灵活的解决方案。
 
 Java 从 1.6 版本开始引入 Deque 接口，并在后续版本中不断优化其实现。与传统的 Stack 类相比，Deque 提供了更优秀的性能表现和更丰富的 API；与普通 Queue 相比，Deque 提供了更灵活的操作方式。本文将深入探讨 Deque 的核心特性、实现机制、使用场景和最佳实践。
 
-## 2. Deque 核心特性与优势
+## 2 Deque 核心特性与优势
 
 ### 2.1 双端操作能力
 
@@ -99,7 +99,7 @@ Deque 接口为每种操作提供了两套方法：一套在操作失败时抛�
 | **头部查看** | `getFirst()`       | `peekFirst()`        | 查看但不移除头部元素 |
 | **尾部查看** | `getLast()`        | `peekLast()`         | 查看但不移除尾部元素 |
 
-## 3. Deque 与 Queue 的对比
+## 3 Deque 与 Queue 的对比
 
 Deque 继承自 Queue 接口，但提供了更丰富的功能。以下是两者的主要区别：
 
@@ -139,7 +139,7 @@ public class DequeVsQueue {
 }
 ```
 
-## 4. Deque 的主要实现类
+## 4 Deque 的主要实现类
 
 Java 提供了多个 Deque 接口的实现类，每个类都有其特定的优势和适用场景。
 
@@ -364,7 +364,7 @@ public class LinkedBlockingDequeExample {
 - **高并发环境，无界队列**：选择 ConcurrentLinkedDeque
 - **有界阻塞队列，生产者-消费者模式**：选择 LinkedBlockingDeque
 
-## 5. Deque 的典型应用场景
+## 5 Deque 的典型应用场景
 
 ### 5.1 栈实现（替代 Stack 类）
 
@@ -668,7 +668,7 @@ public class ProducerConsumerExample {
 }
 ```
 
-## 6. 多线程环境下的使用
+## 6 多线程环境下的使用
 
 ### 6.1 线程安全选择
 
@@ -776,7 +776,7 @@ public class SynchronizedDequeExample {
 }
 ```
 
-## 7. 性能优化与最佳实践
+## 7 性能优化与最佳实践
 
 ### 7.1 容量规划
 
@@ -939,7 +939,7 @@ public class CommonPitfalls {
 }
 ```
 
-## 8. 总结
+## 8 总结
 
 Java Deque 是一个功能强大且灵活的双端队列接口，提供了在队列两端进行高效操作的能力。通过选择合适的实现类（ArrayDeque、LinkedList、ConcurrentLinkedDeque 或 LinkedBlockingDeque），可以满足各种不同场景的需求。
 

@@ -7,7 +7,7 @@ author: zhycn
 
 XML（可扩展标记语言）是一种广泛应用于数据存储和交换的标记语言。在 Java 开发中，XML 被用于配置文件、数据交换、Web 服务等场景。本文将全面介绍 Java 中 XML 处理的技术细节和最佳实践。
 
-## 1. XML 基础
+## 1 XML 基础
 
 XML（eXtensible Markup Language）是一种自描述的数据格式，用于存储和传输结构化数据。与 JSON 相比，XML 支持更丰富的元数据描述和模式验证。
 
@@ -23,7 +23,7 @@ XML（eXtensible Markup Language）是一种自描述的数据格式，用于存
 </订单>
 ```
 
-## 2. Java XML 解析技术
+## 2 Java XML 解析技术
 
 Java 提供了多种 XML 解析方式，每种方式各有优缺点，适用于不同场景。
 
@@ -201,7 +201,7 @@ Order restoredOrder = (Order) unmarshaller.unmarshal(new File("order.xml"));
 **优点**：简单直观，免去手动解析过程。
 **缺点**：需要预先定义映射关系，灵活性较低。
 
-## 3. XML 处理高级特性
+## 3 XML 处理高级特性
 
 ### 3.1 XML 命名空间
 
@@ -310,7 +310,7 @@ for (int i = 0; i < result.getLength(); i++) {
 }
 ```
 
-## 4. Java XML 最佳实践
+## 4 Java XML 最佳实践
 
 ### 4.1 选择正确的解析方式
 
@@ -389,7 +389,7 @@ public class MyErrorHandler implements ErrorHandler {
 }
 ```
 
-## 5. 实战案例：构建一个简单的 XML 处理器
+## 5 实战案例：构建一个简单的 XML 处理器
 
 以下是一个综合示例，演示如何使用 DOM 和 JAXB 处理 XML 数据。
 
@@ -569,7 +569,7 @@ public class JAXBProcessor {
 }
 ```
 
-## 6. 总结
+## 6 总结
 
 XML 在 Java 开发中仍然扮演着重要角色，特别是在企业级应用和配置管理中。选择适当的 XML 处理技术至关重要：
 

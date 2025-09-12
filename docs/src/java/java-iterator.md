@@ -8,7 +8,7 @@ author: zhycn
 
 本文旨在全面介绍 Java 迭代器的核心概念、工作原理、使用方法和最佳实践，内容涵盖从基础到高级的各个方面，并提供丰富的代码示例和性能优化建议。
 
-## 1. 迭代器概述
+## 1 迭代器概述
 
 迭代器（Iterator）是 Java 集合框架中用于遍历集合元素的核心工具，它提供了一种统一的方式来访问各种集合对象中的元素，而无需暴露集合的内部表示。迭代器模式是一种行为型设计模式，它将遍历逻辑与数据存储分离，使客户端能够以一致的方式处理不同类型的集合。
 
@@ -18,7 +18,7 @@ author: zhycn
 - **统一访问接口**：为不同集合提供一致的遍历方式
 - **支持多种遍历方式**：可在同一集合上支持多种遍历方式
 
-## 2. 迭代器接口与核心方法
+## 2 迭代器接口与核心方法
 
 Java 迭代器接口定义在 `java.util.Iterator` 中，包含以下核心方法：
 
@@ -51,7 +51,7 @@ public interface Iterator<E> {
 3. **remove()**：删除迭代器最后返回的元素，是唯一安全删除元素的方式，必须在 `next()` 后调用，每次只能调用一次。
 4. **forEachRemaining()**：Java 8 新增方法，使用 `Consumer` 处理剩余元素，更高效的批量操作。
 
-## 3. 迭代器的工作原理与内部机制
+## 3 迭代器的工作原理与内部机制
 
 ### 3.1 快速失败机制（Fail-Fast）
 
@@ -118,7 +118,7 @@ private class Itr implements Iterator<E> {
 }
 ```
 
-## 4. 迭代器的使用方式
+## 4 迭代器的使用方式
 
 ### 4.1 标准遍历范式
 
@@ -178,7 +178,7 @@ list.add("new");   // 修改集合
 String s = it.next(); // ConcurrentModificationException
 ```
 
-## 5. 高级迭代器类型
+## 5 高级迭代器类型
 
 ### 5.1 ListIterator
 
@@ -227,7 +227,7 @@ System.out.println("剩余元素:");
 spliterator.forEachRemaining(System.out::println);
 ```
 
-## 6. 性能分析与优化
+## 6 性能分析与优化
 
 ### 6.1 不同遍历方式性能对比
 
@@ -300,7 +300,7 @@ while (it.hasNext()) {
 it.forEachRemaining(this::process);
 ```
 
-## 7. 最佳实践
+## 7 最佳实践
 
 ### 7.1 选择适当的迭代方式
 
@@ -380,7 +380,7 @@ long count = list.parallelStream()
 list.removeIf(s -> s.startsWith("X"));
 ```
 
-## 8. 自定义迭代器实现
+## 8 自定义迭代器实现
 
 ### 8.1 实现树结构迭代器
 
@@ -473,7 +473,7 @@ public class FilteringIterator<T> implements Iterator<T> {
 }
 ```
 
-## 9. 总结
+## 9 总结
 
 Java 迭代器是集合框架的核心组件，提供了统一的方式来遍历各种集合类型。通过深入理解迭代器的工作原理和特性，我们可以编写出更健壮、高效的代码。
 

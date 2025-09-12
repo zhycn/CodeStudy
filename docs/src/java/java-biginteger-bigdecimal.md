@@ -5,7 +5,7 @@ author: zhycn
 
 # Java BigInteger 与 BigDecimal 详解与最佳实践
 
-## 1. 概述
+## 1 概述
 
 在 Java 编程中，当需要进行大数运算或高精度计算时，基本数据类型（如 `int`, `long`, `double`）可能无法满足需求。Java 提供了两个类来处理这种情况：`BigInteger` 和 `BigDecimal`。
 
@@ -14,7 +14,7 @@ author: zhycn
 
 这两个类都位于 `java.math` 包中，并且是**不可变**（immutable）的，即一旦创建，其值不能被更改。任何运算都会返回一个新的对象。
 
-## 2. BigInteger 详解
+## 2 BigInteger 详解
 
 ### 2.1 内部实现
 
@@ -132,7 +132,7 @@ String stringValue = bigValue.toString();
 5. **不可变性**：`BigInteger` 对象是不可变的，任何操作都会返回新对象。 重复创建大对象可能影响性能，应考虑重用。
 6. **多线程安全**：由于其不可变性，`BigInteger` 是线程安全的。
 
-## 3. BigDecimal 详解
+## 3 BigDecimal 详解
 
 ### 3.1 为什么需要 BigDecimal
 
@@ -271,7 +271,7 @@ System.out.println(bd1.equals(bd2));         // false (精度不同)
 5. **性能考虑**：`BigDecimal` 的运算性能通常低于基本数据类型和 `BigInteger`。 在不需要高精度的场合，应避免使用。
 6. **不可变性**：与 `BigInteger` 一样，`BigDecimal` 也是不可变的，操作会返回新对象。
 
-## 4. BigInteger 与 BigDecimal 对比
+## 4 BigInteger 与 BigDecimal 对比
 
 | 特性         | BigInteger                                  | BigDecimal                                          |
 | :----------- | :------------------------------------------ | :-------------------------------------------------- |
@@ -287,7 +287,7 @@ System.out.println(bd1.equals(bd2));         // false (精度不同)
 - 如果需要处理**整数**，并且其大小超出了 `long` 类型的范围，请使用 `BigInteger`。
 - 如果需要处理**小数**，并且需要**精确计算**（避免浮点数精度误差），请使用 `BigDecimal`。
 
-## 5. 实战应用案例
+## 5 实战应用案例
 
 ### 5.1 大数阶乘计算（BigInteger）
 
@@ -374,7 +374,7 @@ public class ScientificCalculationExample {
 }
 ```
 
-## 6. 总结
+## 6 总结
 
 `BigInteger` 和 `BigDecimal` 是 Java 中进行高精度数值计算的强大工具。
 

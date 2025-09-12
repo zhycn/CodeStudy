@@ -5,7 +5,7 @@ author: zhycn
 
 # Java Scripting 详解与最佳实践
 
-## 1. Java Scripting API 概述
+## 1 Java Scripting API 概述
 
 Java Scripting API（JSR-223）是 Java 平台的一个标准接口，旨在让 Java 应用程序能够灵活地集成和执行各种脚本语言。它定义了一种可以在 Java 应用中嵌入不同脚本语言的统一接口，允许 Java 程序调用、执行脚本，并且支持将 Java 对象传递到脚本语言中。
 
@@ -29,7 +29,7 @@ JSR-223 支持多种脚本语言，包括但不限于：
 - **Lua**
 - **BeanShell**
 
-## 2. 核心接口与类详解
+## 2 核心接口与类详解
 
 ### 2.1 ScriptEngineManager 类
 
@@ -197,7 +197,7 @@ if (engine instanceof Invocable) {
 }
 ```
 
-## 3. 高级用法与最佳实践
+## 3 高级用法与最佳实践
 
 ### 3.1 性能优化策略
 
@@ -488,7 +488,7 @@ public class ScriptRuleEngine {
 }
 ```
 
-## 4. 总结与展望
+## 4 总结与展望
 
 Java Scripting API（JSR-223）为 Java 应用程序提供了强大的脚本集成能力，允许开发者灵活地将多种脚本语言融入 Java 应用中。通过熟练掌握 `ScriptEngine`、`Bindings`、`Compilable` 和 `Invocable` 等核心接口，可以构建出高度动态化和可扩展的应用程序。
 

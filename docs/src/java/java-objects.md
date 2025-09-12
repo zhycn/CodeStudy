@@ -5,7 +5,7 @@ author: zhycn
 
 # Java Objects 工具类详解与最佳实践
 
-## 1. 概述 `java.util.Objects` 类
+## 1 概述 `java.util.Objects` 类
 
 `java.util.Objects` 类是 Java 7 引入的一个实用工具类，它包含了一系列静态方法，用于处理对象的常见操作。这个类的主要目的是**降低代码中的空指针异常（NullPointerException）风险**，同时提供一些非常实用的方法供我们使用。
 
@@ -20,7 +20,7 @@ author: zhycn
 - **空值安全**：所有方法都设计了空值安全的处理机制。
 - **代码简洁**：帮助开发者编写更简洁、更安全的代码。
 
-## 2. 核心方法详解
+## 2 核心方法详解
 
 ### 2.1 对象判空方法
 
@@ -229,7 +229,7 @@ System.out.println(Objects.toString(name));               // 输出: "null"
 System.out.println(Objects.toString(name, "Unknown"));   // 输出: "Unknown"
 ```
 
-## 3. 最佳实践与应用场景
+## 3 最佳实践与应用场景
 
 ### 3.1 方法参数验证
 
@@ -370,7 +370,7 @@ public class ImmutableUser {
 }
 ```
 
-## 4. 性能考虑与注意事项
+## 4 性能考虑与注意事项
 
 ### 4.1 性能影响
 
@@ -436,7 +436,7 @@ public class ImmutableUser {
    }
    ```
 
-## 5. 综合示例与实践案例
+## 5 综合示例与实践案例
 
 ### 5.1 数据库查询结果处理器
 
@@ -531,7 +531,7 @@ class RawConfig {
 }
 ```
 
-## 6. 总结
+## 6 总结
 
 `java.util.Objects` 类是 Java 开发中一个极其有用的工具类，它提供了一系列空值安全的方法来处理常见对象操作。通过遵循本文介绍的最佳实践，你可以：
 

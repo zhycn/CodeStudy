@@ -7,7 +7,7 @@ author: zhycn
 
 作为 Java 并发编程的核心组件，`Future` 接口为异步计算提供了基础支持。本文将深入解析 `Future` 的设计理念、工作机制、使用方法和最佳实践。
 
-## 1. Future 概述
+## 1 Future 概述
 
 `Future` 接口（`java.util.concurrent.Future`）是 Java 5 引入的异步计算抽象，它代表一个可能尚未完成的异步任务的结果。通过 `Future`，开发者可以提交任务到线程池异步执行，在需要时获取计算结果，并能够控制任务的生命周期。
 
@@ -17,7 +17,7 @@ author: zhycn
 - ✅ **提供统一的任务控制接口**：检查状态、获取结果、取消任务
 - ✅ **保证跨线程内存可见性**：确保线程间的数据同步
 
-## 2. 核心工作机制
+## 2 核心工作机制
 
 ### 2.1 状态机模型
 
@@ -54,7 +54,7 @@ stateDiagram-v2
 | 调用已取消任务的 `get()` | 抛出 `CancellationException` |
 | 重复调用 `cancel(true)` | 首次调用可能成功取消，后续调用无效 |
 
-## 3. 基础用法与代码示例
+## 3 基础用法与代码示例
 
 ### 3.1 基本使用模式
 
@@ -160,7 +160,7 @@ public class FutureExceptionHandling {
 }
 ```
 
-## 4. FutureTask 实用类
+## 4 FutureTask 实用类
 
 `FutureTask` 是 `Future` 接口的实现类，同时实现了 `Runnable` 接口，既可提交到线程池执行，也可直接作为 `Thread` 的目标。
 
@@ -190,7 +190,7 @@ public class FutureTaskDemo {
 }
 ```
 
-## 5. 任务取消机制深度剖析
+## 5 任务取消机制深度剖析
 
 ### 5.1 取消操作的两种模式
 
@@ -241,7 +241,7 @@ public class GracefulCancellationDemo {
 - **状态不可逆**：已完成的任务调用 `cancel()` 返回 `false`
 - **资源泄漏风险**：被中断线程可能遗留未关闭的资源
 
-## 6. Future 与 CompletableFuture 的对比
+## 6 Future 与 CompletableFuture 的对比
 
 ### 6.1 功能差异
 
@@ -259,7 +259,7 @@ public class GracefulCancellationDemo {
 - **复杂流水线**：优先选择 CompletableFuture
 - **混合使用**：通过 `CompletableFuture.supplyAsync()` 包装现有 Future
 
-## 7. 最佳实践与常见陷阱
+## 7 最佳实践与常见陷阱
 
 ### 7.1 超时控制
 
@@ -340,7 +340,7 @@ Future<?> future = executor.submit(() -> {
 future.cancel(true); // 保留可取消性
 ```
 
-## 8. 总结
+## 8 总结
 
 Java `Future` 接口作为异步计算的基石，其核心价值在于实现任务提交与结果获取的解耦，使开发者能够构建高效、响应式的并发应用程序。
 

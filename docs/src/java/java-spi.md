@@ -5,7 +5,7 @@ author: zhycn
 
 # Java SPI 详解与最佳实践
 
-## 1. SPI 概述
+## 1 SPI 概述
 
 Java **Service Provider Interface** (SPI) 是 Java 提供的一套服务发现机制，用于实现模块化开发和组件替换的核心技术。SPI 机制允许第三方为接口提供实现，从而实现框架扩展和组件替换，而无需修改原有代码。
 
@@ -25,7 +25,7 @@ SPI 机制的核心价值在于：
 
 这种机制使得 Java 应用程序能够通过动态加载服务实现类来实现解耦，提高了系统的灵活性和可维护性。
 
-## 2. SPI 核心机制
+## 2 SPI 核心机制
 
 ### 2.1 SPI 的组成要素
 
@@ -74,7 +74,7 @@ private class LazyIterator implements Iterator<S> {
 
 `ServiceLoader` 采用懒加载机制，仅在遍历迭代器时按需加载实现类，避免一次性加载所有服务提供者带来的内存开销。
 
-## 3. SPI 使用指南
+## 3 SPI 使用指南
 
 ### 3.1 基本使用步骤
 
@@ -250,7 +250,7 @@ public class LoggerFactory {
 }
 ```
 
-## 4. SPI 高级特性
+## 4 SPI 高级特性
 
 ### 4.1 SPI 在主流框架中的应用
 
@@ -360,7 +360,7 @@ public class CustomServiceLoader<T> {
 }
 ```
 
-## 5. SPI 最佳实践
+## 5 SPI 最佳实践
 
 ### 5.1 性能优化方案
 
@@ -566,7 +566,7 @@ public class SecureServiceLoader<T> {
 }
 ```
 
-## 6. 总结
+## 6 总结
 
 Java SPI 是一种强大的服务发现机制，为 Java 应用程序提供了高度灵活的扩展能力。其核心价值在于：
 

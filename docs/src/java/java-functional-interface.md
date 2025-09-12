@@ -6,11 +6,11 @@ author: zhycn
 
 # Java 函数式接口详解与最佳实践
 
-## 1. 概述
+## 1 概述
 
 Java 函数式接口（Functional Interface）是 Java 8 引入的核心特性之一，它是 Lambda 表达式和方法引用的目标类型，为 Java 带来了函数式编程的能力。函数式接口允许我们将行为参数化，使代码更简洁、灵活和可读。
 
-## 2. 什么是函数式接口
+## 2 什么是函数式接口
 
 函数式接口是**有且仅有一个抽象方法**的接口。它可以包含多个默认方法或静态方法，但抽象方法只能有一个。
 
@@ -42,7 +42,7 @@ interface StringProcessor {
 }
 ```
 
-## 3. Java 内置核心函数式接口
+## 3 Java 内置核心函数式接口
 
 Java 在 `java.util.function` 包中提供了一系列常用的函数式接口，以下是六大核心接口：
 
@@ -233,7 +233,7 @@ _常见变种：_
 - `IntBinaryOperator`: 接受两个 int 类型参数，返回 int 类型结果
 - `LongBinaryOperator`: 接受两个 long 类型参数，返回 long 类型结果
 
-## 4. 自定义函数式接口
+## 4 自定义函数式接口
 
 虽然 Java 提供了丰富的内置函数式接口，但有时我们需要创建自定义接口以满足特定业务需求。
 
@@ -278,7 +278,7 @@ public class CustomFunctionalInterfaceDemo {
 }
 ```
 
-## 5. 方法引用
+## 5 方法引用
 
 方法引用是 Lambda 表达式的一种简写形式，本质上是函数式接口的另一种实现方式。
 
@@ -319,7 +319,7 @@ public class MethodReferenceDemo {
 }
 ```
 
-## 6. 函数组合与链式操作
+## 6 函数组合与链式操作
 
 Java 8 允许将多个函数组合成更复杂的函数，实现链式调用。
 
@@ -394,7 +394,7 @@ public class ConsumerChainingDemo {
 }
 ```
 
-## 7. 使用场景与实战应用
+## 7 使用场景与实战应用
 
 函数式接口在 Java 中有广泛的应用场景。
 
@@ -520,7 +520,7 @@ observers.add(s -> System.out.println("Observer 2: " + s));
 observers.forEach(observer -> observer.accept("Event occurred"));
 ```
 
-## 8. 高级技巧与最佳实践
+## 8 高级技巧与最佳实践
 
 ### 8.1 异常处理
 
@@ -598,7 +598,7 @@ if (needed) {
    - 使用方法引用可获得更有意义的堆栈信息
    - 复杂 Lambda 可拆分为方法引用
 
-## 9. 总结
+## 9 总结
 
 函数式接口是 Java 函数式编程的基石，它通过 Lambda 表达式和方法引用实现了行为参数化，显著提升了代码的简洁性、可读性和可维护性。
 

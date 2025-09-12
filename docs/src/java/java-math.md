@@ -6,7 +6,7 @@ author: zhycn
 
 # Java Math 类详解与最佳实践
 
-## 1. Math 类概述与设计理念
+## 1 Math 类概述与设计理念
 
 Java 的 `java.lang.Math` 类是 Java 开发中不可或缺的数学工具类，它提供了一系列用于执行常见数学运算的静态方法。这个类位于 `java.lang` 包下，因此无需显式导入即可使用。Math 类被设计为 **final 类**，且构造方法为**私有（private）**，这意味着开发者无法通过 new 关键字创建其实例，也无法通过继承扩展该类。
 
@@ -38,7 +38,7 @@ Math 类通过以下设计解决这些问题：
 - 符合 IEEE 754 标准的浮点运算
 - 线程安全的实现（所有方法均为 static）
 
-## 2. 核心方法详解
+## 2 核心方法详解
 
 Math 类提供了丰富的方法，涵盖了数学运算的多个方面。以下分类详解其核心方法。
 
@@ -139,7 +139,7 @@ int exactDecrement = Math.decrementExact(5);    // 精确递减
 long exactNegate = Math.negateExact(10L);       // 精确取反
 ```
 
-## 3. 重要常量说明
+## 3 重要常量说明
 
 Math 类定义了两个重要的数学常量：
 
@@ -153,7 +153,7 @@ double circumference = 2 * Math.PI * radius;  // 周长公式 C = 2πr
 double area = Math.PI * radius * radius;       // 面积公式 S = πr²
 ```
 
-## 4. 实战应用场景
+## 4 实战应用场景
 
 ### 4.1 游戏开发：坐标与距离计算
 
@@ -236,7 +236,7 @@ public static void findNarcissisticNumbers() {
 }
 ```
 
-## 5. 高级特性与最佳实践
+## 5 高级特性与最佳实践
 
 ### 5.1 精确计算与舍入控制
 
@@ -313,7 +313,7 @@ double negativeInfinity = Double.NEGATIVE_INFINITY;
 boolean isEqual = Math.equals(0.1 + 0.2, 0.3, 1e-9);  // JDK 14+
 ```
 
-## 6. 性能优化策略
+## 6 性能优化策略
 
 ### 6.1 幂运算优化
 
@@ -363,7 +363,7 @@ double fmaResult = Math.fma(a, b, c);  // 等效于a*b + c，但更精确快速
 boolean isEqual = Math.equals(0.1 + 0.2, 0.3, 1e-9);
 ```
 
-## 7. 总结与展望
+## 7 总结与展望
 
 Java Math 类是一个强大而全面的数学工具库，涵盖了绝大多数日常开发中的数学需求。通过合理运用 Math 类，可以避免90%的数值计算陷阱。
 

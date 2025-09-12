@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 数组详解与最佳实践
 
-## 1. 数组概述
+## 1 数组概述
 
 Java 数组是一种用于存储**相同类型数据**的有序集合，是 Java 编程中最基础且重要的数据结构之一。数组中的所有元素具有相同的数据类型，并通过编号（索引）进行统一管理，索引从0开始。
 
@@ -34,7 +34,7 @@ Java 数组是一种用于存储**相同类型数据**的有序集合，是 Java
 | **按初始化方式** | 静态初始化数组   | 创建同时指定元素值       |
 |                  | 动态初始化数组   | 创建时只指定长度，后赋值 |
 
-## 2. 一维数组
+## 2 一维数组
 
 ### 2.1 声明与初始化
 
@@ -118,7 +118,7 @@ boolean[] boolArray = new boolean[3]; // 所有元素为false
 String[] strArray = new String[3]; // 所有元素为null
 ```
 
-## 3. 多维数组
+## 3 多维数组
 
 ### 3.1 二维数组
 
@@ -191,7 +191,7 @@ int[][][] threeDArray = {
 int value = threeDArray[0][1][1]; // 4
 ```
 
-## 4. Arrays 工具类
+## 4 Arrays 工具类
 
 `java.util.Arrays`类提供了操作数组的各种实用方法。
 
@@ -258,7 +258,7 @@ int[] largeArray = new int[1000000];
 Arrays.parallelSort(largeArray);
 ```
 
-## 5. 数组的内存机制
+## 5 数组的内存机制
 
 ### 5.1 内存分配与布局
 
@@ -328,7 +328,7 @@ Person[] shallowPeopleCopy = Arrays.copyOf(people, people.length);
 people[0].setName("Charlie"); // shallowPeopleCopy[0]也会变成"Charlie"
 ```
 
-## 6. 数组的常见操作与算法
+## 6 数组的常见操作与算法
 
 ### 6.1 查找元素
 
@@ -421,7 +421,7 @@ public static int[] reversedCopy(int[] array) {
 }
 ```
 
-## 7. 数组的局限性及替代方案
+## 7 数组的局限性及替代方案
 
 ### 7.1 数组的局限性
 
@@ -463,7 +463,7 @@ Integer[] array = list.toArray(new Integer[0]);
 List<Integer> newList = Arrays.asList(array);
 ```
 
-## 8. 性能优化与最佳实践
+## 8 性能优化与最佳实践
 
 ### 8.1 数组性能优化
 
@@ -510,7 +510,7 @@ public static void safeArrayAccess(int[] array, int index) {
 }
 ```
 
-## 9. 综合应用示例
+## 9 综合应用示例
 
 ### 9.1 统计学生成绩
 

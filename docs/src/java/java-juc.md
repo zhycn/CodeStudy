@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 并发编程（JUC）详解与最佳实践
 
-## 1. JUC 包概述
+## 1 JUC 包概述
 
 Java 并发工具包（Java Util Concurrent，简称 JUC）是 Java 5 引入的专门用于多线程编程的工具包，位于 `java.util.concurrent` 及其子包中。JUC 提供了比传统线程 API 更高级、更灵活的并发编程工具，极大简化了并发程序的开发难度，提高了并发程序的性能和可靠性。
 
@@ -41,7 +41,7 @@ JUC 包针对这些问题提供了全面的解决方案，具有以下优势：
 - **扩展性强**：支持更复杂的并发场景，如分治合并、异步编程等
 - **可靠性高**：减少了死锁等并发问题的发生概率，提供了更安全的并发数据结构
 
-## 2. 原子类详解
+## 2 原子类详解
 
 ### 2.1 原子类概述与核心原理
 
@@ -192,7 +192,7 @@ public class AtomicIntegerExample {
    - 问题描述：原子类适用于简单原子操作，复杂逻辑仍需使用同步锁
    - 解决方案：对于复杂操作，考虑使用`synchronized`或`ReentrantLock`
 
-## 3. ConcurrentHashMap 解析
+## 3 ConcurrentHashMap 解析
 
 ### 3.1 ConcurrentHashMap 概述
 
@@ -342,7 +342,7 @@ public class ConcurrentHashMapExample {
 | **扩容机制**  | 2倍扩容      | 2倍扩容        | 分段扩容/2倍扩容              |
 | **Java版本**  | 所有         | 所有           | Java 5+                       |
 
-## 4. CopyOnWriteArrayList 解析
+## 4 CopyOnWriteArrayList 解析
 
 ### 4.1 CopyOnWriteArrayList 概述
 
@@ -529,7 +529,7 @@ public class CopyOnWriteArrayListExample {
 | **内存开销**     | 低            | 低                 | 高（写时复制）           |
 | **适用场景**     | 单线程环境    | 多线程环境（写少） | 多线程环境（读多写少）   |
 
-## 5. 最佳实践与性能优化
+## 5 最佳实践与性能优化
 
 ### 5.1 原子类最佳实践
 
@@ -759,7 +759,7 @@ public class CopyOnWriteArrayListExample {
    }
    ```
 
-## 6. 总结与展望
+## 6 总结与展望
 
 ### 6.1 关键知识点回顾
 
