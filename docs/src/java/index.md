@@ -120,6 +120,8 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 并发编程（JUC）详解与最佳实践](./java-juc.md)
 - [Java 内存模型（JMM）详解与最佳实践](./java-jmm.md)
 - [Java Fork/Join 框架详解与最佳实践](./java-fork-join.md)
+- [Java Future 接口详解与最佳实践](./java-future.md)
+- [Java ThreadLocal 深度解析与最佳实践](./java-threadlocal.md)
 
 ### 6. 输入输出 (I/O)
 
@@ -130,6 +132,8 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java NIO 详解与最佳实践](./java-nio.md)
 - [Java Scanner 类详解与最佳实践（知道就好）](./java-scanner.md)
 - [Java 压缩与解压缩 API 详解与最佳实践](./java-compression.md)
+- [Java IO 核心接口详解与最佳实践](./java-io-tools.md)
+- [Java NIO 核心工具类详解与最佳实践](./java-nio-tools.md)
 
 ### 7. 高级语言特性
 
@@ -154,6 +158,9 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java Base64 详解与最佳实践](./java-base64.md)
 - [Java Timer 详解与最佳实践（不推荐使用）](./java-timer.md)
 - [Java BigInteger 与 BigDecimal 详解与最佳实践](./java-biginteger-bigdecimal.md)
+- [Java Random 工具类详解与最佳实践](./java-random.md)
+- [Java Properties 属性类详解与最佳实践](./java-properties.md)
+- [Java StringJoiner 详解与最佳实践](./java-StringJoinner.md)
 
 ### 9. 日期和时间
 
@@ -178,6 +185,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 模块化详解与最佳实践](./java-modularity.md)
 - [Java 本地方法接口 (JNI) 详解与最佳实践](./java-jni.md)
 - [Java 序列化与反序列化详解与最佳实践](./java-serializable.md)
+- [Java Invoke 详解与最佳实践](./java-invoke.md)
 
 ### 12. 设计模式
 
@@ -234,3 +242,4 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java XML 处理详解与最佳实践](./java-xml.md)
 - [Java Scripting 详解与最佳实践](./java-scripting.md)
 - [Java JNDI 详解与最佳实践](./java-jndi.md)
+- [Java SPI 详解与最佳实践](./java-spi.md)
