@@ -14,6 +14,22 @@
 
 ## v2025.09
 
+- Added: [Java SPI 详解与最佳实践](./docs/src/java/java-spi.md)
+- Added: [Java Future 接口详解与最佳实践](./docs/src/java/java-future.md)
+- Added: [Java ThreadLocal 深度解析与最佳实践](./docs/src/java/java-threadlocal.md)
+- Added: [Java Random 工具类详解与最佳实践](./docs/src/java/java-random.md)
+- Added: [Java Invoke 详解与最佳实践](./docs/src/java/java-invoke.md)
+- Added: [Java Properties 属性类详解与最佳实践](./docs/src/java/java-properties.md)
+- Added: [Java StringJoiner 详解与最佳实践](./java-StringJoinner.md)
+- Added: [Java NIO 核心工具类详解与最佳实践](./docs/src/java/java-nio-tools.md)
+- Added: [Java IO 核心接口详解与最佳实践](./docs/src/java/java-io-tools.md)
+- Added: [Java KeyTool 详解与最佳实践](./docs/src/java/java-keytool.md)
+- Added: [Java BigInteger 与 BigDecimal 详解与最佳实践](./docs/src/java/java-biginteger-bigdecimal.md)
+- Added: [Java SQL 编程详解与最佳实践](./docs/src/java/java-sql.md)
+- Added: [Java JNDI 详解与最佳实践](./docs/src/java/java-jndi.md)
+- Added: [Java Security 详解与最佳实践](./docs/src/java/java-security.md)
+- Added: [Java Scripting 详解与最佳实践](./docs/src/java/java-scripting.md)
+- Added: [Java XML 处理详解与最佳实践](./docs/src/java/java-xml.md)
 - Added: [Java 已过时的技术清单（不要再学了）](./docs/src/java/java-outdated.md)
 - Added: [Java Fork/Join 框架详解与最佳实践](./docs/src/java/java-fork-join.md)
 - Added: [Java 开发环境配置详解与最佳实践](./docs/src/java/java-development-environment.md)
