@@ -153,6 +153,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java Math 类详解与最佳实践](./java-math.md)
 - [Java Base64 详解与最佳实践](./java-base64.md)
 - [Java Timer 详解与最佳实践（不推荐使用）](./java-timer.md)
+- [Java BigInteger 与 BigDecimal 详解与最佳实践](./java-biginteger-bigdecimal.md)
 
 ### 9. 日期和时间
 
@@ -167,6 +168,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 数据库编程（JDBC）详解与最佳实践](./java-jdbc.md)
 - [Java 网络编程详解与最佳实践](./java-network.md)
 - [Java HttpClient 详解与最佳实践](./java-httpclient.md)
+- [Java SQL 编程详解与最佳实践](./java-sql.md)
 
 ### 11. 反射和高级特性
 
@@ -189,6 +191,8 @@ Oracle 提供了丰富的 Java 相关资源：
 此组涵盖加密、解密、哈希和数字签名等安全编程主题。
 
 - [Java 安全编程：加密、解密、哈希与数字签名详解与最佳实践](./java-encryption.md)
+- [Java Security 详解与最佳实践](./java-security.md)
+- [Java KeyTool 详解与最佳实践](./java-keytool.md)
 
 ### 14. 虚拟机和性能
 
@@ -227,3 +231,6 @@ Oracle 提供了丰富的 Java 相关资源：
 
 - [Java 高效图片处理详解与最佳实践](./java-imageio.md)
 - [Java 已过时的技术清单（不要再学了）](./java-outdated.md)
+- [Java XML 处理详解与最佳实践](./java-xml.md)
+- [Java Scripting 详解与最佳实践](./java-scripting.md)
+- [Java JNDI 详解与最佳实践](./java-jndi.md)
