@@ -292,7 +292,7 @@ double primitiveDouble = doubleValue; // Double对象自动拆箱为基本类型
    int parsedNumber = Integer.parseInt(numberStr); // 字符串转int
    ```
 
-3. **允许null值**：
+3. **允许 null 值**：
 
    ```java
    Integer age = null; // 包装类可以表示null

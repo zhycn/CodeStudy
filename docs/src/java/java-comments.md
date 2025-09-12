@@ -152,7 +152,7 @@ public class Calculator {
 javadoc -d docs MyClass.java
 ```
 
-这将为`MyClass.java`生成API文档，并保存在`docs`目录中。
+这将为`MyClass.java`生成API文档，并保存在`docs`目录中。注意：实际工作中使用 Gradle 或 Maven 插件等工具来生成文档。
 
 **示例**：
 
@@ -307,11 +307,11 @@ public String toString() {
 }
 ```
 
-## 6 IDE支持与快捷键
+## 6 IDE 支持与快捷键
 
 现代集成开发环境（IDE）提供了丰富的注释功能和支持，可以大大提高开发效率：
 
-### 6.1 IntelliJ IDEA快捷键
+### 6.1 IntelliJ IDEA 快捷键
 
 | 操作         | Windows/Linux    | macOS                 |
 | ------------ | ---------------- | --------------------- |

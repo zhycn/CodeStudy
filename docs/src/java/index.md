@@ -73,10 +73,10 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 修饰符详解与最佳实践](./java-modifier.md)
 - [Java 运算符详解](./java-operators.md)
 - [Java Package 包详解与最佳实践](./java-package.md)
+- [Java 关键字与保留字完整指南](./java-keywords.md)
 - [Java 变量命名规则详解](./java-variable-naming.md)
 - [Java 基本数据类型详解](./java-datatypes.md)
 - [Java String 字符串详解](./java-string.md)
-- [Java 关键字与保留字完整指南](./java-keywords.md)
 
 ### 2. 面向对象编程 (OOP)
 
