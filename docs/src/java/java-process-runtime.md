@@ -61,7 +61,7 @@ public class MemoryMonitoringExample {
         performMemoryIntensiveTask();
 
         // 计算内存使用后的情况
-        long endMemory = runtime.totalMemory() - runtime.ffreeMemory();
+        long endMemory = runtime.totalMemory() - runtime.freeMemory();
 
         System.out.println("内存占用增加: " + (endMemory - startMemory) / 1024 + "KB");
         System.out.println("总内存: " + runtime.totalMemory() / 1024 / 1024 + "MB");

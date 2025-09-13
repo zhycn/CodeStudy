@@ -195,6 +195,7 @@ Oracle 提供了丰富的 Java 相关资源：
 
 - [Java 设计模式精讲：单例模式与工厂模式](./java-design-pattern-p1.md)
 - [Java 设计模式精讲：代理模式与模板方法模式](./java-design-pattern-p2.md)
+- [免费在线学习代码重构和设计模式](https://refactoringguru.cn/)
 
 ### 13. 安全编程
 
