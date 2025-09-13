@@ -74,7 +74,7 @@
 - Added: [Java Comparator 比较器接口详解与最佳实践](./docs/src/java/java-comparator.md)
 - Added: [Java Objects 工具类详解与最佳实践](./docs/src/java/java-objects.md)
 - Added: [Java Collectors 工具类详解与最佳实践](./docs/src/java/java-collectors.md)
-- Added: [Java Timer 详解与最佳实践（不推荐使用）](./docs/src/java/java-timer.md)
+- Added: [Java Timer 详解与最佳实践（不建议使用）](./docs/src/java/java-timer.md)
 - Added: [Java Collections 工具类详解与最佳实践](./docs/src/java/java-collections.md)
 - Added: [Java Arrays 工具类详解与最佳实践](./docs/src/java/java-arrays.md)
 - Added: [Java Map 集合详解与最佳实践](./docs/src/java/java-map.md)

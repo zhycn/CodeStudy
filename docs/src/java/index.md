@@ -158,7 +158,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java Objects 工具类详解与最佳实践](./java-objects.md)
 - [Java Math 类详解与最佳实践](./java-math.md)
 - [Java Base64 详解与最佳实践](./java-base64.md)
-- [Java Timer 详解与最佳实践（不推荐使用）](./java-timer.md)
+- [Java Timer 详解与最佳实践（不建议使用）](./java-timer.md)
 - [Java BigInteger 与 BigDecimal 详解与最佳实践](./java-biginteger-bigdecimal.md)
 - [Java Random 工具类详解与最佳实践](./java-random.md)
 - [Java Properties 属性类详解与最佳实践](./java-properties.md)
@@ -224,7 +224,7 @@ Oracle 提供了丰富的 Java 相关资源：
 
 ### 16. 国际化和本地化
 
-此组涵盖国际化和本地化相关主题。
+此组涵盖国际化和本地化相关主题。*强烈推荐使用 Spring Boot 进行国际化和本地化配置。*
 
 - [Java 国际化 (i18n) 与本地化 (l10n) 详解与最佳实践](./java-i18n.md)
 - [Java 资源绑定（Resource Bundle）详解与最佳实践](./java-resource-bundle.md)
@@ -237,10 +237,10 @@ Oracle 提供了丰富的 Java 相关资源：
 
 ### 18. 其他主题
 
-此组包括一些特定主题，如图像处理。
+此组包括一些特定主题，如图像处理，脚本，SPI，XML等。
 
-- [Java 高效图片处理详解与最佳实践](./java-imageio.md)
 - [Java 已过时的技术清单（不要再学了）](./java-outdated.md)
+- [Java 高效图片处理详解与最佳实践](./java-imageio.md)
 - [Java XML 处理详解与最佳实践](./java-xml.md)
 - [Java Scripting 详解与最佳实践](./java-scripting.md)
 - [Java JNDI 详解与最佳实践](./java-jndi.md)

@@ -254,7 +254,7 @@ public class LogProcessor extends AbstractProcessor {
 
 编译时处理的典型应用包括：
 
-- Lombok库（如`@Getter`、`@Setter`注解）
+- Lombok 库（如 `@Getter`、`@Setter` 注解）
 - 代码检查工具（如 Error Prone）
 - 代码生成工具（如 MapStruct）
 
@@ -319,8 +319,8 @@ public class UserController {
 
 注解可以用于在编译时自动生成额外的代码，减少手动编写代码量：
 
-- **Lombok库**：`@Data`、`@Getter`、`@Setter`、`@Builder`等
-- **MapStruct**：`@Mapper`用于生成映射代码
+- **Lombok 库**：`@Data`、`@Getter`、`@Setter`、`@Builder`等
+- **MapStruct**：`@Mapper` 用于生成映射代码
 
 ```java
 @Data

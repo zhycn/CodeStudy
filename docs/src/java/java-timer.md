@@ -1,9 +1,9 @@
 ---
-title: Java Timer 详解与最佳实践（不推荐使用）
+title: Java Timer 详解与最佳实践（不建议使用）
 author: zhycn
 ---
 
-# Java Timer 详解与最佳实践（不推荐使用）
+# Java Timer 详解与最佳实践（不建议使用）
 
 在 Java 应用开发中，定时任务是常见需求，如数据清理、日志记录和状态检查等。Java 提供了多种实现定时任务的方式，`java.util.Timer` 是其中之一，但由于其局限性，在实际项目中需谨慎使用。本文将深入探讨 Java Timer 的工作原理、使用方法和最佳实践，并介绍更优秀的替代方案。
 
