@@ -1,9 +1,9 @@
 ---
-title: Java IO 核心接口详解与最佳实践
+title: Java IO 核心组件详解与最佳实践
 author: zhycn
 ---
 
-# Java IO 核心接口详解与最佳实践
+# Java IO 核心组件详解与最佳实践
 
 ## 1 Java IO 概述
 
@@ -450,7 +450,7 @@ Reader reader2 = new InputStreamReader(
 | 二进制数据 | 传统IO + 缓冲流 | DataInputStream/DataOutputStream 更方便 |
 | 文本处理 | 传统IO + Reader/Writer | 专门的字符处理API |
 
-*表：IO API选择指南*
+*表：IO API 选择指南*
 
 **NIO 示例**：
 
@@ -480,6 +480,6 @@ Java IO 系统提供了强大而灵活的数据处理能力，其核心接口定
 - **核心接口**：`Closeable`、`Flushable`、`DataInput`、`DataOutput`、`ObjectInput`、`ObjectOutput` 和 `Serializable` 等接口构成了 Java IO 的基石
 - **设计模式**：装饰器模式和适配器模式使得IO流能够灵活组合和扩展功能
 - **最佳实践**：正确的资源管理、性能优化、异常处理和编码选择是构建健壮IO应用的关键
-- **API选择**：根据具体场景选择合适的 IO API（传统 IO 或 NIO）
+- **API 选择**：根据具体场景选择合适的 IO API（传统 IO 或 NIO）
 
 随着 Java 语言的不断发展，IO API 也在持续演进。对于新项目，建议考虑使用 NIO.2（Java 7+引入）提供的 Path API 和 Files 工具类，它们提供了更现代、更简洁的文件操作方式。然而，理解传统 IO 核心接口和原理仍然是每个 Java 开发者必备的基础知识。

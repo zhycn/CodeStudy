@@ -134,8 +134,8 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java NIO 详解与最佳实践](./java-nio.md)
 - [Java Scanner 类详解与最佳实践（知道就好）](./java-scanner.md)
 - [Java 压缩与解压缩 API 详解与最佳实践](./java-compression.md)
-- [Java IO 核心接口详解与最佳实践](./java-io-tools.md)
-- [Java NIO 核心工具类详解与最佳实践](./java-nio-tools.md)
+- [Java IO 核心组件详解与最佳实践](./java-io-components.md)
+- [Java NIO 核心组件详解与最佳实践](./java-nio-components.md)
 
 ### 7. 高级语言特性
 
