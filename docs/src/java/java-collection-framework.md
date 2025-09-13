@@ -104,7 +104,7 @@ String fruit = list.get(1); // 访问元素
 list.remove(0); // 删除元素
 ```
 
-### 2.3 Set接口
+### 2.3 Set 接口
 
 Set 是不允许重复元素的集合，基于 equals() 和 hashCode() 判断元素唯一性：
 
@@ -191,7 +191,7 @@ vector.add("Element");
 List<String> syncedList = Collections.synchronizedList(new ArrayList<>());
 ```
 
-### 3.2 Set实现类对比
+### 3.2 Set 实现类对比
 
 #### 3.2.1 HashSet
 
@@ -369,7 +369,7 @@ Runnable task = () -> {
      - 需要保持插入顺序 → LinkedHashMap
      - 多线程环境 → ConcurrentHashMap
      - 其他情况 → HashMap
-   - 否 → 选择Collection接口实现类
+   - 否 → 选择 Collection 接口实现类
      - 需要有序且可重复 → List
        - 频繁随机访问 → ArrayList
        - 频繁插入删除 → LinkedList

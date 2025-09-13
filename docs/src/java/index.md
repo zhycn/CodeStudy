@@ -84,9 +84,9 @@ Oracle 提供了丰富的 Java 相关资源：
 
 - [Java 对象和类详解](./java-object-classes.md)
 - [Java 构造方法详解与最佳实践](./java-constructor.md)
-- [Java Interface 接口详解与最佳实践](./java-interface.md)
 - [Java 面向对象编程（OOP）核心思想详解与最佳实践](./java-oop.md)
 - [Java Enum 枚举详解与最佳实践](./java-enum.md)
+- [Java Interface 接口详解与最佳实践](./java-interface.md)
 - [Java Record 记录类详解与最佳实践](./java-record.md)
 - [Java 密封类 (Sealed Class) 详解与最佳实践](./java-sealed-class.md)
 
@@ -110,6 +110,7 @@ Oracle 提供了丰富的 Java 相关资源：
 此组专注于 Java 的异常处理机制。
 
 - [Java 异常处理详解与最佳实践](./java-exception.md)
+- [Java 常用异常类完整指南](./java-exception-guides.md)
 
 ### 5. 多线程与并发
 

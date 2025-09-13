@@ -14,6 +14,7 @@
 
 ## v2025.09
 
+- Added: [Java 常用异常类完整指南](./docs/src/java/java-exception-guides.md)
 - Added: [Java SPI 详解与最佳实践](./docs/src/java/java-spi.md)
 - Added: [Java Future 接口详解与最佳实践](./docs/src/java/java-future.md)
 - Added: [Java ThreadLocal 深度解析与最佳实践](./docs/src/java/java-threadlocal.md)
