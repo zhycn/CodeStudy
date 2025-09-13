@@ -1,9 +1,10 @@
 ---
-title: Java ThreadLocal 深度解析与最佳实践
+title: Java ThreadLocal 详解与最佳实践
+description: 详细解析 Java ThreadLocal 类的工作原理、使用场景和最佳实践，帮助开发者正确使用 ThreadLocal 避免内存泄漏和线程安全问题。
 author: zhycn
 ---
 
-# Java ThreadLocal 深度解析与最佳实践
+# Java ThreadLocal 详解与最佳实践
 
 ## 1 ThreadLocal 简介
 

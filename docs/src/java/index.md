@@ -120,9 +120,10 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java 线程池详解与最佳实践](./java-thread-pool.md)
 - [Java 并发编程（JUC）详解与最佳实践](./java-juc.md)
 - [Java 内存模型（JMM）详解与最佳实践](./java-jmm.md)
-- [Java Fork/Join 框架详解与最佳实践](./java-fork-join.md)
+- [Java ThreadLocal 详解与最佳实践](./java-threadlocal.md)
 - [Java Future 接口详解与最佳实践](./java-future.md)
-- [Java ThreadLocal 深度解析与最佳实践](./java-threadlocal.md)
+- [Java Fork/Join 框架详解与最佳实践](./java-fork-join.md)
+- [Java 并发编程核心接口详解与最佳实践](./java-juc-api.md)
 
 ### 6. 输入输出 (I/O)
 
