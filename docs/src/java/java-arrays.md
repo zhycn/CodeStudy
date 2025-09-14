@@ -1,5 +1,6 @@
 ---
 title: Java Arrays 工具类详解与最佳实践
+description: 这篇文章详细介绍了 Java Arrays 工具类的使用方法、设计理念、性能优化技巧和最佳实践。
 author: zhycn
 ---
 

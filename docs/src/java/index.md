@@ -185,7 +185,7 @@ Oracle 提供了丰富的 Java 相关资源：
 
 - [Java Reflection 反射详解与最佳实践](./java-reflection.md)
 - [Java 模块化详解与最佳实践](./java-modularity.md)
-- [Java 本地方法接口 (JNI) 详解与最佳实践](./java-jni.md)
+- [Java 本地方法接口 (JNI) 详解与最佳实践（不建议使用）](./java-jni.md)
 - [Java 序列化与反序列化详解与最佳实践](./java-serializable.md)
 - [Java Invoke 详解与最佳实践](./java-invoke.md)
 
@@ -209,12 +209,17 @@ Oracle 提供了丰富的 Java 相关资源：
 
 此组深入探讨 JVM、垃圾回收、类加载和性能调优。
 
+- [Java 类加载机制详解与最佳实践](./java-class-loading.md)
+- [Java 进程与 Runtime 类详解与最佳实践](./java-process-runtime.md)
 - [Java 虚拟机（JVM）详解与最佳实践](./java-jvm.md)
 - [JVM 垃圾回收（GC）机制详解与最佳实践](./java-gc.md)
 - [Java 内存模型（JMM）详解与最佳实践](./java-jmm.md)
 - [JVM 调优与常用工具详解及最佳实践](./java-jvm-tuning.md)
-- [Java 类加载机制详解与最佳实践](./java-class-loading.md)
-- [Java 进程与 Runtime 类详解与最佳实践](./java-process-runtime.md)
+- [Java JDK 命令行工具详解与最佳实践](./java-jdk-command.md)
+- [Java JConsole 工具详解与最佳实践](./java-jconsole.md)
+- [Java jstat 工具详解与最佳实践](./java-jstat.md)
+- [Java jstack 工具详解与最佳实践](./java-jstack.md)
+- [Java jmap 工具详解与最佳实践](./java-jmap.md)
 
 ### 15. 开发环境和配置
 

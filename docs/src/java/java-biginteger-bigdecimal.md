@@ -1,5 +1,6 @@
 ---
 title: Java BigInteger 与 BigDecimal 详解与最佳实践
+description: 详细介绍 Java 中 BigInteger 和 BigDecimal 类的使用，包括内部实现、创建方式、常用运算操作、精度控制、比较方法，以及使用注意事项与最佳实践，同时给出实战应用案例。
 author: zhycn
 ---
 

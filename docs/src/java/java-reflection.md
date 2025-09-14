@@ -431,7 +431,7 @@ public class ReflectionExceptionHandling {
 }
 ```
 
-## 6 反射在现代Java开发中的实践
+## 6 反射在现代 Java 开发中的实践
 
 ### 6.1 模块化系统的考虑
 

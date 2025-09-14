@@ -1,10 +1,10 @@
 ---
-title: Java 本地方法接口 (JNI) 详解与最佳实践
+title: Java 本地方法接口 (JNI) 详解与最佳实践（不建议使用）
 description: 这篇文章详细介绍了 Java 本地方法接口 (JNI) 的概念、工作原理、使用场景和开发流程。
 author: zhycn
 ---
 
-# Java 本地方法接口 (JNI) 详解与最佳实践
+# Java 本地方法接口 (JNI) 详解与最佳实践（不建议使用）
 
 ## 1 JNI 概述与核心概念
 
