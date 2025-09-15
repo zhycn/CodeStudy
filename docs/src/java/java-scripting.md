@@ -61,14 +61,14 @@ ScriptEngine groovyEngine = manager.getEngineByName("groovy");
 
 **主要方法：**
 
-| 方法 | 描述 |
-|------|------|
-| `eval(String script)` | 执行脚本 |
-| `eval(Reader reader)` | 从 Reader 执行脚本 |
-| `put(String key, Object value)` | 设置绑定变量 |
-| `get(String key)` | 获取绑定变量 |
-| `createBindings()` | 创建 Bindings 实例 |
-| `getFactory()` | 获取 ScriptEngineFactory |
+| 方法                            | 描述                     |
+| ------------------------------- | ------------------------ |
+| `eval(String script)`           | 执行脚本                 |
+| `eval(Reader reader)`           | 从 Reader 执行脚本       |
+| `put(String key, Object value)` | 设置绑定变量             |
+| `get(String key)`               | 获取绑定变量             |
+| `createBindings()`              | 创建 Bindings 实例       |
+| `getFactory()`                  | 获取 ScriptEngineFactory |
 
 **使用示例：**
 

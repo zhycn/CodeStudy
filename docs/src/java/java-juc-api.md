@@ -74,7 +74,7 @@ public interface Future<V> {
     boolean isCancelled();
     boolean isDone();
     V get() throws InterruptedException, ExecutionException;
-    V get(long timeout, TimeUnit unit) 
+    V get(long timeout, TimeUnit unit)
         throws InterruptedException, ExecutionException, TimeoutException;
 }
 ```
@@ -132,11 +132,11 @@ executor.shutdown();
 // synchronized 使用示例
 public class Counter {
     private int count;
-    
+
     public synchronized void increment() {
         count++;
     }
-    
+
     public void incrementWithBlock() {
         synchronized(this) {
             count++;
@@ -153,7 +153,7 @@ Java 5 引入了 `Lock` 接口，提供了比 `synchronized` 更灵活和高级�
 // Lock 接口使用示例
 public class LockExample {
     private final Lock lock = new ReentrantLock();
-    
+
     public void performTask() {
         lock.lock();
         try {
@@ -176,7 +176,7 @@ public class DataStorage {
     private final Lock readLock = rwLock.readLock();
     private final Lock writeLock = rwLock.writeLock();
     private Map<String, String> data = new HashMap<>();
-    
+
     public String get(String key) {
         readLock.lock();
         try {
@@ -185,7 +185,7 @@ public class DataStorage {
             readLock.unlock();
         }
     }
-    
+
     public void put(String key, String value) {
         writeLock.lock();
         try {
@@ -206,7 +206,7 @@ Java 8 引入了 `StampedLock`，它提供了一种性能更好的读写锁实�
 public class Point {
     private double x, y;
     private final StampedLock sl = new StampedLock();
-    
+
     // 写方法
     void move(double deltaX, double deltaY) {
         long stamp = sl.writeLock();
@@ -217,7 +217,7 @@ public class Point {
             sl.unlockWrite(stamp);
         }
     }
-    
+
     // 读方法
     double distanceFromOrigin() {
         long stamp = sl.tryOptimisticRead();
@@ -290,7 +290,7 @@ for (String language : list) {
 // 生产者-消费者使用 BlockingQueue 示例
 public class ProducerConsumer {
     private final BlockingQueue<String> queue = new LinkedBlockingQueue<>(10);
-    
+
     // 生产者
     class Producer implements Runnable {
         public void run() {
@@ -304,13 +304,13 @@ public class ProducerConsumer {
                 Thread.currentThread().interrupt();
             }
         }
-        
+
         private String produceItem() {
             // 生产项目逻辑
             return "item-" + System.currentTimeMillis();
         }
     }
-    
+
     // 消费者
     class Consumer implements Runnable {
         public void run() {
@@ -324,7 +324,7 @@ public class ProducerConsumer {
                 Thread.currentThread().interrupt();
             }
         }
-        
+
         private void processItem(String item) {
             // 处理项目逻辑
         }
@@ -343,7 +343,7 @@ public class ProducerConsumer {
 public class CountDownLatchExample {
     public static void main(String[] args) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(2);
-        
+
         new Thread(() -> {
             System.out.println("Task 1 started.");
             // 模拟任务执行
@@ -351,7 +351,7 @@ public class CountDownLatchExample {
             System.out.println("Task 1 finished.");
             latch.countDown();
         }).start();
-        
+
         new Thread(() -> {
             System.out.println("Task 2 started.");
             // 模拟任务执行
@@ -359,7 +359,7 @@ public class CountDownLatchExample {
             System.out.println("Task 2 finished.");
             latch.countDown();
         }).start();
-        
+
         // 等待两个任务都执行完毕
         latch.await();
         System.out.println("All tasks finished.");
@@ -379,7 +379,7 @@ public class CyclicBarrierExample {
         CyclicBarrier barrier = new CyclicBarrier(threadCount, () -> {
             System.out.println("所有线程已到达屏障，执行屏障操作");
         });
-        
+
         for (int i = 0; i < threadCount; i++) {
             final int threadId = i;
             new Thread(() -> {
@@ -388,12 +388,12 @@ public class CyclicBarrierExample {
                     Thread.sleep(1000 + threadId * 200);
                     System.out.println("线程 " + threadId + " 到达屏障，等待其他线程");
                     barrier.await();
-                    
+
                     System.out.println("线程 " + threadId + " 正在执行第二阶段工作");
                     Thread.sleep(500 + threadId * 100);
                     System.out.println("线程 " + threadId + " 再次到达屏障，等待其他线程");
                     barrier.await();
-                    
+
                     System.out.println("线程 " + threadId + " 完成所有工作");
                 } catch (InterruptedException | BrokenBarrierException e) {
                     Thread.currentThread().interrupt();
@@ -413,7 +413,7 @@ public class CyclicBarrierExample {
 public class ConnectionPool {
     private final Semaphore semaphore;
     private final List<Connection> connections;
-    
+
     public ConnectionPool(int poolSize) {
         semaphore = new Semaphore(poolSize);
         connections = Collections.synchronizedList(new ArrayList<>());
@@ -421,27 +421,27 @@ public class ConnectionPool {
             connections.add(createConnection());
         }
     }
-    
+
     public Connection getConnection() throws InterruptedException {
         semaphore.acquire();
         return getAvailableConnection();
     }
-    
+
     public void releaseConnection(Connection connection) {
         returnConnection(connection);
         semaphore.release();
     }
-    
+
     private synchronized Connection getAvailableConnection() {
         // 获取可用连接的逻辑
         return connections.remove(0);
     }
-    
+
     private synchronized void returnConnection(Connection connection) {
         // 归还连接的逻辑
         connections.add(connection);
     }
-    
+
     private Connection createConnection() {
         // 创建连接的逻辑
         return null; // 实际实现中返回真实连接
@@ -458,7 +458,7 @@ public class ConnectionPool {
 public class ExchangerExample {
     public static void main(String[] args) {
         Exchanger<String> exchanger = new Exchanger<>();
-        
+
         new Thread(() -> {
             try {
                 String dataFromOtherThread = exchanger.exchange("Data from Thread A");
@@ -467,7 +467,7 @@ public class ExchangerExample {
                 Thread.currentThread().interrupt();
             }
         }).start();
-        
+
         new Thread(() -> {
             try {
                 String dataFromOtherThread = exchanger.exchange("Data from Thread B");
@@ -494,15 +494,15 @@ Java 在 `java.util.concurrent.atomic` 包中提供了一组原子类，用于�
 // AtomicInteger 使用示例
 public class AtomicCounter {
     private AtomicInteger count = new AtomicInteger(0);
-    
+
     public void increment() {
         count.incrementAndGet();
     }
-    
+
     public void decrement() {
         count.decrementAndGet();
     }
-    
+
     public int getCount() {
         return count.get();
     }
@@ -519,15 +519,15 @@ public class AtomicCounter {
 // AtomicReference 使用示例
 public class AtomicReferenceExample {
     private AtomicReference<String> latestValue = new AtomicReference<>();
-    
+
     public void updateValue(String newValue) {
         latestValue.set(newValue);
     }
-    
+
     public String getValue() {
         return latestValue.get();
     }
-    
+
     // CAS 操作示例
     public boolean compareAndSet(String expect, String update) {
         return latestValue.compareAndSet(expect, update);
@@ -545,15 +545,15 @@ public class AtomicReferenceExample {
 // AtomicIntegerArray 使用示例
 public class AtomicArrayExample {
     private AtomicIntegerArray array = new AtomicIntegerArray(10);
-    
+
     public void increment(int index) {
         array.getAndIncrement(index);
     }
-    
+
     public void set(int index, int value) {
         array.set(index, value);
     }
-    
+
     public int get(int index) {
         return array.get(index);
     }
@@ -580,9 +580,9 @@ public class AtomicArrayExample {
 ### 8.3 并发集合的选择策略
 
 1. **根据操作特性选择集合**：
-    - 频繁读、少量写：`CopyOnWriteArrayList`、`CopyOnWriteArraySet`
-    - 频繁的 put 和 get：`ConcurrentHashMap`
-    - 生产者-消费者模式：`BlockingQueue` 实现
+   - 频繁读、少量写：`CopyOnWriteArrayList`、`CopyOnWriteArraySet`
+   - 频繁的 put 和 get：`ConcurrentHashMap`
+   - 生产者-消费者模式：`BlockingQueue` 实现
 2. **利用原子操作**：使用 `ConcurrentHashMap` 的原子方法（如 `putIfAbsent`、`compute` 等）避免显式同步。
 3. **注意迭代器的弱一致性**：并发集合的迭代器是弱一致性的，不保证反映所有最新修改。
 

@@ -31,8 +31,8 @@ JavaBean 具有以下核心特性：
 3. **属性私有化**：所有属性应该声明为 private，以实现封装。
 4. **提供公共的访问器方法**：为每个属性提供公共的 getter 和 setter 方法。
 5. **遵循命名约定**：
-    - Getter 方法：`getXxx()`，对于布尔类型可以使用 `isXxx()`。
-    - Setter 方法：`setXxx()`。
+   - Getter 方法：`getXxx()`，对于布尔类型可以使用 `isXxx()`。
+   - Setter 方法：`setXxx()`。
 6. **实现 Serializable 接口**：使 Bean 能够被序列化和反序列化。
 
 ### 2.1 示例：基本 Java Bean
@@ -45,38 +45,38 @@ public class UserBean implements Serializable {
     private String username;
     private String password;
     private boolean active;
-    
+
     // 无参构造器
     public UserBean() {
     }
-    
+
     // 带参构造器（可选）
     public UserBean(String username, String password) {
         this.username = username;
         this.password = password;
     }
-    
+
     // Getter 和 Setter 方法
     public String getUsername() {
         return username;
     }
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     public String getPassword() {
         return password;
     }
-    
+
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     public boolean isActive() {
         return active;
     }
-    
+
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -95,13 +95,13 @@ JavaBean 非常适合用于处理 HTML 表单数据。表单字段可以直接�
 
 ```html
 <form action="register" method="post">
-    <label for="username">用户名：</label>
-    <input type="text" id="username" name="username" required>
-    <br>
-    <label for="password">密码：</label>
-    <input type="password" id="password" name="password" required>
-    <br>
-    <button type="submit">提交</button>
+  <label for="username">用户名：</label>
+  <input type="text" id="username" name="username" required />
+  <br />
+  <label for="password">密码：</label>
+  <input type="password" id="password" name="password" required />
+  <br />
+  <button type="submit">提交</button>
 </form>
 ```
 
@@ -110,15 +110,15 @@ JavaBean 非常适合用于处理 HTML 表单数据。表单字段可以直接�
 ```java
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // 创建JavaBean实例并绑定表单数据
         UserBean user = new UserBean();
         user.setUsername(request.getParameter("username"));
         user.setPassword(request.getParameter("password"));
-        
+
         // 此处可以添加业务逻辑，如数据验证、持久化等
-        
+
         // 将bean存储在请求属性中，转发到JSP页面
         request.setAttribute("user", user);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/result.jsp");
@@ -167,14 +167,14 @@ public class UserDaoImpl implements UserDao {
         // 获取数据库连接（实际项目中应使用连接池）
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "user", "password");
     }
-    
+
     @Override
     public UserBean getUserById(int id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE id = ?")) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 UserBean user = new UserBean();
                 user.setId(rs.getInt("id"));
@@ -188,7 +188,7 @@ public class UserDaoImpl implements UserDao {
         }
         return null;
     }
-    
+
     // 其他方法实现...
 }
 ```
@@ -230,7 +230,7 @@ public class UserBean implements Serializable {
 public class MyService {
     @Resource
     private UserDao userDao;
-    
+
     @Autowired
     private AnotherService anotherService;
 }
@@ -254,13 +254,13 @@ public class MyService {
 1. **缓存优化**：对频繁使用的 JavaBean 对象进行缓存，减少对象创建和数据库查询的次数。可以使用 Ehcache、Redis 等缓存框架。
 
 2. **数据库优化**：
-    - 使用索引优化查询速度。
-    - 限制结果集大小，避免返回过多数据。
-    - 使用连接池管理数据库连接。
+   - 使用索引优化查询速度。
+   - 限制结果集大小，避免返回过多数据。
+   - 使用连接池管理数据库连接。
 
 3. **线程安全**：
-    - 对于 singleton 作用域的 JavaBean，尽量减少可变状态。
-    - 使用不可变对象或同步代码块来保证线程安全。
+   - 对于 singleton 作用域的 JavaBean，尽量减少可变状态。
+   - 使用不可变对象或同步代码块来保证线程安全。
 
 ### 4.4 使用 BeanRegistrar 动态注册 Bean
 
@@ -274,14 +274,14 @@ class MyBeanRegistrar implements BeanRegistrar {
     public void register(BeanRegistry registry, Environment env) {
         // 基本Bean注册
         registry.registerBean("foo", Foo.class);
-        
+
         // 高级Bean注册，带配置选项
         registry.registerBean("bar", Bar.class, spec -> spec
                 .prototype()
                 .lazyInit()
                 .description("自定义描述")
                 .supplier(context -> new Bar(context.bean(Foo.class))));
-        
+
         // 条件Bean注册
         if (env.matchesProfiles("baz")) {
             registry.registerBean(Baz.class, spec -> spec
@@ -295,12 +295,12 @@ class MyBeanRegistrar implements BeanRegistrar {
 
 JavaBean 在 Web 应用中有不同的作用域，合理选择作用域可以优化性能和内存使用：
 
-| 作用域 | 描述 | 适用场景 |
-|--------|------|---------|
-| page | 仅在当前页面内有效 | 页面内部临时数据存储 |
-| request | 在一次 HTTP 请求响应周期内有效 | 跨多个 Servlet/JSP 页面共享数据 |
-| session | 在整个用户会话期间有效 | 用户登录状态等需要跨多个请求维持的状态信息 |
-| application | 在整个 Web 应用程序生命周期内有效 | 全局共享、不变的的数据 |
+| 作用域      | 描述                              | 适用场景                                   |
+| ----------- | --------------------------------- | ------------------------------------------ |
+| page        | 仅在当前页面内有效                | 页面内部临时数据存储                       |
+| request     | 在一次 HTTP 请求响应周期内有效    | 跨多个 Servlet/JSP 页面共享数据            |
+| session     | 在整个用户会话期间有效            | 用户登录状态等需要跨多个请求维持的状态信息 |
+| application | 在整个 Web 应用程序生命周期内有效 | 全局共享、不变的的数据                     |
 
 ### 4.6 其他最佳实践
 

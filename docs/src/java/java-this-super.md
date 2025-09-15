@@ -26,12 +26,12 @@ author: zhycn
 public class Person {
     private String name;
     private int age;
-    
+
     public Person(String name, int age) {
         this.name = name; // 使用this区分成员变量和参数
         this.age = age;
     }
-    
+
     public void setName(String name) {
         this.name = name; // 明确表示引用的是成员变量
     }
@@ -47,7 +47,7 @@ public class Calculator {
     public void calculate() {
         this.displayResult(); // 明确调用本类方法
     }
-    
+
     public void displayResult() {
         System.out.println("Calculating...");
     }
@@ -63,15 +63,15 @@ public class Rectangle {
     private int width;
     private int height;
     private String color;
-    
+
     public Rectangle() {
         this(10, 20); // 调用另一个构造方法
     }
-    
+
     public Rectangle(int width, int height) {
         this(width, height, "white"); // 继续调用另一个构造方法
     }
-    
+
     public Rectangle(int width, int height, String color) {
         this.width = width;
         this.height = height;
@@ -87,12 +87,12 @@ public class Rectangle {
 ```java
 public class Student {
     private String name;
-    
+
     public void register() {
         CourseManager manager = new CourseManager();
         manager.registerStudent(this); // 将当前对象作为参数传递
     }
-    
+
     public String getName() {
         return name;
     }
@@ -124,7 +124,7 @@ public class Vehicle {
 
 public class Car extends Vehicle {
     private String brand = "Toyota";
-    
+
     public void displayBrands() {
         System.out.println("Local brand: " + brand); // 输出 Toyota
         System.out.println("Parent brand: " + super.brand); // 输出 Generic
@@ -160,7 +160,7 @@ public class Dog extends Animal {
 public class Employee {
     private String name;
     private double salary;
-    
+
     public Employee(String name, double salary) {
         this.name = name;
         this.salary = salary;
@@ -169,7 +169,7 @@ public class Employee {
 
 public class Manager extends Employee {
     private double bonus;
-    
+
     public Manager(String name, double salary, double bonus) {
         super(name, salary); // 调用父类构造方法
         this.bonus = bonus;
@@ -192,7 +192,7 @@ public class Parent extends Grandparent {
 
 public class Child extends Parent {
     private String value = "Child";
-    
+
     public void showValues() {
         System.out.println("Local value: " + value); // Child
         System.out.println("Parent value: " + super.value); // Parent
@@ -213,17 +213,17 @@ public class Child extends Parent {
 
 为了更清晰地理解这两个关键字的区别，下表列出了它们的主要特性对比：
 
-| 对比点         | this 关键字                          | super 关键字                          |
-|----------------|--------------------------------------|---------------------------------------|
-| **基本含义**   | 当前对象的引用                       | 父类对象的引用                        |
-| **访问范围**   | 本类的成员变量、方法                 | 父类的成员变量、方法                  |
-| **构造方法调用** | this() - 调用本类其他构造方法        | super() - 调用父类构造方法            |
-| **调用要求**   | 必须放在构造方法第一行               | 必须放在构造方法第一行                |
-| **继承需求**   | 不依赖继承，任何类都可以使用         | 只能在继承体系中使用                  |
-| **指向对象**   | 指向当前实例                         | 指向直接父类实例                      |
-| **特殊用法**   | 可作为参数传递                       | 用于访问被隐藏的父类成员              |
+| 对比点           | this 关键字                   | super 关键字               |
+| ---------------- | ----------------------------- | -------------------------- |
+| **基本含义**     | 当前对象的引用                | 父类对象的引用             |
+| **访问范围**     | 本类的成员变量、方法          | 父类的成员变量、方法       |
+| **构造方法调用** | this() - 调用本类其他构造方法 | super() - 调用父类构造方法 |
+| **调用要求**     | 必须放在构造方法第一行        | 必须放在构造方法第一行     |
+| **继承需求**     | 不依赖继承，任何类都可以使用  | 只能在继承体系中使用       |
+| **指向对象**     | 指向当前实例                  | 指向直接父类实例           |
+| **特殊用法**     | 可作为参数传递                | 用于访问被隐藏的父类成员   |
 
-*c表：this 和 super 关键字的主要特性对比*
+_c表：this 和 super 关键字的主要特性对比_
 
 ## 5. 高级话题与最佳实践
 
@@ -241,7 +241,7 @@ public class A {
     public A() {
         System.out.println("A's no-arg constructor");
     }
-    
+
     public A(String message) {
         System.out.println("A's constructor with message: " + message);
     }
@@ -252,12 +252,12 @@ public class B extends A {
         // 隐含调用 super()
         System.out.println("B's no-arg constructor");
     }
-    
+
     public B(String message) {
         super(message); // 显式调用父类构造方法
         System.out.println("B's constructor with message: " + message);
     }
-    
+
     public B(int value) {
         this("Value: " + value); // 调用本类其他构造方法
         System.out.println("B's constructor with value: " + value);
@@ -277,11 +277,11 @@ public class SecureConnection extends Connection {
         super.connect(); // 保留父类核心功能
         logConnection(); // 添加新功能
     }
-    
+
     private void authenticate() {
         System.out.println("Authenticating...");
     }
-    
+
     private void logConnection() {
         System.out.println("Logging connection...");
     }
@@ -297,7 +297,7 @@ public class Parent {
     public void show() {
         System.out.println("Parent's show");
     }
-    
+
     public void test() {
         this.show(); // 动态绑定，调用实际类型的show方法
         show();      // 同上
@@ -309,7 +309,7 @@ public class Child extends Parent {
     public void show() {
         System.out.println("Child's show");
     }
-    
+
     public void example() {
         super.show(); // 静态绑定，总是调用Parent的show方法
         this.show();  // 动态绑定，调用Child的show方法
@@ -324,7 +324,7 @@ public class Test {
         // 输出:
         // Parent's show (super.show())
         // Child's show (this.show())
-        
+
         child.test();
         // 输出:
         // Child's show (动态绑定到实际类型Child)
@@ -337,63 +337,63 @@ public class Test {
 
 1. **忘记调用 super()**：当父类没有无参构造方法时，必须在子类中显式调用 `super(...)`
 
-    ```java
-    // 错误示例
-    public class Parent {
-        public Parent(String name) { /* ... */ }
-    }
-    
-    public class Child extends Parent {
-        public Child() { 
-            // 错误：编译器不会自动添加super()
-            // 需要显式调用super("default")
-        }
-    }
-    
-    // 正确示例
-    public class Child extends Parent {
-        public Child() {
-            super("default"); // 显式调用父类构造方法
-        }
-    }
-    ```
+   ```java
+   // 错误示例
+   public class Parent {
+       public Parent(String name) { /* ... */ }
+   }
+
+   public class Child extends Parent {
+       public Child() {
+           // 错误：编译器不会自动添加super()
+           // 需要显式调用super("default")
+       }
+   }
+
+   // 正确示例
+   public class Child extends Parent {
+       public Child() {
+           super("default"); // 显式调用父类构造方法
+       }
+   }
+   ```
 
 2. **错误的位置调用**：`this()` 或 `super()` 必须放在构造方法第一行
 
-    ```java
-    // 错误示例
-    public class Example {
-        public Example() {
-            System.out.println("Initializing...");
-            super(); // 编译错误：必须在第一行
-        }
-    }
-    ```
+   ```java
+   // 错误示例
+   public class Example {
+       public Example() {
+           System.out.println("Initializing...");
+           super(); // 编译错误：必须在第一行
+       }
+   }
+   ```
 
 3. **同时使用 this() 和 super()**：在同一个构造方法中不能同时使用
 
-    ```java
-    // 错误示例
-    public class Example {
-        public Example() {
-            super();
-            this(10); // 编译错误：不能同时使用
-        }
-    }
-    ```
+   ```java
+   // 错误示例
+   public class Example {
+       public Example() {
+           super();
+           this(10); // 编译错误：不能同时使用
+       }
+   }
+   ```
 
 4. **在静态上下文中使用**：`this` 和 `super` 不能在静态方法中使用
 
-    ```java
-    public class Example {
-        private String value;
-        
-        public static void staticMethod() {
-            System.out.println(this.value); // 编译错误
-            System.out.println(super.toString()); // 编译错误
-        }
-    }
-    ```
+   ```java
+   public class Example {
+       private String value;
+
+       public static void staticMethod() {
+           System.out.println(this.value); // 编译错误
+           System.out.println(super.toString()); // 编译错误
+       }
+   }
+   ```
 
 ### 5.5 性能考量
 
@@ -432,20 +432,20 @@ public class Test {
 public class Shape {
     private String color;
     private boolean filled;
-    
+
     public Shape(String color, boolean filled) {
         this.color = color;
         this.filled = filled;
     }
-    
+
     public double calculateArea() {
         return 0.0;
     }
-    
+
     public void display() {
         System.out.println("Shape [color=" + color + ", filled=" + filled + "]");
     }
-    
+
     // Getter 和 Setter 方法
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }
@@ -456,32 +456,32 @@ public class Shape {
 // 子类
 public class Circle extends Shape {
     private double radius;
-    
+
     public Circle() {
         this("red", true, 1.0); // 调用本类其他构造方法
     }
-    
+
     public Circle(String color, boolean filled, double radius) {
         super(color, filled); // 调用父类构造方法
         this.radius = radius;
     }
-    
+
     @Override
     public double calculateArea() {
         return Math.PI * radius * radius;
     }
-    
+
     @Override
     public void display() {
         super.display(); // 调用父类方法
         System.out.println("Circle [radius=" + radius + ", area=" + this.calculateArea() + "]");
     }
-    
+
     // 特定于Circle的方法
     public double getCircumference() {
         return 2 * Math.PI * this.radius; // 使用this访问成员变量
     }
-    
+
     // Getter 和 Setter 方法
     public double getRadius() { return radius; }
     public void setRadius(double radius) { this.radius = radius; }
@@ -492,7 +492,7 @@ public class TestShapes {
     public static void main(String[] args) {
         Circle circle = new Circle("blue", true, 5.0);
         circle.display();
-        
+
         System.out.println("Circumference: " + circle.getCircumference());
     }
 }

@@ -37,10 +37,10 @@ jmap 在以下场景中特别有用：
 
 **JDK 版本要求**：
 
-| JDK 版本 | 功能差异                  |
-|----------|-------------------------|
-| JDK 6    | 基础功能                  |
-| JDK 7+   | 支持 -heap 参数           |
+| JDK 版本 | 功能差异                     |
+| -------- | ---------------------------- |
+| JDK 6    | 基础功能                     |
+| JDK 7+   | 支持 -heap 参数              |
 | JDK 8+   | 增强诊断功能，部分选项已废弃 |
 
 **权限要求**：
@@ -210,7 +210,7 @@ jmap -histo[:live] <pid>
   ```bash
   # 查看对象数最多的对象，按降序排序
   jmap -histo <pid> | grep alibaba | sort -k 2 -g -r | less
-  
+
   # 查看占用内存最多的对象，按降序排序
   jmap -histo <pid> | grep alibaba | sort -k 3 -g -r | less
   ```
@@ -262,7 +262,7 @@ Number of objects pending for finalization: 0
 ```java
 public class MemoryLeak {
     static List<byte[]> cache = new ArrayList<>();
-    
+
     public static void main(String[] args) {
         while(true) {
             cache.add(new byte[1024*1024]); // 持续添加1MB数组
@@ -369,20 +369,20 @@ jmap -dump:live,format=b,file=${DUMP_DIR}/heap_$(date +%H%M%S).hprof $PID
 ### 7.1 常见问题及解决方案
 
 1. **无法访问进程**
-    - **问题**：jmap 无法访问指定的 Java 进程
-    - **解决方案**：确保有足够权限（Linux 中需同一用户或有 sudo 权限），并确认进程确实是 Java 进程
+   - **问题**：jmap 无法访问指定的 Java 进程
+   - **解决方案**：确保有足够权限（Linux 中需同一用户或有 sudo 权限），并确认进程确实是 Java 进程
 
 2. **文件权限问题**
-    - **问题**：无法生成堆转储文件或写入目标目录
-    - **解决方案**：使用 sudo 或更改文件权限
+   - **问题**：无法生成堆转储文件或写入目标目录
+   - **解决方案**：使用 sudo 或更改文件权限
 
 3. **进程无响应**
-    - **问题**：jmap 命令执行无响应
-    - **解决方案**：使用强制模式 `jmap -F`，但需注意这可能导致数据不一致
+   - **问题**：jmap 命令执行无响应
+   - **解决方案**：使用强制模式 `jmap -F`，但需注意这可能导致数据不一致
 
 4. **JDK 版本兼容性问题**
-    - **问题**：某些选项在新 JDK 版本中已废弃（如 `-heap` 在 JDK 9+ 中已弃用）
-    - **解决方案**：使用替代方案（如 `jhsdb jmap --heap`）或更新命令
+   - **问题**：某些选项在新 JDK 版本中已废弃（如 `-heap` 在 JDK 9+ 中已弃用）
+   - **解决方案**：使用替代方案（如 `jhsdb jmap --heap`）或更新命令
 
 ## 8 替代工具与综合诊断
 
@@ -402,13 +402,13 @@ jcmd <pid> GC.class_histogram
 
 内存分析通常需要结合多种工具：
 
-| 工具名称         | 作用领域                     |
-|------------------|----------------------------|
-| Eclipse MAT      | 堆转储深度分析               |
-| VisualVM         | 实时内存监控                 |
-| jstat            | GC 统计监控                 |
-| Arthas           | 在线诊断                    |
-| Async-Profiler   | 低开销分析工具，适合生产环境 |
+| 工具名称       | 作用领域                     |
+| -------------- | ---------------------------- |
+| Eclipse MAT    | 堆转储深度分析               |
+| VisualVM       | 实时内存监控                 |
+| jstat          | GC 统计监控                  |
+| Arthas         | 在线诊断                     |
+| Async-Profiler | 低开销分析工具，适合生产环境 |
 
 ### 8.3 综合排查流程
 

@@ -36,17 +36,17 @@ keytool -help
 
 1. **直接指定完整路径**：
 
-    ```bash
-    "C:\Program Files\Java\jdk1.8.0_301\bin\keytool.exe" -list -v -keystore ...
-    ```
+   ```bash
+   "C:\Program Files\Java\jdk1.8.0_301\bin\keytool.exe" -list -v -keystore ...
+   ```
 
 2. **配置环境变量**：
-    将 JDK 的 `bin` 目录（如 `C:\Program Files\Java\jdk1.8.0_301\bin`）添加到系统 `Path` 变量中。
-    重启命令行工具，并使用以下命令验证配置：
+   将 JDK 的 `bin` 目录（如 `C:\Program Files\Java\jdk1.8.0_301\bin`）添加到系统 `Path` 变量中。
+   重启命令行工具，并使用以下命令验证配置：
 
-    ```bash
-    java -version
-    ```
+   ```bash
+   java -version
+   ```
 
 ### 2.3 文件权限问题
 
@@ -149,15 +149,15 @@ keytool -delete -alias myalias -keystore mykeystore.jks
 
 下表总结了 KeyTool 的常用命令：
 
-| 功能 | 命令示例 |
-|------|----------|
-| 生成密钥对 | `keytool -genkeypair -alias mykey -keyalg RSA -keysize 2048 -keystore mykeystore.jks` |
-| 列出所有别名 | `keytool -list -keystore mykeystore.jks` |
-| 查看证书详细信息 | `keytool -list -v -keystore mykeystore.jks -alias mykey` |
-| 生成证书请求 | `keytool -certreq -alias mykey -file myapp.csr -keystore mykeystore.jks` |
-| 导出证书 | `keytool -exportcert -alias mykey -file myapp.cer -keystore mykeystore.jks` |
-| 导入证书 | `keytool -importcert -alias mykey -file myapp.cer -keystore mykeystore.jks` |
-| 删除条目 | `keytool -delete -alias mykey -keystore mykeystore.jks` |
+| 功能             | 命令示例                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| 生成密钥对       | `keytool -genkeypair -alias mykey -keyalg RSA -keysize 2048 -keystore mykeystore.jks` |
+| 列出所有别名     | `keytool -list -keystore mykeystore.jks`                                              |
+| 查看证书详细信息 | `keytool -list -v -keystore mykeystore.jks -alias mykey`                              |
+| 生成证书请求     | `keytool -certreq -alias mykey -file myapp.csr -keystore mykeystore.jks`              |
+| 导出证书         | `keytool -exportcert -alias mykey -file myapp.cer -keystore mykeystore.jks`           |
+| 导入证书         | `keytool -importcert -alias mykey -file myapp.cer -keystore mykeystore.jks`           |
+| 删除条目         | `keytool -delete -alias mykey -keystore mykeystore.jks`                               |
 
 ## 5 高级用法与实战应用
 

@@ -35,11 +35,13 @@ Java 是一种广泛使用的面向对象编程语言，由 Sun Microsystems（�
    ```bash
    open ~/.zshrc
    ```
+
    - 在文件中添加以下内容（根据实际安装的 JDK 版本修改路径）：
    ```bash
    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
    export PATH=$JAVA_HOME/bin:$PATH
    ```
+
    - 保存文件后，执行以下命令使配置生效：
    ```bash
    source ~/.zshrc
@@ -57,11 +59,13 @@ Java 是一种广泛使用的面向对象编程语言，由 Sun Microsystems（�
    ```bash
    sudo vim /etc/profile
    ```
+
    - 在文件末尾添加以下内容（根据实际安装路径修改）：
    ```bash
    export JAVA_HOME=/usr/local/jdk-17
    export PATH=$JAVA_HOME/bin:$PATH
    ```
+
    - 保存文件后，执行以下命令使配置生效：
    ```bash
    source /etc/profile

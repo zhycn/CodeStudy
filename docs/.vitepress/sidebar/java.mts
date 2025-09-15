@@ -20,8 +20,8 @@ const javaSidebar = [
       { text: '泛型（Generic）', link: '/java/java-generics' },
       { text: '注解（Annotation）', link: '/java/java-annotation' },
       { text: '反射（Reflection）', link: '/java/java-reflection' },
-      { text: 'Invoke 动态调用', link: '/java/java-invoke' }
-    ]
+      { text: 'Invoke 动态调用', link: '/java/java-invoke' },
+    ],
   },
   {
     text: '面向对象编程',
@@ -34,8 +34,8 @@ const javaSidebar = [
       { text: 'Enum 枚举', link: '/java/java-enum' },
       { text: 'Record 记录类', link: '/java/java-record' },
       { text: '密封类 (Sealed Class) ', link: '/java/java-sealed-class' },
-      { text: 'JavaBean 规范', link: '/java/java-bean' }
-    ]
+      { text: 'JavaBean 规范', link: '/java/java-bean' },
+    ],
   },
   {
     text: '核心工具库',
@@ -56,8 +56,8 @@ const javaSidebar = [
       { text: '资源绑定（Resource Bundle）', link: '/java/java-resource-bundle' },
       { text: '国际化与本地化', link: '/java/java-i18n' },
       { text: 'Timer (不建议使用)', link: '/java/java-timer' },
-      { text: '正则表达式', link: '/java/java-regular-expression' }
-    ]
+      { text: '正则表达式', link: '/java/java-regular-expression' },
+    ],
   },
   {
     text: '集合框架',
@@ -71,8 +71,8 @@ const javaSidebar = [
       { text: 'Iterator 迭代器', link: '/java/java-iterator' },
       { text: 'Collections 工具类', link: '/java/java-collections' },
       { text: 'Comparator 比较器', link: '/java/java-comparator' },
-      { text: 'Collectors 工具类', link: '/java/java-collectors' }
-    ]
+      { text: 'Collectors 工具类', link: '/java/java-collectors' },
+    ],
   },
   {
     text: '函数式编程与流处理',
@@ -80,8 +80,8 @@ const javaSidebar = [
       { text: 'Lambda 表达式', link: '/java/java-lambda' },
       { text: '函数式接口（Functional Interface）', link: '/java/java-functional-interface' },
       { text: 'Stream API', link: '/java/java-stream' },
-      { text: 'Optional', link: '/java/java-optional' }
-    ]
+      { text: 'Optional', link: '/java/java-optional' },
+    ],
   },
   {
     text: '输入输出与持久化',
@@ -98,8 +98,8 @@ const javaSidebar = [
       { text: 'SQL 编程', link: '/java/java-sql' },
       { text: '序列化与反序列化', link: '/java/java-serializable' },
       { text: 'XML 处理 (DOM, SAX, JAXB)', link: '/java/java-xml' },
-      { text: '压缩与解压缩', link: '/java/java-compression' }
-    ]
+      { text: '压缩与解压缩', link: '/java/java-compression' },
+    ],
   },
   {
     text: '并发编程',
@@ -111,8 +111,8 @@ const javaSidebar = [
       { text: '线程池', link: '/java/java-thread-pool' },
       { text: 'ThreadLocal', link: '/java/java-threadlocal' },
       { text: 'Future 接口', link: '/java/java-future' },
-      { text: 'Fork/Join 框架', link: '/java/java-fork-join' }
-    ]
+      { text: 'Fork/Join 框架', link: '/java/java-fork-join' },
+    ],
   },
   {
     text: 'JVM 与性能调优',
@@ -125,8 +125,8 @@ const javaSidebar = [
       { text: 'jstat 工具', link: '/java/java-jstat' },
       { text: 'jstack 工具', link: '/java/java-jstack' },
       { text: 'jmap 工具', link: '/java/java-jmap' },
-      { text: 'JConsole 工具', link: '/java/java-jconsole' }
-    ]
+      { text: 'JConsole 工具', link: '/java/java-jconsole' },
+    ],
   },
   {
     text: '安全、集成与部署',
@@ -139,25 +139,25 @@ const javaSidebar = [
       { text: 'Scripting 脚本编程', link: '/java/java-scripting' },
       { text: 'JNI (不建议使用)', link: '/java/java-jni' },
       { text: '进程与 Runtime', link: '/java/java-process-runtime' },
-      { text: '系统属性（System Properties）', link: '/java/java-system-properties' }
-    ]
+      { text: '系统属性（System Properties）', link: '/java/java-system-properties' },
+    ],
   },
   {
     text: '设计模式',
     items: [
       { text: '单例模式与工厂模式', link: '/java/java-design-pattern-p1' },
       { text: '代理模式与模板方法模式', link: '/java/java-design-pattern-p2' },
-      { text: '代码重构与设计模式', link: 'https://refactoringguru.cn/' }
-    ]
+      { text: '代码重构与设计模式', link: 'https://refactoringguru.cn/' },
+    ],
   },
   {
     text: '其他与最佳实践',
     items: [
       { text: '日志框架', link: '/java/java-logging' },
       { text: '高效图片处理', link: '/java/java-imageio' },
-      { text: '已过时的技术', link: '/java/java-deprecated' }
-    ]
-  }
-]
+      { text: '已过时的技术', link: '/java/java-deprecated' },
+    ],
+  },
+];
 
-export default javaSidebar
+export default javaSidebar;

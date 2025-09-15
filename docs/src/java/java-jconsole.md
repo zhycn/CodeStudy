@@ -60,7 +60,7 @@ JConsole 的主界面包含多个选项卡，每个提供不同维度的监控�
 - **线程数量**
 - **已加载类数量**
 - **CPU 使用率**
-这些图表帮助开发者快速了解应用程序的整体运行状态。
+  这些图表帮助开发者快速了解应用程序的整体运行状态。
 
 ### 3.2 内存（Memory）
 
@@ -94,7 +94,7 @@ JConsole 的主界面包含多个选项卡，每个提供不同维度的监控�
 - **当前已加载的类数量**
 - **自 JVM 启动以来已加载的类总数**
 - **已卸载的类数量**
-异常增长的类数量可能暗示类加载器泄漏或 Metaspace 溢出问题。
+  异常增长的类数量可能暗示类加载器泄漏或 Metaspace 溢出问题。
 
 ### 3.5 VM 摘要（VM Summary）
 
@@ -128,7 +128,7 @@ import java.util.List;
 public class MemoryLeakExample {
     // 静态集合持有对象引用，导致无法回收
     private static final List<Object> LEAK_LIST = new ArrayList<>();
-    
+
     public static void main(String[] args) throws InterruptedException {
         System.out.println("程序启动，PID：" + ProcessHandle.current().pid());
         while (true) {
@@ -158,7 +158,7 @@ public class DeadlockExample {
 
     public static void main(String[] args) {
         System.out.println("程序启动，PID：" + ProcessHandle.current().pid());
-        
+
         // 线程1：先获取LOCK_A，再尝试获取LOCK_B
         new Thread(() -> {
             synchronized (LOCK_A) {
@@ -206,29 +206,29 @@ public class DeadlockExample {
 
 - **远程监控与安全**：在生产环境中，务必为 JMX 远程连接启用认证和 SSL 加密：
 
-    ```bash
-    -Dcom.sun.management.jmxremote.authenticate=true
-    -Dcom.sun.management.jmxremote.ssl=true
-    -Dcom.sun.management.jmxremote.password.file=/path/to/jmxremote.password
-    -Dcom.sun.management.jmxremote.access.file=/path/to/jmxremote.access
-    ```
+  ```bash
+  -Dcom.sun.management.jmxremote.authenticate=true
+  -Dcom.sun.management.jmxremote.ssl=true
+  -Dcom.sun.management.jmxremote.password.file=/path/to/jmxremote.password
+  -Dcom.sun.management.jmxremote.access.file=/path/to/jmxremote.access
+  ```
 
 - **性能开销**：JConsole 本身会消耗资源，对高负载应用可能产生性能影响。建议在需要时连接，并避免过高频率的刷新。
 - **自动化与告警**：JConsole 不适合长期监控。生产环境应建立自动化监控和告警系统（如 Prometheus + Grafana），并在出现 OOM 时自动生成堆转储：
 
-    ```bash
-    -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/path/to/heapdump.hprof
-    ```
+  ```bash
+  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/path/to/heapdump.hprof
+  ```
 
 ### 5.3 常见问题排查指南
 
-| 问题现象                          | 可能原因                      | JConsole 排查步骤                                    | 后续行动                             |
-| --------------------------------- | ----------------------------- | ---------------------------------------------------- | ------------------------------------ |
-| 应用响应缓慢，CPU 不高             | 频繁 Full GC                  | 查看“内存”选项卡，观察 GC 次数和耗时                 | 调整堆大小、优化 GC 参数或代码逻辑   |
-| CPU 使用率持续 100%                | 无限循环、计算密集型任务      | 查看“线程”选项卡，查找 RUNNABLE 状态的线程及其堆栈     | 优化热点代码或算法                   |
-| 线程数持续增长                     | 线程泄漏（如未关闭连接池）    | 查看“线程”选项卡，监控线程数量变化趋势                 | 检查代码中线程创建和销毁的逻辑       |
-| 堆内存使用持续增长，GC 无法回收 | 内存泄漏                      | 观察“内存”选项卡，手动 GC 后内存是否回落；结合 jmap 分析 | 生成堆转储，使用 MAT 等工具分析引用链 |
-| 应用部分功能卡死                  | 线程死锁                      | 点击“线程”选项卡中的“检测死锁”按钮                    | 根据堆栈信息修复锁的获取顺序         |
+| 问题现象                        | 可能原因                   | JConsole 排查步骤                                        | 后续行动                              |
+| ------------------------------- | -------------------------- | -------------------------------------------------------- | ------------------------------------- |
+| 应用响应缓慢，CPU 不高          | 频繁 Full GC               | 查看“内存”选项卡，观察 GC 次数和耗时                     | 调整堆大小、优化 GC 参数或代码逻辑    |
+| CPU 使用率持续 100%             | 无限循环、计算密集型任务   | 查看“线程”选项卡，查找 RUNNABLE 状态的线程及其堆栈       | 优化热点代码或算法                    |
+| 线程数持续增长                  | 线程泄漏（如未关闭连接池） | 查看“线程”选项卡，监控线程数量变化趋势                   | 检查代码中线程创建和销毁的逻辑        |
+| 堆内存使用持续增长，GC 无法回收 | 内存泄漏                   | 观察“内存”选项卡，手动 GC 后内存是否回落；结合 jmap 分析 | 生成堆转储，使用 MAT 等工具分析引用链 |
+| 应用部分功能卡死                | 线程死锁                   | 点击“线程”选项卡中的“检测死锁”按钮                       | 根据堆栈信息修复锁的获取顺序          |
 
 ## 6. 局限性
 

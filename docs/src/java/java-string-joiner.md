@@ -200,13 +200,13 @@ StringJoiner 的性能表现接近于 StringBuilder，特别是在处理大量�
 
 ### 8.1 StringJoiner vs StringBuilder
 
-| 特性 | StringJoiner | StringBuilder |
-|------|-------------|--------------|
-| **用途** | 拼接带分隔符、前缀、后缀的字符串 | 拼接任意字符串 |
-| **灵活性** | 专注于分隔符处理，灵活性较低 | 灵活性高，支持任意操作 |
-| **性能** | 性能较高（用于分隔符场景） | 性能最高 |
-| **代码简洁性** | 更简洁，适合处理带分隔符的拼接 | 需要手动处理分隔符 |
-| **前缀后缀支持** | 内置支持 | 需要手动添加 |
+| 特性             | StringJoiner                     | StringBuilder          |
+| ---------------- | -------------------------------- | ---------------------- |
+| **用途**         | 拼接带分隔符、前缀、后缀的字符串 | 拼接任意字符串         |
+| **灵活性**       | 专注于分隔符处理，灵活性较低     | 灵活性高，支持任意操作 |
+| **性能**         | 性能较高（用于分隔符场景）       | 性能最高               |
+| **代码简洁性**   | 更简洁，适合处理带分隔符的拼接   | 需要手动处理分隔符     |
+| **前缀后缀支持** | 内置支持                         | 需要手动添加           |
 
 ### 8.2 StringJoiner vs String.join
 
@@ -254,54 +254,54 @@ System.out.println(joiner.toString()); // 输出: [Apple, Banana, Cherry]
 ## 9 最佳实践
 
 1. **选择合适的技术**：
-    - 简单分隔符拼接：使用 `String.join()`
-    - 需要前缀、后缀或复杂逻辑：使用 `StringJoiner`
-    - 超大量数据拼接或复杂操作：使用 `StringBuilder`
+   - 简单分隔符拼接：使用 `String.join()`
+   - 需要前缀、后缀或复杂逻辑：使用 `StringJoiner`
+   - 超大量数据拼接或复杂操作：使用 `StringBuilder`
 
 2. **合理处理空值**：
 
-    ```java
-    StringJoiner joiner = new StringJoiner(", ");
-    joiner.setEmptyValue("No elements");
-    // 没有添加任何元素
-    System.out.println(joiner.toString()); // 输出: No elements
-    ```
+   ```java
+   StringJoiner joiner = new StringJoiner(", ");
+   joiner.setEmptyValue("No elements");
+   // 没有添加任何元素
+   System.out.println(joiner.toString()); // 输出: No elements
+   ```
 
 3. **过滤空值元素**：
 
-    ```java
-    List<String> data = Arrays.asList("Java", "", "Python", null);
-    StringJoiner joiner = new StringJoiner("; ");
-    data.stream()
-        .filter(str -> str != null && !str.isEmpty())
-        .forEach(joiner::add);
-    System.out.println(joiner.toString()); // 输出: Java; Python
-    ```
+   ```java
+   List<String> data = Arrays.asList("Java", "", "Python", null);
+   StringJoiner joiner = new StringJoiner("; ");
+   data.stream()
+       .filter(str -> str != null && !str.isEmpty())
+       .forEach(joiner::add);
+   System.out.println(joiner.toString()); // 输出: Java; Python
+   ```
 
 4. **利用链式调用**：
 
-    ```java
-    String result = new StringJoiner(", ", "[", "]")
-        .add("Apple")
-        .add("Banana")
-        .add("Cherry")
-        .toString();
-    System.out.println(result); // 输出: [Apple, Banana, Cherry]
-    ```
+   ```java
+   String result = new StringJoiner(", ", "[", "]")
+       .add("Apple")
+       .add("Banana")
+       .add("Cherry")
+       .toString();
+   System.out.println(result); // 输出: [Apple, Banana, Cherry]
+   ```
 
 5. **合并多个 StringJoiner**：
 
-    ```java
-    StringJoiner joiner1 = new StringJoiner(", ", "Names: ", "");
-    joiner1.add("Alice").add("Bob");
+   ```java
+   StringJoiner joiner1 = new StringJoiner(", ", "Names: ", "");
+   joiner1.add("Alice").add("Bob");
 
-    StringJoiner joiner2 = new StringJoiner(" and ", "", " are programmers");
-    joiner2.add("Charlie").add("David");
+   StringJoiner joiner2 = new StringJoiner(" and ", "", " are programmers");
+   joiner2.add("Charlie").add("David");
 
-    joiner1.merge(joiner2);
-    System.out.println(joiner1.toString());
-    // 输出: Names: Alice, Bob, Charlie and David are programmers
-    ```
+   joiner1.merge(joiner2);
+   System.out.println(joiner1.toString());
+   // 输出: Names: Alice, Bob, Charlie and David are programmers
+   ```
 
 ## 10 总结
 

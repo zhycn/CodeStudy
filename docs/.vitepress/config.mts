@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress';
-import javaSidebar from './sidebar/java.mts'
+import javaSidebar from './sidebar/java.mts';
 
 export default defineConfig({
   // 站点级核心配置
@@ -12,7 +12,7 @@ export default defineConfig({
   cleanUrls: true,
   ignoreDeadLinks: true,
   sitemap: {
-    hostname: 'https://zhycn.github.io/CodeStudy'
+    hostname: 'https://zhycn.github.io/CodeStudy',
   },
   appearance: 'dark', // 默认深色模式
   head: [
@@ -22,7 +22,7 @@ export default defineConfig({
     ['meta', { property: 'og:title', content: 'CodeStudy - 编程学习资源整合' }],
     ['meta', { property: 'og:description', content: '系统化整合编程指南、精选书单、视频课程与效率工具' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:url', content: 'https://zhycn.github.io/CodeStudy' }]
+    ['meta', { property: 'og:url', content: 'https://zhycn.github.io/CodeStudy' }],
   ],
 
   themeConfig: {

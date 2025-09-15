@@ -206,28 +206,28 @@ public class SamplingExample {
 
 1. **避免频繁创建 Random 实例**：创建 Random 实例的开销较大，建议在应用程序中复用同一个实例。
 
-    ```java
-    // 不推荐：频繁创建新实例
-    for (int i = 0; i < 1000; i++) {
-        Random random = new Random(); // 不必要的开销
-        int num = random.nextInt();
-    }
+   ```java
+   // 不推荐：频繁创建新实例
+   for (int i = 0; i < 1000; i++) {
+       Random random = new Random(); // 不必要的开销
+       int num = random.nextInt();
+   }
 
-    // 推荐：复用同一个实例
-    Random random = new Random();
-    for (int i = 0; i < 1000; i++) {
-        int num = random.nextInt();
-    }
-    ```
+   // 推荐：复用同一个实例
+   Random random = new Random();
+   for (int i = 0; i < 1000; i++) {
+       int num = random.nextInt();
+   }
+   ```
 
 2. **多线程环境下的选择**：Random 类不是线程安全的。在多线程环境中，建议使用 `ThreadLocalRandom`（Java 7+）或为每个线程创建独立的 Random 实例。
 
-    ```java
-    // Java 7+ 多线程环境推荐使用 ThreadLocalRandom
-    import java.util.concurrent.ThreadLocalRandom;
+   ```java
+   // Java 7+ 多线程环境推荐使用 ThreadLocalRandom
+   import java.util.concurrent.ThreadLocalRandom;
 
-    ThreadLocalRandom.current().nextInt(100);
-    ```
+   ThreadLocalRandom.current().nextInt(100);
+   ```
 
 ### 5.2 范围生成的正确方法
 

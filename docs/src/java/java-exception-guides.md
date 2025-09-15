@@ -60,23 +60,23 @@ Throwable
 
 下面列出了 JDK 中常用的异常类及其分类：
 
-| 异常类名称 | 类别 | 简要描述 |
-| ---------- | ---- | -------- |
-| `NullPointerException` | 运行时异常 | 当应用程序试图在需要对象的地方使用 `null` 时抛出 |
-| `ArithmeticException` | 运行时异常 | 当出现异常的算术条件时抛出，例如除以零 |
-| `ArrayIndexOutOfBoundsException` | 运行时异常 | 当使用非法索引访问数组时抛出，索引为负或大于等于数组大小 |
-| `ClassCastException` | 运行时异常 | 当试图将对象强制转换为不是实例的子类时抛出 |
-| `IllegalArgumentException` | 运行时异常 | 当向方法传递非法或不适当的参数时抛出 |
-| `NumberFormatException` | 运行时异常 | 当应用程序试图将字符串转换为数值类型，但字符串格式不当时抛出 |
-| `StringIndexOutOfBoundsException` | 运行时异常 | 当使用索引访问字符串，但索引为负或大于等于字符串长度时抛出 |
-| `IOException` | 检查异常 | 当发生某种 I/O 异常时抛出，如文件未找到或无法读取 |
-| `FileNotFoundException` | 检查异常 | 当试图打开指定路径名表示的文件失败时抛出 |
-| `SQLException` | 检查异常 | 提供关于数据库访问错误或其他错误的信息 |
-| `InterruptedException` | 检查异常 | 当线程在活动之前或期间被中断时抛出 |
-| `NoSuchMethodException` | 检查异常 | 当无法找到特定方法时抛出 |
-| `ClassNotFoundException` | 检查异常 | 当应用程序试图加载类但无法找到时抛出 |
-| `OutOfMemoryError` | 错误 | 当 Java 虚拟机无法分配对象时抛出，因为内存不足 |
-| `StackOverflowError` | 错误 | 当应用程序递归太深而发生堆栈溢出时抛出 |
+| 异常类名称                        | 类别       | 简要描述                                                     |
+| --------------------------------- | ---------- | ------------------------------------------------------------ |
+| `NullPointerException`            | 运行时异常 | 当应用程序试图在需要对象的地方使用 `null` 时抛出             |
+| `ArithmeticException`             | 运行时异常 | 当出现异常的算术条件时抛出，例如除以零                       |
+| `ArrayIndexOutOfBoundsException`  | 运行时异常 | 当使用非法索引访问数组时抛出，索引为负或大于等于数组大小     |
+| `ClassCastException`              | 运行时异常 | 当试图将对象强制转换为不是实例的子类时抛出                   |
+| `IllegalArgumentException`        | 运行时异常 | 当向方法传递非法或不适当的参数时抛出                         |
+| `NumberFormatException`           | 运行时异常 | 当应用程序试图将字符串转换为数值类型，但字符串格式不当时抛出 |
+| `StringIndexOutOfBoundsException` | 运行时异常 | 当使用索引访问字符串，但索引为负或大于等于字符串长度时抛出   |
+| `IOException`                     | 检查异常   | 当发生某种 I/O 异常时抛出，如文件未找到或无法读取            |
+| `FileNotFoundException`           | 检查异常   | 当试图打开指定路径名表示的文件失败时抛出                     |
+| `SQLException`                    | 检查异常   | 提供关于数据库访问错误或其他错误的信息                       |
+| `InterruptedException`            | 检查异常   | 当线程在活动之前或期间被中断时抛出                           |
+| `NoSuchMethodException`           | 检查异常   | 当无法找到特定方法时抛出                                     |
+| `ClassNotFoundException`          | 检查异常   | 当应用程序试图加载类但无法找到时抛出                         |
+| `OutOfMemoryError`                | 错误       | 当 Java 虚拟机无法分配对象时抛出，因为内存不足               |
+| `StackOverflowError`              | 错误       | 当应用程序递归太深而发生堆栈溢出时抛出                       |
 
 ## 4 常见运行时异常详解
 
@@ -96,21 +96,21 @@ Throwable
 public class NullPointerExample {
     public static void main(String[] args) {
         String text = null;
-        
+
         // 这会抛出NullPointerException
         try {
             System.out.println(text.length());
         } catch (NullPointerException e) {
             System.out.println("捕获到NullPointerException: " + e.getMessage());
         }
-        
+
         // 正确的处理方式
         if (text != null) {
             System.out.println(text.length());
         } else {
             System.out.println("字符串为null");
         }
-        
+
         // 使用Java 8的Optional类
         java.util.Optional<String> optionalText = java.util.Optional.ofNullable(text);
         System.out.println("字符串长度: " + optionalText.map(String::length).orElse(0));
@@ -129,14 +129,14 @@ public class ArithmeticExample {
     public static void main(String[] args) {
         int a = 10;
         int b = 0;
-        
+
         try {
             int result = a / b; // 这会抛出ArithmeticException
         } catch (ArithmeticException e) {
             System.out.println("捕获到ArithmeticException: " + e.getMessage());
             System.out.println("除数不能为零");
         }
-        
+
         // 预防措施
         if (b != 0) {
             int result = a / b;
@@ -158,14 +158,14 @@ public class ArithmeticExample {
 public class ArrayIndexExample {
     public static void main(String[] args) {
         int[] numbers = {1, 2, 3, 4, 5};
-        
+
         try {
             // 尝试访问不存在的数组元素
             System.out.println(numbers[10]); // 这会抛出ArrayIndexOutOfBoundsException
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("捕获到ArrayIndexOutOfBoundsException: " + e.getMessage());
         }
-        
+
         // 预防措施 - 检查索引范围
         int index = 10;
         if (index >= 0 && index < numbers.length) {
@@ -173,7 +173,7 @@ public class ArrayIndexExample {
         } else {
             System.out.println("索引 " + index + " 超出数组范围 [0, " + (numbers.length-1) + "]");
         }
-        
+
         // 使用增强for循环避免索引问题
         for (int num : numbers) {
             System.out.print(num + " ");
@@ -192,14 +192,14 @@ public class ArrayIndexExample {
 public class ClassCastExample {
     public static void main(String[] args) {
         Object obj = "Hello World";
-        
+
         try {
             // 这将成功，因为obj实际上是一个String
             Integer number = (Integer) obj; // 这会抛出ClassCastException
         } catch (ClassCastException e) {
             System.out.println("捕获到ClassCastException: " + e.getMessage());
         }
-        
+
         // 正确的处理方式 - 使用instanceof检查
         if (obj instanceof Integer) {
             Integer number = (Integer) obj;
@@ -222,33 +222,33 @@ public class ClassCastExample {
 
 ```java
 public class IllegalArgumentExample {
-    
+
     public static void setAge(int age) {
         if (age < 0 || age > 150) {
             throw new IllegalArgumentException("年龄必须在0到150之间");
         }
         System.out.println("年龄设置为: " + age);
     }
-    
+
     public static void printName(String name) {
         // 使用Objects.requireNonNull进行空值检查
         java.util.Objects.requireNonNull(name, "名字不能为空");
         System.out.println("名字是: " + name);
     }
-    
+
     public static void main(String[] args) {
         try {
             setAge(-5); // 这会抛出IllegalArgumentException
         } catch (IllegalArgumentException e) {
             System.out.println("捕获到IllegalArgumentException: " + e.getMessage());
         }
-        
+
         try {
             printName(null); // 这会抛出NullPointerException（IllegalArgumentException的子类）
         } catch (Exception e) {
             System.out.println("捕获到异常: " + e.getMessage());
         }
-        
+
         // 使用自定义异常信息
         try {
             int[] array = {};
@@ -277,10 +277,10 @@ public class NumberFormatExample {
         } catch (NumberFormatException e) {
             System.out.println("捕获到NumberFormatException: " + e.getMessage());
         }
-        
+
         // 安全转换方法
         String[] testCases = {"123", "45.67", "abc", "9876543210"};
-        
+
         for (String test : testCases) {
             try {
                 int result = safeParseInt(test);
@@ -290,17 +290,17 @@ public class NumberFormatExample {
             }
         }
     }
-    
+
     public static int safeParseInt(String str) {
         if (str == null || str.isEmpty()) {
             throw new IllegalArgumentException("输入字符串为null或空");
         }
-        
+
         // 检查是否只包含数字
         if (!str.matches("\\d+")) {
             throw new IllegalArgumentException("输入字符串包含非数字字符: " + str);
         }
-        
+
         // 检查是否在int范围内
         try {
             return Integer.parseInt(str);
@@ -325,7 +325,7 @@ import java.io.*;
 public class IOExceptionExample {
     public static void main(String[] args) {
         BufferedReader reader = null;
-        
+
         try {
             reader = new BufferedReader(new FileReader("nonexistent.txt"));
             String line = reader.readLine();
@@ -346,7 +346,7 @@ public class IOExceptionExample {
                 System.out.println("关闭文件时发生错误: " + e.getMessage());
             }
         }
-        
+
         // 使用try-with-resources语句（Java 7+）
         try (BufferedReader br = new BufferedReader(new FileReader("test.txt"))) {
             String line = br.readLine();
@@ -379,13 +379,13 @@ public class OutOfMemoryErrorExample {
             System.out.println("捕获到OutOfMemoryError: " + e.getMessage());
             System.out.println("JVM内存不足，无法分配该数组");
         }
-        
+
         // 获取当前内存信息
         Runtime runtime = Runtime.getRuntime();
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
         long maxMemory = runtime.maxMemory();
-        
+
         System.out.println("总内存: " + totalMemory / (1024 * 1024) + "MB");
         System.out.println("空闲内存: " + freeMemory / (1024 * 1024) + "MB");
         System.out.println("最大内存: " + maxMemory / (1024 * 1024) + "MB");
@@ -400,8 +400,8 @@ public class OutOfMemoryErrorExample {
 3. **使用 try-with-resources**：确保资源被正确关闭（Java 7+）
 4. **提供有用的异常信息**：在异常消息中包含相关上下文信息
 5. **适当使用检查异常和未检查异常**：
-    - 对可恢复条件使用检查异常
-    - 对编程错误使用未检查异常（运行时异常）
+   - 对可恢复条件使用检查异常
+   - 对编程错误使用未检查异常（运行时异常）
 6. **考虑性能影响**：异常处理成本高昂，不应用于控制正常程序流
 7. **日志记录**：适当记录异常，便于调试和监控
 
@@ -409,7 +409,7 @@ public class OutOfMemoryErrorExample {
 
 ```java
 public class ExceptionBestPractices {
-    
+
     public void processFile(String filename) {
         // 使用try-with-resources确保资源被关闭
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
@@ -425,14 +425,14 @@ public class ExceptionBestPractices {
             throw new RuntimeException("处理文件时发生I/O错误: " + filename, e);
         }
     }
-    
+
     private void processLine(String line) {
         // 具体处理逻辑
         if (line == null || line.trim().isEmpty()) {
             // 使用适当的异常类型
             throw new IllegalArgumentException("行内容不能为空");
         }
-        
+
         try {
             // 业务逻辑
             int value = Integer.parseInt(line);
@@ -442,10 +442,10 @@ public class ExceptionBestPractices {
             throw new IllegalArgumentException("行内容不是有效数字: " + line, e);
         }
     }
-    
+
     public static void main(String[] args) {
         ExceptionBestPractices example = new ExceptionBestPractices();
-        
+
         try {
             example.processFile("data.txt");
         } catch (IllegalArgumentException e) {
@@ -475,17 +475,17 @@ public class ExceptionBestPractices {
 public class InsufficientFundsException extends Exception {
     private double currentBalance;
     private double amountRequired;
-    
+
     public InsufficientFundsException(double currentBalance, double amountRequired) {
         super("资金不足。当前余额: " + currentBalance + ", 所需金额: " + amountRequired);
         this.currentBalance = currentBalance;
         this.amountRequired = amountRequired;
     }
-    
+
     public double getCurrentBalance() {
         return currentBalance;
     }
-    
+
     public double getAmountRequired() {
         return amountRequired;
     }
@@ -497,17 +497,17 @@ public class InsufficientFundsException extends Exception {
 ```java
 public class InvalidConfigurationException extends RuntimeException {
     private String configKey;
-    
+
     public InvalidConfigurationException(String configKey) {
         super("无效配置: " + configKey);
         this.configKey = configKey;
     }
-    
+
     public InvalidConfigurationException(String configKey, String message) {
         super("无效配置 " + configKey + ": " + message);
         this.configKey = configKey;
     }
-    
+
     public String getConfigKey() {
         return configKey;
     }
@@ -519,7 +519,7 @@ public class InvalidConfigurationException extends RuntimeException {
 ```java
 public class BankAccount {
     private double balance;
-    
+
     public void withdraw(double amount) throws InsufficientFundsException {
         if (amount > balance) {
             throw new InsufficientFundsException(balance, amount);
@@ -531,7 +531,7 @@ public class BankAccount {
 public class CustomExceptionExample {
     public static void main(String[] args) {
         BankAccount account = new BankAccount();
-        
+
         try {
             account.withdraw(100);
         } catch (InsufficientFundsException e) {
@@ -539,7 +539,7 @@ public class CustomExceptionExample {
             System.out.println("当前余额: " + e.getCurrentBalance());
             System.out.println("所需金额: " + e.getAmountRequired());
         }
-        
+
         // 使用自定义运行时异常
         String configKey = "database.url";
         try {
