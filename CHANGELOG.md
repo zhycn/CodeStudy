@@ -14,6 +14,10 @@
 
 ## v2025.09
 
+- Added: [Java this 和 super 关键字详解与最佳实践](./docs/src/java/java-this-super.md)
+- Added: [Java Number 详解与最佳实践](./docs/src/java/java-number.md)
+- Added: [Java Bean 详解与最佳实践](./docs/src/java/java-bean.md)
+- Added: [Java 流程控制详解与最佳实践](./docs/src/java/java-control-flow.md)
 - Added: [Java JDK 命令行工具详解与最佳实践](./docs/src/java/java-jdk-command.md)
 - Added: [Java JConsole 工具详解与最佳实践](./docs/src/java/java-jconsole.md)
 - Added: [Java jstat 工具详解与最佳实践](./docs/src/java/java-jstat.md)
