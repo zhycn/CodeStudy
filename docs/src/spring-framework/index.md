@@ -5,7 +5,7 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 - Spring Framework 官网: <https://spring.io/projects/spring-framework>
 - Spring Framework 文档: <https://docs.spring.io/spring-framework/reference/>
 - Spring Framework 源码: <https://github.com/spring-projects/spring-framework>
-- Spring Framework 6.2.10 API: <https://docs.spring.io/spring-framework/docs/6.2.10/javadoc-api/>
+- Spring Framework API 文档: <https://docs.spring.io/spring-framework/docs/current/javadoc-api/>
 
 ## Core
 

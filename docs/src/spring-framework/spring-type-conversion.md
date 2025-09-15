@@ -1,6 +1,12 @@
+---
+title: Spring 框架 Type Conversion 类型转换详解与最佳实践
+description: 了解 Spring 框架的类型转换系统，包括核心接口、内置转换器、自定义转换器、与 Spring Boot 集成等。
+author: zhycn
+---
+
 # Spring 框架 Type Conversion 类型转换详解与最佳实践
 
-## 1. 概述
+## 1 概述
 
 Spring 框架提供了一个强大且灵活的类型转换系统，用于在不同数据类型之间进行转换。这个系统在 Spring 3.0 引入的 `core.convert` 包中提供，它定义了一个 SPI (Service Provider Interface) 来实现类型转换逻辑，以及一个 API 来在运行时执行类型转换。
 
@@ -28,7 +34,7 @@ Spring 类型转换系统在以下场景中发挥着重要作用：
 3. **SpEL 表达式**：在 Spring 表达式语言中进行类型转换
 4. **表单处理**：在 Spring MVC 中处理表单数据转换
 
-## 2. 类型转换的核心接口
+## 2 类型转换的核心接口
 
 Spring 类型转换系统基于几个核心接口构建，每个接口针对不同的转换需求场景。
 
@@ -162,7 +168,7 @@ public interface ConditionalConverter {
 
 ConditionalGenericConverter 结合了 GenericConverter 和 ConditionalConverter 的功能。
 
-## 3. ConversionService API
+## 3 ConversionService API
 
 ConversionService 是类型转换系统的统一入口点，定义了在运行时执行类型转换的 API。
 
@@ -195,7 +201,7 @@ System.out.println(date);    // 输出: Fri Jul 01 00:00:00 CST 2022
 
 DefaultConversionService 已经内置了许多常用转换器，包括字符串到数字、日期等的转换。
 
-## 4. 内置类型转换器
+## 4 内置类型转换器
 
 Spring 提供了大量内置的类型转换器，在 `org.springframework.core.convert.support` 包中可以找到这些实现。
 
@@ -212,7 +218,7 @@ Spring 提供了大量内置的类型转换器，在 `org.springframework.core.c
 
 _caption: Spring 内置的常用类型转换器_
 
-## 5. 自定义类型转换器
+## 5 自定义类型转换器
 
 当 Spring 内置的转换器不能满足需求时，我们可以实现自定义的类型转换器。
 
@@ -306,7 +312,7 @@ public void processPerson() {
 }
 ```
 
-## 6. 类型转换的最佳实践
+## 6 类型转换的最佳实践
 
 ### 6.1 性能优化
 
@@ -398,7 +404,7 @@ public class StringToPersonConverterTest {
 }
 ```
 
-## 7. 与 Spring Boot 集成
+## 7 与 Spring Boot 集成
 
 在 Spring Boot 应用中，类型转换更加简单便捷。
 
@@ -451,7 +457,7 @@ public class CustomConversionConfiguration {
 }
 ```
 
-## 8. 常见问题与解决方案
+## 8 常见问题与解决方案
 
 ### 8.1 转换器不生效
 
@@ -496,7 +502,7 @@ public class ComplexTypeConverter implements GenericConverter {
 }
 ```
 
-## 9. 总结
+## 9 总结
 
 Spring 的类型转换系统提供了一个强大、灵活的机制来处理各种类型转换需求。通过理解核心接口（`Converter`、`ConverterFactory`、`GenericConverter`）和 `ConversionService` API，我们可以有效地使用内置转换器并实现自定义转换逻辑。
 

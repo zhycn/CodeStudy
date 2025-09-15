@@ -1,3 +1,9 @@
+---
+title: Spring 框架 Data Binding 数据绑定详解与最佳实践
+description: 本文将详细介绍 Spring 框架中的数据绑定机制，包括其核心组件、工作原理、应用场景以及最佳实践。
+author: zhycn
+---
+
 # Spring 框架 Data Binding 数据绑定详解与最佳实践
 
 ## 1. 概述

@@ -14,6 +14,15 @@
 
 ## v2025.09
 
+- Added: [Spring 框架 IoC 容器详解与最佳实践](./docs/src/spring-framework/spring-ioc-container.md)
+- Added: [Spring 框架 Resources 资源管理详解与最佳实践](./docs/src/spring-framework/spring-resource.md)
+- Added: [Spring 框架 Validation 验证框架详解与最佳实践](./docs/src/spring-framework/spring-validation.md)
+- Added: [Spring 框架 Data Binding 数据绑定详解与最佳实践](./docs/src/spring-framework/spring-data-binding.md)
+- Added: [Spring 框架 Type Conversion 类型转换详解与最佳实践](./docs/src/spring-framework/spring-type-conversion.md)
+- Added: [Spring 框架 SpEL 表达式语言详解与最佳实践](./docs/src/spring-framework/spring-expression.md)
+- Added: [Spring 框架 AOP 面向切面编程详解与最佳实践](./docs/src/spring-framework/spring-aop.md)
+- Added: [Spring 框架 Events 事件机制详解与最佳实践](./docs/src/spring-framework/spring-event.md)
+- Added: [Spring 框架 AOT 详解与最佳实践](./docs/src/spring-framework/spring-aot.md)
 - Added: [Java this 和 super 关键字详解与最佳实践](./docs/src/java/java-this-super.md)
 - Added: [Java Number 详解与最佳实践](./docs/src/java/java-number.md)
 - Added: [Java Bean 详解与最佳实践](./docs/src/java/java-bean.md)
