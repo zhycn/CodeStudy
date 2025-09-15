@@ -1,4 +1,8 @@
-好的，请看这篇关于 Spring WebTestClient 的详细技术文档。
+---
+title: Spring 框架 WebTestClient 详解与最佳实践
+description: 详细介绍 Spring WebTestClient 的核心概念、架构、工作原理、核心注解、高级特性，并提供最佳实践。
+author: zhycn
+---
 
 # Spring 框架 WebTestClient 详解与最佳实践
 
@@ -54,13 +58,13 @@ testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 `spring-boot-starter-test` 会自动引入：
 
-- `spring-test` & `spring-webflux` (包含 `WebTestClient`)
-- JUnit Jupiter (JUnit 5)
-- AssertJ
-- Hamcrest
-- JSONassert
-- JsonPath
-- Mockito
+- `spring-test` & `spring-webflux` (包含 `WebTestClient`，用于支持 Web 测试功能)
+- JUnit Jupiter (JUnit 5，Java 主流的单元测试框架)
+- AssertJ (提供丰富且流畅的断言 API，方便编写测试断言)
+- Hamcrest (一套匹配器库，可用于创建自定义的断言逻辑)
+- JSONassert (用于验证 JSON 响应的内容是否符合预期)
+- JsonPath (用于解析和操作 JSON 数据，方便对 JSON 响应进行断言)
+- Mockito (用于创建和管理测试中的模拟对象，便于进行隔离测试)
 
 ## 3. 初始化与配置
 

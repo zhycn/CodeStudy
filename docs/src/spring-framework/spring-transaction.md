@@ -1,5 +1,7 @@
-好的，作为一名 Spring 专家和 Markdown 文档工程师，我将为你生成一篇详尽、专业的教程。本文档综合了主流最佳实践和官方文档精髓，旨在提供清晰、可操作的指导。
-
+---
+title: Spring 框架 Transactions 事务管理详解与最佳实践
+description: 本文深入探讨了 Spring 框架中事务管理的核心概念、机制和最佳实践。内容涵盖了事务的定义、传播行为、隔离级别、超时设置、回滚规则以及异常处理等方面。
+author: zhycn
 ---
 
 # Spring 框架 Transactions 事务管理详解与最佳实践

@@ -1,7 +1,7 @@
-好的，没有问题。作为一名资深的 Spring 专家和技术文档工程师，我将为你呈现一篇关于 Spring MockMvc 的详尽指南。
-
-在开始撰写前，我综合分析了 Spring 官方文档、Baeldung、Spring.io Guides、JavaDoc 以及多位行业专家（如 Eugen Paraschiv, Petri Kainulainen 等）的博客文章，旨在为你提供最准确、最现代、最实用的实践方案。
-
+---
+title: Spring 框架 MockMvc 详解与最佳实践
+description: 详细介绍 Spring MockMvc 的核心概念、架构、工作原理、核心注解、高级特性，并提供最佳实践。
+author: zhycn
 ---
 
 # Spring Framework MockMvc 详解与最佳实践

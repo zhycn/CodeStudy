@@ -24,12 +24,17 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 - [Spring 框架 Testing 测试框架详解与最佳实践](./spring-testing.md)
 - [Spring 框架 Unit Testing 单元测试详解与最佳实践](./spring-unit-testing.md)
 - [Spring 框架 Integration Testing 集成测试详解与最佳实践](./spring-integration-testing.md)
+- [Spring 框架 E2E Testing 端到端测试详解与最佳实践](./spring-e2e-testing.md)
 - [Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践](./spring-jdbc-testing-support.md)
 - [Spring 框架 TestContext 测试上下文详解与最佳实践](./spring-testcontext.md)
 - [Spring 框架 WebTestClient 详解与最佳实践](./spring-webtestclient.md)
 - [Spring 框架 MockMvc 详解与最佳实践](./spring-mockmvc.md)
 - [Spring 框架 Mockito 测试框架详解与最佳实践](./spring-mockito.md)
 - [Spring 框架 JUnit 测试框架详解与最佳实践](./spring-junit.md)
+- [Spring 框架 AssertJ 测试框架详解与最佳实践](./spring-assertj.md)
+- [Spring 框架 Hamcrest 测试框架详解与最佳实践](./spring-hamcrest.md)
+- [Spring 框架 JSONassert 测试框架详解与最佳实践](./spring-jsonassert.md)
+- [Spring 框架 Testcontainers 测试详解与最佳实践](./spring-testcontainers.md)
 
 ## Data Access
 

@@ -1,4 +1,8 @@
-好的，请看这篇关于 Spring 框架集成测试的详细技术文档。
+---
+title: Spring 框架 Integration Testing 集成测试详解与最佳实践
+description: 详细介绍 Spring 集成测试的基础概念、重要性、核心组件、测试策略、数据管理、最佳实践和进阶技巧。
+author: zhycn
+---
 
 # Spring 框架 Integration Testing 集成测试详解与最佳实践
 
@@ -440,15 +444,19 @@ public class UserRepositoryTestcontainersTest {
 ## 6. 常见问题与排查（FAQ）
 
 **Q: 测试运行时提示 `BeanCreationException` 或找不到 Bean？**
+
 A: 检查 `@SpringBootTest` 是否能找到你的主配置类（通常它会自动搜索）。如果项目结构特殊，使用 `@ContextConfiguration(classes = MyApplication.class)` 显式指定。
 
 **Q: `@Transactional` 回滚失效了？**
+
 A: 可能的原因：1) 测试方法抛出了异常，导致事务提前回滚；2) 使用的数据库存储引擎（如 MySQL 的 MyISAM）不支持事务；3) 在测试方法中手动调用了 `TransactionTemplate` 或 `EntityManager` 的 `flush()` 方法，提交了部分数据。
 
 **Q: 如何测试非回滚的场景？**
+
 A: 在测试类或方法上加上 `@Rollback(false)` 注解，或者使用 `@TransactionConfiguration` (JUnit 4) 配置。但务必配合 `@Sql` 在之后进行数据清理。
 
 **Q: `@MockBean` 导致其他测试失败？**
+
 A: `@MockBean` 会修改应用程序上下文。如果一个 `@MockBean` 定义在测试类 A 中，当测试类 B 运行时，它会使用未被修改的上下文。但如果上下文被缓存并共享，修改可能会影响其他测试。确保每个测试都正确地定义了自己所需的 Mock。
 
 通过遵循本文的指南和实践，你将能够为你的 Spring 应用程序构建一套可靠、高效且可维护的集成测试套件，从而显著提升代码质量和开发信心。

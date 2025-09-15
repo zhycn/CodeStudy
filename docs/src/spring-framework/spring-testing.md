@@ -1,3 +1,9 @@
+---
+title: Spring 框架 Testing 测试框架详解与最佳实践
+description: 详细介绍 Spring 测试框架的使用方法、优势和最佳实践，帮助开发者编写高效、可靠的测试代码。
+author: zhycn
+---
+
 # Spring 框架 Testing 测试框架详解与最佳实践
 
 ## 1 概述
@@ -16,7 +22,7 @@ Spring 测试框架是 Spring Framework 提供的专门模块，用于支持基�
 
 Spring 测试遵循测试金字塔原则：
 
-```plaintext
+```bash
 单元测试 (70%) → 集成测试 (20%) → 端到端测试 (10%)
 ```
 
@@ -34,23 +40,14 @@ Spring 测试遵循测试金字塔原则：
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
     </dependency>
-
-    <!-- Mockito 核心 -->
-    <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>3.11.2</version>
-        <scope>test</scope>
-    </dependency>
 </dependencies>
 ```
 
 对于 Gradle 项目，在 `build.gradle` 中添加：
 
-```gradle
+```groovy
 dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mockito:mockito-core:3.11.2'
 }
 ```
 
@@ -60,11 +57,8 @@ dependencies {
 
 ```java
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class BasicSpringTest {
 
@@ -170,6 +164,10 @@ Spring Boot 提供了多种测试切片注解，只加载必要的组件：
 | `@DataJpaTest`    | JPA 仓库测试    | 只加载 JPA 相关组件        |
 | `@JsonTest`       | JSON 序列化测试 | 只加载 JSON 相关组件       |
 | `@RestClientTest` | 客户端测试      | 只加载 REST 客户端相关组件 |
+
+:::info Spring Boot 测试切片清单
+<https://docs.spring.io/spring-boot/appendix/test-auto-configuration/slices.html>
+:::
 
 #### 4.2.1 MVC 控制器测试
 

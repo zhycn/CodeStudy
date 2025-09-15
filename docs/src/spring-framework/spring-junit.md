@@ -1,4 +1,8 @@
-好的，请看这篇关于 Spring 框架 JUnit 测试的详细文档。
+---
+title: Spring 框架 JUnit 测试框架详解与最佳实践
+description: 本文详细介绍了 Spring 框架中 JUnit 测试框架的使用方法、核心注解、最佳实践和注意事项。
+author: zhycn
+---
 
 # Spring 框架 JUnit 测试框架详解与最佳实践
 
@@ -15,29 +19,12 @@ JUnit 作为 Java 领域最流行的单元测试框架，与 Spring 强大的测
 ### 2.1 Maven 依赖
 
 ```xml
-<!-- Spring Test Context -->
 <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-test</artifactId>
-    <version>6.1.0</version> <!-- 请使用与你的 Spring 核心版本一致的版本 -->
-    <scope>test</scope>
-</dependency>
-
-<!-- JUnit Jupiter (JUnit 5) -->
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter</artifactId>
-    <version>5.10.0</version> <!-- 请使用最新稳定版 -->
-    <scope>test</scope>
-</dependency>
-
-<!-- 如果涉及数据库测试，可能需要 Spring Boot Test Starter (可选) -->
-<!-- <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-test</artifactId>
-    <version>3.1.0</version>
     <scope>test</scope>
-</dependency> -->
+    <!-- 版本由 spring-boot-starter-parent 管理 -->
+</dependency>
 ```
 
 **注意**： 从 Spring Framework 5.0 开始，官方推荐使用 JUnit 5 (JUnit Jupiter)。本文也将主要基于 JUnit 5 进行阐述。

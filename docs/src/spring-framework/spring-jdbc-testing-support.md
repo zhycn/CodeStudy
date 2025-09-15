@@ -1,7 +1,7 @@
-好的，没有问题。作为一名资深的 Spring 专家和技术文档工程师，我将为你撰写一篇关于 Spring JDBC Testing Support 的详尽指南。
-
-在开始之前，我参考并分析了来自 Spring 官方文档、Baeldung、Spring Framework Guru、JavaTpoint 等多个权威来源的优质文章和最佳实践，以确保内容的准确性、深度和实用性。
-
+---
+title: Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践
+description: 详细介绍 Spring JDBC 测试支持的核心功能、优势、项目配置与依赖，以及如何使用它来提升数据库测试的效率和质量。
+author: zhycn
 ---
 
 # Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践
@@ -296,12 +296,15 @@ void testWithCommit() {
 ## 6. 常见问题与解决方案 (FAQ)
 
 **Q: 测试时出现 `Table not found` 错误？**
+
 **A**: 确保 `schema.sql` 脚本被正确加载和执行。检查 `@Sql` 注解的路径是否正确，或检查 `DataSource` 配置是否正确使用了 `EmbeddedDatabaseBuilder` 并添加了脚本。
 
 **Q: 我想在测试中与生产环境使用同类型的数据库（如 MySQL），怎么办？**
+
 **A**: 虽然不推荐（因为慢），但有时是必要的。你可以使用 Docker 在测试环境中启动一个真实的 MySQL 实例，并通过 `Testcontainers` 等库与 Spring Boot 集成，实现高效的集成测试。
 
 **Q: `@Transactional` 和 `@Rollback` 失效了？**
+
 **A**: 首先检查是否正确配置了事务管理器。在 Spring Boot 中这是自动配置的。其次，确保你没有在测试中手动调用 `commit()` 或 `rollback()`。最后，检查数据库引擎是否支持事务（如 MySQL 的 InnoDB 支持，MyISAM 不支持）。
 
 ## 7. 总结
