@@ -1,5 +1,6 @@
 ---
 title: Java Collectors 工具类详解与最佳实践
+description: 详细介绍 Java Collectors 工具类的使用方法、核心概念和最佳实践，帮助开发者正确、高效地使用 Collectors 类。
 author: zhycn
 ---
 

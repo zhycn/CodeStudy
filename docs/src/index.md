@@ -14,8 +14,9 @@ hero:
       text: GitHub 仓库
       link: https://github.com/zhycn/CodeStudy
 features:
-  - title: 系统化学习路径
-    details: 精心整理的编程学习路线，从基础到进阶，循序渐进掌握核心技术
+  - title: Java 编程指南
+    details: 详细介绍 Java 编程语言的基础概念、语法和常用类库，帮助开发者快速入门。
+    link: /java
   - title: 优质资源整合
     details: 精选国内外优质书籍、视频课程和工具资源，避免信息过载
   - title: 实践驱动

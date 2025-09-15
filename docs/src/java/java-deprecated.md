@@ -1,5 +1,6 @@
 ---
 title: Java 已过时的技术清单（不要再学了）
+description: 详细介绍 Java 已过时的技术清单，包括 Applets、Web Start、AWT 重量级组件和 java.util.Date 等，帮助开发者避免使用已废弃的技术。
 author: zhycn
 ---
 

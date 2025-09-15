@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import javaSidebar from './sidebar/java.mts'
 
 export default defineConfig({
   // 站点级核心配置
@@ -69,33 +70,7 @@ export default defineConfig({
 
     // 自动生成的侧边栏
     sidebar: {
-      // '/guides/': [
-      //   {
-      //     text: '编程基础',
-      //     // collapsed: false,
-      //     items: [
-      //       { text: '数据结构', link: '/guides/data-structures' },
-      //       { text: '算法入门', link: '/guides/algorithms' }
-      //     ]
-      //   },
-      //   {
-      //     text: '前端开发',
-      //     // collapsed: true,
-      //     items: [
-      //       { text: 'JavaScript 精要', link: '/guides/javascript' },
-      //       { text: 'Vue 实战技巧', link: '/guides/vue' }
-      //     ]
-      //   }
-      // ],
-      // '/books/': [
-      //   {
-      //     text: '推荐书单',
-      //     items: [
-      //       { text: '年度最佳技术书籍', link: '/books/top' },
-      //       { text: '前端开发必读', link: '/books/frontend' }
-      //     ]
-      //   }
-      // ]
+      '/java/': javaSidebar,
     },
 
     // 增强的社交链接

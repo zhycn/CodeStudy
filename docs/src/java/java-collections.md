@@ -1,5 +1,6 @@
 ---
 title: Java Collections 工具类详解与最佳实践
+description: 详细介绍 Java Collections 工具类的使用方法、核心概念和最佳实践，帮助开发者正确、高效地使用 Collections 类。
 author: zhycn
 ---
 

@@ -61,8 +61,6 @@ Oracle 提供了丰富的 Java 相关资源：
 
 您说得对，好的分组不仅要符合学习逻辑，更要方便用户快速查找和定位信息。基于这个原则，我重新设计了一个**以功能模块为核心、更偏向于参考手册式**的分组方案，让每个技术点都能被快速找到。
 
----
-
 ## 文档目录
 
 ### 语言基础与核心概念 (Language Basics & Core Concepts)
@@ -100,23 +98,23 @@ Oracle 提供了丰富的 Java 相关资源：
 
 ### 核心工具库 (Core Utilities)
 
-#### 字符串与数值处理
+**字符串与数值处理**
 
 - [Java String 字符串详解](./java-string.md)
 - [Java Number 详解与最佳实践](./java-number.md)
 - [Java BigInteger 与 BigDecimal 详解与最佳实践](./java-biginteger-bigdecimal.md)
 - [Java StringJoiner 详解与最佳实践](./java-string-joiner.md)
 
-#### 日期与时间
+**日期与时间**
 
 - [Java 日期时间详解与最佳实践](./java-date-time.md)
 
-#### 异常处理
+**异常处理**
 
 - [Java 异常处理详解与最佳实践](./java-exception.md)
 - [Java 常用异常类完整指南](./java-exception-guides.md)
 
-#### 常用工具类
+**常用工具类**
 
 - [Java Objects 工具类详解与最佳实践](./java-objects.md)
 - [Java Arrays 工具类详解与最佳实践](./java-arrays.md)
@@ -125,6 +123,7 @@ Oracle 提供了丰富的 Java 相关资源：
 - [Java Base64 详解与最佳实践](./java-base64.md)
 - [Java Properties 属性类详解与最佳实践](./java-properties.md)
 - [Java 资源绑定（Resource Bundle）详解与最佳实践](./java-resource-bundle.md)
+- [Java 国际化 (i18n) 与本地化 (l10n) 详解与最佳实践](./java-i18n.md)
 - [Java Timer 详解与最佳实践（不建议使用）](./java-timer.md)
 - [Java 正则表达式详解](./java-regular-expression.md)
 
@@ -150,29 +149,29 @@ Oracle 提供了丰富的 Java 相关资源：
 
 ### 输入输出 (I/O) & 持久化
 
-#### 基础 I/O
+**基础 I/O**
 
 - [Java File 文件操作详解](./java-file.md)
 - [Java IO 详解与最佳实践](./java-io.md)
 - [Java IO 核心组件详解与最佳实践](./java-io-components.md)
 - [Java Scanner 类详解与最佳实践（知道就好）](./java-scanner.md)
 
-#### 网络编程
+**网络编程**
 
 - [Java 网络编程详解与最佳实践](./java-network.md)
 - [Java HttpClient 详解与最佳实践](./java-httpclient.md)
 
-#### NIO
+**NIO**
 
 - [Java NIO 详解与最佳实践](./java-nio.md)
 - [Java NIO 核心组件详解与最佳实践](./java-nio-components.md)
 
-#### 数据库编程
+**数据库编程**
 
 - [Java 数据库编程（JDBC）详解与最佳实践](./java-jdbc.md)
 - [Java SQL 编程详解与最佳实践](./java-sql.md)
 
-#### 数据格式与压缩
+**数据格式与压缩**
 
 - [Java 序列化与反序列化详解与最佳实践](./java-serializable.md)
 - [Java XML 处理详解与最佳实践](./java-xml.md)
@@ -203,30 +202,32 @@ Oracle 提供了丰富的 Java 相关资源：
 
 ### 安全、集成与部署 (Security, Integration & Deployment)
 
-#### 安全 (Security)
+**安全**
 
 - [Java 安全编程：加密、解密、哈希与数字签名详解与最佳实践](./java-cryptography.md)
 - [Java Security 详解与最佳实践](./java-security.md)
 - [Java KeyTool 详解与最佳实践](./java-keytool.md)
 
-#### 集成与扩展 (Integration & Extension)
+**集成与扩展**
 
 - [Java SPI 详解与最佳实践](./java-spi.md)
 - [Java JNDI 详解与最佳实践](./java-jndi.md)
 - [Java Scripting 详解与最佳实践](./java-scripting.md)
 - [Java 本地方法接口 (JNI) 详解与最佳实践（不建议使用）](./java-jni.md)
 
-#### 部署与系统交互 (Deployment & System Interaction)
+**部署与系统交互**
 
 - [Java 进程与 Runtime 类详解与最佳实践](./java-process-runtime.md)
 - [Java 系统属性（System Properties）详解与最佳实践](./java-system-properties.md)
 
-### 其他与最佳实践 (Others & Best Practices)
+### 设计模式 (Design Patterns)
 
-- [Java 日志框架详解与最佳实践](./java-logging.md)
 - [Java 设计模式精讲：单例模式与工厂模式](./java-design-pattern-p1.md)
 - [Java 设计模式精讲：代理模式与模板方法模式](./java-design-pattern-p2.md)
 - [免费在线学习代码重构和设计模式](https://refactoringguru.cn/)
+
+### 其他与最佳实践 (Others & Best Practices)
+
+- [Java 日志框架详解与最佳实践](./java-logging.md)
 - [Java 高效图片处理详解与最佳实践](./java-imageio.md)
-- [Java 国际化 (i18n) 与本地化 (l10n) 详解与最佳实践](./java-i18n.md)
 - [Java 已过时的技术清单（不要再学了）](./java-deprecated.md)
