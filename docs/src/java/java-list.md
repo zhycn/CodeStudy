@@ -6,7 +6,7 @@ author: zhycn
 
 # Java List 集合详解与最佳实践
 
-## 1. List 接口概述
+## 1 List 接口概述
 
 Java List 接口是 Java 集合框架（Java Collections Framework）中最重要的接口之一，它继承自 Collection 接口，专门用于存储有序的元素集合。List 的核心特性包括：
 
@@ -17,7 +17,7 @@ Java List 接口是 Java 集合框架（Java Collections Framework）中最重�
 
 List 与 Set、Queue 等其他集合类型的区别在于它保持了元素的插入顺序并允许重复值，这使其在需要维持元素顺序的场景中特别有用。
 
-## 2. List 核心实现类对比
+## 2 List 核心实现类对比
 
 Java 提供了多个 List 接口的实现类，每个都有其特定的应用场景和性能特征。
 
@@ -87,7 +87,7 @@ List<String> copyOnWriteList = new CopyOnWriteArrayList<>(); // 写时复制技�
 | **线程安全**      | 否            | 否               | 是（同步方法）         | 是（写时复制）           |
 | **适用场景**      | 频繁随机访问  | 频繁头尾插入删除 | 线程安全需求（不推荐） | 读多写少的并发场景       |
 
-## 3. List 核心操作与方法
+## 3 List 核心操作与方法
 
 ### 3.1 基础操作
 
@@ -196,7 +196,7 @@ int min = Collections.min(numbers); // 最小值
 Collections.replaceAll(numbers, 1, 100); // 替换所有匹配元素
 ```
 
-## 4. 性能分析与优化
+## 4 性能分析与优化
 
 ### 4.1 时间复杂度分析
 
@@ -257,7 +257,7 @@ largeList.parallelStream() // 并行处理
          .collect(Collectors.toList());
 ```
 
-## 5. 线程安全与并发处理
+## 5 线程安全与并发处理
 
 ### 5.1 线程安全问题
 
@@ -305,7 +305,7 @@ synchronized(manualSyncList) {
 3. **复杂操作**：使用显式同步保证原子性操作
 4. **避免在迭代中修改**：使用迭代器的 remove 方法而非集合的 remove 方法
 
-## 6. 最佳实践与应用场景
+## 6 最佳实践与应用场景
 
 ### 6.1 实现类选择指南
 
@@ -502,7 +502,7 @@ List<String> hrNames = employees.stream()
    boolean contains = people.contains(new Person("Alice", 25)); // 需要正确实现equals方法
    ```
 
-## 7. 常见问题与解决方案
+## 7 常见问题与解决方案
 
 ### 7.1 常见异常处理
 
@@ -562,7 +562,7 @@ int index = Collections.indexOfSubList(numbers, Arrays.asList(1, 4));
 int lastIndex = Collections.lastIndexOfSubList(numbers, Arrays.asList(1, 4));
 ```
 
-## 8. 总结
+## 8 总结
 
 Java List 集合是日常开发中最常用的数据结构之一，正确选择和使用 List 实现类对应用性能至关重要。通过本文的详细讲解，我们可以总结出以下关键点：
 

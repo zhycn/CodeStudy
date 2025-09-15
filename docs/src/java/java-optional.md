@@ -6,13 +6,13 @@ author: zhycn
 
 # Java Optional 详解与最佳实践
 
-## 1. Optional 简介与背景
+## 1 Optional 简介与背景
 
 在 Java 编程中，**空指针异常（NullPointerException，简称 NPE）** 是最常见且令人头疼的问题之一。传统上，开发者往往通过显式的 null 检查来防止空指针异常，但这种方法不仅繁琐，还容易遗漏检查导致运行时错误。这种传统的空值处理方式会导致代码膨胀、可读性差和维护困难等问题。
 
 Java 8 引入的 `Optional` 类为我们提供了一种更加**优雅和安全**的方式来避免 NPE，使得我们的代码更加简洁、可维护且符合函数式编程风格。Optional 是一个容器对象，它可以**包装一个可能为 null 的值**，从而明确表示值可能缺失的概念，并通过类型系统强制开发者处理这种情况。
 
-## 2. Optional 的核心概念与原理
+## 2 Optional 的核心概念与原理
 
 `Optional<T>` 是一个泛型容器类，它可以包含一个非空的值，也可以为空。这个类最初的设计灵感来自函数式编程语言，如 Scala 的 Option 类型。
 
@@ -29,7 +29,7 @@ Optional 的**核心设计理念**是通过类型系统显式表达值可能缺�
 
 Optional 类是一个**不可变**的类，因此是线程安全的。
 
-## 3. 创建 Optional 对象
+## 3 创建 Optional 对象
 
 创建 Optional 对象有三种主要方式，下表总结了它们的特点和适用场景：
 
@@ -67,7 +67,7 @@ Optional<String> emptyOpt = Optional.empty();
 
 > **注意**：不应将 Optional 对象本身设为 null，这违背了设计初衷。始终使用 `Optional.empty()` 而不是 null 来表示空的 Optional。
 
-## 4. 安全访问与值处理
+## 4 安全访问与值处理
 
 Optional 提供了多种安全的方法来访问其中的值，避免直接使用容易引发异常的 `get()` 方法。
 
@@ -120,7 +120,7 @@ if (optionalValue.isEmpty()) {
 
 > **最佳实践**：优先使用 `ifPresent()`、`orElse()`、`orElseGet()` 和 `orElseThrow()` 方法，而不是直接使用 `get()` 方法或先调用 `isPresent()` 再调用 `get()`。
 
-## 5. 链式操作与函数式编程
+## 5 链式操作与函数式编程
 
 Optional 支持函数式编程风格，提供了 `map()`、`flatMap()` 和 `filter()` 方法来处理容器内的值，使代码更加简洁和表达力强。
 
@@ -187,7 +187,7 @@ public String getUserCity(User user) {
 
 这种链式操作**替代了多层嵌套的 null 检查**，使代码更加清晰和简洁。
 
-## 6. 最佳实践与使用场景
+## 6 最佳实践与使用场景
 
 ### 6.1 ✅ 推荐用法
 
@@ -294,7 +294,7 @@ public String getUserCity(User user) {
    List<String> names = new ArrayList<>();
    ```
 
-## 7. 常见误区与反模式
+## 7 常见误区与反模式
 
 ### 7.1 性能陷阱
 
@@ -360,7 +360,7 @@ Optional<Optional<String>> doubleWrap = Optional.of(Optional.of("value"));
 Optional<String> flattened = optionalValue.flatMap(Function.identity());
 ```
 
-## 8. 实际应用示例
+## 8 实际应用示例
 
 ### 8.1 示例一：避免多层 null 检查
 
@@ -419,7 +419,7 @@ public class Configuration {
 }
 ```
 
-## 9. 总结
+## 9 总结
 
 Optional 是 Java 8 引入的一个重要特性，它提供了一种更优雅和安全的方式来处理可能为 null 的值。正确使用 Optional 可以：
 

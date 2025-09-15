@@ -8,7 +8,7 @@ author: zhycn
 
 本文为 Java IO 流操作的全面指南，详细介绍了 Java IO 的核心概念、分类、使用方法和最佳实践。无论您是初学者还是经验丰富的开发者，都能从本文中找到有价值的信息。
 
-## 1. Java IO 概述
+## 1 Java IO 概述
 
 Java IO（Input/Output）是 Java 编程语言中用于处理输入和输出操作的一组 API。它提供了丰富的类和接口，使得 Java 程序能够与各种数据源（如文件、网络、内存等）进行数据的读写交互。
 
@@ -55,7 +55,7 @@ Java IO 库采用了**装饰器模式**，允许动态地为流添加功能。�
    - `FileChannel`、`SocketChannel`、`ServerSocketChannel`
    - `Selector`、`ByteBuffer`、`Charset`
 
-## 2. 核心类与API
+## 2 核心类与API
 
 ### 2.1 字节流
 
@@ -257,7 +257,7 @@ public class ObjectStreamExample {
 }
 ```
 
-## 3. 高级特性和技巧
+## 3 高级特性和技巧
 
 ### 3.1 Java NIO（New I/O）
 
@@ -440,7 +440,7 @@ Files.copy(new File("source.txt"), new File("destination.txt"));
 String content = Files.toString(new File("file.txt"), StandardCharsets.UTF_8);
 ```
 
-## 4. 最佳实践总结
+## 4 最佳实践总结
 
 ### 4.1 场景选择建议
 

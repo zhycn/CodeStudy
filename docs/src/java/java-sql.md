@@ -5,7 +5,7 @@ author: zhycn
 
 # Java SQL 编程详解与最佳实践
 
-## 1. 引言
+## 1 引言
 
 Java Database Connectivity (JDBC) 是 Java 语言中访问关系型数据库的**标准 API**，它提供了与数据库无关的连接和操作方式。JDBC API 主要包含在 `java.sql` 和 `javax.sql` 两个包中，为 Java 开发者提供了**统一的数据访问接口**。无论是 MySQL、Oracle、SQL Server 还是 PostgreSQL，都可以通过 JDBC 进行访问，实现了"编写一次，处处运行"的数据库访问能力。
 
@@ -30,7 +30,7 @@ JDBC 驱动程序分为四种类型：
 
 目前大多数应用都使用 Type 4 驱动程序，因为它不需要额外的本地库或中间件，直接通过网络协议与数据库通信。
 
-## 2. JDBC 基础与连接配置
+## 2 JDBC 基础与连接配置
 
 ### 2.1 建立数据库连接
 
@@ -72,7 +72,7 @@ try (Connection conn = DriverManager.getConnection(url, username, password);
 }
 ```
 
-## 3. java.sql 核心接口详解
+## 3 java.sql 核心接口详解
 
 ### 3.1 DriverManager 类
 
@@ -377,7 +377,7 @@ try (Statement stmt = conn.createStatement();
 }
 ```
 
-## 4. 事务管理与连接池
+## 4 事务管理与连接池
 
 ### 4.1 事务管理
 
@@ -458,7 +458,7 @@ try (HikariDataSource dataSource = new HikariDataSource(config);
 - 监控连接池的使用情况，及时调整配置
 - 正确关闭连接（归还到连接池）
 
-## 5. SQL 注入与安全实践
+## 5 SQL 注入与安全实践
 
 ### 5.1 SQL 注入原理
 
@@ -505,7 +505,7 @@ try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 - **避免动态 SQL**：尽量不要拼接 SQL 语句
 - **使用 ORM 框架**：如 Hibernate、MyBatis 等
 
-## 6. 实践案例与性能优化
+## 6 实践案例与性能优化
 
 ### 6.1 完整 JDBC 操作示例
 
@@ -636,7 +636,7 @@ public class DatabaseUtil {
 2. **使用 PreparedStatement**：利用预编译和缓存提高性能
 3. **批量操作**：对大量操作使用批处理
 4. **分页查询**：避免一次性返回大量数据
-5. **只获取需要的数据**：避免使用 SELECT *
+5. **只获取需要的数据**：避免使用 SELECT \*
 6. **使用索引**：确保查询条件字段有适当索引
 7. **合理使用事务**：保持事务简短，避免长时间持有连接
 
@@ -664,7 +664,7 @@ public void batchInsertUsers(List<User> users) throws SQLException {
 }
 ```
 
-## 7. 总结
+## 7 总结
 
 本文详细介绍了 Java SQL 编程的核心接口和最佳实践。通过学习和应用这些知识，你可以编写出**高效、安全、可维护**的数据库应用程序。
 

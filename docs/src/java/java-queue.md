@@ -8,7 +8,7 @@ author: zhycn
 
 本文深入剖析 Java 集合框架中的 Queue 接口及其实现类，结合源码分析和实战案例，为开发者提供全面的队列使用指南。
 
-## 1. 队列基础概念
+## 1 队列基础概念
 
 ### 1.1 什么是队列？
 
@@ -34,7 +34,7 @@ Queue 的主要子接口和实现类包括：
 - **BlockingQueue**：阻塞队列接口，支持线程间安全通信
 - **常用实现类**：LinkedList, ArrayDeque, PriorityQueue, ConcurrentLinkedQueue 等
 
-## 2. Queue 核心接口与方法
+## 2 Queue 核心接口与方法
 
 ### 2.1 基本操作方法
 
@@ -89,7 +89,7 @@ String front = deque.pollFirst(); // 移除队首
 String end = deque.pollLast();   // 移除队尾
 ```
 
-## 3. Queue 核心实现类详解
+## 3 Queue 核心实现类详解
 
 ### 3.1 LinkedList
 
@@ -298,7 +298,7 @@ producer.start();
 consumer.start();
 ```
 
-## 4. Queue 的使用场景与实战案例
+## 4 Queue 的使用场景与实战案例
 
 ### 4.1 任务调度与消息传递
 
@@ -479,7 +479,7 @@ while (!delayQueue.isEmpty()) {
 }
 ```
 
-## 5. 性能对比与最佳实践
+## 5 性能对比与最佳实践
 
 ### 5.1 队列实现类性能对比
 
@@ -550,7 +550,7 @@ while (!delayQueue.isEmpty()) {
 
 4. **优先级混乱**：确保 PriorityQueue 中元素的 Comparable 实现正确，或者提供正确的 Comparator。
 
-## 6. 总结
+## 6 总结
 
 Java Queue 提供了丰富而强大的队列实现，涵盖了从基本 FIFO 数据结构到高级并发工具的各种需求。正确选择和使用队列实现类对于构建高效、可靠的 Java 应用程序至关重要。
 

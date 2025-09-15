@@ -7,7 +7,7 @@ author: zhycn
 
 作为 Java 开发人员，密钥和证书的管理是确保应用程序安全性的重要环节。KeyTool 作为 Java 开发工具包（JDK）自带的密钥和证书管理工具，为开发者提供了便捷、高效的解决方案。本文将全面介绍 KeyTool 的使用方法、核心功能和最佳实践。
 
-## 1. KeyTool 简介
+## 1 KeyTool 简介
 
 KeyTool 是 Java 提供的密钥和证书管理工具，它位于 Java 安装的 `bin` 目录中，安装 Java 即可使用。KeyTool 可以帮助开发者创建和管理 Java 密钥库（Java Keystore，JKS）及 Java 加密扩展密钥库（Java Cryptographic Extensions Keystore，JCEKS），其主要功能包括：
 
@@ -18,7 +18,7 @@ KeyTool 是 Java 提供的密钥和证书管理工具，它位于 Java 安装的
 
 KeyTool 底层使用 Java 提供的密钥库相关 API 实现，可以与不同类型的密钥库进行交互，并提供了对密钥和证书的生成、导入、导出、签发、验证等功能。
 
-## 2. 环境配置与安装
+## 2 环境配置与安装
 
 ### 2.1 验证 KeyTool 安装
 
@@ -36,17 +36,17 @@ keytool -help
 
 1. **直接指定完整路径**：
 
-    ```bash
-    "C:\Program Files\Java\jdk1.8.0_301\bin\keytool.exe" -list -v -keystore ...
-    ```
+   ```bash
+   "C:\Program Files\Java\jdk1.8.0_301\bin\keytool.exe" -list -v -keystore ...
+   ```
 
 2. **配置环境变量**：
-    将 JDK 的 `bin` 目录（如 `C:\Program Files\Java\jdk1.8.0_301\bin`）添加到系统 `Path` 变量中。
-    重启命令行工具，并使用以下命令验证配置：
+   将 JDK 的 `bin` 目录（如 `C:\Program Files\Java\jdk1.8.0_301\bin`）添加到系统 `Path` 变量中。
+   重启命令行工具，并使用以下命令验证配置：
 
-    ```bash
-    java -version
-    ```
+   ```bash
+   java -version
+   ```
 
 ### 2.3 文件权限问题
 
@@ -63,7 +63,7 @@ keytool.exe -list -v -keystore d:\test.keystore -alias mykey
 - 检查文件权限：右键文件 → 属性 → 安全 → 添加当前用户的"读取"权限
 - 简化文件路径：将文件复制到无空格和特殊字符的路径（如 `C:\keys\test.keystore`）
 
-## 3. KeyTool 核心功能
+## 3 KeyTool 核心功能
 
 ### 3.1 密钥库管理
 
@@ -145,21 +145,21 @@ keytool -list -v -keystore mykeystore.jks -alias myalias
 keytool -delete -alias myalias -keystore mykeystore.jks
 ```
 
-## 4. KeyTool 命令参考
+## 4 KeyTool 命令参考
 
 下表总结了 KeyTool 的常用命令：
 
-| 功能 | 命令示例 |
-|------|----------|
-| 生成密钥对 | `keytool -genkeypair -alias mykey -keyalg RSA -keysize 2048 -keystore mykeystore.jks` |
-| 列出所有别名 | `keytool -list -keystore mykeystore.jks` |
-| 查看证书详细信息 | `keytool -list -v -keystore mykeystore.jks -alias mykey` |
-| 生成证书请求 | `keytool -certreq -alias mykey -file myapp.csr -keystore mykeystore.jks` |
-| 导出证书 | `keytool -exportcert -alias mykey -file myapp.cer -keystore mykeystore.jks` |
-| 导入证书 | `keytool -importcert -alias mykey -file myapp.cer -keystore mykeystore.jks` |
-| 删除条目 | `keytool -delete -alias mykey -keystore mykeystore.jks` |
+| 功能             | 命令示例                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| 生成密钥对       | `keytool -genkeypair -alias mykey -keyalg RSA -keysize 2048 -keystore mykeystore.jks` |
+| 列出所有别名     | `keytool -list -keystore mykeystore.jks`                                              |
+| 查看证书详细信息 | `keytool -list -v -keystore mykeystore.jks -alias mykey`                              |
+| 生成证书请求     | `keytool -certreq -alias mykey -file myapp.csr -keystore mykeystore.jks`              |
+| 导出证书         | `keytool -exportcert -alias mykey -file myapp.cer -keystore mykeystore.jks`           |
+| 导入证书         | `keytool -importcert -alias mykey -file myapp.cer -keystore mykeystore.jks`           |
+| 删除条目         | `keytool -delete -alias mykey -keystore mykeystore.jks`                               |
 
-## 5. 高级用法与实战应用
+## 5 高级用法与实战应用
 
 ### 5.1 创建自签名证书
 
@@ -213,7 +213,7 @@ keytool -exportcert -alias server -keystore server.jks -file server.cer
 keytool -importcert -alias server -file server.cer -keystore client_truststore.jks
 ```
 
-## 6. 最佳实践
+## 6 最佳实践
 
 ### 6.1 安全性最佳实践
 
@@ -238,7 +238,7 @@ keytool -importcert -alias server -file server.cer -keystore client_truststore.j
 3. **证书链验证失败**：在导入签发证书之前，确保先将相应的 CA 证书导入到密钥库中，否则会报错"无法从回复中建立链"
 4. **路径问题**：避免中文、空格和特殊符号，路径可以用英文双引号包裹
 
-## 7. 常见问题解答（FAQ）
+## 7 常见问题解答（FAQ）
 
 **Q1: KeyTool 和 OpenSSL 有什么区别？**
 
@@ -283,7 +283,7 @@ A: 相比于 Java 6，Java 7 及更高版本中的 KeyTool 有一些改动：
 - `-import` 选项改名为 `-importcert`
 - `-keyclone`、`-identitydb` 和 `-selfcert` 选项被废弃
 
-## 8. 总结
+## 8 总结
 
 Java KeyTool 是一个功能强大的密钥和证书管理工具，为 Java 开发者提供了便捷、高效的安全管理方案。通过掌握 KeyTool 的基本命令和选项，以及了解其在实践中的应用场景，开发者能够更好地管理密钥和证书，确保应用程序的安全性和用户数据的保密性。
 

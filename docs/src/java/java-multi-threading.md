@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 多线程编程详解与最佳实践
 
-## 1. 多线程基础概念
+## 1 多线程基础概念
 
 ### 1.1 什么是多线程？
 
@@ -39,7 +39,7 @@ Java 线程生命周期包括以下几种状态：
 - **超时等待（Timed Waiting）**：有限时间等待
 - **终止（Terminated）**：线程执行完毕或异常终止
 
-## 2. Java 中的多线程实现
+## 2 Java 中的多线程实现
 
 Java 提供了三种主要的多线程实现方式，每种方式都有其适用场景和特点：
 
@@ -181,9 +181,9 @@ ExecutorService paymentExecutor = Executors.newFixedThreadPool(4);
 ExecutorService stockExecutor = Executors.newFixedThreadPool(2);
 ```
 
-某银行系统实践表明，隔离后核心支付交易P99延迟从210ms降至95ms，且库存查询异常不再影响支付流程。
+某银行系统实践表明，隔离后核心支付交易线程池 P99 延迟从 210ms 降至 95ms，且库存查询异常不再影响支付流程。
 
-## 3. 线程安全与同步机制
+## 3 线程安全与同步机制
 
 多线程共享资源时，若没有正确同步，可能引发数据不一致和竞态条件。
 
@@ -203,7 +203,7 @@ class Counter {
 }
 ```
 
-多个线程同时调用`increment()`，可能导致最终 count 值小于预期。
+多个线程同时调用 `increment()`，可能导致最终 count 值小于预期。
 
 ### 3.2 同步关键字 synchronized
 
@@ -315,7 +315,7 @@ public void updateUser(String userId) {
 }
 ```
 
-用户服务优化后，TPS从120提升到850，竞争减少效果显著。
+用户服务优化后，TPS 从 120 提升到 850，竞争减少效果显著。
 
 #### 3.5.2 StampedLock 高性能读写控制
 
@@ -348,7 +348,7 @@ class Point {
 
 在地理信息服务中，该方案使读操作吞吐量提升4倍，同时保持写操作的及时性。
 
-## 4. 并发工具类
+## 4 并发工具类
 
 Java 提供的 `java.util.concurrent` 包提供多种高级并发工具：
 
@@ -548,7 +548,7 @@ public class CompletableFutureExample {
 
 该模式在风控系统中将多服务调用链路由串行650ms优化至并行210ms。
 
-## 5. 多线程开发中的常见问题与最佳实践
+## 5 多线程开发中的常见问题与最佳实践
 
 ### 5.1 死锁（Deadlock）
 
@@ -624,16 +624,16 @@ public class ConcurrentCollectionExample {
 
 #### 5.5.1 上下文切换优化
 
-通过`JMC`监控发现：当线程数超过32时（4核CPU），上下文切换开销占比达15%。优化措施：
+通过`JMC`监控发现：当线程数超过 32 时（4核 CPU），上下文切换开销占比达 15%。优化措施：
 
-- 将线程池核心线程数从40调整为16
+- 将线程池核心线程数从 40 调整为 16
 - 使用协程(Quasar Fiber)替代部分线程
 
-优化后上下文切换次数下降72%，CPU利用率从85%提升至93%，QPS提高40%。
+优化后上下文切换次数下降72%，CPU 利用率从 85% 提升至 93%，QPS 提高 40%。
 
 #### 5.5.2 伪共享解决方案
 
-使用`@Contended`注解避免缓存行无效化：
+使用 `@Contended` 注解避免缓存行无效化：
 
 ```java
 import jdk.internal.vm.annotation.Contended;
@@ -647,9 +647,9 @@ class Counter {
 }
 ```
 
-在计数服务中，该优化使CAS操作耗时从45ns降至12ns，高并发下性能提升显著。
+在计数服务中，该优化使 CAS 操作耗时从 45ns 降至 12ns，高并发下性能提升显著。
 
-## 6. 多线程典型使用场景
+## 6 多线程典型使用场景
 
 ### 6.1 高并发请求处理
 
@@ -715,7 +715,7 @@ for (Future<Result> future : futures) {
 
 **优势**：
 
-- 充分利用多核CPU
+- 充分利用多核 CPU
 - 处理时间随线程数线性减少
 
 ### 6.4 生产者-消费者模型
@@ -746,11 +746,11 @@ executor.execute(() -> {
 - 平衡生产消费速度差异
 - 实现流量削峰
 
-## 7. 前沿并发模型探索
+## 7 前沿并发模型探索
 
 ### 7.1 Project Loom 虚拟线程
 
-Project Loom 虚拟线程实测：在文件解析任务中，10,000个虚拟线程仅需40MB内存，而传统线程需要10GB。
+Project Loom 虚拟线程实测：在文件解析任务中，10,000 个虚拟线程仅需 40MB 内存，而传统线程需要 10GB。
 
 同步代码直接转换为异步：
 
@@ -764,7 +764,7 @@ try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 在 IO 密集型场景，资源消耗仅为传统线程池的 5%。
 
-## 8. 总结
+## 8 总结
 
 Java 多线程编程是提升应用性能的重要技术，但开发难度较大，需要掌握线程生命周期、同步机制、并发工具以及常见问题的防范。
 

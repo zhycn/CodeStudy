@@ -5,7 +5,7 @@ author: zhycn
 
 # Java HttpClient 详解与最佳实践
 
-## 1. HttpClient 概述与发展历程
+## 1 HttpClient 概述与发展历程
 
 Java 的 HTTP 客户端发展经历了几个阶段。从早期的 `HttpURLConnection`（始于 JDK 1.1）到广泛使用的第三方库如 Apache HttpClient 和 OkHttp，再到 JDK 11 中引入的现代标准 `java.net.http.HttpClient`。
 
@@ -19,7 +19,7 @@ Java 的 HTTP 客户端发展经历了几个阶段。从早期的 `HttpURLConnec
 
 与传统的 Apache HttpClient 相比，JDK 11+ 的 HttpClient 提供了更简洁的 API、更好的性能（尤其在异步和高并发场景）以及无需额外依赖的优势。
 
-## 2. 核心 API 介绍
+## 2 核心 API 介绍
 
 ### 2.1 HttpClient 类
 
@@ -79,7 +79,7 @@ System.out.println("响应体: " + response.body());
 System.out.println("HTTP 版本: " + response.version());
 ```
 
-## 3. 基本使用示例
+## 3 基本使用示例
 
 ### 3.1 同步请求
 
@@ -184,7 +184,7 @@ public class PostJsonExample {
 }
 ```
 
-## 4. 高级特性与最佳实践
+## 4 高级特性与最佳实践
 
 ### 4.1 连接池管理
 
@@ -393,7 +393,7 @@ public class RetryExample {
 }
 ```
 
-## 5. 高并发场景下的优化
+## 5 高并发场景下的优化
 
 在高并发环境中，HttpClient 需要适当配置以优化性能。
 
@@ -467,7 +467,7 @@ public class HighConcurrencyExample {
 }
 ```
 
-## 6. JDK HttpClient 与 Apache HttpClient 对比
+## 6 JDK HttpClient 与 Apache HttpClient 对比
 
 | 特性          | JDK 11+ HttpClient       | Apache HttpClient      |
 | ------------- | ------------------------ | ---------------------- |
@@ -485,7 +485,7 @@ public class HighConcurrencyExample {
 - 现有基于 Apache HttpClient 的项目如果运行良好，不一定需要立即迁移
 - 如果需要 HTTP/2 或更好的异步支持，考虑迁移到 JDK HttpClient
 
-## 7. 总结与最佳实践
+## 7 总结与最佳实践
 
 1. **复用 HttpClient 实例**：HttpClient 是线程安全的，应复用而不是为每个请求创建新实例。
 2. **合理设置超时**：总是设置连接超时和请求超时，防止网络问题导致线程阻塞。

@@ -1,5 +1,6 @@
 ---
 title: Java Comparator 比较器接口详解与最佳实践
+description: 详细介绍 Java Comparator 比较器接口的使用方法、核心概念和最佳实践，帮助开发者正确、高效地使用 Comparator 类。
 author: zhycn
 ---
 

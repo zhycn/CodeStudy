@@ -1,11 +1,12 @@
 ---
 title: Java BigInteger 与 BigDecimal 详解与最佳实践
+description: 详细介绍 Java 中 BigInteger 和 BigDecimal 类的使用，包括内部实现、创建方式、常用运算操作、精度控制、比较方法，以及使用注意事项与最佳实践，同时给出实战应用案例。
 author: zhycn
 ---
 
 # Java BigInteger 与 BigDecimal 详解与最佳实践
 
-## 1. 概述
+## 1 概述
 
 在 Java 编程中，当需要进行大数运算或高精度计算时，基本数据类型（如 `int`, `long`, `double`）可能无法满足需求。Java 提供了两个类来处理这种情况：`BigInteger` 和 `BigDecimal`。
 
@@ -14,7 +15,7 @@ author: zhycn
 
 这两个类都位于 `java.math` 包中，并且是**不可变**（immutable）的，即一旦创建，其值不能被更改。任何运算都会返回一个新的对象。
 
-## 2. BigInteger 详解
+## 2 BigInteger 详解
 
 ### 2.1 内部实现
 
@@ -122,17 +123,17 @@ String stringValue = bigValue.toString();
 2. **性能考虑**：`BigInteger` 的运算比基本数据类型慢，应优化算法逻辑，例如使用位运算替代乘除法。
 3. **比较操作**：使用 `compareTo()` 方法比较值，而非 `==` 或 `!=`（它们比较的是引用）。
 
-    ```java
-    if (bigInt1.compareTo(bigInt2) == 0) {
-        // 值相等
-    }
-    ```
+   ```java
+   if (bigInt1.compareTo(bigInt2) == 0) {
+       // 值相等
+   }
+   ```
 
 4. **异常处理**：某些运算（如除以零）会抛出 `ArithmeticException`，需妥善处理。
 5. **不可变性**：`BigInteger` 对象是不可变的，任何操作都会返回新对象。 重复创建大对象可能影响性能，应考虑重用。
 6. **多线程安全**：由于其不可变性，`BigInteger` 是线程安全的。
 
-## 3. BigDecimal 详解
+## 3 BigDecimal 详解
 
 ### 3.1 为什么需要 BigDecimal
 
@@ -219,15 +220,15 @@ BigDecimal negate = a.negate();
 
 `BigDecimal` 的精度控制通过 `scale` 和 `RoundingMode` 来实现。常用的舍入模式包括：
 
-| 舍入模式            | 描述                                           |
-| :------------------ | :--------------------------------------------- |
-| `RoundingMode.UP`   | 远离零方向舍入。                               |
-| `RoundingMode.DOWN` | 向零方向舍入（截断）。                         |
-| `RoundingMode.CEILING` | 向正无穷大方向舍入。                         |
-| `RoundingMode.FLOOR`   | 向负无穷大方向舍入。                         |
-| `RoundingMode.HALF_UP` | **四舍五入**（最常见的商业舍入方式）。       |
+| 舍入模式                 | 描述                                         |
+| :----------------------- | :------------------------------------------- |
+| `RoundingMode.UP`        | 远离零方向舍入。                             |
+| `RoundingMode.DOWN`      | 向零方向舍入（截断）。                       |
+| `RoundingMode.CEILING`   | 向正无穷大方向舍入。                         |
+| `RoundingMode.FLOOR`     | 向负无穷大方向舍入。                         |
+| `RoundingMode.HALF_UP`   | **四舍五入**（最常见的商业舍入方式）。       |
 | `RoundingMode.HALF_DOWN` | 五舍六入（如果舍弃部分 > 0.5，则向上舍入）。 |
-| `RoundingMode.HALF_EVEN` | 银行家舍入法（向最接近的偶数舍入）。       |
+| `RoundingMode.HALF_EVEN` | 银行家舍入法（向最接近的偶数舍入）。         |
 
 ```java
 BigDecimal value = new BigDecimal("1.235");
@@ -263,31 +264,31 @@ System.out.println(bd1.equals(bd2));         // false (精度不同)
 3. **精度控制**：在需要精确小数位数的场景（如货币），使用 `setScale()` 方法明确设置精度。
 4. **避免尾随零**：使用 `stripTrailingZeros()` 方法去除不必要的尾随零，提高可读性。
 
-    ```java
-    BigDecimal value = new BigDecimal("123.45000");
-    System.out.println(value.stripTrailingZeros()); // 123.45
-    ```
+   ```java
+   BigDecimal value = new BigDecimal("123.45000");
+   System.out.println(value.stripTrailingZeros()); // 123.45
+   ```
 
 5. **性能考虑**：`BigDecimal` 的运算性能通常低于基本数据类型和 `BigInteger`。 在不需要高精度的场合，应避免使用。
 6. **不可变性**：与 `BigInteger` 一样，`BigDecimal` 也是不可变的，操作会返回新对象。
 
-## 4. BigInteger 与 BigDecimal 对比
+## 4 BigInteger 与 BigDecimal 对比
 
-| 特性         | BigInteger                                  | BigDecimal                                          |
-| :----------- | :------------------------------------------ | :-------------------------------------------------- |
-| **用途**     | 任意精度整数运算                            | 任意精度十进制小数运算                                |
-| **精度**     | 整数                                        | 小数（可指定小数点后的位数）                          |
-| **内部存储** | `int signum`, `int[] mag`           | `BigInteger intVal`, `int scale`, `long intCompact` |
-| **性能**     | 相对较高（仅处理整数）              | 相对较低（需要处理精度和舍入）              |
-| **适用场景** | 密码学、大数分解、超出 long 范围的整数计算     | 金融计算、货币处理、需要精确小数计算的任何场景          |
-| **除法行为** | 整除，可获取商和余数                          | 必须指定精度和舍入模式                              |
+| 特性         | BigInteger                                 | BigDecimal                                          |
+| :----------- | :----------------------------------------- | :-------------------------------------------------- |
+| **用途**     | 任意精度整数运算                           | 任意精度十进制小数运算                              |
+| **精度**     | 整数                                       | 小数（可指定小数点后的位数）                        |
+| **内部存储** | `int signum`, `int[] mag`                  | `BigInteger intVal`, `int scale`, `long intCompact` |
+| **性能**     | 相对较高（仅处理整数）                     | 相对较低（需要处理精度和舍入）                      |
+| **适用场景** | 密码学、大数分解、超出 long 范围的整数计算 | 金融计算、货币处理、需要精确小数计算的任何场景      |
+| **除法行为** | 整除，可获取商和余数                       | 必须指定精度和舍入模式                              |
 
 **选择指南**：
 
 - 如果需要处理**整数**，并且其大小超出了 `long` 类型的范围，请使用 `BigInteger`。
 - 如果需要处理**小数**，并且需要**精确计算**（避免浮点数精度误差），请使用 `BigDecimal`。
 
-## 5. 实战应用案例
+## 5 实战应用案例
 
 ### 5.1 大数阶乘计算（BigInteger）
 
@@ -374,7 +375,7 @@ public class ScientificCalculationExample {
 }
 ```
 
-## 6. 总结
+## 6 总结
 
 `BigInteger` 和 `BigDecimal` 是 Java 中进行高精度数值计算的强大工具。
 

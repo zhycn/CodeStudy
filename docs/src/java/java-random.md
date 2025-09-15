@@ -7,7 +7,7 @@ author: zhycn
 
 作为 Java 开发中最常用的工具类之一，`java.util.Random` 为生成伪随机数提供了强大而灵活的功能。本文将深入探讨 Random 类的使用方式、原理机制、应用场景和最佳实践。
 
-## 1. Random 类概述
+## 1 Random 类概述
 
 `java.util.Random` 是 Java 提供的一个**伪随机数生成器** (Pseudorandom Number Generator)，它通过线性同余算法 (Linear Congruential Generator) 生成随机数序列。所谓"伪随机"，是指生成的随机数并非真正的随机，而是通过特定算法计算出来的确定性序列，只是看起来是随机的。
 
@@ -27,7 +27,7 @@ Random random2 = new Random(12345);
 
 无参构造函数使用当前系统时间的毫秒数作为种子，而带参构造函数允许开发者指定种子值。
 
-## 2. 核心方法详解
+## 2 核心方法详解
 
 Random 类提供了丰富的方法来生成各种类型的随机数。
 
@@ -80,7 +80,7 @@ byte[] byteArray = new byte[10];
 random.nextBytes(byteArray);
 ```
 
-## 3. 随机原理与种子机制
+## 3 随机原理与种子机制
 
 ### 3.1 线性同余生成器
 
@@ -111,7 +111,7 @@ System.out.println(random2.nextInt()); // 输出：-1193959466
 
 这种特性在测试和调试时非常有用，可以保证结果的可重现性。
 
-## 4. 应用场景与实践示例
+## 4 应用场景与实践示例
 
 ### 4.1 游戏开发
 
@@ -200,34 +200,34 @@ public class SamplingExample {
 }
 ```
 
-## 5. 最佳实践与注意事项
+## 5 最佳实践与注意事项
 
 ### 5.1 性能优化
 
 1. **避免频繁创建 Random 实例**：创建 Random 实例的开销较大，建议在应用程序中复用同一个实例。
 
-    ```java
-    // 不推荐：频繁创建新实例
-    for (int i = 0; i < 1000; i++) {
-        Random random = new Random(); // 不必要的开销
-        int num = random.nextInt();
-    }
+   ```java
+   // 不推荐：频繁创建新实例
+   for (int i = 0; i < 1000; i++) {
+       Random random = new Random(); // 不必要的开销
+       int num = random.nextInt();
+   }
 
-    // 推荐：复用同一个实例
-    Random random = new Random();
-    for (int i = 0; i < 1000; i++) {
-        int num = random.nextInt();
-    }
-    ```
+   // 推荐：复用同一个实例
+   Random random = new Random();
+   for (int i = 0; i < 1000; i++) {
+       int num = random.nextInt();
+   }
+   ```
 
 2. **多线程环境下的选择**：Random 类不是线程安全的。在多线程环境中，建议使用 `ThreadLocalRandom`（Java 7+）或为每个线程创建独立的 Random 实例。
 
-    ```java
-    // Java 7+ 多线程环境推荐使用 ThreadLocalRandom
-    import java.util.concurrent.ThreadLocalRandom;
+   ```java
+   // Java 7+ 多线程环境推荐使用 ThreadLocalRandom
+   import java.util.concurrent.ThreadLocalRandom;
 
-    ThreadLocalRandom.current().nextInt(100);
-    ```
+   ThreadLocalRandom.current().nextInt(100);
+   ```
 
 ### 5.2 范围生成的正确方法
 
@@ -253,7 +253,7 @@ double randomDoubleInRange = random.nextDouble() * (doubleMax - doubleMin) + dou
 
 3. **安全关键场景**：对于安全敏感的应用（如加密密钥生成），应使用 `java.security.SecureRandom` 而不是 Random 类。
 
-## 6. 替代方案
+## 6 替代方案
 
 ### 6.1 ThreadLocalRandom
 
@@ -278,7 +278,7 @@ byte[] bytes = new byte[16];
 secureRandom.nextBytes(bytes); // 生成安全随机字节
 ```
 
-## 7. 常见问题与解决方案
+## 7 常见问题与解决方案
 
 ### 7.1 随机数的重复问题
 

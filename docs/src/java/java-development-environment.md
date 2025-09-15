@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 开发环境配置详解与最佳实践
 
-## 1. Java 开发环境概述
+## 1 Java 开发环境概述
 
 Java 开发环境的配置是每个 Java 程序员的首要任务，一个合理配置的环境能显著提高开发效率和项目可维护性。2025 年，Java 生态持续演进，JDK 21 已成为企业级开发的主流版本，带来了虚拟线程、模式匹配增强等革命性特性。本文将详细介绍 Windows、macOS、Linux 及 Docker 环境下的 Java 开发环境配置，并分享行业最佳实践。
 
@@ -32,7 +32,7 @@ Java 开发环境的配置是每个 Java 程序员的首要任务，一个合理
 - **Homebrew**（macOS）：方便的包管理工具，可安装多个 JDK 版本
 - **Windows Package Manager**（Windows）：Windows 平台的包管理工具
 
-## 2. Windows 环境配置
+## 2 Windows 环境配置
 
 ### 2.1 JDK 安装
 
@@ -98,7 +98,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 21.0.2+13-LTS-58, mixed mode, sharing)
 2. 配置 JDK：Window > Preferences > Java > Installed JREs > Add
 3. 设置编码：Window > Preferences > General > Workspace，将"Text file encoding"改为 UTF-8
 
-## 3. macOS 环境配置
+## 3 macOS 环境配置
 
 ### 3.1 JDK 安装
 
@@ -173,7 +173,7 @@ java -version
 javac -version
 ```
 
-## 4. Linux 环境配置
+## 4 Linux 环境配置
 
 ### 4.1 使用包管理器安装
 
@@ -259,7 +259,7 @@ which java
 echo $JAVA_HOME
 ```
 
-## 5. Docker 环境配置
+## 5 Docker 环境配置
 
 ### 5.1 编写 Dockerfile
 
@@ -379,7 +379,7 @@ _表：Java Docker 容器优化参数_
 | `--memory`                 | `512m`                | 限制容器最大内存使用量            |
 | `--cpus`                   | `1.0`                 | 限制容器 CPU 使用量               |
 
-## 6. 跨平台开发建议
+## 6 跨平台开发建议
 
 ### 6.1 一致的项目结构
 
@@ -507,7 +507,7 @@ jobs:
         run: mvn -B test --file pom.xml
 ```
 
-## 7. 总结与最佳实践
+## 7 总结与最佳实践
 
 ### 7.1 环境配置最佳实践
 

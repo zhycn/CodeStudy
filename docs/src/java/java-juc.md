@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 并发编程（JUC）详解与最佳实践
 
-## 1. JUC 包概述
+## 1 JUC 包概述
 
 Java 并发工具包（Java Util Concurrent，简称 JUC）是 Java 5 引入的专门用于多线程编程的工具包，位于 `java.util.concurrent` 及其子包中。JUC 提供了比传统线程 API 更高级、更灵活的并发编程工具，极大简化了并发程序的开发难度，提高了并发程序的性能和可靠性。
 
@@ -41,7 +41,7 @@ JUC 包针对这些问题提供了全面的解决方案，具有以下优势：
 - **扩展性强**：支持更复杂的并发场景，如分治合并、异步编程等
 - **可靠性高**：减少了死锁等并发问题的发生概率，提供了更安全的并发数据结构
 
-## 2. 原子类详解
+## 2 原子类详解
 
 ### 2.1 原子类概述与核心原理
 
@@ -119,9 +119,9 @@ public class AtomicIntegerExample {
 - `getAndIncrement()`：原子性地获取当前值然后将值加1（相当于`i++`）
 - `decrementAndGet()`：原子性地将当前值减1并返回新值（相当于`--i`）
 - `getAndDecrement()`：原子性地获取当前值然后将值减1（相当于`i--`）
-- `getAndAdd(int delta)`：原子性地获取当前值然后加上指定的delta
-- `addAndGet(int delta)`：原子性地加上指定的delta然后返回新值
-- `compareAndSet(int expect, int update)`：如果当前值等于预期值expect，则原子性地将其更新为update
+- `getAndAdd(int delta)`：原子性地获取当前值然后加上指定的 delta
+- `addAndGet(int delta)`：原子性地加上指定的 delta 然后返回新值
+- `compareAndSet(int expect, int update)`：如果当前值等于预期值 expect，则原子性地将其更新为 update
 - `get()`：获取当前值
 - `set(int newValue)`：设置为给定新值
 
@@ -129,40 +129,40 @@ public class AtomicIntegerExample {
 
 与传统的`synchronized`关键字相比，`AtomicInteger`在竞争不激烈的情况下性能更高，因为它避免了线程上下文切换和阻塞。
 
-| **特性**     | **AtomicInteger**         | **synchronized**             |
-| ------------ | ------------------------- | ---------------------------- |
-| **实现方式** | 基于CAS（硬件级原子操作） | 基于JVM的监视器锁（Monitor） |
-| **性能**     | 竞争不激烈时效率高        | 竞争激烈时开销大（线程阻塞） |
-| **适用场景** | 简单原子操作              | 复杂同步逻辑                 |
-| **可扩展性** | 高（无需加锁）            | 低（锁竞争导致性能下降）     |
-| **内存语义** | 保证可见性和原子性        | 保证可见性和原子性           |
+| **特性**     | **AtomicInteger**          | **synchronized**               |
+| ------------ | -------------------------- | ------------------------------ |
+| **实现方式** | 基于 CAS（硬件级原子操作） | 基于 JVM 的监视器锁（Monitor） |
+| **性能**     | 竞争不激烈时效率高         | 竞争激烈时开销大（线程阻塞）   |
+| **适用场景** | 简单原子操作               | 复杂同步逻辑                   |
+| **可扩展性** | 高（无需加锁）             | 低（锁竞争导致性能下降）       |
+| **内存语义** | 保证可见性和原子性         | 保证可见性和原子性             |
 
 ### 2.3 其他原子类
 
-除了`AtomicInteger`，JUC还提供了多种原子类，覆盖了不同的使用场景：
+除了`AtomicInteger`，JUC 包还提供了多种原子类，覆盖了不同的使用场景：
 
 1. **基本类型原子类**：
-   - `AtomicLong`：提供对long类型的原子操作
-   - `AtomicBoolean`：提供对boolean类型的原子操作
+   - `AtomicLong`：提供对 long 类型的原子操作
+   - `AtomicBoolean`：提供对 boolean 类型的原子操作
 
 2. **引用类型原子类**：
    - `AtomicReference`：用于原子更新对象引用
-   - `AtomicStampedReference`：通过添加版本戳解决ABA问题
-   - `AtomicMarkableReference`：通过添加标记位解决ABA问题
+   - `AtomicStampedReference`：通过添加版本戳解决 ABA 问题
+   - `AtomicMarkableReference`：通过添加标记位解决 ABA 问题
 
 3. **数组原子类**：
-   - `AtomicIntegerArray`：提供对int数组元素的原子操作
-   - `AtomicLongArray`：提供对long数组元素的原子操作
+   - `AtomicIntegerArray`：提供对 int 数组元素的原子操作
+   - `AtomicLongArray`：提供对 long 数组元素的原子操作
    - `AtomicReferenceArray`：提供对引用数组元素的原子操作
 
 4. **字段更新器**：
-   - `AtomicIntegerFieldUpdater`：基于反射原子更新对象的volatile int字段
-   - `AtomicLongFieldUpdater`：基于反射原子更新对象的volatile long字段
-   - `AtomicReferenceFieldUpdater`：基于反射原子更新对象的volatile引用字段
+   - `AtomicIntegerFieldUpdater`：基于反射原子更新对象的 volatile int 字段
+   - `AtomicLongFieldUpdater`：基于反射原子更新对象的 volatile long 字段
+   - `AtomicReferenceFieldUpdater`：基于反射原子更新对象的 volatile 引用字段
 
 5. **高性能累加器**（Java 8+）：
-   - `LongAdder`：在高并发场景下比`AtomicLong`更高性能的计数器
-   - `DoubleAdder`：用于double类型的高性能累加器
+   - `LongAdder`：在高并发场景下比 `AtomicLong` 更高性能的计数器
+   - `DoubleAdder`：用于 double 类型的高性能累加器
    - `LongAccumulator`：支持自定义累加函数的高性能累加器
 
 ### 2.4 原子类的适用场景与注意事项
@@ -171,28 +171,28 @@ public class AtomicIntegerExample {
 
 1. **计数器**：多线程环境下的计数，如生成唯一ID、统计请求次数等
 2. **状态标志**：多线程间的状态同步，如控制线程启停
-3. **乐观锁实现**：通过`compareAndSet()`实现无锁算法
+3. **乐观锁实现**：通过 `compareAndSet()` 实现无锁算法
 4. **累积统计**：如求和、最大值、最小值等统计操作
 
 #### 2.4.2 注意事项与局限性
 
 1. **ABA问题**：
-   - 问题描述：一个值从A变为B，然后又变回A，CAS操作会误认为它没有被修改过
-   - 解决方案：使用`AtomicStampedReference`或`AtomicMarkableReference`添加版本戳
+   - 问题描述：一个值从 A 变为 B，然后又变回 A，CAS 操作会误认为它没有被修改过
+   - 解决方案：使用 `AtomicStampedReference` 或 `AtomicMarkableReference` 添加版本戳
 
 2. **循环时间长开销大**：
-   - 问题描述：CAS操作如果长时间不成功，会给CPU带来较大开销
-   - 解决方案：限制CAS重试次数，或使用`LongAdder`等高性能累加器
+   - 问题描述：CAS 操作如果长时间不成功，会给 CPU 带来较大开销
+   - 解决方案：限制 CAS 重试次数，或使用 `LongAdder` 等高性能累加器
 
 3. **只能保证一个变量的原子操作**：
-   - 问题描述：CAS只能保证一个共享变量的原子操作，无法保证多个变量的原子性
-   - 解决方案：使用互斥锁或将多个变量合并到一个对象中使用`AtomicReference`
+   - 问题描述：CAS 只能保证一个共享变量的原子操作，无法保证多个变量的原子性
+   - 解决方案：使用互斥锁或将多个变量合并到一个对象中使用 `AtomicReference`
 
 4. **不适用于复杂操作**：
    - 问题描述：原子类适用于简单原子操作，复杂逻辑仍需使用同步锁
-   - 解决方案：对于复杂操作，考虑使用`synchronized`或`ReentrantLock`
+   - 解决方案：对于复杂操作，考虑使用 `synchronized` 或 `ReentrantLock`
 
-## 3. ConcurrentHashMap 解析
+## 3 ConcurrentHashMap 解析
 
 ### 3.1 ConcurrentHashMap 概述
 
@@ -342,7 +342,7 @@ public class ConcurrentHashMapExample {
 | **扩容机制**  | 2倍扩容      | 2倍扩容        | 分段扩容/2倍扩容              |
 | **Java版本**  | 所有         | 所有           | Java 5+                       |
 
-## 4. CopyOnWriteArrayList 解析
+## 4 CopyOnWriteArrayList 解析
 
 ### 4.1 CopyOnWriteArrayList 概述
 
@@ -462,10 +462,10 @@ public class CopyOnWriteArrayListExample {
 
 #### 4.5.1 适用场景
 
-1. **监听器列表**：在GUI应用或事件驱动模型中存储监听器列表
+1. **监听器列表**：在 GUI 应用或事件驱动模型中存储监听器列表
 2. **读多写少的配置数据**：如缓存配置信息、黑白名单等
 3. **快照数据**：需要数据快照进行遍历或分析的场景
-4. **避免迭代异常**：需要避免`ConcurrentModificationException`的场景
+4. **避免迭代异常**：需要避免 `ConcurrentModificationException` 的场景
 
 #### 4.5.2 最佳实践与注意事项
 
@@ -529,12 +529,12 @@ public class CopyOnWriteArrayListExample {
 | **内存开销**     | 低            | 低                 | 高（写时复制）           |
 | **适用场景**     | 单线程环境    | 多线程环境（写少） | 多线程环境（读多写少）   |
 
-## 5. 最佳实践与性能优化
+## 5 最佳实践与性能优化
 
 ### 5.1 原子类最佳实践
 
 1. **优先使用 LongAdder 代替 AtomicLong**
-   在高并发写多读少的场景下，`LongAdder`比`AtomicLong`性能更好，但需要注意它不保证实时精确值。
+   在高并发写多读少的场景下，`LongAdder` 比 `AtomicLong` 性能更好，但需要注意它不保证实时精确值。
 
    ```java
    // 高并发计数器场景推荐使用LongAdder
@@ -547,8 +547,8 @@ public class CopyOnWriteArrayListExample {
    long sum = adder.sum();
    ```
 
-2. **解决ABA问题**
-   在对数据一致性要求高的场景，使用带版本戳的原子类避免ABA问题。
+2. **解决 ABA 问题**
+   在对数据一致性要求高的场景，使用带版本戳的原子类避免 ABA 问题。
 
    ```java
    // 使用AtomicStampedReference解决ABA问题
@@ -759,7 +759,7 @@ public class CopyOnWriteArrayListExample {
    }
    ```
 
-## 6. 总结与展望
+## 6 总结与展望
 
 ### 6.1 关键知识点回顾
 
@@ -783,7 +783,7 @@ Java 并发包（JUC）提供了强大而丰富的并发编程工具，其中原
    - 更高效的无锁算法和数据结构
    - 更好的异步编程支持
    - 更智能的并发控制机制
-   - 对新型硬件架构（如NUMA、异构计算）的更好支持
+   - 对新型硬件架构（如 NUMA、异构计算）的更好支持
 
 ### 6.3 学习建议
 

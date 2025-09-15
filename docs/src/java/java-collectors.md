@@ -1,11 +1,12 @@
 ---
 title: Java Collectors 工具类详解与最佳实践
+description: 详细介绍 Java Collectors 工具类的使用方法、核心概念和最佳实践，帮助开发者正确、高效地使用 Collectors 类。
 author: zhycn
 ---
 
 # Java Collectors 工具类详解与最佳实践
 
-## 1. Collectors 工具类概述
+## 1 Collectors 工具类概述
 
 Java 8 引入的 `java.util.stream.Collectors` 是一个功能强大的工具类，专门用于处理 Stream API 的终端收集操作。它提供了多种静态方法，可以将流中的元素累积到各种集合中，并能执行各种汇总、分组和分区等操作。Collectors 类设计遵循了"工具类"模式，所有方法都是静态的，无需创建类的实例即可使用。
 
@@ -24,7 +25,7 @@ Collector 接口定义的五个组件协同工作：
 4. **Finisher**：对结果容器执行最终的转换（可选）。
 5. **Characteristics**：定义收集器的行为特性（如 CONCURRENT, UNORDERED, IDENTITY_FINISH）。
 
-## 2. 常用收集操作详解
+## 2 常用收集操作详解
 
 ### 2.1 集合收集操作
 
@@ -390,7 +391,7 @@ Integer max = numbers.stream()
 // 结果: 5
 ```
 
-## 3. 并行流与收集器
+## 3 并行流与收集器
 
 ### 3.1 并行流使用注意事项
 
@@ -434,7 +435,7 @@ ConcurrentMap<String, Double> concurrentAvgSalary = employees.parallelStream()
         Collectors.averagingDouble(Employee::getSalary)));
 ```
 
-## 4. 性能优化与最佳实践
+## 4 性能优化与最佳实践
 
 ### 4.1 容量规划优化
 
@@ -518,7 +519,7 @@ Map<Integer, String> lengthMap = listWithNulls.stream()
         (existing, replacement) -> existing));
 ```
 
-## 5. 实际应用场景
+## 5 实际应用场景
 
 ### 5.1 数据统计分析
 
@@ -604,7 +605,7 @@ public class ConfigProcessor {
 }
 ```
 
-## 6. 常见问题与解决方案
+## 6 常见问题与解决方案
 
 ### 6.1 重复键异常处理
 

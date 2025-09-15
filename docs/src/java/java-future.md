@@ -7,7 +7,7 @@ author: zhycn
 
 作为 Java 并发编程的核心组件，`Future` 接口为异步计算提供了基础支持。本文将深入解析 `Future` 的设计理念、工作机制、使用方法和最佳实践。
 
-## 1. Future 概述
+## 1 Future 概述
 
 `Future` 接口（`java.util.concurrent.Future`）是 Java 5 引入的异步计算抽象，它代表一个可能尚未完成的异步任务的结果。通过 `Future`，开发者可以提交任务到线程池异步执行，在需要时获取计算结果，并能够控制任务的生命周期。
 
@@ -17,7 +17,7 @@ author: zhycn
 - ✅ **提供统一的任务控制接口**：检查状态、获取结果、取消任务
 - ✅ **保证跨线程内存可见性**：确保线程间的数据同步
 
-## 2. 核心工作机制
+## 2 核心工作机制
 
 ### 2.1 状态机模型
 
@@ -37,24 +37,24 @@ stateDiagram-v2
 
 ### 2.2 核心方法解析
 
-| 方法 | 说明 | 阻塞性 |
-|------|------|--------|
-| `get()` | 获取计算结果，未完成时阻塞 | 阻塞 |
-| `get(long, TimeUnit)` | 带超时的结果获取 | 有条件阻塞 |
-| `isDone()` | 检查任务是否完成 | 非阻塞 |
-| `cancel(boolean)` | 尝试取消任务 | 非阻塞 |
-| `isCancelled()` | 判断任务是否已取消 | 非阻塞 |
+| 方法                  | 说明                       | 阻塞性     |
+| --------------------- | -------------------------- | ---------- |
+| `get()`               | 获取计算结果，未完成时阻塞 | 阻塞       |
+| `get(long, TimeUnit)` | 带超时的结果获取           | 有条件阻塞 |
+| `isDone()`            | 检查任务是否完成           | 非阻塞     |
+| `cancel(boolean)`     | 尝试取消任务               | 非阻塞     |
+| `isCancelled()`       | 判断任务是否已取消         | 非阻塞     |
 
 **方法行为总结**：
 
-| 场景 | 行为 |
-|------|------|
-| 调用已完成任务的 `get()` | 立即返回计算结果 |
-| 调用未完成任务的 `get()` | 阻塞当前线程直至结果就绪 |
-| 调用已取消任务的 `get()` | 抛出 `CancellationException` |
-| 重复调用 `cancel(true)` | 首次调用可能成功取消，后续调用无效 |
+| 场景                     | 行为                               |
+| ------------------------ | ---------------------------------- |
+| 调用已完成任务的 `get()` | 立即返回计算结果                   |
+| 调用未完成任务的 `get()` | 阻塞当前线程直至结果就绪           |
+| 调用已取消任务的 `get()` | 抛出 `CancellationException`       |
+| 重复调用 `cancel(true)`  | 首次调用可能成功取消，后续调用无效 |
 
-## 3. 基础用法与代码示例
+## 3 基础用法与代码示例
 
 ### 3.1 基本使用模式
 
@@ -160,7 +160,7 @@ public class FutureExceptionHandling {
 }
 ```
 
-## 4. FutureTask 实用类
+## 4 FutureTask 实用类
 
 `FutureTask` 是 `Future` 接口的实现类，同时实现了 `Runnable` 接口，既可提交到线程池执行，也可直接作为 `Thread` 的目标。
 
@@ -190,14 +190,14 @@ public class FutureTaskDemo {
 }
 ```
 
-## 5. 任务取消机制深度剖析
+## 5 任务取消机制深度剖析
 
 ### 5.1 取消操作的两种模式
 
-| 模式 | 触发方式 | 中断处理 |
-|------|----------|----------|
-| 不可中断 | `cancel(false)` | 仅标记取消状态，不中断线程 |
-| 可中断 | `cancel(true)` | 调用 `Thread.interrupt()` 尝试中断 |
+| 模式     | 触发方式        | 中断处理                           |
+| -------- | --------------- | ---------------------------------- |
+| 不可中断 | `cancel(false)` | 仅标记取消状态，不中断线程         |
+| 可中断   | `cancel(true)`  | 调用 `Thread.interrupt()` 尝试中断 |
 
 ### 5.2 优雅取消实现模板
 
@@ -241,17 +241,17 @@ public class GracefulCancellationDemo {
 - **状态不可逆**：已完成的任务调用 `cancel()` 返回 `false`
 - **资源泄漏风险**：被中断线程可能遗留未关闭的资源
 
-## 6. Future 与 CompletableFuture 的对比
+## 6 Future 与 CompletableFuture 的对比
 
 ### 6.1 功能差异
 
-| 特性 | Future | CompletableFuture |
-|------|--------|-------------------|
-| 手动完成 | ❌ | ✅ |
+| 特性       | Future                        | CompletableFuture             |
+| ---------- | ----------------------------- | ----------------------------- |
+| 手动完成   | ❌                            | ✅                            |
 | 异常处理链 | 手动捕获 `ExecutionException` | 支持 `exceptionally()` 处理链 |
-| 组合操作 | ❌ | ✅ (`thenCombine`等) |
-| 非阻塞回调 | ❌ | ✅ (`thenApply`等) |
-| 超时控制 | 需显式指定 | 内置 `orTimeout()` 方法 |
+| 组合操作   | ❌                            | ✅ (`thenCombine`等)          |
+| 非阻塞回调 | ❌                            | ✅ (`thenApply`等)            |
+| 超时控制   | 需显式指定                    | 内置 `orTimeout()` 方法       |
 
 ### 6.2 迁移策略建议
 
@@ -259,7 +259,7 @@ public class GracefulCancellationDemo {
 - **复杂流水线**：优先选择 CompletableFuture
 - **混合使用**：通过 `CompletableFuture.supplyAsync()` 包装现有 Future
 
-## 7. 最佳实践与常见陷阱
+## 7 最佳实践与常见陷阱
 
 ### 7.1 超时控制
 
@@ -340,7 +340,7 @@ Future<?> future = executor.submit(() -> {
 future.cancel(true); // 保留可取消性
 ```
 
-## 8. 总结
+## 8 总结
 
 Java `Future` 接口作为异步计算的基石，其核心价值在于实现任务提交与结果获取的解耦，使开发者能够构建高效、响应式的并发应用程序。
 
@@ -353,12 +353,12 @@ Java `Future` 接口作为异步计算的基石，其核心价值在于实现任
 
 **选择建议**：
 
-| 场景 | 推荐技术 |
-|------|----------|
-| 简单异步任务 | Future + ExecutorService |
-| 需要任务取消能力 | Future + 可中断逻辑 |
-| 复杂异步流水线 | CompletableFuture |
-| 多个任务组合 | CompletableFuture |
-| 非阻塞回调需求 | CompletableFuture |
+| 场景             | 推荐技术                 |
+| ---------------- | ------------------------ |
+| 简单异步任务     | Future + ExecutorService |
+| 需要任务取消能力 | Future + 可中断逻辑      |
+| 复杂异步流水线   | CompletableFuture        |
+| 多个任务组合     | CompletableFuture        |
+| 非阻塞回调需求   | CompletableFuture        |
 
 随着 Java 并发API的演进，`CompletableFuture` 提供了更强大的异步编程能力，但传统的 `Future` 接口在简单场景下仍然是轻量且有效的选择。理解 `Future` 的工作原理和最佳实践，是为现代Java并发编程奠定坚实基础的关键步骤。

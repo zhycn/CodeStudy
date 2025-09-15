@@ -8,7 +8,7 @@ author: zhycn
 
 Java 集合框架是 Java 语言中用于存储和操作数据的一组类和接口，它提供了多种数据结构实现，极大地简化了数据处理复杂度。本文将全面解析 Java 集合框架的核心组件、实现原理、性能特征及最佳实践。
 
-## 1. 集合框架概述
+## 1 集合框架概述
 
 Java 集合框架（Java Collections Framework）是 Java 提供的一组用于存储和操作对象的类和接口，位于 `java.util` 包中。它提供了一种统一的方式来处理对象集合，取代了传统的数组处理方式，具有动态扩容、类型安全和丰富 API 等优势。
 
@@ -73,7 +73,7 @@ Map 是存储键值对（Key-Value）的双列集合接口。
 | ConcurrentHashMap     | 哈希表（分段锁/CAS）       | 线程安全，高并发性能优于 Hashtable 和 `Collections.synchronizedMap` | 是       | 高并发环境下需要线程安全的HashMap                      |
 | ConcurrentSkipListMap | 跳表                       | 线程安全，键有序                                                    | 是       | 高并发环境下需要键有序的线程安全Map                    |
 
-## 2. 核心接口详解
+## 2 核心接口详解
 
 ### 2.1 Collection 接口
 
@@ -104,7 +104,7 @@ String fruit = list.get(1); // 访问元素
 list.remove(0); // 删除元素
 ```
 
-### 2.3 Set接口
+### 2.3 Set 接口
 
 Set 是不允许重复元素的集合，基于 equals() 和 hashCode() 判断元素唯一性：
 
@@ -139,7 +139,7 @@ queue.offer("Task2");
 String task = queue.poll(); // 获取并移除队首元素
 ```
 
-## 3. 常用实现类详解
+## 3 常用实现类详解
 
 ### 3.1 List 实现类对比
 
@@ -191,7 +191,7 @@ vector.add("Element");
 List<String> syncedList = Collections.synchronizedList(new ArrayList<>());
 ```
 
-### 3.2 Set实现类对比
+### 3.2 Set 实现类对比
 
 #### 3.2.1 HashSet
 
@@ -341,7 +341,7 @@ Runnable task = () -> {
 // 启动多个线程同时执行上述任务
 ```
 
-## 4. 集合性能对比与选择指南
+## 4 集合性能对比与选择指南
 
 ### 4.1 性能对比表
 
@@ -369,7 +369,7 @@ Runnable task = () -> {
      - 需要保持插入顺序 → LinkedHashMap
      - 多线程环境 → ConcurrentHashMap
      - 其他情况 → HashMap
-   - 否 → 选择Collection接口实现类
+   - 否 → 选择 Collection 接口实现类
      - 需要有序且可重复 → List
        - 频繁随机访问 → ArrayList
        - 频繁插入删除 → LinkedList
@@ -422,7 +422,7 @@ Runnable task = () -> {
   configList.add(newConfig);
   ```
 
-## 5. 集合框架最佳实践
+## 5 集合框架最佳实践
 
 ### 5.1 初始化优化
 
@@ -571,7 +571,7 @@ List<String> parallelResult = names.parallelStream()
     .collect(Collectors.toList());
 ```
 
-## 6. 常见问题与解决方案
+## 6 常见问题与解决方案
 
 ### 6.1 如何选择合适的 List 的实现类？
 
@@ -651,7 +651,7 @@ public static <T extends Serializable> T deepClone(T object) {
 }
 ```
 
-## 7. 总结
+## 7 总结
 
 Java 集合框架是 Java 开发的核心基础，提供了丰富的数据结构和算法。选择合适的集合类需要考虑以下因素：
 

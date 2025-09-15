@@ -53,31 +53,31 @@ Properties props3 = new Properties(defaultProps); // 设置默认属性
 
 Properties 类提供了一系列用于操作属性的方法：
 
-| 方法名 | 描述 | 返回值 |
-|--------|------|--------|
-| `setProperty(String key, String value)` | 设置键值对 | String (旧值) |
-| `getProperty(String key)` | 获取指定键的值 | String |
-| `getProperty(String key, String defaultValue)` | 获取指定键的值，若无则返回默认值 | String |
-| `remove(Object key)` | 移除指定键及其对应的值 | Object |
-| `clear()` | 清空所有键值对 | void |
-| `containsKey(Object key)` | 判断是否包含指定键 | boolean |
-| `containsValue(Object value)` | 判断是否包含指定值 | boolean |
-| `propertyNames()` | 返回所有键的枚举 | Enumeration<?> |
-| `stringPropertyNames()` | 返回所有字符串键的集合 | Set\<String\> |
+| 方法名                                         | 描述                             | 返回值         |
+| ---------------------------------------------- | -------------------------------- | -------------- |
+| `setProperty(String key, String value)`        | 设置键值对                       | String (旧值)  |
+| `getProperty(String key)`                      | 获取指定键的值                   | String         |
+| `getProperty(String key, String defaultValue)` | 获取指定键的值，若无则返回默认值 | String         |
+| `remove(Object key)`                           | 移除指定键及其对应的值           | Object         |
+| `clear()`                                      | 清空所有键值对                   | void           |
+| `containsKey(Object key)`                      | 判断是否包含指定键               | boolean        |
+| `containsValue(Object value)`                  | 判断是否包含指定值               | boolean        |
+| `propertyNames()`                              | 返回所有键的枚举                 | Enumeration<?> |
+| `stringPropertyNames()`                        | 返回所有字符串键的集合           | Set\<String\>  |
 
 ### 2.3 文件加载与保存方法
 
 Properties 类提供了多种方法用于从流中加载和保存属性：
 
-| 方法名 | 描述 | 编码方式 |
-|--------|------|----------|
-| `load(InputStream inStream)` | 从输入流加载属性 | ISO-8859-1 |
-| `load(Reader reader)` | 从字符流加载属性 | 支持 UTF-8 |
-| `loadFromXML(InputStream in)` | 从 XML 输入流加载属性 | UTF-8 |
-| `store(OutputStream out, String comments)` | 将属性保存到输出流 | ISO-8859-1 |
-| `store(Writer writer, String comments)` | 将属性保存到字符流 | 支持 UTF-8 |
-| `storeToXML(OutputStream os, String comment)` | 将属性保存为 XML 格式 | UTF-8 |
-| `storeToXML(OutputStream os, String comment, String encoding)` | 将属性保存为指定编码的 XML | 指定编码 |
+| 方法名                                                         | 描述                       | 编码方式   |
+| -------------------------------------------------------------- | -------------------------- | ---------- |
+| `load(InputStream inStream)`                                   | 从输入流加载属性           | ISO-8859-1 |
+| `load(Reader reader)`                                          | 从字符流加载属性           | 支持 UTF-8 |
+| `loadFromXML(InputStream in)`                                  | 从 XML 输入流加载属性      | UTF-8      |
+| `store(OutputStream out, String comments)`                     | 将属性保存到输出流         | ISO-8859-1 |
+| `store(Writer writer, String comments)`                        | 将属性保存到字符流         | 支持 UTF-8 |
+| `storeToXML(OutputStream os, String comment)`                  | 将属性保存为 XML 格式      | UTF-8      |
+| `storeToXML(OutputStream os, String comment, String encoding)` | 将属性保存为指定编码的 XML | 指定编码   |
 
 ## 3 基本使用与示例
 

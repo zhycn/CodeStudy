@@ -6,7 +6,7 @@ author: zhycn
 
 # Java Reflection 反射详解与最佳实践
 
-## 1. 反射的核心概念与原理
+## 1 反射的核心概念与原理
 
 Java 反射（Reflection）是 Java 语言内建的一种强大机制，它允许程序在**运行时**动态获取类信息、检查类结构，并操作类成员（字段、方法、构造器等）。这种能力突破了编译期静态类型检查的限制，赋予程序自我认知和动态操作的能力。
 
@@ -55,7 +55,7 @@ Java 反射 API 主要包含以下核心类：
 
 这些类都位于 `java.lang.reflect` 包中（除了 `Class` 位于 `java.lang` 包），它们共同构成了 Java 反射机制的基础。
 
-## 2. 反射核心 API 详解
+## 2 反射核心 API 详解
 
 ### 2.1 类成员获取与检查
 
@@ -146,7 +146,7 @@ public class DynamicOperationExample {
 }
 ```
 
-## 3. 反射的高级应用场景
+## 3 反射的高级应用场景
 
 ### 3.1 框架开发
 
@@ -266,7 +266,7 @@ public class AnnotationProcessor {
 }
 ```
 
-## 4. 反射性能优化技巧
+## 4 反射性能优化技巧
 
 反射操作通常比直接调用慢 10-100 倍，主要原因是：
 
@@ -350,7 +350,7 @@ public class LambdaMetaExample {
 }
 ```
 
-## 5. 反射的安全考虑与最佳实践
+## 5 反射的安全考虑与最佳实践
 
 ### 5.1 安全注意事项
 
@@ -431,7 +431,7 @@ public class ReflectionExceptionHandling {
 }
 ```
 
-## 6. 反射在现代Java开发中的实践
+## 6 反射在现代 Java 开发中的实践
 
 ### 6.1 模块化系统的考虑
 
@@ -501,7 +501,7 @@ public class CacheableProcessor {
 }
 ```
 
-## 7. 总结与最佳实践汇总
+## 7 总结与最佳实践汇总
 
 Java 反射是一项强大但需要谨慎使用的特性。以下是关键最佳实践总结：
 

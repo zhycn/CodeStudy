@@ -6,7 +6,7 @@ author: zhycn
 
 # Java Scanner 类详解与最佳实践（知道就好）
 
-## 1. 概述与核心功能
+## 1 概述与核心功能
 
 Java 中的 `Scanner` 类是 `java.util` 包中一个极其实用的工具类，用于解析基本类型和字符串的简单文本扫描器。它可以将输入文本（如文件、字符串或标准输入流）分解为标记（tokens），然后使用各种 `next` 方法将其转换为不同类型的值。
 
@@ -20,7 +20,7 @@ Scanner 类的核心功能包括：
 
 Scanner 类的设计理念是简单、灵活，适合处理各种不同的数据源，包括控制台输入、文件输入、字符串等。它使用正则表达式来解析原始输入流，从而读取不同类型的值。
 
-## 2. 创建 Scanner 对象
+## 2 创建 Scanner 对象
 
 Scanner 类提供了多个构造函数，可以根据不同的需求来创建 Scanner 对象。
 
@@ -77,7 +77,7 @@ Scanner socketScanner = new Scanner(inputStream);
 
 Scanner 类可以适配各种输入流。
 
-## 3. 读取不同类型的数据
+## 3 读取不同类型的数据
 
 Scanner 类提供了一系列方法来处理不同类型的数据。
 
@@ -142,7 +142,7 @@ scanner.nextLine(); // 消耗换行符
 String name = scanner.nextLine();
 ```
 
-## 4. 高级输入处理
+## 4 高级输入处理
 
 ### 4.1 分隔符控制
 
@@ -206,7 +206,7 @@ int num = scanner.nextInt();
 - `hasNextLine()`：是否有下一行
 - `hasNext(pattern)`：是否匹配指定正则表达式
 
-## 5. 异常处理与边界情况
+## 5 异常处理与边界情况
 
 Scanner 类在解析输入时可能会遇到无效数据，例如在读取整数时遇到非数字字符。这时，Scanner 会抛出 `InputMismatchException` 异常。
 
@@ -235,7 +235,7 @@ try {
 }
 ```
 
-## 6. 最佳实践与性能优化
+## 6 最佳实践与性能优化
 
 ### 6.1 资源管理
 
@@ -274,7 +274,7 @@ try (Scanner scanner = new Scanner(new File("data.txt"))) {
 
 Scanner 类不是线程安全的。在多线程环境中，应该为每个线程创建独立的 Scanner 实例或进行同步控制。
 
-## 7. 实战应用案例
+## 7 实战应用案例
 
 ### 7.1 控制台计算器
 
@@ -410,7 +410,7 @@ public class ConfigParser {
 }
 ```
 
-## 8. 总结
+## 8 总结
 
 Scanner 类是 Java 中处理输入数据的一个非常有用的工具。它的灵活性使得它在各种应用场景下都表现出色，无论是从控制台读取用户输入，还是从文件中解析数据。
 

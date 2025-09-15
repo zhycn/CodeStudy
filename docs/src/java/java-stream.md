@@ -6,7 +6,7 @@ author: zhycn
 
 # Java Stream API 详解与最佳实践
 
-## 1. Stream 简介
+## 1 Stream 简介
 
 Java Stream 是 Java 8 中引入的一个重要特性，它提供了一种声明式、函数式处理数据集合的方式。Stream 不是数据结构，而是对数据源（集合、数组等）进行各种高效聚合操作的抽象流水线。与传统循环相比，Stream 操作更简洁、可读性更强，并且可以轻松实现并行处理以提高大数据集的处理效率。
 
@@ -35,7 +35,7 @@ List<String> result = names.stream()
     .collect(Collectors.toList());
 ```
 
-## 2. 核心概念与工作原理
+## 2 核心概念与工作原理
 
 ### 2.1 Stream API 的特性
 
@@ -63,7 +63,7 @@ Stream API 操作形成一条流水线（Pipeline），数据像在传送带上�
 
 **惰性求值机制**：中间操作不会立即执行，而是记录操作步骤，直到遇到终端操作时才一次性执行所有操作。这种设计优化了处理效率，避免了不必要的计算。
 
-## 3. 创建 Stream
+## 3 创建 Stream
 
 有多种方式可以创建 Stream，下面介绍常用的方法：
 
@@ -124,7 +124,7 @@ LongStream longStream = LongStream.of(1L, 2L, 3L);  // 特定值
 DoubleStream doubleStream = DoubleStream.generate(Math::random).limit(10);
 ```
 
-## 4. 常用中间操作
+## 4 常用中间操作
 
 中间操作返回新的 Stream，可以链式调用。以下是常用的中间操作：
 
@@ -241,7 +241,7 @@ List<String> page = names.stream()
     .collect(Collectors.toList());
 ```
 
-## 5. 常用终端操作
+## 5 常用终端操作
 
 终端操作触发实际计算，返回结果或副作用。终端操作后，Stream 不能再使用。
 
@@ -422,7 +422,7 @@ Optional<String> max = names.stream()
 // 结果: Optional["Charlie"]（长度最长）
 ```
 
-## 6. 并行流与性能优化
+## 6 并行流与性能优化
 
 ### 6.1 并行流的使用
 
@@ -552,7 +552,7 @@ List<String> result = names.parallelStream()
     .collect(Collectors.toList());  // 线程安全
 ```
 
-## 7. 最佳实践与常见陷阱
+## 7 最佳实践与常见陷阱
 
 ### 7.1 最佳实践
 
@@ -666,7 +666,7 @@ private String processName(String name) {
 }
 ```
 
-## 8. 总结
+## 8 总结
 
 Java Stream API 是现代 Java 编程中不可或缺的一部分，它提供了声明式、函数式处理数据集合的能力。通过本文的详细讲解，你应该已经掌握了：
 

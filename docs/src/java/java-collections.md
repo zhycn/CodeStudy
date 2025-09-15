@@ -1,11 +1,12 @@
 ---
 title: Java Collections 工具类详解与最佳实践
+description: 详细介绍 Java Collections 工具类的使用方法、核心概念和最佳实践，帮助开发者正确、高效地使用 Collections 类。
 author: zhycn
 ---
 
 # Java Collections 工具类详解与最佳实践
 
-## 1. 概述与核心概念
+## 1 概述与核心概念
 
 Java `Collections` 工具类是 Java 集合框架（Java Collections Framework, JCF）中一个不可或缺的实用工具类，位于 `java.util` 包中。它提供了一系列静态方法，用于对集合进行各种操作，包括排序、查找、替换、线程安全化以及创建不可变集合等。
 
@@ -27,7 +28,7 @@ Collections 工具类主要操作以下核心接口及其实现类：
 - **Map 接口**：HashMap、TreeMap、LinkedHashMap 等。
 - **Queue 接口**：LinkedList、PriorityQueue 等。
 
-## 2. 核心方法详解
+## 2 核心方法详解
 
 ### 2.1 排序操作
 
@@ -178,7 +179,7 @@ synchronized(synchronizedList) {
 
 **注意**：即使使用线程安全包装，迭代操作仍需要手动同步。
 
-## 3. 最佳实践与性能优化
+## 3 最佳实践与性能优化
 
 ### 3.1 集合选型原则
 
@@ -309,7 +310,7 @@ public List<String> getConfigItems() {
 }
 ```
 
-## 4. 实战应用场景
+## 4 实战应用场景
 
 ### 4.1 电商购物车实现
 
@@ -379,7 +380,7 @@ while (!taskQueue.isEmpty()) {
 }
 ```
 
-## 5. 总结
+## 5 总结
 
 Java Collections 工具类提供了丰富而强大的方法简化集合操作，是每个 Java 开发者必须掌握的核心工具类。通过合理运用其提供的排序、查找、修改等方法，以及正确使用线程安全包装和不可变集合，可以显著提高代码质量和性能。
 

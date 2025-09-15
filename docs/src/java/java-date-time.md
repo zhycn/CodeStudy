@@ -6,7 +6,7 @@ author: zhycn
 
 # Java 日期时间详解与最佳实践
 
-## 1. Java 日期时间 API 演进与概述
+## 1 Java 日期时间 API 演进与概述
 
 Java 的日期和时间 API 经历了显著的演进过程。在早期版本中（Java 1.0/1.1），日期时间处理主要依赖于 `java.util.Date` 和 `java.util.Calendar` 类，但这些类存在诸多设计缺陷。`Date` 类虽然表示特定的瞬时时间（精确到毫秒），但其**很多方法已被弃用**，**不支持国际化**，并且**月份从0开始**的计数方式容易导致混淆。随后引入的 `Calendar` 类提供了更复杂的日期时间操作，但仍存在**时区处理复杂**、**不够直观**、**易错**等问题。
 
@@ -25,7 +25,7 @@ Java 8 引入了全新的日期时间 API（`java.time` 包，遵循 JSR-310 标
 
 _表：Java 旧日期时间 API 与新日期时间 API 特性对比_
 
-## 2. java.time 包核心类详解
+## 2 java.time 包核心类详解
 
 Java 8 引入的 `java.time` 包提供了一套全面且功能丰富的日期时间 API，这些 API 严格区分了不同日期时间概念，使得处理更加精确和直观。
 
@@ -102,7 +102,7 @@ System.out.println("操作耗时: " + elapsed.toMillis() + "毫秒");
 
 _表：java.time 包核心类用途总结_
 
-## 3. 日期时间格式化与解析
+## 3 日期时间格式化与解析
 
 在日常开发中，日期时间的**格式化**（转换为字符串）和**解析**（从字符串转换为日期时间对象）是常见操作。Java 8 引入的 `DateTimeFormatter` 类，它替代了旧的 `SimpleDateFormat`，提供了更强大、更安全的功能。
 
@@ -167,7 +167,7 @@ for (DateTimeFormatter formatter : formatters) {
 }
 ```
 
-## 4. 日期时间计算与调整
+## 4 日期时间计算与调整
 
 Java 8 引入的日期时间 API 提供了丰富的日期时间计算和调整方法，使得日期时间操作变得简单直观。
 
@@ -265,7 +265,7 @@ System.out.println("天数差: " + daysBetween);
 System.out.println("小时差: " + hoursBetween);
 ```
 
-## 5. 时区处理
+## 5 时区处理
 
 在全球化的应用程序中，时区处理是一个不可忽视的重要因素。Java 8 日期时间API提供了强大的时区支持，使得处理不同时区的时间变得简单可靠。
 
@@ -353,7 +353,7 @@ System.out.println("结束: " + end);
 System.out.println("总小时数: " + duration.toHours()); // 应该是47小时（因为少了1小时）
 ```
 
-## 6. 与旧 API 的互操作
+## 6 与旧 API 的互操作
 
 尽管推荐在新项目中使用 Java 8 日期时间 API，但在维护旧系统或与遗留代码交互时，可能需要与旧的日期时间 API（`Date`、`Calendar`）进行转换。
 
@@ -436,7 +436,7 @@ System.out.println("java.sql.Timestamp: " + sqlTimestamp);
 System.out.println("从sql.Timestamp转换回: " + fromSqlTimestamp);
 ```
 
-## 7. 最佳实践与性能考虑
+## 7 最佳实践与性能考虑
 
 在使用 Java 日期时间 API 时，遵循一些最佳实践可以提高代码质量、性能和可维护性。
 
@@ -563,7 +563,7 @@ public class DateUtilsTest {
 }
 ```
 
-## 8. 总结
+## 8 总结
 
 Java 日期时间处理从早期的问题重重的 Date 和 Calendar 类，发展到如今功能完善、设计优秀的 java.time API，经历了显著的演进。现代 Java 日期时间 API 提供了：
 
