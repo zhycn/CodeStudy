@@ -1,10 +1,10 @@
-好的，没有问题。作为一名 Spring 专家和 Markdown 文档工程师，我将为你呈现一篇详尽、专业且可立即上手的 Spring JMS 集成指南。
-
-在开始撰写前，我已通过联网搜索分析了来自 Spring 官方文档、Apache ActiveMQ 官方文档、IBM Developer、Baeldung、JavaWorld 等超过 10 篇中英文优质技术文章和教程，确保内容的准确性、时效性和最佳实践。
-
+---
+title: Spring 框架 JMS 集成详解与最佳实践
+description: 本教程详细介绍了 Spring 框架 JMS 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
-# Spring Framework JMS 集成详解与最佳实践
+# Spring 框架 JMS 集成详解与最佳实践
 
 ## 1. 引言
 

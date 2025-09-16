@@ -1,7 +1,7 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring 框架 ORM 数据访问支持的详尽教程。
-
-在开始撰写前，我已通过联网搜索参考了大量官方文档、知名技术博客（如 Baeldung、Spring.io）以及社区深度技术文章，确保内容的准确性、时效性和最佳实践。
-
+---
+title: Spring 框架 ORM 数据访问支持详解与最佳实践
+description: 本文深入探讨了 Spring 框架中 ORM 数据访问支持的核心概念、机制和最佳实践。内容涵盖了 ORM 框架的选择、配置、事务管理、批量操作、结果集映射等方面。
+author: zhycn
 ---
 
 # Spring 框架 ORM 数据访问支持详解与最佳实践
@@ -30,8 +30,6 @@ Spring 为以下 ORM 框架提供了官方支持：
 4. **JDO (Java Data Objects)**: 另一种持久化标准。
 
 本文将重点讲解最常用的 **Hibernate** 和 **JPA** 集成。
-
----
 
 ## 2. 核心集成与配置
 
@@ -207,8 +205,6 @@ public class JpaConfig {
 }
 ```
 
----
-
 ## 3. 统一异常处理
 
 Spring ORM 最显著的优势之一是其统一的异常处理机制。
@@ -257,8 +253,6 @@ public class UserService {
     }
 }
 ```
-
----
 
 ## 4. 声明式事务管理
 
@@ -315,8 +309,6 @@ public class BookingService {
   `@Transactional(rollbackFor = {IOException.class, MyBusinessException.class})`
 - **不回滚特定异常**：使用 `noRollbackFor` 属性。
 
----
-
 ## 5. 模板模式 (HibernateTemplate/JpaTemplate) vs. 原生 API
 
 在 Spring 的早期版本中，`HibernateTemplate` 和 `JpaTemplate` 被广泛使用，它们处理了资源的打开关闭和异常的转换。
@@ -357,8 +349,6 @@ public User findUser(Long id) {
 }
 ```
 
----
-
 ## 6. 延迟加载与 Open Session In View 模式
 
 ### 6.1 问题描述
@@ -397,8 +387,6 @@ spring.jpa.open-in-view=true
 
 3. **谨慎使用 OSIV**：如果必须使用，确保充分测试其性能影响，并考虑使用第二个只读数据库来减轻主库压力。
 
----
-
 ## 7. 集成测试
 
 Spring 提供了强大的支持来编写 ORM 集成测试。
@@ -427,8 +415,6 @@ class UserRepositoryIntegrationTest {
     // 由于有@Transactional，此测试结束后，保存的数据会被回滚，数据库保持干净。
 }
 ```
-
----
 
 ## 8. 总结与最佳实践清单
 

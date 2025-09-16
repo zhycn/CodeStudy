@@ -65,7 +65,6 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 
 ## Integration
 
-- [Spring 框架 REST Clients 集成详解与最佳实践](./spring-integration-rest-clients.md)
 - [Spring 框架 JMS 集成详解与最佳实践](./spring-integration-jms.md)
 - [Spring 框架 JCA 集成详解与最佳实践](./spring-integration-jca.md)
 - [Spring 框架 JMX 集成详解与最佳实践](./spring-integration-jmx.md)

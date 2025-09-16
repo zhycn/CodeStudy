@@ -1,21 +1,10 @@
-好的，没有问题。作为 Spring 技术专家和 Markdown 文档工程师，我将为你生成一篇详尽、专业且实用的技术文档。
-
-在撰写本文之前，我综合分析了来自 Spring 官方文档、Baeldung、Spring.io Guides、InfoQ 以及多位技术专家博客在内的十多篇优质文章，旨在为你提供体系化的知识和经过验证的最佳实践。
-
+---
+title: Spring Framework STOMP Messaging 详解与最佳实践
+description: 本文详细介绍了 Spring Framework 中 STOMP Messaging 的核心概念、配置方式、最佳实践以及实际应用场景。通过掌握这些知识，开发者可以在企业级应用中高效、一致地处理实时通信需求，提升系统的可维护性和可扩展性。
+author: zhycn
 ---
 
 # Spring 框架 STOMP Messaging 详解与最佳实践
-
-## 文档元信息
-
-| 项目             | 内容                                           |
-| :--------------- | :--------------------------------------------- |
-| **文档状态**     | ✅ 已完成                                      |
-| **作者**         | Spring 技术专家团队                            |
-| **审核人**       | -                                              |
-| **最后更新日期** | 2023-10-27                                     |
-| **目标读者**     | 具备 Spring Boot 和 Web 开发基础的初中级开发者 |
-| **前置知识**     | Spring Boot, WebSocket, 基本的消息传递概念     |
 
 ## 1. 引言：为什么选择 STOMP？
 
@@ -39,7 +28,7 @@
 
 一个 STOMP 帧 (Frame) 由三部分组成：**命令** (Command)，**头部** (Headers)，和**主体** (Body)。
 
-```
+```bash
 COMMAND
 header1:value1
 header2:value2
@@ -49,7 +38,7 @@ Body^@
 
 **示例：一个客户端发送消息的帧**
 
-```
+```bash
 SEND
 destination:/app/chat
 content-type:application/json
@@ -59,7 +48,7 @@ content-type:application/json
 
 **示例：服务器向订阅者广播消息的帧**
 
-```
+```bash
 MESSAGE
 destination:/topic/chat.message.1
 subscription:sub-0
@@ -485,16 +474,17 @@ stompClient.subscribe(
 ## 7. 常见问题与排查 (FAQ)
 
 **Q: 连接失败，出现 `Error during WebSocket handshake: Unexpected response code: 404`**
+
 **A:** 检查 STOMP 端点 URL 是否正确，以及服务器端 CORS 配置。
 
 **Q: 消息发送了，但客户端收不到。**
+
 **A:** 使用浏览器开发者工具的 **Network** -> **WS** 标签查看 WebSocket 帧，确认目的地前缀、订阅路径和发送路径是否匹配。
 
 **Q: 如何保证消息顺序？**
+
 **A:** 对于单个客户端，消息在同一个连接中通常是按顺序处理的。对于全局顺序，需要依赖外部代理的特性或业务逻辑保证。
 
 ## 8. 总结
 
 Spring Framework 对 STOMP 协议的支持提供了一种强大而灵活的方式来构建交互性强、实时性高的 Web 应用程序。通过理解其架构、熟练掌握 `@MessageMapping`、`SimpMessagingTemplate` 等核心 API，并结合 Spring Security 和外部消息代理，开发者可以构建出健壮、可扩展的生产级实时消息系统。
-
-本教程涵盖了从基础到进阶的核心概念，希望能为你深入使用 Spring STOMP 打下坚实的基础。

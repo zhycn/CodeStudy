@@ -26,17 +26,16 @@ JSONassert 提供以下主要特性：
 
 ```xml
 <dependency>
-    <groupId>org.skyscreamer</groupId>
-    <artifactId>jsonassert</artifactId>
-    <version>1.5.0</version>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
     <scope>test</scope>
-</dependency>
+    <!-- 版本由 spring-boot-starter-parent 管理 -->
 ```
 
 对于 Gradle 项目，添加以下依赖：
 
-```gradle
-testImplementation 'org.skyscreamer:jsonassert:1.5.0'
+```groovy
+testImplementation 'org.springframework.boot:spring-boot-starter-test'
 ```
 
 ## 2 JSONassert 核心功能

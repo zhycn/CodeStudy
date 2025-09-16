@@ -1,5 +1,7 @@
-好的，作为一名 Spring 专家和技术文档工程师，我将为你生成一篇关于 Spring Web Servlet 的详尽教程。本文档融合了官方文档、社区最佳实践和我的个人经验，旨在提供一份清晰、全面且可操作的指南。
-
+---
+title: Spring Framework Web Servlet 详解与最佳实践
+description: 本文详细介绍了 Spring Framework 中 Web Servlet 的核心概念、配置方式、最佳实践以及实际应用场景。通过掌握这些知识，开发者可以在企业级应用中高效、一致地处理 HTTP 请求和响应，提升系统的可维护性和可扩展性。
+author: zhycn
 ---
 
 # Spring Framework Web Servlet 详解与最佳实践
@@ -18,7 +20,7 @@
 
 **工作流程简图：**
 
-```
+```java
 HTTP Request → DispatcherServlet → HandlerMapping → Controller → ModelAndView → ViewResolver → View → HTTP Response
 ```
 
@@ -298,15 +300,19 @@ Spring MVC 在某些地方（如控制器方法参数解析）使用了 `ThreadL
 ## 6. 常见问题与解决方案 (FAQ)
 
 **Q: 我的静态资源（CSS, JS）返回 404？**
+
 **A:** 确保你正确配置了资源处理器（`addResourceHandlers`）或启用了默认 Servlet 处理（`configureDefaultServletHandling`）。同时检查资源的实际存放路径是否与配置匹配。
 
 **Q: 我得到了一个 `404` 错误，但日志显示没有任何控制器匹配该路径？**
+
 **A:** 检查你的 `DispatcherServlet` 映射模式是否是 `/`，并且你已正确配置了 `throwExceptionIfNoHandlerFound`，以便能进入统一的异常处理流程。
 
 **Q: 文件上传失败？**
+
 **A:** 确保你不仅配置了 `MultipartResolver` bean，还在 Servlet 注册中设置了 `MultipartConfigElement`（如上传文件大小限制、临时目录等）。
 
 **Q: 拦截器的 `postHandle` 方法没有被调用？**
+
 **A:** 这通常是因为控制器的 `preHandle` 方法中发生了异常，或者请求已经被完成或提交。检查控制器和拦截器中是否有未处理的异常。
 
 ## 7. 总结

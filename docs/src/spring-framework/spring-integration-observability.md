@@ -1,20 +1,10 @@
-好的，没有问题。作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring 框架 Observability 集成的高质量教程。
-
-在开始之前，我已通过联网搜索并分析了 Spring 官方文档、Micrometer 文档、OpenTelemetry 指南、Grafana 实验室博客以及多位业界专家（如 Tommy Ludwig, Jonatan Ivanov 等）的文章，确保内容的准确性、前沿性和实践性。
-
+---
+title: Spring 框架 Observability 集成详解与最佳实践
+description: 本教程详细介绍了 Spring 框架 Observability 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
 # Spring 框架 Observability 集成详解与最佳实践
-
-## 文档元数据
-
-| 属性         | 值                                             |
-| :----------- | :--------------------------------------------- |
-| **文档状态** | `已发布`                                       |
-| **版本**     | `1.0`                                          |
-| **最后更新** | `2023-10-27`                                   |
-| **目标读者** | 中级至高级 Spring Boot 开发者、SRE、运维工程师 |
-| **前置知识** | Spring Boot, Micrometer, 微服务基础概念        |
 
 ## 1. 概述：什么是 Observability？
 

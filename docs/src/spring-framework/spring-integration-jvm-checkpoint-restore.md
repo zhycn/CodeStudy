@@ -1,7 +1,7 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring 框架与 JVM Checkpoint Restore (CRaC) 集成的详细教程。
-
-在开始撰写前，我综合分析了来自 VMware、Spring官方博客、RedHat、Azul、GitHub 官方仓库、InfoQ 以及多位技术专家博客的超过 10 篇优质英文和中文文章，确保内容的准确性、前沿性和实用性。
-
+---
+title: Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践
+description: 本教程详细介绍了 Spring 框架与 JVM Checkpoint Restore (CRaC) 集成的技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
 # Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践
@@ -268,17 +268,21 @@ java -XX:CRaCRestoreFrom=./crac-files
 
 ## 6. 常见问题与排查 (FAQ)
 
-- **Q: 错误 `-XX:+CRaCCheckpointTo not supported`**
-  - **A**: 你使用的 JDK 不支持 CRaC。请换用 Azul Zulu Prime 或相应版本的 Oracle JDK。
+**Q: 错误 `-XX:+CRaCCheckpointTo not supported`**
 
-- **Q: 恢复后出现 `Connection refused` 等网络错误**
-  - **A**: 这是最常见的问题。确保你在 `beforeCheckpoint` 中正确关闭了连接，并在 `afterRestore` 中**重新创建**了连接工厂或客户端，而不是尝试复用旧对象。
+**A**: 你使用的 JDK 不支持 CRaC。请换用 Azul Zulu Prime 或相应版本的 Oracle JDK。
 
-- **Q: 检查点进程卡住或失败**
-  - **A**: 通常是因为有无法序列化的资源或线程。使用 `-XX:+CRaCTrace` JVM 参数可以获得更详细的调试日志。检查是否有第三方库创建了不兼容的线程或资源。
+**Q: 恢复后出现 `Connection refused` 等网络错误**
 
-- **Q: 如何判断应用已准备好进行检查点？**
-  - **A**: 可以编写一个健康检查接口（如 `/health/ready`），确认所有服务都已启动完毕后再手动触发 `jcmd`。在自动化流程中，可以在启动后等待固定时间或通过脚本判断日志输出。
+**A**: 这是最常见的问题。确保你在 `beforeCheckpoint` 中正确关闭了连接，并在 `afterRestore` 中**重新创建**了连接工厂或客户端，而不是尝试复用旧对象。
+
+**Q: 检查点进程卡住或失败**
+
+**A**: 通常是因为有无法序列化的资源或线程。使用 `-XX:+CRaCTrace` JVM 参数可以获得更详细的调试日志。检查是否有第三方库创建了不兼容的线程或资源。
+
+**Q: 如何判断应用已准备好进行检查点？**
+
+**A**: 可以编写一个健康检查接口（如 `/health/ready`），确认所有服务都已启动完毕后再手动触发 `jcmd`。在自动化流程中，可以在启动后等待固定时间或通过脚本判断日志输出。
 
 ## 7. 结论
 
