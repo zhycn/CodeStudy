@@ -52,6 +52,7 @@ export default defineConfig({
     // 优化的导航菜单
     nav: [
       { text: '首页', link: '/' },
+      { text: '开发工具', link: '/devtools/', activeMatch: '/devtools/' },
       { text: 'Java', link: '/java/', activeMatch: '/java/' },
       { text: 'Spring', link: '/spring-framework/', activeMatch: '/spring-' },
       { text: '前端开发', link: '/frontend/', activeMatch: '/frontend/' },

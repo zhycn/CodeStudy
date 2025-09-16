@@ -47,7 +47,7 @@ Lombok 的核心价值在于解决了 Java 语言长期存在的冗余代码问�
 
 对于 Gradle 项目，可以在 `build.gradle` 中添加依赖配置：
 
-```gradle
+```groovy
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.38'
     annotationProcessor 'org.projectlombok:lombok:1.18.38'
@@ -55,7 +55,7 @@ dependencies {
 ```
 
 :::tip 提示
-需要注意的是，Lombok 版本需与 Java 版本和构建工具兼容，建议使用最新稳定版（如 1.18.38）。对于 Spring Boot 项目，通常无需指定版本和 scope，Spring Boot 已经自动适配好。
+需要注意的是，Lombok 版本需与 Java 版本和构建工具兼容，建议使用最新稳定版（如 1.18.38）。对于 Spring Boot 项目，通常无需指定版本和 scope，Spring Boot 已经自动适配好了。
 :::
 
 ### 2.2 IDE 插件安装

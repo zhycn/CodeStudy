@@ -88,6 +88,10 @@ sdk list maven
 
 执行 `sdk list <candidate>` 命令后，你会看到一个详细的表格，其中包含了 SDK 的版本号、发行商以及是否为默认版本等信息。
 
+:::tip SDK Installation Candidates
+<https://sdkman.io/sdks/>
+:::
+
 ### 3.2. `sdk install`：安装 SDK
 
 使用 `sdk install` 命令可以轻松安装任何可用的 SDK。SDKMAN! 会自动处理下载、校验和解压，并将文件放置到 `$HOME/.sdkman/candidates/<candidate>/<version>` 目录下。

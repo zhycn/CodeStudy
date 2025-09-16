@@ -108,7 +108,7 @@
 - Added: [Java Record 记录类详解与最佳实践](./docs/src/java/java-record.md)
 - Added: [Java Reflection 反射详解与最佳实践](./docs/src/java/java-reflection.md)
 - Added: [Bun 详解与最佳实践](./docs/src/frontend/guide-bun.md)
-- Added: [Homebrew 详解与最佳实践](./docs/src/guides/guide-homebrew.md)
+- Added: [Homebrew 详解与最佳实践](./docs/src/devtools/guide-homebrew.md)
 - Added: [Java 基础语法详解](./docs/src/java/java-basic-syntax.md)
 - Added: [Java Package 包详解与最佳实践](./docs/src/java/java-package.md)
 - Added: [Java 运算符详解](./docs/src/java/java-operators.md)
@@ -128,9 +128,9 @@
 - Added: [Java Enum 枚举详解与最佳实践](./docs/src/java/java-enum.md)
 - Added: [Java Base64 详解与最佳实践](./docs/src/java/java-base64.md)
 - Added: [Apollo Client 与 Spring Boot 集成详解与最佳实践](./docs/src/guides/guide-apollo-client.md)
-- Added: [SDKMAN! 的使用指南与最佳实践](./docs/src/guides/guide-sdkman.md)
-- Added: [jEnv 详解与最佳实践](./docs/src/guides/guide-jenv.md)
-- Added: [Lombok 详解与最佳实践：全面提升 Java 开发效率](./docs/src/guides/guide-lombok.md)
+- Added: [SDKMAN! 的使用指南与最佳实践](./docs/src/devtools/guide-sdkman.md)
+- Added: [jEnv 详解与最佳实践](./docs/src/devtools/guide-jenv.md)
+- Added: [Lombok 详解与最佳实践：全面提升 Java 开发效率](./docs/src/devtools/guide-lombok.md)
 
 ## v2025.08
 
