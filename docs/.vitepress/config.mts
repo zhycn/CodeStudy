@@ -54,7 +54,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '开发工具', link: '/devtools/', activeMatch: '/devtools/' },
       { text: 'Java', link: '/java/', activeMatch: '/java/' },
-      { text: 'Spring', link: '/spring-framework/', activeMatch: '/spring-' },
+      { text: 'Spring', link: '/spring-boot/', activeMatch: '/spring-' },
       { text: '前端开发', link: '/frontend/', activeMatch: '/frontend/' },
       { text: '编程指南', link: '/guides/', activeMatch: '/guides/' },
       // { text: '书单推荐', link: '/books/', activeMatch: '/books/' },
