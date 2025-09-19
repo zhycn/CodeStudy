@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress';
 import javaSidebar from './sidebar/java.mts';
+import gitSidebar from './sidebar/git.mts';
 
 export default defineConfig({
   // 站点级核心配置
@@ -72,6 +73,7 @@ export default defineConfig({
     // 自动生成的侧边栏
     sidebar: {
       '/java/': javaSidebar,
+      '/devtools/git/': gitSidebar,
     },
 
     // 增强的社交链接
