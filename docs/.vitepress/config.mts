@@ -58,6 +58,7 @@ export default defineConfig({
       { text: 'Spring', link: '/spring-boot/', activeMatch: '/spring-' },
       { text: '前端开发', link: '/frontend/', activeMatch: '/frontend/' },
       { text: '编程指南', link: '/guides/', activeMatch: '/guides/' },
+      { text: 'Python3', link: '/python/python3/', activeMatch: '/python/python3/' },
       // { text: '书单推荐', link: '/books/', activeMatch: '/books/' },
       // { text: '视频课程', link: '/courses/', activeMatch: '/courses/' },
       // {

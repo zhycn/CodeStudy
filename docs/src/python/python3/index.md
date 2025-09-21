@@ -2,11 +2,16 @@
 
 基于 Python 3.13 官方文档及社区最佳实践审核和完善。
 
+- Python3 官方网站：<https://www.python.org/>
+- Python3 官方文档：<https://docs.python.org/3/>
+- Python3 PEP 8 代码风格指南：<https://peps.python.org/pep-0008/>
+
 ## 文档目录
 
 ### 核心语言特性
 
 - [Python3 简介与发展历史](./python3-introduction.md)
+- [Python3 卸载与安装详解与最佳实践](./python3-uninstall-install.md)
 - [Python3 安装与环境配置详解与最佳实践](./python3-installation.md)
 - [Python3 解释器详解与最佳实践](./python3-interpreter.md)
 - [Python3 开发工具链完整指南](./python3-development-tools.md)

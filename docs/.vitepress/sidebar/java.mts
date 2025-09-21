@@ -1,7 +1,7 @@
 // Java 编程指南
 const javaSidebar = [
   {
-    text: 'Java',
+    text: 'Java 系列教程',
     items: [
       { text: 'Java 编程指南', link: '/java/' },
     ]

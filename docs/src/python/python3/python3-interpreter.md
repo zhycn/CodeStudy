@@ -349,12 +349,3 @@ def greet(name: str, times: int = 1) -> str:
 # pip install mypy
 # mypy script.py
 ```
-
-## 10. 进一步学习资源
-
-1. <https://docs.python.org/3/using/cmdline.html>
-2. <https://realpython.com>
-3. <https://wiki.python.org/moin/PythonSpeed/PerformanceTips>
-4. <https://github.com/python/cpython/blob/main/Tools/gdb/libpython.py>
-
-通过掌握 Python 解释器的各种特性和最佳实践，您将能够更高效地开发、调试和优化 Python 应用程序。

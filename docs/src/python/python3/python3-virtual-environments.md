@@ -1,5 +1,7 @@
-好的，请看这篇关于 Python3 虚拟环境的详尽指南。本文在参考了 Python 官方文档、Real Python、Stack Overflow 社区讨论以及多篇知名技术博客（如 Martin Heinz, Geekflare, FreeCodeCamp 等）的最佳实践后总结而成。
-
+---
+title: Python3 虚拟环境（Virtual Environment）详解与最佳实践
+description: 了解 Python3 虚拟环境的作用、创建、激活、管理和使用方法，以及最佳实践。
+author: zhycn
 ---
 
 # Python3 虚拟环境（Virtual Environment）详解与最佳实践
@@ -125,7 +127,7 @@ venv\Scripts\Activate.ps1
 
     **`requirements-dev.txt` 示例：**
 
-    ```txt
+    ```python
     -r requirements.txt
     black==22.3.0
     isort==5.10.1
@@ -203,7 +205,7 @@ __pycache__/
 ## 7. 总结与最佳实践清单
 
 | 最佳实践 | 说明 |
-| ：--- | :--- |
+| :--- | :--- |
 | **一个项目，一个环境** | 为每个独立的项目创建专属的虚拟环境。 |
 | **使用 `venv`** | Python 3.3+ 用户应优先使用标准库的 `venv`。 |
 | **激活环境** | 在开始工作前，务必先激活对应的虚拟环境。 |

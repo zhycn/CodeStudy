@@ -1,4 +1,9 @@
-好的，请看下方为您生成的关于 Python3 开发工具链的完整指南。本文旨在为您提供从环境搭建到项目发布的全流程最佳实践。
+---
+title: Python 3 开发工具链完整指南
+description: 详细介绍 Python 3 开发工具链的详细内容，包括解释器安装、包管理、代码编辑器、调试器、测试框架等。
+author: zhycn
+---
+
 
 # Python 3 开发工具链完整指南
 
@@ -25,7 +30,7 @@ brew update
 brew install pyenv
 ```
 
-安装完成后，根据终端提示，将必要的命令添加到你的 shell 配置文件（如 `~/.bashrc` 或 `~/.zshrc`）中。
+安装完成后，根据终端提示，将必要的命令添加到你的 shell 配置文件（如 `~/.bash_profile` 或 `~/.zshrc`）中。
 
 **常用命令:**
 
@@ -54,7 +59,7 @@ pyenv local 3.9.18
 
 一个规范的 Python 项目结构有助于维护和协作。一个典型的项目可能如下所示：
 
-```
+```python
 my-awesome-project/
 │
 ├── src/                    # 源代码目录（可选但推荐）
@@ -405,4 +410,4 @@ http GET https://httpbin.org/json
 7. **文档维护：** 使用 `MkDocs` 编写文档，并通过 `mkdocs serve` 实时预览。
 8. **打包发布：** 使用 `python -m build` 构建包，用 `twine upload dist/*` 发布到 PyPI。
 
-遵循这套工具链和实践，你将能构建出健壮、可维护、协作友好的 Python 3 项目。Happy Coding
+遵循这套工具链和实践，你将能构建出健壮、可维护、协作友好的 Python 3 项目。
