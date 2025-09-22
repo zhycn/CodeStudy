@@ -6,6 +6,14 @@ author: zhycn
 
 # Spring 框架 Caching 集成详解与最佳实践
 
+- [Spring Cache Abstraction](https://docs.spring.io/spring-framework/reference/integration/cache.html) - 缓存抽象层，提供了统一的 API 来管理缓存。
+- [Caffeine](https://github.com/ben-manes/caffeine) - 基于 Java 8 的高性能缓存库，提供了本地缓存的解决方案。
+- [Redisson](https://github.com/redisson/redisson) - 基于 Redis 的 Java 驻留对象缓存库，提供了分布式缓存的解决方案。
+- [Redis](https://redis.io/) - 基于内存的键值存储数据库，常用于缓存、会话存储、消息队列等场景。
+- [Ehcache](https://www.ehcache.org/) - 基于 Java 的本地缓存库，提供了简单、快速的缓存解决方案。
+- [Hazelcast](https://hazelcast.com/) - 基于内存的分布式缓存解决方案，提供了高可用性、可扩展性和 fault tolerance。
+- [Memcached](https://memcached.org/) - 基于内存的简单键值存储数据库，常用于缓存和会话存储。
+
 ## 1. 概述
 
 在现代应用程序中，缓存是提升性能、降低延迟、减少后端负载的关键技术。Spring 框架从 3.1 版本开始提供了一套声明式的缓存抽象层，允许开发者以极小的侵入性将缓存集成到应用程序中。

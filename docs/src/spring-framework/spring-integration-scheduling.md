@@ -6,6 +6,9 @@ author: zhycn
 
 # Spring 框架 Scheduling 集成详解与最佳实践
 
+- [Task Execution and Scheduling](https://docs.spring.io/spring-framework/reference/integration/scheduling.html)
+- [Quartz Scheduler](https://www.quartz-scheduler.org/)
+
 ## 1. 概述
 
 在现代应用程序中，定时任务（Scheduling）是必不可少的功能，它用于执行周期性的作业、延迟任务或固定时间的操作，例如数据同步、日志清理、发送提醒邮件等。
@@ -37,7 +40,7 @@ Spring 框架提供了一个轻量级、功能丰富且易于使用的任务调�
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context</artifactId>
-    <version>5.3.23</version> <!-- 请使用最新版本 -->
+    <version>6.2.10</version> <!-- 请使用最新版本 -->
 </dependency>
 ```
 
@@ -195,8 +198,6 @@ public class CronTask {
     }
 }
 ```
-
-**提示**：可以使用在线工具（如 <https://www.cronmaker.com/）来生成和验证> cron 表达式。
 
 ## 4. 配置与自定义（TaskScheduler）
 
