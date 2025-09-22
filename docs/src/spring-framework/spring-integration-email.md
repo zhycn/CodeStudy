@@ -23,25 +23,25 @@ author: zhycn
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context-support</artifactId>
-    <version>5.3.23</version> <!-- 请使用你的 Spring 版本 -->
+    <version>6.2.10</version> <!-- 请使用你的 Spring 版本 -->
 </dependency>
 
 <!-- JavaMail API，Spring 邮件功能的底层实现 -->
 <dependency>
-    <groupId>com.sun.mail</groupId>
-    <artifactId>javax.mail</artifactId>
-    <version>1.6.2</version>
+    <groupId>org.eclipse.angus</groupId>
+    <artifactId>jakarta.mail</artifactId>
+    <version>2.0.4</version>
 </dependency>
 ```
 
-> **注意**：对于 Spring Boot 项目，只需添加 `spring-boot-starter-mail` 依赖即可，它会自动管理上述依赖的版本。
->
-> ```xml
-> <dependency>
->     <groupId>org.springframework.boot</groupId>
->     <artifactId>spring-boot-starter-mail</artifactId>
-> </dependency>
-> ```
+**注意**：对于 Spring Boot 项目，只需添加 `spring-boot-starter-mail` 依赖即可，它会自动管理上述依赖的版本。
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
 
 ### 2.2 配置 JavaMailSender
 

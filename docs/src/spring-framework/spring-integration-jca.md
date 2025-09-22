@@ -20,7 +20,7 @@ author: zhycn
 
 - **资源适配器（Resource Adapter, RA）**: 这是一个实现 JCA 规范的 JAR 文件（通常以 `.rar` 为后缀）。它充当了 Java 应用程序与特定 EIS 之间的桥梁，封装了所有底层的通信和事务细节。例如，你可能有一个 SAP R/3 的资源适配器或一个 IBM CICS 的资源适配器。
 - **通用客户端接口（Common Client Interface, CCI）**: 定义了一个标准的 API，用于与资源适配器交互、执行操作（如执行某个 EIS 函数）和访问数据。它是 JCA 规定的标准接口。
-- **连接工厂（Connection Factory）**: 客户端使用 `ConnectionFactory`（如 `javax.resource.cci.ConnectionFactory`）来创建与 EIS 的连接，类似于 JDBC 中的 `DataSource`。
+- **连接工厂（Connection Factory）**: 客户端使用 `ConnectionFactory`（如 `jakarta.resource.cci.ConnectionFactory`）来创建与 EIS 的连接，类似于 JDBC 中的 `DataSource`。
 - **连接（Connection）**: 代表一个与 EIS 的活动连接，通过 `ConnectionFactory` 创建。
 - **交互（Interaction）**: 通过 `Connection` 创建，用于执行 EIS 相关的操作，例如调用一个远程函数。
 - **交互规范（InteractionSpec）**: 一个包含如何执行交互的配置信息的对象（例如要调用的函数名）。

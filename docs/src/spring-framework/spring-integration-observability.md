@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 Observability 集成详解与最佳实践
 
+- [Observability Support](https://docs.spring.io/spring-framework/reference/integration/observability.html)
+
 ## 1. 概述：什么是 Observability？
 
 在分布式系统，特别是微服务架构中，**Observability（可观测性）** 已不再是简单的监控（Monitoring）。监控通常意味着我们预先定义一组指标（Metrics）和仪表盘，用于观察我们**已知的**、**预期的**故障模式。而 Observability 赋予我们的是探索、诊断和理解系统**未知的**、**意外的**行为状态的能力。
@@ -30,7 +32,7 @@ Spring Boot Actuator 自动配置并集成了 Micrometer。
 
 ### 2.2 Spring Boot Actuator: 生产就绪功能
 
-<https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html> 提供了一系列生产就绪的功能，用于监控和管理你的应用。
+<https://docs.spring.io/spring-boot/reference/actuator/index.html> 提供了一系列生产就绪的功能，用于监控和管理你的应用。
 
 - **端点（Endpoints）**: Actuator 提供了多个 HTTP 和 JMX 端点（如 `/actuator/health`, `/actuator/metrics`, `/actuator/prometheus`）来暴露应用信息。
 - **健康检查**: 提供应用健康状态。

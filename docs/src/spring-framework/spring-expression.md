@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 SpEL 表达式语言详解与最佳实践
 
+- SpEL 官方文档：[Spring Expression Language (SpEL)](https://docs.spring.io/spring-framework/reference/core/expressions.html)
+
 ## 1 SpEL 概述
 
 Spring 表达式语言（SpEL）是 Spring 框架中一种**强大的表达式语言**，它在运行时提供对对象图的**查询和操作能力**。SpEL 最初创建是为了支持 Spring 社区的需求，与 Spring 生态系统深度集成，但也可以独立于 Spring 容器使用。SpEL 的语法类似于 Unified EL，但提供了更多特性，包括**方法调用**、**基本字符串模板功能**和**属性访问**等高级功能。
@@ -71,7 +73,7 @@ Expression exp = parser.parseExpression("new String('hello world').toUpperCase()
 String result = exp.getValue(String.class); // "HELLO WORLD"
 ```
 
-`T()` 运算符的参数必须是类的全限定名（java.lang包除外）。SpEL 内部使用 StandardTypeLocator 来解析类型，默认已经注册了 java.lang 包，因此可以直接使用类似 `T(Math)` 的简短形式。
+`T()` 运算符的参数必须是类的全限定名（java.lang 包除外）。SpEL 内部使用 StandardTypeLocator 来解析类型，默认已经注册了 java.lang 包，因此可以直接使用类似 `T(Math)` 的简短形式。
 
 ### 2.4 操作符详解
 
@@ -276,10 +278,10 @@ _表：SpEL 集合操作符功能示例_
 
 | **操作类型** | **表达式示例**       | **功能描述**                 |
 | ------------ | -------------------- | ---------------------------- |
-| 投影         | `users.![name]`      | 提取所有用户的name属性       |
-| 筛选         | `users.?[age > 18]`  | 筛选年龄大于18的用户         |
-| 首元素匹配   | `users.^[age > 18]`  | 获取第一个年龄大于18的用户   |
-| 尾元素匹配   | `users.$[age > 18]`  | 获取最后一个年龄大于18的用户 |
+| 投影         | `users.![name]`      | 提取所有用户 name 属性       |
+| 筛选         | `users.?[age > 18]`  | 筛选年龄大于 18 的用户         |
+| 首元素匹配   | `users.^[age > 18]`  | 获取第一个年龄大于 18 的用户   |
+| 尾元素匹配   | `users.$[age > 18]`  | 获取最后一个年龄大于 18 的用户 |
 | 聚合计算     | `users.![age].sum()` | 计算所有用户年龄总和         |
 
 ### 4.2 模板表达式

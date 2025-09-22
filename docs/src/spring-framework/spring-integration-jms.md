@@ -8,7 +8,7 @@ author: zhycn
 
 ## 1. 引言
 
-在现代分布式企业级应用中，异步消息传递是解耦系统组件、提升可靠性、增强可扩展性的核心架构模式之一。Java Message Service (JMS) 作为 Java EE 规范的一部分，定义了一套通用的 API，用于在 Java 应用程序之间发送和接收消息。
+在现代分布式企业级应用中，异步消息传递是解耦系统组件、提升可靠性、增强可扩展性的核心架构模式之一。Java Message Service (JMS) 作为 Java EE （Jakarta EE）规范的一部分，定义了一套通用的 API，用于在 Java 应用程序之间发送和接收消息。
 
 Spring Framework 对 JMS 提供了强大的支持，通过其 `spring-jms` 模块，极大地简化了 JMS 的使用。它将 JMS 的复杂性封装起来，提供了与 Spring 事务管理、依赖注入等特性无缝集成的解决方案，允许开发者以更简洁、更符合 Spring 风格的方式进行消息驱动的开发。
 

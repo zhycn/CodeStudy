@@ -6,6 +6,10 @@ author: zhycn
 
 # Spring 框架 JMX 集成详解与最佳实践
 
+- [Spring JMX Support](https://docs.spring.io/spring-framework/reference/integration/jmx.html)
+- [Spring JMX Annotations](https://docs.spring.io/spring-framework/reference/integration/jmx/interface.html#jmx-interface-metadata-types)
+- [JMX Monitoring with Jolokia](https://www.jolokia.org/)
+
 ## 1. 概述：JMX 与 Spring 的价值
 
 Java Management Extensions (JMX) 是 Java 平台的标准技术，用于管理和监控应用程序、设备、系统对象和面向服务的网络。这些资源由被称为 **MBeans (Managed Beans)** 的 Java 对象表示。
@@ -374,7 +378,6 @@ public class AppStatistics implements NotificationPublisherAware {
 ```java
 package com.example.demo.jmx;
 
-import org.springframework.jmx.export.notification.NotificationListener;
 import org.springframework.stereotype.Component;
 import javax.management.Notification;
 import javax.management.NotificationListener;
