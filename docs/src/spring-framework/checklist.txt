@@ -62,6 +62,7 @@
 【ok】 [Spring 框架 Email 集成详解与最佳实践](./spring-integration-email.md)
 【ok】 [Spring 框架 Tasks 集成详解与最佳实践](./spring-integration-tasks.md)
 【ok】 [Spring 框架 Scheduling 集成详解与最佳实践](./spring-integration-scheduling.md)
+【ok】 [Spring Boot 与 Quartz 集成详解与最佳实践](./spring-integration-quartz.md)
 【ok】 [Spring 框架 Caching 集成详解与最佳实践](./spring-integration-caching.md)
 【ok】 [Spring 框架 Observability 集成详解与最佳实践](./spring-integration-observability.md)
 【ok】 [Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践](./spring-integration-jvm-checkpoint-restore.md)
@@ -71,3 +72,10 @@
 扩展知识
 
 - micrometer
+
+REST Clients
+- RestClient - synchronous client with a fluent API.
+- WebClient - non-blocking, reactive client with fluent API.
+- RestTemplate - synchronous client with template method API.
+- HTTP Interface - annotated interface with generated, dynamic proxy implementation.
+

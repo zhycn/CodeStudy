@@ -73,6 +73,7 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 - [Spring 框架 Email 集成详解与最佳实践](./spring-integration-email.md)
 - [Spring 框架 Tasks 集成详解与最佳实践](./spring-integration-tasks.md)
 - [Spring 框架 Scheduling 集成详解与最佳实践](./spring-integration-scheduling.md)
+- [Spring Boot 与 Quartz 集成详解与最佳实践](./spring-integration-quartz.md)
 - [Spring 框架 Caching 集成详解与最佳实践](./spring-integration-caching.md)
 - [Spring 框架 Observability 集成详解与最佳实践](./spring-integration-observability.md)
 - [Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践](./spring-integration-jvm-checkpoint-restore.md)
