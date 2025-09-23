@@ -3,34 +3,34 @@
 - [Spring 框架 Validation 验证框架详解与最佳实践](./spring-validation.md)
 - [Spring 框架 Data Binding 数据绑定详解与最佳实践](./spring-data-binding.md)
 - [Spring 框架 Type Conversion 类型转换详解与最佳实践](./spring-type-conversion.md)
-【ok】 [Spring 框架 SpEL 表达式语言详解与最佳实践](./spring-expression.md)
-【ok】 [Spring 框架 SpEL 核心组件详解与最佳实践](./spring-expression-core.md)
+【ok】- [Spring 框架 SpEL 表达式语言详解与最佳实践](./spring-expression.md)
+【ok】- [Spring 框架 SpEL 核心组件详解与最佳实践](./spring-expression-core.md)
 - [Spring 框架 AOP 面向切面编程详解与最佳实践](./spring-aop.md)
 - [Spring 框架 Events 事件机制详解与最佳实践](./spring-event.md)
 - [Spring 框架 AOT 详解与最佳实践](./spring-aot.md)
 
 ## Testing
 
-- [Spring 框架 Testing 测试框架详解与最佳实践](./spring-testing.md)
-- [Spring 框架 Unit Testing 单元测试详解与最佳实践](./spring-unit-testing.md)
-- [Spring 框架 Integration Testing 集成测试详解与最佳实践](./spring-integration-testing.md)
-- [Spring 框架 E2E Testing 端到端测试详解与最佳实践](./spring-e2e-testing.md)
-- [Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践](./spring-jdbc-testing-support.md)
-- [Spring 框架 TestContext 测试上下文详解与最佳实践](./spring-testcontext.md)
-- [Spring 框架 WebTestClient 详解与最佳实践](./spring-webtestclient.md)
-- [Spring 框架 MockMvc 详解与最佳实践](./spring-mockmvc.md)
-- [Spring 框架 Mockito 测试框架详解与最佳实践](./spring-mockito.md)
-- [Spring 框架 JUnit 测试框架详解与最佳实践](./spring-junit.md)
-- [Spring 框架 AssertJ 测试框架详解与最佳实践](./spring-assertj.md)
-- [Spring 框架 Hamcrest 测试框架详解与最佳实践](./spring-hamcrest.md)
-- [Spring 框架 JSONassert 测试框架详解与最佳实践](./spring-jsonassert.md)
-- [Spring 框架 Testcontainers 测试详解与最佳实践](./spring-testcontainers.md)
+【ok】- [Spring 框架 Testing 测试框架详解与最佳实践](./spring-testing.md)
+【ok】- [Spring 框架 Unit Testing 单元测试详解与最佳实践](./spring-unit-testing.md)
+【ok】- [Spring 框架 Integration Testing 集成测试详解与最佳实践](./spring-integration-testing.md)
+【ok】- [Spring 框架 E2E Testing 端到端测试详解与最佳实践](./spring-e2e-testing.md)
+【ok】- [Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践](./spring-jdbc-testing-support.md)
+【ok】- [Spring 框架 TestContext 测试上下文详解与最佳实践](./spring-testcontext.md)
+【ok】- [Spring 框架 WebTestClient 详解与最佳实践](./spring-webtestclient.md)
+【ok】- [Spring 框架 MockMvc 详解与最佳实践](./spring-mockmvc.md)
+【ok】- [Spring 框架 Mockito 测试框架详解与最佳实践](./spring-mockito.md)
+【ok】- [Spring 框架 JUnit 测试框架详解与最佳实践](./spring-junit.md)
+【ok】- [Spring 框架 AssertJ 测试框架详解与最佳实践](./spring-assertj.md)
+【ok】- [Spring 框架 Hamcrest 测试框架详解与最佳实践](./spring-hamcrest.md)
+【ok】- [Spring 框架 JSONassert 测试框架详解与最佳实践](./spring-jsonassert.md)
+【ok】- [Spring 框架 Testcontainers 测试详解与最佳实践](./spring-testcontainers.md)
 
 ## Data Access
 
 - [Spring 框架 Data Access 数据访问详解与最佳实践](./spring-data-access.md)
-- [Spring 框架 Transactions 事务管理详解与最佳实践](./spring-transaction.md)
-- [Spring 框架 DAO Support 数据访问支持详解与最佳实践](./spring-dao-support.md)
+【ok】- [Spring 框架 Transactions 事务管理详解与最佳实践](./spring-transaction.md)
+【ok】- [Spring 框架 DAO Support 数据访问支持详解与最佳实践](./spring-dao-support.md)
 - [Spring 框架 JDBC 数据访问支持详解与最佳实践](./spring-dao-support-jdbc.md)
 - [Spring 框架 R2DBC 数据访问支持详解与最佳实践](./spring-dao-support-r2dbc.md)
 - [Spring 框架 ORM 数据访问支持详解与最佳实践](./spring-dao-support-orm.md)
@@ -55,23 +55,24 @@
 
 ## Integration
 
-【ok】 [Spring 框架 JMS 集成详解与最佳实践](./spring-integration-jms.md)
-【ok】 [Spring 框架 JMS 核心组件详解与最佳实践](./spring-integration-jms-core.md)
-【ok】 [Spring 框架 JCA 集成详解与最佳实践](./spring-integration-jca.md)
-【ok】 [Spring 框架 JMX 集成详解与最佳实践](./spring-integration-jmx.md)
-【ok】 [Spring 框架 Email 集成详解与最佳实践](./spring-integration-email.md)
-【ok】 [Spring 框架 Tasks 集成详解与最佳实践](./spring-integration-tasks.md)
-【ok】 [Spring 框架 Scheduling 集成详解与最佳实践](./spring-integration-scheduling.md)
-【ok】 [Spring Boot 与 Quartz 集成详解与最佳实践](./spring-integration-quartz.md)
-【ok】 [Spring 框架 Caching 集成详解与最佳实践](./spring-integration-caching.md)
-【ok】 [Spring 框架 Observability 集成详解与最佳实践](./spring-integration-observability.md)
-【ok】 [Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践](./spring-integration-jvm-checkpoint-restore.md)
+【ok】- [Spring 框架 JMS 集成详解与最佳实践](./spring-integration-jms.md)
+【ok】- [Spring 框架 JMS 核心组件详解与最佳实践](./spring-integration-jms-core.md)
+【ok】- [Spring 框架 JCA 集成详解与最佳实践](./spring-integration-jca.md)
+【ok】- [Spring 框架 JMX 集成详解与最佳实践](./spring-integration-jmx.md)
+【ok】- [Spring 框架 Email 集成详解与最佳实践](./spring-integration-email.md)
+【ok】- [Spring 框架 Tasks 集成详解与最佳实践](./spring-integration-tasks.md)
+【ok】- [Spring 框架 Scheduling 集成详解与最佳实践](./spring-integration-scheduling.md)
+【ok】- [Spring Boot 与 Quartz 集成详解与最佳实践](./spring-integration-quartz.md)
+【ok】- [Spring 框架 Caching 集成详解与最佳实践](./spring-integration-caching.md)
+【ok】- [Spring 框架 Observability 集成详解与最佳实践](./spring-integration-observability.md)
+【ok】- [Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践](./spring-integration-jvm-checkpoint-restore.md)
 
 ---
 
 扩展知识
 
 - micrometer
+- Spring Boot 测试注解完全指南
 
 REST Clients
 - RestClient - synchronous client with a fluent API.

@@ -236,7 +236,7 @@ public class UserControllerSliceTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private UserService userService;
 
     @Test
@@ -277,7 +277,7 @@ public class UserRepositoryTest {
 
 ⛔ **注意事项**：
 
-- 使用 `@MockBean` 会破坏应用程序上下文缓存，可能导致测试速度下降
+- 使用 `@MockitoBean` 会破坏应用程序上下文缓存，可能导致测试速度下降
 - 测试切片注解只自动配置特定部分的组件，其他组件需要手动模拟或排除
 
 ### 3.4 全栈集成测试
@@ -519,9 +519,9 @@ _表：Spring 测试常见陷阱与解决方案_
 
 | **常见陷阱**         | **问题描述**                                | **解决方案**                                       |
 | -------------------- | ------------------------------------------- | -------------------------------------------------- |
-| **上下文缓存污染**   | 使用 @MockBean 导致上下文重建，减慢测试速度 | 合理组织测试类，将使用相同 Mock 配置的测试放在一起 |
+| **上下文缓存污染**   | 使用 @MockitoBean 导致上下文重建，减慢测试速度 | 合理组织测试类，将使用相同 Mock 配置的测试放在一起 |
 | **数据库序列化问题** | 测试并行执行时数据库序列冲突                | 使用不同的数据库序列初始值，或序列化测试执行       |
-| **网络依赖**         | 测试依赖外部服务，导致不稳定                | 使用 @MockBean 或 WireMock 模拟外部服务            |
+| **网络依赖**         | 测试依赖外部服务，导致不稳定                | 使用 @MockitoBean 或 WireMock 模拟外部服务            |
 | **测试数据冲突**     | 测试间共享数据导致意外行为                  | 确保每个测试清理自己的数据，或使用随机数据         |
 | **配置遗漏**         | 测试环境缺少必要配置                        | 使用 @TestPropertySource 提供测试专用配置          |
 
@@ -621,7 +621,7 @@ public class ParameterizedUserTest {
                 <goal>prepare-agent</goal>
                 <goal>report</goal>
             </goals>
-        </execution>
+        </execution>ƒ
     </executions>
 </plugin>
 ```
@@ -637,10 +637,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'adopt'
       - name: Build with tests and coverage
         run: mvn test jacoco:report
@@ -675,7 +675,7 @@ jobs:
   test:
     strategy:
       matrix:
-        java: [11, 17]
+        java: [21, 17]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

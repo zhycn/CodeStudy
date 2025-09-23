@@ -324,7 +324,7 @@ class UserRegistrationTest {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    @MockBean
+    @MockitoBean
     private WelcomeEmailSender emailSender;
 
     @Test

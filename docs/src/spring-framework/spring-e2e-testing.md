@@ -39,7 +39,7 @@ author: zhycn
 
 Spring 测试框架提供了对集成测试和单元测试的支持，具有以下重要意义：
 
-- 让 TDD 编程更加容易
+- 让 TDD (Test-Driven Development) 编程更加容易
 - 可以在不启动服务器的情况下进行测试，比启动真实的服务器更快
 - 可以模拟出依赖的服务，让测试更加专注
 - 对有状态存储在外部系统（如数据库）的情况，可以快速做存根处理
@@ -209,7 +209,7 @@ public class BookControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private BookService bookService;
 
     @Test
@@ -246,7 +246,7 @@ public void testWithoutRollback() {
 
 端到端测试性能可以通过以下公式估算：
 
-```
+```bash
 T = n × (t_setup + t_exec + t_verify + t_teardown)
 ```
 
@@ -378,7 +378,7 @@ public class BatchJobE2ETest {
 })
 public class MicroserviceE2ETest {
 
-    @MockBean
+    @MockitoBean
     private ServiceClient serviceClient;
 
     @Autowired
@@ -408,7 +408,7 @@ public class MicroserviceE2ETest {
 ### 7.1 测试环境问题
 
 1. **Mock 失效问题**：
-    - 现象：`@MockBean` 未生效，仍调用真实实现
+    - 现象：`@MockitoBean` 未生效，仍调用真实实现
     - 解决方案：确保测试类有 `@SpringBootTest` 或相关切片测试注解，检查包扫描范围
 
 2. **循环依赖问题**：
@@ -485,7 +485,7 @@ jobs:
 | `@SpringBootTest` | 加载完整应用上下文 | `@SpringBootTest(webEnvironment = RANDOM_PORT)` |
 | `@WebMvcTest` | 测试 MVC 控制器 | `@WebMvcTest(UserController.class)` |
 | `@DataJpaTest` | 测试 JPA 组件 | `@DataJpaTest` |
-| `@MockBean` | 创建并注入 Mock 对象 | `@MockBean UserService userService` |
+| `@MockitoBean` | 创建并注入 Mock 对象 | `@MockitoBean UserService userService` |
 | `@Sql` | 执行 SQL 脚本 | `@Sql("/test-data.sql")` |
 | `@Transactional` | 配置测试事务 | `@Transactional(propagation = NOT_SUPPORTED)` |
 | `@TestPropertySource` | 指定测试属性源 | `@TestPropertySource(properties = "key=value")` |

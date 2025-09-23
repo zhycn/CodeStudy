@@ -8,7 +8,14 @@ author: zhycn
 
 ## 1. 引言
 
-在软件开发领域，测试是确保代码质量、功能正确性和系统稳定性的基石。测试金字塔模型将测试分为三个主要层次：单元测试（Unit Testing）、集成测试（Integration Testing）和端到端测试（End-to-End Testing）。
+在软件开发领域，测试是确保代码质量、功能正确性和系统稳定性的基石。测试金字塔模型将测试分为三个主要层次：
+
+- **单元测试（Unit Testing）**
+  - 测试单个组件或模块的行为，通常使用 Mock 对象或 Stub 对象来模拟依赖。
+- **集成测试（Integration Testing）**
+  - 测试多个组件或模块之间的交互与协作是否正常。
+- **端到端测试（End-to-End Testing）**
+  - 测试整个应用程序的功能是否按预期工作，包括数据库、外部服务、用户界面等。
 
 **集成测试** 位于金字塔的中间层，它专注于测试多个模块、组件或系统之间的交互与协作是否正常。与单元测试的“隔离性”（通常使用 Mock 对象）不同，集成测试会启动一个真实的、部分或完整的应用程序上下文，涉及真实的数据库、消息队列、外部 API 等依赖。
 
@@ -33,10 +40,10 @@ Spring 提供了一个强大且灵活的测试框架（`spring-test` 模块）�
 | `@SpringBootTest`       | 用于启动一个完整的 Spring Boot 应用程序上下文进行测试。它是进行集成测试的主要入口。可以通过 `webEnvironment` 属性定义如何启动 Web 环境。                   |
 | `@ContextConfiguration` | 用于指定如何为测试加载和配置应用程序上下文。可以指定配置类或配置文件的位置。`@SpringBootTest` 是它的增强版。                                               |
 | `@TestConfiguration`    | 用于提供额外的、特定于测试的配置类。它可以用来覆盖生产环境中的 Bean 定义或定义测试专用的 Bean。                                                            |
-| `@MockBean`             | 向 Spring 应用程序上下文中添加一个 Mockito mock 对象。它可以 mock 现有的 Bean 或定义新的 Bean。非常适用于替换那些复杂或不稳定的依赖（如外部服务客户端）。  |
-| `@SpyBean`              | 向 Spring 应用程序上下文中添加一个 Mockito spy 对象。用于部分 mock 真实的 Bean，通常用于验证某个方法是否被调用。                                           |
+| `@MockitoBean`             | 向 Spring 应用程序上下文中添加一个 Mockito mock 对象。它可以 mock 现有的 Bean 或定义新的 Bean。非常适用于替换那些复杂或不稳定的依赖（如外部服务客户端）。  |
+| `@MockitoSpyBean`              | 向 Spring 应用程序上下文中添加一个 Mockito spy 对象。用于部分 mock 真实的 Bean，通常用于验证某个方法是否被调用。                                      |
 | `@DataJpaTest`          | 一个“切片测试”（Slice Test）注解。它只专注于 JPA 组件，配置一个内嵌数据库、Hibernate 和 Spring Data JPA。通常不加载服务层或控制器层的 Bean。               |
-| `@WebMvcTest`           | 另一个“切片测试”注解。它专注于 Spring MVC 组件，配置控制器、`@ControllerAdvice` 等，但不加载服务层或数据层的 Bean。需要与 `@MockBean` 结合使用来模拟依赖。 |
+| `@WebMvcTest`           | 另一个“切片测试”注解。它专注于 Spring MVC 组件，配置控制器、`@ControllerAdvice` 等，但不加载服务层或数据层的 Bean。需要与 `@MockitoBean` 结合使用来模拟依赖。 |
 | `@Transactional`        | 声明测试方法或类的事务性。测试结束后，事务默认会**回滚**，从而避免污染数据库。这是集成测试中最常用的保持测试独立性的手段。                                 |
 | `@Sql`                  | 用于在测试方法执行前或执行后执行指定的 SQL 脚本，以初始化或清理数据库状态。                                                                                |
 
@@ -73,7 +80,7 @@ Spring 提供了一个强大且灵活的测试框架（`spring-test` 模块）�
 - **AssertJ**: 流畅的断言库。
 - **Hamcrest**: 匹配器库。
 - **Mockito**: Mock 框架。
-- **JSONassert**: JSON 断言库。
+- **JSONAssert**: JSON 断言库。
 - **JsonPath**: JSON XPath 库。
 
 ### 3.2 测试配置分离
@@ -203,13 +210,13 @@ class UserServiceIntegrationTest {
 1. **`@WebMvcTest` (切片测试)**：只加载 Web 相关的组件，速度较快。需要 Mock 下层服务。
 2. **`@SpringBootTest(webEnvironment = ...)`**：加载完整上下文，并启动一个真实的嵌入式 Servlet 容器。
 
-**方式 1：使用 `@WebMvcTest` 和 `@MockBean`**
+**方式 1：使用 `@WebMvcTest` 和 `@MockitoBean`**
 
 ```java
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
@@ -222,7 +229,7 @@ class UserControllerSliceTest {
     @Autowired
     private MockMvc mvc; // 用于模拟 HTTP 请求的入口类
 
-    @MockBean // Mock 掉 Service，因为 @WebMvcTest 不会配置它
+    @MockitoBean // Mock 掉 Service，因为 @WebMvcTest 不会配置它
     private UserService userService;
 
     @Test
@@ -335,9 +342,9 @@ INSERT INTO users (id, name, email) VALUES (100, 'test1', 'test1@example.com');
 INSERT INTO users (id, name, email) VALUES (101, 'test2', 'test2@example.com');
 ```
 
-### 5.2 Mocking 外部服务与 `@MockBean`
+### 5.2 Mocking 外部服务与 `@MockitoBean`
 
-当你的服务依赖一个外部 HTTP API（如 GitHub API）时，在测试中调用真实 API 是不可靠且缓慢的。使用 `@MockBean` 是完美的解决方案。
+当你的服务依赖一个外部 HTTP API（如 GitHub API）时，在测试中调用真实 API 是不可靠且缓慢的。使用 `@MockitoBean` 是完美的解决方案。
 
 ```java
 @SpringBootTest
@@ -347,7 +354,7 @@ class GitHubServiceIntegrationTest {
     @Autowired
     private GitHubService gitHubService;
 
-    @MockBean // 这个 Bean 会被 Mockito mock 替换
+    @MockitoBean // 这个 Bean 会被 Mockito mock 替换
     private GitHubApiClient gitHubApiClient;
 
     @Test
@@ -436,7 +443,7 @@ public class UserRepositoryTestcontainersTest {
 1. **优先使用切片测试 (`@WebMvcTest`, `@DataJpaTest`)**: 它们启动更快，聚焦于特定层次，使测试意图更明确。
 2. **明智地使用 `@SpringBootTest`**: 完整上下文启动较慢，只在测试组件集成时使用。
 3. **始终让测试保持独立**: 使用 `@Transactional` 回滚或 `@Sql` 清理来确保每个测试不依赖数据库状态，也不影响后续测试。
-4. **Mock 不稳定和缓慢的依赖**: 使用 `@MockBean` 来处理外部 HTTP API、邮件服务、文件系统等。
+4. **Mock 不稳定和缓慢的依赖**: 使用 `@MockitoBean` 来处理外部 HTTP API、邮件服务、文件系统等。
 5. **考虑使用 Testcontainers**: 当需要更高保真度地测试与特定数据库或中间件的交互时。
 6. **优化上下文缓存**: Spring 默认会缓存应用程序上下文。将具有相同配置的测试放在同一个类或同一个包下，可以大幅减少测试总时间。
 7. **避免在单元测试中使用集成测试工具**: 不要在简单的单元测试中注入 `@SpringBootTest`，这会使测试变得缓慢且复杂。
@@ -455,8 +462,8 @@ A: 可能的原因：1) 测试方法抛出了异常，导致事务提前回滚�
 
 A: 在测试类或方法上加上 `@Rollback(false)` 注解，或者使用 `@TransactionConfiguration` (JUnit 4) 配置。但务必配合 `@Sql` 在之后进行数据清理。
 
-**Q: `@MockBean` 导致其他测试失败？**
+**Q: `@MockitoBean` 导致其他测试失败？**
 
-A: `@MockBean` 会修改应用程序上下文。如果一个 `@MockBean` 定义在测试类 A 中，当测试类 B 运行时，它会使用未被修改的上下文。但如果上下文被缓存并共享，修改可能会影响其他测试。确保每个测试都正确地定义了自己所需的 Mock。
+A: `@MockitoBean` 会修改应用程序上下文。如果一个 `@MockitoBean` 定义在测试类 A 中，当测试类 B 运行时，它会使用未被修改的上下文。但如果上下文被缓存并共享，修改可能会影响其他测试。确保每个测试都正确地定义了自己所需的 Mock。
 
 通过遵循本文的指南和实践，你将能够为你的 Spring 应用程序构建一套可靠、高效且可维护的集成测试套件，从而显著提升代码质量和开发信心。

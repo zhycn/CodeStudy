@@ -310,7 +310,7 @@ INSERT INTO users (username, active) VALUES ('inactive_user', false);
      ```
 
 4. **使用 Mockito 等进行部分 Mock**
-   - Spring Test 与 Mockito 等 Mock 框架可以很好地结合。你可以使用 `@MockBean` 来为 ApplicationContext 中的某个 Bean 注入一个 Mock 对象。
+   - Spring Test 与 Mockito 等 Mock 框架可以很好地结合。你可以使用 `@MockitoBean` 来为 ApplicationContext 中的某个 Bean 注入一个 Mock 对象。
 
      ```java
      @SpringJUnitConfig(classes = AppConfig.class)
@@ -319,7 +319,7 @@ INSERT INTO users (username, active) VALUES ('inactive_user', false);
          @Autowired
          private MainService mainService;
 
-         @MockBean // Spring 会用一个 Mock 替换上下文中的 RemoteService Bean
+         @MockitoBean // Spring 会用一个 Mock 替换上下文中的 RemoteService Bean
          private RemoteService remoteService;
 
          @Test
@@ -356,9 +356,9 @@ INSERT INTO users (username, active) VALUES ('inactive_user', false);
 
 **A:** 如果你需要测试的方法本身不包含事务声明（例如，它自己启动了新事务），那么你的测试类**不应该**使用 `@Transactional`，否则会改变被测代码的事务行为。你可能需要手动清理 `@Sql` 插入的数据。
 
-**Q: `@MockBean` 和普通的 Mockito `@Mock` 有什么区别？**
+**Q: `@MockitoBean` 和普通的 Mockito `@Mock` 有什么区别？**
 
-**A:** `@MockBean` 会将 Mock 对象注入到 Spring 的 `ApplicationContext` 中，替换掉同名的原有 Bean。而普通的 `@Mock` 只是一个简单的 Mock 对象，需要你自己通过构造函数或 setter 方法将其注入到被测试的 Bean 中。
+**A:** `@MockitoBean` 会将 Mock 对象注入到 Spring 的 `ApplicationContext` 中，替换掉同名的原有 Bean。而普通的 `@Mock` 只是一个简单的 Mock 对象，需要你自己通过构造函数或 setter 方法将其注入到被测试的 Bean 中。
 
 ## 8. 总结
 

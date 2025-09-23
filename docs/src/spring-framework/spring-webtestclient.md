@@ -62,7 +62,7 @@ testImplementation("org.springframework.boot:spring-boot-starter-test")
 - JUnit Jupiter (JUnit 5，Java 主流的单元测试框架)
 - AssertJ (提供丰富且流畅的断言 API，方便编写测试断言)
 - Hamcrest (一套匹配器库，可用于创建自定义的断言逻辑)
-- JSONassert (用于验证 JSON 响应的内容是否符合预期)
+- JSONAssert (用于验证 JSON 响应的内容是否符合预期)
 - JsonPath (用于解析和操作 JSON 数据，方便对 JSON 响应进行断言)
 - Mockito (用于创建和管理测试中的模拟对象，便于进行隔离测试)
 

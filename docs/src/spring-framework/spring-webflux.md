@@ -343,7 +343,7 @@ public class UserEvent {
    @Import(UserService.class) // 需要导入相关依赖
    class UserControllerTest {
 
-       @MockBean
+       @MockitoBean
        private UserRepository userRepository;
 
        @Autowired

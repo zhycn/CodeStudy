@@ -110,12 +110,12 @@ public class UserServiceTest {
 }
 ```
 
-### 4.5 `@MockBean` 与 `@SpyBean` (Spring Boot)
+### 4.5 `@MockitoBean` 与 `@MockitoSpyBean` (Spring Boot)
 
 这些是 Spring Boot Test 提供的强大注解，用于向 ApplicationContext 中添加 Mockito 的 mock 或 spy 对象。它会 mock 掉该 Bean 的所有注入点。
 
-- `@MockBean`: 创建一个 Mockito mock 实例并替换掉 ApplicationContext 中的同名 Bean。
-- `@SpyBean`: 创建一个 Mockito spy 实例（部分 mock），包装真实的 Bean。
+- `@MockitoBean`: 创建一个 Mockito mock 实例并替换掉 ApplicationContext 中的同名 Bean。
+- `@MockitoSpyBean`: 创建一个 Mockito spy 实例（部分 mock），包装真实的 Bean。
 
 ```java
 @SpringJUnitConfig(TestConfig.class)
@@ -124,7 +124,7 @@ public class OrderServiceTest {
     @Autowired
     private OrderService orderService;
 
-    @MockBean
+    @MockitoBean
     private PaymentGateway paymentGateway; // 模拟外部支付接口
 
     @Test
@@ -237,21 +237,21 @@ public class UserServiceIntegrationTest {
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // 只实例化 Web 层相关的 Bean (Controllers, WebMvcConfigurer等)
-// 其他 Bean (如 Service) 需要用 @MockBean 模拟
+// 其他 Bean (如 Service) 需要用 @MockitoBean 模拟
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc; // 模拟 MVC 环境的强大工具
 
-    @MockBean
+    @MockitoBean
     private UserService userService;
 
     @Test

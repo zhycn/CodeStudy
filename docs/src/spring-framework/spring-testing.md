@@ -6,6 +6,13 @@ author: zhycn
 
 # Spring 框架 Testing 测试框架详解与最佳实践
 
+- [Testing](https://docs.spring.io/spring-framework/reference/testing.html)
+- [Standard Annotation Support](https://docs.spring.io/spring-framework/reference/testing/annotations/integration-standard.html)
+- [Spring Testing Annotations](https://docs.spring.io/spring-framework/reference/testing/annotations/integration-spring.html)
+- [Spring JUnit Jupiter Testing Annotations](https://docs.spring.io/spring-framework/reference/testing/annotations/integration-junit-jupiter.html)
+- [Meta-Annotation Support for Testing](https://docs.spring.io/spring-framework/reference/testing/annotations/integration-meta.html)
+- [Spring Boot 测试切片](https://docs.spring.io/spring-boot/appendix/test-auto-configuration/slices.html)
+
 ## 1 概述
 
 Spring 测试框架是 Spring Framework 提供的专门模块，用于支持基于 Spring 的应用程序的各种测试。它提供了一系列工具和注解，帮助开发者编写简洁、可维护、可重复的测试代码，覆盖单元测试、集成测试和端到端测试等多种测试类型。
@@ -175,7 +182,7 @@ Spring Boot 提供了多种测试切片注解，只加载必要的组件：
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -187,7 +194,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private UserService userService;
 
     @Test
@@ -525,7 +532,7 @@ public class WireMockTest {
 | -------------- | ----------------------------------------- |
 | 测试相互干扰   | 使用 @DirtiesContext 标记修改上下文的测试 |
 | 随机测试失败   | 避免共享状态，确保测试独立性              |
-| 外部服务不可靠 | 使用 @MockBean 或 WireMock 模拟外部服务   |
+| 外部服务不可靠 | 使用 @MockitoBean 或 WireMock 模拟外部服务   |
 
 ### 9.3 测试代码维护
 
@@ -544,7 +551,7 @@ Spring 测试框架提供了全面而强大的工具集，支持从单元测试�
 1. **遵循测试金字塔**：以单元测试为基础，适量集成测试，少量端到端测试
 2. **合理使用测试切片**：避免不必要的上下文加载，提高测试速度
 3. **有效管理测试数据**：使用事务回滚和 SQL 脚本确保测试独立性
-4. **模拟外部依赖**：使用 @MockBean 和 WireMock 提高测试稳定性和速度
+4. **模拟外部依赖**：使用 @MockitoBean 和 WireMock 提高测试稳定性和速度
 5. **优化测试性能**：利用上下文缓存和合适工具减少测试执行时间
 
 通过实施这些实践，你可以为 Spring 应用程序构建快速、可靠且易于维护的测试套件，为应用程序质量提供坚实保障。

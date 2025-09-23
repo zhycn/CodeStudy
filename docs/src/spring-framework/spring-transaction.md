@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 Transactions 事务管理详解与最佳实践
 
+- [Transaction Management](https://docs.spring.io/spring-framework/reference/data-access/transaction.html)
+
 ## 1. 事务核心概念回顾
 
 在深入 Spring 事务之前，我们首先回顾一下数据库事务的四个核心特性（ACID）：
@@ -261,7 +263,8 @@ public void directTransactionControl(PlatformTransactionManager transactionManag
 ### 7.2 常见陷阱
 
 1. **自调用问题 (Self-Invocation)**: 在同一个类中，一个非事务方法 `A()` 调用一个事务方法 `B()`，事务将会**失效**。因为 `@Transactional` 是基于代理实现的，只有通过代理对象进行的调用才会被拦截。内部调用 (`this.B()`) 不会经过代理。
-   **解决方案**: 将事务方法放到另一个 Service 中，或者使用 `AspectJ` 模式（而非代理模式）来实现 AOP。
+
+    **解决方案**: 将事务方法放到另一个 Service 中，或者使用 `AspectJ` 模式（而非代理模式）来实现 AOP。
 
 2. **异常被捕获 (Exception Caught and Handled)**: 如果在事务方法中捕获了异常并且没有重新抛出，事务管理器将不知道发生了异常，因此不会回滚事务。
 

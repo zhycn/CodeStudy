@@ -4,7 +4,7 @@ description: 详细介绍 Spring MockMvc 的核心概念、架构、工作原理
 author: zhycn
 ---
 
-# Spring Framework MockMvc 详解与最佳实践
+# Spring 框架 MockMvc 详解与最佳实践
 
 ## 1. 概述
 
@@ -424,4 +424,4 @@ public class UserControllerFullIntegrationTest {
 }
 ```
 
-通过这份指南，你应该能够全面掌握 Spring `MockMvc` 的使用，并能够为你的 Web 层编写出高效、可靠且易于维护的测试代码。Happy Testing!
+通过这份指南，你应该能够全面掌握 Spring `MockMvc` 的使用，并能够为你的 Web 层编写出高效、可靠且易于维护的测试代码。

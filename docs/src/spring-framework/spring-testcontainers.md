@@ -8,6 +8,9 @@ author: zhycn
 
 本文深入探讨了 Spring 框架中 Testcontainers 的集成与最佳实践，内容涵盖基础概念、环境配置、基本用法、高级特性以及在持续集成环境中的应用。
 
+- [Testcontainers 官方网站](https://www.testcontainers.org/)
+- [Testcontainers GitHub 仓库](https://github.com/testcontainers/testcontainers-java)
+
 ## 1. Testcontainers 简介
 
 Testcontainers 是一个开源框架，用于提供轻量级的一次性 Docker 容器实例，这些实例可以运行数据库、消息代理、Web 浏览器或任何可在 Docker 容器中运行的服务。它与 JUnit 集成，允许开发人员在测试中启动和管理容器，从而为集成测试提供真实的环境。
@@ -39,7 +42,7 @@ Testcontainers 利用 Docker 的 API 来启动、管理和停止容器。在测�
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers-bom</artifactId>
-            <version>1.19.0</version>
+            <version>1.21.3</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>

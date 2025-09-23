@@ -1,18 +1,18 @@
 ---
-title: Spring 框架 JSONassert 测试详解与最佳实践
-description: 本文深入探讨了 Spring 框架中 JSONassert 测试的核心概念、机制和最佳实践。内容涵盖了 JSONassert 简介、核心特性、依赖配置、比较模式、基本用法等方面。
+title: Spring 框架 JSONAssert 测试详解与最佳实践
+description: 本文深入探讨了 Spring 框架中 JSONAssert 测试的核心概念、机制和最佳实践。内容涵盖了 JSONAssert 简介、核心特性、依赖配置、比较模式、基本用法等方面。
 author: zhycn
 ---
 
-# Spring 框架 JSONassert 测试详解与最佳实践
+# Spring 框架 JSONAssert 测试详解与最佳实践
 
-## 1 JSONassert 简介
+## 1 JSONAssert 简介
 
-JSONassert 是一个专为编写 JSON 单元测试而设计的强大工具，特别适用于测试 RESTful API 接口。它通过比较字符串形式的 JSON 数据，在内部将其转换为 JSON 对象并进行逻辑结构和数据的比较。
+JSONAssert 是一个专为编写 JSON 单元测试而设计的强大工具，特别适用于测试 RESTful API 接口。它通过比较字符串形式的 JSON 数据，在内部将其转换为 JSON 对象并进行逻辑结构和数据的比较。
 
 ### 1.1 核心特性
 
-JSONassert 提供以下主要特性：
+JSONAssert 提供以下主要特性：
 
 - **灵活的比较模式**：支持多种比较模式，从严格模式到宽松模式
 - **清晰的错误报告**：提供详细易懂的错误信息，帮助快速定位问题
@@ -22,7 +22,7 @@ JSONassert 提供以下主要特性：
 
 ### 1.2 依赖配置
 
-在 Maven 项目中添加以下依赖即可开始使用 JSONassert：
+在 Maven 项目中添加以下依赖即可开始使用 JSONAssert：
 
 ```xml
 <dependency>
@@ -38,11 +38,11 @@ JSONassert 提供以下主要特性：
 testImplementation 'org.springframework.boot:spring-boot-starter-test'
 ```
 
-## 2 JSONassert 核心功能
+## 2 JSONAssert 核心功能
 
 ### 2.1 比较模式
 
-JSONassert 提供四种不同的比较模式，适应各种测试场景：
+JSONAssert 提供四种不同的比较模式，适应各种测试场景：
 
 | 模式 | 允许额外字段 | 数组顺序严格 | 描述 |
 |------|--------------|--------------|------|
@@ -53,11 +53,11 @@ JSONassert 提供四种不同的比较模式，适应各种测试场景：
 
 ### 2.2 基本用法
 
-以下是 JSONassert 的基本使用示例：
+以下是 JSONAssert 的基本使用示例：
 
 ```java
 import org.json.JSONException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 public class BasicJsonAssertTest {
@@ -78,7 +78,7 @@ public class BasicJsonAssertTest {
 
 ### 2.3 复杂对象比较
 
-JSONassert 能够处理复杂的嵌套 JSON 对象：
+JSONAssert 能够处理复杂的嵌套 JSON 对象：
 
 ```java
 @Test
@@ -93,51 +93,50 @@ public void testNestedJsonComparison() throws JSONException {
 
 ## 3 Spring Boot 集成
 
-Spring Boot 提供了对 JSONassert 的自动配置支持，使得在测试中更加便捷地使用。
+Spring Boot 提供了对 JSONAssert 的自动配置支持，使得在测试中更加便捷地使用。
 
 ### 3.1 使用 @JsonTest 注解
 
 Spring Boot 的 `@JsonTest` 注解自动配置了 JSON 测试所需的组件：
 
 ```java
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @JsonTest
 public class UserJsonTest {
-    
-    @Autowired
-    private JacksonTester<User> json;
-    
-    @Test
-    public void testSerialize() throws Exception {
-        User user = new User("Alice", "alice@example.com");
-        
-        // 与JSON文件对比
-        assertThat(this.json.write(user)).isEqualToJson("expected_user.json");
-        
-        // 验证JSON路径值
-        assertThat(this.json.write(user)).hasJsonPathStringValue("$.name");
-        assertThat(this.json.write(user)).extractingJsonPathStringValue("$.name")
-                .isEqualTo("Alice");
-    }
-    
-    @Test
-    public void testDeserialize() throws Exception {
-        String content = "{\"name\":\"Bob\",\"email\":\"bob@example.com\"}";
-        
-        assertThat(this.json.parse(content))
-                .isEqualTo(new User("Bob", "bob@example.com"));
-        
-        assertThat(this.json.parseObject(content).getName()).isEqualTo("Bob");
-    }
+
+  private record User(String name, String email) {}
+
+  @Autowired
+  private JacksonTester<User> json;
+
+  @Test
+  public void testSerialize() throws Exception {
+    User user = new User("Alice", "alice@example.com");
+
+    // 与JSON文件对比
+    assertThat(this.json.write(user)).isEqualToJson("expected_user.json");
+
+    // 验证JSON路径值
+    assertThat(this.json.write(user)).hasJsonPathStringValue("$.name");
+    assertThat(this.json.write(user)).extractingJsonPathStringValue("$.name")
+      .isEqualTo("Alice");
+  }
+
+  @Test
+  public void testDeserialize() throws Exception {
+    String content = "{\"name\":\"Bob\",\"email\":\"bob@example.com\"}";
+
+    assertThat(this.json.parse(content))
+      .isEqualTo(new User("Bob", "bob@example.com"));
+
+    assertThat(this.json.parseObject(content).name()).isEqualTo("Bob");
+  }
 }
 ```
 
@@ -153,10 +152,10 @@ Spring Boot 自动配置以下 JSON 测试器：
 
 ### 4.1 处理动态字段
 
-在实际应用中，JSON 响应常常包含动态字段（如 ID、时间戳等）。JSONassert 提供了多种方式处理这些字段：
+在实际应用中，JSON 响应常常包含动态字段（如 ID、时间戳等）。JSONAssert 提供了多种方式处理这些字段：
 
 ```java
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.comparator.CustomComparator;
@@ -209,7 +208,7 @@ JSONAssert.assertEquals(expected, actual, new CustomJsonComparator(JSONCompareMo
 
 ### 4.3 处理集合和数组
 
-JSONassert 提供了强大的数组比较功能：
+JSONAssert 提供了强大的数组比较功能：
 
 ```java
 @Test
@@ -244,13 +243,13 @@ public void testPartialJsonValidation() throws Exception {
 
 ### 5.1 与 REST Assured 集成
 
-REST Assured 是一个流行的 REST API 测试库，可以与 JSONassert 结合使用：
+REST Assured 是一个流行的 REST API 测试库，可以与 JSONAssert 结合使用：
 
 ```java
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.json.JSONException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import static io.restassured.RestAssured.given;
@@ -276,10 +275,10 @@ public class RestAssuredIntegrationTest {
 
 ### 5.2 与 MockMvc 集成
 
-在 Spring MVC 测试中，JSONassert 可以与 MockMvc 一起使用：
+在 Spring MVC 测试中，JSONAssert 可以与 MockMvc 一起使用：
 
 ```java
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -423,7 +422,7 @@ JSONAssert.assertEquals(expected, actual, JSONCompareMode.LENIENT);
 
 ## 8 总结
 
-JSONassert 是一个强大且灵活的 JSON 测试库，与 Spring Boot 框架无缝集成，大大简化了 JSON 相关的测试工作。通过合理使用不同的比较模式、自定义比较器以及与其它测试工具的结合，可以创建健壮且可维护的 JSON 测试套件。
+JSONAssert 是一个强大且灵活的 JSON 测试库，与 Spring Boot 框架无缝集成，大大简化了 JSON 相关的测试工作。通过合理使用不同的比较模式、自定义比较器以及与其它测试工具的结合，可以创建健壮且可维护的 JSON 测试套件。
 
 核心要点回顾：
 

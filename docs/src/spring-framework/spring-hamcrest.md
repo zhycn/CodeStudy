@@ -6,6 +6,9 @@ author: zhycn
 
 # Spring 框架 Hamcrest 测试详解与最佳实践
 
+- [Hamcrest 官方网站](https://hamcrest.org/)
+- [Hamcrest GitHub 仓库](https://github.com/hamcrest/JavaHamcrest)
+
 ## 1 引言
 
 Hamcrest 是一个用于软件测试的强大框架，它提供了丰富的**匹配器（Matchers）** 集合，可以组合起来创建灵活且表达力强的测试断言。在 Spring 测试环境中，Hamcrest 与 JUnit 和 Mockito 等框架协同工作，显著提升了测试代码的**可读性和维护性**。
@@ -75,7 +78,7 @@ public void test_with_hamcrest_assertThat() {
 - AssertJ：一款快速断言库
 - **Hamcrest**：一款单元测试匹配库
 - Mockito：一款 Mock 测试框架
-- JSONassert：一款 JSON 断言库
+- JSONAssert：一款 JSON 断言库
 - JsonPath：一款 JSON XPath 库
 
 ### 3.2 基本导入语句
@@ -281,7 +284,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     
-    @MockBean
+    @MockitoBean
     private UserService userService;
     
     @Test
@@ -607,13 +610,13 @@ public class UserServiceIntegrationTest {
 
 使用适当的策略模拟外部依赖：
 
-1. **使用 @MockBean 模拟简单依赖**：
+1. **使用 @MockitoBean 模拟简单依赖**：
 
 ```java
 @SpringBootTest
 public class UserServiceTest {
     
-    @MockBean
+    @MockitoBean
     private EmailService emailService;
     
     @Autowired

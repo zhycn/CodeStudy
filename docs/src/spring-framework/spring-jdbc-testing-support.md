@@ -100,27 +100,30 @@ public class SpringJdbcTestApplicationTests {
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
 public class TestConfig {
 
-    @Bean
-    public DataSource dataSource() {
-        // 这里通常使用 EmbeddedDatabaseBuilder
-        // 对于 Spring Boot，配置在 application.properties 中，无需此 Bean
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:schema.sql")
-                .addScript("classpath:test-data.sql")
-                .build();
-    }
+  @Bean
+  public DataSource dataSource() {
+    // 这里通常使用 EmbeddedDatabaseBuilder
+    // 对于 Spring Boot，配置在 application.properties 中，无需此 Bean
+    return new EmbeddedDatabaseBuilder()
+      .setType(EmbeddedDatabaseType.H2)
+      .addScript("classpath:schema.sql")
+      .addScript("classpath:test-data.sql")
+      .build();
+  }
 
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
+  @Bean
+  public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    return new JdbcTemplate(dataSource);
+  }
 }
+
 ```
 
 ### 4.2 事务管理与回滚
@@ -129,28 +132,30 @@ public class TestConfig {
 
 ```java
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.test.annotation.Rollback;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringJUnitConfig
 @Transactional // 每个测试方法都在事务中执行
 public class UserRepositoryTest {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
 
-    @Test
-    void testInsertUser() {
-        String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
-        int rowsAffected = jdbcTemplate.update(sql, "Alice", "alice@example.com");
+  @Test
+  void testInsertUser() {
+    String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+    int rowsAffected = jdbcTemplate.update(sql, "Alice", "alice@example.com");
 
-        assertEquals(1, rowsAffected);
-        // 由于事务存在，此处可以查询到刚插入的数据
-        Integer id = jdbcTemplate.queryForObject("SELECT id FROM users WHERE email = ?", Integer.class, "alice@example.com");
-        assertEquals(1, id);
-    }
-    // 方法结束时，事务默认会自动回滚，数据库状态恢复到测试前
+    assertEquals(1, rowsAffected);
+    // 由于事务存在，此处可以查询到刚插入的数据
+    Integer id = jdbcTemplate.queryForObject("SELECT id FROM users WHERE email = ?", Integer.class, "alice@example.com");
+    assertEquals(1, id);
+  }
+  // 方法结束时，事务默认会自动回滚，数据库状态恢复到测试前
 }
 ```
 
