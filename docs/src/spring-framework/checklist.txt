@@ -25,6 +25,8 @@
 【ok】- [Spring 框架 Hamcrest 测试框架详解与最佳实践](./spring-hamcrest.md)
 【ok】- [Spring 框架 JSONassert 测试框架详解与最佳实践](./spring-jsonassert.md)
 【ok】- [Spring 框架 Testcontainers 测试详解与最佳实践](./spring-testcontainers.md)
+【ok】- [Spring Boot 3.x Test 注解完全指南](./spring-test-annotations.md)
+【ok】- [Spring Test Mock 核心组件详解与最佳实践](./spring-mock.md)
 
 ## Data Access
 
@@ -79,4 +81,3 @@ REST Clients
 - WebClient - non-blocking, reactive client with fluent API.
 - RestTemplate - synchronous client with template method API.
 - HTTP Interface - annotated interface with generated, dynamic proxy implementation.
-

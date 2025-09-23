@@ -36,6 +36,8 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 - [Spring 框架 Hamcrest 测试框架详解与最佳实践](./spring-hamcrest.md)
 - [Spring 框架 JSONAssert 测试框架详解与最佳实践](./spring-jsonassert.md)
 - [Spring 框架 Testcontainers 测试详解与最佳实践](./spring-testcontainers.md)
+- [Spring Boot 3.x Test 注解完全指南](./spring-test-annotations.md)
+- [Spring Test Mock 核心组件详解与最佳实践](./spring-mock.md)
 
 ## Data Access
 
@@ -110,3 +112,17 @@ Spring Framework 6.x 要求 **JDK 17+** 并全面支持 **Jakarta EE 9+**（包�
 | **spring-webflux**         | Spring 的反应式 Web 框架，用于构建基于 Reactive Streams 的非阻塞、异步 Web 应用。                            |
 | **spring-webmvc**          | 基于 Servlet API 的传统 Web MVC 框架，用于构建模型-视图-控制器架构的 Web 应用程序。                           |
 | **spring-websocket**       | 提供了 WebSocket 通信的支持，用于在 Web 应用中实现双向、实时的消息传递。                                                 |
+
+### 常用测试框架
+
+- [**JUnit**](https://junit.org/) - 一款广泛使用的 Java 单元测试框架，支持参数化测试、测试套件、测试运行器等功能，可有效组织和运行测试用例。
+- [**TestNG**](https://testng.org/) - 另一个强大的测试框架，支持测试参数化、测试依赖、测试分组等特性，相比 JUnit 功能更为丰富，适用于复杂的测试场景。
+- [**AssertJ**](https://assertj.github.io/doc/) - 提供了流畅且富有表达力的断言 API，能够编写可读性极高的测试断言，让测试代码更易理解和维护。
+- [**Mockito**](https://site.mockito.org/) - 流行的模拟对象框架，用于创建和配置模拟对象，支持参数匹配、行为验证等功能，便于编写独立的单元测试。
+- [**Hamcrest**](https://hamcrest.org/) - 提供了灵活的匹配器（Matcher） API，可用于编写更加灵活和可复用的断言，增强测试断言的表达能力。
+- [**EasyMock**](https://easymock.org/) - 轻量级的模拟对象框架，支持创建和配置模拟对象，使用简单，适合快速搭建模拟测试环境。
+- [**JMock**](https://jmock.org/) - 用于创建模拟对象的框架，提供简洁的 API 来定义模拟对象的行为，并非基于 Mockito 风格，可独立用于测试开发。
+- [**Testcontainers**](https://www.testcontainers.org/) - 在测试过程中启动和管理容器化的依赖服务，如数据库、消息队列等，使测试环境更接近生产环境，提高测试的可靠性。
+- [**JSONassert**](https://github.com/skyscreamer/JSONassert) - 专门用于比较 JSON 字符串的断言库，支持灵活的 JSON 格式验证，可处理复杂的 JSON 数据比较。
+- [**Spring Boot 测试切片**](https://docs.spring.io/spring-boot/appendix/test-auto-configuration/slices.html) - Spring Boot 提供的测试工具，用于对特定功能模块进行切片测试，可减少测试启动时间，提高测试效率。
+- [**Spring Boot 测试注解**](https://docs.spring.io/spring-framework/reference/testing/annotations.html) - Spring Boot 提供的一系列测试注解，可简化测试配置，方便对 Spring Boot 应用进行各种类型的测试。
