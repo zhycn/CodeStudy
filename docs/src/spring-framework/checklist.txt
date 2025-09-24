@@ -8,6 +8,7 @@
 - [Spring 框架 AOP 面向切面编程详解与最佳实践](./spring-aop.md)
 - [Spring 框架 Events 事件机制详解与最佳实践](./spring-event.md)
 - [Spring 框架 AOT 详解与最佳实践](./spring-aot.md)
+- [Spring Messaging 模块核心组件详解与最佳实践](./spring-messaging.md)
 
 ## Testing
 
@@ -30,13 +31,17 @@
 
 ## Data Access
 
-- [Spring 框架 Data Access 数据访问详解与最佳实践](./spring-data-access.md)
+【ok】- [Spring 框架 Data Access 数据访问详解与最佳实践](./spring-data-access.md)
 【ok】- [Spring 框架 Transactions 事务管理详解与最佳实践](./spring-transaction.md)
+【ok】- [Spring 框架 JTA 分布式事务详解与最佳实践](./spring-jta-transaction.md)
+【ok】- [Spring 框架 Reactive 响应式事务详解与最佳实践](./spring-reactive-transaction.md)
+【ok】- [Spring 框架事务管理器详解与最佳实践](./spring-transaction-manager.md)
+【ok】- [Spring 框架多种事务详解与最佳实践](./spring-mutil-transaction.md)
 【ok】- [Spring 框架 DAO Support 数据访问支持详解与最佳实践](./spring-dao-support.md)
-- [Spring 框架 JDBC 数据访问支持详解与最佳实践](./spring-dao-support-jdbc.md)
-- [Spring 框架 R2DBC 数据访问支持详解与最佳实践](./spring-dao-support-r2dbc.md)
-- [Spring 框架 ORM 数据访问支持详解与最佳实践](./spring-dao-support-orm.md)
-- [Spring 框架 XML Marshalling 数据访问支持详解与最佳实践](./spring-dao-support-xml.md)
+【ok】- [Spring 框架 JDBC 数据访问支持详解与最佳实践](./spring-jdbc.md)
+【ok】- [Spring 框架 R2DBC 数据访问支持详解与最佳实践](./spring-r2dbc.md)
+【ok】- [Spring 框架 ORM 数据访问支持详解与最佳实践](./spring-orm.md)
+【ok】- [Spring 框架 XML Marshalling （OXM）详解与最佳实践](./spring-oxm.md)
 
 ## Web Servlet
 
@@ -74,7 +79,6 @@
 扩展知识
 
 - micrometer
-- Spring Boot 测试注解完全指南
 
 REST Clients
 - RestClient - synchronous client with a fluent API.

@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 DAO Support 数据访问支持详解与最佳实践
 
+- [DAO Support](https://docs.spring.io/spring-framework/reference/data-access/dao.html)
+
 ## 1. 引言
 
 在基于 Spring 框架的应用程序中，数据访问层 (Data Access Object, DAO) 是连接业务逻辑与持久化存储（如关系型数据库、NoSQL 等）的核心桥梁。为了简化 DAO 组件的开发，避免重复和样板代码，Spring 提供了一套强大的 **DAO Support** 抽象支持类。

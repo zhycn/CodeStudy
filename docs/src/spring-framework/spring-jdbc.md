@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 JDBC 数据访问支持详解与最佳实践
 
+- [Data Access with JDBC](https://docs.spring.io/spring-framework/reference/data-access/jdbc.html)
+
 ## 1. 概述
 
 Spring JDBC 是 Spring 框架提供的一个重要模块，它对原始的 JDBC API 进行了轻量级封装，极大地简化了数据库操作代码。通过 Spring JDBC，开发者可以避免编写繁琐的 `try-catch-finally` 代码块，更专注于 SQL 和业务逻辑的实现。

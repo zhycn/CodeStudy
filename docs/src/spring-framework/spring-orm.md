@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 ORM 数据访问支持详解与最佳实践
 
+- [Object Relational Mapping (ORM) Data Access](https://docs.spring.io/spring-framework/reference/data-access/orm.html)
+
 ## 1. 概述
 
 对象关系映射（Object-Relational Mapping, ORM）是一种编程技术，用于在面向对象编程语言和关系型数据库之间实现数据的自动转换。Spring 框架并不自身提供 ORM 实现，而是为主流的 ORM 框架提供了无与伦比的集成支持，极大地简化了数据访问层（DAO, Data Access Object）的开发。

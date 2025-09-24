@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 Data Access 数据访问详解与最佳实践
 
+- [Data Access](https://docs.spring.io/spring-framework/reference/data-access.html)
+
 ## 1. 概述
 
 在企业级应用开发中，数据访问层 (DAL) 是连接业务逻辑和持久化数据存储 (如关系型数据库、NoSQL 等) 的核心桥梁。Spring 框架提供了一个强大且一致的 **数据访问异常体系** 和 **模板方法模式** 的实现，极大地简化了数据访问代码的编写，并有效地处理了各种冗杂和易错的流程。

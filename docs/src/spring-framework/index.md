@@ -19,6 +19,7 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 - [Spring 框架 AOP 面向切面编程详解与最佳实践](./spring-aop.md)
 - [Spring 框架 Events 事件机制详解与最佳实践](./spring-event.md)
 - [Spring 框架 AOT 详解与最佳实践](./spring-aot.md)
+- [Spring Messaging 模块核心组件详解与最佳实践](./spring-messaging.md)
 
 ## Testing
 
@@ -36,18 +37,22 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 - [Spring 框架 Hamcrest 测试框架详解与最佳实践](./spring-hamcrest.md)
 - [Spring 框架 JSONAssert 测试框架详解与最佳实践](./spring-jsonassert.md)
 - [Spring 框架 Testcontainers 测试详解与最佳实践](./spring-testcontainers.md)
-- [Spring Boot 3.x Test 注解完全指南](./spring-test-annotations.md)
+- [Spring Boot 3.x 测试注解完全指南](./spring-test-annotations.md)
 - [Spring Test Mock 核心组件详解与最佳实践](./spring-mock.md)
 
 ## Data Access
 
 - [Spring 框架 Data Access 数据访问详解与最佳实践](./spring-data-access.md)
-- [Spring 框架 Transactions 事务管理详解与最佳实践](./spring-transaction.md) - 事务还没完
+- [Spring 框架 Transactions 事务管理详解与最佳实践](./spring-transaction.md)
+- [Spring 框架 JTA 分布式事务详解与最佳实践](./spring-jta-transaction.md)
+- [Spring 框架 Reactive 响应式事务详解与最佳实践](./spring-reactive-transaction.md)
+- [Spring 框架事务管理器详解与最佳实践](./spring-transaction-manager.md)
+- [Spring 框架多种事务详解与最佳实践](./spring-mutil-transaction.md)
 - [Spring 框架 DAO Support 数据访问支持详解与最佳实践](./spring-dao-support.md)
-- [Spring 框架 JDBC 数据访问支持详解与最佳实践](./spring-dao-support-jdbc.md)
-- [Spring 框架 R2DBC 数据访问支持详解与最佳实践](./spring-dao-support-r2dbc.md)
-- [Spring 框架 ORM 数据访问支持详解与最佳实践](./spring-dao-support-orm.md)
-- [Spring 框架 XML Marshalling 数据访问支持详解与最佳实践](./spring-dao-support-xml.md)
+- [Spring 框架 JDBC 数据访问支持详解与最佳实践](./spring-jdbc.md)
+- [Spring 框架 R2DBC 数据访问支持详解与最佳实践](./spring-r2dbc.md)
+- [Spring 框架 ORM 数据访问支持详解与最佳实践](./spring-orm.md)
+- [Spring 框架 XML Marshalling （OXM）详解与最佳实践](./spring-oxm.md)
 
 ## Web Servlet
 

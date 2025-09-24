@@ -6,6 +6,8 @@ author: zhycn
 
 # Spring 框架 R2DBC 数据访问支持详解与最佳实践
 
+- [Data Access with R2DBC](https://docs.spring.io/spring-framework/reference/data-access/r2dbc.html)
+
 ## 1. 引言
 
 在传统的 Java 应用开发中，JDBC (Java Database Connectivity) 是关系型数据库访问的**事实标准**。然而，JDBC 是一个完全阻塞的 API，每个数据库调用都会阻塞一个线程，直到收到数据库的响应。这在**响应式**和**高并发**的应用中会成为严重的性能瓶颈。

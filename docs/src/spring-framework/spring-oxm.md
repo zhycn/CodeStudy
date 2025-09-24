@@ -1,10 +1,12 @@
 ---
-title: Spring 框架 XML Marshalling 数据访问支持详解与最佳实践
-description: 本文详细介绍了 Spring 框架中 XML Marshalling 数据访问支持的核心概念、配置方式、最佳实践以及实际应用场景。通过掌握这些知识，开发者可以在企业级应用中高效、一致地处理 XML 数据绑定，提升系统的可维护性和可扩展性。
+title: Spring 框架 XML Marshalling （OXM）详解与最佳实践
+description: 本文详细介绍了 Spring 框架中 XML Marshalling (OXM) 的核心概念、配置方式、最佳实践以及实际应用场景。通过掌握这些知识，开发者可以在企业级应用中高效、一致地处理 XML 数据绑定，提升系统的可维护性和可扩展性。
 author: zhycn
 ---
 
-# Spring 框架 XML Marshalling 数据访问支持详解与最佳实践
+# Spring 框架 XML Marshalling （OXM）详解与最佳实践
+
+- [Marshalling XML by Using Object-XML Mappers](https://docs.spring.io/spring-framework/reference/data-access/oxm.html)
 
 ## 1. 概述
 
@@ -200,37 +202,40 @@ public class UserXmlService {
 ### 5.3 测试类
 
 ```java
-// TestUserXmlService.java
-import com.example.model.User;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+
 import java.io.IOException;
 
 public class TestUserXmlService {
 
-    public static void main(String[] args) throws IOException {
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-        UserXmlService service = context.getBean(UserXmlService.class);
+  public static void main(String[] args) throws IOException {
+    // ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+    // Jaxb2Marshaller jaxb2Marshaller = context.getBean(Jaxb2Marshaller.class);
 
-        // 创建测试对象
-        User user = new User(1L, "john_doe", "john.doe@example.com");
+    Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+    jaxb2Marshaller.setClassesToBeBound(User.class);
 
-        // 测试 Marshalling
-        String xmlOutput = service.marshalUserToXml(user);
-        System.out.println("Marshalled XML:");
-        System.out.println(xmlOutput);
+    UserXmlService service = new UserXmlService(jaxb2Marshaller);
 
-        // 测试 Unmarshalling
-        User unmarshalledUser = service.unmarshalXmlToUser(xmlOutput);
-        System.out.println("\nUnmarshalled User Object:");
-        System.out.println(unmarshalledUser);
+    // 创建测试对象
+    User user = new User(1L, "john_doe", "john.doe@example.com");
 
-        // 验证对象是否相等（基于 equals 方法，此处未重写，比较的是引用）
-        System.out.println("\nAre objects equal? " + user.equals(unmarshalledUser)); // 应为 false（除非重写 equals）
-        System.out.println("Are field values equal? " +
-                          user.getId().equals(unmarshalledUser.getId()) &&
-                          user.getUsername().equals(unmarshalledUser.getUsername())); // 应为 true
-    }
+    // 测试 Marshalling
+    String xmlOutput = service.marshalUserToXml(user);
+    System.out.println("Marshalled XML:");
+    System.out.println(xmlOutput);
+
+    // 测试 Unmarshalling
+    User unmarshalledUser = service.unmarshalXmlToUser(xmlOutput);
+    System.out.println("\nUnmarshalled User Object:");
+    System.out.println(unmarshalledUser);
+
+    // 验证对象是否相等（基于 equals 方法，此处未重写，比较的是引用）
+    System.out.println("\nAre objects equal? " + user.equals(unmarshalledUser)); // 应为 false（除非重写 equals）
+    System.out.println("Are field values equal? " +
+      user.getId().equals(unmarshalledUser.getId()) +
+      user.getUsername().equals(unmarshalledUser.getUsername())); // 应为 true
+  }
 }
 ```
 
