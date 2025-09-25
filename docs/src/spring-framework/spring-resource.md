@@ -8,6 +8,8 @@ author: zhycn
 
 本文深入探讨 Spring 框架中的资源管理机制，涵盖 Resource 接口设计、各种资源实现、加载策略以及最佳实践方案。
 
+- [Spring Resources](https://docs.spring.io/spring-framework/reference/core/resources.html)
+
 ## 1. Spring 资源管理概述
 
 在 Java 应用程序开发中，资源访问是一个常见需求，包括读取配置文件、处理静态资源（如图片、CSS、JavaScript 文件）以及访问远程资源等。Spring 框架通过抽象的 `Resource` 接口及其相关实现，提供了一套统一且强大的资源访问解决方案，有效屏蔽了不同资源类型的底层差异。
