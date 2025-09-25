@@ -22,9 +22,9 @@ Selenium 是一个强大的开源工具，用于自动化 web 浏览器交互。
 
 Selenium 项目主要由三个工具组成：
 
-* **Selenium WebDriver**: 用于编写自动化脚本的核心组件，通过原生操作系统支持或浏览器扩展直接控制浏览器。
-* **Selenium IDE**: 一个用于录制和回放用户操作的浏览器扩展（主要用于原型设计和快速调试）。
-* **Selenium Grid**: 用于在多台机器和不同浏览器上并行运行测试，显著缩短测试执行时间。
+- **Selenium WebDriver**: 用于编写自动化脚本的核心组件，通过原生操作系统支持或浏览器扩展直接控制浏览器。
+- **Selenium IDE**: 一个用于录制和回放用户操作的浏览器扩展（主要用于原型设计和快速调试）。
+- **Selenium Grid**: 用于在多台机器和不同浏览器上并行运行测试，显著缩短测试执行时间。
 
 我们通常所说的 Selenium 自动化主要指使用 **Selenium WebDriver**。
 
@@ -42,11 +42,11 @@ pip install selenium
 
 WebDriver 是一个独立的可执行文件，它充当 Selenium 代码和浏览器之间的桥梁。你需要为你使用的浏览器下载对应的驱动。
 
-| 浏览器 | 驱动名称 | 下载地址 |
-| :--- | :--- | :--- |
-| Chrome | ChromeDriver | <https://googlechromelabs.github.io/chrome-for-testing/> |
-| Firefox | geckodriver | <https://github.com/mozilla/geckodriver/releases> |
-| Edge | Microsoft Edge Driver | <https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/> |
+| 浏览器  | 驱动名称              | 下载地址                                                                |
+| :------ | :-------------------- | :---------------------------------------------------------------------- |
+| Chrome  | ChromeDriver          | <https://googlechromelabs.github.io/chrome-for-testing/>                |
+| Firefox | geckodriver           | <https://github.com/mozilla/geckodriver/releases>                       |
+| Edge    | Microsoft Edge Driver | <https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/> |
 
 **最佳实践：使用 `webdriver-manager`**
 手动管理驱动版本非常繁琐，尤其是 Chrome/Edge 经常自动更新。强烈推荐使用 `webdriver-manager` 库，它会自动下载和匹配当前浏览器版本的驱动。
@@ -382,20 +382,20 @@ driver.switch_to.window(main_window) # 切回原窗口
 
 ## 9. 常见问题与解决方案
 
-* **`ElementNotInteractableException` 或 `ElementClickInterceptedException`**:
-  * **原因**: 元素被遮挡、重叠、不可见或尚未完成渲染。
-  * **解决**: 使用**显式等待**确保元素可交互（`EC.element_to_be_clickable`）。使用 `ActionChains` 或 `execute_script` 进行点击。滚动元素到视图中。
+- **`ElementNotInteractableException` 或 `ElementClickInterceptedException`**:
+  - **原因**: 元素被遮挡、重叠、不可见或尚未完成渲染。
+  - **解决**: 使用**显式等待**确保元素可交互（`EC.element_to_be_clickable`）。使用 `ActionChains` 或 `execute_script` 进行点击。滚动元素到视图中。
 
-* **`NoSuchElementException`**:
-  * **原因**: 在元素加载到 DOM 之前就尝试定位它。
-  * **解决**: 使用**显式等待**（`EC.visibility_of_element_located` 或 `EC.presence_of_element_located`）。检查是否在 iframe 中，需要先切换。
+- **`NoSuchElementException`**:
+  - **原因**: 在元素加载到 DOM 之前就尝试定位它。
+  - **解决**: 使用**显式等待**（`EC.visibility_of_element_located` 或 `EC.presence_of_element_located`）。检查是否在 iframe 中，需要先切换。
 
-* **`SessionNotCreatedException`**:
-  * **原因**: 浏览器版本与 WebDriver 版本不匹配。
-  * **解决**: 使用 `webdriver-manager` 自动匹配版本，或手动下载正确的驱动版本。
+- **`SessionNotCreatedException`**:
+  - **原因**: 浏览器版本与 WebDriver 版本不匹配。
+  - **解决**: 使用 `webdriver-manager` 自动匹配版本，或手动下载正确的驱动版本。
 
-* **Chrome 在 Docker/Linux 中崩溃**:
-  * **解决**: 添加以下启动参数：
+- **Chrome 在 Docker/Linux 中崩溃**:
+  - **解决**: 添加以下启动参数：
 
         ```python
         chrome_options.add_argument("--no-sandbox")
@@ -403,8 +403,8 @@ driver.switch_to.window(main_window) # 切回原窗口
         chrome_options.add_argument("--headless=new")
         ```
 
-* **网站检测到 Selenium**:
-  * **缓解**: 使用 `chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])`。更复杂的方法需要覆盖 `cdp` 执行中的某些变量，但这是一场军备竞赛，没有一劳永逸的解决方案。
+- **网站检测到 Selenium**:
+  - **缓解**: 使用 `chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])`。更复杂的方法需要覆盖 `cdp` 执行中的某些变量，但这是一场军备竞赛，没有一劳永逸的解决方案。
 
 通过遵循本指南中的详细解释和最佳实践，你将能够编写出健壮、高效且可维护的 Python3 Selenium 自动化脚本。
 

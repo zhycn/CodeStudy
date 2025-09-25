@@ -14,20 +14,20 @@ uWSGI 是一个功能极其丰富且高度可配置的 WSGI (Web Server Gateway 
 
 ### 1.2 为什么选择 uWSGI？
 
-* **高性能与低内存占用**：uWSGI 采用 C 语言编写，核心非常轻量且高效。其异步和非阻塞特性使其能够处理大量并发连接。
-* **可扩展性与灵活性**：提供了海量的配置选项，允许你精细地调整进程数、线程数、异步模式、日志记录等几乎所有方面，以适应从开发到高负载生产环境的各种需求。
-* **协议支持广泛**：不仅原生支持 WSGI 协议，还可以通过插件支持 HTTP、FastCGI、SCGI 等协议，使其能够轻松地与 Nginx、Apache 等 Web 服务器配合工作。
-* **进程管理**：内置强大的进程管理功能，如优雅重启（不中断服务的情况下重新加载应用代码）、链式重载等。
-* **监控与管理**：提供了基于 HTTP、TCP 甚至原始套接字的统计和管理接口，方便集成监控系统。
+- **高性能与低内存占用**：uWSGI 采用 C 语言编写，核心非常轻量且高效。其异步和非阻塞特性使其能够处理大量并发连接。
+- **可扩展性与灵活性**：提供了海量的配置选项，允许你精细地调整进程数、线程数、异步模式、日志记录等几乎所有方面，以适应从开发到高负载生产环境的各种需求。
+- **协议支持广泛**：不仅原生支持 WSGI 协议，还可以通过插件支持 HTTP、FastCGI、SCGI 等协议，使其能够轻松地与 Nginx、Apache 等 Web 服务器配合工作。
+- **进程管理**：内置强大的进程管理功能，如优雅重启（不中断服务的情况下重新加载应用代码）、链式重载等。
+- **监控与管理**：提供了基于 HTTP、TCP 甚至原始套接字的统计和管理接口，方便集成监控系统。
 
 官方网站：<https://uwsgi-docs.readthedocs.io/>
 
 ## 2. 核心概念
 
-* **WSGI**：Python Web 服务器网关接口。它是一种标准，规定了 Web 服务器如何与 Python Web 应用程序或框架进行通信。你的 Flask/Django 应用都是一个 WSGI `callable`（通常是 `application`）。
-* **uWSGI 协议**：一种高效的二进制协议，用于 uWSGI 进程与其它服务器（如 Nginx）之间的通信。Nginx 的 `uwsgi_pass` 指令就是使用这个协议。
-* **Worker**：uWSGI 的工作进程。每个 Worker 是一个独立的操作系统进程，负责处理请求。你通常会配置多个 Worker 来利用多核 CPU。
-* **Master Process**：主进程。负责管理 Worker 进程，包括平滑重启、日志轮换、监控等。在生产环境中强烈建议启用。
+- **WSGI**：Python Web 服务器网关接口。它是一种标准，规定了 Web 服务器如何与 Python Web 应用程序或框架进行通信。你的 Flask/Django 应用都是一个 WSGI `callable`（通常是 `application`）。
+- **uWSGI 协议**：一种高效的二进制协议，用于 uWSGI 进程与其它服务器（如 Nginx）之间的通信。Nginx 的 `uwsgi_pass` 指令就是使用这个协议。
+- **Worker**：uWSGI 的工作进程。每个 Worker 是一个独立的操作系统进程，负责处理请求。你通常会配置多个 Worker 来利用多核 CPU。
+- **Master Process**：主进程。负责管理 Worker 进程，包括平滑重启、日志轮换、监控等。在生产环境中强烈建议启用。
 
 ## 3. 安装与基础使用
 
@@ -77,14 +77,14 @@ uwsgi --http :8000 --wsgi-file app.py --callable application
 uwsgi --http :8000 --wsgi-file app.py --callable application --master --processes 4 --threads 2 --enable-threads --name MyAwesomeApp
 ```
 
-* `--http :8000`：在 8000 端口上启动一个 HTTP 服务器。**注意：这主要用于测试。在生产环境中，你应该使用 `--socket` 并与 Nginx 配合。**
-* `--wsgi-file app.py`：指定包含 WSGI `application` 的文件。
-* `--callable application`：指定文件中的哪个变量是 WSGI `callable`（默认为 `application`）。
-* `--master`：启用主进程管理模式。
-* `--processes 4`：启动 4 个工作进程（Worker）。
-* `--threads 2`：每个工作进程开启 2 个线程。
-* `--enable-threads`：启用 Python GIL，允许线程并发。
-* `--name MyAwesomeApp`：设置进程的前缀名，方便监控和管理。
+- `--http :8000`：在 8000 端口上启动一个 HTTP 服务器。**注意：这主要用于测试。在生产环境中，你应该使用 `--socket` 并与 Nginx 配合。**
+- `--wsgi-file app.py`：指定包含 WSGI `application` 的文件。
+- `--callable application`：指定文件中的哪个变量是 WSGI `callable`（默认为 `application`）。
+- `--master`：启用主进程管理模式。
+- `--processes 4`：启动 4 个工作进程（Worker）。
+- `--threads 2`：每个工作进程开启 2 个线程。
+- `--enable-threads`：启用 Python GIL，允许线程并发。
+- `--name MyAwesomeApp`：设置进程的前缀名，方便监控和管理。
 
 访问 `http://your-server-ip:8000` 即可看到 "Hello World from uWSGI!"。
 
@@ -233,17 +233,17 @@ sudo nginx -s reload
 
 当你的代码更新后，你需要重启 uWSGI 以使新代码生效。
 
-* **优雅重启 (Graceful Reload)**：通过向主进程发送 `SIGHUP` 信号，它会逐个重启 worker，确保服务不中断。
+- **优雅重启 (Graceful Reload)**：通过向主进程发送 `SIGHUP` 信号，它会逐个重启 worker，确保服务不中断。
 
-    ```bash
-    # 如果使用了 pidfile
-    uwsgi --reload /tmp/uwsgi.pid
-    # 或者直接使用 master FIFO（需要在配置中启用）
-    # echo r > /tmp/uwsgi.fifo
-    ```
+  ```bash
+  # 如果使用了 pidfile
+  uwsgi --reload /tmp/uwsgi.pid
+  # 或者直接使用 master FIFO（需要在配置中启用）
+  # echo r > /tmp/uwsgi.fifo
+  ```
 
-* **完全重启**：直接停止再启动 uWSGI 进程。
-* **开发环境自动重载**：在开发时，可以添加 `--py-auto-reload 2` 参数，uWSGI 会监视文件变动并自动重启。**切勿在生产环境中使用此选项！**
+- **完全重启**：直接停止再启动 uWSGI 进程。
+- **开发环境自动重载**：在开发时，可以添加 `--py-auto-reload 2` 参数，uWSGI 会监视文件变动并自动重启。**切勿在生产环境中使用此选项！**
 
 ### 6.2 静态文件服务
 
@@ -281,17 +281,17 @@ WantedBy=multi-user.target
 
 1. **不要以 root 用户运行 uWSGI Worker**：使用 `uid` 和 `gid` 选项来降权。
 
-    ```ini
-    uid = www-data
-    gid = www-data
-    ```
+   ```ini
+   uid = www-data
+   gid = www-data
+   ```
 
 2. **使用 Unix Socket**：在与 Nginx 通信时，Unix Socket 比 TCP Loopback 更安全且性能稍好。
 3. **设置 Socket 权限**：确保 Nginx 的用户有权读写 Unix Socket 文件。
 
-    ```ini
-    chmod-socket = 660
-    ```
+   ```ini
+   chmod-socket = 660
+   ```
 
 4. **启用 HTTP 路由保护**（如果直接暴露 HTTP）：使用 `--http-router` 或借助 Nginx 的访问控制。
 
@@ -300,25 +300,25 @@ WantedBy=multi-user.target
 性能调优没有银弹，最佳配置取决于你的具体应用、硬件和流量模式。务必进行压测（如使用 `ab`、`wrk` 或 `locust`）。
 
 1. **进程与线程**：
-    * `processes = (2 * CPU_cores) + 1` 是一个不错的起点。
-    * 对于 I/O 密集型应用（如大量数据库调用、网络请求），增加 `threads`（如 4-8）通常比增加进程更有效，因为线程更轻量。记得设置 `enable-threads = true`。
+   - `processes = (2 * CPU_cores) + 1` 是一个不错的起点。
+   - 对于 I/O 密集型应用（如大量数据库调用、网络请求），增加 `threads`（如 4-8）通常比增加进程更有效，因为线程更轻量。记得设置 `enable-threads = true`。
 2. **异步模式**：对于超高并发（万级别），可以考虑 uWSGI 的异步模式，但这需要应用也有一定的异步支持。通常，增加 Worker 和线程是更简单直接的方法。
 3. **内存使用**：监控 Worker 进程的内存增长。设置 `max-requests = 1000` 可以定期重启 Worker，避免内存泄漏导致的问题。
 4. **CPU 亲和力**：`cpu-affinity = 1` 可以将 Worker 绑定到特定的 CPU 核心，减少上下文切换开销，在高端部署中可能有用。
 
 ## 8. 常见问题排查 (Troubleshooting)
 
-* **`no python application found`**：
-  * 检查 `chdir`、`module` 和 `callable` 配置是否正确。
-  * 检查虚拟环境路径 `home` 是否正确。
-* **`unable to load app 0 (mountpoint='')`**：
-  * 通常是 Python 代码导入错误。检查你的应用代码是否能正常导入，依赖是否安装。
-  * 可以手动在虚拟环境中 `python -c "from myproject.wsgi import application"` 来测试。
-* **权限错误（Permission denied）**：
-  * 检查运行 uWSGI 的用户是否有权访问项目文件、虚拟环境和 Unix Socket 文件。
-* **连接被拒绝（111 Connection refused）**：
-  * 检查 uWSGI 是否正在运行，以及 `uwsgi_pass` 指令中的地址和端口是否与 `uwsgi.ini` 中的 `socket` 配置一致。
-* **获取详细日志**：启动时添加 `--log-4xx`、`--log-5xx` 或 `--log-slow` 选项，或在配置中设置 `log-maxsize` 和 `logger` 来记录更详细的错误信息。
+- **`no python application found`**：
+  - 检查 `chdir`、`module` 和 `callable` 配置是否正确。
+  - 检查虚拟环境路径 `home` 是否正确。
+- **`unable to load app 0 (mountpoint='')`**：
+  - 通常是 Python 代码导入错误。检查你的应用代码是否能正常导入，依赖是否安装。
+  - 可以手动在虚拟环境中 `python -c "from myproject.wsgi import application"` 来测试。
+- **权限错误（Permission denied）**：
+  - 检查运行 uWSGI 的用户是否有权访问项目文件、虚拟环境和 Unix Socket 文件。
+- **连接被拒绝（111 Connection refused）**：
+  - 检查 uWSGI 是否正在运行，以及 `uwsgi_pass` 指令中的地址和端口是否与 `uwsgi.ini` 中的 `socket` 配置一致。
+- **获取详细日志**：启动时添加 `--log-4xx`、`--log-5xx` 或 `--log-slow` 选项，或在配置中设置 `log-maxsize` 和 `logger` 来记录更详细的错误信息。
 
 ## 9. 总结
 

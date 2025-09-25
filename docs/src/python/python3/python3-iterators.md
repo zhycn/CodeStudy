@@ -75,15 +75,15 @@ simulate_for_loop([1, 2, 3])
 ```python
 class CountUpTo:
     """一个从 start 计数到 max（不包括）的迭代器"""
-    
+
     def __init__(self, start, max):
         self.current = start
         self.max = max
-        
+
     def __iter__(self):
         # 返回迭代器对象自身
         return self
-        
+
     def __next__(self):
         if self.current >= self.max:
             # 没有更多元素，抛出 StopIteration
@@ -112,11 +112,11 @@ for num in counter:
 ```python
 class CountUpToContainer:
     """一个可多次迭代的可迭代对象"""
-    
+
     def __init__(self, start, max):
         self.start = start
         self.max = max
-        
+
     def __iter__(self):
         # 每次调用 __iter__ 都返回一个新的迭代器实例
         # 这样每次 for 循环都能从头开始
@@ -124,14 +124,14 @@ class CountUpToContainer:
 
 class CountUpToIterator:
     """负责迭代的迭代器类"""
-    
+
     def __init__(self, start, max):
         self.current = start
         self.max = max
-        
+
     def __iter__(self):
         return self
-        
+
     def __next__(self):
         if self.current >= self.max:
             raise StopIteration
@@ -165,33 +165,33 @@ Python 内置的容器类型（如 `list`, `tuple`）都采用这种模式。
 1. **使用内置工具**：优先使用 `for` 循环、列表推导式、`map()`, `filter()` 等内置语法和函数，它们会自动处理迭代器协议，代码更简洁高效。
 2. **处理无限迭代器**：`itertools.count()`、自定义的无限生成器在使用时，必须使用像 `itertools.islice()` 这样的工具来限制结果，避免无限循环。
 
-    ```python
-    import itertools
+   ```python
+   import itertools
 
-    # 创建一个从 100 开始的无限计数器
-    counter = itertools.count(100)
-    # 使用 islice 取出前 5 个元素
-    first_five = itertools.islice(counter, 5)
-    print(list(first_five)) # [100, 101, 102, 103, 104]
-    ```
+   # 创建一个从 100 开始的无限计数器
+   counter = itertools.count(100)
+   # 使用 islice 取出前 5 个元素
+   first_five = itertools.islice(counter, 5)
+   print(list(first_five)) # [100, 101, 102, 103, 104]
+   ```
 
 3. **使用 `itertools` 模块**：该模块提供了一系列用于操作迭代器的强大工具，如链式连接 (`chain`)、分组 (`groupby`)、切片 (`islice`)、组合生成器等，应熟练掌握。
 
-    ```python
-    import itertools
+   ```python
+   import itertools
 
-    # 将多个迭代器连接成一个
-    chained = itertools.chain([1, 2, 3], ('a', 'b'), range(5, 7))
-    print(list(chained)) # [1, 2, 3, 'a', 'b', 5, 6]
+   # 将多个迭代器连接成一个
+   chained = itertools.chain([1, 2, 3], ('a', 'b'), range(5, 7))
+   print(list(chained)) # [1, 2, 3, 'a', 'b', 5, 6]
 
-    # 根据键函数对连续项进行分组
-    data = sorted([('animal', 'dog'), ('plant', 'oak'), ('animal', 'cat')], key=lambda x: x[0])
-    for key, group in itertools.groupby(data, key=lambda x: x[0]):
-        print(f"{key}: {list(group)}")
-    # Output:
-    # animal: [('animal', 'dog'), ('animal', 'cat')]
-    # plant: [('plant', 'oak')]
-    ```
+   # 根据键函数对连续项进行分组
+   data = sorted([('animal', 'dog'), ('plant', 'oak'), ('animal', 'cat')], key=lambda x: x[0])
+   for key, group in itertools.groupby(data, key=lambda x: x[0]):
+       print(f"{key}: {list(group)}")
+   # Output:
+   # animal: [('animal', 'dog'), ('animal', 'cat')]
+   # plant: [('plant', 'oak')]
+   ```
 
 4. **不要对迭代器进行 len() 操作**：迭代器在耗尽前通常不知道其长度。如果需要长度，请先将它转换为列表（如果确定数据量不大且内存允许）或使用其他方法计算。
 
@@ -199,50 +199,50 @@ Python 内置的容器类型（如 `list`, `tuple`）都采用这种模式。
 
 - **误区：在循环中修改正在迭代的集合**：这会导致未定义的行为或运行时错误。正确的做法是迭代其副本或创建新集合。
 
-    ```python
-    # 错误示范 (可能导致意外行为)
-    my_list = [1, 2, 3, 4, 5]
-    for item in my_list:
-        if item % 2 == 0:
-            my_list.remove(item) # 在迭代时修改原列表
-    print(my_list) # 结果可能不符合预期
+  ```python
+  # 错误示范 (可能导致意外行为)
+  my_list = [1, 2, 3, 4, 5]
+  for item in my_list:
+      if item % 2 == 0:
+          my_list.remove(item) # 在迭代时修改原列表
+  print(my_list) # 结果可能不符合预期
 
-    # 正确做法：迭代副本或使用列表推导式
-    my_list = [1, 2, 3, 4, 5]
-    for item in my_list.copy(): # 迭代副本
-        if item % 2 == 0:
-            my_list.remove(item)
-    print(my_list) # [1, 3, 5]
+  # 正确做法：迭代副本或使用列表推导式
+  my_list = [1, 2, 3, 4, 5]
+  for item in my_list.copy(): # 迭代副本
+      if item % 2 == 0:
+          my_list.remove(item)
+  print(my_list) # [1, 3, 5]
 
-    # 更Pythonic的做法：使用列表推导式创建新列表
-    my_list = [1, 2, 3, 4, 5]
-    my_list = [x for x in my_list if x % 2 != 0]
-    print(my_list) # [1, 3, 5]
-    ```
+  # 更Pythonic的做法：使用列表推导式创建新列表
+  my_list = [1, 2, 3, 4, 5]
+  my_list = [x for x in my_list if x % 2 != 0]
+  print(my_list) # [1, 3, 5]
+  ```
 
 - **问题：迭代器已耗尽**：记住，迭代器是“一次性”的。如果你需要多次遍历数据，要么使用可迭代对象（如列表），要么在每次需要时重新创建迭代器。
 
-    ```python
-    data = [1, 2, 3]
-    iterator = iter(data)
+  ```python
+  data = [1, 2, 3]
+  iterator = iter(data)
 
-    list1 = list(iterator) # [1, 2, 3]
-    list2 = list(iterator) # [] (迭代器已空)
-    
-    # 解决方案：重新获取迭代器
-    iterator_new = iter(data)
-    list2_fixed = list(iterator_new) # [1, 2, 3]
-    ```
+  list1 = list(iterator) # [1, 2, 3]
+  list2 = list(iterator) # [] (迭代器已空)
+
+  # 解决方案：重新获取迭代器
+  iterator_new = iter(data)
+  list2_fixed = list(iterator_new) # [1, 2, 3]
+  ```
 
 ## 总结
 
-| 特性 | 可迭代对象 (Iterable) | 迭代器 (Iterator) |
-| :--- | :--- | :--- |
-| **核心方法** | `__iter__()` | `__iter__()` 和 `__next__()` |
-| **功能** | 可被迭代（数据的来源） | 负责维护迭代状态（如何取下一个） |
-| **内存效率** | 通常一次性加载所有数据 | **惰性计算**，节省内存 |
-| **重用性** | 可多次迭代 | **一次性**，耗尽后需重新创建 |
-| **示例** | `list`, `dict`, `str`, `file` | `generator`, `zip()`, `map()` 的结果 |
+| 特性         | 可迭代对象 (Iterable)         | 迭代器 (Iterator)                    |
+| :----------- | :---------------------------- | :----------------------------------- |
+| **核心方法** | `__iter__()`                  | `__iter__()` 和 `__next__()`         |
+| **功能**     | 可被迭代（数据的来源）        | 负责维护迭代状态（如何取下一个）     |
+| **内存效率** | 通常一次性加载所有数据        | **惰性计算**，节省内存               |
+| **重用性**   | 可多次迭代                    | **一次性**，耗尽后需重新创建         |
+| **示例**     | `list`, `dict`, `str`, `file` | `generator`, `zip()`, `map()` 的结果 |
 
 迭代器是 Python 中强大而优雅的工具。理解其协议和惰性特性，对于编写高效、内存友好且符合 Python 风格的代码至关重要。它是通往生成器、协程和异步编程等更高级概念的必经之路。
 

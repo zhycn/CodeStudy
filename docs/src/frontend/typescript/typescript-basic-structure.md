@@ -63,15 +63,15 @@ TypeScript 编译器的配置文件，用于指定编译选项。
 ```json
 {
   "compilerOptions": {
-    "target": "ES2020",          // 编译目标 JavaScript 版本
-    "module": "commonjs",         // 模块系统
-    "outDir": "./dist",           // 输出目录
-    "rootDir": "./src",           // 源代码根目录
-    "strict": true,               // 启用所有严格类型检查
-    "esModuleInterop": true,      // 改善 CommonJS/ES 模块兼容性
-    "skipLibCheck": true         // 跳过声明文件类型检查
+    "target": "ES2020", // 编译目标 JavaScript 版本
+    "module": "commonjs", // 模块系统
+    "outDir": "./dist", // 输出目录
+    "rootDir": "./src", // 源代码根目录
+    "strict": true, // 启用所有严格类型检查
+    "esModuleInterop": true, // 改善 CommonJS/ES 模块兼容性
+    "skipLibCheck": true // 跳过声明文件类型检查
   },
-  "include": ["src/**/*"],        // 包含的文件
+  "include": ["src/**/*"], // 包含的文件
   "exclude": ["node_modules", "dist"] // 排除的文件
 }
 ```
@@ -84,11 +84,11 @@ TypeScript 的核心是为变量、函数参数和返回值添加类型注解。
 
 ```typescript
 // 变量类型注解
-let username: string = "Alice";
+let username: string = 'Alice';
 let age: number = 30;
 let isActive: boolean = true;
 let scores: number[] = [98, 76, 85];
-let person: { name: string; age: number } = { name: "Bob", age: 25 };
+let person: { name: string; age: number } = { name: 'Bob', age: 25 };
 
 // 函数参数和返回值类型注解
 function greet(name: string): string {
@@ -124,8 +124,8 @@ type GreetFunction = (name: string) => string;
 // 实现接口
 const currentUser: User = {
   id: 1,
-  name: "Charlie",
-  createdAt: new Date()
+  name: 'Charlie',
+  createdAt: new Date(),
 };
 ```
 
@@ -134,12 +134,12 @@ const currentUser: User = {
 ```typescript
 // 联合类型：值可以是多种类型之一
 type ID = number | string;
-let userId: ID = 101;    // 有效
-userId = "user-101";     // 也有效
+let userId: ID = 101; // 有效
+userId = 'user-101'; // 也有效
 
 // 字面量联合类型
-type Status = "active" | "inactive" | "pending";
-let currentStatus: Status = "active";
+type Status = 'active' | 'inactive' | 'pending';
+let currentStatus: Status = 'active';
 
 // 交叉类型：合并多个类型
 type Employee = Person & { employeeId: number };
@@ -164,15 +164,18 @@ interface ApiResponse<T> {
 
 // 使用泛型类
 class KeyValuePair<K, V> {
-  constructor(public key: K, public value: V) {}
+  constructor(
+    public key: K,
+    public value: V
+  ) {}
 }
 
 // 使用示例
 const numberIdentity = identity<number>(42);
 const userResponse: ApiResponse<User> = {
-  data: { id: 1, name: "David", createdAt: new Date() },
+  data: { id: 1, name: 'David', createdAt: new Date() },
   status: 200,
-  message: "Success"
+  message: 'Success',
 };
 ```
 
@@ -213,7 +216,7 @@ namespace Geometry {
     x: number;
     y: number;
   }
-  
+
   export function distance(a: Point, b: Point): number {
     return Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
   }
@@ -233,17 +236,18 @@ TypeScript 能够根据上下文自动推断类型。
 
 ```typescript
 // 类型推断示例
-let message = "Hello World"; // TypeScript 推断为 string 类型
-let count = 10;              // 推断为 number 类型
+let message = 'Hello World'; // TypeScript 推断为 string 类型
+let count = 10; // 推断为 number 类型
 
 // 函数返回值类型推断
-function square(x: number) { // 返回类型推断为 number
+function square(x: number) {
+  // 返回类型推断为 number
   return x * x;
 }
 
 // 上下文类型推断
 const numbers = [1, 2, 3]; // 推断为 number[]
-numbers.forEach(n => n.toFixed(2)); // n 推断为 number
+numbers.forEach((n) => n.toFixed(2)); // n 推断为 number
 ```
 
 ### 5.2 类型守卫与类型缩小
@@ -251,8 +255,8 @@ numbers.forEach(n => n.toFixed(2)); // n 推断为 number
 ```typescript
 // typeof 类型守卫
 function padLeft(value: string, padding: string | number) {
-  if (typeof padding === "number") {
-    return Array(padding + 1).join(" ") + value;
+  if (typeof padding === 'number') {
+    return Array(padding + 1).join(' ') + value;
   }
   return padding + value;
 }
@@ -260,13 +264,13 @@ function padLeft(value: string, padding: string | number) {
 // instanceof 类型守卫
 class Bird {
   fly() {
-    console.log("Flying");
+    console.log('Flying');
   }
 }
 
 class Fish {
   swim() {
-    console.log("Swimming");
+    console.log('Swimming');
   }
 }
 
@@ -280,7 +284,7 @@ function move(animal: Bird | Fish) {
 
 // 自定义类型守卫
 function isString(value: any): value is string {
-  return typeof value === "string";
+  return typeof value === 'string';
 }
 ```
 
@@ -335,7 +339,7 @@ tsc --sourceMap
 
 ```typescript
 // 好的实践：让 TypeScript 推断简单类型
-const name = "Alice"; // 不需要 :string
+const name = 'Alice'; // 不需要 :string
 
 // 好的实践：为复杂对象和函数添加显式类型
 interface Product {
@@ -355,7 +359,7 @@ function parseJson(json: string): unknown {
 }
 
 const data = parseJson('{"name": "John"}');
-if (data && typeof data === "object" && "name" in data) {
+if (data && typeof data === 'object' && 'name' in data) {
   console.log(data.name); // 安全访问
 }
 ```
@@ -423,7 +427,7 @@ function processData(data: any) {
 
 ```typescript
 function processData(data: unknown) {
-  if (typeof data === "object" && data !== null && "name" in data) {
+  if (typeof data === 'object' && data !== null && 'name' in data) {
     // 现在安全了
     console.log(data.name);
   }

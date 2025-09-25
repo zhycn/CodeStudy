@@ -36,9 +36,9 @@ npm run build
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -68,9 +68,9 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             // 可以将大的依赖单独打包，例如 vue 和 vue-router
             if (id.includes('vue') || id.includes('vue-router')) {
-              return 'vendor-vue'
+              return 'vendor-vue';
             }
-            return 'vendor' // 其他依赖
+            return 'vendor'; // 其他依赖
           }
         },
         // 用于命名入口 chunk 的文件名模式
@@ -78,15 +78,15 @@ export default defineConfig({
         // 用于命名代码拆分时创建的 chunk 的文件名模式
         chunkFileNames: 'static/js/[name]-[hash].js',
         // 用于命名输出静态资源的文件名模式
-        assetFileNames: 'static/assets/[name]-[hash][extname]'
-      }
+        assetFileNames: 'static/assets/[name]-[hash][extname]',
+      },
     },
     // 启用/禁用 gzip 压缩大小报告。设置为 true 可能会降低构建速度
     reportCompressedSize: false,
     // 设置 chunk 大小警告的限制（以 kbs 为单位），避免生成过大的 chunk
-    chunkSizeWarningLimit: 1000
-  }
-})
+    chunkSizeWarningLimit: 1000,
+  },
+});
 ```
 
 #### 使用 Vue CLI 的配置示例
@@ -95,7 +95,7 @@ Vue CLI 内部基于 Webpack，配置方式不同。
 
 ```javascript
 // vue.config.js
-const { defineConfig } = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig({
   transpileDependencies: true,
@@ -118,25 +118,25 @@ module.exports = defineConfig({
               name: 'chunk-vendors',
               test: /[\\/]node_modules[\\/]/,
               priority: 10,
-              chunks: 'initial'
+              chunks: 'initial',
             },
             common: {
               name: 'chunk-common',
               minChunks: 2,
               priority: 5,
               chunks: 'initial',
-              reuseExistingChunk: true
-            }
-          }
-        }
-      }
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
     }
   },
   // 链式操作 (高级)，允许对 webpack 配置进行更细粒度的修改
   chainWebpack: (config) => {
     // 你可以在这里使用 webpack-chain 的 API
-  }
-})
+  },
+});
 ```
 
 ### 1.3 分析构建产物
@@ -149,7 +149,7 @@ module.exports = defineConfig({
 2. 在 `vite.config.js` 中配置：
 
 ```javascript
-import { visualizer } from 'rollup-plugin-visualizer'
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
@@ -159,10 +159,10 @@ export default defineConfig({
       open: true, // 构建完成后自动打开报告
       filename: 'dist/stats.html', // 输出文件名
       gzipSize: true, // 显示 gzip 后的大小
-      brotliSize: true // 显示 brotli 后的大小
-    })
-  ]
-})
+      brotliSize: true, // 显示 brotli 后的大小
+    }),
+  ],
+});
 ```
 
 运行 `npm run build` 后，会自动生成一个可视化的依赖分析报告 (`dist/stats.html`)。
@@ -287,24 +287,24 @@ add_header Content-Security-Policy "default-src 'self' https: data: 'unsafe-inli
 2. 在 `main.js` 或入口文件中使用：
 
 ```javascript
-import { getCLS, getFID, getLCP, getFCP, getTTFB } from 'web-vitals'
+import { getCLS, getFID, getLCP, getFCP, getTTFB } from 'web-vitals';
 
-getCLS(console.log)
-getFID(console.log)
-getLCP(console.log)
-getFCP(console.log)
-getTTFB(console.log)
+getCLS(console.log);
+getFID(console.log);
+getLCP(console.log);
+getFCP(console.log);
+getTTFB(console.log);
 
 // 在实际项目中，你应该将这些指标发送到你的监控服务（如 Google Analytics， Sentry， 或自建后端）
 function sendToAnalytics(metric) {
-  const body = JSON.stringify(metric)
+  const body = JSON.stringify(metric);
   // 使用 `navigator.sendBeacon()` 或其他方法发送数据
   // 例如：发送到 Google Analytics 4
   // gtag('event', 'web_vital', { ...metric, event_category: 'Web Vitals' });
 }
-getCLS(sendToAnalytics)
-getFID(sendToAnalytics)
-getLCP(sendToAnalytics)
+getCLS(sendToAnalytics);
+getFID(sendToAnalytics);
+getLCP(sendToAnalytics);
 ```
 
 ### 4.2 错误追踪
@@ -317,21 +317,21 @@ getLCP(sendToAnalytics)
 2. 在 `main.js` 中初始化：
 
 ```javascript
-import * as Sentry from '@sentry/vue'
+import * as Sentry from '@sentry/vue';
 
 Sentry.init({
   app,
   dsn: 'https://your-public-key@o000000.ingest.sentry.io/0000000', // 你的 DSN
   integrations: [
     new Sentry.BrowserTracing({
-      routingInstrumentation: Sentry.vueRouterInstrumentation(router)
-    })
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+    }),
   ],
   // 设置 tracesSampleRate 以捕获性能指标
   tracesSampleRate: 1.0,
   // 设置环境
-  environment: process.env.NODE_ENV
-})
+  environment: process.env.NODE_ENV,
+});
 ```
 
 ## 5. 持续集成与部署 (CI/CD)
@@ -401,6 +401,7 @@ jobs:
 遵循这些最佳实践，将能确保您的 Vue 3 应用以高性能、高可用的状态服务于最终用户。
 
 ---
+
 **参考文献与扩展阅读**
 
 1. <https://vuejs.org/guide/best-practices/production-deployment.html>

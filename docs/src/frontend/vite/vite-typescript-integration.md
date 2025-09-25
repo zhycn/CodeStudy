@@ -79,11 +79,11 @@ Vite 期望 `tsconfig.json` 中的某些配置项以特定方式设置，以与�
     "moduleResolution": "bundler", // 或 "node"
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,       // 必须为 true，确保每个文件可作为独立模块安全转译
-    "noEmit": true,                // Vite 负责构建，tsc 只做类型检查
+    "isolatedModules": true, // 必须为 true，确保每个文件可作为独立模块安全转译
+    "noEmit": true, // Vite 负责构建，tsc 只做类型检查
 
     /* Linting and Code Quality */
-    "strict": true,                // 强烈推荐开启所有严格检查
+    "strict": true, // 强烈推荐开启所有严格检查
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -112,9 +112,9 @@ Vite 期望 `tsconfig.json` 中的某些配置项以特定方式设置，以与�
 你可以在 Vite 配置中进一步微调与 TypeScript 相关的行为。
 
 ```typescript
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -123,19 +123,19 @@ export default defineConfig({
     // 配置路径别名 (需要与 tsconfig.json 中的 `paths` 对应)
     alias: {
       '@': resolve(__dirname, 'src'),
-      '~': resolve(__dirname, 'src')
-    }
+      '~': resolve(__dirname, 'src'),
+    },
   },
   build: {
     // 构建目标，与 tsconfig.json 中的 target 保持协调
-    target: 'es2020'
+    target: 'es2020',
   },
   // 可选的 esbuild 配置
   esbuild: {
     // 在构建时移除一些代码（如 console.log, debugger）
-    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
-  }
-})
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+  },
+});
 ```
 
 ## 4. 高级用法与集成
@@ -150,13 +150,13 @@ Vite 使用 `import.meta.env` 来暴露环境变量。为了获得类型提示�
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_APP_TITLE: string
-  readonly VITE_API_BASE_URL: string
+  readonly VITE_APP_TITLE: string;
+  readonly VITE_API_BASE_URL: string;
   // 更多环境变量...
 }
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+  readonly env: ImportMetaEnv;
 }
 ```
 
@@ -189,17 +189,17 @@ interface ImportMeta {
 1. **在 IDE 中配置**: 确保你的编辑器（VS Code、WebStorm 等）已启用 TypeScript 语言服务。
 2. **使用 npm 脚本**:
 
-    ```json
-    {
-      "scripts": {
-        "dev": "vite", // 快速启动，无类型检查
-        "type-check": "tsc --noEmit", // 只做类型检查
-        "type-check:watch": "tsc --noEmit --watch", // 监听模式
-        "build": "npm run type-check && vite build", // 构建前先检查类型
-        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
-      }
-    }
-    ```
+   ```json
+   {
+     "scripts": {
+       "dev": "vite", // 快速启动，无类型检查
+       "type-check": "tsc --noEmit", // 只做类型检查
+       "type-check:watch": "tsc --noEmit --watch", // 监听模式
+       "build": "npm run type-check && vite build", // 构建前先检查类型
+       "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+     }
+   }
+   ```
 
 3. **在 CI/CD 中**: 确保你的 CI 流程（如 GitHub Actions）会运行 `npm run type-check` 和 `npm run lint`，以便在合并代码前捕获所有类型和语法错误。
 
@@ -211,32 +211,27 @@ interface ImportMeta {
 4. **让 `tsc` 只负责类型检查**: 始终使用 `tsc --noEmit` 进行类型检查，而让 Vite/esbuild 负责代码转译和打包，以发挥各自的优势。
 5. **将类型检查集成到 Git Hooks 中**: 使用工具如 `husky` 和 `lint-staged`，在提交前（pre-commit）自动运行类型检查和 linting，防止错误进入代码库。
 
-    ```json
-    // package.json (配合 husky & lint-staged)
-    {
-      "lint-staged": {
-        "*.{ts,tsx}": [
-          "npm run type-check",
-          "eslint --fix"
-        ]
-      }
-    }
-    ```
+   ```json
+   // package.json (配合 husky & lint-staged)
+   {
+     "lint-staged": {
+       "*.{ts,tsx}": ["npm run type-check", "eslint --fix"]
+     }
+   }
+   ```
 
 6. **谨慎使用 `any`**: 尽量使用更精确的类型。如果必须使用，可以考虑使用 `unknown` 类型并配合类型守卫（Type Guards），或者使用 `// @ts-ignore` 或 `// @ts-expect-error` 进行有注释的、局部的忽略。
 
 ## 6. 常见问题与解决方案 (Troubleshooting)
 
 **Q1: 我在 Vite 中导入了第三方库，但出现 `Could not find a declaration file` 的错误。**
-**A1**: 许多库自带类型定义。首先尝试安装对应的 `@types/` 包，例如 `npm install -D @types/lodash`。如果库没有官方类型，你可以：
-    - 在导入的文件顶部添加 `// @ts-ignore` 临时忽略。
-    - 创建一个 `src/globals.d.ts` 文件并声明这个模块：
-      ```typescript
+**A1**: 许多库自带类型定义。首先尝试安装对应的 `@types/` 包，例如 `npm install -D @types/lodash`。如果库没有官方类型，你可以：- 在导入的文件顶部添加 `// @ts-ignore` 临时忽略。- 创建一个 `src/globals.d.ts` 文件并声明这个模块：
+`typescript
       // globals.d.ts
       declare module 'untyped-library' {
         export const someFunc: () => void
       }
-      ```
+      `
 
 **Q2: Vite 构建很快，但 `tsc --noEmit` 很慢。**
 **A2**: 确保在 `tsconfig.json` 中设置了 `"skipLibCheck": true`。它会跳过对 `.d.ts` 文件的类型检查，通常会显著提升速度。
@@ -250,9 +245,9 @@ interface ImportMeta {
 ```typescript
 export default defineConfig({
   esbuild: {
-    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
-  }
-})
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+  },
+});
 ```
 
 ## 7. 总结
@@ -262,7 +257,8 @@ Vite 与 TypeScript 的集成堪称天作之合。Vite 处理了构建和开发�
 记住核心原则：**Vite/esbuild 负责转译和打包，TypeScript 编译器 (`tsc`) 负责类型检查**。清晰地分离这两者的职责，是你获得顺畅开发体验的关键。
 
 ---
-*本文内容综合参考并总结了 Vite 官方文档、TypeScript 官方手册以及以下社区优质文章和资源：*
+
+_本文内容综合参考并总结了 Vite 官方文档、TypeScript 官方手册以及以下社区优质文章和资源：_
 
 1. <https://vitejs.dev/guide/features.html#typescript>
 2. <https://vitejs.dev/config/#typescript>

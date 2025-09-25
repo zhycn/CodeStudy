@@ -28,7 +28,7 @@ Testcontainers 利用 Docker 的 API 来启动、管理和停止容器。在测�
 
 ## 2. 环境准备与依赖配置
 
-### 2.1  prerequisites
+### 2.1 prerequisites
 
 - **Docker 环境**：本地或远程 Docker 引擎（需配置 `DOCKER_HOST` 环境变量指向 Docker 守护进程）。
 - **Java 开发环境**：JDK 11 或更高版本。
@@ -56,47 +56,47 @@ Testcontainers 利用 Docker 的 API 来启动、管理和停止容器。在测�
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <!-- Testcontainers 核心库 -->
     <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <!-- JUnit 5 集成 -->
     <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>junit-jupiter</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <!-- 数据库容器模块（按需添加） -->
     <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>postgresql</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>mysql</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>mssqlserver</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <!-- Redis 容器模块 -->
     <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>redis</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <!-- Kafka 容器模块 -->
     <dependency>
         <groupId>org.testcontainers</groupId>
@@ -426,7 +426,7 @@ public class DevTestcontainersConfig {
     public PostgreSQLContainer<?> postgreSQLContainer() {
         return new PostgreSQLContainer<>("postgres:15");
     }
-    
+
     @Bean
     @ServiceConnection
     public RedisContainer redisContainer() {
@@ -502,38 +502,38 @@ name: CI with Testcontainers
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     services:
       docker:
         image: docker:dind
         options: --privileged
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        
-    - name: Setup Docker
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker.io
-        sudo systemctl start docker
-        
-    - name: Run tests with Testcontainers
-      run: ./mvnw test -Dspring.profiles.active=test
-      env:
-        DOCKER_HOST: tcp://localhost:2375
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          sudo systemctl start docker
+
+      - name: Run tests with Testcontainers
+        run: ./mvnw test -Dspring.profiles.active=test
+        env:
+          DOCKER_HOST: tcp://localhost:2375
 ```
 
 ### 6.2 镜像缓存优化
@@ -631,15 +631,15 @@ Testcontainers 为 Spring Boot 应用程序提供了强大的集成测试能力�
 
 ## 附录：常用容器配置参考
 
-| **容器类型**       | **依赖**                      | **镜像示例**     | **Spring Boot 3.1+ 支持** |
-| ------------------ | ----------------------------- | ---------------- | ------------------------- |
-| PostgreSQL         | testcontainers-postgresql     | postgres:15      | 是                       |
-| MySQL              | testcontainers-mysql          | mysql:8.0        | 是                       |
-| MariaDB            | testcontainers-mariadb        | mariadb:10.6     | 是                       |
-| Redis              | testcontainers-redis          | redis:7.0-alpine | 是                       |
-| Kafka              | testcontainers-kafka          | confluentinc/cp-kafka:7.3.0 | 是          |
-| MongoDB            | testcontainers-mongodb        | mongo:6.0        | 是                       |
-| Oracle XE          | testcontainers-oracle-xe      | gvenzl/oracle-xe:21-slim | 是           |
-| Elasticsearch      | testcontainers-elasticsearch  | elasticsearch:8.6.0 | 是                     |
+| **容器类型**  | **依赖**                     | **镜像示例**                | **Spring Boot 3.1+ 支持** |
+| ------------- | ---------------------------- | --------------------------- | ------------------------- |
+| PostgreSQL    | testcontainers-postgresql    | postgres:15                 | 是                        |
+| MySQL         | testcontainers-mysql         | mysql:8.0                   | 是                        |
+| MariaDB       | testcontainers-mariadb       | mariadb:10.6                | 是                        |
+| Redis         | testcontainers-redis         | redis:7.0-alpine            | 是                        |
+| Kafka         | testcontainers-kafka         | confluentinc/cp-kafka:7.3.0 | 是                        |
+| MongoDB       | testcontainers-mongodb       | mongo:6.0                   | 是                        |
+| Oracle XE     | testcontainers-oracle-xe     | gvenzl/oracle-xe:21-slim    | 是                        |
+| Elasticsearch | testcontainers-elasticsearch | elasticsearch:8.6.0         | 是                        |
 
 > 注意：本文中的代码示例基于 Spring Boot 3.1+ 和 Testcontainers 1.18+ 版本。在使用时，请确保您的项目依赖版本与示例兼容。

@@ -140,9 +140,9 @@ watch(
     console.log('User changed (deeply):', newUser);
   },
   {
-    deep: true,       // 深度侦听，即使嵌套属性变化也会触发
-    immediate: true,  // 在侦听器创建时立即触发一次回调
-    flush: 'post'     // 控制回调的触发时机，'post' 使回调在 DOM 更新后执行
+    deep: true, // 深度侦听，即使嵌套属性变化也会触发
+    immediate: true, // 在侦听器创建时立即触发一次回调
+    flush: 'post', // 控制回调的触发时机，'post' 使回调在 DOM 更新后执行
   }
 );
 ```
@@ -174,7 +174,9 @@ watchEffect(() => {
 `watch` 和 `watchEffect` 都会返回一个用于停止侦听的函数。
 
 ```javascript
-const stop = watchEffect(() => { /* ... */ });
+const stop = watchEffect(() => {
+  /* ... */
+});
 
 // 当不再需要时，调用该函数以清除副作用并停止侦听
 stop();
@@ -182,11 +184,11 @@ stop();
 
 ### 3.3 `watch` vs. `watchEffect`
 
-| 特性 | `watch` | `watchEffect` |
-| :--- | :--- | :--- |
-| **依赖追踪** | 显式指定侦听源。 | 自动追踪回调函数中所有的响应式依赖。 |
-| **初始执行** | 默认不立即执行（除非设置 `immediate: true`）。 | **立即执行一次**以收集依赖。 |
-| **旧值** | 在回调中提供变化前的旧值 (`oldValue`)。 | **不提供**旧值。 |
+| 特性         | `watch`                                                                    | `watchEffect`                                                                      |
+| :----------- | :------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- |
+| **依赖追踪** | 显式指定侦听源。                                                           | 自动追踪回调函数中所有的响应式依赖。                                               |
+| **初始执行** | 默认不立即执行（除非设置 `immediate: true`）。                             | **立即执行一次**以收集依赖。                                                       |
+| **旧值**     | 在回调中提供变化前的旧值 (`oldValue`)。                                    | **不提供**旧值。                                                                   |
 | **适用场景** | 需要知道哪个具体状态变化了，以及变化前后的值。需要惰性执行（首次不执行）。 | 不关心旧值，且副作用需要立即执行。依赖关系更动态（例如，依赖一个条件判断里的值）。 |
 
 ## 4. 副作用清理与刷新时机
@@ -240,11 +242,11 @@ watchEffect((onCleanup) => {
 
 ```javascript
 watch(source, callback, {
-  flush: 'post' // 确保回调在 DOM 更新后运行
+  flush: 'post', // 确保回调在 DOM 更新后运行
 });
 
 watchEffect(callback, {
-  flush: 'post' // 同上
+  flush: 'post', // 同上
 });
 // 有一个别名函数更方便：watchPostEffect
 watchPostEffect(() => {
@@ -255,52 +257,52 @@ watchPostEffect(() => {
 ## 5. 性能优化与最佳实践
 
 1. **谨慎使用 `deep: true`**
-    - 深度侦听会遍历整个对象，在大型数据结构上成本较高。尽量使用点路径（如 `() => obj.specific.key`）来精确侦听需要的属性。
+   - 深度侦听会遍历整个对象，在大型数据结构上成本较高。尽量使用点路径（如 `() => obj.specific.key`）来精确侦听需要的属性。
 
 2. **避免无限循环**
-    - 不要在侦听器中同步修改它所侦听的依赖，否则会再次触发侦听器，导致无限循环。
-    - **错误示例：**
+   - 不要在侦听器中同步修改它所侦听的依赖，否则会再次触发侦听器，导致无限循环。
+   - **错误示例：**
 
-        ```javascript
-        watch(count, (newVal) => {
-          count.value = newVal * 2; // 修改 count 会再次触发这个 watch！
-        });
-        ```
+     ```javascript
+     watch(count, (newVal) => {
+       count.value = newVal * 2; // 修改 count 会再次触发这个 watch！
+     });
+     ```
 
 3. **适时停止侦听器**
-    - 在组件的 `setup()` 或 `<script setup>` 中创建的侦听器，会自动绑定到该组件的生命周期，在组件卸载时自动停止。
-    - 如果你在**异步回调**中创建了一个侦听器，它不会自动绑定到当前组件实例。你必须手动调用返回的停止函数，以防止内存泄漏。
+   - 在组件的 `setup()` 或 `<script setup>` 中创建的侦听器，会自动绑定到该组件的生命周期，在组件卸载时自动停止。
+   - 如果你在**异步回调**中创建了一个侦听器，它不会自动绑定到当前组件实例。你必须手动调用返回的停止函数，以防止内存泄漏。
 
-        ```javascript
-        import { watchEffect } from 'vue';
+     ```javascript
+     import { watchEffect } from 'vue';
 
-        let unwatch = null;
-        setTimeout(() => {
-          unwatch = watchEffect(() => { ... });
-        }, 1000);
+     let unwatch = null;
+     setTimeout(() => {
+       unwatch = watchEffect(() => { ... });
+     }, 1000);
 
-        // 在组件卸载时，或者合适的时机，记得调用 unwatch()
-        ```
+     // 在组件卸载时，或者合适的时机，记得调用 unwatch()
+     ```
 
 4. **优先使用 `watch` 进行明确的侦听**
-    - 除非确实需要自动依赖追踪和立即执行，否则更推荐使用 `watch`。它使依赖关系更加明确，代码意图更清晰。
+   - 除非确实需要自动依赖追踪和立即执行，否则更推荐使用 `watch`。它使依赖关系更加明确，代码意图更清晰。
 
 5. **使用 `watchPostEffect` 进行 DOM 操作**
-    - 执行 DOM 操作时，总是使用 `flush: 'post'` 或其别名 `watchPostEffect`，以确保 DOM 已被更新。
+   - 执行 DOM 操作时，总是使用 `flush: 'post'` 或其别名 `watchPostEffect`，以确保 DOM 已被更新。
 
 6. **结合计算属性**
-    - 如果目的是计算一个新值，**优先使用计算属性**。仅在需要执行“副作用”时才使用侦听器。
+   - 如果目的是计算一个新值，**优先使用计算属性**。仅在需要执行“副作用”时才使用侦听器。
 
 ## 6. 总结与选择指南
 
-| 场景 | 推荐工具 |
-| :--- | :--- |
-| **观察一个或多个特定数据源，需要旧值** | `watch` |
-| **观察一个响应式对象的深层嵌套属性** | `watch` + `deep: true` (或点路径 getter) |
-| **需要在侦听器创建时立即执行一次** | `watch` + `immediate: true` **或** `watchEffect` |
-| **副作用依赖多个响应式值，且不关心旧值** | `watchEffect` |
-| **依赖关系是动态的（例如，在条件分支中）** | `watchEffect` |
-| **需要在副作用中操作更新后的 DOM** | `watch`/`watchEffect` + `flush: 'post'` **或** `watchPostEffect` |
-| **执行异步任务并需要取消之前的任务** | `watch` 或 `watchEffect` + `onCleanup` |
+| 场景                                       | 推荐工具                                                         |
+| :----------------------------------------- | :--------------------------------------------------------------- |
+| **观察一个或多个特定数据源，需要旧值**     | `watch`                                                          |
+| **观察一个响应式对象的深层嵌套属性**       | `watch` + `deep: true` (或点路径 getter)                         |
+| **需要在侦听器创建时立即执行一次**         | `watch` + `immediate: true` **或** `watchEffect`                 |
+| **副作用依赖多个响应式值，且不关心旧值**   | `watchEffect`                                                    |
+| **依赖关系是动态的（例如，在条件分支中）** | `watchEffect`                                                    |
+| **需要在副作用中操作更新后的 DOM**         | `watch`/`watchEffect` + `flush: 'post'` **或** `watchPostEffect` |
+| **执行异步任务并需要取消之前的任务**       | `watch` 或 `watchEffect` + `onCleanup`                           |
 
 希望这份详尽的指南能帮助你在 Vue 3 项目中更加得心应手地使用侦听器，写出更高效、更健壮的代码！

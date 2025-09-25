@@ -360,12 +360,12 @@ git config --global credential.helper store
 
 ### 7.1 常见错误处理
 
-| 问题现象 | 可能原因 | 解决方案 |
-|---------|---------|---------|
-| 权限被拒绝（Permission denied） | SSH 密钥或 HTTPS 认证错误 | 检查 SSH 密钥配置或使用个人访问令牌 |
-| 非快进推送错误 | 本地分支落后于远程分支 | 先执行 `git pull` 合并更改后再推送 |
-| 冲突标记残留 | 解决冲突后未正确标记已解决 | 使用 `git add` 标记已解决的文件 |
-| 远程分支不存在 | 分支尚未推送或已被删除 | 使用 `git fetch` 更新远程信息 |
+| 问题现象                        | 可能原因                   | 解决方案                            |
+| ------------------------------- | -------------------------- | ----------------------------------- |
+| 权限被拒绝（Permission denied） | SSH 密钥或 HTTPS 认证错误  | 检查 SSH 密钥配置或使用个人访问令牌 |
+| 非快进推送错误                  | 本地分支落后于远程分支     | 先执行 `git pull` 合并更改后再推送  |
+| 冲突标记残留                    | 解决冲突后未正确标记已解决 | 使用 `git add` 标记已解决的文件     |
+| 远程分支不存在                  | 分支尚未推送或已被删除     | 使用 `git fetch` 更新远程信息       |
 
 ### 7.2 恢复与回退操作
 
@@ -397,12 +397,12 @@ Git 远程仓库是现代软件开发协作的核心，掌握其工作原理和�
 
 ## 附录：常用命令速查表
 
-| 命令 | 描述 | 示例 |
-|------|------|------|
-| `git remote -v` | 查看远程仓库 | `git remote -v` |
-| `git remote add` | 添加远程仓库 | `git remote add origin <url>` |
-| `git push` | 推送到远程 | `git push -u origin main` |
-| `git pull` | 从远程拉取 | `git pull --rebase origin main` |
-| `git fetch` | 获取远程更新 | `git fetch --prune` |
-| `git branch -r` | 查看远程分支 | `git branch -r` |
+| 命令                | 描述         | 示例                              |
+| ------------------- | ------------ | --------------------------------- |
+| `git remote -v`     | 查看远程仓库 | `git remote -v`                   |
+| `git remote add`    | 添加远程仓库 | `git remote add origin <url>`     |
+| `git push`          | 推送到远程   | `git push -u origin main`         |
+| `git pull`          | 从远程拉取   | `git pull --rebase origin main`   |
+| `git fetch`         | 获取远程更新 | `git fetch --prune`               |
+| `git branch -r`     | 查看远程分支 | `git branch -r`                   |
 | `git push --delete` | 删除远程分支 | `git push origin --delete feat-x` |

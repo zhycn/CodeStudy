@@ -18,13 +18,13 @@ author: zhycn
 
 在实际应用中，拦截器常与过滤器和 AOP 进行对比，以下是它们的主要区别：
 
-| 特性 | Filter（过滤器） | Interceptor（拦截器） | AOP（面向切面编程） |
-|------|-----------------|---------------------|-------------------|
-| **所属层级** | Servlet 规范 | Spring MVC 框架 | Spring AOP |
-| **拦截范围** | 所有请求（包括静态资源） | 控制器请求（Handler） | 任意方法（基于切点定义） |
+| 特性         | Filter（过滤器）             | Interceptor（拦截器）          | AOP（面向切面编程）        |
+| ------------ | ---------------------------- | ------------------------------ | -------------------------- |
+| **所属层级** | Servlet 规范                 | Spring MVC 框架                | Spring AOP                 |
+| **拦截范围** | 所有请求（包括静态资源）     | 控制器请求（Handler）          | 任意方法（基于切点定义）   |
 | **使用场景** | 编码设置、安全过滤、日志记录 | 权限校验、登录检查、业务层处理 | 日志、事务、缓存、异常处理 |
-| **配置方式** | web.xml 或注解 | Spring 配置类中注册 | 注解（@Aspect）、配置切面 |
-| **执行时机** | 请求进入 Servlet 前 | 控制器方法调用前后 | 方法调用前后 |
+| **配置方式** | web.xml 或注解               | Spring 配置类中注册            | 注解（@Aspect）、配置切面  |
+| **执行时机** | 请求进入 Servlet 前          | 控制器方法调用前后             | 方法调用前后               |
 
 **核心区别总结**：
 
@@ -41,8 +41,8 @@ Spring MVC 拦截器主要通过实现 `HandlerInterceptor` 接口来创建。�
 #### 2.1.1 preHandle 方法
 
 ```java
-boolean preHandle(HttpServletRequest request, 
-                  HttpServletResponse response, 
+boolean preHandle(HttpServletRequest request,
+                  HttpServletResponse response,
                   Object handler) throws Exception;
 ```
 
@@ -55,9 +55,9 @@ boolean preHandle(HttpServletRequest request,
 #### 2.1.2 postHandle 方法
 
 ```java
-void postHandle(HttpServletRequest request, 
-                HttpServletResponse response, 
-                Object handler, 
+void postHandle(HttpServletRequest request,
+                HttpServletResponse response,
+                Object handler,
                 ModelAndView modelAndView) throws Exception;
 ```
 
@@ -68,9 +68,9 @@ void postHandle(HttpServletRequest request,
 #### 2.1.3 afterCompletion 方法
 
 ```java
-void afterCompletion(HttpServletRequest request, 
-                     HttpServletResponse response, 
-                     Object handler, 
+void afterCompletion(HttpServletRequest request,
+                     HttpServletResponse response,
+                     Object handler,
                      Exception ex) throws Exception;
 ```
 
@@ -85,34 +85,34 @@ void afterCompletion(HttpServletRequest request,
 ```java
 @Component
 public class LogInterceptor implements HandlerInterceptor {
-    
+
     private static final Logger log = LoggerFactory.getLogger(LogInterceptor.class);
-    
+
     @Override
-    public boolean preHandle(HttpServletRequest request, 
-                             HttpServletResponse response, 
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
                              Object handler) {
         long startTime = System.currentTimeMillis();
         request.setAttribute("startTime", startTime);
-        
-        log.info("请求开始: URL={}, 方法={}, 参数={}", 
-                request.getRequestURL(), 
-                request.getMethod(), 
+
+        log.info("请求开始: URL={}, 方法={}, 参数={}",
+                request.getRequestURL(),
+                request.getMethod(),
                 request.getParameterMap());
         return true;
     }
-    
+
     @Override
-    public void afterCompletion(HttpServletRequest request, 
-                                HttpServletResponse response, 
-                                Object handler, 
+    public void afterCompletion(HttpServletRequest request,
+                                HttpServletResponse response,
+                                Object handler,
                                 Exception ex) {
         long startTime = (Long) request.getAttribute("startTime");
         long endTime = System.currentTimeMillis();
-        
-        log.info("请求完成: URL={}, 耗时={}ms, 异常={}", 
-                request.getRequestURL(), 
-                (endTime - startTime), 
+
+        log.info("请求完成: URL={}, 耗时={}ms, 异常={}",
+                request.getRequestURL(),
+                (endTime - startTime),
                 ex != null ? ex.getMessage() : "无");
     }
 }
@@ -127,23 +127,23 @@ public class LogInterceptor implements HandlerInterceptor {
 ```java
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-    
+
     @Autowired
     private LogInterceptor logInterceptor;
-    
+
     @Autowired
     private AuthInterceptor authInterceptor;
-    
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册日志拦截器，拦截所有请求
         registry.addInterceptor(logInterceptor)
                 .addPathPatterns("/**");
-        
+
         // 注册权限拦截器，拦截特定路径
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/api/**", "/admin/**")
-                .excludePathPatterns("/api/login", "/api/register", 
+                .excludePathPatterns("/api/login", "/api/register",
                                    "/static/**", "/error");
     }
 }
@@ -208,59 +208,59 @@ public class SecondInterceptor implements HandlerInterceptor {
 @Slf4j
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Override
-    public boolean preHandle(HttpServletRequest request, 
-                             HttpServletResponse response, 
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
                              Object handler) throws Exception {
-        
+
         // 排除登录相关接口
         String requestURI = request.getRequestURI();
         if (requestURI.contains("/login") || requestURI.contains("/public/")) {
             return true;
         }
-        
+
         // 从请求头获取 Token
         String token = request.getHeader("X-Auth-Token");
         if (!StringUtils.hasLength(token)) {
             sendUnauthorizedResponse(response, "缺少认证令牌");
             return false;
         }
-        
+
         // 验证 Token 有效性
         User user = userService.validateToken(token);
         if (user == null) {
             sendUnauthorizedResponse(response, "认证令牌无效或已过期");
             return false;
         }
-        
+
         // 将用户信息存入请求上下文
         UserContext.setCurrentUser(user);
         return true;
     }
-    
+
     @Override
-    public void afterCompletion(HttpServletRequest request, 
-                                HttpServletResponse response, 
-                                Object handler, 
+    public void afterCompletion(HttpServletRequest request,
+                                HttpServletResponse response,
+                                Object handler,
                                 Exception ex) {
         // 清理用户上下文，防止内存泄漏
         UserContext.clear();
     }
-    
-    private void sendUnauthorizedResponse(HttpServletResponse response, 
+
+    private void sendUnauthorizedResponse(HttpServletResponse response,
                                          String message) throws IOException {
         response.setStatus(HttpStatus.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("code", 401);
         result.put("message", message);
         result.put("timestamp", System.currentTimeMillis());
-        
+
         response.getWriter().write(new ObjectMapper().writeValueAsString(result));
     }
 }
@@ -273,31 +273,31 @@ public class AuthInterceptor implements HandlerInterceptor {
 ```java
 @Component
 public class RateLimitInterceptor implements HandlerInterceptor {
-    
+
     private final Map<String, RateLimiter> limiters = new ConcurrentHashMap<>();
     private final double permitsPerSecond = 100.0; // 每秒允许的请求数
-    
+
     @Override
-    public boolean preHandle(HttpServletRequest request, 
-                             HttpServletResponse response, 
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
                              Object handler) throws Exception {
-        
+
         String apiKey = request.getHeader("API-Key");
         String clientIp = getClientIpAddress(request);
         String identifier = StringUtils.hasLength(apiKey) ? apiKey : clientIp;
-        
-        RateLimiter limiter = limiters.computeIfAbsent(identifier, 
+
+        RateLimiter limiter = limiters.computeIfAbsent(identifier,
             key -> RateLimiter.create(permitsPerSecond));
-        
+
         if (!limiter.tryAcquire()) {
             response.setStatus(HttpStatus.SC_TOO_MANY_REQUESTS);
             response.getWriter().write("请求过于频繁，请稍后再试");
             return false;
         }
-        
+
         return true;
     }
-    
+
     private String getClientIpAddress(HttpServletRequest request) {
         // 获取客户端真实 IP（考虑代理情况）
         String xForwardedFor = request.getHeader("X-Forwarded-For");
@@ -316,36 +316,36 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 ```java
 @Component
 public class PerformanceInterceptor implements HandlerInterceptor {
-    
+
     private static final Logger log = LoggerFactory.getLogger("performance");
-    
+
     @Override
-    public boolean preHandle(HttpServletRequest request, 
-                             HttpServletResponse response, 
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
                              Object handler) {
         request.setAttribute("startTime", System.nanoTime());
         return true;
     }
-    
+
     @Override
-    public void afterCompletion(HttpServletRequest request, 
-                                HttpServletResponse response, 
-                                Object handler, 
+    public void afterCompletion(HttpServletRequest request,
+                                HttpServletResponse response,
+                                Object handler,
                                 Exception ex) {
         long startTime = (Long) request.getAttribute("startTime");
         long duration = (System.nanoTime() - startTime) / 1_000_000; // 转换为毫秒
-        
+
         String endpoint = request.getRequestURI();
         String method = request.getMethod();
-        
+
         // 记录慢请求（超过 500ms）
         if (duration > 500) {
-            log.warn("慢接口警告: {} {}, 耗时: {}ms, 异常: {}", 
+            log.warn("慢接口警告: {} {}, 耗时: {}ms, 异常: {}",
                     method, endpoint, duration, ex != null ? ex.getMessage() : "无");
         } else {
             log.info("接口执行: {} {}, 耗时: {}ms", method, endpoint, duration);
         }
-        
+
         // 可以推送到监控系统（如 Prometheus、InfluxDB）
         Metrics.timer("http.requests")
                 .tag("method", method)
@@ -365,13 +365,13 @@ public class PerformanceInterceptor implements HandlerInterceptor {
 ```java
 @ControllerAdvice
 public class InterceptorExceptionHandler {
-    
+
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ErrorResult> handleAuthException(AuthException e) {
         ErrorResult error = new ErrorResult(401, e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
-    
+
     @ExceptionHandler(RateLimitException.class)
     public ResponseEntity<ErrorResult> handleRateLimitException(RateLimitException e) {
         ErrorResult error = new ErrorResult(429, "请求过于频繁");
@@ -380,8 +380,8 @@ public class InterceptorExceptionHandler {
 }
 
 // 在拦截器中使用自定义异常
-public boolean preHandle(HttpServletRequest request, 
-                         HttpServletResponse response, 
+public boolean preHandle(HttpServletRequest request,
+                         HttpServletResponse response,
                          Object handler) {
     if (!checkPermission(request)) {
         throw new AuthException("用户无权限访问此资源");
@@ -397,10 +397,10 @@ public boolean preHandle(HttpServletRequest request,
 ```java
 @Component
 public class AsyncInterceptor implements AsyncHandlerInterceptor {
-    
+
     @Override
-    public void afterConcurrentHandlingStarted(HttpServletRequest request, 
-                                               HttpServletResponse response, 
+    public void afterConcurrentHandlingStarted(HttpServletRequest request,
+                                               HttpServletResponse response,
                                                Object handler) {
         // 异步请求开始时的处理
         log.info("异步请求开始: {}", request.getRequestURI());
@@ -416,16 +416,16 @@ public class AsyncInterceptor implements AsyncHandlerInterceptor {
 @Configuration
 @RefreshScope // 配合配置中心实现热更新
 public class DynamicInterceptorConfig implements WebMvcConfigurer {
-    
+
     @Value("${interceptors.rate-limit.enabled:true}")
     private boolean rateLimitEnabled;
-    
+
     @Value("${interceptors.rate-limit.threshold:100}")
     private int rateLimitThreshold;
-    
+
     @Autowired
     private RateLimitInterceptor rateLimitInterceptor;
-    
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         if (rateLimitEnabled) {
@@ -434,7 +434,7 @@ public class DynamicInterceptorConfig implements WebMvcConfigurer {
                     .order(1);
         }
     }
-    
+
     @EventListener
     public void onConfigUpdate(EnvironmentChangeEvent event) {
         // 配置更新时的处理逻辑
@@ -469,7 +469,7 @@ public class DynamicInterceptorConfig implements WebMvcConfigurer {
 public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(new MyInterceptor())
             .addPathPatterns("/**")
-            .excludePathPatterns("/static/**", "/css/**", "/js/**", 
+            .excludePathPatterns("/static/**", "/css/**", "/js/**",
                                "/images/**", "/favicon.ico");
 }
 ```
@@ -479,23 +479,23 @@ public void addInterceptors(InterceptorRegistry registry) {
 ```java
 @Component
 public class CorsInterceptor implements HandlerInterceptor {
-    
+
     @Override
-    public boolean preHandle(HttpServletRequest request, 
-                             HttpServletResponse response, 
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
                              Object handler) {
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", 
+        response.setHeader("Access-Control-Allow-Methods",
                          "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", 
+        response.setHeader("Access-Control-Allow-Headers",
                          "Content-Type, Authorization, X-Requested-With");
         response.setHeader("Access-Control-Max-Age", "3600");
-        
+
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpStatus.SC_OK);
             return false;
         }
-        
+
         return true;
     }
 }

@@ -46,108 +46,108 @@ npm run dev
 
 1. **初始化项目并安装核心依赖**：
 
-    ```bash
-    mkdir my-vue3-vite-app
-    cd my-vue3-vite-app
-    npm init -y
-    ```
+   ```bash
+   mkdir my-vue3-vite-app
+   cd my-vue3-vite-app
+   npm init -y
+   ```
 
 2. **安装 Vite 和 Vue 3**：
 
-    ```bash
-    npm install -D vite
-    npm install vue @vitejs/plugin-vue
-    ```
+   ```bash
+   npm install -D vite
+   npm install vue @vitejs/plugin-vue
+   ```
 
-    * `vue`: Vue 3 核心库。
-    * `@vitejs/plugin-vue`: **这是连接 Vite 和 Vue 3 的核心插件**，它负责编译 `.vue` 单文件组件（SFCs）。
+   - `vue`: Vue 3 核心库。
+   - `@vitejs/plugin-vue`: **这是连接 Vite 和 Vue 3 的核心插件**，它负责编译 `.vue` 单文件组件（SFCs）。
 
 3. **创建基本文件结构**：
 
-    ```
-    ├── index.html
-    ├── package.json
-    ├── vite.config.js
-    └── src
-        ├── App.vue
-        ├── main.js (或 main.ts)
-        └── components
-            └── HelloWorld.vue
-    ```
+   ```
+   ├── index.html
+   ├── package.json
+   ├── vite.config.js
+   └── src
+       ├── App.vue
+       ├── main.js (或 main.ts)
+       └── components
+           └── HelloWorld.vue
+   ```
 
 4. **配置 `vite.config.js`**：
 
-    ```javascript
-    // vite.config.js
-    import { defineConfig } from 'vite'
-    import vue from '@vitejs/plugin-vue'
+   ```javascript
+   // vite.config.js
+   import { defineConfig } from 'vite';
+   import vue from '@vitejs/plugin-vue';
 
-    // https://vitejs.dev/config/
-    export default defineConfig({
-      plugins: [vue()], // 在此处启用 Vue 插件
-    })
-    ```
+   // https://vitejs.dev/config/
+   export default defineConfig({
+     plugins: [vue()], // 在此处启用 Vue 插件
+   });
+   ```
 
 5. **配置 `index.html`** (注意 `type="module"` 和根元素)：
 
-    ```html
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite + Vue</title>
-      </head>
-      <body>
-        <!-- 挂载点 -->
-        <div id="app"></div>
-        <!-- 指向你的入口文件 -->
-        <script type="module" src="/src/main.js"></script>
-      </body>
-    </html>
-    ```
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>Vite + Vue</title>
+     </head>
+     <body>
+       <!-- 挂载点 -->
+       <div id="app"></div>
+       <!-- 指向你的入口文件 -->
+       <script type="module" src="/src/main.js"></script>
+     </body>
+   </html>
+   ```
 
 6. **创建 Vue 入口文件 `src/main.js`**：
 
-    ```javascript
-    import { createApp } from 'vue'
-    import App from './App.vue'
+   ```javascript
+   import { createApp } from 'vue';
+   import App from './App.vue';
 
-    createApp(App).mount('#app')
-    ```
+   createApp(App).mount('#app');
+   ```
 
 7. **创建 `App.vue` 单文件组件**：
 
-    ```vue
-    <template>
-      <div>
-        <h1>Hello Vite + Vue 3!</h1>
-      </div>
-    </template>
+   ```vue
+   <template>
+     <div>
+       <h1>Hello Vite + Vue 3!</h1>
+     </div>
+   </template>
 
-    <script setup>
-    // 使用 <script setup> 语法糖
-    </script>
+   <script setup>
+   // 使用 <script setup> 语法糖
+   </script>
 
-    <style scoped>
-    h1 {
-      color: #42b883;
-    }
-    </style>
-    ```
+   <style scoped>
+   h1 {
+     color: #42b883;
+   }
+   </style>
+   ```
 
 8. **在 `package.json` 中添加脚本**：
 
-    ```json
-    {
-      "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview"
-      }
-    }
-    ```
+   ```json
+   {
+     "scripts": {
+       "dev": "vite",
+       "build": "vite build",
+       "preview": "vite preview"
+     }
+   }
+   ```
 
 现在，运行 `npm run dev` 即可启动开发服务器。
 
@@ -159,8 +159,8 @@ npm run dev
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [
@@ -170,12 +170,12 @@ export default defineConfig({
       template: {
         compilerOptions: {
           // 配置模板编译器选项
-          isCustomElement: tag => tag.includes('-') // 将包含短横线的标签视为自定义元素
-        }
-      }
-    })
+          isCustomElement: (tag) => tag.includes('-'), // 将包含短横线的标签视为自定义元素
+        },
+      },
+    }),
   ],
-})
+});
 ```
 
 ### 3.2 路径别名 (Alias) 解析
@@ -184,9 +184,9 @@ Vite 默认支持别名，但需要手动配置。
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import path from 'path' // 需要安装 @types/node
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path'; // 需要安装 @types/node
 
 export default defineConfig({
   plugins: [vue()],
@@ -196,15 +196,15 @@ export default defineConfig({
       '~assets': path.resolve(__dirname, './src/assets'),
     },
   },
-})
+});
 ```
 
 配置后，您可以在代码中这样使用：
 
 ```vue
 <script setup>
-import HelloWorld from '@/components/HelloWorld.vue'
-import logo from '~assets/logo.png'
+import HelloWorld from '@/components/HelloWorld.vue';
+import logo from '~assets/logo.png';
 </script>
 ```
 
@@ -213,57 +213,57 @@ import logo from '~assets/logo.png'
 Vite 使用 `.env` 文件来加载环境变量。
 
 1. **创建环境文件**：
-    * `.env`: 所有情况
-    * `.env.development`: 开发环境
-    * `.env.production`: 生产环境
+   - `.env`: 所有情况
+   - `.env.development`: 开发环境
+   - `.env.production`: 生产环境
 
 2. **定义变量** (以 `VITE_` 前缀开头)：
 
-    ```
-    VITE_API_BASE_URL=https://api.myapp.com
-    VITE_APP_TITLE=My Awesome App
-    ```
+   ```
+   VITE_API_BASE_URL=https://api.myapp.com
+   VITE_APP_TITLE=My Awesome App
+   ```
 
 3. **在代码中使用**：
 
-    ```vue
-    <script setup>
-    // 直接通过 import.meta.env 访问
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
-    const appTitle = import.meta.env.VITE_APP_TITLE
-    </script>
+   ```vue
+   <script setup>
+   // 直接通过 import.meta.env 访问
+   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+   const appTitle = import.meta.env.VITE_APP_TITLE;
+   </script>
 
-    <template>
-      <h1>{{ appTitle }}</h1>
-    </template>
-    ```
+   <template>
+     <h1>{{ appTitle }}</h1>
+   </template>
+   ```
 
 4. **在配置文件中使用** (需要调用 `loadEnv`)：
 
-    ```javascript
-    // vite.config.js
-    import { defineConfig, loadEnv } from 'vite'
-    import vue from '@vitejs/plugin-vue'
+   ```javascript
+   // vite.config.js
+   import { defineConfig, loadEnv } from 'vite';
+   import vue from '@vitejs/plugin-vue';
 
-    export default defineConfig(({ mode }) => {
-      // 加载当前模式下的环境变量
-      const env = loadEnv(mode, process.cwd())
+   export default defineConfig(({ mode }) => {
+     // 加载当前模式下的环境变量
+     const env = loadEnv(mode, process.cwd());
 
-      return {
-        plugins: [vue()],
-        // 示例：根据环境变量配置代理
-        server: {
-          proxy: {
-            '/api': {
-              target: env.VITE_API_BASE_URL,
-              changeOrigin: true,
-              rewrite: (path) => path.replace(/^\/api/, '')
-            }
-          }
-        }
-      }
-    })
-    ```
+     return {
+       plugins: [vue()],
+       // 示例：根据环境变量配置代理
+       server: {
+         proxy: {
+           '/api': {
+             target: env.VITE_API_BASE_URL,
+             changeOrigin: true,
+             rewrite: (path) => path.replace(/^\/api/, ''),
+           },
+         },
+       },
+     };
+   });
+   ```
 
 ## 4. 开发环境最佳实践
 
@@ -291,7 +291,7 @@ export default defineConfig({
       },
     },
   },
-})
+});
 ```
 
 ## 5. 生产构建优化
@@ -302,27 +302,27 @@ Vite（基于 Rollup）默认会自动进行代码分割。结合 Vue Router 可
 
 ```javascript
 // router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/HomeView.vue') // 动态 import 实现懒加载
+    component: () => import('@/views/HomeView.vue'), // 动态 import 实现懒加载
   },
   {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/AboutView.vue')
-  }
-]
+    component: () => import(/* webpackChunkName: "about" */ '@/views/AboutView.vue'),
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
 ```
 
 ### 5.2 使用 `vite-ssr-plugin` 进行服务端渲染 (SSR)
@@ -331,24 +331,24 @@ export default router
 
 1. **安装** (以 `vite-plugin-ssr` 为例)：
 
-    ```bash
-    npm install -D vite-plugin-ssr
-    ```
+   ```bash
+   npm install -D vite-plugin-ssr
+   ```
 
 2. **基本配置**：
 
-    ```javascript
-    // vite.config.js
-    import { defineConfig } from 'vite'
-    import vue from '@vitejs/plugin-vue'
-    import ssr from 'vite-plugin-ssr/plugin'
+   ```javascript
+   // vite.config.js
+   import { defineConfig } from 'vite';
+   import vue from '@vitejs/plugin-vue';
+   import ssr from 'vite-plugin-ssr/plugin';
 
-    export default defineConfig({
-      plugins: [vue(), ssr()],
-    })
-    ```
+   export default defineConfig({
+     plugins: [vue(), ssr()],
+   });
+   ```
 
-    SSR 配置较为复杂，涉及入口文件、客户端/服务端构建等，建议查阅相应插件的官方文档。
+   SSR 配置较为复杂，涉及入口文件、客户端/服务端构建等，建议查阅相应插件的官方文档。
 
 ## 6. 常见问题与解决方案 (FAQ)
 
@@ -358,27 +358,27 @@ export default router
 **原因**： Vite 使用 `import.meta.env` 而不是 `process.env`。
 **解决**：
 
-* **替换**： 将所有 `process.env` 替换为 `import.meta.env`。
-* **垫片 (Polyfill)**： 在 `vite.config.js` 中配置 `define`：
+- **替换**： 将所有 `process.env` 替换为 `import.meta.env`。
+- **垫片 (Polyfill)**： 在 `vite.config.js` 中配置 `define`：
 
-    ```javascript
-    export default defineConfig({
-      define: {
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        'process.env': {} // 或者提供一个完整的垫片对象
-      },
-    })
-    ```
+  ```javascript
+  export default defineConfig({
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env': {}, // 或者提供一个完整的垫片对象
+    },
+  });
+  ```
 
-    **推荐使用第一种替换方案**。
+  **推荐使用第一种替换方案**。
 
 ### 6.2 如何在 SFC 的 `<template>` 中使用别名？
 
 **问题**： 在 `<template>` 中使用 `@/assets/logo.png` 路径不生效。
 **解决**： Vite 不处理 SFC 模板中的别名。需要使用相对路径或绝对路径（以 `/` 开头）。
 
-* **相对路径**: `./assets/logo.png` 或 `../assets/logo.png`
-* **绝对路径 (推荐)**: `/src/assets/logo.png` (Vite 会将 `/src` 解析为项目根目录下的 `src` 目录)
+- **相对路径**: `./assets/logo.png` 或 `../assets/logo.png`
+- **绝对路径 (推荐)**: `/src/assets/logo.png` (Vite 会将 `/src` 解析为项目根目录下的 `src` 目录)
 
 ### 6.3 与其他 UI 库集成 (如 Element Plus)
 
@@ -386,52 +386,53 @@ export default router
 
 1. **安装**：
 
-    ```bash
-    npm install element-plus
-    ```
+   ```bash
+   npm install element-plus
+   ```
 
 2. **按需自动导入 (强烈推荐)**：
 
-    ```bash
-    npm install -D unplugin-vue-components unplugin-auto-import
-    ```
+   ```bash
+   npm install -D unplugin-vue-components unplugin-auto-import
+   ```
 
-    ```javascript
-    // vite.config.js
-    import AutoImport from 'unplugin-auto-import/vite'
-    import Components from 'unplugin-vue-components/vite'
-    import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+   ```javascript
+   // vite.config.js
+   import AutoImport from 'unplugin-auto-import/vite';
+   import Components from 'unplugin-vue-components/vite';
+   import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
-    export default defineConfig({
-      plugins: [
-        vue(),
-        AutoImport({
-          resolvers: [ElementPlusResolver()],
-        }),
-        Components({
-          resolvers: [ElementPlusResolver()],
-        }),
-      ],
-    })
-    ```
+   export default defineConfig({
+     plugins: [
+       vue(),
+       AutoImport({
+         resolvers: [ElementPlusResolver()],
+       }),
+       Components({
+         resolvers: [ElementPlusResolver()],
+       }),
+     ],
+   });
+   ```
 
-    配置完成后，您就可以直接在模板中使用 `<el-button>` 而无需手动 `import` 组件和样式，插件会自动处理。
+   配置完成后，您就可以直接在模板中使用 `<el-button>` 而无需手动 `import` 组件和样式，插件会自动处理。
 
 ## 7. 总结
 
 Vite 与 Vue 3 的结合是现代前端开发的一个强大组合。它提供了：
 
-* **极致的开发体验**： 秒级启动和闪电般的热更新。
-* **简单的配置**： 开箱即用的支持，减少复杂的构建配置。
-* **强大的扩展性**： 基于 Rollup 的插件生态系统和灵活的 API。
-* **高效的产出**： 优化的生产构建包，支持现代 JavaScript 和代码分割。
+- **极致的开发体验**： 秒级启动和闪电般的热更新。
+- **简单的配置**： 开箱即用的支持，减少复杂的构建配置。
+- **强大的扩展性**： 基于 Rollup 的插件生态系统和灵活的 API。
+- **高效的产出**： 优化的生产构建包，支持现代 JavaScript 和代码分割。
 
 遵循本文档中的指南和最佳实践，您将能够高效地创建、开发和部署高性能的 Vue 3 应用程序。
 
 ---
+
 **官方资源与进一步阅读**：
 
-* <https://vitejs.dev/>
-* <https://vuejs.org/>
-* <https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue>
-* <https://vitejs.dev/plugins/>
+- <https://vitejs.dev/>
+- <https://vuejs.org/>
+- <https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue>
+- <https://vitejs.dev/plugins/>

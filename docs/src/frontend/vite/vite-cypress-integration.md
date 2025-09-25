@@ -61,8 +61,8 @@ Vite 以其极速的冷启动、闪电般的模块热更新 (HMR) 和优化的�
 
    ```javascript
    // cypress.config.js
-   const { defineConfig } = require('cypress')
-   const vitePreprocessor = require('cypress-vite')
+   const { defineConfig } = require('cypress');
+   const vitePreprocessor = require('cypress-vite');
 
    // 或者使用 ES Modules 语法
    // import { defineConfig } from 'cypress'
@@ -83,11 +83,11 @@ Vite 以其极速的冷启动、闪电般的模块热更新 (HMR) 和优化的�
      // 对于 E2E 测试，您可能还需要配置一个预处理器来编译 spec 文件
      e2e: {
        setupNodeEvents(on, config) {
-         on('file:preprocessor', vitePreprocessor())
-         return config
+         on('file:preprocessor', vitePreprocessor());
+         return config;
        },
      },
-   })
+   });
    ```
 
 ### 2.3 配置 Vite
@@ -98,12 +98,12 @@ Vite 以其极速的冷启动、闪电般的模块热更新 (HMR) 和优化的�
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [vue()],
-})
+});
 ```
 
 ## 3. 编写测试
@@ -118,22 +118,22 @@ E2E 测试从一个特殊版本的应用程序开始，模拟真实用户的行�
 describe('Home Page E2E Test', () => {
   beforeEach(() => {
     // 访问应用程序的根 URL
-    cy.visit('/')
-  })
+    cy.visit('/');
+  });
 
   it('should display the correct title', () => {
     // 断言页面标题包含 "Vite"
-    cy.title().should('include', 'Vite')
-  })
+    cy.title().should('include', 'Vite');
+  });
 
   it('should have a working counter', () => {
     // 使用 Cypress 选择器找到按钮并点击
-    cy.get('button').contains('count is').click().click()
+    cy.get('button').contains('count is').click().click();
 
     // 断言计数已更新
-    cy.get('button').should('contain', 'count is 2')
-  })
-})
+    cy.get('button').should('contain', 'count is 2');
+  });
+});
 ```
 
 **运行 E2E 测试**：
@@ -161,13 +161,13 @@ npx cypress open --e2e                        # 打开 Cypress App 运行
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 defineProps({
   msg: String,
-})
+});
 
-const count = ref(0)
+const count = ref(0);
 </script>
 ```
 
@@ -175,7 +175,7 @@ const count = ref(0)
 
 ```javascript
 // cypress/component/HelloWorld.cy.js
-import HelloWorld from '../../src/components/HelloWorld.vue'
+import HelloWorld from '../../src/components/HelloWorld.vue';
 
 describe('HelloWorld Component', () => {
   it('renders properly and is interactive', () => {
@@ -184,19 +184,19 @@ describe('HelloWorld Component', () => {
       props: {
         msg: 'Hello Cypress with Vite!',
       },
-    })
+    });
 
     // 断言渲染的文本内容
-    cy.get('h1').should('contain.text', 'Hello Cypress with Vite!')
-    cy.get('button').should('contain.text', 'count is: 0')
+    cy.get('h1').should('contain.text', 'Hello Cypress with Vite!');
+    cy.get('button').should('contain.text', 'count is: 0');
 
     // 与组件交互
-    cy.get('button').click().click()
+    cy.get('button').click().click();
 
     // 断言状态已更新
-    cy.get('button').should('contain.text', 'count is: 2')
-  })
-})
+    cy.get('button').should('contain.text', 'count is: 2');
+  });
+});
 ```
 
 #### React 组件测试示例
@@ -205,18 +205,16 @@ describe('HelloWorld Component', () => {
 
 ```jsx
 // src/components/Counter.jsx
-import { useState } from 'react'
+import { useState } from 'react';
 
 export function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <div>
-      <button onClick={() => setCount((count) => count + 1)}>
-        count is {count}
-      </button>
+      <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
     </div>
-  )
+  );
 }
 ```
 
@@ -224,20 +222,20 @@ export function Counter() {
 
 ```jsx
 // cypress/component/Counter.cy.jsx
-import { Counter } from '../../src/components/Counter'
+import { Counter } from '../../src/components/Counter';
 
 describe('Counter Component', () => {
   it('should increment the count on click', () => {
     // 挂载组件
-    cy.mount(<Counter />)
+    cy.mount(<Counter />);
 
     // 初始状态断言
-    cy.get('button').should('contain.text', 'count is 0')
+    cy.get('button').should('contain.text', 'count is 0');
 
     // 交互与更新后断言
-    cy.get('button').click().click().should('contain.text', 'count is 2')
-  })
-})
+    cy.get('button').click().click().should('contain.text', 'count is 2');
+  });
+});
 ```
 
 **运行组件测试**：
@@ -264,43 +262,43 @@ Vite 使用 `import.meta.env`，而 Cypress 使用 `process.env`。为了让测�
 
    ```javascript
    // cypress.config.js
-   const { defineConfig } = require('cypress')
-   require('dotenv').config({ path: '.env' }) // 或者 '.env.local'
+   const { defineConfig } = require('cypress');
+   require('dotenv').config({ path: '.env' }); // 或者 '.env.local'
 
    export default defineConfig({
      e2e: {
        setupNodeEvents(on, config) {
          // 将 Vite 的环境变量传递给 Cypress
-         config.env.VITE_SOME_KEY = process.env.VITE_SOME_KEY
-         return config
+         config.env.VITE_SOME_KEY = process.env.VITE_SOME_KEY;
+         return config;
        },
      },
      env: {
        // 也可以在这里直接定义，或通过 CLI 参数传入
        apiUrl: process.env.VITE_API_URL,
      },
-   })
+   });
    ```
 
 3. **在测试中使用**：
 
    ```javascript
    // 在测试中，使用 Cypress.env()
-   const apiUrl = Cypress.env('VITE_API_URL')
-   cy.visit(apiUrl)
+   const apiUrl = Cypress.env('VITE_API_URL');
+   cy.visit(apiUrl);
    ```
 
 ### 处理路径别名 (Path Aliases)
 
-如果您的 `vite.config.js` 中配置了别名 (``resolve.alias``)，Cypress 可能无法直接识别。有几种解决方案：
+如果您的 `vite.config.js` 中配置了别名 (`resolve.alias`)，Cypress 可能无法直接识别。有几种解决方案：
 
 1. **使用 `cypress-vite` 预处理器**：如上文配置，它通常能处理好别名。
 2. **在 `cypress/support/component.js` 中配置**：
 
    ```javascript
    // 安装 @types/node 并引入 path
-   import { defineConfig } from 'vite'
-   const path = require('path')
+   import { defineConfig } from 'vite';
+   const path = require('path');
 
    // 在挂载命令中传入正确的 Vite 配置
    Cypress.Commands.add('mount', (comp, options) => {
@@ -313,8 +311,8 @@ Vite 使用 `import.meta.env`，而 Cypress 使用 `process.env`。为了让测�
          },
        },
        ...options,
-     })
-   })
+     });
+   });
    ```
 
 3. **使用 Webpack 风格的别名插件（较老的方法）**：
@@ -331,58 +329,58 @@ Vite 使用 `import.meta.env`，而 Cypress 使用 `process.env`。为了让测�
 ### 5.2 最佳实践
 
 1. **为测试环境配置独立的 Vite 模式**：
-    在 `package.json` 中创建脚本，使用 `--mode test` 来运行 Cypress，并在 `vite.config.js` 中为 `test` 模式进行特定配置（如禁用某些优化）。
+   在 `package.json` 中创建脚本，使用 `--mode test` 来运行 Cypress，并在 `vite.config.js` 中为 `test` 模式进行特定配置（如禁用某些优化）。
 
-    ```json
-    "scripts": {
-      "test:e2e": "cypress run --e2e --env mode=test",
-      "test:component": "cypress run --component --env mode=test"
-    }
-    ```
+   ```json
+   "scripts": {
+     "test:e2e": "cypress run --e2e --env mode=test",
+     "test:component": "cypress run --component --env mode=test"
+   }
+   ```
 
 2. **清理状态**：
-    使用 `beforeEach` 和 `afterEach` 钩子来清理测试状态，例如清除 `localStorage`、重置数据库（通过 `cy.request()` 调用后端 API）或清理测试数据。
+   使用 `beforeEach` 和 `afterEach` 钩子来清理测试状态，例如清除 `localStorage`、重置数据库（通过 `cy.request()` 调用后端 API）或清理测试数据。
 
 3. **使用自定义命令**：
-    将重复的测试逻辑（如登录、数据准备）抽象成自定义的 Cypress 命令，存放在 `cypress/support/commands.js` 中。
+   将重复的测试逻辑（如登录、数据准备）抽象成自定义的 Cypress 命令，存放在 `cypress/support/commands.js` 中。
 
-    ```javascript
-    // cypress/support/commands.js
-    Cypress.Commands.add('login', (username, password) => {
-      cy.session([username, password], () => {
-        cy.visit('/login')
-        cy.get('#username').type(username)
-        cy.get('#password').type(password)
-        cy.get('form').submit()
-        cy.url().should('include', '/dashboard')
-      })
-    })
-    ```
+   ```javascript
+   // cypress/support/commands.js
+   Cypress.Commands.add('login', (username, password) => {
+     cy.session([username, password], () => {
+       cy.visit('/login');
+       cy.get('#username').type(username);
+       cy.get('#password').type(password);
+       cy.get('form').submit();
+       cy.url().should('include', '/dashboard');
+     });
+   });
+   ```
 
 4. **视觉回归测试**：
-    考虑集成像 `@cypress/visual-regression` 或 `Percy` 这样的工具，来捕获 UI 的变化。
+   考虑集成像 `@cypress/visual-regression` 或 `Percy` 这样的工具，来捕获 UI 的变化。
 
 5. **在 CI/CD 中运行**：
-    确保您的 CI 流水线（如 GitHub Actions、GitLab CI）正确安装了依赖项（包括浏览器），并运行 Cypress 测试。
+   确保您的 CI 流水线（如 GitHub Actions、GitLab CI）正确安装了依赖项（包括浏览器），并运行 Cypress 测试。
 
-    **示例 GitHub Actions 工作流片段**：
+   **示例 GitHub Actions 工作流片段**：
 
-    ```yaml
-    jobs:
-      cypress-run:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-          - name: Install dependencies
-            run: npm ci
-          - name: Run Cypress E2E Tests
-            uses: cypress-io/github-action@v6
-            with:
-              build: npm run build
-              start: npm run preview
-              browser: chrome
-    ```
+   ```yaml
+   jobs:
+     cypress-run:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Checkout
+           uses: actions/checkout@v4
+         - name: Install dependencies
+           run: npm ci
+         - name: Run Cypress E2E Tests
+           uses: cypress-io/github-action@v6
+           with:
+             build: npm run build
+             start: npm run preview
+             browser: chrome
+   ```
 
 ## 6. 常见问题与解决方案 (FAQ)
 

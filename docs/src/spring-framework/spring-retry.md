@@ -113,14 +113,14 @@ public class RetryApplication {
 ```java
 @Service
 public class RetryServiceImpl implements RetryService {
-    
+
     @Override
-    @Retryable(value = RuntimeException.class, maxAttempts = 4, 
+    @Retryable(value = RuntimeException.class, maxAttempts = 4,
                backoff = @Backoff(delay = 1000, multiplier = 2.0))
     public String invokeMethod(Integer status) {
-        System.out.println("invokeMethod 调用时间：" + 
+        System.out.println("invokeMethod 调用时间：" +
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-dd-MM HH:mm:ss")));
-        
+
         // 模拟异常
         if (status != null) {
             throw new RuntimeException("服务中断了......");
@@ -161,14 +161,14 @@ public class RetryServiceImpl implements RetryService {
 ```java
 @Service
 public class RetryServiceImpl implements RetryService {
-    
+
     @Override
     @Retryable(value = RuntimeException.class, maxAttempts = 3)
     public String processData(String data) {
         // 业务逻辑
         return externalService.call(data);
     }
-    
+
     @Recover
     public String recoverProcessData(RuntimeException e, String data) {
         // 记录日志、发送告警等
@@ -200,17 +200,17 @@ void testRetryTemplate() throws Throwable {
         .exponentialBackoff(1000, 2, 10000)
         .retryOn(RuntimeException.class)
         .build();
-    
+
     String result = retryTemplate.execute(
         (RetryCallback<String, Throwable>) context -> {
             // 业务逻辑
             return externalService.invokeMethod(1);
-        }, 
+        },
         context -> {
             // 所有重试失败后的恢复逻辑
             return "服务降级了！";
         });
-    
+
     System.out.println(result);
 }
 ```
@@ -222,23 +222,23 @@ void testRetryTemplate() throws Throwable {
 ```java
 @Configuration
 public class RetryConfig {
-    
+
     @Bean
     public RetryTemplate retryTemplate() {
         RetryTemplate retryTemplate = new RetryTemplate();
-        
+
         // 重试策略
         SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
         retryPolicy.setMaxAttempts(4);
         retryTemplate.setRetryPolicy(retryPolicy);
-        
+
         // 退避策略
         ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
         backOffPolicy.setInitialInterval(2000L);
         backOffPolicy.setMultiplier(2.0);
         backOffPolicy.setMaxInterval(10000L);
         retryTemplate.setBackOffPolicy(backOffPolicy);
-        
+
         return retryTemplate;
     }
 }
@@ -253,16 +253,16 @@ public class RetryConfig {
 public RetryTemplate customRetryTemplate() {
     // 异常分类策略
     ExceptionClassifierRetryPolicy classifier = new ExceptionClassifierRetryPolicy();
-    
+
     Map<Class<? extends Throwable>, RetryPolicy> policyMap = new HashMap<>();
     policyMap.put(IllegalArgumentException.class, new SimpleRetryPolicy(3));
     policyMap.put(NullPointerException.class, new TimeoutRetryPolicy());
-    
+
     classifier.setPolicyMap(policyMap);
-    
+
     RetryTemplate template = new RetryTemplate();
     template.setRetryPolicy(classifier);
-    
+
     return template;
 }
 ```
@@ -275,21 +275,21 @@ public RetryTemplate customRetryTemplate() {
 
 ```java
 public class CustomRetryPolicy implements RetryPolicy {
-    
+
     private int attempts = 0;
     private final int maxAttempts = 3;
-    
+
     @Override
     public boolean canRetry(RetryContext context) {
         attempts++;
         return attempts <= maxAttempts;
     }
-    
+
     @Override
     public void close(RetryContext context) {
         // 清理资源
     }
-    
+
     @Override
     public void registerThrowable(RetryContext context, Throwable throwable) {
         // 处理抛出的异常
@@ -303,24 +303,24 @@ Spring Retry 提供了监听器接口，允许在重试过程中的关键节点�
 
 ```java
 public class CustomRetryListener implements RetryListener {
-    
+
     @Override
-    public <T, E extends Throwable> boolean open(RetryContext context, 
+    public <T, E extends Throwable> boolean open(RetryContext context,
                                                    RetryCallback<T, E> callback) {
         System.out.println("重试开始");
         return true;
     }
-    
+
     @Override
-    public <T, E extends Throwable> void close(RetryContext context, 
-                                                RetryCallback<T, E> callback, 
+    public <T, E extends Throwable> void close(RetryContext context,
+                                                RetryCallback<T, E> callback,
                                                 Throwable throwable) {
         System.out.println("重试结束");
     }
-    
+
     @Override
-    public <T, E extends Throwable> void onError(RetryContext context, 
-                                                  RetryCallback<T, E> callback, 
+    public <T, E extends Throwable> void onError(RetryContext context,
+                                                  RetryCallback<T, E> callback,
                                                   Throwable throwable) {
         System.out.println("第" + context.getRetryCount() + "次重试失败");
     }
@@ -341,17 +341,17 @@ Spring Retry 支持使用 SpEL 表达式进行动态配置：
 ```java
 @Service
 public class ExpressionRetryService {
-    
+
     @Retryable(
-        value = MyException.class, 
+        value = MyException.class,
         maxAttemptsExpression = "#{${retry.max.attempts:3}}",
         backoff = @Backoff(delayExpression = "#{${retry.delay:1000}}",
                           multiplierExpression = "#{${retry.multiplier:2.0}}"))
     public void processWithExpression() {
         // 业务逻辑
     }
-    
-    @Retryable(exceptionExpression = 
+
+    @Retryable(exceptionExpression =
                "#{message.contains('retryable')}")
     public void processWithExceptionExpression() {
         // 只有异常消息包含'retryable'时才重试
@@ -382,7 +382,7 @@ public class ExpressionRetryService {
 
 ```java
 // 好的实践：明确指定重试的异常类型
-@Retryable(value = {NetworkException.class, TimeoutException.class}, 
+@Retryable(value = {NetworkException.class, TimeoutException.class},
            maxAttempts = 3)
 public void callExternalService() {
     // 业务逻辑
@@ -405,7 +405,7 @@ public void process() {
 - 考虑使用随机延迟，避免多个客户端同时重试
 
 ```java
-@Retryable(value = RuntimeException.class, 
+@Retryable(value = RuntimeException.class,
            maxAttempts = 4,
            backoff = @Backoff(delay = 1000, multiplier = 2, random = true))
 public void optimizedMethod() {
@@ -420,15 +420,15 @@ public void optimizedMethod() {
 ```java
 @Service
 public class TransactionalRetryService {
-    
+
     @Transactional
-    @Retryable(value = {OptimisticLockingFailureException.class}, 
+    @Retryable(value = {OptimisticLockingFailureException.class},
                maxAttempts = 3)
     public void updateWithRetry(Entity entity) {
         // 数据库操作，可能抛出乐观锁异常
         entityRepository.save(entity);
     }
-    
+
     @Recover
     public void recoverUpdate(OptimisticLockingFailureException e, Entity entity) {
         // 处理重试失败的情况
@@ -449,9 +449,9 @@ public class TransactionalRetryService {
 ```java
 @Service
 public class LoggingRetryService {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(LoggingRetryService.class);
-    
+
     @Retryable(value = RuntimeException.class, maxAttempts = 3)
     public void processWithLogging(String data) {
         try {
@@ -462,7 +462,7 @@ public class LoggingRetryService {
             throw e;
         }
     }
-    
+
     @Recover
     public void recoverProcess(RuntimeException e, String data) {
         logger.error("处理数据最终失败，数据: {}", data, e);
@@ -486,15 +486,15 @@ public class LoggingRetryService {
 ```java
 @Service
 public class SelfInjectionService {
-    
+
     @Autowired
     private SelfInjectionService self;
-    
+
     public void outerMethod() {
         // 正确：通过代理对象调用
         self.innerMethod();
     }
-    
+
     @Retryable(value = RuntimeException.class)
     public void innerMethod() {
         // 业务逻辑
@@ -536,40 +536,40 @@ public class SelfInjectionService {
 @Service
 @Slf4j
 public class OrderService {
-    
+
     @Autowired
     private InventoryService inventoryService;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Transactional
     @Retryable(value = {ServiceUnavailableException.class, NetworkException.class},
                maxAttempts = 4,
                backoff = @Backoff(delay = 1000, multiplier = 2, maxDelay = 10000))
     public Order createOrder(OrderRequest request) {
         log.info("创建订单，订单号: {}", request.getOrderNumber());
-        
+
         // 扣减库存
         inventoryService.deductStock(request.getProductId(), request.getQuantity());
-        
+
         // 创建订单
         Order order = new Order();
         order.setOrderNumber(request.getOrderNumber());
         order.setProductId(request.getProductId());
         order.setQuantity(request.getQuantity());
         order.setStatus(OrderStatus.CREATED);
-        
+
         Order savedOrder = orderRepository.save(order);
         log.info("订单创建成功，订单ID: {}", savedOrder.getId());
-        
+
         return savedOrder;
     }
-    
+
     @Recover
     public Order handleCreateOrderFailure(RuntimeException e, OrderRequest request) {
         log.error("订单创建失败，已达到最大重试次数，订单号: {}", request.getOrderNumber(), e);
-        
+
         // 创建失败订单记录
         Order failedOrder = new Order();
         failedOrder.setOrderNumber(request.getOrderNumber());
@@ -577,13 +577,13 @@ public class OrderService {
         failedOrder.setQuantity(request.getQuantity());
         failedOrder.setStatus(OrderStatus.FAILED);
         failedOrder.setErrorMessage(e.getMessage());
-        
+
         orderRepository.save(failedOrder);
-        
+
         // 发送告警通知
-        alertService.sendAlert("订单创建失败", 
+        alertService.sendAlert("订单创建失败",
             "订单号: " + request.getOrderNumber() + ", 错误: " + e.getMessage());
-        
+
         throw new BusinessException("订单创建失败，请稍后重试", e);
     }
 }
@@ -596,7 +596,7 @@ public class OrderService {
 @EnableRetry
 @EnableAspectJAutoProxy
 public class RetryConfiguration {
-    
+
     @Bean
     public RetryTemplate inventoryRetryTemplate() {
         return RetryTemplate.builder()
@@ -610,17 +610,17 @@ public class RetryConfiguration {
 
 @Component
 class InventoryRetryListener implements RetryListener {
-    
+
     @Override
-    public <T, E extends Throwable> boolean open(RetryContext context, 
+    public <T, E extends Throwable> boolean open(RetryContext context,
                                                    RetryCallback<T, E> callback) {
         log.info("库存服务调用开始重试");
         return true;
     }
-    
+
     @Override
-    public <T, E extends Throwable> void onError(RetryContext context, 
-                                                  RetryCallback<T, E> callback, 
+    public <T, E extends Throwable> void onError(RetryContext context,
+                                                  RetryCallback<T, E> callback,
                                                   Throwable throwable) {
         log.warn("库存服务第{}次调用失败", context.getRetryCount());
     }

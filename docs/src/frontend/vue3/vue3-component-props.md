@@ -3,20 +3,23 @@
 > 本文基于 Vue3 官方文档以及 12 篇优质技术文章分析总结，提供全面且实用的 Props 指南
 
 ## 🔍 引言：理解 Props 的重要性
+
 在 Vue 组件化开发中，**Props** 是父子组件通信的核心机制，用于**从父组件向子组件传递数据**。与 Vue2 相比，Vue3 在 Props 处理上提供了更灵活的 TypeScript 支持和更严格的类型检查机制。
 
 ## 🧱 一、Props 基础声明
 
 ### 1.1 数组语法（基本用法）
+
 ```vue
 <script>
 export default {
-  props: ['title', 'content', 'likes']
-}
+  props: ['title', 'content', 'likes'],
+};
 </script>
 ```
 
 ### 1.2 对象语法（推荐）
+
 ```vue
 <script>
 export default {
@@ -24,18 +27,19 @@ export default {
     title: String,
     content: {
       type: String,
-      required: true
+      required: true,
     },
     likes: {
       type: Number,
-      default: 0
-    }
-  }
-}
+      default: 0,
+    },
+  },
+};
 </script>
 ```
 
 ### 1.3 组合式 API 声明
+
 ```vue
 <script setup>
 // 运行时声明
@@ -60,30 +64,29 @@ const props = defineProps<Props>()
 ## 📦 二、Props 传递方式
 
 ### 2.1 静态传递
+
 ```vue
 <ChildComponent title="Vue3 Props 指南" :likes="42" />
 ```
 
 ### 2.2 动态绑定
+
 ```vue
 <template>
-  <ChildComponent 
-    :title="articleTitle" 
-    :likes="totalLikes"
-    :published="isPublished"
-  />
+  <ChildComponent :title="articleTitle" :likes="totalLikes" :published="isPublished" />
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const articleTitle = ref('深入理解 Vue3 Props')
-const totalLikes = ref(120)
-const isPublished = ref(true)
+const articleTitle = ref('深入理解 Vue3 Props');
+const totalLikes = ref(120);
+const isPublished = ref(true);
 </script>
 ```
 
 ### 2.3 传递对象所有属性
+
 ```vue
 <template>
   <ChildComponent v-bind="post" />
@@ -93,36 +96,38 @@ const isPublished = ref(true)
 const post = {
   id: 1,
   title: 'Vue3 Props 最佳实践',
-  content: '...'
-}
+  content: '...',
+};
 </script>
 ```
 
 ## 🔒 三、Props 验证机制
 
 ### 3.1 类型验证
+
 ```javascript
 props: {
   // 支持多种类型
   value: [String, Number],
-  
+
   // 自定义类实例
   author: Person,
-  
+
   // 数组类型
   tags: Array,
-  
+
   // 带默认值的对象
   metadata: {
     type: Object,
-    default: () => ({ 
-      category: '未分类' 
+    default: () => ({
+      category: '未分类'
     })
   }
 }
 ```
 
 ### 3.2 自定义验证函数
+
 ```javascript
 props: {
   rating: {
@@ -136,11 +141,12 @@ props: {
 ```
 
 ### 3.3 枚举验证
+
 ```javascript
 props: {
   status: {
     type: String,
-    validator: (value) => 
+    validator: (value) =>
       ['draft', 'published', 'archived'].includes(value)
   }
 }
@@ -151,21 +157,21 @@ props: {
 **核心规则：** Props 遵循单向数据流，子组件**不应直接修改**接收的 prop 值
 
 ### 4.1 正确实践
+
 ```vue
 <script setup>
-const props = defineProps(['initialCounter'])
+const props = defineProps(['initialCounter']);
 
 // 使用 prop 初始化本地数据
-const counter = ref(props.initialCounter)
+const counter = ref(props.initialCounter);
 
 // 基于 prop 的计算属性
-const formattedDate = computed(() => 
-  new Date(props.timestamp).toLocaleDateString()
-)
+const formattedDate = computed(() => new Date(props.timestamp).toLocaleDateString());
 </script>
 ```
 
 ### 4.2 需要修改时的模式
+
 ```vue
 <!-- 父组件 -->
 <template>
@@ -174,21 +180,19 @@ const formattedDate = computed(() =>
 
 <!-- 子组件 -->
 <template>
-  <input 
-    :value="modelValue" 
-    @input="$emit('update:modelValue', $event.target.value)"
-  />
+  <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
 </template>
 
 <script setup>
-defineProps(['modelValue'])
-defineEmits(['update:modelValue'])
+defineProps(['modelValue']);
+defineEmits(['update:modelValue']);
 </script>
 ```
 
 ## 🎯 五、TypeScript 最佳实践
 
 ### 5.1 接口声明 Props
+
 ```typescript
 <script setup lang="ts">
 interface Props {
@@ -207,22 +211,24 @@ const props = withDefaults(defineProps<Props>(), {
 ```
 
 ### 5.2 复杂类型定义
+
 ```typescript
 type User = {
-  id: number
-  name: string
-}
+  id: number;
+  name: string;
+};
 
 defineProps<{
-  users: User[]
+  users: User[];
   // 函数类型
-  onSelect: (user: User) => void
-}>()
+  onSelect: (user: User) => void;
+}>();
 ```
 
 ## 🚀 六、性能优化技巧
 
 ### 6.1 避免不必要的重新渲染
+
 ```javascript
 // 对象类型使用函数返回默认值
 props: {
@@ -237,13 +243,11 @@ default: () => []
 ```
 
 ### 6.2 大型对象传递优化
+
 ```vue
 <!-- 传递原始值而非对象引用 -->
 <template>
-  <ExpensiveComponent 
-    :name="user.name" 
-    :avatar="user.avatar"
-  />
+  <ExpensiveComponent :name="user.name" :avatar="user.avatar" />
 </template>
 ```
 
@@ -256,6 +260,7 @@ default: () => []
 5. **必要验证**：关键数据添加 `required: true`
 6. **命名规范**：使用 camelCase 声明，kebab-case 传递
 7. **文档注释**：为每个 prop 添加 JSDoc 注释
+
 ```javascript
 props: {
   /**

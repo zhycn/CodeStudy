@@ -225,43 +225,43 @@ type BooleansStringNumber = [...boolean[], string, number];
 
 2. **尽可能让 TypeScript 推断数组类型**：在初始化时赋值，可以省略类型注解，让 TS 自动推断。
 
-    ```typescript
-    // 好：TS 能推断出 numbers 是 number[]
-    const numbers = [1, 2, 3];
-    // 不需要写成 const numbers: number[] = [1, 2, 3];
-    ```
+   ```typescript
+   // 好：TS 能推断出 numbers 是 number[]
+   const numbers = [1, 2, 3];
+   // 不需要写成 const numbers: number[] = [1, 2, 3];
+   ```
 
 3. **使用 `readonly` 修饰符保护数据**：对于配置数组、函数参数等不应被修改的情况，使用 `readonly` 可以避免意外的修改，提高代码的可靠性和可预测性。
 
 4. **区分 `for` 循环和数组方法**：
-    * 需要索引或需要中断循环时，使用 `for` 循环或 `for...of` (结合 `entries()`)。
-    * 否则，优先使用 `map`, `filter`, `forEach`, `reduce` 等高阶函数，它们更具声明式风格，且通常能返回新的不可变数据。
+   - 需要索引或需要中断循环时，使用 `for` 循环或 `for...of` (结合 `entries()`)。
+   - 否则，优先使用 `map`, `filter`, `forEach`, `reduce` 等高阶函数，它们更具声明式风格，且通常能返回新的不可变数据。
 
 5. **善用类型守卫进行 `filter`**：通过自定义类型守卫函数，可以帮助 TypeScript 正确缩小 `filter` 后数组的类型。
 
-    ```typescript
-    function isNumber(value: unknown): value is number {
-      return typeof value === 'number';
-    }
+   ```typescript
+   function isNumber(value: unknown): value is number {
+     return typeof value === 'number';
+   }
 
-    const mixedArray: unknown[] = [1, 'hello', 2, 'world'];
-    const numbersArray = mixedArray.filter(isNumber); // numbersArray 的类型被推断为 number[]
-    ```
+   const mixedArray: unknown[] = [1, 'hello', 2, 'world'];
+   const numbersArray = mixedArray.filter(isNumber); // numbersArray 的类型被推断为 number[]
+   ```
 
 6. **为复杂对象数组定义接口 (Interface)**：不要仅仅使用 `{id: number; name: string}[]`，而是先定义接口，提高代码可读性和可维护性。
 
-    ```typescript
-    interface User {
-      id: number;
-      name: string;
-      email: string;
-    }
+   ```typescript
+   interface User {
+     id: number;
+     name: string;
+     email: string;
+   }
 
-    const users: User[] = [
-      { id: 1, name: 'Alice', email: 'alice@example.com' },
-      // ...
-    ];
-    ```
+   const users: User[] = [
+     { id: 1, name: 'Alice', email: 'alice@example.com' },
+     // ...
+   ];
+   ```
 
 ## 常见问题与误区
 

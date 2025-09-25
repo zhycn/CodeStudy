@@ -8,13 +8,13 @@
 
 **服务端渲染（Server-Side Rendering）** 是一种在服务器端生成完整 HTML 页面并直接发送给浏览器的技术。与客户端渲染（CSR）相比：
 
-| 特性 | CSR (客户端渲染) | SSR (服务端渲染) |
-|------|-----------------|-----------------|
-| 渲染位置 | 浏览器 | 服务器 |
-| 首屏加载 | 需要等待JS加载执行 | 立即显示完整内容 |
-| SEO支持 | 较差（依赖JS执行） | 优秀（完整HTML） |
-| 服务器负载 | 低 | 高 |
-| 适用场景 | 后台系统、仪表盘 | 内容网站、电商平台 |
+| 特性       | CSR (客户端渲染)   | SSR (服务端渲染)   |
+| ---------- | ------------------ | ------------------ |
+| 渲染位置   | 浏览器             | 服务器             |
+| 首屏加载   | 需要等待JS加载执行 | 立即显示完整内容   |
+| SEO支持    | 较差（依赖JS执行） | 优秀（完整HTML）   |
+| 服务器负载 | 低                 | 高                 |
+| 适用场景   | 后台系统、仪表盘   | 内容网站、电商平台 |
 
 ### 1.2 Vue3 SSR 优势
 
@@ -67,70 +67,70 @@ project/
 **main.js (通用入口)**
 
 ```javascript
-import { createSSRApp } from 'vue'
-import App from './App.vue'
+import { createSSRApp } from 'vue';
+import App from './App.vue';
 
 export function createApp() {
-  return createSSRApp(App)
+  return createSSRApp(App);
 }
 ```
 
 **entry-server.js (服务器入口)**
 
 ```javascript
-import { renderToString } from '@vue/server-renderer'
-import { createApp } from './main'
+import { renderToString } from '@vue/server-renderer';
+import { createApp } from './main';
 
 export async function render(url) {
-  const { app } = createApp()
-  
+  const { app } = createApp();
+
   // 可在此处添加路由和数据预取逻辑
-  const html = await renderToString(app)
-  
+  const html = await renderToString(app);
+
   return {
     html,
     // 可返回预取数据
-    initialState: {}
-  }
+    initialState: {},
+  };
 }
 ```
 
 **entry-client.js (客户端入口)**
 
 ```javascript
-import { createApp } from './main'
+import { createApp } from './main';
 
-const { app } = createApp()
+const { app } = createApp();
 
 // 激活静态HTML
-app.mount('#app')
+app.mount('#app');
 ```
 
 **server.js (Express服务器)**
 
 ```javascript
-import express from 'express'
-import fs from 'fs'
-import { render } from './src/server/entry-server'
+import express from 'express';
+import fs from 'fs';
+import { render } from './src/server/entry-server';
 
-const server = express()
-const indexTemplate = fs.readFileSync('./index.html', 'utf-8')
+const server = express();
+const indexTemplate = fs.readFileSync('./index.html', 'utf-8');
 
-server.use(express.static('dist'))
+server.use(express.static('dist'));
 
 server.get('*', async (req, res) => {
-  const { html, initialState } = await render(req.url)
-  
+  const { html, initialState } = await render(req.url);
+
   const responseHtml = indexTemplate
     .replace('<!--ssr-outlet-->', html)
-    .replace('"__INITIAL_STATE__"', JSON.stringify(initialState))
-  
-  res.status(200).set({ 'Content-Type': 'text/html' }).end(responseHtml)
-})
+    .replace('"__INITIAL_STATE__"', JSON.stringify(initialState));
+
+  res.status(200).set({ 'Content-Type': 'text/html' }).end(responseHtml);
+});
 
 server.listen(3000, () => {
-  console.log('Server running at http://localhost:3000')
-})
+  console.log('Server running at http://localhost:3000');
+});
 ```
 
 **index.html (模板文件)**
@@ -138,17 +138,17 @@ server.listen(3000, () => {
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Vue3 SSR</title>
-</head>
-<body>
-  <div id="app"><!--ssr-outlet--></div>
-  <script>
-    window.__INITIAL_STATE__ = "__INITIAL_STATE__"
-  </script>
-  <script src="/dist/client-bundle.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vue3 SSR</title>
+  </head>
+  <body>
+    <div id="app"><!--ssr-outlet--></div>
+    <script>
+      window.__INITIAL_STATE__ = '__INITIAL_STATE__';
+    </script>
+    <script src="/dist/client-bundle.js"></script>
+  </body>
 </html>
 ```
 
@@ -166,19 +166,19 @@ npm install pinia @pinia/nuxt
 
 ```javascript
 // stores/useProductStore.js
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useProductStore = defineStore('products', {
   state: () => ({
-    items: []
+    items: [],
   }),
   actions: {
     async fetchProducts() {
-      const res = await fetch('https://api.example.com/products')
-      this.items = await res.json()
-    }
-  }
-})
+      const res = await fetch('https://api.example.com/products');
+      this.items = await res.json();
+    },
+  },
+});
 ```
 
 **服务器端数据预取**
@@ -186,30 +186,28 @@ export const useProductStore = defineStore('products', {
 ```javascript
 // entry-server.js
 export async function render(url) {
-  const { app, router, pinia } = createApp()
-  const productStore = useProductStore(pinia)
-  
-  await router.push(url)
-  await router.isReady()
-  
+  const { app, router, pinia } = createApp();
+  const productStore = useProductStore(pinia);
+
+  await router.push(url);
+  await router.isReady();
+
   // 检查匹配组件是否需要预取数据
-  const matchedComponents = router.currentRoute.value.matched.flatMap(record => 
-    Object.values(record.components)
-  )
-  
-  const asyncData = matchedComponents.map(component => {
-    const asyncData = component.asyncData
-    return asyncData ? asyncData({ store: pinia }) : Promise.resolve()
-  })
-  
-  await Promise.all(asyncData)
-  
-  const html = await renderToString(app)
-  
+  const matchedComponents = router.currentRoute.value.matched.flatMap((record) => Object.values(record.components));
+
+  const asyncData = matchedComponents.map((component) => {
+    const asyncData = component.asyncData;
+    return asyncData ? asyncData({ store: pinia }) : Promise.resolve();
+  });
+
+  await Promise.all(asyncData);
+
+  const html = await renderToString(app);
+
   return {
     html,
-    initialState: pinia.state.value
-  }
+    initialState: pinia.state.value,
+  };
 }
 ```
 
@@ -217,14 +215,14 @@ export async function render(url) {
 
 ```javascript
 // entry-client.js
-const { app, pinia } = createApp()
+const { app, pinia } = createApp();
 
 if (window.__INITIAL_STATE__) {
-  pinia.state.value = window.__INITIAL_STATE__
+  pinia.state.value = window.__INITIAL_STATE__;
 }
 
-app.use(pinia)
-app.mount('#app')
+app.use(pinia);
+app.mount('#app');
 ```
 
 ## 5. 路由与代码分割
@@ -232,22 +230,20 @@ app.mount('#app')
 ### 5.1 Vue Router 配置
 
 ```javascript
-import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
+import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router';
 
 export function createRouter() {
   return createRouter({
-    history: import.meta.env.SSR ? 
-      createMemoryHistory() : 
-      createWebHistory(),
+    history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
     routes: [
-      { 
-        path: '/', 
+      {
+        path: '/',
         component: () => import('./views/Home.vue'),
-        asyncData: ({ store }) => store.dispatch('fetchData')
+        asyncData: ({ store }) => store.dispatch('fetchData'),
       },
-      { path: '/about', component: () => import('./views/About.vue') }
-    ]
-  })
+      { path: '/about', component: () => import('./views/About.vue') },
+    ],
+  });
 }
 ```
 
@@ -255,11 +251,9 @@ export function createRouter() {
 
 ```javascript
 // 使用defineAsyncComponent优化
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue';
 
-const HeavyComponent = defineAsyncComponent(() => 
-  import('./components/HeavyComponent.vue')
-)
+const HeavyComponent = defineAsyncComponent(() => import('./components/HeavyComponent.vue'));
 ```
 
 ## 6. 性能优化策略
@@ -268,57 +262,57 @@ const HeavyComponent = defineAsyncComponent(() =>
 
 ```javascript
 // 组件级缓存
-import { createSSRApp, h } from 'vue'
-import { renderToString } from '@vue/server-renderer'
+import { createSSRApp, h } from 'vue';
+import { renderToString } from '@vue/server-renderer';
 
 const app = createSSRApp({
-  render: () => h(MyComponent)
-})
+  render: () => h(MyComponent),
+});
 
-const renderCache = new Map()
+const renderCache = new Map();
 
 server.get('*', async (req, res) => {
-  const key = req.url
+  const key = req.url;
   if (renderCache.has(key)) {
-    return res.end(renderCache.get(key))
+    return res.end(renderCache.get(key));
   }
-  
-  const html = await renderToString(app)
-  renderCache.set(key, html)
-  
-  res.end(html)
-})
+
+  const html = await renderToString(app);
+  renderCache.set(key, html);
+
+  res.end(html);
+});
 ```
 
 ### 6.2 流式渲染
 
 ```javascript
-import { renderToNodeStream } from '@vue/server-renderer'
+import { renderToNodeStream } from '@vue/server-renderer';
 
 server.get('*', (req, res) => {
-  res.setHeader('Content-Type', 'text/html')
-  
-  const stream = renderToNodeStream(app)
-  
-  stream.on('data', chunk => {
-    res.write(chunk)
-  })
-  
+  res.setHeader('Content-Type', 'text/html');
+
+  const stream = renderToNodeStream(app);
+
+  stream.on('data', (chunk) => {
+    res.write(chunk);
+  });
+
   stream.on('end', () => {
-    res.end()
-  })
-})
+    res.end();
+  });
+});
 ```
 
 ### 6.3 性能优化总结表
 
-| 优化策略 | 实现方式 | 收益 |
-|---------|---------|------|
-| 组件缓存 | LRU缓存组件输出 | 减少40%渲染时间 |
-| 流式渲染 | renderToNodeStream | 提高TTFB指标 |
-| Brotli压缩 | 服务器压缩响应 | 减少70%传输体积 |
-| CDN分发 | 静态资源CDN加速 | 全球加载加速 |
-| 代码分割 | 路由级分割 | 减少首屏JS体积 |
+| 优化策略   | 实现方式           | 收益            |
+| ---------- | ------------------ | --------------- |
+| 组件缓存   | LRU缓存组件输出    | 减少40%渲染时间 |
+| 流式渲染   | renderToNodeStream | 提高TTFB指标    |
+| Brotli压缩 | 服务器压缩响应     | 减少70%传输体积 |
+| CDN分发    | 静态资源CDN加速    | 全球加载加速    |
+| 代码分割   | 路由级分割         | 减少首屏JS体积  |
 
 ## 7. 最佳实践指南
 
@@ -336,30 +330,30 @@ server.get('*', (req, res) => {
   <div>
     <Head>
       <title>{{ product.title }}</title>
-      <meta name="description" :content="product.description">
-      <meta property="og:image" :content="product.image">
+      <meta name="description" :content="product.description" />
+      <meta property="og:image" :content="product.image" />
     </Head>
     <!-- 页面内容 -->
   </div>
 </template>
 
 <script setup>
-import { useHead } from '@vueuse/head'
+import { useHead } from '@vueuse/head';
 
-const product = ref({})
+const product = ref({});
 
 onMounted(async () => {
-  const res = await fetch('/api/product')
-  product.value = await res.json()
-  
+  const res = await fetch('/api/product');
+  product.value = await res.json();
+
   useHead({
     title: product.value.title,
     meta: [
       { name: 'description', content: product.value.description },
-      { property: 'og:image', content: product.value.image }
-    ]
-  })
-})
+      { property: 'og:image', content: product.value.image },
+    ],
+  });
+});
 </script>
 ```
 
@@ -367,8 +361,8 @@ onMounted(async () => {
 
 ```bash
 # 推荐部署架构
-客户端请求 -> CDN -> 
-  |-> 静态资源 (Nginx) 
+客户端请求 -> CDN ->
+  |-> 静态资源 (Nginx)
   |-> 动态请求 (Node.js集群 + PM2负载均衡)
 ```
 
@@ -390,11 +384,11 @@ onMounted(async () => {
 ```javascript
 // 清理全局事件监听器
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
-})
+  window.removeEventListener('resize', handleResize);
+});
 
 // 使用WeakMap替代全局变量
-const requestCache = new WeakMap()
+const requestCache = new WeakMap();
 ```
 
 ### 8.3 第三方库兼容
@@ -403,17 +397,17 @@ const requestCache = new WeakMap()
 
 ```javascript
 // 条件导入第三方库
-let analytics
+let analytics;
 if (!import.meta.env.SSR) {
-  analytics = await import('analytics-library')
+  analytics = await import('analytics-library');
 }
 
 // 在组件中
 onMounted(() => {
   if (analytics) {
-    analytics.track('pageview')
+    analytics.track('pageview');
   }
-})
+});
 ```
 
 ## 9. 进阶：Nuxt3 框架实践

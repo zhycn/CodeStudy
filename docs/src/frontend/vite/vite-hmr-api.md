@@ -40,65 +40,69 @@ if (import.meta.hot) {
 
 这是最核心的方法，用于定义模块如何“接受”更新，从而使其成为“HMR 边界”。
 
-* **接受自身更新（无回调）**：模块接受自身更新，替换后页面会刷新。
+- **接受自身更新（无回调）**：模块接受自身更新，替换后页面会刷新。
 
-    ```javascript
-    // foo.js
-    export const value = 'original';
+  ```javascript
+  // foo.js
+  export const value = 'original';
 
-    if (import.meta.hot) {
-      import.meta.hot.accept();
-    }
-    ```
+  if (import.meta.hot) {
+    import.meta.hot.accept();
+  }
+  ```
 
-* **接受带有回调的自身更新**：你可以获取更新后的模块，并执行自定义更新逻辑，避免页面刷新。
+- **接受带有回调的自身更新**：你可以获取更新后的模块，并执行自定义更新逻辑，避免页面刷新。
 
-    ```javascript
-    // counter.js
-    let count = 0;
-    export function getCount() { return count; }
-    export function increment() { count++; }
+  ```javascript
+  // counter.js
+  let count = 0;
+  export function getCount() {
+    return count;
+  }
+  export function increment() {
+    count++;
+  }
 
-    if (import.meta.hot) {
-      import.meta.hot.accept((newModule) => {
-        // newModule 是更新后的模块内容
-        console.log('counter module updated!', newModule);
-        // 你可以在这里尝试恢复状态，例如：
-        // count = newModule.getCount();
-      });
-    }
-    ```
+  if (import.meta.hot) {
+    import.meta.hot.accept((newModule) => {
+      // newModule 是更新后的模块内容
+      console.log('counter module updated!', newModule);
+      // 你可以在这里尝试恢复状态，例如：
+      // count = newModule.getCount();
+    });
+  }
+  ```
 
-* **接受依赖模块的更新**：一个模块可以指定其依赖的模块更新时该如何处理。这对于“父”模块管理其“子”模块的更新非常有用。
+- **接受依赖模块的更新**：一个模块可以指定其依赖的模块更新时该如何处理。这对于“父”模块管理其“子”模块的更新非常有用。
 
-    ```javascript
-    // app.js
-    import { render } from './render.js';
-    import { initState } from './state.js';
+  ```javascript
+  // app.js
+  import { render } from './render.js';
+  import { initState } from './state.js';
 
-    let state = initState();
-    render(state);
+  let state = initState();
+  render(state);
 
-    if (import.meta.hot) {
-      import.meta.hot.accept(['./render.js', './state.js'], (newDependencies) => {
-        // newDependencies 是一个数组，包含每个依赖更新后的模块
-        // 如果某个依赖更新失败（如语法错误），则该位置为 undefined
-        const [newRender, newState] = newDependencies;
+  if (import.meta.hot) {
+    import.meta.hot.accept(['./render.js', './state.js'], (newDependencies) => {
+      // newDependencies 是一个数组，包含每个依赖更新后的模块
+      // 如果某个依赖更新失败（如语法错误），则该位置为 undefined
+      const [newRender, newState] = newDependencies;
 
-        if (newRender) {
-          console.log('render module updated');
-          // 使用新的 render 函数重新渲染
-          state = newState ? newState.initState() : state; // 如果 state 也更新了，重新初始化
-          newRender.render(state);
-        } else if (newState) {
-          console.log('state module updated');
-          // 可以重新初始化状态，但可能需要保留部分现有状态
-          state = newState.initState();
-          render(state);
-        }
-      });
-    }
-    ```
+      if (newRender) {
+        console.log('render module updated');
+        // 使用新的 render 函数重新渲染
+        state = newState ? newState.initState() : state; // 如果 state 也更新了，重新初始化
+        newRender.render(state);
+      } else if (newState) {
+        console.log('state module updated');
+        // 可以重新初始化状态，但可能需要保留部分现有状态
+        state = newState.initState();
+        render(state);
+      }
+    });
+  }
+  ```
 
 #### `import.meta.hot.dispose()`
 
@@ -159,10 +163,10 @@ if (import.meta.hot) {
 
 监听自定义的 HMR 事件。
 
-* `'vite:beforeUpdate'`: 在应用更新**之前**触发。
-* `'vite:afterUpdate'`: 在应用更新**之后**触发。
-* `'vite:beforeFullReload'`: 在页面即将完全重载**之前**触发。
-* `'vite:error'`: 在发生错误时触发。
+- `'vite:beforeUpdate'`: 在应用更新**之前**触发。
+- `'vite:afterUpdate'`: 在应用更新**之后**触发。
+- `'vite:beforeFullReload'`: 在页面即将完全重载**之前**触发。
+- `'vite:error'`: 在发生错误时触发。
 
 ```javascript
 // 监听所有错误
@@ -254,12 +258,12 @@ if (import.meta.hot) {
 
 ```jsx
 // store.js
-import { create } from 'zustand'
+import { create } from 'zustand';
 
-const useStore = create(set => ({
+const useStore = create((set) => ({
   bears: 0,
-  increasePopulation: () => set(state => ({ bears: state.bears + 1 }))
-}))
+  increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
+}));
 
 // 保持 Zustand Store 的状态 across HMR
 if (import.meta.hot) {
@@ -294,8 +298,8 @@ if (import.meta.hot) {
 
 ### 4.5 性能与边界定义
 
-* **谨慎使用 HMR 边界**：不是所有模块都需要成为 HMR 边界。过多的 `accept` 回调会增加复杂性和潜在的 bug。通常，在应用的“根”组件或状态管理模块处设置边界就足够了。
-* **避免深层嵌套的 `accept`**：尽量让依赖链保持扁平。
+- **谨慎使用 HMR 边界**：不是所有模块都需要成为 HMR 边界。过多的 `accept` 回调会增加复杂性和潜在的 bug。通常，在应用的“根”组件或状态管理模块处设置边界就足够了。
+- **避免深层嵌套的 `accept`**：尽量让依赖链保持扁平。
 
 ## 5. 调试 HMR 问题
 
@@ -319,11 +323,11 @@ Vite 的 HMR API (`import.meta.hot`) 是一个强大而灵活的工具，它允�
 
 **核心要点**：
 
-* **`accept`** 定义模块如何响应更新。
-* **`dispose` + `data`** 是实现状态持久化的黄金组合。
-* **始终处理副作用**，避免内存泄漏。
-* **拥抱框架生态**，优先使用框架特定的 Vite 插件（如 `@vitejs/plugin-react`），它们已经解决了大部分常见问题。
-* **做好错误处理和降级**，保证开发体验的鲁棒性。
+- **`accept`** 定义模块如何响应更新。
+- **`dispose` + `data`** 是实现状态持久化的黄金组合。
+- **始终处理副作用**，避免内存泄漏。
+- **拥抱框架生态**，优先使用框架特定的 Vite 插件（如 `@vitejs/plugin-react`），它们已经解决了大部分常见问题。
+- **做好错误处理和降级**，保证开发体验的鲁棒性。
 
 通过遵循这些最佳实践，你可以充分利用 Vite 超快 HMR 的优势，构建出令人愉悦的开发工作流。
 

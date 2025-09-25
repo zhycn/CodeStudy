@@ -118,7 +118,6 @@ try {
   console.log('Build completed successfully!');
   // buildResult 是一个数组，包含 Rollup 的输出
   console.log(buildResult[0].output[0]);
-
 } catch (error) {
   console.error('Build failed:', error);
   process.exit(1);
@@ -167,12 +166,19 @@ node preview.js
 ```javascript
 import { resolveConfig } from 'vite';
 
-const config = await resolveConfig({
-  // 这里可以覆盖任何配置选项，类似于命令行 --config
-}, 'build', 'production'); // 第二个参数是命令模式，第三个是环境模式
+const config = await resolveConfig(
+  {
+    // 这里可以覆盖任何配置选项，类似于命令行 --config
+  },
+  'build',
+  'production'
+); // 第二个参数是命令模式，第三个是环境模式
 
 console.log('Resolved root:', config.root);
-console.log('Resolved plugins:', config.plugins.map(p => p.name));
+console.log(
+  'Resolved plugins:',
+  config.plugins.map((p) => p.name)
+);
 ```
 
 ## 4. 最佳实践与常见用例
@@ -326,7 +332,7 @@ createSsrServer();
 server.ws.send({
   type: 'custom',
   event: 'special-update',
-  data: { changedFile: 'some-file.js' }
+  data: { changedFile: 'some-file.js' },
 });
 
 // 在客户端代码中接收

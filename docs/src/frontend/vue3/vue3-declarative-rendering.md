@@ -33,22 +33,22 @@ Vue.js 的核心思想是**声明式渲染**。它允许开发者通过一种更
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
 
 // 使用 `ref` 创建响应式的基本数据类型数据
-const message = ref('Hello Vue 3!')
-const count = ref(0)
+const message = ref('Hello Vue 3!');
+const count = ref(0);
 
 // 使用 `computed` 创建响应式的计算属性
 const reversedMessage = computed(() => {
-  return message.value.split('').reverse().join('')
-})
+  return message.value.split('').reverse().join('');
+});
 
 // 3秒后改变数据，视图会自动更新
 setTimeout(() => {
-  message.value = 'Hello Declarative Rendering!'
-  count.value += 5
-}, 3000)
+  message.value = 'Hello Declarative Rendering!';
+  count.value += 5;
+}, 3000);
 </script>
 ```
 
@@ -71,9 +71,9 @@ setTimeout(() => {
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const rawHtml = ref('<span style="color: red;">This should be red.</span>')
+const rawHtml = ref('<span style="color: red;">This should be red.</span>');
 </script>
 ```
 
@@ -94,10 +94,10 @@ const rawHtml = ref('<span style="color: red;">This should be red.</span>')
 <template>
   <div>
     <button @click="isVisible = !isVisible">Toggle</button>
-    
+
     <!-- v-if: 真正的条件渲染，元素会被完全销毁和重建 -->
     <p v-if="isVisible">This is controlled by v-if</p>
-    
+
     <!-- v-show: 只是切换 CSS 的 display 属性，元素始终被渲染 -->
     <p v-show="isVisible">This is controlled by v-show</p>
 
@@ -109,10 +109,10 @@ const rawHtml = ref('<span style="color: red;">This should be red.</span>')
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const isVisible = ref(true)
-const type = ref('A')
+const isVisible = ref(true);
+const type = ref('A');
 </script>
 ```
 
@@ -131,35 +131,31 @@ const type = ref('A')
     <h3>Rendering an Array</h3>
     <ul>
       <!-- 使用 item 和 index -->
-      <li v-for="(item, index) in items" :key="item.id">
-        {{ index }} - {{ item.text }}
-      </li>
+      <li v-for="(item, index) in items" :key="item.id">{{ index }} - {{ item.text }}</li>
     </ul>
 
     <h3>Rendering an Object</h3>
     <ul>
       <!-- 使用 value, key, and index -->
-      <li v-for="(value, key, index) in myObject" :key="key">
-        {{ index }}. {{ key }}: {{ value }}
-      </li>
+      <li v-for="(value, key, index) in myObject" :key="key">{{ index }}. {{ key }}: {{ value }}</li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const items = ref([
   { id: 1, text: 'Learn JavaScript' },
   { id: 2, text: 'Learn Vue' },
-  { id: 3, text: 'Build Something Awesome' }
-])
+  { id: 3, text: 'Build Something Awesome' },
+]);
 
 const myObject = ref({
   title: 'How to do lists in Vue',
   author: 'Jane Doe',
-  publishedAt: '2023-10-01'
-})
+  publishedAt: '2023-10-01',
+});
 </script>
 ```
 
@@ -176,8 +172,7 @@ const myObject = ref({
 <template>
   <div>
     <!-- 绑定单个 attribute -->
-    
-    
+
     <!-- 绑定一个对象 (Vue 3 常用) -->
     <div v-bind="objectOfAttrs"></div>
 
@@ -191,20 +186,20 @@ const myObject = ref({
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const imageSrc = ref('/path/to/image.jpg')
-const imageAlt = ref('An image')
-const isActive = ref(true)
-const hasError = ref(false)
-const activeColor = ref('red')
-const fontSize = ref(30)
-const isButtonDisabled = ref(true)
+const imageSrc = ref('/path/to/image.jpg');
+const imageAlt = ref('An image');
+const isActive = ref(true);
+const hasError = ref(false);
+const activeColor = ref('red');
+const fontSize = ref(30);
+const isButtonDisabled = ref(true);
 
 const objectOfAttrs = ref({
   id: 'container',
-  class: 'wrapper'
-})
+  class: 'wrapper',
+});
 </script>
 ```
 
@@ -223,14 +218,12 @@ const objectOfAttrs = ref({
     <button @click="greet">Greet</button>
 
     <!-- 访问原生事件对象 -->
-    <button @click="warn('Form cannot be submitted yet.', $event)">
-      Submit
-    </button>
+    <button @click="warn('Form cannot be submitted yet.', $event)">Submit</button>
 
     <!-- 事件修饰符 -->
     <form @submit.prevent="onSubmit">
       <!-- .prevent 等同于 event.preventDefault() -->
-      <input type="submit">
+      <input type="submit" />
     </form>
     <div @click.self="doThat">
       <!-- 只当事件是从元素本身（而非子元素）触发时调用 -->
@@ -238,41 +231,41 @@ const objectOfAttrs = ref({
     </div>
 
     <!-- 按键修饰符 -->
-    <input @keyup.enter="submit" placeholder="Press Enter to submit">
+    <input @keyup.enter="submit" placeholder="Press Enter to submit" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const count = ref(0)
+const count = ref(0);
 
 function greet(event) {
-  alert(`Hello!`)
+  alert(`Hello!`);
   // `event` 是原生 DOM 事件对象
   if (event) {
-    alert(event.target.tagName)
+    alert(event.target.tagName);
   }
 }
 
 function warn(message, event) {
   // 现在可以访问原生事件
   if (event) {
-    event.preventDefault()
+    event.preventDefault();
   }
-  alert(message)
+  alert(message);
 }
 
 function onSubmit() {
-  alert('Form submitted!')
+  alert('Form submitted!');
 }
 
 function submit() {
-  alert('Enter key pressed!')
+  alert('Enter key pressed!');
 }
 
 function doThat() {
-  alert('Div itself was clicked!')
+  alert('Div itself was clicked!');
 }
 </script>
 ```
@@ -285,19 +278,19 @@ function doThat() {
 <template>
   <div>
     <h3>Text Input</h3>
-    <input v-model="text" placeholder="Type something">
+    <input v-model="text" placeholder="Type something" />
     <p>{{ text }}</p>
 
     <h3>Checkbox</h3>
-    <input type="checkbox" v-model="checked">
+    <input type="checkbox" v-model="checked" />
     <label>Checked: {{ checked }}</label>
 
     <h3>Multi Checkbox</h3>
-    <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+    <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
     <label for="jack">Jack</label>
-    <input type="checkbox" id="john" value="John" v-model="checkedNames">
+    <input type="checkbox" id="john" value="John" v-model="checkedNames" />
     <label for="john">John</label>
-    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
     <label for="mike">Mike</label>
     <p>Checked names: {{ checkedNames }}</p>
 
@@ -312,29 +305,29 @@ function doThat() {
 
     <h3>v-model Modifiers</h3>
     <!-- .lazy: 在 change 事件后同步，而非 input -->
-    <input v-model.lazy="lazyText">
+    <input v-model.lazy="lazyText" />
     <p>{{ lazyText }}</p>
 
     <!-- .number: 将用户输入自动转换为数字 -->
-    <input v-model.number="age" type="number">
+    <input v-model.number="age" type="number" />
     <p>Type: {{ typeof age }}</p>
 
     <!-- .trim: 自动去除用户输入首尾的空白字符 -->
-    <input v-model.trim="trimmedText">
+    <input v-model.trim="trimmedText" />
     <p>"{{ trimmedText }}"</p>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const text = ref('')
-const checked = ref(false)
-const checkedNames = ref([])
-const selected = ref('')
-const lazyText = ref('')
-const age = ref(null)
-const trimmedText = ref('')
+const text = ref('');
+const checked = ref(false);
+const checkedNames = ref([]);
+const selected = ref('');
+const lazyText = ref('');
+const age = ref(null);
+const trimmedText = ref('');
 </script>
 ```
 
@@ -342,41 +335,41 @@ const trimmedText = ref('')
 
 1. **正确的 Key 管理**：在 `v-for` 中始终使用唯一且稳定的 `key`，避免使用索引。这能最大程度地重用 DOM 元素，提高列表渲染和更新的性能。
 
-    ```vue
-    <!-- Bad -->
-    <li v-for="(item, index) in items" :key="index">
-      {{ item.name }}
-    </li>
+   ```vue
+   <!-- Bad -->
+   <li v-for="(item, index) in items" :key="index">
+     {{ item.name }}
+   </li>
 
-    <!-- Good -->
-    <li v-for="item in items" :key="item.id">
-      {{ item.name }}
-    </li>
-    ```
+   <!-- Good -->
+   <li v-for="item in items" :key="item.id">
+     {{ item.name }}
+   </li>
+   ```
 
 2. **计算属性 vs 方法**：对于复杂的逻辑或依赖其他响应式数据的值，使用**计算属性**。计算属性会基于其响应式依赖进行缓存，只在相关依赖发生改变时才会重新求值。而**方法**调用总是在重渲染发生时再次执行。
 
-    ```vue
-    <script setup>
-    import { ref, computed } from 'vue'
+   ```vue
+   <script setup>
+   import { ref, computed } from 'vue';
 
-    const firstName = ref('John')
-    const lastName = ref('Doe')
+   const firstName = ref('John');
+   const lastName = ref('Doe');
 
-    // Good: Cached until firstName or lastName changes
-    const fullName = computed(() => firstName.value + ' ' + lastName.value)
+   // Good: Cached until firstName or lastName changes
+   const fullName = computed(() => firstName.value + ' ' + lastName.value);
 
-    // Bad: Will run on every re-render
-    // const getFullName = () => firstName.value + ' ' + lastName.value
-    </script>
+   // Bad: Will run on every re-render
+   // const getFullName = () => firstName.value + ' ' + lastName.value
+   </script>
 
-    <template>
-      <!-- This will be efficient -->
-      <p>{{ fullName }}</p>
-      <!-- This will be less efficient if called multiple times -->
-      <!-- <p>{{ getFullName() }}</p> -->
-    </template>
-    ```
+   <template>
+     <!-- This will be efficient -->
+     <p>{{ fullName }}</p>
+     <!-- This will be less efficient if called multiple times -->
+     <!-- <p>{{ getFullName() }}</p> -->
+   </template>
+   ```
 
 3. **避免不必要的组件重渲染**：使用 `v-show` 替代 `v-if` 进行高频切换。对于复杂的子组件，可以使用 `KeepAlive` 组件缓存其状态，或使用 `v-once` 指令渲染静态内容。
 
@@ -410,7 +403,7 @@ A: **不推荐**在同一元素上使用，因为 `v-if` 的优先级比 `v-for`
   {{ todo.name }}
 </li>
 <script setup>
-const incompleteTodos = computed(() => todos.value.filter(todo => !todo.isComplete))
+const incompleteTodos = computed(() => todos.value.filter((todo) => !todo.isComplete));
 </script>
 ```
 

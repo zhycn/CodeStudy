@@ -176,12 +176,12 @@ except ValueError as e:
 ```python
 class InvalidEmailError(Exception):
     """当电子邮件格式无效时引发异常"""
-    
+
     def __init__(self, email, message="无效的电子邮件格式"):
         self.email = email
         self.message = message
         super().__init__(self.message)
-    
+
     def __str__(self):
         return f"{self.message}: {self.email}"
 
@@ -319,7 +319,7 @@ def process_multiple_items(items):
             process_item(item)
         except Exception as e:
             exceptions.append(e)
-    
+
     if exceptions:
         raise MultipleExceptions(exceptions)
 ```
@@ -375,17 +375,17 @@ Python 的异常处理机制提供了强大而灵活的工具来构建健壮的�
 
 ## 附录：常见异常快速参考表
 
-| 异常 | 描述 | 常见原因 |
-|------|------|----------|
-| `SyntaxError` | 语法错误 | 代码不符合 Python 语法规则 |
-| `IndentationError` | 缩进错误 | 代码缩进不正确 |
-| `NameError` | 名称错误 | 尝试访问未定义的变量 |
-| `TypeError` | 类型错误 | 操作或函数应用于不适当类型的对象 |
-| `ValueError` | 值错误 | 操作或函数接收到类型正确但值不合适的参数 |
-| `IndexError` | 索引错误 | 序列下标超出范围 |
-| `KeyError` | 键错误 | 字典中不存在指定的键 |
-| `FileNotFoundError` | 文件未找到错误 | 尝试打开不存在的文件 |
-| `PermissionError` | 权限错误 | 没有足够的权限执行操作 |
-| `ZeroDivisionError` | 除零错误 | 试图除以零 |
+| 异常                | 描述           | 常见原因                                 |
+| ------------------- | -------------- | ---------------------------------------- |
+| `SyntaxError`       | 语法错误       | 代码不符合 Python 语法规则               |
+| `IndentationError`  | 缩进错误       | 代码缩进不正确                           |
+| `NameError`         | 名称错误       | 尝试访问未定义的变量                     |
+| `TypeError`         | 类型错误       | 操作或函数应用于不适当类型的对象         |
+| `ValueError`        | 值错误         | 操作或函数接收到类型正确但值不合适的参数 |
+| `IndexError`        | 索引错误       | 序列下标超出范围                         |
+| `KeyError`          | 键错误         | 字典中不存在指定的键                     |
+| `FileNotFoundError` | 文件未找到错误 | 尝试打开不存在的文件                     |
+| `PermissionError`   | 权限错误       | 没有足够的权限执行操作                   |
+| `ZeroDivisionError` | 除零错误       | 试图除以零                               |
 
 通过掌握这些异常处理技术和最佳实践，您将能够编写出更加健壮、可维护的 Python 应用程序。

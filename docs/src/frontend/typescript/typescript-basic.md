@@ -14,7 +14,7 @@ TypeScript 包含了 JavaScript 的所有原始数据类型。
 
 ```typescript
 // 字符串
-let firstName: string = "John";
+let firstName: string = 'John';
 // 数字 (包括整数、浮点数、NaN, Infinity)
 let age: number = 30;
 let temperature: number = 36.6;
@@ -24,7 +24,7 @@ let isActive: boolean = true;
 let nothing: null = null;
 let notDefined: undefined = undefined;
 // Symbol (ES6)
-let uniqueKey: symbol = Symbol("unique");
+let uniqueKey: symbol = Symbol('unique');
 // BigInt (ES2020)
 let bigNumber: bigint = 9007199254740991n;
 ```
@@ -40,14 +40,14 @@ let list1: number[] = [1, 2, 3];
 let list2: Array<number> = [1, 2, 3]; // 泛型语法
 
 // 元组类型
-let person: [string, number, boolean] = ["Alice", 28, true];
+let person: [string, number, boolean] = ['Alice', 28, true];
 // 访问元组元素
 console.log(person[0]); // "Alice"
 console.log(person[1]); // 28
 
 // 元组也支持可选元素（TypeScript 3.0+）
-let optionalTuple: [string, number?] = ["hello"];
-optionalTuple = ["world", 42];
+let optionalTuple: [string, number?] = ['hello'];
+optionalTuple = ['world', 42];
 ```
 
 ### 1.3 对象类型与接口
@@ -72,7 +72,7 @@ type Point = {
 // 应用接口
 const user: User = {
   id: 1,
-  name: "Jane Doe",
+  name: 'Jane Doe',
   createdAt: new Date(),
 };
 
@@ -87,12 +87,12 @@ const user: User = {
 ```typescript
 // 联合类型
 let id: string | number;
-id = "ABC123";
+id = 'ABC123';
 id = 123; // 也有效
 
 // 字面量类型
-type Direction = "up" | "down" | "left" | "right";
-let move: Direction = "up";
+type Direction = 'up' | 'down' | 'left' | 'right';
+let move: Direction = 'up';
 // move = "diagonal"; // 错误: 类型 '"diagonal"' 不能赋值给类型 'Direction'
 
 // 结合使用
@@ -114,9 +114,9 @@ enum Role {
 
 // 字符串枚举
 enum FileAccess {
-  Read = "READ",
-  Write = "WRITE",
-  Execute = "EXECUTE",
+  Read = 'READ',
+  Write = 'WRITE',
+  Execute = 'EXECUTE',
 }
 
 // 常量枚举 (更高效，在编译时会被内联)
@@ -142,15 +142,15 @@ console.log(FileAccess.Write); // "WRITE"
 
 ```typescript
 // any - 关闭类型检查，应尽量避免使用
-let uncertain: any = "Hello";
+let uncertain: any = 'Hello';
 uncertain = 42;
 uncertain = true;
 
 // unknown - 更安全的 any，在使用前需要类型检查
 let notSure: unknown = 4;
-notSure = "maybe a string";
+notSure = 'maybe a string';
 // console.log(notSure.length); // 错误: Object is of type 'unknown'
-if (typeof notSure === "string") {
+if (typeof notSure === 'string') {
   console.log(notSure.length); // 现在可以了
 }
 
@@ -192,13 +192,13 @@ const multiply = function (x: number, y: number): number {
 // 箭头函数
 const divide = (x: number, y: number): number => {
   if (y === 0) {
-    throw new Error("Division by zero");
+    throw new Error('Division by zero');
   }
   return x / y;
 };
 
 // 可选参数和默认参数
-function greet(name: string, greeting: string = "Hello"): string {
+function greet(name: string, greeting: string = 'Hello'): string {
   return `${greeting}, ${name}!`;
 }
 
@@ -211,14 +211,14 @@ function sum(...numbers: number[]): number {
 function getArray(value: string): string[];
 function getArray(value: number): number[];
 function getArray(value: string | number): string[] | number[] {
-  if (typeof value === "string") {
-    return value.split("");
+  if (typeof value === 'string') {
+    return value.split('');
   } else {
-    return value.toString().split("").map(Number);
+    return value.toString().split('').map(Number);
   }
 }
 
-const chars = getArray("hello"); // string[]
+const chars = getArray('hello'); // string[]
 const digits = getArray(12345); // number[]
 ```
 
@@ -253,9 +253,9 @@ type Coordinates = [number, number];
 type Employee = Person & { employeeId: ID };
 
 const employee: Employee = {
-  name: "John",
+  name: 'John',
   age: 30,
-  employeeId: "E123", // 可以是 string 或 number
+  employeeId: 'E123', // 可以是 string 或 number
 };
 ```
 
@@ -271,7 +271,7 @@ TypeScript 具有强大的类型推断能力，但也允许开发者明确断言
 
 ```typescript
 // 类型推断 - TypeScript 会自动推断变量类型
-let message = "Hello World"; // 推断为 string
+let message = 'Hello World'; // 推断为 string
 let count = 10; // 推断为 number
 
 // 数组类型推断
@@ -283,7 +283,7 @@ numbers.forEach((n) => {
 });
 
 // 类型断言 - 当开发者比 TypeScript 更了解值的类型时使用
-let someValue: any = "this is a string";
+let someValue: any = 'this is a string';
 
 // 方式一: 使用角括号语法
 let strLength1: number = (<string>someValue).length;
@@ -297,7 +297,7 @@ let maybeString: string | null = getStringOrNull();
 console.log(maybeString!.length); // 使用 ! 断言不为 null
 
 // 双重断言（应尽量避免）
-let unknownValue: unknown = "hello";
+let unknownValue: unknown = 'hello';
 // let str: string = unknownValue; // 错误
 let str: string = unknownValue as any as string;
 ```
@@ -314,7 +314,7 @@ function identity<T>(arg: T): T {
   return arg;
 }
 
-let output1 = identity<string>("myString"); // 输出类型为 string
+let output1 = identity<string>('myString'); // 输出类型为 string
 let output2 = identity(42); // 类型推断为 number
 
 // 泛型接口
@@ -323,7 +323,7 @@ interface KeyValuePair<K, V> {
   value: V;
 }
 
-let pair: KeyValuePair<number, string> = { key: 1, value: "one" };
+let pair: KeyValuePair<number, string> = { key: 1, value: 'one' };
 
 // 泛型类
 class GenericNumber<T> {
@@ -350,8 +350,8 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
   return obj[key];
 }
 
-let person = { name: "Jane", age: 28 };
-let name = getProperty(person, "name"); // string
+let person = { name: 'Jane', age: 28 };
+let name = getProperty(person, 'name'); // string
 // let email = getProperty(person, "email"); // 错误: "email" 不在 "name" | "age" 中
 ```
 
@@ -372,9 +372,9 @@ function getValue<T, K extends keyof T>(obj: T, key: K): T[K] {
   return obj[key];
 }
 
-const person: Person = { name: "Alice", age: 30, location: "Paris" };
-const name = getValue(person, "name"); // string
-const age = getValue(person, "age"); // number
+const person: Person = { name: 'Alice', age: 30, location: 'Paris' };
+const name = getValue(person, 'name'); // string
+const age = getValue(person, 'age'); // number
 ```
 
 ### 6.2 映射类型
@@ -405,8 +405,8 @@ type Record<K extends keyof any, T> = {
   [P in K]: T;
 };
 
-type PersonName = Pick<Person, "name">; // { name: string }
-type ThreeStringProps = Record<"prop1" | "prop2" | "prop3", string>;
+type PersonName = Pick<Person, 'name'>; // { name: string }
+type ThreeStringProps = Record<'prop1' | 'prop2' | 'prop3', string>;
 ```
 
 ## 7. 命名空间与模块
@@ -417,7 +417,7 @@ namespace Utilities {
   export function formatDate(date: Date): string {
     return date.toLocaleDateString();
   }
-  
+
   export function calculateTax(amount: number): number {
     return amount * 0.2;
   }
@@ -451,23 +451,24 @@ console.log(add(2, 3)); // 5
     /* 语言和环境 */
     "target": "ES2020", // 编译目标
     "lib": ["ES2020", "DOM", "DOM.Iterable"], // 包含的库定义文件
-    
+
     /* 模块系统 */
     "module": "ESNext", // 模块系统
     "moduleResolution": "node", // 模块解析策略
     "baseUrl": "./", // 解析非相对模块名的基准目录
-    "paths": { // 模块名到基于 baseUrl 的路径映射
+    "paths": {
+      // 模块名到基于 baseUrl 的路径映射
       "@/*": ["src/*"]
     },
-    
+
     /* JavaScript 支持 */
     "allowJs": true, // 允许编译 JavaScript 文件
     "checkJs": true, // 在 .js 文件中报告错误
-    
+
     /* 生成文件选项 */
     "outDir": "./dist", // 输出目录
     "removeComments": true, // 删除注释
-    
+
     /* 类型检查选项 - 启用严格模式 */
     "strict": true, // 启用所有严格类型检查选项
     "noImplicitAny": true, // 禁止隐式 any 类型
@@ -477,26 +478,26 @@ console.log(add(2, 3)); // 5
     "strictPropertyInitialization": true, // 严格的属性初始化检查
     "noImplicitThis": true, // 禁止隐式的 this 类型
     "alwaysStrict": true, // 以严格模式检查代码
-    
+
     /* 额外检查 */
     "noUnusedLocals": true, // 报告未使用的局部变量
     "noUnusedParameters": true, // 报告未使用的参数
     "exactOptionalPropertyTypes": true, // 精确的可选属性类型
     "noImplicitReturns": true, // 不是函数的所有代码路径都有返回值时报错
     "noFallthroughCasesInSwitch": true, // 报告 switch 语句的 fallthrough 错误
-    
+
     /* 模块解析选项 */
     "esModuleInterop": true, // 为导入 CommonJS 模块提供兼容性
     "allowSyntheticDefaultImports": true, // 允许从没有默认导出的模块中默认导入
-    
+
     /* 源代码映射 */
     "sourceMap": true, // 生成相应的 .map 文件
     "declaration": true, // 生成相应的 .d.ts 文件
     "declarationMap": true, // 为声明文件生成 sourcemap
-    
+
     /* 实验性选项 */
     "experimentalDecorators": true, // 启用实验性的装饰器支持
-    "emitDecoratorMetadata": true, // 为装饰器提供元数据支持
+    "emitDecoratorMetadata": true // 为装饰器提供元数据支持
   },
   "include": [
     "src/**/*" // 包含的文件
@@ -515,16 +516,16 @@ console.log(add(2, 3)); // 5
 
 ```typescript
 // 不使用 const 断言
-let sizes = ["small", "medium", "large"]; // string[]
+let sizes = ['small', 'medium', 'large']; // string[]
 let first = sizes[0]; // string
 
 // 使用 const 断言
-let sizesConst = ["small", "medium", "large"] as const; // readonly ["small", "medium", "large"]
+let sizesConst = ['small', 'medium', 'large'] as const; // readonly ["small", "medium", "large"]
 let firstConst = sizesConst[0]; // "small"
 
 // 对象使用 const 断言
 const user = {
-  name: "John",
+  name: 'John',
   age: 30,
 } as const;
 // user.age = 31; // 错误: 无法分配到 "age" ，因为它是只读属性
@@ -544,18 +545,18 @@ interface Colors {
 
 // 使用 as 会丢失具体信息
 const colors1 = {
-  red: "#FF0000",
-  green: "#00FF00",
-  blue: "#0000FF",
-  primary: "red", // 被推断为 string
+  red: '#FF0000',
+  green: '#00FF00',
+  blue: '#0000FF',
+  primary: 'red', // 被推断为 string
 } as Colors;
 
 // 使用 satisfies 保留具体类型信息
 const colors2 = {
-  red: "#FF0000",
-  green: "#00FF00",
-  blue: "#0000FF",
-  primary: "red", // 被推断为字面量类型 "red"
+  red: '#FF0000',
+  green: '#00FF00',
+  blue: '#0000FF',
+  primary: 'red', // 被推断为字面量类型 "red"
 } satisfies Colors;
 
 // colors1.primary 是 string 类型
@@ -586,7 +587,7 @@ function safeParse(jsonString: string): unknown {
 }
 
 const result = safeParse('{"name": "John"}');
-if (result && typeof result === "object" && "name" in result) {
+if (result && typeof result === 'object' && 'name' in result) {
   console.log((result as { name: string }).name);
 }
 ```
@@ -601,7 +602,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  status: "active" | "inactive" | "pending";
+  status: 'active' | 'inactive' | 'pending';
 }
 
 export type ApiResponse<T> = {
@@ -611,68 +612,68 @@ export type ApiResponse<T> = {
 };
 
 // userService.ts
-import { User, ApiResponse } from "./types";
+import { User, ApiResponse } from './types';
 
 class UserService {
   private baseUrl: string;
 
-  constructor(baseUrl: string = "/api") {
+  constructor(baseUrl: string = '/api') {
     this.baseUrl = baseUrl;
   }
 
   async getUser(id: number): Promise<ApiResponse<User>> {
     const response = await fetch(`${this.baseUrl}/users/${id}`);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   }
 
   async updateUser<T extends Partial<User>>(id: number, updates: T): Promise<ApiResponse<User>> {
     const response = await fetch(`${this.baseUrl}/users/${id}`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(updates),
     });
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
+
     return response.json();
   }
 }
 
 // app.ts
-import { UserService } from "./userService";
+import { UserService } from './userService';
 
 async function main() {
   const userService = new UserService();
-  
+
   try {
     const response = await userService.getUser(1);
-    
+
     if (response.success) {
       console.log(`User: ${response.data.name}`);
-      
+
       // 更新用户状态
-      const updateResponse = await userService.updateUser(1, { 
-        status: "active" 
+      const updateResponse = await userService.updateUser(1, {
+        status: 'active',
       });
-      
+
       if (updateResponse.success) {
-        console.log("User updated successfully");
+        console.log('User updated successfully');
       }
     }
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error:", error.message);
+      console.error('Error:', error.message);
     } else {
-      console.error("Unknown error occurred");
+      console.error('Unknown error occurred');
     }
   }
 }

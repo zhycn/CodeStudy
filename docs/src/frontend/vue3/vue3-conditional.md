@@ -27,9 +27,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref } from 'vue';
 
-const awesome = ref(true);
+  const awesome = ref(true);
 </script>
 ```
 
@@ -46,32 +46,24 @@ const awesome = ref(true);
 ```html
 <template>
   <div>
-    <div v-if="type === 'A'">
-      Type A
-    </div>
-    <div v-else-if="type === 'B'">
-      Type B
-    </div>
-    <div v-else-if="type === 'C'">
-      Type C
-    </div>
-    <div v-else>
-      Not A/B/C
-    </div>
+    <div v-if="type === 'A'">Type A</div>
+    <div v-else-if="type === 'B'">Type B</div>
+    <div v-else-if="type === 'C'">Type C</div>
+    <div v-else>Not A/B/C</div>
     <button @click="changeType">Change Type</button>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref } from 'vue';
 
-const type = ref('A');
+  const type = ref('A');
 
-function changeType() {
-  const types = ['A', 'B', 'C', 'D'];
-  const currentIndex = types.indexOf(type.value);
-  type.value = types[(currentIndex + 1) % types.length];
-}
+  function changeType() {
+    const types = ['A', 'B', 'C', 'D'];
+    const currentIndex = types.indexOf(type.value);
+    type.value = types[(currentIndex + 1) % types.length];
+  }
 </script>
 ```
 
@@ -90,9 +82,9 @@ function changeType() {
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref } from 'vue';
 
-const ok = ref(true);
+  const ok = ref(true);
 </script>
 ```
 
@@ -104,14 +96,14 @@ const ok = ref(true);
 
 这是一个至关重要的选择，直接影响性能和行为。
 
-| 特性 | `v-if` | `v-show` |
-| :--- | :--- | :--- |
-| **DOM 操作** | **条件性地销毁和重建** DOM 元素/组件 | 仅切换 CSS `display` 属性 |
-| **初始渲染** | 如果初始为 `false`，**不渲染**，节省初始负载 | **始终渲染**，无论初始条件 |
-| **切换开销** | **高**（涉及组件的生命周期钩子） | **低**（仅 CSS 切换） |
-| **编译与数据绑定** | 是**惰性**的，条件块内的事件监听器和子组件只在条件为真时创建 | 无论条件如何，初始编译和绑定都会进行 |
-| **与 `<template>` 标签的使用** | 支持 | **不支持** |
-| **用法场景** | **运行时条件很少改变**，或者需要**避免初始渲染成本** | **需要非常频繁切换**的场景 |
+| 特性                           | `v-if`                                                       | `v-show`                             |
+| :----------------------------- | :----------------------------------------------------------- | :----------------------------------- |
+| **DOM 操作**                   | **条件性地销毁和重建** DOM 元素/组件                         | 仅切换 CSS `display` 属性            |
+| **初始渲染**                   | 如果初始为 `false`，**不渲染**，节省初始负载                 | **始终渲染**，无论初始条件           |
+| **切换开销**                   | **高**（涉及组件的生命周期钩子）                             | **低**（仅 CSS 切换）                |
+| **编译与数据绑定**             | 是**惰性**的，条件块内的事件监听器和子组件只在条件为真时创建 | 无论条件如何，初始编译和绑定都会进行 |
+| **与 `<template>` 标签的使用** | 支持                                                         | **不支持**                           |
+| **用法场景**                   | **运行时条件很少改变**，或者需要**避免初始渲染成本**         | **需要非常频繁切换**的场景           |
 
 #### 选择指南
 
@@ -142,8 +134,8 @@ const ok = ref(true);
 </template>
 
 <script setup>
-import { ref } from 'vue';
-const isVisible = ref(true);
+  import { ref } from 'vue';
+  const isVisible = ref(true);
 </script>
 ```
 
@@ -160,24 +152,24 @@ Vue 会尽可能高效地渲染元素，通常会**复用已有元素**而不是
   <div>
     <template v-if="loginType === 'username'">
       <label>Username</label>
-      <input placeholder="Enter your username" key="username-input">
+      <input placeholder="Enter your username" key="username-input" />
     </template>
     <template v-else>
       <label>Email</label>
-      <input placeholder="Enter your email address" key="email-input">
+      <input placeholder="Enter your email address" key="email-input" />
     </template>
     <button @click="toggleLoginType">Toggle Login Type</button>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref } from 'vue';
 
-const loginType = ref('username');
+  const loginType = ref('username');
 
-function toggleLoginType() {
-  loginType.value = loginType.value === 'username' ? 'email' : 'username';
-}
+  function toggleLoginType() {
+    loginType.value = loginType.value === 'username' ? 'email' : 'username';
+  }
 </script>
 ```
 
@@ -198,20 +190,20 @@ function toggleLoginType() {
 </template>
 
 <script setup>
-import { ref } from 'vue';
-const show = ref(true);
+  import { ref } from 'vue';
+  const show = ref(true);
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s ease;
+  }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
 </style>
 ```
 
@@ -232,23 +224,23 @@ const show = ref(true);
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import ComponentA from './ComponentA.vue';
-import ComponentB from './ComponentB.vue';
-import ComponentC from './ComponentC.vue';
+  import { ref, computed } from 'vue';
+  import ComponentA from './ComponentA.vue';
+  import ComponentB from './ComponentB.vue';
+  import ComponentC from './ComponentC.vue';
 
-const userStatus = ref('guest'); // 可能是 'admin', 'user', 'guest'
+  const userStatus = ref('guest'); // 可能是 'admin', 'user', 'guest'
 
-const currentComponent = computed(() => {
-  switch (userStatus.value) {
-    case 'admin':
-      return ComponentA;
-    case 'user':
-      return ComponentB;
-    default:
-      return ComponentC;
-  }
-});
+  const currentComponent = computed(() => {
+    switch (userStatus.value) {
+      case 'admin':
+        return ComponentA;
+      case 'user':
+        return ComponentB;
+      default:
+        return ComponentC;
+    }
+  });
 </script>
 ```
 
@@ -257,25 +249,21 @@ const currentComponent = computed(() => {
 1. **谨慎使用 `v-if`**：不必要的 `v-if` 会导致不必要的组件销毁和重建，触发完整的生命周期，消耗性能。对于静态内容，使用 CSS 控制显示隐藏往往是更好的选择。
 2. **善用 `v-show` 处理高频切换**：标签页、折叠面板、模态框等需要频繁切换显示状态的元素，优先考虑 `v-show`。
 3. **避免 `v-if` 和 `v-for` 用于同一元素**：**永远不要**将 `v-if` 和 `v-for` 同时用在同一个元素上。当它们处于同一节点时，`v-if` 的优先级比 `v-for` 更高，这意味着 `v-if` 将没有权限访问 `v-for` 作用域内的变量。这会导致逻辑错误和性能问题。
-    - **错误示例**: `<li v-for="user in users" v-if="user.isActive" :key="user.id">`
-    - **正确做法**：使用计算属性过滤列表，或者将 `v-if` 移至外层容器。
+   - **错误示例**: `<li v-for="user in users" v-if="user.isActive" :key="user.id">`
+   - **正确做法**：使用计算属性过滤列表，或者将 `v-if` 移至外层容器。
 
-        ```html
-        <!-- 方法一：使用计算属性 -->
-        <li v-for="user in activeUsers" :key="user.id">
-          {{ user.name }}
-        </li>
-        ```
+     ```html
+     <!-- 方法一：使用计算属性 -->
+     <li v-for="user in activeUsers" :key="user.id">{{ user.name }}</li>
+     ```
 
-        ```html
-        <!-- 方法二：将 v-if 移至外层 -->
-        <template v-if="shouldShowUsers">
-          <li v-for="user in users" :key="user.id">
-            {{ user.name }}
-          </li>
-        </template>
-        <p v-else>No users to show.</p>
-        ```
+     ```html
+     <!-- 方法二：将 v-if 移至外层 -->
+     <template v-if="shouldShowUsers">
+       <li v-for="user in users" :key="user.id">{{ user.name }}</li>
+     </template>
+     <p v-else>No users to show.</p>
+     ```
 
 ## 6. 常见问题 (FAQ)
 
@@ -301,6 +289,7 @@ Vue 3 的条件渲染系统既强大又灵活。核心是理解 `v-if`（条件�
 通过遵循这些最佳实践，你可以构建出性能出色、行为 predictable 且易于维护的 Vue 应用程序。
 
 ---
+
 **参考资料**：
 
 1. <https://vuejs.org/guide/essentials/conditional.html>

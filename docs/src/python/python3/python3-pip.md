@@ -261,7 +261,7 @@ pip cache purge
    # requirements.txt（生产依赖）
    Django==3.2.9
    gunicorn==20.1.0
-   
+
    # requirements-dev.txt（开发依赖）
    -r requirements.txt
    pytest==6.2.5

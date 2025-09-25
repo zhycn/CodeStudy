@@ -14,15 +14,15 @@
 
 ```vue
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
 // 声明同名的 ref
-const inputRef = ref(null)
+const inputRef = ref(null);
 
 onMounted(() => {
   // DOM 元素在挂载后可用
-  inputRef.value.focus()
-})
+  inputRef.value.focus();
+});
 </script>
 
 <template>
@@ -37,9 +37,9 @@ onMounted(() => {
 <script>
 export default {
   mounted() {
-    this.$refs.inputRef.focus()
-  }
-}
+    this.$refs.inputRef.focus();
+  },
+};
 </script>
 
 <template>
@@ -53,15 +53,15 @@ export default {
 
 ```vue
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
-const canvasRef = ref(null)
+const canvasRef = ref(null);
 
 onMounted(() => {
-  const ctx = canvasRef.value.getContext('2d')
-  ctx.fillStyle = 'green'
-  ctx.fillRect(10, 10, 150, 100)
-})
+  const ctx = canvasRef.value.getContext('2d');
+  ctx.fillStyle = 'green';
+  ctx.fillRect(10, 10, 150, 100);
+});
 </script>
 
 <template>
@@ -82,16 +82,16 @@ onMounted(() => {
 ```vue
 <!-- ParentComponent.vue -->
 <script setup>
-import { ref } from 'vue'
-import ChildComponent from './ChildComponent.vue'
+import { ref } from 'vue';
+import ChildComponent from './ChildComponent.vue';
 
-const childRef = ref(null)
+const childRef = ref(null);
 
 const callChildMethod = () => {
   if (childRef.value) {
-    childRef.value.sayHello()
+    childRef.value.sayHello();
   }
-}
+};
 </script>
 
 <template>
@@ -104,13 +104,13 @@ const callChildMethod = () => {
 <!-- ChildComponent.vue -->
 <script setup>
 const sayHello = () => {
-  console.log('Hello from Child!')
-}
+  console.log('Hello from Child!');
+};
 
 // 明确暴露公共接口
 defineExpose({
-  sayHello
-})
+  sayHello,
+});
 </script>
 ```
 
@@ -129,20 +129,18 @@ defineExpose({
 
 ```vue
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
-const itemRefs = ref([])
+const itemRefs = ref([]);
 
 onMounted(() => {
-  console.log(itemRefs.value) // DOM 元素数组
-})
+  console.log(itemRefs.value); // DOM 元素数组
+});
 </script>
 
 <template>
   <ul>
-    <li v-for="item in 5" :key="item" ref="itemRefs">
-      项目 {{ item }}
-    </li>
+    <li v-for="item in 5" :key="item" ref="itemRefs">项目 {{ item }}</li>
   </ul>
 </template>
 ```
@@ -153,23 +151,18 @@ onMounted(() => {
 
 ```vue
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const dynamicRef = ref(null)
-const isPrimary = ref(true)
+const dynamicRef = ref(null);
+const isPrimary = ref(true);
 
 const setRef = (el) => {
-  dynamicRef.value = el
-}
+  dynamicRef.value = el;
+};
 </script>
 
 <template>
-  <button 
-    :ref="isPrimary ? 'primaryRef' : setRef"
-    @click="isPrimary = !isPrimary"
-  >
-    切换引用
-  </button>
+  <button :ref="isPrimary ? 'primaryRef' : setRef" @click="isPrimary = !isPrimary">切换引用</button>
 </template>
 ```
 
@@ -179,17 +172,17 @@ const setRef = (el) => {
 
 ```vue
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const inputRef = ref(null)
+const inputRef = ref(null);
 
 // 函数形式引用
 const setInputRef = (el) => {
   if (el) {
-    inputRef.value = el
-    el.classList.add('special-input')
+    inputRef.value = el;
+    el.classList.add('special-input');
   }
-}
+};
 </script>
 
 <template>
@@ -203,20 +196,20 @@ const setInputRef = (el) => {
 
 ```javascript
 // 使用可选链操作符
-inputRef.value?.focus()
+inputRef.value?.focus();
 
 // 使用防御性检查
 if (inputRef.value && inputRef.value.tagName === 'INPUT') {
-  inputRef.value.select()
+  inputRef.value.select();
 }
 ```
 
 ### 5.2 生命周期策略
 
-| 生命周期钩子 | 适用场景 |
-|-------------|---------|
-| `onMounted` | DOM 操作、初始化第三方库 |
-| `onUpdated` | 响应 DOM 更新 |
+| 生命周期钩子      | 适用场景                 |
+| ----------------- | ------------------------ |
+| `onMounted`       | DOM 操作、初始化第三方库 |
+| `onUpdated`       | 响应 DOM 更新            |
 | `onBeforeUnmount` | 清理工作（如事件监听器） |
 
 ### 5.3 优化技巧
@@ -226,12 +219,12 @@ if (inputRef.value && inputRef.value.tagName === 'INPUT') {
 3. **延迟访问**：使用 `nextTick` 确保 DOM 更新完成
 
    ```javascript
-   import { nextTick } from 'vue'
-   
+   import { nextTick } from 'vue';
+
    const updateRef = async () => {
-     await nextTick()
+     await nextTick();
      // 此时 DOM 已更新
-   }
+   };
    ```
 
 4. **引用缓存**：对需要多次访问的引用进行缓存
@@ -248,17 +241,17 @@ if (inputRef.value && inputRef.value.tagName === 'INPUT') {
 
 ```vue
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 
 // DOM 元素类型标注
-const inputRef = ref<HTMLInputElement | null>(null)
+const inputRef = ref<HTMLInputElement | null>(null);
 
 // 组件实例类型标注
-const childRef = ref<InstanceType<typeof ChildComponent> | null>(null)
+const childRef = ref<InstanceType<typeof ChildComponent> | null>(null);
 
 onMounted(() => {
-  inputRef.value?.focus()
-})
+  inputRef.value?.focus();
+});
 </script>
 ```
 
@@ -268,23 +261,23 @@ onMounted(() => {
 <!-- ChildComponent.vue -->
 <script setup lang="ts">
 const sayHello = (name: string) => {
-  console.log(`Hello ${name}!`)
-}
+  console.log(`Hello ${name}!`);
+};
 
 defineExpose({
-  sayHello
-})
+  sayHello,
+});
 </script>
 ```
 
 ## 7. 替代方案比较
 
-| 方法 | 适用场景 | 缺点 |
-|------|---------|------|
-| 模板引用 | 直接 DOM 操作、第三方库集成 | 违背声明式原则 |
-| 事件系统 | 父子组件通信 | 不适用于兄弟组件 |
-| Provide/Inject | 深层嵌套组件 | 增加耦合度 |
-| 状态管理 (Pinia) | 全局状态共享 | 不适合局部 DOM 操作 |
+| 方法             | 适用场景                    | 缺点                |
+| ---------------- | --------------------------- | ------------------- |
+| 模板引用         | 直接 DOM 操作、第三方库集成 | 违背声明式原则      |
+| 事件系统         | 父子组件通信                | 不适用于兄弟组件    |
+| Provide/Inject   | 深层嵌套组件                | 增加耦合度          |
+| 状态管理 (Pinia) | 全局状态共享                | 不适合局部 DOM 操作 |
 
 ## 8. 总结
 
@@ -308,10 +301,10 @@ graph TD
   H --> I[封装操作逻辑]
 ```
 
-> 官方资源推荐：  
+> 官方资源推荐：
 >
-> - <https://vuejs.org/guide/essentials/template-refs.html>  
-> - <https://vuejs.org/guide/reusability/composables.html>  
-> - <https://vuejs.org/guide/typescript/composition-api.html>  
+> - <https://vuejs.org/guide/essentials/template-refs.html>
+> - <https://vuejs.org/guide/reusability/composables.html>
+> - <https://vuejs.org/guide/typescript/composition-api.html>
 
 通过遵循这些实践原则，您可以安全高效地在 Vue 3 应用中使用模板引用功能，平衡声明式优势与必要的命令式操作需求。

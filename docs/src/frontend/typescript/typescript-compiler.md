@@ -10,9 +10,9 @@ TypeScript 的强大之处不仅在于其类型系统，更在于其强大而灵
 
 TypeScript Compiler (`tsc`) 是一个将 TypeScript 代码转换为纯 JavaScript 代码的转译器。它的核心功能包括：
 
-* **类型检查**： 在编译时静态分析代码，捕捉类型错误，这是 TypeScript 的核心价值。
-* **语法降级**： 将新的 ECMAScript 特性（如 ES6/ES7/ESNext）转换为能在旧版浏览器或环境中运行的 JavaScript 代码（如 ES5/ES3）。
-* **代码转换**： 将 TypeScript 特有的语法（如 `enum`, `namespace`）和类型注解完全移除，生成干净的 JavaScript。
+- **类型检查**： 在编译时静态分析代码，捕捉类型错误，这是 TypeScript 的核心价值。
+- **语法降级**： 将新的 ECMAScript 特性（如 ES6/ES7/ESNext）转换为能在旧版浏览器或环境中运行的 JavaScript 代码（如 ES5/ES3）。
+- **代码转换**： 将 TypeScript 特有的语法（如 `enum`, `namespace`）和类型注解完全移除，生成干净的 JavaScript。
 
 ### 1.1 安装与基本使用
 
@@ -63,27 +63,27 @@ tsc --init
 
 这是最核心的部分，包含了数百个配置项。以下是一些最重要和最常用的选项：
 
-* **目标环境相关**
-  * `target`: 指定编译后的 JavaScript 目标版本，如 `"ES5"`, `"ES2015"`, `"ES2020"`, `"ESNext"`。默认是 `"ES3"`。
-  * `module`: 指定生成代码的模块系统，如 `"CommonJS"`, `"ES2015"`, `"ES2020"`, `"UMD"`, `"AMD"`。对于 Node.js 环境，通常设置为 `"CommonJS"`；对于现代浏览器，可使用 `"ES2015"`。
-  * `lib`: 指定编译过程中需要引入的库定义文件，如 `["DOM", "ES2015"]`。通常不需要手动设置，编译器会根据 `target` 自动选择。
+- **目标环境相关**
+  - `target`: 指定编译后的 JavaScript 目标版本，如 `"ES5"`, `"ES2015"`, `"ES2020"`, `"ESNext"`。默认是 `"ES3"`。
+  - `module`: 指定生成代码的模块系统，如 `"CommonJS"`, `"ES2015"`, `"ES2020"`, `"UMD"`, `"AMD"`。对于 Node.js 环境，通常设置为 `"CommonJS"`；对于现代浏览器，可使用 `"ES2015"`。
+  - `lib`: 指定编译过程中需要引入的库定义文件，如 `["DOM", "ES2015"]`。通常不需要手动设置，编译器会根据 `target` 自动选择。
 
-* **输出控制相关**
-  * `outDir`: 指定输出目录。将所有编译后的 `.js` 文件（以及 `.d.ts`，如果开启了 `declaration`）放置于此目录中。
-  * `outFile`: 将所有的全局作用域下的代码合并到一个指定的文件中。仅当 `module` 为 `"AMD"` 或 `"System"` 时有效。
-  * `rootDir`: 指定输入文件的根目录，用于控制输出目录的结构。
+- **输出控制相关**
+  - `outDir`: 指定输出目录。将所有编译后的 `.js` 文件（以及 `.d.ts`，如果开启了 `declaration`）放置于此目录中。
+  - `outFile`: 将所有的全局作用域下的代码合并到一个指定的文件中。仅当 `module` 为 `"AMD"` 或 `"System"` 时有效。
+  - `rootDir`: 指定输入文件的根目录，用于控制输出目录的结构。
 
-* **类型检查严格性相关（极其重要）**
-  * `strict`: 总开关，启用所有严格的类型检查选项。**强烈推荐设置为 `true`**。
-  * `noImplicitAny`: 禁止隐式的 `any` 类型。启用后，编译器会对类型推断为 `any` 的表达式报错。
-  * `strictNullChecks`: 启用严格的 `null` 和 `undefined` 检查，避免著名的“ billion-dollar mistake ”。
-  * `exactOptionalPropertyTypes`: 要求可选属性的赋值必须是 `undefined` 或该属性类型，不能是该类型的子类型（包括 `null`）。
-  * ...以及其他很多以 `strict` 开头的选项。
+- **类型检查严格性相关（极其重要）**
+  - `strict`: 总开关，启用所有严格的类型检查选项。**强烈推荐设置为 `true`**。
+  - `noImplicitAny`: 禁止隐式的 `any` 类型。启用后，编译器会对类型推断为 `any` 的表达式报错。
+  - `strictNullChecks`: 启用严格的 `null` 和 `undefined` 检查，避免著名的“ billion-dollar mistake ”。
+  - `exactOptionalPropertyTypes`: 要求可选属性的赋值必须是 `undefined` 或该属性类型，不能是该类型的子类型（包括 `null`）。
+  - ...以及其他很多以 `strict` 开头的选项。
 
-* **模块解析相关**
-  * `moduleResolution`: 指定模块解析策略。通常有 `"node"` (Node.js 的方式) 或 `"classic"` (TypeScript 遗留的方式)。**现代项目通常使用 `"node"`**，并且当 `module` 为 `"CommonJS"`, `"ES2015"`, `"ES2020"` 等时，这是默认值。
-  * `baseUrl`: 设置解析非相对模块名称的基目录。
-  * `paths`: 设置模块名到基于 `baseUrl` 的路径映射，常用于配置别名（alias），与 Webpack 或 Rollup 的别名配置配合使用。
+- **模块解析相关**
+  - `moduleResolution`: 指定模块解析策略。通常有 `"node"` (Node.js 的方式) 或 `"classic"` (TypeScript 遗留的方式)。**现代项目通常使用 `"node"`**，并且当 `module` 为 `"CommonJS"`, `"ES2015"`, `"ES2020"` 等时，这是默认值。
+  - `baseUrl`: 设置解析非相对模块名称的基目录。
+  - `paths`: 设置模块名到基于 `baseUrl` 的路径映射，常用于配置别名（alias），与 Webpack 或 Rollup 的别名配置配合使用。
 
     ```json
     {
@@ -97,10 +97,10 @@ tsc --init
     }
     ```
 
-* **源码映射（Source Map）相关**
-  * `sourceMap`: 生成相应的 `.map` 文件，用于调试器调试 TypeScript 源码而非编译后的 JavaScript。
-  * `declaration`: 生成相应的 `.d.ts` 声明文件，用于描述库的类型信息。
-  * `declarationMap`: 为 `.d.ts` 文件生成 source map，以便在编辑器中能跳转到原始的 TypeScript 定义。
+- **源码映射（Source Map）相关**
+  - `sourceMap`: 生成相应的 `.map` 文件，用于调试器调试 TypeScript 源码而非编译后的 JavaScript。
+  - `declaration`: 生成相应的 `.d.ts` 声明文件，用于描述库的类型信息。
+  - `declarationMap`: 为 `.d.ts` 文件生成 source map，以便在编辑器中能跳转到原始的 TypeScript 定义。
 
 #### `include` 和 `exclude`
 
@@ -123,10 +123,7 @@ tsc --init
 
 ```json
 {
-  "references": [
-    { "path": "./packages/common" },
-    { "path": "./packages/utils" }
-  ]
+  "references": [{ "path": "./packages/common" }, { "path": "./packages/utils" }]
 }
 ```
 
@@ -236,11 +233,7 @@ my-monorepo/
 ```json
 {
   "files": [],
-  "references": [
-    { "path": "./packages/core" },
-    { "path": "./packages/utils" },
-    { "path": "./packages/app" }
-  ]
+  "references": [{ "path": "./packages/core" }, { "path": "./packages/utils" }, { "path": "./packages/app" }]
 }
 ```
 
@@ -254,9 +247,9 @@ tsc -b --verbose
 
 在现代前端开发中，通常不直接使用 `tsc` 进行构建，而是将其与 Webpack, Rollup, Vite, esbuild 等构建工具集成。
 
-* **Webpack**: 使用 `ts-loader` 或 `awesome-typescript-loader`。
-* **Rollup/Vite**: 使用 `@rollup/plugin-typescript`。
-* **esbuild**: 本身具有极快的 TypeScript 转译能力（但不做类型检查）。
+- **Webpack**: 使用 `ts-loader` 或 `awesome-typescript-loader`。
+- **Rollup/Vite**: 使用 `@rollup/plugin-typescript`。
+- **esbuild**: 本身具有极快的 TypeScript 转译能力（但不做类型检查）。
 
 **最佳实践**：在开发时，利用构建工具的插件进行转译（以获得更快的热更新），但同时并行运行 `tsc --noEmit --watch` 进程来进行类型检查。这样既保证了开发体验，又确保了类型安全。
 
@@ -280,20 +273,15 @@ TypeScript 编译器暴露了一套完整的 API，允许你以编程方式分�
 
 ```typescript
 // analyzer.ts
-import * as ts from "typescript";
-import * as fs from "fs";
+import * as ts from 'typescript';
+import * as fs from 'fs';
 
 function extractInterfaces(filePath: string): void {
   // 1. 读取文件内容
-  const fileContent = fs.readFileSync(filePath, "utf-8");
+  const fileContent = fs.readFileSync(filePath, 'utf-8');
 
   // 2. 创建 SourceFile 对象 (AST)
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    fileContent,
-    ts.ScriptTarget.Latest,
-    true
-  );
+  const sourceFile = ts.createSourceFile(filePath, fileContent, ts.ScriptTarget.Latest, true);
 
   // 3. 遍历 AST
   function visit(node: ts.Node) {
@@ -308,7 +296,7 @@ function extractInterfaces(filePath: string): void {
 }
 
 // 使用示例
-extractInterfaces("./example.ts");
+extractInterfaces('./example.ts');
 ```
 
 **`example.ts` 内容：**
@@ -344,23 +332,23 @@ Found interface: Product
 ## 5. 常见问题与解决方案
 
 1. **`Cannot find module '...'` 或 `Cannot find name '...'`**
-    * **原因**: 缺少类型声明文件。
-    * **解决**: 尝试安装对应的 `@types/` 包，如 `npm install --save-dev @types/node`。如果库自带类型，则无需安装。如果都没有，可以自己创建一个 `.d.ts` 文件声明模块。
+   - **原因**: 缺少类型声明文件。
+   - **解决**: 尝试安装对应的 `@types/` 包，如 `npm install --save-dev @types/node`。如果库自带类型，则无需安装。如果都没有，可以自己创建一个 `.d.ts` 文件声明模块。
 
 2. **编译速度慢**
-    * **解决**:
-        * 启用 `incremental`。
-        * 启用 `skipLibCheck`（跳过对 `.d.ts` 文件的检查）。
-        * 使用 Project References 拆分大项目。
-        * 考虑使用 `ts-loader` 的 `transpileOnly: true` 选项（在 Webpack 中）来快速转译，并用 `fork-ts-checker-webpack-plugin` 在另一个进程进行类型检查。
+   - **解决**:
+     - 启用 `incremental`。
+     - 启用 `skipLibCheck`（跳过对 `.d.ts` 文件的检查）。
+     - 使用 Project References 拆分大项目。
+     - 考虑使用 `ts-loader` 的 `transpileOnly: true` 选项（在 Webpack 中）来快速转译，并用 `fork-ts-checker-webpack-plugin` 在另一个进程进行类型检查。
 
 3. **`tsconfig.json` 配置似乎不生效**
-    * **原因**: 可能有多份 `tsconfig.json`，或者编译器没有找到正确的配置文件。
-    * **解决**: 使用 `tsc --project /path/to/your/tsconfig.json` 或 `tsc -p /path/to/your/tsconfig.json` 来明确指定配置文件。
+   - **原因**: 可能有多份 `tsconfig.json`，或者编译器没有找到正确的配置文件。
+   - **解决**: 使用 `tsc --project /path/to/your/tsconfig.json` 或 `tsc -p /path/to/your/tsconfig.json` 来明确指定配置文件。
 
 4. **如何在编译时处理非 TS 资源（如 `.css`, `.png`）**
-    * **说明**: `tsc` 本身只处理 `.ts`, `.tsx`, `.js`, `.jsx` 文件。
-    * **解决**: 这需要在构建工具（如 Webpack）层面解决，使用对应的 loader（如 `css-loader`, `file-loader`）。
+   - **说明**: `tsc` 本身只处理 `.ts`, `.tsx`, `.js`, `.jsx` 文件。
+   - **解决**: 这需要在构建工具（如 Webpack）层面解决，使用对应的 loader（如 `css-loader`, `file-loader`）。
 
 ## 6. 总结
 

@@ -37,25 +37,25 @@ Vite 开发服务器的核心优势在于它**完全跳过了打包阶段**。
 
 为了弥补 ESM 在大量模块请求时的性能缺陷和处理 CommonJS 依赖，Vite 引入了**依赖预构建**。
 
-* **目的**：
-  * **兼容性**：将非 ESM 的依赖（如 CommonJS）转换为 ESM。
-  * **性能**：将具有许多内部模块的依赖（如 `lodash-es` 有 600+ 模块）合并为单个模块，减少 HTTP 请求数量。
-* **过程**：在服务器首次启动时，Vite 使用 `esbuild`（用 Go 编写，比 JavaScript 打包器快 10-100 倍）执行预构建。
-* **缓存**：预构建的结果会缓存到 `node_modules/.vite` 目录。除非你修改了 `package.json` 或相关配置，否则后续启动会直接使用缓存，速度极快。
+- **目的**：
+  - **兼容性**：将非 ESM 的依赖（如 CommonJS）转换为 ESM。
+  - **性能**：将具有许多内部模块的依赖（如 `lodash-es` 有 600+ 模块）合并为单个模块，减少 HTTP 请求数量。
+- **过程**：在服务器首次启动时，Vite 使用 `esbuild`（用 Go 编写，比 JavaScript 打包器快 10-100 倍）执行预构建。
+- **缓存**：预构建的结果会缓存到 `node_modules/.vite` 目录。除非你修改了 `package.json` 或相关配置，否则后续启动会直接使用缓存，速度极快。
 
 你可以通过 `optimizeDeps` 配置项自定义预构建行为。
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   optimizeDeps: {
     // 强制预构建某些包，或排除某些包
     include: ['some-dependency'],
-    exclude: ['some-other-dependency']
-  }
-})
+    exclude: ['some-other-dependency'],
+  },
+});
 ```
 
 ## 3. 热模块替换（HMR）深入解析
@@ -98,7 +98,7 @@ Vite 提供了了一套完整的 HMR API。默认情况下，框架集成（如 
 
 ```javascript
 // src/custom.js
-let data = { count: 0 }
+let data = { count: 0 };
 
 // 模块的主要逻辑
 function render() {
@@ -145,8 +145,8 @@ export { data, render };
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [vue()],
@@ -162,27 +162,27 @@ export default defineConfig({
       '/api': {
         target: 'http://jsonplaceholder.typicode.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
     // 预热常用文件以避免首次请求时的延迟
     warmup: {
-      clientFiles: ['./src/main.js', './src/App.vue']
-    }
+      clientFiles: ['./src/main.js', './src/App.vue'],
+    },
   },
   // 预构建相关配置
   optimizeDeps: {
     // 预构建时强制排除某些包
-    exclude: ['js-big-decimal']
-  }
-})
+    exclude: ['js-big-decimal'],
+  },
+});
 ```
 
 ### 4.2 HMR 性能与稳定性
 
-* **避免大型模块**：尽量避免在单个模块中导入巨大的 JSON 文件或库，这可能会拖慢 HMR 的速度。将其拆分或使用按需导入。
-* **正确处理 HMR 边界**：在框架组件中，通常无需手动处理 HMR，但要确保组件的 `accept` 和 `render` 逻辑正确。对于自定义逻辑，使用 `import.meta.hot.dispose` 清理定时器、事件监听器等资源，防止内存泄漏。
-* **注意循环依赖**：循环依赖可能会阻止 HMR 正常工作并导致难以调试的问题。使用 ESLint 插件（如 `import/no-cycle`）来检测它们。
+- **避免大型模块**：尽量避免在单个模块中导入巨大的 JSON 文件或库，这可能会拖慢 HMR 的速度。将其拆分或使用按需导入。
+- **正确处理 HMR 边界**：在框架组件中，通常无需手动处理 HMR，但要确保组件的 `accept` 和 `render` 逻辑正确。对于自定义逻辑，使用 `import.meta.hot.dispose` 清理定时器、事件监听器等资源，防止内存泄漏。
+- **注意循环依赖**：循环依赖可能会阻止 HMR 正常工作并导致难以调试的问题。使用 ESLint 插件（如 `import/no-cycle`）来检测它们。
 
 ### 4.3 调试与故障排除
 
@@ -198,9 +198,9 @@ export default defineConfig({
 
 Vite 的强大之处在于其生态系统。主流框架通过官方插件提供了顶级的 HMR 体验。
 
-* **Vue**：使用 `@vitejs/plugin-vue`，它为 Single-File Components (SFCs) 提供了无缝的 HMR 支持。
-* **React**：使用 `@vitejs/plugin-react`，它通过 Babel 插件实现了 React 组件的快速刷新（Fast Refresh）。
-* **Svelte**：使用 `@sveltejs/vite-plugin-svelte`，它完全支持 Svelte 组件的 HMR。
+- **Vue**：使用 `@vitejs/plugin-vue`，它为 Single-File Components (SFCs) 提供了无缝的 HMR 支持。
+- **React**：使用 `@vitejs/plugin-react`，它通过 Babel 插件实现了 React 组件的快速刷新（Fast Refresh）。
+- **Svelte**：使用 `@sveltejs/vite-plugin-svelte`，它完全支持 Svelte 组件的 HMR。
 
 这些插件为你处理了框架复杂的 HMR 逻辑，你通常无需关心其实现细节。
 
@@ -208,9 +208,9 @@ Vite 的强大之处在于其生态系统。主流框架通过官方插件提供
 
 Vite 通过其基于原生 ESM 的开发服务器和高效的热更新机制，重新定义了前端开发的体验。
 
-* **开发服务器**：利用按需编译和依赖预构建，实现了**极速启动**。
-* **HMR**：基于 WebSocket 和精巧的插件系统，提供了**快速可靠**的模块热替换，保持应用状态。
-* **最佳实践**：通过合理配置服务器、注意模块设计和善用调试工具，可以确保开发流程的顺畅和高效。
+- **开发服务器**：利用按需编译和依赖预构建，实现了**极速启动**。
+- **HMR**：基于 WebSocket 和精巧的插件系统，提供了**快速可靠**的模块热替换，保持应用状态。
+- **最佳实践**：通过合理配置服务器、注意模块设计和善用调试工具，可以确保开发流程的顺畅和高效。
 
 拥抱 Vite，享受它所带来的现代、快速且愉悦的开发工作流吧！
 

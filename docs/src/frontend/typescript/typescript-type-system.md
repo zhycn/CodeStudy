@@ -18,12 +18,12 @@ TypeScript 包含了 JavaScript 的所有原始类型，并允许你显式地声
 // 显式类型注解
 let isDone: boolean = false;
 let decimal: number = 6;
-let color: string = "blue";
+let color: string = 'blue';
 let list: number[] = [1, 2, 3];
 let notSure: any = 4; // 应尽量避免使用 any
 
 // 类型推断 (Type Inference) - TypeScript 会自动推断出变量类型
-let inferredString = "this is a string"; // 类型为 string
+let inferredString = 'this is a string'; // 类型为 string
 let inferredNumber = 42; // 类型为 number
 
 // 无需显式声明，TypeScript 能根据值推断出类型
@@ -36,21 +36,21 @@ let inferredNumber = 42; // 类型为 number
 ```typescript
 // 联合类型
 let identifier: string | number;
-identifier = "abc123"; // OK
+identifier = 'abc123'; // OK
 identifier = 123; // OK
 // identifier = true; // Error: Type 'boolean' is not assignable to type 'string | number'
 
 // 字面量类型
-let status: "success" | "error";
-status = "success"; // OK
-status = "error"; // OK
+let status: 'success' | 'error';
+status = 'success'; // OK
+status = 'error'; // OK
 // status = "warning"; // Error
 
 // 结合使用，功能强大
-type Result = { state: "success"; value: number } | { state: "error"; message: string };
+type Result = { state: 'success'; value: number } | { state: 'error'; message: string };
 
 function handleResult(result: Result) {
-  if (result.state === "success") {
+  if (result.state === 'success') {
     console.log(`Value: ${result.value}`); // 此处 TypeScript 知道 result 一定有 value 属性
   } else {
     console.error(result.message); // 此处 TypeScript 知道 result 一定有 message 属性
@@ -81,7 +81,8 @@ type Person = {
   age: number;
 };
 
-type Employee = Person & { // 交叉类型
+type Employee = Person & {
+  // 交叉类型
   employeeId: number;
 };
 
@@ -90,7 +91,7 @@ type Tuple = [string, number]; // 元组类型
 
 // 使用
 let point: Point = { x: 10, y: 20, id: 1 };
-let employee: Employee = { name: "Alice", age: 30, employeeId: 123 };
+let employee: Employee = { name: 'Alice', age: 30, employeeId: 123 };
 ```
 
 **接口 vs 类型别名：如何选择？**
@@ -108,8 +109,8 @@ function identity<T>(arg: T): T {
   return arg;
 }
 // 使用
-let output1 = identity<string>("myString"); // 显式指定类型参数
-let output2 = identity("myString"); // 更常见的方式：利用类型推断
+let output1 = identity<string>('myString'); // 显式指定类型参数
+let output2 = identity('myString'); // 更常见的方式：利用类型推断
 
 // 泛型接口
 interface ApiResponse<T> {
@@ -121,8 +122,8 @@ interface ApiResponse<T> {
 // 使用
 const userResponse: ApiResponse<{ name: string; age: number }> = {
   code: 200,
-  message: "OK",
-  data: { name: "Bob", age: 25 }
+  message: 'OK',
+  data: { name: 'Bob', age: 25 },
 };
 
 // 泛型约束 - 限制类型参数必须符合某种形状
@@ -134,7 +135,7 @@ function logLength<T extends HasLength>(arg: T): void {
   console.log(arg.length);
 }
 logLength([1, 2, 3]); // OK, array has .length
-logLength("hello"); // OK, string has .length
+logLength('hello'); // OK, string has .length
 // logLength(42); // Error, number doesn't have .length
 ```
 
@@ -149,7 +150,7 @@ TypeScript 提供了一系列高级类型工具，用于进行复杂的类型操
 interface StringDictionary {
   [index: string]: string; // 键是 string，值也是 string
 }
-const dict: StringDictionary = { key1: "value1", key2: "value2" };
+const dict: StringDictionary = { key1: 'value1', key2: 'value2' };
 
 // 映射类型 - 基于旧类型创建新类型
 type ReadonlyPoint = Readonly<Point>; // 所有属性变为只读
@@ -166,7 +167,7 @@ type MyPartial<T> = {
 
 ```typescript
 // 条件类型 - 根据条件选择类型
-type IsString<T> = T extends string ? "Yes" : "No";
+type IsString<T> = T extends string ? 'Yes' : 'No';
 type A = IsString<string>; // "Yes"
 type B = IsString<number>; // "No"
 
@@ -174,7 +175,7 @@ type B = IsString<number>; // "No"
 type EventName = 'click' | 'scroll' | 'mousemove';
 type HandlerName = `on${Capitalize<EventName>}`; // "onClick" | "onScroll" | "onMousemove"
 
-function setUpHandler(event: EventName, handler: ()=> void): void {
+function setUpHandler(event: EventName, handler: () => void): void {
   // ... setup logic
 }
 // 使用时，handler 的名字可以动态生成，且类型安全
@@ -191,7 +192,8 @@ function setUpHandler(event: EventName, handler: ()=> void): void {
 - **糟糕的实践**：
 
   ```typescript
-  function parseData(data: any) { // 丢失了所有类型信息
+  function parseData(data: any) {
+    // 丢失了所有类型信息
     return data.value * 2;
   }
   ```
@@ -202,7 +204,8 @@ function setUpHandler(event: EventName, handler: ()=> void): void {
   interface DataStructure {
     value: number;
   }
-  function parseData(data: DataStructure) { // 类型安全
+  function parseData(data: DataStructure) {
+    // 类型安全
     return data.value * 2;
   }
   ```
@@ -215,11 +218,11 @@ function setUpHandler(event: EventName, handler: ()=> void): void {
 
 ```typescript
 // 不推荐 - 冗余
-const name: string = "Alice";
+const name: string = 'Alice';
 const numbers: number[] = [1, 2, 3];
 
 // 推荐 - 简洁且安全
-const name = "Alice"; // TypeScript 推断为 string
+const name = 'Alice'; // TypeScript 推断为 string
 const numbers = [1, 2, 3]; // TypeScript 推断为 number[]
 ```
 
@@ -239,7 +242,7 @@ const sizes = ['small', 'medium', 'large'] as const; // readonly ["small", "medi
 let mySize = sizes[0]; // "small" - 字面量类型，更精确！
 
 // 结合类型使用
-function getSize(): readonly ["small", "medium", "large"] {
+function getSize(): readonly ['small', 'medium', 'large'] {
   return ['small', 'medium', 'large'] as const;
 }
 ```
@@ -252,17 +255,19 @@ function getSize(): readonly ["small", "medium", "large"] {
 // 不推荐
 function greet(name: string, greeting: string) {
   if (greeting === undefined) {
-    greeting = "Hello";
+    greeting = 'Hello';
   }
   return `${greeting}, ${name}`;
 }
 
 // 推荐
-function greet(name: string, greeting: string = "Hello") { // 默认参数
+function greet(name: string, greeting: string = 'Hello') {
+  // 默认参数
   return `${greeting}, ${name}`;
 }
 
-function logMessage(message: string, userId?: string) { // 可选参数
+function logMessage(message: string, userId?: string) {
+  // 可选参数
   console.log(`[${userId || 'Anonymous'}]: ${message}`);
 }
 ```
@@ -272,19 +277,16 @@ function logMessage(message: string, userId?: string) { // 可选参数
 这是处理类似状态机或者有一组固定模式的对象的最有效方式。
 
 ```typescript
-type NetworkState =
-  | { state: "loading" }
-  | { state: "success", response: string }
-  | { state: "error", error: Error };
+type NetworkState = { state: 'loading' } | { state: 'success'; response: string } | { state: 'error'; error: Error };
 
 function processState(networkState: NetworkState): string {
   // TypeScript 会根据 state 字段来缩小类型范围
   switch (networkState.state) {
-    case "loading":
-      return "Downloading...";
-    case "success":
+    case 'loading':
+      return 'Downloading...';
+    case 'success':
       return `Response: ${networkState.response.toUpperCase()}`; // 安全访问 response
-    case "error":
+    case 'error':
       return `Error: ${networkState.error.message}`; // 安全访问 error
   }
 }

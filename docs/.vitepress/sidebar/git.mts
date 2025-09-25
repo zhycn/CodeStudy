@@ -21,6 +21,6 @@ const gitSidebar = [
       { text: 'Git .gitattributes 文件', link: '/devtools/git/git-gitattributes' },
     ],
   },
-]
+];
 
-export default gitSidebar
+export default gitSidebar;

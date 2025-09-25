@@ -290,7 +290,7 @@ class RegularUser:
 
 class SlotUser:
     __slots__ = ['name', 'age']  # 限制属性列表
-    
+
     def __init__(self, name, age):
         self.name = name
         self.age = age
@@ -385,11 +385,11 @@ async def async_download_url(session, url):
 
 async def main():
     urls = ["https://www.example.com"] * 10
-    
+
     async with aiohttp.ClientSession() as session:
         tasks = [async_download_url(session, url) for url in urls]
         results = await asyncio.gather(*tasks)
-    
+
     return results
 
 start = time.time()

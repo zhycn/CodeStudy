@@ -12,9 +12,9 @@ author: zhycn
 
 直接安装在操作系统上的 Python（系统 Python）可能会带来一些问题：
 
-* **版本冲突**：不同项目可能依赖不同版本的 Python 或第三方库。
-* **权限问题**：全局安装包可能需要 `sudo` 权限，有潜在安全风险且可能破坏系统依赖。
-* **项目隔离**：避免项目 A 的依赖包意外地影响项目 B。
+- **版本冲突**：不同项目可能依赖不同版本的 Python 或第三方库。
+- **权限问题**：全局安装包可能需要 `sudo` 权限，有潜在安全风险且可能破坏系统依赖。
+- **项目隔离**：避免项目 A 的依赖包意外地影响项目 B。
 
 因此，最佳实践是使用**虚拟环境**为每个项目创建独立的、干净的运行空间。
 
@@ -38,9 +38,9 @@ python3 --version  # 通常指向 Python 3
 1. **访问官网**：前往 <https://www.python.org/downloads/>。
 2. **下载安装包**：网站会自动推荐当前系统的最新稳定版。请下载并运行安装程序。
 3. **关键安装步骤（Windows）**：
-    * **勾选 “Add python.exe to PATH”**：这是最重要的一步！它将允许你在任何终端位置直接运行 Python。
-    * **选择自定义安装**：建议点击 “Customize installation” 以确保安装所有组件。
-    * **可选功能**：在后续窗口中，确保勾选了 “pip” (包管理工具) 和 “py launcher” (用于管理多个 Python 版本)。
+   - **勾选 “Add python.exe to PATH”**：这是最重要的一步！它将允许你在任何终端位置直接运行 Python。
+   - **选择自定义安装**：建议点击 “Customize installation” 以确保安装所有组件。
+   - **可选功能**：在后续窗口中，确保勾选了 “pip” (包管理工具) 和 “py launcher” (用于管理多个 Python 版本)。
 4. **验证安装**：重新打开终端，再次运行 `python --version`，现在它应该指向新安装的 Python 3 版本。
 
 > **注意**：在 macOS 上，你也可以使用 <https://brew.sh/> 安装：`brew install python`。
@@ -51,8 +51,8 @@ python3 --version  # 通常指向 Python 3
 
 **安装 Pyenv**：
 
-* **macOS**：使用 Homebrew：`brew install pyenv`
-* **Linux**：请参考 <https://github.com/pyenv/pyenv#installation>。
+- **macOS**：使用 Homebrew：`brew install pyenv`
+- **Linux**：请参考 <https://github.com/pyenv/pyenv#installation>。
 
 **常用命令**：
 
@@ -97,23 +97,23 @@ python -m venv venv
 
 **激活虚拟环境**：
 
-* **Windows (PowerShell)**：
+- **Windows (PowerShell)**：
 
-    ```powershell
-    .\venv\Scripts\Activate.ps1
-    ```
+  ```powershell
+  .\venv\Scripts\Activate.ps1
+  ```
 
-* **Windows (Command Prompt)**：
+- **Windows (Command Prompt)**：
 
-    ```cmd
-    .\venv\Scripts\activate.bat
-    ```
+  ```cmd
+  .\venv\Scripts\activate.bat
+  ```
 
-* **macOS/Linux (bash/zsh)**：
+- **macOS/Linux (bash/zsh)**：
 
-    ```bash
-    source venv/bin/activate
-    ```
+  ```bash
+  source venv/bin/activate
+  ```
 
 激活后，你的终端提示符前会出现 `(venv)` 字样，表示你正处于该虚拟环境中。此时，所有 `pip` 安装的包都将只存在于这个环境中。
 
@@ -249,19 +249,19 @@ source ./venv/bin/activate # 或相应的激活命令
 1. **安装 Python**：从官网或使用 `pyenv` 安装一个现代 Python 版本（如 3.8+）。
 2. **为每个项目创建虚拟环境**：
 
-    ```bash
-    cd my_awesome_project
-    python -m venv venv
-    ```
+   ```bash
+   cd my_awesome_project
+   python -m venv venv
+   ```
 
 3. **激活环境**：
 
-    ```bash
-    # Windows
-    .\venv\Scripts\activate
-    # macOS/Linux
-    source venv/bin/activate
-    ```
+   ```bash
+   # Windows
+   .\venv\Scripts\activate
+   # macOS/Linux
+   source venv/bin/activate
+   ```
 
 4. **在激活的环境中工作**：安装包 (`pip install`)、运行脚本 (`python script.py`)。
 5. **管理依赖**：将依赖导出到 `requirements.txt` (`pip freeze > requirements.txt`) 并共享它。

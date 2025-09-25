@@ -249,9 +249,9 @@ def main():
     if len(sys.argv) < 2:
         print("用法: python script.py <命令> [参数]")
         sys.exit(1)
-    
+
     command = sys.argv[1]
-    
+
     if command == 'greet':
         name = sys.argv[2] if len(sys.argv) > 2 else 'World'
         print(f"Hello, {name}!")
@@ -335,9 +335,9 @@ def main():
     parser.add_argument('input', help='输入文件')
     parser.add_argument('-o', '--output', help='输出文件')
     parser.add_argument('-v', '--verbose', action='store_true', help='详细模式')
-    
+
     args = parser.parse_args()
-    
+
     print(f"输入文件: {args.input}")
     if args.output:
         print(f"输出文件: {args.output}")
@@ -356,14 +356,14 @@ import sys
 def safe_recursion_limit(new_limit):
     """安全地设置递归限制"""
     current_limit = sys.getrecursionlimit()
-    
+
     if new_limit > 3000:
         print("警告: 设置高递归限制可能导致栈溢出")
         response = input("确定要继续吗? (y/N): ")
         if response.lower() != 'y':
             print("操作已取消")
             return current_limit
-    
+
     old_limit = current_limit
     sys.setrecursionlimit(new_limit)
     print(f"递归限制已从 {old_limit} 改为 {new_limit}")
@@ -417,19 +417,19 @@ import sys
 
 class MemoryEfficientDataProcessor:
     """内存高效的数据处理器"""
-    
+
     def __init__(self):
         self._data = []
-    
+
     def add_data(self, item):
         """添加数据并监控内存使用"""
         self._data.append(item)
-        
+
         # 监控内存使用
         if sys.getsizeof(self._data) > 1024 * 1024:  # 1MB
             print("警告: 数据大小超过 1MB")
             self._compress_data()
-    
+
     def _compress_data(self):
         """压缩数据以减少内存使用"""
         print("正在压缩数据...")
@@ -474,7 +474,7 @@ def debug_module_loading():
     print("Python 路径:")
     for i, path in enumerate(sys.path):
         print(f"  {i}: {path}")
-    
+
     print("\n已加载模块:")
     for name, module in list(sys.modules.items())[:10]:  # 只显示前10个
         print(f"  {name}: {module}")
@@ -493,21 +493,21 @@ def process_large_data(data_generator, chunk_size=1000):
     """处理大型数据集，分块处理以避免内存问题"""
     processed_count = 0
     memory_usage = []
-    
+
     for chunk in data_generator:
         # 处理数据块
         result = process_chunk(chunk)
-        
+
         # 监控内存使用
         memory_usage.append(sys.getsizeof(result))
-        
+
         processed_count += len(chunk)
         print(f"已处理 {processed_count} 条记录")
-        
+
         # 如果内存使用持续增长，提醒用户
         if len(memory_usage) > 10 and memory_usage[-1] > 2 * memory_usage[0]:
             print("警告: 内存使用持续增长，考虑优化处理逻辑")
-    
+
     return processed_count
 
 def process_chunk(chunk):

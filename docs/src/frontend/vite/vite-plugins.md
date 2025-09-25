@@ -36,8 +36,8 @@ export default function myPlugin() {
     },
     transform(code, id) {
       // 转换模块内容
-    }
-  }
+    },
+  };
 }
 ```
 
@@ -79,27 +79,27 @@ export default function myPlugin() {
 ```javascript
 // vite-plugin-virtual-module.js
 export default function virtualModule() {
-  const virtualModuleId = 'virtual:my-module'
-  const resolvedVirtualModuleId = '\0' + virtualModuleId // 约定：虚拟模块 ID 前加 \0
+  const virtualModuleId = 'virtual:my-module';
+  const resolvedVirtualModuleId = '\0' + virtualModuleId; // 约定：虚拟模块 ID 前加 \0
 
   return {
     name: 'vite-plugin-virtual-module',
-    
+
     // 解析虚拟模块的 ID
     resolveId(id) {
       if (id === virtualModuleId) {
-        return resolvedVirtualModuleId
+        return resolvedVirtualModuleId;
       }
     },
-    
+
     // 加载虚拟模块的内容
     load(id) {
       if (id === resolvedVirtualModuleId) {
         // 这里可以返回动态生成的内容
-        return `export const message = "Hello from a virtual module at ${new Date().toLocaleTimeString()}!";`
+        return `export const message = "Hello from a virtual module at ${new Date().toLocaleTimeString()}!";`;
       }
-    }
-  }
+    },
+  };
 }
 ```
 
@@ -107,21 +107,21 @@ export default function virtualModule() {
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import virtualModule from './vite-plugin-virtual-module.js'
+import { defineConfig } from 'vite';
+import virtualModule from './vite-plugin-virtual-module.js';
 
 export default defineConfig({
-  plugins: [virtualModule()]
-})
+  plugins: [virtualModule()],
+});
 ```
 
 在你的代码中引入：
 
 ```javascript
 // main.js
-import { message } from 'virtual:my-module'
+import { message } from 'virtual:my-module';
 
-console.log(message) // 输出: "Hello from a virtual module at 14:25:30!"
+console.log(message); // 输出: "Hello from a virtual module at 14:25:30!"
 ```
 
 ### 4.2 示例二：文件处理与 HTML 注入插件
@@ -130,33 +130,30 @@ console.log(message) // 输出: "Hello from a virtual module at 14:25:30!"
 
 ```javascript
 // vite-plugin-file-injector.js
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
 
 export default function fileInjector() {
   return {
     name: 'vite-plugin-file-injector',
-    
+
     // 转换 index.html
     transformIndexHtml(html) {
       // 读取一个外部文件（例如一个声明文件）
-      const disclaimer = fs.readFileSync(path.resolve(__dirname, 'disclaimer.txt'), 'utf-8')
-      
+      const disclaimer = fs.readFileSync(path.resolve(__dirname, 'disclaimer.txt'), 'utf-8');
+
       // 将文件内容注入到 <body> 底部
-      return html.replace(
-        '</body>',
-        `<script>console.log(\`${disclaimer}\`)</script></body>`
-      )
+      return html.replace('</body>', `<script>console.log(\`${disclaimer}\`)</script></body>`);
     },
-    
+
     // 处理自定义文件类型
     transform(code, id) {
       if (id.endsWith('.custom')) {
         // 将 .custom 文件的内容转换为 JS 模块
-        return `export default \`${code}\``
+        return `export default \`${code}\``;
       }
-    }
-  }
+    },
+  };
 }
 ```
 
@@ -169,18 +166,18 @@ export default function fileInjector() {
 export default function customMiddleware() {
   return {
     name: 'vite-plugin-custom-middleware',
-    
+
     configureServer(server) {
       // 添加一个简单的中间件
       server.middlewares.use('/api/debug', (req, res, next) => {
-        res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({ message: 'This is from custom middleware!', time: new Date() }))
-      })
-      
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ message: 'This is from custom middleware!', time: new Date() }));
+      });
+
       // 你也可以在插件中获取和修改现有的中间件
       // 例如，在 Vite 的 HTML 回退中间件之前执行某些操作
-    }
-  }
+    },
+  };
 }
 ```
 
@@ -190,36 +187,36 @@ export default function customMiddleware() {
 
 2. **使用 TypeScript**：为你的插件提供类型定义可以极大地改善开发体验。使用 `PluginOption` 类型来定义插件对象。
 
-    ```typescript
-    import type { PluginOption } from 'vite'
+   ```typescript
+   import type { PluginOption } from 'vite';
 
-    export default function myPlugin(): PluginOption {
-      return {
-        name: 'vite-plugin-my-ts-plugin',
-        // ... hooks
-      }
-    }
-    ```
+   export default function myPlugin(): PluginOption {
+     return {
+       name: 'vite-plugin-my-ts-plugin',
+       // ... hooks
+     };
+   }
+   ```
 
 3. **尊重钩子的顺序**：Vite 插件可以指定 `enforce: 'pre' | 'post'` 来控制执行顺序（默认在核心插件之间执行）。`pre` 插件在 Vite 核心插件之前运行，`post` 插件在之后运行。合理使用 `enforce` 可以避免与其他插件冲突。
 
 4. **合理的配置**：通过插件工厂函数接受用户选项，使插件可配置。
 
-    ```javascript
-    export default function myPlugin(options = {}) {
-      const defaultOptions = { enabled: true, mode: 'development' }
-      const resolvedOptions = { ...defaultOptions, ...options }
-      
-      return {
-        name: 'vite-plugin-configurable',
-        config(config, env) {
-          if (resolvedOptions.mode === env.mode) {
-            // ... 根据选项和模式进行配置
-          }
-        }
-      }
-    }
-    ```
+   ```javascript
+   export default function myPlugin(options = {}) {
+     const defaultOptions = { enabled: true, mode: 'development' };
+     const resolvedOptions = { ...defaultOptions, ...options };
+
+     return {
+       name: 'vite-plugin-configurable',
+       config(config, env) {
+         if (resolvedOptions.mode === env.mode) {
+           // ... 根据选项和模式进行配置
+         }
+       },
+     };
+   }
+   ```
 
 5. **良好的文档**：为你的插件编写清晰的 README，说明其功能、选项、用法和示例。
 

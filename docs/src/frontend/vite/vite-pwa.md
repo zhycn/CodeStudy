@@ -52,8 +52,8 @@ pnpm add -D vite-plugin-pwa workbox-core workbox-routing workbox-strategies work
 在你的 `vite.config.ts` (或 `vite.config.js`) 文件中引入并配置插件：
 
 ```typescript
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
@@ -61,7 +61,7 @@ export default defineConfig({
     VitePWA({
       // 基础配置
       registerType: 'autoUpdate', // Service Worker 更新模式
-      injectRegister: 'auto',     // 注册脚本的注入方式
+      injectRegister: 'auto', // 注册脚本的注入方式
 
       // 应用 Manifest
       manifest: {
@@ -73,24 +73,24 @@ export default defineConfig({
           {
             src: '/icon-192.png',
             sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: '/icon-512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: '/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'maskable' // 支持自适应图标
-          }
-        ]
-      }
-    })
-  ]
-})
+          },
+          {
+            src: '/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable', // 支持自适应图标
+          },
+        ],
+      },
+    }),
+  ],
+});
 ```
 
 ### 3.3 更新项目入口文件
@@ -99,19 +99,19 @@ export default defineConfig({
 
 ```typescript
 // main.ts
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 
-const app = createApp(App)
+const app = createApp(App);
 
 // 仅在生产环境或支持 PWA 的开发环境下注册
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.ready.then(() => {
-    console.log('Service Worker 已就绪')
-  })
+    console.log('Service Worker 已就绪');
+  });
 }
 
-app.mount('#app')
+app.mount('#app');
 ```
 
 ## 4. 核心配置详解
@@ -187,15 +187,15 @@ VitePWA({
           cacheName: 'api-cache',
           expiration: {
             maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 // 缓存 24 小时
+            maxAgeSeconds: 60 * 60 * 24, // 缓存 24 小时
           },
           backgroundSync: {
             name: 'api-queue',
             options: {
-              maxRetentionTime: 60 * 24 // 重试 24 小时
-            }
-          }
-        }
+              maxRetentionTime: 60 * 24, // 重试 24 小时
+            },
+          },
+        },
       },
       {
         urlPattern: /^https:\/\/fonts\.(?:gstatic)\.com\/.*/i, // 谷歌字体
@@ -203,18 +203,18 @@ VitePWA({
         options: {
           cacheName: 'google-fonts-cache',
           expiration: {
-            maxAgeSeconds: 60 * 60 * 24 * 365 // 缓存一年
-          }
-        }
-      }
+            maxAgeSeconds: 60 * 60 * 24 * 365, // 缓存一年
+          },
+        },
+      },
     ],
     // 跳过等待，让新的 Service Worker 立即激活
     skipWaiting: true,
     clientsClaim: true,
     // 预缓存忽略列表
-    dontCacheBustURLsMatching: /\.\w{8}\./ // 不要破坏已有哈希的文件
-  }
-})
+    dontCacheBustURLsMatching: /\.\w{8}\./, // 不要破坏已有哈希的文件
+  },
+});
 ```
 
 ### 4.3 注册策略与更新处理
@@ -226,21 +226,21 @@ VitePWA({
 VitePWA({
   // 注册类型：'autoUpdate' | 'prompt' | 'manual'
   registerType: 'autoUpdate',
-  
+
   // 自定义 Service Worker 文件名（可选）
   srcDir: 'src',
   filename: 'sw.ts', // 如果你使用自定义 Service Worker
-  
+
   // 开发环境支持
   devOptions: {
     enabled: false, // 默认在开发模式下禁用
     type: 'module', // 使用模块化的 Service Worker
-    navigateFallback: 'index.html' // SPA 回退路由
+    navigateFallback: 'index.html', // SPA 回退路由
   },
-  
+
   // 自定义注册逻辑（高级用法）
-  injectRegister: 'auto' // 或 'inline'、'script'、'null'
-})
+  injectRegister: 'auto', // 或 'inline'、'script'、'null'
+});
 ```
 
 在你的客户端代码中，你应该监听 Service Worker 的更新事件，并提示用户刷新页面。
@@ -252,28 +252,28 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     // 当新的 Service Worker 控制页面时，提示用户刷新
     // 你可以在这里显示一个更新提示栏
-    showUpdateNotification()
-  })
-  
+    showUpdateNotification();
+  });
+
   // 监听 Service Worker 的更新发现
-  let refreshing = false
+  let refreshing = false;
   navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
       // 用户选择跳过等待，立即更新
       if (!refreshing) {
-        refreshing = true
-        window.location.reload()
+        refreshing = true;
+        window.location.reload();
       }
     }
-  })
+  });
 }
 
 function showUpdateNotification() {
   // 实现一个 UI 提示，让用户知道有新版本可用
   // 用户点击后，可以发送消息让 Service Worker 跳过等待
-  const updateDialog = confirm('新版本可用。是否立即更新？')
+  const updateDialog = confirm('新版本可用。是否立即更新？');
   if (updateDialog === true) {
-    navigator.serviceWorker.controller?.postMessage({ type: 'SKIP_WAITING' })
+    navigator.serviceWorker.controller?.postMessage({ type: 'SKIP_WAITING' });
   }
 }
 ```
@@ -289,31 +289,31 @@ function showUpdateNotification() {
 VitePWA({
   strategies: 'injectManifest', // 使用注入模式而非生成模式
   srcDir: 'src',
-  filename: 'sw.ts' // 你的自定义 Service Worker 文件
-})
+  filename: 'sw.ts', // 你的自定义 Service Worker 文件
+});
 ```
 
 创建自定义 Service Worker 文件 `src/sw.ts`：
 
 ```typescript
 // src/sw.ts
-import { precacheAndRoute } from 'workbox-precaching'
-import { registerRoute } from 'workbox-routing'
-import { StaleWhileRevalidate, NetworkFirst } from 'workbox-strategies'
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate, NetworkFirst } from 'workbox-strategies';
 
 // 使用预编译的清单注入
-declare let self: ServiceWorkerGlobalScope
+declare let self: ServiceWorkerGlobalScope;
 
 // 注入由 Vite 生成的预缓存清单
-precacheAndRoute(self.__WB_MANIFEST)
+precacheAndRoute(self.__WB_MANIFEST);
 
 // 自定义缓存策略
 registerRoute(
   ({ request }) => request.destination === 'image',
   new StaleWhileRevalidate({
-    cacheName: 'image-cache'
+    cacheName: 'image-cache',
   })
-)
+);
 
 // 自定义 API 缓存
 registerRoute(
@@ -327,28 +327,28 @@ registerRoute(
         cacheWillUpdate: async ({ response }) => {
           // 只缓存有效的响应
           if (response && response.status === 200) {
-            return response
+            return response;
           }
-          return null
-        }
-      }
-    ]
+          return null;
+        },
+      },
+    ],
   })
-)
+);
 
 // 自定义消息处理
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting()
+    self.skipWaiting();
   }
-})
+});
 
 // 自定义后台同步
 self.addEventListener('sync', (event) => {
   if (event.tag === 'background-sync') {
-    event.waitUntil(doBackgroundSync())
+    event.waitUntil(doBackgroundSync());
   }
-})
+});
 
 async function doBackgroundSync() {
   // 实现后台同步逻辑
@@ -371,27 +371,28 @@ async function doBackgroundSync() {
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue';
 
-const isOnline = ref(navigator.onLine)
+const isOnline = ref(navigator.onLine);
 
 const updateOnlineStatus = () => {
-  isOnline.value = navigator.onLine
-}
+  isOnline.value = navigator.onLine;
+};
 
 onMounted(() => {
-  window.addEventListener('online', updateOnlineStatus)
-  window.addEventListener('offline', updateOnlineStatus)
-})
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('online', updateOnlineStatus)
-  window.removeEventListener('offline', updateOnlineStatus)
-})
+  window.removeEventListener('online', updateOnlineStatus);
+  window.removeEventListener('offline', updateOnlineStatus);
+});
 </script>
 
 <style scoped>
-.online-indicator, .offline-indicator {
+.online-indicator,
+.offline-indicator {
   padding: 8px;
   text-align: center;
   position: fixed;
@@ -421,28 +422,28 @@ onUnmounted(() => {
 // 在自定义 Service Worker 中
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-posts') {
-    event.waitUntil(syncPosts())
+    event.waitUntil(syncPosts());
   }
-})
+});
 
 async function syncPosts() {
   // 从 IndexedDB 获取待同步的数据
-  const unsyncedPosts = await getUnsyncedPosts()
-  
+  const unsyncedPosts = await getUnsyncedPosts();
+
   for (const post of unsyncedPosts) {
     try {
       // 尝试同步到服务器
       await fetch('/api/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(post)
-      })
-      
+        body: JSON.stringify(post),
+      });
+
       // 同步成功，从待同步列表中移除
-      await markPostAsSynced(post.id)
+      await markPostAsSynced(post.id);
     } catch (error) {
       // 同步失败，保留数据下次再试
-      console.error('后台同步失败:', error)
+      console.error('后台同步失败:', error);
     }
   }
 }
@@ -465,18 +466,18 @@ VitePWA({
           cacheName: 'static-resources',
           expiration: {
             maxEntries: 60,
-            maxAgeSeconds: 30 * 24 * 60 * 60 // 30天
-          }
-        }
-      }
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 30天
+          },
+        },
+      },
     ],
-    
+
     // 使用 compression 插件预压缩资源
     additionalManifestEntries: [
-      { url: '/app.webmanifest', revision: null } // 避免不必要的缓存破坏
-    ]
-  }
-})
+      { url: '/app.webmanifest', revision: null }, // 避免不必要的缓存破坏
+    ],
+  },
+});
 ```
 
 ## 6. 调试与测试
@@ -527,16 +528,16 @@ runtimeCaching: [
     handler: 'NetworkFirst',
     options: {
       cacheName: 'html-cache',
-      networkTimeoutSeconds: 3
-    }
+      networkTimeoutSeconds: 3,
+    },
   },
   {
     // 静态资源（JS、CSS） - 缓存优先，带有后台更新
     urlPattern: /\.(?:js|css)$/,
     handler: 'StaleWhileRevalidate',
     options: {
-      cacheName: 'static-assets'
-    }
+      cacheName: 'static-assets',
+    },
   },
   {
     // 图片 - 缓存优先，但设置合理的过期时间
@@ -546,11 +547,11 @@ runtimeCaching: [
       cacheName: 'images',
       expiration: {
         maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 60 // 30天
-      }
-    }
-  }
-]
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30天
+      },
+    },
+  },
+];
 ```
 
 ### 7.3 处理版本更新
@@ -566,13 +567,13 @@ self.addEventListener('activate', (event) => {
         cacheNames.map((cacheName) => {
           // 删除旧版本的缓存
           if (cacheName !== currentCacheVersion) {
-            return caches.delete(cacheName)
+            return caches.delete(cacheName);
           }
         })
-      )
+      );
     })
-  )
-})
+  );
+});
 ```
 
 ## 8. 完整示例
@@ -581,9 +582,9 @@ self.addEventListener('activate', (event) => {
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
@@ -599,14 +600,14 @@ export default defineConfig({
           {
             src: '/icon-192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: '/icon-512.png',
             sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
+            type: 'image/png',
+          },
+        ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
@@ -618,15 +619,15 @@ export default defineConfig({
               cacheName: 'google-fonts-cache',
               expiration: {
                 maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 一年
-              }
-            }
-          }
-        ]
-      }
-    })
-  ]
-})
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 一年
+              },
+            },
+          },
+        ],
+      },
+    }),
+  ],
+});
 ```
 
 ## 9. 结论

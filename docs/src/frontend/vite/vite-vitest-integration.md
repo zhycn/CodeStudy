@@ -40,8 +40,8 @@ pnpm add -D vitest
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue' // 示例中使用 Vue，如果是 React 则替换为 @vitejs/plugin-react
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue'; // 示例中使用 Vue，如果是 React 则替换为 @vitejs/plugin-react
 
 export default defineConfig({
   plugins: [vue()],
@@ -52,7 +52,7 @@ export default defineConfig({
     // 设置测试环境
     environment: 'jsdom', // 对于组件测试，需要模拟 DOM 环境。如果是 node 服务端测试，可设置为 'node'
   },
-})
+});
 ```
 
 **关键配置项说明**：
@@ -86,14 +86,14 @@ export default defineConfig({
 ```typescript
 // src/utils/math.ts
 export function sum(a: number, b: number): number {
-  return a + b
+  return a + b;
 }
 
 export function divide(a: number, b: number): number {
   if (b === 0) {
-    throw new Error('Cannot divide by zero')
+    throw new Error('Cannot divide by zero');
   }
-  return a / b
+  return a / b;
 }
 ```
 
@@ -103,28 +103,28 @@ export function divide(a: number, b: number): number {
 
 ```typescript
 // src/utils/math.test.ts
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect } from 'vitest';
 // 如果 globals 为 true，则可以省略上面的导入
-import { sum, divide } from './math'
+import { sum, divide } from './math';
 
 describe('math utilities', () => {
   describe('sum function', () => {
     it('adds two numbers correctly', () => {
-      expect(sum(2, 3)).toBe(5)
-      expect(sum(-1, 5)).toBe(4)
-    })
-  })
+      expect(sum(2, 3)).toBe(5);
+      expect(sum(-1, 5)).toBe(4);
+    });
+  });
 
   describe('divide function', () => {
     it('divides two numbers correctly', () => {
-      expect(divide(10, 2)).toBe(5)
-    })
+      expect(divide(10, 2)).toBe(5);
+    });
 
     it('throws an error when dividing by zero', () => {
-      expect(() => divide(5, 0)).toThrowError('Cannot divide by zero')
-    })
-  })
-})
+      expect(() => divide(5, 0)).toThrowError('Cannot divide by zero');
+    });
+  });
+});
 ```
 
 ### 3.3 运行测试
@@ -168,39 +168,39 @@ npm install -D @testing-library/react jsdom @testing-library/jest-dom
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-defineProps<{ greeting: string }>()
+defineProps<{ greeting: string }>();
 
-const count = ref(0)
+const count = ref(0);
 </script>
 ```
 
 ```typescript
 // src/components/HelloWorld.spec.ts
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import HelloWorld from './HelloWorld.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import HelloWorld from './HelloWorld.vue';
 
 describe('HelloWorld.vue', () => {
   it('renders props.greeting correctly', () => {
-    const greeting = 'Hello Vitest!'
+    const greeting = 'Hello Vitest!';
     const wrapper = mount(HelloWorld, {
       props: { greeting },
-    })
-    expect(wrapper.text()).toContain(greeting)
-  })
+    });
+    expect(wrapper.text()).toContain(greeting);
+  });
 
   it('button click increments counter', async () => {
     const wrapper = mount(HelloWorld, {
       props: { greeting: '' },
-    })
-    const button = wrapper.find('button')
-    expect(button.text()).toContain('0')
-    await button.trigger('click')
-    expect(button.text()).toContain('1')
-  })
-})
+    });
+    const button = wrapper.find('button');
+    expect(button.text()).toContain('0');
+    await button.trigger('click');
+    expect(button.text()).toContain('1');
+  });
+});
 ```
 
 ### 4.2 模拟 (Mocking)
@@ -213,32 +213,32 @@ Vitest 提供了强大的 mocking 功能，兼容 Jest API。
 // src/utils/__mocks__/axios.ts (手动模拟)
 export default {
   get: vi.fn(() => Promise.resolve({ data: 'mocked data' })),
-}
+};
 
 // 在测试文件中
-import axios from 'axios'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import axios from 'axios';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // 自动模拟整个模块
-vi.mock('axios')
+vi.mock('axios');
 
 describe('api call', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it('fetches data', async () => {
     // 安排：模拟 axios.get 的返回值
-    ;(axios.get as Mock).mockResolvedValue({ data: [1, 2, 3] })
+    (axios.get as Mock).mockResolvedValue({ data: [1, 2, 3] });
 
     // 执行：调用你的函数（该函数内部使用了 axios.get）
-    const result = await yourFunctionThatUsesAxios()
+    const result = await yourFunctionThatUsesAxios();
 
     // 断言：函数返回了预期值，且 axios.get 被以正确的参数调用
-    expect(result).toEqual([1, 2, 3])
-    expect(axios.get).toHaveBeenCalledWith('/api/data')
-  })
-})
+    expect(result).toEqual([1, 2, 3]);
+    expect(axios.get).toHaveBeenCalledWith('/api/data');
+  });
+});
 ```
 
 **模拟部分模块**：
@@ -246,12 +246,12 @@ describe('api call', () => {
 ```typescript
 // 模拟部分模块，保留其他部分
 vi.mock('../module', async (importOriginal) => {
-  const original = await importOriginal()
+  const original = await importOriginal();
   return {
     ...original,
     namedExport: vi.fn(),
-  }
-})
+  };
+});
 ```
 
 ### 4.3 配置别名 (Alias) 与路径解析
@@ -260,8 +260,8 @@ vi.mock('../module', async (importOriginal) => {
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite'
-import path from 'path'
+import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
   // ...
@@ -273,13 +273,13 @@ export default defineConfig({
   test: {
     // ... 无需在 test 中重复配置 alias
   },
-})
+});
 ```
 
 现在，你可以在测试文件中直接使用别名。
 
 ```typescript
-import { sum } from '@/utils/math' // 正常工作
+import { sum } from '@/utils/math'; // 正常工作
 ```
 
 ### 4.4 测试覆盖率
@@ -299,21 +299,23 @@ export default defineConfig({
     coverage: {
       provider: 'v8', // 或 'istanbul'
       reporter: ['text', 'json', 'html'], // 生成多种格式的报告
-      exclude: [ // 排除不需要计算覆盖率的文件
+      exclude: [
+        // 排除不需要计算覆盖率的文件
         '**/node_modules/**',
         '**/dist/**',
         '**/*.test.{js,ts}',
         '**/__mocks__/**',
       ],
-      thresholds: { // 设置覆盖率阈值，强制保证测试质量
+      thresholds: {
+        // 设置覆盖率阈值，强制保证测试质量
         lines: 80,
         functions: 80,
         branches: 80,
         statements: 80,
-      }
+      },
     },
   },
-})
+});
 ```
 
 **2. 运行覆盖率报告**
@@ -338,19 +340,19 @@ npm install -D msw
 
 ```typescript
 // src/mocks/server.ts
-import { setupServer } from 'msw/node'
-import { handlers } from './handlers'
+import { setupServer } from 'msw/node';
+import { handlers } from './handlers';
 
-export const server = setupServer(...handlers)
+export const server = setupServer(...handlers);
 
 // 在测试设置文件中启动和关闭
 // vitest.setup.ts
-import { server } from './mocks/server'
-import { beforeAll, afterAll, afterEach } from 'vitest'
+import { server } from './mocks/server';
+import { beforeAll, afterAll, afterEach } from 'vitest';
 
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
-afterAll(() => server.close())
-afterEach(() => server.resetHandlers())
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+afterAll(() => server.close());
+afterEach(() => server.resetHandlers());
 ```
 
 在 `vitest.config.ts` 中指定 setup 文件：
@@ -366,57 +368,57 @@ test: {
 
 - **使用 `include` 和 `exclude`**： 在配置中明确指定需要测试的文件，避免 Vitest 遍历不必要的目录。
 
-    ```typescript
-    test: {
-      include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
-      exclude: ['**/node_modules/**', '**/dist/**'],
-    }
-    ```
+  ```typescript
+  test: {
+    include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+    exclude: ['**/node_modules/**', '**/dist/**'],
+  }
+  ```
 
 - **在 CI 环境中禁用 watch 和 sourcemap**： `vitest run --no-watch --sourcemap=false`。
 - **将大型测试套件拆分为多个 `shard`**： Vitest v1+ 支持 `--shard` 参数，可以将测试分散到多个机器上并行运行，极大缩短 CI 时间。
 
-    ```bash
-    vitest run --shard=1/3 # 在第一台机器上运行
-    vitest run --shard=2/3 # 在第二台机器上运行
-    vitest run --shard=3/3 # 在第三台机器上运行
-    ```
+  ```bash
+  vitest run --shard=1/3 # 在第一台机器上运行
+  vitest run --shard=2/3 # 在第二台机器上运行
+  vitest run --shard=3/3 # 在第三台机器上运行
+  ```
 
 ## 6. 常见问题与排错 (Troubleshooting)
 
 - **`__dirname is not defined in ES module scope`**： 在 Vite 项目中，你需要使用 `import.meta.url` 而不是 CommonJS 的 `__dirname`。或者，在 `vite.config.ts` 中配置 `define: { global: 'globalThis' }` 可能有助于解决某些第三方库的问题。
 - **CSS/静态资源导入错误**： 在测试中，导入的 `.css` 或图片文件可能会导致错误。你可以在配置中为这些文件定义一个简单的模拟。
 
-    ```typescript
-    // vite.config.ts
-    test: {
-      // ...
-      deps: {
-        inline: ['lodash-es'], // 必要时内联某些依赖
-      },
-      // 模拟非 JS 资源
-      server: {
-        // @ts-ignore - 尚未在类型中公开，但可用
-        middlewareMode: true,
-      },
+  ```typescript
+  // vite.config.ts
+  test: {
+    // ...
+    deps: {
+      inline: ['lodash-es'], // 必要时内联某些依赖
     },
-    ```
+    // 模拟非 JS 资源
+    server: {
+      // @ts-ignore - 尚未在类型中公开，但可用
+      middlewareMode: true,
+    },
+  },
+  ```
 
-    或者使用一个简单的模拟文件：
+  或者使用一个简单的模拟文件：
 
-    ```typescript
-    // __mocks__/fileMock.js
-    export default 'test-file-stub'
-    ```
+  ```typescript
+  // __mocks__/fileMock.js
+  export default 'test-file-stub';
+  ```
 
-    ```typescript
-    // vite.config.ts
-    test: {
-      alias: {
-        '\\.(css|less|scss|sass|png|jpg|gif)$': require.resolve('./__mocks__/fileMock.js'),
-      },
-    }
-    ```
+  ```typescript
+  // vite.config.ts
+  test: {
+    alias: {
+      '\\.(css|less|scss|sass|png|jpg|gif)$': require.resolve('./__mocks__/fileMock.js'),
+    },
+  }
+  ```
 
 ## 7. 总结
 

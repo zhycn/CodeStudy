@@ -66,29 +66,29 @@ const htmlContent = ref('');
 
 1. 安装 DOMPurify：
 
-    ```bash
-    npm install dompurify
-    npm install @types/dompurify # 对于 TypeScript 项目
-    ```
+   ```bash
+   npm install dompurify
+   npm install @types/dompurify # 对于 TypeScript 项目
+   ```
 
 2. 在组件中使用：
 
-    ```vue
-    <template>
-      <div>
-        <!-- 安全：使用净化后的内容 -->
-        <div v-html="purifiedHtml"></div>
-      </div>
-    </template>
+   ```vue
+   <template>
+     <div>
+       <!-- 安全：使用净化后的内容 -->
+       <div v-html="purifiedHtml"></div>
+     </div>
+   </template>
 
-    <script setup>
-    import { ref, computed } from 'vue';
-    import DOMPurify from 'dompurify';
+   <script setup>
+   import { ref, computed } from 'vue';
+   import DOMPurify from 'dompurify';
 
-    const rawHtml = ref('');
-    const purifiedHtml = computed(() => DOMPurify.sanitize(rawHtml.value));
-    </script>
-    ```
+   const rawHtml = ref('');
+   const purifiedHtml = computed(() => DOMPurify.sanitize(rawHtml.value));
+   </script>
+   ```
 
 #### **风险点 2：动态渲染组件或模板**
 
@@ -145,10 +145,10 @@ CSRF 攻击强迫用户在当前已登录的 Web 应用上执行非本意的操�
 CSRF 防护主要在后端实现，但前端需要配合。
 
 1. **使用 Anti-CSRF Tokens：**
-    - 后端生成一个随机 Token（通常存储在用户的 Session 中）。
-    - 该 Token 通过后端模板注入前端（例如，放在 `<meta>` 标签里），或者通过 API 端点返回。
-    - Vue 应用在发送非幂等请求（如 POST, PUT, DELETE）时，在 HTTP 头（如 `X-CSRF-TOKEN`）或请求体中携带此 Token。
-    - 后端验证 Token 的有效性。
+   - 后端生成一个随机 Token（通常存储在用户的 Session 中）。
+   - 该 Token 通过后端模板注入前端（例如，放在 `<meta>` 标签里），或者通过 API 端点返回。
+   - Vue 应用在发送非幂等请求（如 POST, PUT, DELETE）时，在 HTTP 头（如 `X-CSRF-TOKEN`）或请求体中携带此 Token。
+   - 后端验证 Token 的有效性。
 
 **前端示例（从 Meta 标签获取 Token）：**
 
@@ -165,22 +165,24 @@ import { ref } from 'vue';
 function submitForm() {
   // 从 meta 标签中获取后端注入的 Token
   const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-  
+
   fetch('/api/sensitive-action', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-CSRF-TOKEN': token || '', // 将 Token 放在请求头中
     },
-    body: JSON.stringify({ /* 数据 */ }),
+    body: JSON.stringify({
+      /* 数据 */
+    }),
     credentials: 'include', // 如果需要携带 Cookie
-  }).then(response => response.json());
+  }).then((response) => response.json());
 }
 </script>
 ```
 
 2. **设置 SameSite Cookie 属性：**
-    - 后端在设置认证 Cookie（如 Session Cookie）时，应加上 `SameSite=Strict` 或 `SameSite=Lax` 属性。这可以防止浏览器在不同站点的请求中自动发送此 Cookie，从而有效缓解 CSRF 攻击。这是现代浏览器广泛支持的强大防御手段。
+   - 后端在设置认证 Cookie（如 Session Cookie）时，应加上 `SameSite=Strict` 或 `SameSite=Lax` 属性。这可以防止浏览器在不同站点的请求中自动发送此 Cookie，从而有效缓解 CSRF 攻击。这是现代浏览器广泛支持的强大防御手段。
 
 ## 3. 安全的 Vue 应用部署配置
 
@@ -220,17 +222,17 @@ function submitForm() {
 
 ## 总结：Vue3 安全清单
 
-| 类别 | 最佳实践 | 风险等级 |
-| :--- | :--- | :--- |
-| **XSS 防护** | 永远不要使用 `v-html` 渲染用户内容，必须使用时用 `DOMPurify` 净化。 | 高危 |
-| | 对 `:href`、`:src` 等属性绑定的用户 URL 进行协议验证。 | 中危 |
-| | 信赖 Vue 的默认文本插值转义机制。 | - |
-| **CSRF 防护** | 确保后端实施了 Anti-CSRF Token 机制，前端正确携带。 | 高危 |
-| | 确认认证 Cookie 设置了 `SameSite=Lax/Strict` 属性。 | 中/高危 |
-| **部署配置** | 配置严格的 `Content-Security-Policy` 响应头。 | 高危 |
-| | 设置 `X-Content-Type-Options`, `X-Frame-Options` 等安全头。 | 中危 |
-| **依赖管理** | 定期运行 `npm audit` 并更新有漏洞的依赖。 | 中危 |
-| **开发意识** | 对任何来自用户、第三方 API 的数据持“不信任”原则，进行验证和净化。 | - |
+| 类别          | 最佳实践                                                            | 风险等级 |
+| :------------ | :------------------------------------------------------------------ | :------- |
+| **XSS 防护**  | 永远不要使用 `v-html` 渲染用户内容，必须使用时用 `DOMPurify` 净化。 | 高危     |
+|               | 对 `:href`、`:src` 等属性绑定的用户 URL 进行协议验证。              | 中危     |
+|               | 信赖 Vue 的默认文本插值转义机制。                                   | -        |
+| **CSRF 防护** | 确保后端实施了 Anti-CSRF Token 机制，前端正确携带。                 | 高危     |
+|               | 确认认证 Cookie 设置了 `SameSite=Lax/Strict` 属性。                 | 中/高危  |
+| **部署配置**  | 配置严格的 `Content-Security-Policy` 响应头。                       | 高危     |
+|               | 设置 `X-Content-Type-Options`, `X-Frame-Options` 等安全头。         | 中危     |
+| **依赖管理**  | 定期运行 `npm audit` 并更新有漏洞的依赖。                           | 中危     |
+| **开发意识**  | 对任何来自用户、第三方 API 的数据持“不信任”原则，进行验证和净化。   | -        |
 
 安全是一个持续的过程，而非一劳永逸的终点。将安全实践融入开发的每个阶段（设计、编码、测试、部署），才能最大限度地保障您和用户的数据安全。
 

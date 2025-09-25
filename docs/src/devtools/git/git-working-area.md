@@ -43,11 +43,11 @@ Git 的版本控制能力建立在三个核心区域的基础上：**工作区**
 
 ### 1.4 三大区域对比表
 
-| 区域 | 位置 | 作用 | 文件状态 | 常用命令 |
-|------|------|------|----------|----------|
-| **工作区** | 项目目录 | 直接修改文件 | 未跟踪、已修改 | `git status`, `git diff` |
-| **暂存区** | `.git/index` | 临时存储更改 | 已暂存 | `git add`, `git reset` |
-| **版本库** | `.git/` 目录 | 存储历史记录 | 已提交 | `git commit`, `git log` |
+| 区域       | 位置         | 作用         | 文件状态       | 常用命令                 |
+| ---------- | ------------ | ------------ | -------------- | ------------------------ |
+| **工作区** | 项目目录     | 直接修改文件 | 未跟踪、已修改 | `git status`, `git diff` |
+| **暂存区** | `.git/index` | 临时存储更改 | 已暂存         | `git add`, `git reset`   |
+| **版本库** | `.git/` 目录 | 存储历史记录 | 已提交         | `git commit`, `git log`  |
 
 ## 2 数据流转与操作命令
 
@@ -76,7 +76,7 @@ git commit -m "Add hello.txt"      # 提交到版本库
    |--- git checkout ----|   --- git reset -----|
 ```
 
-*图：Git 三大区域的数据流转关系*
+_图：Git 三大区域的数据流转关系_
 
 ### 2.3 常用操作命令详解
 
@@ -177,7 +177,7 @@ git reset --hard HEAD~1
   # 好：拆分多个相关的提交
   git add src/user/login.js
   git commit -m "fix: 修复用户登录验证逻辑"
-  
+
   git add src/order/payment.css
   git commit -m "style: 优化支付页面按钮样式"
   ```
@@ -207,12 +207,12 @@ git reset --hard HEAD~1
 
   ```bash
   feat(user): 新增用户积分累计功能
-  
+
   实现了用户积分累计逻辑，包括：
   - 积分计算规则
   - 积分等级系统
   - 积分兑换入口
-  
+
   关联问题 #123
   ```
 
@@ -222,7 +222,7 @@ git reset --hard HEAD~1
 
 1. **主分支** (main/master)：始终保持稳定和可部署状态
 2. **开发分支** (develop)：集成所有开发中的功能
-3. **功能分支** (feature/*)：每个新功能在独立分支上开发
+3. **功能分支** (feature/\*)：每个新功能在独立分支上开发
 
 > 更多关于分支管理的最佳实践，请参考 [Git 分支与合并详解与最佳实践](./git-branching.md)。
 
@@ -408,13 +408,13 @@ git reflog show --date=iso | grep 72.hours.ago
 
 使用以下命令诊断和恢复文件状态：
 
-| 情景 | 诊断命令 | 恢复命令 |
-|------|----------|----------|
-| 不确定文件状态 | `git status` | - |
-| 工作区文件修改后想撤销 | `git diff` | `git checkout -- <file>` |
-| 已添加到暂存区想撤销 | `git diff --cached` | `git reset HEAD <file>` |
-| 想删除已跟踪的文件 | - | `git rm <file>` |
-| 想从版本库删除但保留本地文件 | - | `git rm --cached <file>` |
+| 情景                         | 诊断命令            | 恢复命令                 |
+| ---------------------------- | ------------------- | ------------------------ |
+| 不确定文件状态               | `git status`        | -                        |
+| 工作区文件修改后想撤销       | `git diff`          | `git checkout -- <file>` |
+| 已添加到暂存区想撤销         | `git diff --cached` | `git reset HEAD <file>`  |
+| 想删除已跟踪的文件           | -                   | `git rm <file>`          |
+| 想从版本库删除但保留本地文件 | -                   | `git rm --cached <file>` |
 
 ## 总结
 

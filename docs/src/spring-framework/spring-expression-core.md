@@ -23,13 +23,13 @@ SpEL 的设计旨在填补静态 Java 代码与动态配置需求之间的鸿沟
 
 SpEL 类似于 JSP 的 EL 和 OGNL，但功能更为丰富。以下是 SpEL 与正则表达式的核心区别：
 
-| **维度**         | **SpEL**                      | **正则表达式**               |
-|------------------|-------------------------------|------------------------------|
-| **核心目标**     | 动态操作对象与逻辑            | 字符串模式匹配与文本处理     |
-| **语法复杂度**   | 高（支持对象、方法、集合）    | 中（专注字符模式）           |
-| **类型支持**     | 强类型（对象、数字、布尔等）  | 弱类型（仅字符串）           |
-| **上下文依赖**   | 必需（`EvaluationContext`）   | 无                           |
-| **典型工具**     | Spring 框架、AOP、缓存注解     | 文本编辑器、日志分析工具     |
+| **维度**       | **SpEL**                     | **正则表达式**           |
+| -------------- | ---------------------------- | ------------------------ |
+| **核心目标**   | 动态操作对象与逻辑           | 字符串模式匹配与文本处理 |
+| **语法复杂度** | 高（支持对象、方法、集合）   | 中（专注字符模式）       |
+| **类型支持**   | 强类型（对象、数字、布尔等） | 弱类型（仅字符串）       |
+| **上下文依赖** | 必需（`EvaluationContext`）  | 无                       |
+| **典型工具**   | Spring 框架、AOP、缓存注解   | 文本编辑器、日志分析工具 |
 
 ## 2 SpEL 核心组件架构
 
@@ -153,15 +153,15 @@ Date now = parser.parseExpression("new java.util.Date()").getValue(Date.class);
 
 SpEL 支持丰富的运算符，包括算术、关系、逻辑、正则匹配等运算符。
 
-| **类别**       | **运算符**                              | **示例**                                  |
-|----------------|-----------------------------------------|-------------------------------------------|
-| **算术**       | `+`, `-`, `*`, `/`, `%`, `^`            | `2^3` → 8                                 |
-| **关系**       | `<`, `>`, `==`, `<=`, `>=`, `!=`        | `price > 100 ? 'high' : 'low'`            |
-| **逻辑**       | `and`, `or`, `not`                      | `isVip and age > 18`                      |
-| **正则**       | `matches`                               | `email matches '[a-z]+@domain\.com'`      |
-| **三元**       | `?:`                                    | `status ?: 'default'`                     |
-| **Elvis**      | `?:`                                    | `name ?: 'Unknown'`                       |
-| **安全导航**   | `?.`                                    | `user?.address?.city`                     |
+| **类别**     | **运算符**                       | **示例**                             |
+| ------------ | -------------------------------- | ------------------------------------ |
+| **算术**     | `+`, `-`, `*`, `/`, `%`, `^`     | `2^3` → 8                            |
+| **关系**     | `<`, `>`, `==`, `<=`, `>=`, `!=` | `price > 100 ? 'high' : 'low'`       |
+| **逻辑**     | `and`, `or`, `not`               | `isVip and age > 18`                 |
+| **正则**     | `matches`                        | `email matches '[a-z]+@domain\.com'` |
+| **三元**     | `?:`                             | `status ?: 'default'`                |
+| **Elvis**    | `?:`                             | `name ?: 'Unknown'`                  |
+| **安全导航** | `?.`                             | `user?.address?.city`                |
 
 ### 3.5 集合操作
 
@@ -201,7 +201,7 @@ public class StringUtils {
     }
 }
 
-context.registerFunction("reverse", 
+context.registerFunction("reverse",
     StringUtils.class.getDeclaredMethod("reverse", String.class));
 String result = parser.parseExpression("#reverse('hello')").getValue(context, String.class); // "olleh"
 ```
@@ -214,11 +214,11 @@ String result = parser.parseExpression("#reverse('hello')").getValue(context, St
 
 ```xml
 <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
-    <property name="jdbcUrl" 
+    <property name="jdbcUrl"
               value="#{systemProperties['db.url'] ?: 'jdbc:mysql://localhost:3306/default'}"/>
-    <property name="maximumPoolSize" 
+    <property name="maximumPoolSize"
               value="#{T(java.lang.Runtime).getRuntime().availableProcessors() * 2}"/>
-    <property name="connectionTimeout" 
+    <property name="connectionTimeout"
               value="#{T(java.lang.Math).random() * 1000}"/>
 </bean>
 ```
@@ -230,23 +230,23 @@ SpEL 广泛用于注解驱动开发，特别是 `@Value` 注解。
 ```java
 @Component
 public class AppConfig {
-    
+
     // 从配置文件读取值
     @Value("${app.name}")
     private String appName;
-    
+
     // 计算表达式的值
     @Value("#{10 * 2}")
     private int calculationResult;
-    
+
     // 获取系统属性
     @Value("#{systemProperties['os.name']}")
     private String osName;
-    
+
     // 引用Bean并调用方法
     @Value("#{@userService.getDefaultUser()}")
     private User defaultUser;
-    
+
     // 结合配置文件与默认值
     @Value("#{config['api.timeout'] ?: 5000}")
     private int timeout;
@@ -268,10 +268,10 @@ public interface BankService {
     @PreAuthorize("hasRole('ADMIN') or "
         + "(hasRole('USER') and #accountId == authentication.principal.id)")
     Account getAccount(Long accountId);
-    
+
     @PreAuthorize("hasPermission(#accountId, 'ACCOUNT', 'WRITE')")
     void withdraw(Long accountId, BigDecimal amount);
-    
+
     @PostAuthorize("returnObject.owner == authentication.principal.name")
     Account getAccountDetails(Long accountId);
 }
@@ -283,11 +283,11 @@ SpEL 在 Spring Data 中用于动态查询。
 
 ```java
 public interface UserRepository extends JpaRepository<User, Long> {
-    
+
     // 使用SpEL定义查询条件
     @Query("SELECT u FROM User u WHERE u.status = :#{#status ?: 'ACTIVE'}")
     List<User> findByStatus(@Param("status") String status);
-    
+
     @Query("SELECT u FROM User u WHERE u.createdDate > :#{T(java.time.LocalDate).now().minusDays(7)}")
     List<User> findRecentUsers();
 }
@@ -298,10 +298,10 @@ public class Article {
     @Id
     @GeneratedValue
     private Long id;
-    
+
     @Column
     private Date publishDate;
-    
+
     @Transient
     @Value("#{T(java.time.LocalDate).now()}")
     private LocalDate currentDate;
@@ -317,11 +317,11 @@ SpEL 在 AOP 和缓存中用于动态切点表达式和键生成。
 @Aspect
 @Component
 public class LoggingAspect {
-    
+
     @Pointcut("execution(* com.example.service.*.*(..)) && " +
               "@annotation(org.springframework.transaction.annotation.Transactional)")
     public void transactionalServiceMethods() {}
-    
+
     @Before("transactionalServiceMethods() && args(user)")
     public void logUserOperation(JoinPoint jp, User user) {
         String operation = parser.parseExpression("'用户' + #user.name + '执行了操作'")
@@ -331,7 +331,7 @@ public class LoggingAspect {
 }
 
 // 缓存键生成
-@Cacheable(value = "users", 
+@Cacheable(value = "users",
            key = "#user.id + ':' + #user.type",
            condition = "#user != null",
            unless = "#result == null")
@@ -348,14 +348,14 @@ public User getUser(User user) {
 
 ```java
 public class SpELUtils {
-    
+
     public static String capitalize(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
-    
+
     public static boolean isEmailValid(String email) {
         String pattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         return email != null && email.matches(pattern);
@@ -364,9 +364,9 @@ public class SpELUtils {
 
 // 注册自定义函数
 StandardEvaluationContext context = new StandardEvaluationContext();
-context.registerFunction("capitalize", 
+context.registerFunction("capitalize",
     SpELUtils.class.getDeclaredMethod("capitalize", String.class));
-context.registerFunction("isEmailValid", 
+context.registerFunction("isEmailValid",
     SpELUtils.class.getDeclaredMethod("isEmailValid", String.class));
 
 // 使用自定义函数
@@ -442,7 +442,7 @@ for (Order order : orders) {
 private static final Map<String, Expression> EXPR_CACHE = new ConcurrentHashMap<>();
 
 public Object evaluate(String exprStr, Object root) {
-    Expression expr = EXPR_CACHE.computeIfAbsent(exprStr, 
+    Expression expr = EXPR_CACHE.computeIfAbsent(exprStr,
         key -> parser.parseExpression(key));
     return expr.getValue(root);
 }
@@ -458,7 +458,7 @@ public void process() {
 private final Map<String, Expression> ruleCache = new ConcurrentHashMap<>();
 
 public void process() {
-    Expression exp = ruleCache.computeIfAbsent(ruleEngine.getRule(), 
+    Expression exp = ruleCache.computeIfAbsent(ruleEngine.getRule(),
         key -> parser.parseExpression(key));
     exp.getValue(context);
 }

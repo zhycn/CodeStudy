@@ -30,7 +30,7 @@ public class TraditionalService {
 @Component
 public class IoCService {
     private final FileRepository repository;
-    
+
     @Autowired
     public IoCService(FileRepository repository) {
         this.repository = repository;
@@ -84,14 +84,14 @@ AOP（Aspect-Oriented Programming，面向切面编程）能够将那些与业�
 @Aspect
 @Component
 public class IOLoggingAspect {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(IOLoggingAspect.class);
-    
+
     @Around("execution(* com.example.service.FileService.*(..))")
     public Object logIOOperation(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         String methodName = joinPoint.getSignature().getName();
-        
+
         try {
             logger.info("开始执行IO操作: {}", methodName);
             Object result = joinPoint.proceed();
@@ -125,17 +125,17 @@ Spring 的 `Resource` 接口提供了对不同来源资源的统一抽象，主�
 ```java
 @Service
 public class ResourceService {
-    
+
     @Autowired
     private ResourceLoader resourceLoader;
-    
+
     public String loadResourceContent(String location) throws IOException {
         Resource resource = resourceLoader.getResource(location);
-        
+
         try (InputStream inputStream = resource.getInputStream();
              BufferedReader reader = new BufferedReader(
                  new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            
+
             return reader.lines().collect(Collectors.joining("\n"));
         }
     }
@@ -146,12 +146,12 @@ public class ResourceService {
 
 Spring 支持多种资源路径前缀：
 
-| 前缀 | 示例 | 说明 |
-|------|------|------|
-| `classpath:` | `classpath:config/app.properties` | 从类路径加载 |
-| `file:` | `file:/etc/config/app.properties` | 从文件系统加载 |
-| `http:` | `https://example.com/config.xml` | 通过 HTTP 协议加载 |
-| `无前缀` | `config/app.properties` | 由 ApplicationContext 决定 |
+| 前缀         | 示例                              | 说明                       |
+| ------------ | --------------------------------- | -------------------------- |
+| `classpath:` | `classpath:config/app.properties` | 从类路径加载               |
+| `file:`      | `file:/etc/config/app.properties` | 从文件系统加载             |
+| `http:`      | `https://example.com/config.xml`  | 通过 HTTP 协议加载         |
+| `无前缀`     | `config/app.properties`           | 由 ApplicationContext 决定 |
 
 ### 3.4 多资源加载
 
@@ -175,17 +175,17 @@ Spring 5.0 引入了 `org.springframework.util.StreamUtils`，提供轻量级的
 import org.springframework.util.StreamUtils;
 
 public class StreamUtilsExample {
-    
+
     public void copyStream() throws IOException {
         InputStream in = new FileInputStream("source.txt");
         OutputStream out = new FileOutputStream("target.txt");
-        
+
         // 复制流
         StreamUtils.copy(in, out);
-        
+
         // 读取流到字节数组
         byte[] data = StreamUtils.copyToByteArray(in);
-        
+
         // 读取流到字符串
         String content = StreamUtils.copyToString(in, StandardCharsets.UTF_8);
     }
@@ -200,18 +200,18 @@ public class StreamUtilsExample {
 import org.springframework.util.FileCopyUtils;
 
 public class FileCopyUtilsExample {
-    
+
     public void copyFile() throws IOException {
         File source = new File("source.txt");
         File target = new File("target.txt");
-        
+
         // 复制文件
         FileCopyUtils.copy(source, target);
-        
+
         // 从输入流复制到文件
         InputStream in = new FileInputStream(source);
         FileCopyUtils.copy(in, target);
-        
+
         // 从文件复制到输出流
         OutputStream out = new FileOutputStream(target);
         FileCopyUtils.copy(source, out);
@@ -240,14 +240,14 @@ import org.apache.commons.io.IOUtils;
 
 @Service
 public class FileService {
-    
+
     public String readFileContent(File file) throws IOException {
         try (InputStream inputStream = new FileInputStream(file)) {
             // 将输入流转换为字符串
             return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         }
     }
-    
+
     public void copyLargeFile(File source, File target) throws IOException {
         try (InputStream in = new FileInputStream(source);
              OutputStream out = new FileOutputStream(target)) {
@@ -255,7 +255,7 @@ public class FileService {
             IOUtils.copyLarge(in, out);
         }
     }
-    
+
     public void silentClose(Closeable closeable) {
         // 静默关闭资源
         IOUtils.closeQuietly(closeable);
@@ -283,29 +283,29 @@ Spring 提供了 `MultipartFile` 接口来处理文件上传。
 ```java
 @RestController
 public class FileUploadController {
-    
+
     private static final String UPLOAD_DIR = "uploads/";
-    
+
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("上传文件为空");
         }
-        
+
         try {
             // 确保上传目录存在
             Path uploadPath = Paths.get(UPLOAD_DIR);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-            
+
             // 生成安全的文件名
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             Path filePath = uploadPath.resolve(fileName);
-            
+
             // 保存文件
             file.transferTo(filePath.toFile());
-            
+
             return ResponseEntity.ok("文件上传成功: " + fileName);
         } catch (IOException e) {
             return ResponseEntity.status(500).body("文件上传失败: " + e.getMessage());
@@ -319,17 +319,17 @@ public class FileUploadController {
 ```java
 @RestController
 public class FileDownloadController {
-    
+
     @GetMapping("/download/{filename:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
         try {
             Path filePath = Paths.get("uploads").resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
-            
+
             if (resource.exists() && resource.isReadable()) {
                 return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, "application/octet-stream")
-                    .header(HttpHeaders.CONTENT_DISPOSITION, 
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
                            "attachment; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
             } else {
@@ -349,26 +349,26 @@ public class FileDownloadController {
 ```java
 @Service
 public class ChunkedFileUploadService {
-    
-    public void uploadChunk(String fileId, int chunkNumber, 
+
+    public void uploadChunk(String fileId, int chunkNumber,
                            MultipartFile chunk, int totalChunks) throws IOException {
-        
+
         String chunkDir = "chunks/" + fileId + "/";
         Path chunkPath = Paths.get(chunkDir, "chunk-" + chunkNumber);
-        
+
         // 保存分块
         Files.createDirectories(Paths.get(chunkDir));
         chunk.transferTo(chunkPath.toFile());
-        
+
         // 如果是最后一个分块，合并文件
         if (chunkNumber == totalChunks - 1) {
             mergeChunks(fileId, totalChunks);
         }
     }
-    
+
     private void mergeChunks(String fileId, int totalChunks) throws IOException {
         Path mergedFile = Paths.get("uploads", fileId);
-        
+
         try (OutputStream out = new FileOutputStream(mergedFile.toFile())) {
             for (int i = 0; i < totalChunks; i++) {
                 Path chunkPath = Paths.get("chunks/" + fileId + "/", "chunk-" + i);
@@ -377,7 +377,7 @@ public class ChunkedFileUploadService {
                 Files.delete(chunkPath);
             }
         }
-        
+
         // 删除分块目录
         Files.deleteIfExists(Paths.get("chunks/" + fileId + "/"));
     }
@@ -395,7 +395,7 @@ Spring 5 引入了 `WebClient` 作为 `RestTemplate` 的替代品，支持非阻
 ```java
 @Configuration
 public class WebClientConfig {
-    
+
     @Bean
     public WebClient webClient() {
         return WebClient.builder()
@@ -411,17 +411,17 @@ public class WebClientConfig {
 ```java
 @Service
 public class ApiService {
-    
+
     @Autowired
     private WebClient webClient;
-    
+
     public Mono<String> getData() {
         return webClient.get()
             .uri("/data")
             .retrieve()
             .bodyToMono(String.class);
     }
-    
+
     public Mono<String> postData(String jsonData) {
         return webClient.post()
             .uri("/data")
@@ -439,29 +439,29 @@ Spring WebFlux 支持响应式的文件上传和下载：
 ```java
 @RestController
 public class ReactiveFileController {
-    
+
     @PostMapping(value = "/reactive-upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Flux<String> reactiveUpload(@RequestBody Flux<Part> parts) {
         return parts.filter(part -> part instanceof FilePart)
                    .cast(FilePart.class)
                    .flatMap(this::saveFile);
     }
-    
+
     private Mono<String> saveFile(FilePart filePart) {
         String filename = filePart.filename();
         Path filePath = Paths.get("uploads", filename);
-        
+
         return filePart.transferTo(filePath)
                       .then(Mono.just("文件上传成功: " + filename));
     }
-    
+
     @GetMapping("/reactive-download/{filename}")
     public ResponseEntity<Flux<DataBuffer>> reactiveDownload(@PathVariable String filename) {
         Path filePath = Paths.get("uploads", filename);
         Resource resource = new FileSystemResource(filePath);
-        
+
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, 
+            .header(HttpHeaders.CONTENT_DISPOSITION,
                    "attachment; filename=\"" + resource.getFilename() + "\"")
             .body(DataBufferUtils.read(resource, new DefaultDataBufferFactory(), 4096));
     }
@@ -479,7 +479,7 @@ public String readFileSafely(File file) {
     try (InputStream inputStream = new FileInputStream(file);
          BufferedReader reader = new BufferedReader(
              new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-        
+
         return reader.lines().collect(Collectors.joining("\n"));
     } catch (IOException e) {
         throw new UncheckedIOException("读取文件失败: " + file.getPath(), e);
@@ -492,21 +492,21 @@ public String readFileSafely(File file) {
 ```java
 @Service
 public class ResourceService {
-    
+
     @Autowired
     private ResourceLoader resourceLoader;
-    
+
     public void processResource(String location) {
         Resource resource = resourceLoader.getResource(location);
-        
+
         if (!resource.exists()) {
             throw new IllegalArgumentException("资源不存在: " + location);
         }
-        
+
         if (!resource.isReadable()) {
             throw new IllegalArgumentException("资源不可读: " + location);
         }
-        
+
         // 处理资源...
     }
 }
@@ -520,10 +520,10 @@ public class ResourceService {
 public void copyWithBuffer(Path source, Path target) throws IOException {
     // 使用合适的缓冲区大小（通常 4KB-8KB）
     byte[] buffer = new byte[8192];
-    
+
     try (InputStream in = Files.newInputStream(source);
          OutputStream out = Files.newOutputStream(target)) {
-        
+
         int bytesRead;
         while ((bytesRead = in.read(buffer)) != -1) {
             out.write(buffer, 0, bytesRead);
@@ -540,11 +540,11 @@ public void copyLargeFileWithChannel(File source, File target) throws IOExceptio
          FileOutputStream fos = new FileOutputStream(target);
          FileChannel inChannel = fis.getChannel();
          FileChannel outChannel = fos.getChannel()) {
-        
+
         // 使用 transferTo 实现零拷贝
         long size = inChannel.size();
         long position = 0;
-        
+
         while (position < size) {
             position += inChannel.transferTo(position, 8192, outChannel);
         }
@@ -559,25 +559,25 @@ public void copyLargeFileWithChannel(File source, File target) throws IOExceptio
 ```java
 @ControllerAdvice
 public class IOExceptionHandler {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(IOExceptionHandler.class);
-    
+
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ErrorResponse> handleIOException(IOException ex) {
         logger.error("IO操作失败", ex);
-        
-        ErrorResponse error = new ErrorResponse("IO_ERROR", 
+
+        ErrorResponse error = new ErrorResponse("IO_ERROR",
             "文件操作失败，请稍后重试");
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(error);
     }
-    
+
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleFileNotFound(FileNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse("FILE_NOT_FOUND", 
+        ErrorResponse error = new ErrorResponse("FILE_NOT_FOUND",
             "请求的文件不存在");
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(error);
     }
@@ -588,13 +588,13 @@ public class ErrorResponse {
     private String code;
     private String message;
     private Instant timestamp;
-    
+
     public ErrorResponse(String code, String message) {
         this.code = code;
         this.message = message;
         this.timestamp = Instant.now();
     }
-    
+
     // getters and setters
 }
 ```
@@ -606,29 +606,29 @@ public class ErrorResponse {
 ```java
 @SpringBootTest
 class FileServiceTest {
-    
+
     @Autowired
     private FileService fileService;
-    
+
     @Test
     void testFileUpload() throws Exception {
         // 创建模拟文件
         MockMultipartFile file = new MockMultipartFile(
             "file", "test.txt", "text/plain", "Hello World".getBytes());
-        
+
         // 测试文件上传
         String result = fileService.uploadFile(file);
-        
+
         assertThat(result).contains("上传成功");
     }
-    
+
     @Test
     void testResourceLoading() {
         // 使用内存资源进行测试
         Resource resource = new ByteArrayResource("test data".getBytes());
-        
+
         String content = fileService.readResourceContent(resource);
-        
+
         assertThat(content).isEqualTo("test data");
     }
 }

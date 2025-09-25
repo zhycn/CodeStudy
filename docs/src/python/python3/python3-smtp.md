@@ -11,9 +11,9 @@
 1. #核心概念与库介绍
 2. #基础文本邮件发送
 3. #构建复杂邮件
-    1. #发送-html-邮件
-    2. #添加附件
-    3. #嵌入图片cid
+   1. #发送-html-邮件
+   2. #添加附件
+   3. #嵌入图片cid
 4. #安全连接-tlsssl
 5. #使用外部服务-gmail-示例
 6. #最佳实践总结
@@ -156,7 +156,7 @@ html_content = """
 <html>
   <body>
     <p>这是一张嵌入的图片：<br>
-       
+
     </p>
   </body>
 </html>
@@ -184,18 +184,18 @@ msg_root['To'] = receiver
 
 1. **SMTP over SSL (SMTPS)**: 使用 `SMTP_SSL` 类，一上来就建立 SSL 加密连接。端口通常是 465。
 
-    ```python
-    server = smtplib.SMTP_SSL(smtp_server, 465)
-    server.login(username, password)
-    ```
+   ```python
+   server = smtplib.SMTP_SSL(smtp_server, 465)
+   server.login(username, password)
+   ```
 
 2. **STARTTLS**: 先建立普通连接，然后使用 `starttls()` 方法升级到加密连接。端口通常是 587 或 25。
 
-    ```python
-    server = smtplib.SMTP(smtp_server, 587)
-    server.starttls() # 升级为加密连接
-    server.login(username, password)
-    ```
+   ```python
+   server = smtplib.SMTP(smtp_server, 587)
+   server.starttls() # 升级为加密连接
+   server.login(username, password)
+   ```
 
 **最佳实践是优先使用 STARTTLS (端口 587)**，因为它更灵活，如果服务器不支持加密，你还能收到提示。如果失败，再尝试 SMTPS (端口 465)。
 
@@ -243,12 +243,12 @@ except Exception as e:
 2. **使用应用专用密码**: 不要将你的主邮箱密码硬编码在脚本中。对于 Gmail、QQ 邮箱等服务，务必在邮箱设置中生成并使用 **授权码**。
 3. **安全地管理凭证**: 将邮箱地址、密码/授权码、服务器地址等敏感信息存储在环境变量或配置文件中，不要直接写在代码里。
 
-    ```python
-    # 示例：使用环境变量
-    import os
-    username = os.environ.get('SMTP_USER')
-    password = os.environ.get('SMTP_PASSWORD')
-    ```
+   ```python
+   # 示例：使用环境变量
+   import os
+   username = os.environ.get('SMTP_USER')
+   password = os.environ.get('SMTP_PASSWORD')
+   ```
 
 4. **处理异常**: 使用 `try...except` 块来优雅地处理网络错误、认证失败等问题。
 5. **正确设置邮件头**: 确保 `From`, `To`, `Subject`, `Date` 等头信息完整且格式正确。

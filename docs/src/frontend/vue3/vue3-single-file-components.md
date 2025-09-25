@@ -1,9 +1,10 @@
 以下是为您撰写的《Vue3 单文件组件详解与最佳实践》技术文档，融合 Vue 官方文档及社区最佳实践，包含可运行代码示例：
 
-```markdown
+````markdown
 # Vue 3 单文件组件（SFC）详解与最佳实践
 
 ## 一、SFC 核心概念
+
 单文件组件（Single File Component）是 Vue 的核心特性，将组件的**逻辑**、**模板**和**样式**封装在单个 `.vue` 文件中：
 
 ```vue
@@ -13,9 +14,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const message = ref('Hello Vue 3!')
+const message = ref('Hello Vue 3!');
 </script>
 
 <style scoped>
@@ -25,6 +26,7 @@ const message = ref('Hello Vue 3!')
 }
 </style>
 ```
+````
 
 ### SFC 优势
 
@@ -45,10 +47,10 @@ const message = ref('Hello Vue 3!')
   <div>
     <!-- 动态绑定 -->
     <p :title="dynamicTitle">{{ computedValue }}</p>
-    
+
     <!-- 事件处理 -->
     <button @click="handleClick">Click</button>
-    
+
     <!-- 插槽 -->
     <slot name="header"></slot>
   </div>
@@ -67,26 +69,26 @@ const message = ref('Hello Vue 3!')
 
 ```vue
 <script setup>
-import { ref, computed, defineProps } from 'vue'
+import { ref, computed, defineProps } from 'vue';
 
 // Props 声明
 const props = defineProps({
   id: {
     type: Number,
-    required: true
+    required: true,
   },
-  title: String
-})
+  title: String,
+});
 
 // 响应式数据
-const count = ref(0)
+const count = ref(0);
 
 // 计算属性
-const doubleCount = computed(() => count.value * 2)
+const doubleCount = computed(() => count.value * 2);
 
 // 方法
 function increment() {
-  count.value++
+  count.value++;
 }
 
 // 暴露给模板的变量自动可用
@@ -98,11 +100,11 @@ function increment() {
 ```vue
 <script setup lang="ts">
 interface Props {
-  id: number
-  title?: string
+  id: number;
+  title?: string;
 }
 
-defineProps<Props>()
+defineProps<Props>();
 </script>
 ```
 
@@ -132,11 +134,11 @@ defineProps<Props>()
 
 **作用域方案对比：**
 
-| 方案         | 特性                     | 使用场景         |
-|--------------|--------------------------|------------------|
-| scoped       | 自动添加 data-v 属性     | 通用组件样式     |
-| CSS Modules  | 生成唯一类名             | 大型项目         |
-| 无作用域     | 全局样式                 | 重置样式/基础库  |
+| 方案        | 特性                 | 使用场景        |
+| ----------- | -------------------- | --------------- |
+| scoped      | 自动添加 data-v 属性 | 通用组件样式    |
+| CSS Modules | 生成唯一类名         | 大型项目        |
+| 无作用域    | 全局样式             | 重置样式/基础库 |
 
 ---
 
@@ -155,23 +157,23 @@ defineProps<Props>()
 
 ```js
 // vite.config.js
-import vue from '@vitejs/plugin-vue'
+import vue from '@vitejs/plugin-vue';
 
 export default {
   plugins: [
     vue({
-      customBlocks: ['docs']
-    })
-  ]
-}
+      customBlocks: ['docs'],
+    }),
+  ],
+};
 ```
 
 ### 2. CSS 变量注入
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-const theme = ref('light')
+import { ref } from 'vue';
+const theme = ref('light');
 </script>
 
 <style>
@@ -210,7 +212,7 @@ const theme = ref('light')
 <template>
   <!-- 避免不必要的渲染 -->
   <ChildComponent v-if="shouldRender" />
-  
+
   <!-- 大型列表优化 -->
   <RecycleScroller v-slot="{ item }" :items="bigList">
     {{ item.name }}
@@ -218,12 +220,10 @@ const theme = ref('light')
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue';
 
 // 异步组件加载
-const HeavyComponent = defineAsyncComponent(() => 
-  import('./HeavyComponent.vue')
-)
+const HeavyComponent = defineAsyncComponent(() => import('./HeavyComponent.vue'));
 </script>
 ```
 
@@ -231,14 +231,14 @@ const HeavyComponent = defineAsyncComponent(() =>
 
 ```js
 // 使用 Vitest 测试组件
-import { mount } from '@vue/test-utils'
-import Component from './Component.vue'
+import { mount } from '@vue/test-utils';
+import Component from './Component.vue';
 
 test('emits submit event', async () => {
-  const wrapper = mount(Component)
-  await wrapper.find('button').trigger('click')
-  expect(wrapper.emitted('submit')).toBeTruthy()
-})
+  const wrapper = mount(Component);
+  await wrapper.find('button').trigger('click');
+  expect(wrapper.emitted('submit')).toBeTruthy();
+});
 ```
 
 ---
@@ -303,3 +303,4 @@ npm create vue@latest
 ✅ 标注 Vue 2 迁移关键点
 ✅ 提供分层组件设计规范
 ✅ 强调现代工具链配置（Vite/Vitest/Volar）
+```

@@ -50,9 +50,7 @@ const scoreMap = new Map<string, number>(); // 键为 string, 值为 number
 const userSettingsMap = new Map<number, { theme: string; language: string }>(); // 键为 number, 值为一个对象类型
 
 // 如果你在初始化时提供了值，TypeScript 通常可以推断出类型
-const inferredMap = new Map([
-  ['id', 123],
-]); // inferredMap 的类型被推断为 Map<string, number>
+const inferredMap = new Map([['id', 123]]); // inferredMap 的类型被推断为 Map<string, number>
 ```
 
 ### 2.3 常用操作方法
@@ -99,7 +97,8 @@ const myMap = new Map<string, number>([
 ]);
 
 // 1. 遍历键值对: .entries() (默认迭代器，for...of 直接使用)
-for (const [key, value] of myMap) { // 等价于 `for (const entry of myMap.entries())`
+for (const [key, value] of myMap) {
+  // 等价于 `for (const entry of myMap.entries())`
   console.log(`${key} -> ${value}`);
 }
 // 输出:
@@ -118,7 +117,8 @@ for (const value of myMap.values()) {
 }
 
 // 4. 使用 forEach 方法
-myMap.forEach((value, key) => { // 注意参数顺序是 (value, key)
+myMap.forEach((value, key) => {
+  // 注意参数顺序是 (value, key)
   console.log(`The value for ${key} is ${value}`);
 });
 ```
@@ -128,7 +128,10 @@ myMap.forEach((value, key) => { // 注意参数顺序是 (value, key)
 使用 `.size` 属性可以快速获取 Map 中键值对的数量。
 
 ```typescript
-const myMap = new Map([['a', 1], ['b', 2]]);
+const myMap = new Map([
+  ['a', 1],
+  ['b', 2],
+]);
 console.log(myMap.size); // 输出: 2
 
 myMap.set('c', 3);
@@ -175,7 +178,10 @@ console.log(userMetadataMap.get({ id: 1, name: 'Alice' })); // 输出: undefined
 
 ```typescript
 // Map -> Object
-const myMap = new Map<string, number>([['apples', 5], ['bananas', 10]]);
+const myMap = new Map<string, number>([
+  ['apples', 5],
+  ['bananas', 10],
+]);
 const myObject: Record<string, number> = {};
 
 for (const [key, value] of myMap) {
@@ -214,37 +220,37 @@ console.log(reconstructedMap.get('data')); // 输出: { city: 'Berlin' }
 ## 4. 最佳实践
 
 1. **何时使用 Map vs Object**
-    * **使用 `Map` 当：**
-        * 键的类型不是字符串、数字或 Symbol。
-        * 你需要一个可预测的迭代顺序（插入顺序）。
-        * 你需要频繁地添加和删除键值对。
-        * 你不确定会有哪些键，担心与 `Object.prototype` 上的方法或属性发生冲突。
-        * 你需要更容易地获取集合的大小（`.size`）。
-    * **使用 `Object` 当：**
-        * 你的结构在开发时是固定的，你知道所有的键。
-        * 你需要使用 JSON 的序列化/反序列化功能，并且不想做额外转换。
-        * 你需要使用“解构”赋值等对象特有的语法特性。
-        * 你的场景涉及大量字面量初始化（对象字面量 `{}` 写法更简洁）。
+   - **使用 `Map` 当：**
+     - 键的类型不是字符串、数字或 Symbol。
+     - 你需要一个可预测的迭代顺序（插入顺序）。
+     - 你需要频繁地添加和删除键值对。
+     - 你不确定会有哪些键，担心与 `Object.prototype` 上的方法或属性发生冲突。
+     - 你需要更容易地获取集合的大小（`.size`）。
+   - **使用 `Object` 当：**
+     - 你的结构在开发时是固定的，你知道所有的键。
+     - 你需要使用 JSON 的序列化/反序列化功能，并且不想做额外转换。
+     - 你需要使用“解构”赋值等对象特有的语法特性。
+     - 你的场景涉及大量字面量初始化（对象字面量 `{}` 写法更简洁）。
 
 2. **始终使用泛型**
-    总是为 `Map` 提供类型注解（`new Map<KeyType, ValueType>()`），这能充分利用 TypeScript 的类型系统，在编译时捕获错误，并提供更好的编辑器智能提示。
+   总是为 `Map` 提供类型注解（`new Map<KeyType, ValueType>()`），这能充分利用 TypeScript 的类型系统，在编译时捕获错误，并提供更好的编辑器智能提示。
 
 3. **注意键的相等性**
-    牢记 `Map` 使用引用相等性。如果你希望使用对象的内容作为键（值相等性），你需要自己实现哈希函数和相等比较逻辑，或者考虑使用第三方库。一个简单的替代方案是使用对象的序列化字符串（如 `JSON.stringify(obj)`）作为键，但这只适用于结构稳定的对象。
+   牢记 `Map` 使用引用相等性。如果你希望使用对象的内容作为键（值相等性），你需要自己实现哈希函数和相等比较逻辑，或者考虑使用第三方库。一个简单的替代方案是使用对象的序列化字符串（如 `JSON.stringify(obj)`）作为键，但这只适用于结构稳定的对象。
 
-    ```typescript
-    // 使用序列化字符串作为键的替代方案（注意局限性）
-    const user1 = { id: 1, name: 'Alice' };
-    const user2 = { id: 1, name: 'Alice' }; // 内容相同，但引用不同
+   ```typescript
+   // 使用序列化字符串作为键的替代方案（注意局限性）
+   const user1 = { id: 1, name: 'Alice' };
+   const user2 = { id: 1, name: 'Alice' }; // 内容相同，但引用不同
 
-    const mapByStringKey = new Map<string, string>();
-    mapByStringKey.set(JSON.stringify(user1), 'Role: Admin');
+   const mapByStringKey = new Map<string, string>();
+   mapByStringKey.set(JSON.stringify(user1), 'Role: Admin');
 
-    console.log(mapByStringKey.get(JSON.stringify(user2))); // 输出: 'Role: Admin'
-    ```
+   console.log(mapByStringKey.get(JSON.stringify(user2))); // 输出: 'Role: Admin'
+   ```
 
 4. **内存管理**
-    如果你使用对象作为键，即使这个对象不再在其他地方使用，只要 Map 还引用着它，它就不会被垃圾回收机制回收。如果你不再需要某个键值对，请确保使用 `.delete()` 方法将其从 Map 中移除，以避免内存泄漏。
+   如果你使用对象作为键，即使这个对象不再在其他地方使用，只要 Map 还引用着它，它就不会被垃圾回收机制回收。如果你不再需要某个键值对，请确保使用 `.delete()` 方法将其从 Map 中移除，以避免内存泄漏。
 
 ## 5. 常见问题（FAQ）
 
@@ -252,7 +258,10 @@ console.log(reconstructedMap.get('data')); // 输出: { city: 'Berlin' }
 A: Map 是可迭代的，你可以使用扩展运算符 `...` 将其转换为数组后进行解构，但不能像对象那样直接解构键。
 
 ```typescript
-const myMap = new Map([['x', 10], ['y', 20]]);
+const myMap = new Map([
+  ['x', 10],
+  ['y', 20],
+]);
 
 // 正确：转换为数组后解构
 const entriesArray = [...myMap]; // [ ['x', 10], ['y', 20] ]
@@ -267,19 +276,19 @@ A: `WeakMap` 的键**只能是对象**，并且是“弱引用”的。这意味
 
 ## 6. 总结
 
-| 特性 | Map | Object |
-| :--- | :--- | :--- |
-| **键的类型** | 任意值 | String, Symbol, Number |
-| **键的顺序** | 插入顺序 | 复杂规则（数字升序->创建顺序） |
-| **大小获取** | `.size` 属性 | `Object.keys(obj).length` |
-| **默认继承** | 无 | 从 `Object.prototype` 继承 |
-| **性能** | 频繁增删表现佳 | 无优化 |
-| **序列化** | 需手动处理 | 原生支持 `JSON.stringify` |
+| 特性         | Map            | Object                         |
+| :----------- | :------------- | :----------------------------- |
+| **键的类型** | 任意值         | String, Symbol, Number         |
+| **键的顺序** | 插入顺序       | 复杂规则（数字升序->创建顺序） |
+| **大小获取** | `.size` 属性   | `Object.keys(obj).length`      |
+| **默认继承** | 无             | 从 `Object.prototype` 继承     |
+| **性能**     | 频繁增删表现佳 | 无优化                         |
+| **序列化**   | 需手动处理     | 原生支持 `JSON.stringify`      |
 
 TypeScript `Map` 是一个现代、强大且类型安全的键值集合工具。它解决了普通 `Object` 在作为集合使用时的主要痛点，特别是在键的类型灵活性和迭代顺序方面。通过遵循本文介绍的最佳实践，你可以在合适的场景中有效地使用 `Map`，编写出更健壮、更易维护的 TypeScript 代码。
 
 **官方资源**：
 
-* <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map>
-* <https://www.typescriptlang.org/docs/handbook/2/generics.html> (用于理解 `Map<K, V>` 的泛型语法)
-* <https://github.com/microsoft/TypeScript/blob/main/lib/lib.es2015.collection.d.ts> (查看 `Map` 的类型定义)
+- <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map>
+- <https://www.typescriptlang.org/docs/handbook/2/generics.html> (用于理解 `Map<K, V>` 的泛型语法)
+- <https://github.com/microsoft/TypeScript/blob/main/lib/lib.es2015.collection.d.ts> (查看 `Map` 的类型定义)

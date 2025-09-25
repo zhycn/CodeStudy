@@ -102,22 +102,22 @@ public void object_matchers_demo() {
     String str1 = "text";
     String str2 = "text";
     String str3 = "TEXT";
-    
+
     // 相等性检查
     assertThat(str1, is(str2));
     assertThat(str1, equalTo(str2));
-    
+
     // 同一实例检查
     assertThat(str1, sameInstance(str1));
-    
+
     // 类型检查
     assertThat(str1, instanceOf(String.class));
-    
+
     // null 检查
     String nullString = null;
     assertThat(nullString, nullValue());
     assertThat(str1, notNullValue());
-    
+
     // 忽略大小写检查
     assertThat(str1, equalToIgnoringCase(str3));
 }
@@ -132,13 +132,13 @@ public void object_matchers_demo() {
 public void number_matchers_demo() {
     int value = 5;
     double pi = 3.14159;
-    
+
     // 大小比较
     assertThat(value, greaterThan(0));          // 大于
     assertThat(value, greaterThanOrEqualTo(5)); // 大于等于
     assertThat(value, lessThan(10));            // 小于
     assertThat(value, lessThanOrEqualTo(5));    // 小于等于
-    
+
     // 近似值检查
     assertThat(pi, closeTo(3.14, 0.01));
 }
@@ -152,19 +152,19 @@ public void number_matchers_demo() {
 @Test
 public void text_matchers_demo() {
     String text = "Hello Hamcrest Testing Framework";
-    
+
     // 内容检查
     assertThat(text, containsString("Hamcrest"));
     assertThat(text, startsWith("Hello"));
     assertThat(text, endsWith("Framework"));
-    
+
     // 空字符串检查
     assertThat("", isEmptyString());
     assertThat("", isEmptyOrNullString());
-    
+
     // 空白忽略检查
     assertThat("  text  ", equalToIgnoringWhiteSpace("text"));
-    
+
     // 正则表达式匹配
     assertThat("abc123", matchesRegex("^[a-z]+[0-9]+$"));
 }
@@ -181,21 +181,21 @@ public void collection_matchers_demo() {
     Map<String, String> map = new HashMap<>();
     map.put("key1", "value1");
     map.put("key2", "value2");
-    
+
     // 元素检查
     assertThat(collection, hasItem("cd"));
     assertThat(collection, hasItems("cd", "ab"));
-    
+
     // 所有元素检查
     assertThat(collection, everyItem(hasLength(2)));
-    
+
     // 大小检查
     assertThat(collection, hasSize(3));
-    
+
     // 空集合检查
     List<String> emptyList = Collections.emptyList();
     assertThat(emptyList, empty());
-    
+
     // Map 检查
     assertThat(map, hasKey("key1"));
     assertThat(map, hasValue("value1"));
@@ -212,21 +212,21 @@ public void collection_matchers_demo() {
 public void logical_matchers_demo() {
     String text = "Hello World";
     int value = 42;
-    
+
     // 逻辑组合
     assertThat(text, allOf(
         containsString("Hello"),
         containsString("World"),
         hasLength(11)
     ));
-    
+
     assertThat(value, anyOf(
         lessThan(40),
         greaterThanOrEqualTo(42)
     ));
-    
+
     assertThat(text, not(containsString("Goodbye")));
-    
+
     // anything 匹配器（总是返回 true）
     assertThat(text, anything());
 }
@@ -241,31 +241,31 @@ public void logical_matchers_demo() {
 ```java
 @ExtendWith(MockitoExtension.class)
 public class UserServiceUnitTest {
-    
+
     @Mock
     private UserRepository userRepository;
-    
+
     @InjectMocks
     private UserService userService;
-    
+
     @Test
     public void testFindUserById() {
         // 准备模拟数据
         User mockUser = new User(1L, "john.doe", "John", "Doe");
-        
+
         // 设置 Mock 行为
         when(userRepository.findById(1L)).thenReturn(Optional.of(mockUser));
-        
+
         // 调用被测方法
         User user = userService.findUserById(1L);
-        
+
         // Hamcrest 验证
         assertThat(user, hasProperty("username", equalTo("john.doe")));
         assertThat(user, allOf(
             hasProperty("firstName", equalTo("John")),
             hasProperty("lastName", equalTo("Doe"))
         ));
-        
+
         // 验证 Mock 交互
         verify(userRepository, times(1)).findById(1L);
     }
@@ -280,21 +280,21 @@ public class UserServiceUnitTest {
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockitoBean
     private UserService userService;
-    
+
     @Test
     public void testGetUserById() throws Exception {
         // 准备模拟数据
         User mockUser = new User(1L, "john.doe", "John", "Doe");
-        
+
         // 设置 Mock 行为
         when(userService.findUserById(1L)).thenReturn(mockUser);
-        
+
         // 执行请求并验证响应
         mockMvc.perform(get("/api/users/1"))
                .andExpect(status().isOk())
@@ -303,17 +303,17 @@ public class UserControllerTest {
                .andExpect(jsonPath("$.lastName", equalTo("Doe")))
                .andExpect(jsonPath("$.*", hasSize(4))); // 验证返回的 JSON 有 4 个属性
     }
-    
+
     @Test
     public void testGetAllUsers() throws Exception {
         // 准备模拟数据
         User user1 = new User(1L, "john.doe", "John", "Doe");
         User user2 = new User(2L, "jane.doe", "Jane", "Doe");
         List<User> users = Arrays.asList(user1, user2);
-        
+
         // 设置 Mock 行为
         when(userService.findAllUsers()).thenReturn(users);
-        
+
         // 执行请求并验证响应
         mockMvc.perform(get("/api/users"))
                .andExpect(status().isOk())
@@ -342,11 +342,11 @@ public void testJsonArrayResponse() throws Exception {
            .andExpect(jsonPath("$.status", is(400)))
            .andExpect(jsonPath("$.errors").isArray())
            .andExpect(jsonPath("$.errors", hasSize(3)))
-           .andExpect(jsonPath("$.errors", 
+           .andExpect(jsonPath("$.errors",
                     hasItem("Author is not allowed.")))
-           .andExpect(jsonPath("$.errors", 
+           .andExpect(jsonPath("$.errors",
                     hasItem("Please provide a author")))
-           .andExpect(jsonPath("$.errors", 
+           .andExpect(jsonPath("$.errors",
                     hasItem("Please provide a price")));
 }
 ```
@@ -359,23 +359,23 @@ public void testJsonArrayResponse() throws Exception {
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserRepositoryTest {
-    
+
     @Autowired
     private TestEntityManager entityManager;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @Test
     public void testFindByUsername() {
         // 准备测试数据
         User user = new User("john.doe", "John", "Doe");
         entityManager.persist(user);
         entityManager.flush();
-        
+
         // 执行查询
         Optional<User> found = userRepository.findByUsername("john.doe");
-        
+
         // 验证结果
         assertThat(found.isPresent(), is(true));
         assertThat(found.get(), allOf(
@@ -384,7 +384,7 @@ public class UserRepositoryTest {
             hasProperty("lastName", equalTo("Doe"))
         ));
     }
-    
+
     @Test
     public void testFindAllByLastName() {
         // 准备测试数据
@@ -392,10 +392,10 @@ public class UserRepositoryTest {
         entityManager.persist(new User("jane.doe", "Jane", "Doe"));
         entityManager.persist(new User("bob.smith", "Bob", "Smith"));
         entityManager.flush();
-        
+
         // 执行查询
         List<User> doeFamily = userRepository.findAllByLastName("Doe");
-        
+
         // 验证结果
         assertThat(doeFamily, hasSize(2));
         assertThat(doeFamily, everyItem(hasProperty("lastName", equalTo("Doe"))));
@@ -417,7 +417,7 @@ public class UserRepositoryTest {
 
 ```java
 public class IsSaturday extends BaseMatcher<LocalDate> {
-    
+
     @Override
     public boolean matches(Object item) {
         if (!(item instanceof LocalDate)) {
@@ -426,12 +426,12 @@ public class IsSaturday extends BaseMatcher<LocalDate> {
         LocalDate date = (LocalDate) item;
         return date.getDayOfWeek() == DayOfWeek.SATURDAY;
     }
-    
+
     @Override
     public void describeTo(Description description) {
         description.appendText("a date falling on Saturday");
     }
-    
+
     @Override
     public void describeMismatch(Object item, Description description) {
         if (item instanceof LocalDate) {
@@ -442,7 +442,7 @@ public class IsSaturday extends BaseMatcher<LocalDate> {
             description.appendText("was ").appendValue(item);
         }
     }
-    
+
     // 工厂方法
     public static Matcher<LocalDate> onSaturday() {
         return new IsSaturday();
@@ -454,18 +454,18 @@ public class IsSaturday extends BaseMatcher<LocalDate> {
 
 ```java
 public class CustomMatcherTest {
-    
+
     @Test
     public void testDateIsOnSaturday() {
         LocalDate saturday = LocalDate.of(2023, 6, 10); // 2023-06-10 是周六
-        
+
         assertThat(saturday, onSaturday());
     }
-    
+
     @Test
     public void testDateIsNotOnSaturday() {
         LocalDate monday = LocalDate.of(2023, 6, 12); // 2023-06-12 是周一
-        
+
         assertThat(monday, not(onSaturday()));
     }
 }
@@ -477,7 +477,7 @@ public class CustomMatcherTest {
 
 ```java
 public class UserMatchers {
-    
+
     public static Matcher<User> hasFullName(String expectedName) {
         return new BaseMatcher<User>() {
             @Override
@@ -489,21 +489,21 @@ public class UserMatchers {
                 }
                 return false;
             }
-            
+
             @Override
             public void describeTo(Description description) {
                 description.appendText("a user with full name: ").appendValue(expectedName);
             }
         };
     }
-    
+
     public static Matcher<User> isActive() {
         return new BaseMatcher<User>() {
             @Override
             public boolean matches(Object item) {
                 return (item instanceof User) && ((User) item).isActive();
             }
-            
+
             @Override
             public void describeTo(Description description) {
                 description.appendText("an active user");
@@ -517,7 +517,7 @@ public class UserMatchers {
 public void testUserHasFullNameAndIsActive() {
     User user = new User("john.doe", "John", "Doe");
     user.setActive(true);
-    
+
     assertThat(user, allOf(
         hasFullName("John Doe"),
         isActive()
@@ -531,11 +531,11 @@ public void testUserHasFullNameAndIsActive() {
 
 遵循 **测试金字塔** 原则，构建以单元测试为基础、集成测试适中、E2E 测试少量的测试体系。
 
-| 测试类型 | 比例 | 特点 | 适用场景 |
-|---------|------|------|---------|
-| 单元测试 | 70% | 快速、隔离、不加载 Spring 上下文 | 业务逻辑、工具类、服务方法 |
-| 集成测试 | 20% | 中等速度、部分加载上下文 | API 端点、数据库操作、组件集成 |
-| E2E 测试 | 10% | 慢速、完整应用启动 | 完整业务流程、用户场景 |
+| 测试类型 | 比例 | 特点                             | 适用场景                       |
+| -------- | ---- | -------------------------------- | ------------------------------ |
+| 单元测试 | 70%  | 快速、隔离、不加载 Spring 上下文 | 业务逻辑、工具类、服务方法     |
+| 集成测试 | 20%  | 中等速度、部分加载上下文         | API 端点、数据库操作、组件集成 |
+| E2E 测试 | 10%  | 慢速、完整应用启动               | 完整业务流程、用户场景         |
 
 ### 7.2 测试命名规范
 
@@ -568,23 +568,23 @@ public void shouldThrowNotFoundExceptionWhenUserIdDoesNotExist() {
 @DataJpaTest
 @Transactional
 public class UserRepositoryIntegrationTest {
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @BeforeEach
     public void setUp() {
         // 初始化测试数据
         userRepository.save(new User("user1", "John", "Doe"));
         userRepository.save(new User("user2", "Jane", "Smith"));
     }
-    
+
     @AfterEach
     public void tearDown() {
         // 清理测试数据
         userRepository.deleteAll();
     }
-    
+
     @Test
     @Sql(scripts = "/additional-test-data.sql") // 附加测试数据
     public void testWithAdditionalData() {
@@ -615,21 +615,21 @@ public class UserServiceIntegrationTest {
 ```java
 @SpringBootTest
 public class UserServiceTest {
-    
+
     @MockitoBean
     private EmailService emailService;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Test
     public void shouldSendWelcomeEmailWhenUserIsCreated() {
         // 设置 Mock
         doNothing().when(emailService).sendWelcomeEmail(anyString());
-        
+
         // 执行测试
         userService.createUser("john.doe", "John", "Doe", "john@example.com");
-        
+
         // 验证交互
         verify(emailService, times(1)).sendWelcomeEmail("john@example.com");
     }
@@ -642,19 +642,19 @@ public class UserServiceTest {
 @Testcontainers
 @SpringBootTest
 public class ExternalServiceIntegrationTest {
-    
+
     @Container
-    static GenericContainer<?> externalService = 
+    static GenericContainer<?> externalService =
         new GenericContainer<>("external-service:latest")
             .withExposedPorts(8080);
-    
+
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
-        registry.add("external.service.url", 
-            () -> "http://" + externalService.getHost() + 
+        registry.add("external.service.url",
+            () -> "http://" + externalService.getHost() +
                   ":" + externalService.getMappedPort(8080));
     }
-    
+
     // 测试代码
 }
 ```
@@ -705,7 +705,7 @@ public class ExternalServiceIntegrationTest {
 public void testAsyncOperation() {
     // 触发异步操作
     userService.asyncUpdateUserProfile(userId, profileData);
-    
+
     // 等待直到条件满足
     await().atMost(5, TimeUnit.SECONDS)
            .untilAsserted(() -> {

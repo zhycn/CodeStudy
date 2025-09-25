@@ -24,8 +24,8 @@ interface Person {
 
 // 使用接口
 const user: Person = {
-  firstName: "Angela",
-  lastName: "Davis",
+  firstName: 'Angela',
+  lastName: 'Davis',
   id: 12345,
   greet() {
     console.log(`Hello, my name is ${this.firstName}`);
@@ -53,7 +53,7 @@ type Coordinates = [number, number]; // 元组类型
 type Tree<T> = { value: T; left?: Tree<T>; right?: Tree<T> }; // 泛型与递归类型
 
 const userId: ID = 101; // 可以是 number
-const userId2: ID = "abc-xyz"; // 也可以是 string
+const userId2: ID = 'abc-xyz'; // 也可以是 string
 const point: Coordinates = [10.5, 20.3];
 ```
 
@@ -63,75 +63,75 @@ const point: Coordinates = [10.5, 20.3];
 
 1. **都可以描述对象或函数类型**：两者在定义对象结构时语法几乎可以互换。
 
-    ```typescript
-    interface Point {
-      x: number;
-      y: number;
-    }
-    type Point = {
-      x: number;
-      y: number;
-    };
+   ```typescript
+   interface Point {
+     x: number;
+     y: number;
+   }
+   type Point = {
+     x: number;
+     y: number;
+   };
 
-    interface SetPoint {
-      (x: number, y: number): void;
-    }
-    type SetPoint = (x: number, y: number) => void;
-    ```
+   interface SetPoint {
+     (x: number, y: number): void;
+   }
+   type SetPoint = (x: number, y: number) => void;
+   ```
 
 2. **都支持扩展**：两者都可以通过扩展（继承）来创建更复杂的类型。
-    * **接口** 使用 `extends` 关键字。
+   - **接口** 使用 `extends` 关键字。
 
-        ```typescript
-        interface Animal {
-          name: string;
-        }
-        interface Bear extends Animal {
-          honey: boolean;
-        }
-        const bear: Bear = { name: "Winnie", honey: true };
-        ```
+     ```typescript
+     interface Animal {
+       name: string;
+     }
+     interface Bear extends Animal {
+       honey: boolean;
+     }
+     const bear: Bear = { name: 'Winnie', honey: true };
+     ```
 
-    * **类型别名** 使用交叉类型 `&`。
+   - **类型别名** 使用交叉类型 `&`。
 
-        ```typescript
-        type Animal = {
-          name: string;
-        };
-        type Bear = Animal & {
-          honey: boolean;
-        };
-        const bear: Bear = { name: "Winnie", honey: true };
-        ```
+     ```typescript
+     type Animal = {
+       name: string;
+     };
+     type Bear = Animal & {
+       honey: boolean;
+     };
+     const bear: Bear = { name: 'Winnie', honey: true };
+     ```
 
 3. **都支持实现**：类（Class）可以实现（`implements`）接口或类型别名（只要类型别名描述的是对象结构）。
 
-    ```typescript
-    interface IPerson {
-      name: string;
-      greet(): void;
-    }
-    type TPerson = {
-      name: string;
-      greet(): void;
-    };
+   ```typescript
+   interface IPerson {
+     name: string;
+     greet(): void;
+   }
+   type TPerson = {
+     name: string;
+     greet(): void;
+   };
 
-    class Employee implements IPerson, TPerson {
-      name: string = "";
-      greet() {
-        console.log("Hello!");
-      }
-    }
-    ```
+   class Employee implements IPerson, TPerson {
+     name: string = '';
+     greet() {
+       console.log('Hello!');
+     }
+   }
+   ```
 
 ### 2.2 不同点
 
-| 特性 | 接口 (Interface) | 类型别名 (Type Alias) |
-| :--- | :--- | :--- |
-| **声明合并** | **支持**。定义同名接口会自动合并。 | **不支持**。同名类型别名会报错。 |
-| **扩展方式** | 使用 `extends`（类式继承） | 使用交叉类型 `&`（集合论中的交集） |
-| **描述能力** | 主要用于对象、函数和类的形状 | 功能更强大，可定义**联合类型**、**元组**、**原始类型别名**等 |
-| **性能** | 在错误信息中显示为接口名 | 在错误信息中直接展开显示原始类型，可能更冗长 |
+| 特性         | 接口 (Interface)                   | 类型别名 (Type Alias)                                        |
+| :----------- | :--------------------------------- | :----------------------------------------------------------- |
+| **声明合并** | **支持**。定义同名接口会自动合并。 | **不支持**。同名类型别名会报错。                             |
+| **扩展方式** | 使用 `extends`（类式继承）         | 使用交叉类型 `&`（集合论中的交集）                           |
+| **描述能力** | 主要用于对象、函数和类的形状       | 功能更强大，可定义**联合类型**、**元组**、**原始类型别名**等 |
+| **性能**     | 在错误信息中显示为接口名           | 在错误信息中直接展开显示原始类型，可能更冗长                 |
 
 #### 关键差异详解
 
@@ -147,7 +147,7 @@ interface User {
   age: number;
 }
 // 最终 User 接口为： { name: string; age: number; }
-const user: User = { name: "Alice", age: 30 }; // Correct
+const user: User = { name: 'Alice', age: 30 }; // Correct
 ```
 
 这个特性非常有用，例如当你需要扩展第三方库或全局 Window 对象的类型时。
@@ -178,7 +178,7 @@ interface Bear extends Animal {
 type Animal = { name: string };
 type Bear = Animal & { name: number }; // No immediate error
 // 但当你使用它时，`name` 的类型会是 `never` (string & number)
-const bear: Bear = { name: "Pooh" }; // Error: Type 'string' is not assignable to type 'never'.
+const bear: Bear = { name: 'Pooh' }; // Error: Type 'string' is not assignable to type 'never'.
 ```
 
 **3. 描述能力**
@@ -186,7 +186,7 @@ const bear: Bear = { name: "Pooh" }; // Error: Type 'string' is not assignable t
 类型别名可以很方便地定义联合类型，这是接口无法直接做到的。
 
 ```typescript
-type Status = "success" | "error" | "pending"; // 字面量联合类型
+type Status = 'success' | 'error' | 'pending'; // 字面量联合类型
 type ID = number | string; // 联合类型
 
 interface Something {
@@ -203,33 +203,33 @@ interface Something {
 
 当你主要定义对象或类的形状时，**优先使用接口**。
 
-* **理由**：
-  * 接口的声明合并特性在需要扩展现有类型时非常强大（例如为 `window` 添加自定义属性）。
-  * 错误信息更清晰（显示接口名而不是展开的结构）。
-  * 它更符合面向对象编程的思维模式（`extends` 和 `implements`）。
-* **适用场景**：
-  * 定义库的公共 API。
-  * 定义对象字面量。
-  * 定义类需要实现的契约。
+- **理由**：
+  - 接口的声明合并特性在需要扩展现有类型时非常强大（例如为 `window` 添加自定义属性）。
+  - 错误信息更清晰（显示接口名而不是展开的结构）。
+  - 它更符合面向对象编程的思维模式（`extends` 和 `implements`）。
+- **适用场景**：
+  - 定义库的公共 API。
+  - 定义对象字面量。
+  - 定义类需要实现的契约。
 
 ### 原则 2：必要之时使用类型别名（USE type for specific needs）
 
 在接口无法满足需求时，使用类型别名。
 
-* **理由**：类型别名更灵活。
-* **适用场景**：
-  * 定义**联合类型**：`type Result = Success | Failure`。
-  * 定义**元组类型**：`type Data = [number, string?]`。
-  * 定义**函数类型**：`type ClickHandler = (event: MouseEvent) => void`（如果你想给它一个名字）。
-  * 需要利用**模板字面量类型**时：`type Env =`production`` ` `staging`` ` `development``。
-  * 定义**映射类型**或复杂的工具类型。
+- **理由**：类型别名更灵活。
+- **适用场景**：
+  - 定义**联合类型**：`type Result = Success | Failure`。
+  - 定义**元组类型**：`type Data = [number, string?]`。
+  - 定义**函数类型**：`type ClickHandler = (event: MouseEvent) => void`（如果你想给它一个名字）。
+  - 需要利用**模板字面量类型**时：`type Env =`production`` ` `staging`` ` `development``。
+  - 定义**映射类型**或复杂的工具类型。
 
 ### 原则 3：保持一致性（BE consistent）
 
 在同一个项目中，对于同一种用途，应保持选择的一致性。
 
-* 如果你的团队主要用接口来定义对象，那就坚持这样做。
-* 如果已经在用类型别名定义某个对象，就不要在同一个项目中混用接口来定义同类型的对象。
+- 如果你的团队主要用接口来定义对象，那就坚持这样做。
+- 如果已经在用类型别名定义某个对象，就不要在同一个项目中混用接口来定义同类型的对象。
 
 ### 原则 4：使用 `implements` 进行类校验
 
@@ -248,8 +248,8 @@ type UserData = {
 
 class User implements DatabaseModel, UserData {
   id: number = 0;
-  username: string = "";
-  email: string = "";
+  username: string = '';
+  email: string = '';
 
   save() {
     // Logic to save user to DB
@@ -279,12 +279,12 @@ interface User extends Entity {
 type UserProfile = {
   displayName: string;
   avatarUrl?: string;
-  preferences: ("dark-mode" | "notifications")[];
+  preferences: ('dark-mode' | 'notifications')[];
 };
 
 type ApiResponse<T> =
-  | { status: "success"; data: T; timestamp: Date }
-  | { status: "error"; code: number; message: string };
+  | { status: 'success'; data: T; timestamp: Date }
+  | { status: 'error'; code: number; message: string };
 
 // 4. 类实现接口
 class AdminUser implements User {
@@ -292,14 +292,14 @@ class AdminUser implements User {
   createdAt: Date;
   username: string;
   email: string;
-  role: "super-admin" | "admin"; // 类可以有自己的额外属性
+  role: 'super-admin' | 'admin'; // 类可以有自己的额外属性
 
   constructor(username: string, email: string) {
     this.id = this.generateId();
     this.createdAt = new Date();
     this.username = username;
     this.email = email;
-    this.role = "admin";
+    this.role = 'admin';
   }
 
   private generateId(): string {
@@ -309,7 +309,7 @@ class AdminUser implements User {
   getProfile(): UserProfile {
     return {
       displayName: this.username,
-      preferences: ["dark-mode"],
+      preferences: ['dark-mode'],
     };
   }
 
@@ -317,18 +317,18 @@ class AdminUser implements User {
   fetchUserData(): ApiResponse<{ data: string }> {
     // ... 获取数据逻辑
     return {
-      status: "success",
-      data: { data: "some_data" },
+      status: 'success',
+      data: { data: 'some_data' },
       timestamp: new Date(),
     };
   }
 }
 
 // 5. 使用
-const admin = new AdminUser("admin_user", "admin@example.com");
+const admin = new AdminUser('admin_user', 'admin@example.com');
 const response = admin.fetchUserData();
 
-if (response.status === "success") {
+if (response.status === 'success') {
   console.log(response.data); // TypeScript 知道这里 data 存在
 } else {
   console.error(response.message); // TypeScript 知道这里 message 存在
@@ -361,26 +361,28 @@ A: 可以！它们是互相操作的。
 
 ```typescript
 type Animal = { name: string };
-interface Bear extends Animal { // Interface extends Type Alias
+interface Bear extends Animal {
+  // Interface extends Type Alias
   honey: boolean;
 }
 
 interface Vehicle {
   wheels: number;
 }
-type Car = Vehicle & { // Type Alias intersects Interface
+type Car = Vehicle & {
+  // Type Alias intersects Interface
   brand: string;
 };
 ```
 
 ## 总结
 
-| 特性 | 接口 (Interface) | 类型别名 (Type Alias) |
-| :--- | :--- | :--- |
-| **核心思想** | 定义**契约（Contract）** | 为类型创建**别名（Alias）** |
-| **最佳适用场景** | 对象形状、公共 API、OOP | 联合类型、元组、函数类型、复杂工具类型 |
-| **扩展性** | `extends`（声明合并是独特优势） | `&`（交叉类型） |
-| **灵活性** | 较低，专注于对象 | 极高，可描述任何类型 |
+| 特性             | 接口 (Interface)                | 类型别名 (Type Alias)                  |
+| :--------------- | :------------------------------ | :------------------------------------- |
+| **核心思想**     | 定义**契约（Contract）**        | 为类型创建**别名（Alias）**            |
+| **最佳适用场景** | 对象形状、公共 API、OOP         | 联合类型、元组、函数类型、复杂工具类型 |
+| **扩展性**       | `extends`（声明合并是独特优势） | `&`（交叉类型）                        |
+| **灵活性**       | 较低，专注于对象                | 极高，可描述任何类型                   |
 
 遵循 **“优先使用接口定义对象结构，必要之时使用类型别名”** 的原则，你将能写出更清晰、更健壮且易于扩展的 TypeScript 代码。
 

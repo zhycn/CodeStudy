@@ -67,7 +67,7 @@ function render() {
   return h('div', { id: 'app' }, [
     h('h1', this.message), // 这里读取了 `this.message`
     // ...其他子节点
-  ])
+  ]);
 }
 ```
 
@@ -94,21 +94,21 @@ function render() {
 
 ```vue
 <script>
-import { h, ref } from 'vue'
+import { h, ref } from 'vue';
 
 export default {
   setup() {
-    const message = ref('Hello, Render Function!')
-    const count = ref(0)
+    const message = ref('Hello, Render Function!');
+    const count = ref(0);
 
     return () =>
       h('div', { id: 'app' }, [
         h('h1', message.value),
         h('p', 'Static content (will be hoisted)'),
         h('button', { onClick: () => count.value++ }, `Click me: ${count.value}`),
-      ])
+      ]);
   },
-}
+};
 </script>
 ```
 
@@ -124,60 +124,61 @@ export default {
 
 1. **明智使用 `key`**：在 `v-for` 列表中，总是提供一个唯一且稳定的 `key`。这能帮助 Vue 最大程度地复用 DOM 元素。避免使用 `index` 作为 `key`，除非列表非常简单且无状态变化。
 
-    ```html
-    <!-- 好 -->
-    <li v-for="item in items" :key="item.id">{{ item.name }}</li>
+   ```html
+   <!-- 好 -->
+   <li v-for="item in items" :key="item.id">{{ item.name }}</li>
 
-    <!-- 避免 -->
-    <li v-for="(item, index) in items" :key="index">{{ item.name }}</li>
-    ```
+   <!-- 避免 -->
+   <li v-for="(item, index) in items" :key="index">{{ item.name }}</li>
+   ```
 
 2. **减少不必要的响应式依赖**：将不需要响应式变化的數據定义为普通变量或使用 `shallowRef`/`shallowReactive`，可以减少依赖追踪的开销。
 
-    ```javascript
-    import { shallowRef } from 'vue'
+   ```javascript
+   import { shallowRef } from 'vue'
 
-    const heavyList = shallowRef([...]) // 内部值变化不会触发视图更新
-    ```
+   const heavyList = shallowRef([...]) // 内部值变化不会触发视图更新
+   ```
 
 3. **利用计算属性缓存**：对于复杂的计算逻辑，使用 `computed` 进行缓存，避免在每次渲染时都重新计算。
 
-    ```javascript
-    const filteredList = computed(() => {
-      return heavyList.value.filter(item => item.isActive) // 只有当 heavyList 或 filter 条件变时才重新计算
-    })
-    ```
+   ```javascript
+   const filteredList = computed(() => {
+     return heavyList.value.filter((item) => item.isActive); // 只有当 heavyList 或 filter 条件变时才重新计算
+   });
+   ```
 
 4. **优化事件处理**：避免在模板中内联创建函数，特别是在循环中。这会导致每次渲染都创建一个新函数，子组件因此会进行不必要的更新。
 
-    ```javascript
-    // 在 setup 中定义方法
-    const handleClick = () => { ... }
+   ```javascript
+   // 在 setup 中定义方法
+   const handleClick = () => { ... }
 
-    return { handleClick }
+   return { handleClick }
 
-    // 模板中
-    <button @click="handleClick">Click</button> <!-- 好 -->
-    <button @click="() => {...}">Click</button> <!-- 避免 -->
-    ```
+   // 模板中
+   <button @click="handleClick">Click</button> <!-- 好 -->
+   <button @click="() => {...}">Click</button> <!-- 避免 -->
+   ```
 
 5. **使用 `v-once` 和 `v-memo`**：对于绝对静态的内容，可使用 `v-once`。对于需要条件性跳过更新的节点块，可使用 `v-memo`（Vue 3.2+）。这是一个非常高效的优化手段。
 
-    ```html
-    <div v-once>This will never change: {{ staticMessage }}</div>
+   ```html
+   <div v-once>This will never change: {{ staticMessage }}</div>
 
-    <div v-memo="[valueA, valueB]">
-      <!-- 只有当 valueA 或 valueB 变化时，这个 div 及其子节点才会更新 -->
-      <p>{{ valueA }}</p>
-      <p>{{ valueB }}</p>
-      <p>{{ valueC }}</p> <!-- 即使 valueC 变了，只要 valueA/B 没变，这里也不会更新 -->
-    </div>
-    ```
+   <div v-memo="[valueA, valueB]">
+     <!-- 只有当 valueA 或 valueB 变化时，这个 div 及其子节点才会更新 -->
+     <p>{{ valueA }}</p>
+     <p>{{ valueB }}</p>
+     <p>{{ valueC }}</p>
+     <!-- 即使 valueC 变了，只要 valueA/B 没变，这里也不会更新 -->
+   </div>
+   ```
 
 6. **合理拆分组件**：将大型组件拆分成更小、更专注于自身状态的组件。这可以：
-    - 利用 Vue 的组件级 Diff（父组件更新不一定导致子组件更新）。
-    - 使 `props` 的变化更可预测，方便使用 `defineProps` 进行声明。
-    - 更好的可维护性。
+   - 利用 Vue 的组件级 Diff（父组件更新不一定导致子组件更新）。
+   - 使 `props` 的变化更可预测，方便使用 `defineProps` 进行声明。
+   - 更好的可维护性。
 
 ## 8. 总结
 

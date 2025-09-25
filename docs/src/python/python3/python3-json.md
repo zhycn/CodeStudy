@@ -6,25 +6,25 @@
 
 1. #概述
 2. #核心-api
-    1. #序列化将-python-对象转换为-json-字符串
-    2. #反序列化将-json-字符串转换为-python-对象
-    3. #文件操作
+   1. #序列化将-python-对象转换为-json-字符串
+   2. #反序列化将-json-字符串转换为-python-对象
+   3. #文件操作
 3. #编码器与解码器jsonencoder-与-jsondecoder
-    1. #自定义编码器
-    2. #自定义解码器
-    3. #object_hook-和-object_pairs_hook
+   1. #自定义编码器
+   2. #自定义解码器
+   3. #object_hook-和-object_pairs_hook
 4. #处理复杂数据类型
-    1. #日期时间-datetime-对象
-    2. #自定义类对象
-    3. #不可-json-序列化的类型
+   1. #日期时间-datetime-对象
+   2. #自定义类对象
+   3. #不可-json-序列化的类型
 5. #高级特性与参数详解
-    1. #格式化输出
-    2. #排序键
-    3. #处理非-ascii-字符
-    4. #解析浮点数
+   1. #格式化输出
+   2. #排序键
+   3. #处理非-ascii-字符
+   4. #解析浮点数
 6. #性能与最佳实践
-    1. #性能考量
-    2. #最佳实践总结
+   1. #性能考量
+   2. #最佳实践总结
 7. #常见问题与解决方案
 8. #总结
 
@@ -36,14 +36,14 @@
 
 **基本对应关系表**：
 
-| JSON          | Python        |
-| :------------ | :------------ |
-| `object`      | `dict`        |
-| `array`       | `list`        |
-| `string`      | `str`         |
-| `number`      | `int`, `float`|
-| `true`/`false`| `True`/`False`|
-| `null`        | `None`        |
+| JSON           | Python         |
+| :------------- | :------------- |
+| `object`       | `dict`         |
+| `array`        | `list`         |
+| `string`       | `str`          |
+| `number`       | `int`, `float` |
+| `true`/`false` | `True`/`False` |
+| `null`         | `None`         |
 
 ## 核心 API
 
@@ -53,29 +53,29 @@
 
 将 Python 对象 `obj` 序列化为一个 JSON 格式的字符串。
 
-* **基本用法**：
+- **基本用法**：
 
-    ```python
-    import json
+  ```python
+  import json
 
-    data = {
-        "name": "Alice",
-        "age": 30,
-        "is_student": False,
-        "hobbies": ["reading", "hiking"],
-        "address": {
-            "street": "123 Main St",
-            "city": "Wonderland"
-        }
-    }
+  data = {
+      "name": "Alice",
+      "age": 30,
+      "is_student": False,
+      "hobbies": ["reading", "hiking"],
+      "address": {
+          "street": "123 Main St",
+          "city": "Wonderland"
+      }
+  }
 
-    json_string = json.dumps(data)
-    print(json_string)
-    # 输出: {"name": "Alice", "age": 30, "is_student": false, "hobbies": ["reading", "hiking"], "address": {"street": "123 Main St", "city": "Wonderland"}}
-    ```
+  json_string = json.dumps(data)
+  print(json_string)
+  # 输出: {"name": "Alice", "age": 30, "is_student": false, "hobbies": ["reading", "hiking"], "address": {"street": "123 Main St", "city": "Wonderland"}}
+  ```
 
-* **常用参数**：
-  * `indent`: 用于美化输出的缩进空格数。
+- **常用参数**：
+  - `indent`: 用于美化输出的缩进空格数。
 
         ```python
         pretty_json = json.dumps(data, indent=4)
@@ -96,7 +96,7 @@
         # }
         ```
 
-  * `sort_keys`: 按字母顺序对字典的键进行排序。
+  - `sort_keys`: 按字母顺序对字典的键进行排序。
 
         ```python
         sorted_json = json.dumps(data, sort_keys=True, indent=2)
@@ -104,21 +104,21 @@
         # "address" 键会排在 "age" 键之前
         ```
 
-  * `separators`: 指定 item 和 key 之间的分隔符，可用于压缩 JSON。默认是 `(', ', ': ')`。为了最小化输出，可以使用 `(',', ':')`。
+  - `separators`: 指定 item 和 key 之间的分隔符，可用于压缩 JSON。默认是 `(', ', ': ')`。为了最小化输出，可以使用 `(',', ':')`。
 
         ```python
         compact_json = json.dumps(data, separators=(',', ':'))
-        print(compact_json) 
+        print(compact_json)
         # 输出: {"name":"Alice","age":30,...} (无多余空格)
         ```
 
-  * `ensure_ascii`: 当为 `True`（默认）时，输出中的所有非 ASCII 字符（如中文）都会被转义（例如 `\u4e2d\u6587`）。设置为 `False` 可使这些字符原样输出。
+  - `ensure_ascii`: 当为 `True`（默认）时，输出中的所有非 ASCII 字符（如中文）都会被转义（例如 `\u4e2d\u6587`）。设置为 `False` 可使这些字符原样输出。
 
         ```python
         data_cn = {"name": "张三"}
-        print(json.dumps(data_cn)) 
+        print(json.dumps(data_cn))
         # 输出: {"name": "\u5f20\u4e09"}
-        print(json.dumps(data_cn, ensure_ascii=False)) 
+        print(json.dumps(data_cn, ensure_ascii=False))
         # 输出: {"name": "张三"}
         ```
 
@@ -128,17 +128,17 @@
 
 将包含 JSON 文档的字符串 `s` 反序列化为一个 Python 对象。
 
-* **基本用法**：
+- **基本用法**：
 
-    ```python
-    json_str = '{"name": "Bob", "score": 95.5, "passed": true}'
-    python_obj = json.loads(json_str)
-    print(python_obj)
-    print(type(python_obj)) 
-    # 输出: <class 'dict'>
-    print(python_obj["name"]) 
-    # 输出: Bob
-    ```
+  ```python
+  json_str = '{"name": "Bob", "score": 95.5, "passed": true}'
+  python_obj = json.loads(json_str)
+  print(python_obj)
+  print(type(python_obj))
+  # 输出: <class 'dict'>
+  print(python_obj["name"])
+  # 输出: Bob
+  ```
 
 ### 文件操作
 
@@ -150,20 +150,20 @@
 
 从文件类对象 `fp`（支持 `.read()` 方法的对象）中读取 JSON 数据并反序列化为 Python 对象。
 
-* **读写文件示例**：
+- **读写文件示例**：
 
-    ```python
-    # 写入 JSON 到文件
-    data = {"name": "Charlie", "languages": ["Python", "JavaScript"]}
-    with open('data.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
+  ```python
+  # 写入 JSON 到文件
+  data = {"name": "Charlie", "languages": ["Python", "JavaScript"]}
+  with open('data.json', 'w', encoding='utf-8') as f:
+      json.dump(data, f, indent=4, ensure_ascii=False)
 
-    # 从文件读取 JSON
-    with open('data.json', 'r', encoding='utf-8') as f:
-        loaded_data = json.load(f)
-    print(loaded_data) 
-    # 输出: {'name': 'Charlie', 'languages': ['Python', 'JavaScript']}
-    ```
+  # 从文件读取 JSON
+  with open('data.json', 'r', encoding='utf-8') as f:
+      loaded_data = json.load(f)
+  print(loaded_data)
+  # 输出: {'name': 'Charlie', 'languages': ['Python', 'JavaScript']}
+  ```
 
 ## 编码器与解码器（`JSONEncoder` 与 `JSONDecoder`）
 
@@ -230,8 +230,8 @@ json_str = json.dumps(data, cls=CustomEncoder, indent=2)
 
 ### `object_hook` 和 `object_pairs_hook`
 
-* `object_hook`: 是一个可选的函数，它会被调用于每一个解码出的字典对象。该函数的返回值会替代原始的字典。
-* `object_pairs_hook`: 类似于 `object_hook`，但其输入是由 `(key, value)` 对组成的列表，而不是字典。这可以用于保持元素的顺序（因为 Python 3.6+ 的 `dict` 虽然保持插入顺序，但反序列化时默认不保证）或进行其他操作。
+- `object_hook`: 是一个可选的函数，它会被调用于每一个解码出的字典对象。该函数的返回值会替代原始的字典。
+- `object_pairs_hook`: 类似于 `object_hook`，但其输入是由 `(key, value)` 对组成的列表，而不是字典。这可以用于保持元素的顺序（因为 Python 3.6+ 的 `dict` 虽然保持插入顺序，但反序列化时默认不保证）或进行其他操作。
 
 **示例：将 ISO 日期字符串转换回 `datetime` 对象**
 
@@ -256,7 +256,7 @@ json_str_with_dates = '{"event": "Meeting", "timestamp": "2023-10-27T10:30:45.12
 loaded_data = json.loads(json_str_with_dates, object_hook=custom_deserializer)
 print(loaded_data)
 # 输出: {'event': 'Meeting', 'timestamp': datetime.datetime(2023, 10, 27, 10, 30, 45, 123456), 'birthday': datetime.date(1990, 1, 1)}
-print(type(loaded_data['timestamp'])) 
+print(type(loaded_data['timestamp']))
 # 输出: <class 'datetime.datetime'>
 ```
 
@@ -272,49 +272,49 @@ print(type(loaded_data['timestamp']))
 
 1. **序列化对象的 `__dict__`**：如果对象的属性都可以被序列化。
 
-    ```python
-    class User:
-        def __init__(self, name, user_id):
-            self.name = name
-            self.user_id = user_id
+   ```python
+   class User:
+       def __init__(self, name, user_id):
+           self.name = name
+           self.user_id = user_id
 
-    user = User("Alice", 123)
+   user = User("Alice", 123)
 
-    # 方法 1：直接使用 __dict__
-    user_json = json.dumps(user.__dict__)
-    print(user_json) 
-    # 输出: {"name": "Alice", "user_id": 123}
+   # 方法 1：直接使用 __dict__
+   user_json = json.dumps(user.__dict__)
+   print(user_json)
+   # 输出: {"name": "Alice", "user_id": 123}
 
-    # 反序列化：先得到字典，再用于重建对象
-    user_dict = json.loads(user_json)
-    new_user = User(**user_dict) 
-    # 相当于 User(name='Alice', user_id=123)
-    ```
+   # 反序列化：先得到字典，再用于重建对象
+   user_dict = json.loads(user_json)
+   new_user = User(**user_dict)
+   # 相当于 User(name='Alice', user_id=123)
+   ```
 
 2. **定义专用的序列化方法（更可控）**：在类中定义 `to_json()` 方法，并在 `default` 函数中识别该类的实例。
 
-    ```python
-    class Product:
-        def __init__(self, name, price):
-            self.name = name
-            self.price = price
+   ```python
+   class Product:
+       def __init__(self, name, price):
+           self.name = name
+           self.price = price
 
-        def to_json(self):
-            # 可以控制输出哪些字段以及格式
-            return {"name": self.name, "price": f"{self.price:.2f}"}
+       def to_json(self):
+           # 可以控制输出哪些字段以及格式
+           return {"name": self.name, "price": f"{self.price:.2f}"}
 
-    def extended_serializer(obj):
-        if hasattr(obj, 'to_json'):
-            return obj.to_json()
-        elif isinstance(obj, (datetime, date)):
-            return obj.isoformat()
-        raise TypeError(f"Type {type(obj)} not serializable")
+   def extended_serializer(obj):
+       if hasattr(obj, 'to_json'):
+           return obj.to_json()
+       elif isinstance(obj, (datetime, date)):
+           return obj.isoformat()
+       raise TypeError(f"Type {type(obj)} not serializable")
 
-    product = Product("Laptop", 999.99)
-    product_json = json.dumps(product, default=extended_serializer)
-    print(product_json) 
-    # 输出: {"name": "Laptop", "price": "999.99"}
-    ```
+   product = Product("Laptop", 999.99)
+   product_json = json.dumps(product, default=extended_serializer)
+   print(product_json)
+   # 输出: {"name": "Laptop", "price": "999.99"}
+   ```
 
 ### 不可 JSON 序列化的类型
 
@@ -329,7 +329,7 @@ def handle_sets(obj):
     raise TypeError(f"Type {type(obj)} not serializable")
 
 json_str = json.dumps(data_with_set, default=handle_sets)
-print(json_str) 
+print(json_str)
 # 输出: {"tags": ["python", "tutorial", "json"]}
 # 注意：set 是无序的，所以列表元素顺序可能不同
 ```
@@ -359,12 +359,12 @@ json_str = '{"value": 3.141592653589793238462643383279}'
 
 # 默认解析为 float
 data_float = json.loads(json_str)
-print(type(data_float['value']), data_float['value']) 
+print(type(data_float['value']), data_float['value'])
 # 输出: <class 'float'> 3.141592653589793
 
 # 使用 Decimal 解析以获得精确的十进制表示
 data_decimal = json.loads(json_str, parse_float=decimal.Decimal)
-print(type(data_decimal['value']), data_decimal['value']) 
+print(type(data_decimal['value']), data_decimal['value'])
 # 输出: <class 'decimal.Decimal'> 3.141592653589793238462643383279
 ```
 
@@ -388,30 +388,30 @@ print(type(data_decimal['value']), data_decimal['value'])
 ## 常见问题与解决方案
 
 1. **`TypeError: Object of type X is not JSON serializable`**
-    * **原因**：你尝试序列化一个不支持的类型（如 `datetime`, `set`, 自定义类）。
-    * **解决**：实现并使用 `default` 函数或自定义 `JSONEncoder`。
+   - **原因**：你尝试序列化一个不支持的类型（如 `datetime`, `set`, 自定义类）。
+   - **解决**：实现并使用 `default` 函数或自定义 `JSONEncoder`。
 
 2. **`JSONDecodeError: Expecting value: line 1 column 1 (char 0)`**
-    * **原因**：你尝试解析一个空字符串或根本不是 JSON 的字符串。
-    * **解决**：在调用 `json.loads()` 之前检查输入是否有效。
+   - **原因**：你尝试解析一个空字符串或根本不是 JSON 的字符串。
+   - **解决**：在调用 `json.loads()` 之前检查输入是否有效。
 
-        ```python
-        json_str = get_data_from_network()
-        if json_str.strip(): # 检查非空
-            try:
-                data = json.loads(json_str)
-            except json.JSONDecodeError as e:
-                print(f"Invalid JSON: {e}")
-        else:
-            print("Received empty response")
-        ```
+     ```python
+     json_str = get_data_from_network()
+     if json_str.strip(): # 检查非空
+         try:
+             data = json.loads(json_str)
+         except json.JSONDecodeError as e:
+             print(f"Invalid JSON: {e}")
+     else:
+         print("Received empty response")
+     ```
 
 3. **浮点数精度问题**
-    * **原因**：JSON 中的浮点数在 Python 中解析为 `float` 类型时，可能会存在精度损失。
-    * **解决**：对金融等需要高精度的领域，使用 `parse_float=decimal.Decimal` 参数。
+   - **原因**：JSON 中的浮点数在 Python 中解析为 `float` 类型时，可能会存在精度损失。
+   - **解决**：对金融等需要高精度的领域，使用 `parse_float=decimal.Decimal` 参数。
 
 4. **字典键的顺序**
-    * **注意**：在 Python 3.6 之前，字典不保持插入顺序。虽然现代 Python 版本和 JSON 本身都保持顺序，但如果顺序至关重要，考虑在解码时使用 `object_pairs_hook=collections.OrderedDict`，或者在处理时不要依赖键的顺序。
+   - **注意**：在 Python 3.6 之前，字典不保持插入顺序。虽然现代 Python 版本和 JSON 本身都保持顺序，但如果顺序至关重要，考虑在解码时使用 `object_pairs_hook=collections.OrderedDict`，或者在处理时不要依赖键的顺序。
 
 ## 总结
 
@@ -419,6 +419,6 @@ Python 的 `json` 模块提供了一个强大而灵活的工具集，用于处�
 
 **官方资源**：
 
-* <https://docs.python.org/3/library/json.html>
-* <https://www.json.org/json-en.html>
-* <https://docs.python.org/3/tutorial/index.html>
+- <https://docs.python.org/3/library/json.html>
+- <https://www.json.org/json-en.html>
+- <https://docs.python.org/3/tutorial/index.html>

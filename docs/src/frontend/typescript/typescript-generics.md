@@ -69,10 +69,7 @@ function logAndReturn<T>(value: T): T {
 }
 
 // 可以声明多个类型参数
-function mapArray<InputType, OutputType>(
-  arr: InputType[],
-  mapper: (item: InputType) => OutputType
-): OutputType[] {
+function mapArray<InputType, OutputType>(arr: InputType[], mapper: (item: InputType) => OutputType): OutputType[] {
   return arr.map(mapper);
 }
 
@@ -321,7 +318,10 @@ function pluck<T, K extends keyof T>(arr: T[], key: K): T[K][] {
   return arr.map((obj) => obj[key]);
 }
 
-const users = [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }];
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+];
 const names = pluck(users, 'name'); // names: string[] = ['Alice', 'Bob']
 ```
 
@@ -331,7 +331,7 @@ const names = pluck(users, 'name'); // names: string[] = ['Alice', 'Bob']
 
 **参考资源：**
 
-* <https://www.typescriptlang.org/docs/handbook/2/generics.html>
-* <https://basarat.gitbook.io/typescript/type-system/generics>
-* <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#generic_methods> (围绕数组方法)
-* 社区文章来自：*dev.to*, *medium.com*, *blog.logrocket.com* 等平台关于 TypeScript Generics Best Practices 的讨论。
+- <https://www.typescriptlang.org/docs/handbook/2/generics.html>
+- <https://basarat.gitbook.io/typescript/type-system/generics>
+- <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#generic_methods> (围绕数组方法)
+- 社区文章来自：_dev.to_, _medium.com_, _blog.logrocket.com_ 等平台关于 TypeScript Generics Best Practices 的讨论。

@@ -17,7 +17,7 @@ Spring 框架不仅提供了全面的企业级开发支持，还包含了一系�
 Spring 框架中的工具类按照功能可以分为以下几个类别：
 
 - **字符串处理**：`StringUtils`、`PathMatcher` 等
-- **集合操作**：`CollectionUtils`、`MultiValueMap` 等  
+- **集合操作**：`CollectionUtils`、`MultiValueMap` 等
 - **对象操作**：`ObjectUtils`、`Assert` 等
 - **资源处理**：`ResourceUtils`、`FileCopyUtils` 等
 - **反射操作**：`ReflectionUtils`、`BeanUtils` 等
@@ -144,7 +144,7 @@ boolean isEqual = ObjectUtils.nullSafeEquals("hello", "hello"); // true
 boolean isEqualWithNull = ObjectUtils.nullSafeEquals(null, null); // true
 
 // 获取对象的标识信息
-String identityString = ObjectUtils.identityToString("hello"); 
+String identityString = ObjectUtils.identityToString("hello");
 // 类似 "java.lang.String@1e127982"
 
 // 默认值处理
@@ -165,20 +165,20 @@ public class UserService {
         // 参数非空检查
         Assert.notNull(username, "用户名不能为空");
         Assert.notNull(age, "年龄不能为空");
-        
+
         // 字符串检查
         Assert.hasLength(username, "用户名不能为空字符串");
         Assert.hasText(username.trim(), "用户名不能只包含空白字符");
-        
+
         // 条件检查
         Assert.isTrue(age >= 0, "年龄不能为负数");
-        
+
         // 状态检查
         Assert.state(isSystemReady(), "系统未就绪，无法创建用户");
-        
+
         // 业务逻辑...
     }
-    
+
     private boolean isSystemReady() {
         // 检查系统状态
         return true;
@@ -263,24 +263,24 @@ import org.springframework.util.ReflectionUtils;
 
 public class ReflectionExample {
     private String privateField = "private value";
-    
+
     private void privateMethod() {
         System.out.println("Private method called");
     }
-    
+
     public static void main(String[] args) {
         ReflectionExample example = new ReflectionExample();
-        
+
         // 查找字段
         Field field = ReflectionUtils.findField(ReflectionExample.class, "privateField");
         ReflectionUtils.makeAccessible(field); // 设置可访问
         String value = (String) ReflectionUtils.getField(field, example);
-        
+
         // 查找并调用方法
         Method method = ReflectionUtils.findMethod(ReflectionExample.class, "privateMethod");
         ReflectionUtils.makeAccessible(method);
         ReflectionUtils.invokeMethod(method, example);
-        
+
         // 处理所有字段
         ReflectionUtils.doWithFields(ReflectionExample.class, f -> {
             System.out.println("Field: " + f.getName());
@@ -435,7 +435,7 @@ public class MyService {
         MyService proxy = (MyService) AopContext.currentProxy();
         proxy.methodB();
     }
-    
+
     @Transactional
     public void methodB() {
         // 事务方法
@@ -549,44 +549,44 @@ Spring 框架提供的工具类涵盖了日常开发的常见需求，从字符�
 
 _以下是 org.springframework.util 包提供的工具类。_
 
-| 工具类名称 | 主要用途说明 |
-| :--- | :--- |
-| **Assert** | 参数断言和状态检查，支持非空、条件判断等，不符合条件时快速抛出异常。 |
-| **ClassUtils** | 类相关的工具方法，如获取类信息、判断类是否存在、处理类名等。 |
-| **CollectionUtils** | 集合操作工具，提供判空、交集、并集等集合逻辑运算。 |
-| **ConcurrencyThrottleSupport** | 提供并发节流支持，用于控制并发操作的速率。 |
-| **ConcurrentLruCache** | 线程安全的 LRU（最近最少使用）缓存实现。 |
-| **ConcurrentReferenceHashMap** | 线程安全的、允许使用弱引用或软引用的哈希表实现。 |
-| **DigestUtils** | 消息摘要工具类，用于生成 MD5、SHA-256 等哈希值。 |
-| **ErrorHandler** | 用于处理执行过程中错误的策略接口。 |
-| **FileCopyUtils** | 文件和数据流复制工具，简化流操作。 |
-| **FileSystemUtils** | 文件系统操作工具，例如递归删除目录。 |
-| **LinkedCaseInsensitiveMap** | Key 不区分大小写的 LinkedHashMap 实现。 |
-| **LinkedMultiValueMap** | 一个 Key 对应多个 Value 的 LinkedMap 实现。 |
-| **MethodInvoker** | 用于通过反射方便地调用指定方法的辅助类。 |
-| **MimeType** | 代表 MIME 类型的类。 |
-| **MimeTypeUtils** | MIME 类型相关的工具方法，如解析常见的 MIME 类型字符串。 |
-| **MultiValueMap** | 将一个键映射到多个值的 Map 接口。 |
-| **MultiValueMapAdapter** | MultiValueMap 接口的适配器实现。 |
-| **NumberUtils** | 数字处理工具，支持字符串到数字的解析和 Number 类型转换。 |
-| **ObjectUtils** | 对象操作工具，提供空安全的对象判断、相等比较、空值处理等方法。 |
-| **PathMatcher** | 用于路径字符串匹配的策略接口（如 Ant 风格路径匹配）。 |
-| **PatternMatchUtils** | 提供简单的模式匹配功能。 |
-| **ReflectionUtils** | 反射操作工具类，简化了查找方法/字段、调用方法等反射操作。 |
-| **ResourceUtils** | 资源路径解析工具，支持 "classpath:" 和 "file:" 等 URL 前缀。 |
-| **RouteMatcher** | 用于路由匹配的策略接口。 |
-| **SerializationUtils** | 对象序列化与反序列化工具。 |
-| **SimpleRouteMatcher** | RouteMatcher 的简单实现。 |
-| **StopWatch** | 简单的秒表工具，用于测量代码段的执行时间，支持多任务计时。 |
-| **StreamUtils** | 流操作工具，提供输入/输出流之间高效的数据拷贝等方法。 |
-| **StringUtils** | 字符串工具类，扩展了 JDK 的字符串功能，提供判空、修剪、分割、集合拼接等方法。 |
-| **StringValueResolver** | 用于解析字符串值的策略接口。 |
-| **SystemPropertyUtils** | 系统属性占位符解析工具，用于解析 `${...}` 格式的占位符。 |
-| **TypeUtils** | 类型工具类，用于判断类型间的可分配性（兼容性）。 |
-| **UnmodifiableMultiValueMap** | 不可修改的 MultiValueMap 实现。 |
+| 工具类名称                     | 主要用途说明                                                                  |
+| :----------------------------- | :---------------------------------------------------------------------------- |
+| **Assert**                     | 参数断言和状态检查，支持非空、条件判断等，不符合条件时快速抛出异常。          |
+| **ClassUtils**                 | 类相关的工具方法，如获取类信息、判断类是否存在、处理类名等。                  |
+| **CollectionUtils**            | 集合操作工具，提供判空、交集、并集等集合逻辑运算。                            |
+| **ConcurrencyThrottleSupport** | 提供并发节流支持，用于控制并发操作的速率。                                    |
+| **ConcurrentLruCache**         | 线程安全的 LRU（最近最少使用）缓存实现。                                      |
+| **ConcurrentReferenceHashMap** | 线程安全的、允许使用弱引用或软引用的哈希表实现。                              |
+| **DigestUtils**                | 消息摘要工具类，用于生成 MD5、SHA-256 等哈希值。                              |
+| **ErrorHandler**               | 用于处理执行过程中错误的策略接口。                                            |
+| **FileCopyUtils**              | 文件和数据流复制工具，简化流操作。                                            |
+| **FileSystemUtils**            | 文件系统操作工具，例如递归删除目录。                                          |
+| **LinkedCaseInsensitiveMap**   | Key 不区分大小写的 LinkedHashMap 实现。                                       |
+| **LinkedMultiValueMap**        | 一个 Key 对应多个 Value 的 LinkedMap 实现。                                   |
+| **MethodInvoker**              | 用于通过反射方便地调用指定方法的辅助类。                                      |
+| **MimeType**                   | 代表 MIME 类型的类。                                                          |
+| **MimeTypeUtils**              | MIME 类型相关的工具方法，如解析常见的 MIME 类型字符串。                       |
+| **MultiValueMap**              | 将一个键映射到多个值的 Map 接口。                                             |
+| **MultiValueMapAdapter**       | MultiValueMap 接口的适配器实现。                                              |
+| **NumberUtils**                | 数字处理工具，支持字符串到数字的解析和 Number 类型转换。                      |
+| **ObjectUtils**                | 对象操作工具，提供空安全的对象判断、相等比较、空值处理等方法。                |
+| **PathMatcher**                | 用于路径字符串匹配的策略接口（如 Ant 风格路径匹配）。                         |
+| **PatternMatchUtils**          | 提供简单的模式匹配功能。                                                      |
+| **ReflectionUtils**            | 反射操作工具类，简化了查找方法/字段、调用方法等反射操作。                     |
+| **ResourceUtils**              | 资源路径解析工具，支持 "classpath:" 和 "file:" 等 URL 前缀。                  |
+| **RouteMatcher**               | 用于路由匹配的策略接口。                                                      |
+| **SerializationUtils**         | 对象序列化与反序列化工具。                                                    |
+| **SimpleRouteMatcher**         | RouteMatcher 的简单实现。                                                     |
+| **StopWatch**                  | 简单的秒表工具，用于测量代码段的执行时间，支持多任务计时。                    |
+| **StreamUtils**                | 流操作工具，提供输入/输出流之间高效的数据拷贝等方法。                         |
+| **StringUtils**                | 字符串工具类，扩展了 JDK 的字符串功能，提供判空、修剪、分割、集合拼接等方法。 |
+| **StringValueResolver**        | 用于解析字符串值的策略接口。                                                  |
+| **SystemPropertyUtils**        | 系统属性占位符解析工具，用于解析 `${...}` 格式的占位符。                      |
+| **TypeUtils**                  | 类型工具类，用于判断类型间的可分配性（兼容性）。                              |
+| **UnmodifiableMultiValueMap**  | 不可修改的 MultiValueMap 实现。                                               |
 
 ### 💡 **使用建议**
 
-*   **避免重复造轮子**：这些工具类都是 Spring 框架 `spring-core` 模块的一部分，项目中引入 Spring 后即可直接使用，无需额外依赖。
-*   **优先使用空安全方法**：许多工具类（如 `ObjectUtils`, `CollectionUtils`）的方法都是空安全的（null-safe），使用时可以更安心。
-*   **查阅官方文档**：此表为简要说明，具体使用时可结合 Spring 官方 API 文档深入了解每个方法的参数和细节。
+- **避免重复造轮子**：这些工具类都是 Spring 框架 `spring-core` 模块的一部分，项目中引入 Spring 后即可直接使用，无需额外依赖。
+- **优先使用空安全方法**：许多工具类（如 `ObjectUtils`, `CollectionUtils`）的方法都是空安全的（null-safe），使用时可以更安心。
+- **查阅官方文档**：此表为简要说明，具体使用时可结合 Spring 官方 API 文档深入了解每个方法的参数和细节。

@@ -129,7 +129,7 @@ def download_all_sites(sites):
     with ThreadPoolExecutor(max_workers=5) as executor:
         # 提交任务到线程池，返回Future对象
         futures = [executor.submit(download_site, url) for url in sites]
-        
+
         results = []
         # as_completed(futures) 在任务完成时 yield 结果
         for future in as_completed(futures):
@@ -210,13 +210,13 @@ def consumer(queue):
 
 if __name__ == '__main__':
     queue = multiprocessing.Queue()
-    
+
     p1 = multiprocessing.Process(target=producer, args=(queue,))
     p2 = multiprocessing.Process(target=consumer, args=(queue,))
-    
+
     p1.start()
     p2.start()
-    
+
     p1.join() # 等待生产者结束
     queue.put(None) # 发送终止信号给消费者
     p2.join() # 等待消费者结束
@@ -247,7 +247,7 @@ async def download_all_sites(sites):
         for url in sites:
             task = asyncio.create_task(download_site(session, url))
             tasks.append(task)
-        
+
         # 等待所有任务完成。注意：这里会并发执行所有任务！
         await asyncio.gather(*tasks)
 
@@ -256,7 +256,7 @@ if __name__ == "__main__":
         "https://www.python.org",
         "https://www.google.com",
     ] * 10
-    
+
     start_time = time.time()
     # asyncio.run() 负责创建事件循环、运行协程并关闭循环
     asyncio.run(download_all_sites(sites))
@@ -274,21 +274,21 @@ if __name__ == "__main__":
 
 ## 5. 如何选择并发模型？
 
-| 场景 | 推荐模型 | 原因 |
-| :--- | :--- | :--- |
-| **CPU 密集型** (如图像处理、计算) | `multiprocessing` | 绕过 GIL，真正利用多核 CPU 并行计算。 |
-| **I/O 密集型，连接数不多** | `threading` 或 `ThreadPoolExecutor` | 开发简单，在 I/O 等待时释放 GIL，效率尚可。 |
-| **高并发 I/O 密集型** (如网络服务器、爬虫) | `asyncio` | 极轻量级，无线程切换开销，单线程即可处理数万连接，性能最高。 |
-| **混合型任务** | 组合使用 | 例如，用多进程处理 CPU 部分，用多线程或 `asyncio` 处理每个进程内的 I/O 部分。 |
+| 场景                                       | 推荐模型                            | 原因                                                                          |
+| :----------------------------------------- | :---------------------------------- | :---------------------------------------------------------------------------- |
+| **CPU 密集型** (如图像处理、计算)          | `multiprocessing`                   | 绕过 GIL，真正利用多核 CPU 并行计算。                                         |
+| **I/O 密集型，连接数不多**                 | `threading` 或 `ThreadPoolExecutor` | 开发简单，在 I/O 等待时释放 GIL，效率尚可。                                   |
+| **高并发 I/O 密集型** (如网络服务器、爬虫) | `asyncio`                           | 极轻量级，无线程切换开销，单线程即可处理数万连接，性能最高。                  |
+| **混合型任务**                             | 组合使用                            | 例如，用多进程处理 CPU 部分，用多线程或 `asyncio` 处理每个进程内的 I/O 部分。 |
 
 **决策流程**：
 
 1. 你的程序主要在等待什么？
-    - **等待计算（CPU Bound）** -> 多进程
-    - **等待网络/磁盘（I/O Bound）** -> 继续第 2 步
+   - **等待计算（CPU Bound）** -> 多进程
+   - **等待网络/磁盘（I/O Bound）** -> 继续第 2 步
 2. 你的并发规模有多大？对性能要求多高？
-    - **连接数多，要求极高效率** -> `asyncio`
-    - **连接数不多，追求开发效率** -> 多线程
+   - **连接数多，要求极高效率** -> `asyncio`
+   - **连接数不多，追求开发效率** -> 多线程
 
 ## 6. 最佳实践与常见陷阱
 

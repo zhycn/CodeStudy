@@ -14,18 +14,18 @@
 
 服务端渲染 (SSR) 是一种在服务器上将组件渲染成 HTML 字符串，再发送到客户端的技术。与传统的客户端渲染 (CSR) 相比，它具有以下显著优势：
 
-* **更好的核心 Web 指标 (Core Web Vitals)**：特别是更快的**最大内容绘制 (LCP)** 和**首次内容绘制 (FCP)**，因为用户能更快看到页面内容，而无需等待所有 JavaScript 下载和执行完毕。
-* **卓越的 SEO**：搜索引擎爬虫可以直接接收到完整渲染的 HTML 页面，无需执行 JavaScript，这大大提高了页面的可索引性。
-* **更好的用户体验**：在慢速网络或低性能设备上，用户能更快地看到基本内容，感知性能更高。
+- **更好的核心 Web 指标 (Core Web Vitals)**：特别是更快的**最大内容绘制 (LCP)** 和**首次内容绘制 (FCP)**，因为用户能更快看到页面内容，而无需等待所有 JavaScript 下载和执行完毕。
+- **卓越的 SEO**：搜索引擎爬虫可以直接接收到完整渲染的 HTML 页面，无需执行 JavaScript，这大大提高了页面的可索引性。
+- **更好的用户体验**：在慢速网络或低性能设备上，用户能更快地看到基本内容，感知性能更高。
 
 ### 1.2 Vite 在 SSR 中的价值
 
 Vite 的革命性在于其基于 ESM 的开发服务器，这一特性同样赋能了 SSR 开发体验：
 
-* **统一的开发体验**：Vite 为客户端和服务器代码提供了**一致的开发体验**。服务器代码也能享受 TypeScript、JSX、热更新 (HMR) 等支持，无需复杂的打包配置。
-* **高效的 HMR**：在开发模式下，对 SSR 源代码的更改可以触发高效的热更新，让你在调试 SSR 应用时也能保持流畅的开发流程。
-* **双模式构建**：Vite 能够分别对客户端资源和服务器端代码进行**优化构建**，为生产环境做好充分准备。
-* **强大的生态系统**：众多主流框架（如 Nuxt, SvelteKit, SolidStart, Qwik）都基于 Vite 构建，证明了其作为 SSR 基础工具的稳定性和灵活性。
+- **统一的开发体验**：Vite 为客户端和服务器代码提供了**一致的开发体验**。服务器代码也能享受 TypeScript、JSX、热更新 (HMR) 等支持，无需复杂的打包配置。
+- **高效的 HMR**：在开发模式下，对 SSR 源代码的更改可以触发高效的热更新，让你在调试 SSR 应用时也能保持流畅的开发流程。
+- **双模式构建**：Vite 能够分别对客户端资源和服务器端代码进行**优化构建**，为生产环境做好充分准备。
+- **强大的生态系统**：众多主流框架（如 Nuxt, SvelteKit, SolidStart, Qwik）都基于 Vite 构建，证明了其作为 SSR 基础工具的稳定性和灵活性。
 
 ## 2. Vite SSR 模式详解
 
@@ -35,15 +35,15 @@ Vite 提供了两种主要的 SSR 模式，适用于不同的场景。
 
 在此模式下，你需要创建一个 Node.js 服务器（如 Express, Koa），并将 Vite 作为中间件集成。Vite 负责转换和提供源代码，而你的服务器则负责调用渲染函数并处理路由。
 
-* **优点**：**控制力极强**，你可以完全自定义服务器的所有逻辑，适用于高度定制化的场景或现有 Node.js 项目的改造。
-* **缺点**：需要手动设置更多样板代码。
+- **优点**：**控制力极强**，你可以完全自定义服务器的所有逻辑，适用于高度定制化的场景或现有 Node.js 项目的改造。
+- **缺点**：需要手动设置更多样板代码。
 
 ### 2.2 模式二：完整模式 (Full Mode)
 
 Vite 本身可以创建一个生产就绪的 Node.js 服务器。你提供一个“服务器入口”(Server Entry)，Vite 会为你处理模块加载和创建处理函数。
 
-* **优点**：**设置简单**，Vite 帮你处理了大多数底层细节，更接近主流全栈框架（如 Next.js）的体验。
-* **缺点**：自定义的灵活性略低于中间件模式。
+- **优点**：**设置简单**，Vite 帮你处理了大多数底层细节，更接近主流全栈框架（如 Next.js）的体验。
+- **缺点**：自定义的灵活性略低于中间件模式。
 
 **如何选择？** 对于大多数新项目，建议从**完整模式**开始，因为它更简单。如果你需要深度集成到特定的后端架构中，则选择**中间件模式**。
 
@@ -135,7 +135,7 @@ import App from '../App';
 export function render() {
   // 将 App 组件渲染成 HTML 字符串
   const appHtml = renderToString(<App />);
-  
+
   // 返回包含 HTML 和任何其他需要的数据（如预加载指令）的对象
   return { appHtml };
 }
@@ -151,10 +151,7 @@ import { hydrateRoot } from 'react-dom/client';
 import App from '../App';
 
 // Hydrate 服务器渲染的 HTML
-hydrateRoot(
-  document.getElementById('root'),
-  <App />
-);
+hydrateRoot(document.getElementById('root'), <App />);
 ```
 
 #### `server/index.js`
@@ -175,7 +172,7 @@ async function createServer() {
   // 以中间件模式创建 Vite 服务器
   const vite = await createViteServer({
     server: { middlewareMode: true },
-    appType: 'custom' // 不引入 Vite 默认的 HTML 处理逻辑
+    appType: 'custom', // 不引入 Vite 默认的 HTML 处理逻辑
   });
 
   // 使用 Vite 的实例中间件
@@ -187,10 +184,7 @@ async function createServer() {
 
     try {
       // 1. 读取 index.html
-      let template = fs.readFileSync(
-        path.resolve(__dirname, '../index.html'),
-        'utf-8'
-      );
+      let template = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf-8');
 
       // 2. 应用 Vite 的 HTML 转换。这会注入 Vite HMR 客户端，
       //    同时也会应用 HTML 转换，例如从 Vite 插件引入的 ESM 引用。
@@ -235,8 +229,8 @@ export default defineConfig({
   plugins: [react()],
   ssr: {
     // 防止某些包在 SSR 时被外部化（bundled），确保它们被 Vite 处理
-    noExternal: ['react-router-dom'] // 如果有使用，请添加
-  }
+    noExternal: ['react-router-dom'], // 如果有使用，请添加
+  },
 });
 ```
 
@@ -338,9 +332,9 @@ createServer();
 
 ### 5.3 性能优化
 
-* **代码分割**：利用 `import()` 动态导入和 `vite-plugin-ssr` 等工具实现基于路由的代码分割。
-* **静态资源处理**：使用 `import.meta.env.VITE_APP_BASE_URL` 正确处理静态资源的绝对路径。
-* **生成 `ssr-manifest.json`**：Vite 的构建功能可以生成一个 manifest 文件，帮助你在生产构建时优化预加载指令 (preload directives) 的生成。
+- **代码分割**：利用 `import()` 动态导入和 `vite-plugin-ssr` 等工具实现基于路由的代码分割。
+- **静态资源处理**：使用 `import.meta.env.VITE_APP_BASE_URL` 正确处理静态资源的绝对路径。
+- **生成 `ssr-manifest.json`**：Vite 的构建功能可以生成一个 manifest 文件，帮助你在生产构建时优化预加载指令 (preload directives) 的生成。
 
 ```javascript
 // vite.config.js
@@ -351,7 +345,7 @@ export default defineConfig({
   },
   ssr: {
     // noExternal: [...]
-  }
+  },
 });
 ```
 
@@ -359,8 +353,8 @@ export default defineConfig({
 
 考虑使用成熟的 SSR 框架或插件来简化流程：
 
-* **vite-plugin-ssr**: 一个轻量级但功能强大的 Vite SSR 框架，处理了许多复杂问题。
-* **SSR 框架**：直接使用 **Nuxt** (Vue)、**SvelteKit** (Svelte)、**SolidStart** (Solid) 或 **Next.js**，它们都已与 Vite 深度集成。
+- **vite-plugin-ssr**: 一个轻量级但功能强大的 Vite SSR 框架，处理了许多复杂问题。
+- **SSR 框架**：直接使用 **Nuxt** (Vue)、**SvelteKit** (Svelte)、**SolidStart** (Solid) 或 **Next.js**，它们都已与 Vite 深度集成。
 
 ## 6. 常见问题 (FAQ)
 
@@ -379,10 +373,10 @@ Vite 通过其创新的架构，极大地简化了 SSR 的设置和开发体验�
 
 ## 8. 参考资源
 
-* <https://vitejs.dev/guide/ssr>
-* <https://vitejs.dev/guide/ssr.html>
-* <https://vite-plugin-ssr.com/>
-* <https://reactjs.org/docs/react-dom-server.html>
+- <https://vitejs.dev/guide/ssr>
+- <https://vitejs.dev/guide/ssr.html>
+- <https://vite-plugin-ssr.com/>
+- <https://reactjs.org/docs/react-dom-server.html>
 
 ---
 

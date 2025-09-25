@@ -43,7 +43,7 @@ let resultFromDivisionByZero: number = 1 / 0; // Infinity
 // 非数字 (Not-A-Number)
 let notANumber: number = NaN;
 let resultFromInvalidOperation: number = 0 / 0; // NaN
-let resultFromFailedConversion: number = Number("Hello"); // NaN
+let resultFromFailedConversion: number = Number('Hello'); // NaN
 
 console.log(positiveInfinity); // Infinity
 console.log(negativeInfinity); // -Infinity
@@ -79,10 +79,10 @@ console.log(Number.NaN); // NaN
 
 ```typescript
 // 转换函数
-let a: number = Number("123"); // 123
-let b: number = Number("123.45"); // 123.45
-let c: number = Number("0xFF"); // 255
-let d: number = Number("Hello"); // NaN
+let a: number = Number('123'); // 123
+let b: number = Number('123.45'); // 123.45
+let c: number = Number('0xFF'); // 255
+let d: number = Number('Hello'); // NaN
 let e: number = Number(true); // 1
 let f: number = Number(false); // 0
 
@@ -98,12 +98,12 @@ console.log(Number.isFinite(123)); // true
 
 // 更严格的 NaN 检查 (优于全局的 isNaN)
 console.log(Number.isNaN(NaN)); // true
-console.log(Number.isNaN("Hello")); // false (全局的 isNaN("Hello") 会返回 true，这是其陷阱)
+console.log(Number.isNaN('Hello')); // false (全局的 isNaN("Hello") 会返回 true，这是其陷阱)
 
 // 解析字符串为浮点数或整数
-console.log(Number.parseFloat("123.45abc")); // 123.45
-console.log(Number.parseInt("123abc", 10)); // 123
-console.log(Number.parseInt("1010", 2)); // 10 (二进制解析)
+console.log(Number.parseFloat('123.45abc')); // 123.45
+console.log(Number.parseInt('123abc', 10)); // 123
+console.log(Number.parseInt('1010', 2)); // 10 (二进制解析)
 ```
 
 ### 3.3 实例方法
@@ -200,12 +200,12 @@ function isStringValidNumber(input: string): boolean {
   return /^-?\d+(\.\d+)?$/.test(input);
 }
 
-console.log(safeConversion("123")); // 123
-console.log(safeConversion("123.45")); // 123.45
-console.log(safeConversion("abc")); // null (带有警告)
-console.log(isStringValidNumber("123")); // true
-console.log(isStringValidNumber("123.45")); // true
-console.log(isStringValidNumber("123.45.67")); // false
+console.log(safeConversion('123')); // 123
+console.log(safeConversion('123.45')); // 123.45
+console.log(safeConversion('abc')); // null (带有警告)
+console.log(isStringValidNumber('123')); // true
+console.log(isStringValidNumber('123.45')); // true
+console.log(isStringValidNumber('123.45.67')); // false
 ```
 
 ### 5.2 处理大整数：使用 `BigInt`
@@ -246,7 +246,7 @@ function setOpacity(percentage: Percentage): void {
 
 function setRedComponent(value: RGBColor): void {
   if (value < 0 || value > 255 || !Number.isInteger(value)) {
-    throw new Error("RGB value must be an integer between 0 and 255.");
+    throw new Error('RGB value must be an integer between 0 and 255.');
   }
   // ...
 }

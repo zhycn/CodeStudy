@@ -21,7 +21,7 @@ TypeScript 提供了两种语法形式来实现类型断言。
 **1. 角括号语法**
 
 ```typescript
-let someValue: any = "this is a string";
+let someValue: any = 'this is a string';
 
 // 使用角括号语法断言为 string 类型
 let strLength: number = (<string>someValue).length;
@@ -31,7 +31,7 @@ console.log(strLength); // 输出：16
 **2. `as` 语法**
 
 ```typescript
-let someValue: any = "this is a string";
+let someValue: any = 'this is a string';
 
 // 使用 as 语法断言为 string 类型
 let strLength: number = (someValue as string).length;
@@ -48,15 +48,15 @@ console.log(strLength); // 输出：16
 
 ```typescript
 // 没有类型断言，无法访问 value 属性
-const myElement = document.getElementById("my-input");
+const myElement = document.getElementById('my-input');
 // console.log(myElement.value); // 错误：Property 'value' does not exist on type 'HTMLElement'
 
 // 使用类型断言
-const myInput = document.getElementById("my-input") as HTMLInputElement;
+const myInput = document.getElementById('my-input') as HTMLInputElement;
 console.log(myInput.value); // 可以安全地访问 value 属性
 
 // 另一种写法（使用角括号，非 JSX 环境）
-const anotherInput = <HTMLInputElement>document.getElementById("another-input");
+const anotherInput = <HTMLInputElement>document.getElementById('another-input');
 console.log(anotherInput.value);
 ```
 
@@ -115,8 +115,8 @@ function liveDangerously(x?: number | null) {
 }
 
 // 在 DOM 操作中也很常见
-const foundElement = document.getElementById("my-element")!; // 断言它肯定不是 null
-foundElement.classList.add("active");
+const foundElement = document.getElementById('my-element')!; // 断言它肯定不是 null
+foundElement.classList.add('active');
 ```
 
 **警告**：滥用 `!` 非常危险，因为它移除了 TypeScript 的空值安全保护。**最佳实践是尽可能使用条件检查来代替它**。
@@ -133,17 +133,17 @@ foundElement.classList.add("active");
 
 ```typescript
 function padLeft(value: string, padding: string | number) {
-  if (typeof padding === "number") {
-    return Array(padding + 1).join(" ") + value; // 在此分支中，padding 的类型被窄化为 number
+  if (typeof padding === 'number') {
+    return Array(padding + 1).join(' ') + value; // 在此分支中，padding 的类型被窄化为 number
   }
-  if (typeof padding === "string") {
+  if (typeof padding === 'string') {
     return padding + value; // 在此分支中，padding 的类型被窄化为 string
   }
   throw new Error(`Expected string or number, got '${padding}'.`);
 }
 
-console.log(padLeft("Hello world", 4)); // 输出：    Hello world
-console.log(padLeft("Hello world", ">>> ")); // 输出：>>> Hello world
+console.log(padLeft('Hello world', 4)); // 输出：    Hello world
+console.log(padLeft('Hello world', '>>> ')); // 输出：>>> Hello world
 ```
 
 ### 3.2 `instanceof` 类型守卫
@@ -153,13 +153,13 @@ console.log(padLeft("Hello world", ">>> ")); // 输出：>>> Hello world
 ```typescript
 class Bird {
   fly() {
-    console.log("Flying...");
+    console.log('Flying...');
   }
 }
 
 class Fish {
   swim() {
-    console.log("Swimming...");
+    console.log('Swimming...');
   }
 }
 
@@ -184,12 +184,12 @@ move(nemo); // 输出：Swimming...
 
 ```typescript
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Square {
-  kind: "square";
+  kind: 'square';
   sideLength: number;
 }
 
@@ -197,7 +197,7 @@ type Shape = Circle | Square;
 
 function getArea(shape: Shape) {
   // 使用 'in' 守卫进行区分
-  if ("radius" in shape) {
+  if ('radius' in shape) {
     // 此分支中，shape 被窄化为 Circle
     return Math.PI * shape.radius ** 2;
   } else {
@@ -239,37 +239,34 @@ function letTheAnimalTalk(animal: Cat | Dog) {
 
 // 另一个更复杂的例子：检查一个未知值是否是 number[]
 function isNumberArray(value: unknown): value is number[] {
-  return (
-    Array.isArray(value) &&
-    value.every((element) => typeof element === "number")
-  );
+  return Array.isArray(value) && value.every((element) => typeof element === 'number');
 }
 
-const unknownValue: unknown = [1, 2, 3, "4"]; // 注意，这里有一个 string
+const unknownValue: unknown = [1, 2, 3, '4']; // 注意，这里有一个 string
 
 if (isNumberArray(unknownValue)) {
-  console.log("The array contains only numbers:", unknownValue);
+  console.log('The array contains only numbers:', unknownValue);
   // unknownValue 被窄化为 number[]，但实际运行时会发现条件不成立，不会进入此分支
 } else {
-  console.log("The array does not contain only numbers.");
+  console.log('The array does not contain only numbers.');
 }
 // 输出：The array does not contain only numbers.
 ```
 
 ## 4. 类型断言 vs. 类型守卫：核心差异与选择
 
-| 特性 | 类型断言 (Type Assertion) | 类型守卫 (Type Guard) |
-| :--- | :--- | :--- |
-| **机制** | 编译时，强制告诉编译器类型。 | 运行时，通过逻辑代码验证类型，编译器据此窄化类型。 |
-| **安全性** | **不安全**。如果断言错误，会导致运行时错误。 | **安全**。基于实际的运行时检查，类型正确性有保障。 |
-| **性能影响** | 无运行时成本。 | 有轻微的运行时检查成本。 |
+| 特性         | 类型断言 (Type Assertion)                                                   | 类型守卫 (Type Guard)                                                                   |
+| :----------- | :-------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| **机制**     | 编译时，强制告诉编译器类型。                                                | 运行时，通过逻辑代码验证类型，编译器据此窄化类型。                                      |
+| **安全性**   | **不安全**。如果断言错误，会导致运行时错误。                                | **安全**。基于实际的运行时检查，类型正确性有保障。                                      |
+| **性能影响** | 无运行时成本。                                                              | 有轻微的运行时检查成本。                                                                |
 | **主要用途** | 1. 处理 DOM API。<br>2. 迁移旧代码。<br>3. 覆盖编译器推断（已知更准确时）。 | 1. 处理联合类型。<br>2. 校验外部数据（API 响应）。<br>3. 任何需要运行时类型验证的场景。 |
-| **原则** | **“相信我”** | **“我证明给你看”** |
+| **原则**     | **“相信我”**                                                                | **“我证明给你看”**                                                                      |
 
 **选择策略**：
 
-* **优先使用类型守卫**：只要条件允许，特别是处理联合类型或未知数据时，都应首选类型守卫。它提供了更高程度的类型安全。
-* **谨慎使用类型断言**：仅在确信不会出错且无法使用类型守卫时（如 DOM 操作）使用类型断言。将其视为最后的手段。
+- **优先使用类型守卫**：只要条件允许，特别是处理联合类型或未知数据时，都应首选类型守卫。它提供了更高程度的类型安全。
+- **谨慎使用类型断言**：仅在确信不会出错且无法使用类型守卫时（如 DOM 操作）使用类型断言。将其视为最后的手段。
 
 ## 5. 最佳实践总结
 
@@ -277,44 +274,46 @@ if (isNumberArray(unknownValue)) {
 2. **避免滥用 `any` 和 `!`**：`as any` 和非空断言 `!` 会完全移除类型检查，它们应该是解决类型问题的最后选择，而非首选方案。总是问自己是否有更安全的替代方案。
 3. **为外部数据使用自定义类型守卫**：在处理 API 响应、`localStorage` 或任何外部输入时，编写自定义类型守卫函数来进行**数据验证**（Validation），而不仅仅是类型断言。这确保了数据的结构确实符合你的预期。
 
-    ```typescript
-    // 不佳：盲目断言
-    const apiResponse = await fetch('/api/user') as User;
+   ```typescript
+   // 不佳：盲目断言
+   const apiResponse = (await fetch('/api/user')) as User;
 
-    // 最佳：验证后使用
-    function isValidUser(data: unknown): data is User {
-      return (
-        typeof data === 'object' &&
-        data !== null &&
-        'id' in data &&
-        typeof data.id === 'number' &&
-        'name' in data &&
-        typeof data.name === 'string'
-      );
-    }
+   // 最佳：验证后使用
+   function isValidUser(data: unknown): data is User {
+     return (
+       typeof data === 'object' &&
+       data !== null &&
+       'id' in data &&
+       typeof data.id === 'number' &&
+       'name' in data &&
+       typeof data.name === 'string'
+     );
+   }
 
-    const rawData = await fetch('/api/user').then(r => r.json());
-    if (isValidUser(rawData)) {
-      // 现在可以安全地使用 rawData 作为 User 类型
-      console.log(`Hello, ${rawData.name}`);
-    } else {
-      throw new Error('Received invalid user data from API');
-    }
-    ```
+   const rawData = await fetch('/api/user').then((r) => r.json());
+   if (isValidUser(rawData)) {
+     // 现在可以安全地使用 rawData 作为 User 类型
+     console.log(`Hello, ${rawData.name}`);
+   } else {
+     throw new Error('Received invalid user data from API');
+   }
+   ```
 
 4. **利用判别式联合**：在设计联合类型时，使用一个共同的字面量属性（如 `kind: 'circle'`）来区分不同成员，这样可以极其轻松地使用 `switch` 语句或 `if` 语句进行类型窄化，这是一种极其强大和清晰的模式。
 
-    ```typescript
-    type Shape = Circle | Square; // 如上文定义
+   ```typescript
+   type Shape = Circle | Square; // 如上文定义
 
-    function getArea(shape: Shape): number {
-      switch (shape.kind) { // 根据判别属性进行判断
-        case "circle":
-          return Math.PI * shape.radius ** 2; // shape: Circle
-        case "square":
-          return shape.sideLength ** 2; // shape: Square
-      }
-    }
-    ```
+   function getArea(shape: Shape): number {
+     switch (
+       shape.kind // 根据判别属性进行判断
+     ) {
+       case 'circle':
+         return Math.PI * shape.radius ** 2; // shape: Circle
+       case 'square':
+         return shape.sideLength ** 2; // shape: Square
+     }
+   }
+   ```
 
 通过遵循这些原则和实践，你可以有效地利用 TypeScript 的类型系统，在享受静态类型检查带来的开发效率和可靠性的同时，保持代码的灵活性和表达力。

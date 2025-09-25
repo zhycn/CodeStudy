@@ -49,12 +49,12 @@ Husky 的出现解决了原生 Git Hooks 的几个痛点：**跨项目共享困�
 
 Husky 支持所有主流 Node.js 包管理器，您可以根据项目使用的工具选择相应的安装命令：
 
-| 包管理器 | 安装命令 | 初始化命令 |
-|---------|---------|------------|
-| npm | `npm install husky --save-dev` | `npx husky init` |
-| pnpm | `pnpm add husky --save-dev` | `pnpm exec husky init` |
-| yarn | `yarn add husky --dev` | Yarn 不支持 prepare 脚本，需要手动初始化 |
-| bun | `bun add husky --dev` | `bunx husky init` |
+| 包管理器 | 安装命令                       | 初始化命令                               |
+| -------- | ------------------------------ | ---------------------------------------- |
+| npm      | `npm install husky --save-dev` | `npx husky init`                         |
+| pnpm     | `pnpm add husky --save-dev`    | `pnpm exec husky init`                   |
+| yarn     | `yarn add husky --dev`         | Yarn 不支持 prepare 脚本，需要手动初始化 |
+| bun      | `bun add husky --dev`          | `bunx husky init`                        |
 
 ### 2.3 初始化配置
 
@@ -146,13 +146,13 @@ graph TD
 
 Husky 支持所有 Git 钩子，下表列出了最常用的几种：
 
-| 钩子名称 | 触发时机 | 典型用途 | 重要性 |
-|---------|---------|---------|--------|
-| **pre-commit** | 在提交消息输入后，提交完成前 | 代码检查、格式化、测试 | ⭐⭐⭐⭐⭐ |
-| **commit-msg** | 在提交消息保存后，提交完成前 | 提交消息格式验证 | ⭐⭐⭐⭐ |
-| **pre-push** | 在推送到远程仓库前 | 运行完整测试套件、构建检查 | ⭐⭐⭐⭐ |
-| **pre-rebase** | 在变基操作前 | 检查是否允许变基 | ⭐⭐ |
-| **post-merge** | 在合并操作完成后 | 更新依赖、生成文档 | ⭐⭐ |
+| 钩子名称       | 触发时机                     | 典型用途                   | 重要性     |
+| -------------- | ---------------------------- | -------------------------- | ---------- |
+| **pre-commit** | 在提交消息输入后，提交完成前 | 代码检查、格式化、测试     | ⭐⭐⭐⭐⭐ |
+| **commit-msg** | 在提交消息保存后，提交完成前 | 提交消息格式验证           | ⭐⭐⭐⭐   |
+| **pre-push**   | 在推送到远程仓库前           | 运行完整测试套件、构建检查 | ⭐⭐⭐⭐   |
+| **pre-rebase** | 在变基操作前                 | 检查是否允许变基           | ⭐⭐       |
+| **post-merge** | 在合并操作完成后             | 更新依赖、生成文档         | ⭐⭐       |
 
 ## 4 常用钩子详解
 
@@ -239,25 +239,29 @@ npx --no-install commitlint --edit "$1"
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'type-enum': [2, 'always', [
-      'upd',   // 更新某功能（不是 feat, 不是 fix）
-      'feat',  // 新功能（feature）
-      'fix',   // 修补bug
-      'docs',  // 文档（documentation）
-      'style', // 格式（不影响代码运行的变动）
-      'refactor', // 重构
-      'test',  // 增加测试
-      'chore', // 构建过程或辅助工具的变动
-      'revert' // 撤销之前的commit
-    ]],
+    'type-enum': [
+      2,
+      'always',
+      [
+        'upd', // 更新某功能（不是 feat, 不是 fix）
+        'feat', // 新功能（feature）
+        'fix', // 修补bug
+        'docs', // 文档（documentation）
+        'style', // 格式（不影响代码运行的变动）
+        'refactor', // 重构
+        'test', // 增加测试
+        'chore', // 构建过程或辅助工具的变动
+        'revert', // 撤销之前的commit
+      ],
+    ],
     'type-case': [0],
     'type-empty': [0],
     'scope-empty': [0],
     'scope-case': [0],
     'subject-full-stop': [0, 'never'],
     'subject-case': [0, 'never'],
-    'header-max-length': [0, 'always', 72]
-  }
+    'header-max-length': [0, 'always', 72],
+  },
 };
 ```
 
@@ -296,7 +300,7 @@ if [[ $CURRENT_BRANCH =~ $IMPORTANT_BRANCHES ]]; then
   echo "运行完整测试套件..."
   npm run test:all
   npm run build
-  
+
   echo "检查依赖安全漏洞..."
   npm audit --audit-level moderate
 fi
@@ -349,14 +353,14 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  extends: ["airbnb-base", "plugin:prettier/recommended"],
+  extends: ['airbnb-base', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 2018,
   },
   rules: {
-    "no-console": "off",
-    "import/prefer-default-export": "off"
-  }
+    'no-console': 'off',
+    'import/prefer-default-export': 'off',
+  },
 };
 ```
 
@@ -389,15 +393,8 @@ npm install --save-dev lint-staged
 ```json
 {
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,vue}": [
-      "prettier --write",
-      "eslint --cache --fix",
-      "git add"
-    ],
-    "*.{json,md,yml,css}": [
-      "prettier --write",
-      "git add"
-    ]
+    "src/**/*.{js,jsx,ts,tsx,vue}": ["prettier --write", "eslint --cache --fix", "git add"],
+    "*.{json,md,yml,css}": ["prettier --write", "git add"]
   }
 }
 ```
@@ -417,13 +414,13 @@ npx lint-staged
 
 ```javascript
 module.exports = {
-  ignore: ["package-lock.json", "CHANGELOG.md"],
+  ignore: ['package-lock.json', 'CHANGELOG.md'],
   linters: {
-    "*.ts": ["prettier --write", "eslint --fix", "git add"],
-    "*.js": ["prettier --write", "eslint --cache --fix", "git add"],
-    "*.vue": ["prettier --write", "eslint --cache --fix", "git add"],
-    "*.{json,md,yml,css}": ["prettier --write", "git add"]
-  }
+    '*.ts': ['prettier --write', 'eslint --fix', 'git add'],
+    '*.js': ['prettier --write', 'eslint --cache --fix', 'git add'],
+    '*.vue': ['prettier --write', 'eslint --cache --fix', 'git add'],
+    '*.{json,md,yml,css}': ['prettier --write', 'git add'],
+  },
 };
 ```
 
@@ -447,8 +444,8 @@ module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
     'type-enum': [2, 'always', ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'revert']],
-    'subject-case': [0] // 不强制 subject 大小写
-  }
+    'subject-case': [0], // 不强制 subject 大小写
+  },
 };
 ```
 
@@ -460,20 +457,24 @@ module.exports = {
 // commitlint.config.js
 module.exports = {
   rules: {
-    'type-enum': [2, 'always', [
-      'add',    // 新增功能或文件
-      'update', // 更新功能
-      'fix',    // 修复bug
-      'ui',     // 更新UI
-      'style',  // 样式修改
-      'init',   // 初始化
-      'docs'    // 文档修改
-    ]],
+    'type-enum': [
+      2,
+      'always',
+      [
+        'add', // 新增功能或文件
+        'update', // 更新功能
+        'fix', // 修复bug
+        'ui', // 更新UI
+        'style', // 样式修改
+        'init', // 初始化
+        'docs', // 文档修改
+      ],
+    ],
     'type-empty': [2, 'never'],
     'subject-empty': [2, 'never'],
     'type-case': [2, 'always', 'lower-case'],
-    'subject-case': [0]
-  }
+    'subject-case': [0],
+  },
 };
 ```
 

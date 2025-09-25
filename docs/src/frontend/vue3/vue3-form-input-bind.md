@@ -21,10 +21,7 @@ Vue 3 在 Vue 2 的基础上对 `v-model` 进行了显著改进，使其更加�
 
 ```html
 <!-- 对于标准输入元素 -->
-<input
-  :value="searchText"
-  @input="searchText = $event.target.value"
-/>
+<input :value="searchText" @input="searchText = $event.target.value" />
 
 <!-- 等价于 -->
 <input v-model="searchText" />
@@ -193,7 +190,7 @@ const selectedFruit = ref({});
 const fruits = ref([
   { id: 1, name: '苹果' },
   { id: 2, name: '香蕉' },
-  { id: 3, name: '橙子' }
+  { id: 3, name: '橙子' },
 ]);
 </script>
 ```
@@ -206,13 +203,9 @@ const fruits = ref([
 
 ```vue
 <template>
-  <input
-    type="checkbox"
-    v-model="toggle"
-    :true-value="yesValue"
-    :false-value="noValue"
-  />
-  <p>Toggle value: {{ toggle }}</p> <!-- 将是 'yes' 或 'no' -->
+  <input type="checkbox" v-model="toggle" :true-value="yesValue" :false-value="noValue" />
+  <p>Toggle value: {{ toggle }}</p>
+  <!-- 将是 'yes' 或 'no' -->
 </template>
 
 <script setup>
@@ -231,7 +224,8 @@ const noValue = ref('no');
   <div>
     <input type="radio" v-model="selectedOption" :value="optionA" /> Option A
     <input type="radio" v-model="selectedOption" :value="optionB" /> Option B
-    <p>Selected: {{ selectedOption }}</p> <!-- 将是 optionA 或 optionB 对象 -->
+    <p>Selected: {{ selectedOption }}</p>
+    <!-- 将是 optionA 或 optionB 对象 -->
   </div>
 </template>
 
@@ -285,10 +279,12 @@ const lazyText = ref('');
 <template>
   <div>
     <input v-model="age" type="number" />
-    <p>Type of age: {{ typeof age }}</p> <!-- 输出: string -->
+    <p>Type of age: {{ typeof age }}</p>
+    <!-- 输出: string -->
 
     <input v-model.number="ageNumber" type="number" />
-    <p>Type of ageNumber: {{ typeof ageNumber }}</p> <!-- 输出: number -->
+    <p>Type of ageNumber: {{ typeof ageNumber }}</p>
+    <!-- 输出: number -->
   </div>
 </template>
 
@@ -331,8 +327,8 @@ Vue 3 对自定义组件上的 `v-model` 进行了重大更新，使其更加清
 
 ### 5.1 Vue 2 与 Vue 3 的差异
 
-* **Vue 2**： 在自定义组件上，`v-model` 默认利用 `value` prop 和 `input` 事件。
-* **Vue 3**： 在自定义组件上，`v-model` 默认利用 `modelValue` prop 和 `update:modelValue` 事件。这避免了与 `value` 属性的冲突，并且意图更加明确。
+- **Vue 2**： 在自定义组件上，`v-model` 默认利用 `value` prop 和 `input` 事件。
+- **Vue 3**： 在自定义组件上，`v-model` 默认利用 `modelValue` prop 和 `update:modelValue` 事件。这避免了与 `value` 属性的冲突，并且意图更加明确。
 
 ### 5.2 基本实现
 
@@ -341,10 +337,7 @@ Vue 3 对自定义组件上的 `v-model` 进行了重大更新，使其更加清
 ```vue
 <template>
   <div>
-    <input
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-    />
+    <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
   </div>
 </template>
 
@@ -382,23 +375,15 @@ Vue 3 允许你为同一个组件绑定多个 `v-model`，并且可以为每个 
 ```vue
 <template>
   <div>
-    <input
-      :value="firstName"
-      @input="$emit('update:firstName', $event.target.value)"
-      placeholder="名"
-    />
-    <input
-      :value="lastName"
-      @input="$emit('update:lastName', $event.target.value)"
-      placeholder="姓"
-    />
+    <input :value="firstName" @input="$emit('update:firstName', $event.target.value)" placeholder="名" />
+    <input :value="lastName" @input="$emit('update:lastName', $event.target.value)" placeholder="姓" />
   </div>
 </template>
 
 <script setup>
 defineProps({
   firstName: String,
-  lastName: String
+  lastName: String,
 });
 
 defineEmits(['update:firstName', 'update:lastName']);
@@ -410,10 +395,7 @@ defineEmits(['update:firstName', 'update:lastName']);
 ```vue
 <template>
   <div>
-    <UserForm
-      v-model:firstName="first"
-      v-model:lastName="last"
-    />
+    <UserForm v-model:firstName="first" v-model:lastName="last" />
     <p>全名: {{ first }} {{ last }}</p>
   </div>
 </template>
@@ -436,10 +418,7 @@ const last = ref('');
 ```vue
 <template>
   <div>
-    <input
-      :value="modelValue"
-      @input="emitValue($event.target.value)"
-    />
+    <input :value="modelValue" @input="emitValue($event.target.value)" />
   </div>
 </template>
 
@@ -448,7 +427,7 @@ import { onMounted } from 'vue';
 
 const props = defineProps({
   modelValue: String,
-  modelModifiers: { default: () => ({}) } // 默认空对象
+  modelModifiers: { default: () => ({}) }, // 默认空对象
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -468,7 +447,8 @@ const emitValue = (value) => {
 <template>
   <div>
     <MyCapitalizeInput v-model.capitalize="capitalizedText" />
-    <p>{{ capitalizedText }}</p> <!-- 输入 "hello" 会显示 "Hello" -->
+    <p>{{ capitalizedText }}</p>
+    <!-- 输入 "hello" 会显示 "Hello" -->
   </div>
 </template>
 
@@ -515,20 +495,20 @@ const formattedPhoneNumber = computed({
     phoneNumber.value = numbers; // 存储原始数字
     // 注意：这里不能直接赋值给 formattedPhoneNumber，否则会递归
     // 我们更新的是底层的 phoneNumber ref
-  }
+  },
 });
 </script>
 ```
 
 ### 6.2 性能考量
 
-* **大量输入**： 对于大型表单或列表中的输入框，过度使用 `v-model`（尤其是没有 `.lazy` 修饰符时）可能导致性能问题，因为每次输入都会触发更新。考虑使用 `.lazy` 或在 `change` 事件中手动更新状态。
-* **深层对象**： 使用 `v-model` 绑定深层对象的属性时（如 `v-model="form.user.name"`），确保该属性是响应式的（例如，使用 `reactive` 创建对象）。
+- **大量输入**： 对于大型表单或列表中的输入框，过度使用 `v-model`（尤其是没有 `.lazy` 修饰符时）可能导致性能问题，因为每次输入都会触发更新。考虑使用 `.lazy` 或在 `change` 事件中手动更新状态。
+- **深层对象**： 使用 `v-model` 绑定深层对象的属性时（如 `v-model="form.user.name"`），确保该属性是响应式的（例如，使用 `reactive` 创建对象）。
 
 ### 6.3 无障碍访问（Accessibility）
 
-* 始终为输入元素提供有意义的 `id` 和关联的 `<label>` 的 `for` 属性。
-* 使用 `aria-*` 属性来描述输入框的状态（如无效、必填等）。
+- 始终为输入元素提供有意义的 `id` 和关联的 `<label>` 的 `for` 属性。
+- 使用 `aria-*` 属性来描述输入框的状态（如无效、必填等）。
 
 ```vue
 <template>

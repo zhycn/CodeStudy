@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import ChildComponent from './ChildComponent.vue'
+import ChildComponent from './ChildComponent.vue';
 </script>
 ```
 
@@ -80,10 +80,12 @@ import ChildComponent from './ChildComponent.vue'
 
 ```vue
 <!-- 使用方式1：不提供内容，显示默认文本 -->
-<SubmitButton /> <!-- 渲染：<button class="submit-button">提交</button> -->
+<SubmitButton />
+<!-- 渲染：<button class="submit-button">提交</button> -->
 
 <!-- 使用方式2：提供内容，覆盖默认文本 -->
-<SubmitButton>保存</SubmitButton> <!-- 渲染：<button class="submit-button">保存</button> -->
+<SubmitButton>保存</SubmitButton>
+<!-- 渲染：<button class="submit-button">保存</button> -->
 ```
 
 ## 4. 具名插槽
@@ -133,7 +135,7 @@ import ChildComponent from './ChildComponent.vue'
 </template>
 
 <script setup>
-import BaseLayout from './BaseLayout.vue'
+import BaseLayout from './BaseLayout.vue';
 </script>
 ```
 
@@ -154,10 +156,10 @@ import BaseLayout from './BaseLayout.vue'
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const user = ref({ name: '张三', age: 30 })
-const isLoggedIn = ref(true)
+const user = ref({ name: '张三', age: 30 });
+const isLoggedIn = ref(true);
 </script>
 ```
 
@@ -169,15 +171,13 @@ const isLoggedIn = ref(true)
 <template>
   <CurrentUser v-slot="slotProps">
     <!-- 在模板中访问子组件传递的数据 -->
-    <p v-if="slotProps.isLoggedIn">
-      欢迎, {{ slotProps.user.name }}！
-    </p>
+    <p v-if="slotProps.isLoggedIn">欢迎, {{ slotProps.user.name }}！</p>
     <p v-else>请登录。</p>
   </CurrentUser>
 </template>
 
 <script setup>
-import CurrentUser from './CurrentUser.vue'
+import CurrentUser from './CurrentUser.vue';
 </script>
 ```
 
@@ -198,13 +198,13 @@ import CurrentUser from './CurrentUser.vue'
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const items = ref([
   { id: 1, name: 'Vue.js', description: '渐进式框架' },
   { id: 2, name: 'React', description: '用于构建用户界面的 JavaScript 库' },
-  { id: 3, name: 'Angular', description: '平台和框架' }
-])
+  { id: 3, name: 'Angular', description: '平台和框架' },
+]);
 </script>
 ```
 
@@ -215,14 +215,15 @@ const items = ref([
   <ScopedSlotDemo>
     <!-- 使用解构语法和重命名，让模板更简洁 -->
     <template #item="{ itemData: todo }">
-      <span class="name">{{ todo.name }}</span>: 
+      <span class="name">{{ todo.name }}</span
+      >:
       <span class="desc">{{ todo.description }}</span>
     </template>
   </ScopedSlotDemo>
 </template>
 
 <script setup>
-import ScopedSlotDemo from './ScopedSlotDemo.vue'
+import ScopedSlotDemo from './ScopedSlotDemo.vue';
 </script>
 ```
 
@@ -233,11 +234,11 @@ import ScopedSlotDemo from './ScopedSlotDemo.vue'
 1. **清晰的命名**：为具名插槽起一个描述性的名字，例如 `header`, `footer`, `action`, `content`，避免使用模糊的名字如 `slot1`。
 2. **使用作用域插槽解构**：在 `v-slot` 中直接使用 ES6 解构语法，可以使模板更清晰。
 
-    ```vue
-    <template #item="{ itemData }">
-      {{ itemData.name }}
-    </template>
-    ```
+   ```vue
+   <template #item="{ itemData }">
+     {{ itemData.name }}
+   </template>
+   ```
 
 3. **合理使用后备内容**：为可选的 UI 部分提供合理的默认值，提升开发体验。
 4. **保持插槽的单一职责**：一个插槽最好只负责一个明确的内容区域，避免在一个插槽中塞入过多不相关的内容。
@@ -248,34 +249,34 @@ import ScopedSlotDemo from './ScopedSlotDemo.vue'
 1. **样式冲突**：插槽内容是在父组件作用域中编译的，但其最终的 HTML 结构位于子组件内部。这意味着父组件的样式选择器可能会意外影响到子组件，而子组件的样式（如果使用 `scoped`）也可能通过深度选择器（`::v-deep`）影响插槽内容。需要明确 CSS 作用域规则。
 2. **渲染作用域**：插槽内容**无法**访问子组件的作用域。它只能访问父组件的作用域。所有需要的数据都必须通过插槽 Props 从子组件传递。
 
-    ```vue
-    <!-- 父组件 -->
-    <ChildComponent>
-      <!-- 错误：`childProperty` 在父组件的模板中不存在 -->
-      {{ childProperty }}
-    </ChildComponent>
-    ```
+   ```vue
+   <!-- 父组件 -->
+   <ChildComponent>
+     <!-- 错误：`childProperty` 在父组件的模板中不存在 -->
+     {{ childProperty }}
+   </ChildComponent>
+   ```
 
 3. **默认插槽的隐式传递**：当同时使用默认插槽和作用域插槽时，必须为默认插槽也显式地使用 `<template>` 标签，否则会导致语法错误。
 
-    ```vue
-    <!-- 错误写法 -->
-    <ScopedChild v-slot="defaultSlotProps">
-      内容...
-      <template #other="otherSlotProps"> ... </template>
-    </ScopedChild>
+   ```vue
+   <!-- 错误写法 -->
+   <ScopedChild v-slot="defaultSlotProps">
+     内容...
+     <template #other="otherSlotProps"> ... </template>
+   </ScopedChild>
 
-    <!-- 正确写法 -->
-    <ScopedChild>
-      <template v-slot:default="defaultSlotProps">
-        内容...
-      </template>
-
-      <template #other="otherSlotProps">
-        ...
-      </template>
-    </ScopedChild>
-    ```
+   <!-- 正确写法 -->
+   <ScopedChild>
+     <template v-slot:default="defaultSlotProps">
+       内容...
+     </template>
+   
+     <template #other="otherSlotProps">
+       ...
+     </template>
+   </ScopedChild>
+   ```
 
 ## 7. 高级技巧与模式
 
@@ -286,22 +287,18 @@ Vue 3 支持使用动态指令参数来定义动态插槽名，这提供了极�
 ```vue
 <template>
   <BaseLayout>
-    <template v-slot:[dynamicSlotName]>
-      ...
-    </template>
+    <template v-slot:[dynamicSlotName]> ... </template>
 
     <!-- 或者使用计算属性 -->
-    <template #[computedSlotName]>
-      ...
-    </template>
+    <template #[computedSlotName]> ... </template>
   </BaseLayout>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
 
-const dynamicSlotName = ref('header')
-const computedSlotName = computed(() => 'footer')
+const dynamicSlotName = ref('header');
+const computedSlotName = computed(() => 'footer');
 </script>
 ```
 
@@ -318,10 +315,12 @@ const computedSlotName = computed(() => 'footer')
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const isOn = ref(false)
-const toggle = () => { isOn.value = !isOn.value }
+const isOn = ref(false);
+const toggle = () => {
+  isOn.value = !isOn.value;
+};
 </script>
 ```
 
@@ -331,22 +330,16 @@ const toggle = () => { isOn.value = !isOn.value }
 <template>
   <Toggle v-slot="{ isOn, toggle }">
     <!-- 父组件完全控制如何渲染UI -->
-    <button 
-      @click="toggle" 
-      :class="{ active: isOn }"
-      style="padding: 8px 16px;"
-    >
+    <button @click="toggle" :class="{ active: isOn }" style="padding: 8px 16px;">
       {{ isOn ? 'ON' : 'OFF' }}
     </button>
 
-    <div v-if="isOn" style="margin-top: 10px;">
-      内容现在是显示的！
-    </div>
+    <div v-if="isOn" style="margin-top: 10px;">内容现在是显示的！</div>
   </Toggle>
 </template>
 
 <script setup>
-import Toggle from './Toggle.vue'
+import Toggle from './Toggle.vue';
 </script>
 ```
 

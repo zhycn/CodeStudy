@@ -1,6 +1,6 @@
 好的，请放心。作为您的 Vite 专家和技术文档顾问，我已深入研究了当前关于 Vite 多环境配置的最佳实践和社区方案，并为您精心撰写了这份详尽的教程。
 
-***
+---
 
 # Vite 多环境配置详解与最佳实践
 
@@ -26,12 +26,12 @@ Vite 在一个特殊的 `import.meta.env` 对象上暴露环境变量。它默�
 
 Vite 使用 `dotenv` 从你的项目根目录加载 `.env` 文件。它根据当前运行的**模式**自动加载特定的文件。
 
-| 文件名称                | 加载时机                                  | 优先级 (从上至下递增) |
-| :---------------------- | :---------------------------------------- | :------------------- |
-| `.env`                  | 所有情况下                                | 最低                 |
-| `.env.local`            | 所有情况下，但会被 `gitignore` 忽略         |                      |
-| `.env.[mode]`           | 仅在指定模式下                            |                      |
-| `.env.[mode].local`     | 仅在指定模式下，但会被 `gitignore` 忽略     | 最高                 |
+| 文件名称            | 加载时机                                | 优先级 (从上至下递增) |
+| :------------------ | :-------------------------------------- | :-------------------- |
+| `.env`              | 所有情况下                              | 最低                  |
+| `.env.local`        | 所有情况下，但会被 `gitignore` 忽略     |                       |
+| `.env.[mode]`       | 仅在指定模式下                          |                       |
+| `.env.[mode].local` | 仅在指定模式下，但会被 `gitignore` 忽略 | 最高                  |
 
 **示例文件结构：**
 
@@ -194,16 +194,16 @@ export const apiClient = {
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_APP_NAME: string
-  readonly VITE_APP_VERSION: string
-  readonly VITE_API_BASE_URL: string
-  readonly VITE_DEBUG: string // 注意：dotenv 读取的值都是 string
-  readonly VITE_ENABLE_ANALYTICS: string
-  readonly VITE_ANALYTICS_ID?: string // 可选属性
+  readonly VITE_APP_NAME: string;
+  readonly VITE_APP_VERSION: string;
+  readonly VITE_API_BASE_URL: string;
+  readonly VITE_DEBUG: string; // 注意：dotenv 读取的值都是 string
+  readonly VITE_ENABLE_ANALYTICS: string;
+  readonly VITE_ANALYTICS_ID?: string; // 可选属性
 }
 
 interface ImportMeta {
-  readonly env: ImportMetaEnv
+  readonly env: ImportMetaEnv;
 }
 ```
 
@@ -350,11 +350,11 @@ initApp();
 
 1. **永远不要将 `.env.local` 或任何包含敏感信息的文件提交到版本控制系统**。确保它们在你的 `.gitignore` 中。
 
-    ```
-    .env.local
-    .env.*.local
-    *.local
-    ```
+   ```
+   .env.local
+   .env.*.local
+   *.local
+   ```
 
 2. **牢记 `VITE_` 前缀规则**：任何以 `VITE_` 为前缀的变量都会被包含在客户端代码包中。**绝对不要**将密码、API 密钥、数据库连接字符串等敏感信息以 `VITE_` 为前缀存储。
 3. **敏感信息应通过后端传递**：真正的敏感配置应该由后端服务器管理，并通过安全的 API 端点提供给前端应用。

@@ -48,17 +48,17 @@ headers = {
 try:
     # 发送 GET 请求
     response = requests.get(url, headers=headers, timeout=10)
-    
+
     # 检查请求是否成功 (状态码 200)
     response.raise_for_status()
-    
+
     # 设置正确的编码（有时需要根据响应头或页面 meta 标签调整）
     # response.encoding = 'utf-8'
-    
+
     # 打印状态码和部分内容
     print(f"Status Code: {response.status_code}")
     print(f"Page Content Length: {len(response.text)} characters")
-    
+
 except requests.exceptions.RequestException as e:
     print(f"Request failed: {e}")
     exit()
@@ -96,22 +96,22 @@ for article in book_articles:
     # 方法1: 使用 .find()
     title_tag = article.find('h2', class_='title')
     title = title_tag.get_text(strip=True) if title_tag else 'N/A'
-    
+
     # 方法2: 使用 CSS 选择器 (更现代)
     author_tag = article.select_one('p.author')
     author = author_tag.get_text(strip=True) if author_tag else 'N/A'
-    
+
     # 提取价格
     price_tag = article.find('span', class_='price')
     price = price_tag.get_text(strip=True) if price_tag else 'N/A'
-    
+
     # 提取链接 (获取属性)
     link_tag = article.find('a')
     relative_url = link_tag['href'] if link_tag and link_tag.has_attr('href') else '#'
     # 将相对 URL 转换为绝对 URL
     from urllib.parse import urljoin
     absolute_url = urljoin(url, relative_url)
-    
+
     # 将提取的数据存入字典
     book_info = {
         'title': title,
@@ -151,7 +151,7 @@ driver = webdriver.Chrome(options=options)
 
 try:
     driver.get('https://example.com/javascript-loaded-books')
-    
+
     # 显式等待：等待某个特定元素加载完成，最多等 10 秒
     # 这比 time.sleep(5) 这种固定等待更高效、更可靠
     wait = WebDriverWait(driver, 10)
@@ -159,18 +159,18 @@ try:
     book_list_container = wait.until(
         EC.presence_of_element_located((By.CLASS_NAME, "book-list"))
     )
-    
+
     # 有时候可能需要滚动页面以触发加载
     # driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     # time.sleep(2) # 等待滚动后加载
-    
+
     # 现在页面已完全加载，可以获取 HTML 源码并用 BeautifulSoup 解析
     page_source = driver.page_source
     soup_dynamic = BeautifulSoup(page_source, 'lxml')
-    
+
     # ... 接下来的解析过程与静态页面相同 ...
     # books = soup_dynamic.find_all(...)
-    
+
 finally:
     # 务必关闭浏览器，释放资源
     driver.quit()
@@ -217,7 +217,7 @@ class ExampleSpiderSpider(scrapy.Spider):
     name = 'example_spider'
     allowed_domains = ['example.com']
     start_urls = ['https://example.com/books']
-    
+
     # 自定义设置，例如下载延迟、User-Agent 等
     custom_settings = {
         'DOWNLOAD_DELAY': 1, # 每次请求间隔 1 秒，避免过快
@@ -235,21 +235,21 @@ class ExampleSpiderSpider(scrapy.Spider):
     def parse(self, response):
         # Scrapy 使用 Selector 基于 XPath 或 CSS 选择器，而不是 BeautifulSoup
         books = response.css('article.book')
-        
+
         for book in books:
             item = BookItem()
             item['title'] = book.css('h2.title::text').get(default='N/A').strip()
             item['author'] = book.css('p.author::text').get(default='N/A').strip()
             item['price'] = book.css('span.price::text').get(default='N/A').strip()
-            
+
             relative_url = book.css('a::attr(href)').get()
             if relative_url:
                 item['url'] = urljoin(response.url, relative_url)
             else:
                 item['url'] = 'N/A'
-                
+
             yield item # 生成 item，交给 Pipeline 处理
-        
+
         # 处理分页（示例）
         next_page_url = response.css('a.next-page::attr(href)').get()
         if next_page_url:
@@ -290,22 +290,22 @@ if not can_fetch:
 
 1. **设置延时（Throttling）**：在请求间添加随机延时，减轻服务器压力。
 
-    ```python
-    import time
-    import random
-    
-    delay = random.uniform(1, 3) # 随机延时 1 到 3 秒
-    time.sleep(delay)
-    ```
+   ```python
+   import time
+   import random
 
-    Scrapy 中可在 `settings.py` 中配置 `DOWNLOAD_DELAY` 和 `RANDOMIZE_DOWNLOAD_DELAY`。
+   delay = random.uniform(1, 3) # 随机延时 1 到 3 秒
+   time.sleep(delay)
+   ```
+
+   Scrapy 中可在 `settings.py` 中配置 `DOWNLOAD_DELAY` 和 `RANDOMIZE_DOWNLOAD_DELAY`。
 
 2. **使用会话（Session）**：`requests.Session()` 可以复用 TCP 连接，提高效率并保持 cookies。
 
-    ```python
-    session = requests.Session()
-    response = session.get(url, headers=headers)
-    ```
+   ```python
+   session = requests.Session()
+   response = session.get(url, headers=headers)
+   ```
 
 3. **处理超时和重试**：一定要设置超时，并为某些临时错误（如 429, 500）实现重试逻辑。可以使用 `tenacity` 等库。
 
@@ -313,13 +313,13 @@ if not can_fetch:
 
 1. **代理（Proxies）**：使用代理 IP 池来避免 IP 被封锁。
 
-    ```python
-    proxies = {
-        'http': 'http://10.10.1.10:3128',
-        'https': 'http://10.10.1.10:1080',
-    }
-    response = requests.get(url, proxies=proxies, timeout=10)
-    ```
+   ```python
+   proxies = {
+       'http': 'http://10.10.1.10:3128',
+       'https': 'http://10.10.1.10:1080',
+   }
+   response = requests.get(url, proxies=proxies, timeout=10)
+   ```
 
 2. **User-Agent 轮换**：准备一个 User-Agent 列表并随机使用。
 
@@ -356,34 +356,34 @@ else:
 
 根据数据量和用途选择合适的存储方式。
 
-* **CSV/JSON**：适用于中小规模数据。
+- **CSV/JSON**：适用于中小规模数据。
 
-    ```python
-    import csv
-    import json
-    
-    # CSV
-    with open('books.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['title', 'author', 'price', 'url']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for book in books_data:
-            writer.writerow(book)
-    
-    # JSON
-    with open('books.json', 'w', encoding='utf-8') as jsonfile:
-        json.dump(books_data, jsonfile, ensure_ascii=False, indent=4)
-    ```
+  ```python
+  import csv
+  import json
 
-* **数据库（SQLite, MySQL, PostgreSQL, MongoDB）**：适用于大规模、需要复杂查询的数据。Scrapy 的 Item Pipeline 可以很方便地对接数据库。
+  # CSV
+  with open('books.csv', 'w', newline='', encoding='utf-8') as csvfile:
+      fieldnames = ['title', 'author', 'price', 'url']
+      writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+      writer.writeheader()
+      for book in books_data:
+          writer.writerow(book)
+
+  # JSON
+  with open('books.json', 'w', encoding='utf-8') as jsonfile:
+      json.dump(books_data, jsonfile, ensure_ascii=False, indent=4)
+  ```
+
+- **数据库（SQLite, MySQL, PostgreSQL, MongoDB）**：适用于大规模、需要复杂查询的数据。Scrapy 的 Item Pipeline 可以很方便地对接数据库。
 
 ## 6. 总结
 
-| 场景 | 推荐工具 | 优点 | 缺点 |
-| :--- | :--- | :--- | :--- |
-| **简单静态网站** | `Requests` + `BeautifulSoup` | 简单灵活，学习曲线平缓 | 功能有限，需自己处理并发、队列等 |
-| **复杂动态网站** | `Selenium` / `Playwright` | 能模拟真实用户，处理 JS 渲染 | 速度慢，资源消耗大 |
-| **大型专业项目** | `Scrapy` | 功能强大，异步高效，生态完善 | 学习曲线较陡，框架较重 |
+| 场景             | 推荐工具                     | 优点                         | 缺点                             |
+| :--------------- | :--------------------------- | :--------------------------- | :------------------------------- |
+| **简单静态网站** | `Requests` + `BeautifulSoup` | 简单灵活，学习曲线平缓       | 功能有限，需自己处理并发、队列等 |
+| **复杂动态网站** | `Selenium` / `Playwright`    | 能模拟真实用户，处理 JS 渲染 | 速度慢，资源消耗大               |
+| **大型专业项目** | `Scrapy`                     | 功能强大，异步高效，生态完善 | 学习曲线较陡，框架较重           |
 
 **核心建议**：
 
@@ -396,4 +396,5 @@ else:
 网络爬虫技术仍在不断发展，始终保持学习，关注新的工具和反爬虫技术的变化。
 
 ---
+
 **请注意**：本文档提供的代码示例主要用于教育和演示目的。在实际对任何网站进行爬取之前，请务必确认其服务条款并检查 `robots.txt` 文件，确保你的行为是合法且符合道德的。

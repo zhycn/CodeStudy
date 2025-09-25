@@ -24,16 +24,16 @@ Vue 的单文件组件将一个组件的逻辑 (JavaScript)、模板 (HTML) 和�
 
 <script>
 // 使用组合式 API
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 export default {
   setup() {
-    const greetingMessage = ref('Hello, Vue 3!')
+    const greetingMessage = ref('Hello, Vue 3!');
     return {
-      greetingMessage
-    }
-  }
-}
+      greetingMessage,
+    };
+  },
+};
 </script>
 
 <style scoped>
@@ -64,26 +64,26 @@ export default {
   // 数据
   data() {
     return {
-      count: 0
-    }
+      count: 0,
+    };
   },
   // 方法
   methods: {
     increment() {
-      this.count++
-    }
+      this.count++;
+    },
   },
   // 计算属性
   computed: {
     doubleCount() {
-      return this.count * 2
-    }
+      return this.count * 2;
+    },
   },
   // 生命周期钩子
   mounted() {
-    console.log('Component is mounted!')
-  }
-}
+    console.log('Component is mounted!');
+  },
+};
 </script>
 ```
 
@@ -93,48 +93,48 @@ Vue 3 的推荐写法。它允许我们通过导入 API 函数的方式，将逻
 
 ```vue
 <script>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
 
 export default {
   setup() {
     // 状态 (替代 data)
-    const count = ref(0)
+    const count = ref(0);
 
     // 方法 (替代 methods)
     function increment() {
-      count.value++
+      count.value++;
     }
 
     // 计算属性 (替代 computed)
-    const doubleCount = computed(() => count.value * 2)
+    const doubleCount = computed(() => count.value * 2);
 
     // 生命周期钩子 (替代 mounted)
     onMounted(() => {
-      console.log('Component is mounted!')
-    })
+      console.log('Component is mounted!');
+    });
 
     // 必须将需要在模板中使用的数据和方法返回
     return {
       count,
       increment,
-      doubleCount
-    }
-  }
-}
+      doubleCount,
+    };
+  },
+};
 </script>
 
 <!-- 或者使用更简洁的 <script setup> 语法 -->
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
 
-const count = ref(0)
+const count = ref(0);
 function increment() {
-  count.value++
+  count.value++;
 }
-const doubleCount = computed(() => count.value * 2)
+const doubleCount = computed(() => count.value * 2);
 onMounted(() => {
-  console.log('Component is mounted!')
-})
+  console.log('Component is mounted!');
+});
 // <script setup> 中的顶层绑定会自动在模板中可用
 </script>
 ```
@@ -156,16 +156,16 @@ Props 是自定义属性，用于从父组件向子组件传递数据。
 const props = defineProps({
   title: {
     type: String,
-    required: true // 必传项
+    required: true, // 必传项
   },
   likes: {
     type: Number,
-    default: 0 // 默认值
+    default: 0, // 默认值
   },
-  isPublished: Boolean // 仅类型声明
-})
+  isPublished: Boolean, // 仅类型声明
+});
 
-console.log(props.title)
+console.log(props.title);
 </script>
 
 <template>
@@ -181,24 +181,17 @@ console.log(props.title)
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import ChildComponent from './ChildComponent.vue'
+import { ref } from 'vue';
+import ChildComponent from './ChildComponent.vue';
 
-const postTitle = ref('My Journey with Vue 3')
-const postLikes = ref(42)
+const postTitle = ref('My Journey with Vue 3');
+const postLikes = ref(42);
 </script>
 
 <template>
-  <ChildComponent
-    :title="postTitle"
-    :likes="postLikes"
-    is-published
-  />
+  <ChildComponent :title="postTitle" :likes="postLikes" is-published />
   <!-- 也可以传递静态值 -->
-  <ChildComponent
-    title="Static Title"
-    :likes="100"
-  />
+  <ChildComponent title="Static Title" :likes="100" />
 </template>
 ```
 
@@ -207,27 +200,27 @@ const postLikes = ref(42)
 1. **始终声明 Props**：明确定义 props 的类型、要求和默认值，这相当于组件的 API 文档，能提高可维护性和开发体验。
 2. **使用 `camelCase` 声明，`kebab-case` 传递**：在 JavaScript 中使用 `camelCase`，在模板中使用 `kebab-case`（因为 HTML 属性名是大小写不敏感的）。
 
-    ```javascript
-    defineProps({
-      postTitle: String
-    })
-    ```
+   ```javascript
+   defineProps({
+     postTitle: String,
+   });
+   ```
 
-    ```html
-    <ChildComponent post-title="hello" />
-    ```
+   ```html
+   <ChildComponent post-title="hello" />
+   ```
 
 3. **避免直接修改 Prop**：Props 是只读的。如果需要修改，应该在子组件中定义一个本地的 `ref` 或 `computed` property，基于 prop 的值。
 
-    ```vue
-    <script setup>
-    import { computed } from 'vue'
+   ```vue
+   <script setup>
+   import { computed } from 'vue';
 
-    const props = defineProps(['size'])
-    // 正确的做法：使用计算属性
-    const normalizedSize = computed(() => props.size.trim().toLowerCase())
-    </script>
-    ```
+   const props = defineProps(['size']);
+   // 正确的做法：使用计算属性
+   const normalizedSize = computed(() => props.size.trim().toLowerCase());
+   </script>
+   ```
 
 ## 3. 自定义事件：子组件向父组件传递数据
 
@@ -242,16 +235,16 @@ const postLikes = ref(42)
 ```vue
 <script setup>
 // 声明事件
-const emit = defineEmits(['enlarge-text', 'submit'])
+const emit = defineEmits(['enlarge-text', 'submit']);
 
 function onButtonClick() {
   // 触发无负载事件
-  emit('enlarge-text')
+  emit('enlarge-text');
 }
 
 function onSubmitForm() {
   // 触发有负载事件
-  emit('submit', { id: 1, message: 'Hello from child!' })
+  emit('submit', { id: 1, message: 'Hello from child!' });
 }
 </script>
 
@@ -271,18 +264,18 @@ function onSubmitForm() {
 
 ```vue
 <script setup>
-import { ref } from 'vue'
-import EmitterComponent from './EmitterComponent.vue'
+import { ref } from 'vue';
+import EmitterComponent from './EmitterComponent.vue';
 
-const textSize = ref(1)
-const postMessage = ref('')
+const textSize = ref(1);
+const postMessage = ref('');
 
 function onEnlargeText() {
-  textSize.value += 0.1
+  textSize.value += 0.1;
 }
 
 function onFormSubmit(payload) {
-  postMessage.value = `Received: ${payload.message} (ID: ${payload.id})`
+  postMessage.value = `Received: ${payload.message} (ID: ${payload.id})`;
 }
 </script>
 
@@ -290,10 +283,7 @@ function onFormSubmit(payload) {
   <div :style="{ fontSize: textSize + 'em' }">
     <p>Parent Text</p>
     <p>{{ postMessage }}</p>
-    <EmitterComponent
-      @enlarge-text="onEnlargeText"
-      @submit="onFormSubmit"
-    />
+    <EmitterComponent @enlarge-text="onEnlargeText" @submit="onFormSubmit" />
   </div>
 </template>
 ```
@@ -357,12 +347,12 @@ function onFormSubmit(payload) {
 
 ```vue
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const user = ref({
   firstName: 'John',
-  lastName: 'Doe'
-})
+  lastName: 'Doe',
+});
 </script>
 
 <template>
@@ -407,37 +397,37 @@ const user = ref({
 
 每个组件在被创建、挂载、更新和销毁时都会经历一系列被称为“生命周期钩子”的函数。组合式 API 的钩子名称以 `on` 前缀开头。
 
-| 选项式 API Hook | 组合式 API Hook | 触发时机 |
-| :--- | :--- | :--- |
-| `beforeCreate` | - | 在实例初始化之后、进行数据侦听和事件/侦听器的配置之前同步调用。**在 `setup()` 中不需要它**。 |
-| `created` | - | 在实例处理完所有与状态相关的选项后同步调用。**在 `setup()` 中不需要它**。 |
-| `beforeMount` | `onBeforeMount` | 在组件被挂载之前调用。 |
-| `mounted` | `onMounted` | 在组件被挂载之后调用。**常用于执行 DOM 操作、发起 API 请求**。 |
-| `beforeUpdate` | `onBeforeUpdate` | 在组件即将因为一个响应式状态变更而更新其 DOM 树之前调用。 |
-| `updated` | `onUpdated` | 在组件因为一个响应式状态变更而更新其 DOM 树之后调用。**避免在此钩子中更改状态**。 |
-| `beforeUnmount` | `onBeforeUnmount` | 在组件实例被卸载之前调用。 |
-| `unmounted` | `onUnmounted` | 在组件实例被卸载之后调用。**用于清理副作用，如定时器、事件监听器**。 |
-| `errorCaptured` | `onErrorCaptured` | 在捕获了后代组件传递的错误时调用。 |
+| 选项式 API Hook | 组合式 API Hook   | 触发时机                                                                                     |
+| :-------------- | :---------------- | :------------------------------------------------------------------------------------------- |
+| `beforeCreate`  | -                 | 在实例初始化之后、进行数据侦听和事件/侦听器的配置之前同步调用。**在 `setup()` 中不需要它**。 |
+| `created`       | -                 | 在实例处理完所有与状态相关的选项后同步调用。**在 `setup()` 中不需要它**。                    |
+| `beforeMount`   | `onBeforeMount`   | 在组件被挂载之前调用。                                                                       |
+| `mounted`       | `onMounted`       | 在组件被挂载之后调用。**常用于执行 DOM 操作、发起 API 请求**。                               |
+| `beforeUpdate`  | `onBeforeUpdate`  | 在组件即将因为一个响应式状态变更而更新其 DOM 树之前调用。                                    |
+| `updated`       | `onUpdated`       | 在组件因为一个响应式状态变更而更新其 DOM 树之后调用。**避免在此钩子中更改状态**。            |
+| `beforeUnmount` | `onBeforeUnmount` | 在组件实例被卸载之前调用。                                                                   |
+| `unmounted`     | `onUnmounted`     | 在组件实例被卸载之后调用。**用于清理副作用，如定时器、事件监听器**。                         |
+| `errorCaptured` | `onErrorCaptured` | 在捕获了后代组件传递的错误时调用。                                                           |
 
 **示例：**
 
 ```vue
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue';
 
 onMounted(() => {
-  console.log('Component is mounted!')
+  console.log('Component is mounted!');
   // 设置一个定时器
   timer = setInterval(() => {
     // do something
-  }, 1000)
-})
+  }, 1000);
+});
 
 onUnmounted(() => {
-  console.log('Component is unmounted!')
+  console.log('Component is unmounted!');
   // 清除定时器，防止内存泄漏
-  clearInterval(timer)
-})
+  clearInterval(timer);
+});
 </script>
 ```
 
@@ -449,20 +439,20 @@ onUnmounted(() => {
 
 ```vue
 <script setup>
-import { provide, ref } from 'vue'
+import { provide, ref } from 'vue';
 
-const theme = ref('dark')
+const theme = ref('dark');
 const toggleTheme = () => {
-  theme.value = theme.value === 'dark' ? 'light' : 'dark'
-}
+  theme.value = theme.value === 'dark' ? 'light' : 'dark';
+};
 
 // 提供静态值
-provide('app-version', '1.0.0')
+provide('app-version', '1.0.0');
 // 提供响应式值和方法
 provide('theme', {
   theme,
-  toggleTheme
-})
+  toggleTheme,
+});
 </script>
 ```
 
@@ -470,12 +460,12 @@ provide('theme', {
 
 ```vue
 <script setup>
-import { inject } from 'vue'
+import { inject } from 'vue';
 
 // 注入值，提供默认值以防祖先未提供
-const version = inject('app-version', 'unknown')
+const version = inject('app-version', 'unknown');
 // 注入响应式对象
-const { theme, toggleTheme } = inject('theme')
+const { theme, toggleTheme } = inject('theme');
 </script>
 
 <template>
@@ -491,12 +481,12 @@ const { theme, toggleTheme } = inject('theme')
 1. **API 选择**：新项目首选 **组合式 API** 与 **`<script setup>`**。
 2. **组件命名**：使用 **PascalCase**（例如 `MyComponent.vue`），这在不同的编辑器和工具中辨识度最高。
 3. **Props 设计**：
-    - **声明验证**：始终使用对象形式声明 props 并进行验证。
-    - **只读性**：不要直接修改 prop。
-    - **清晰的命名**：使用描述性名称。
+   - **声明验证**：始终使用对象形式声明 props 并进行验证。
+   - **只读性**：不要直接修改 prop。
+   - **清晰的命名**：使用描述性名称。
 4. **事件设计**：
-    - **声明事件**：使用 `defineEmits`。
-    - **命名**：使用 `camelCase` 事件名。
+   - **声明事件**：使用 `defineEmits`。
+   - **命名**：使用 `camelCase` 事件名。
 5. **逻辑复用**：将可复用的逻辑提取到 **组合式函数 (Composables)** 中，而不是直接复用组件或使用 Mixins。
 6. **样式作用域**：为组件样式使用 **`<style scoped>`** 以避免污染全局样式。
 7. **键控列表**：使用 `v-for` 时总是提供唯一的 `:key` attribute。

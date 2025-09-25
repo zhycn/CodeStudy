@@ -273,7 +273,7 @@ def calculate_area(length: float, width: float) -> float:
 
 from typing import List, Dict, Optional, Union
 
-def process_items(items: List[str], 
+def process_items(items: List[str],
                  counts: Dict[str, int],
                  optional_id: Optional[int] = None) -> Union[bool, str]:
     # items: 一个字符串列表
@@ -294,53 +294,53 @@ def process_items(items: List[str],
 2. **使用描述性的名称**：函数名应该是一个动词或动词短语（如 `get_user_data`, `calculate_total`），清晰表达其意图。
 3. **善用文档字符串（Docstrings）**：使用三重引号为函数编写文档，说明其功能、参数、返回值和可能的异常。遵循 PEP 257 规范。
 
-    ```python
-    def factorial(n):
-        """
-        Calculate the factorial of a non-negative integer n.
+   ```python
+   def factorial(n):
+       """
+       Calculate the factorial of a non-negative integer n.
 
-        Args:
-            n (int): The number to compute the factorial of. Must be >= 0.
+       Args:
+           n (int): The number to compute the factorial of. Must be >= 0.
 
-        Returns:
-            int: The factorial of n.
+       Returns:
+           int: The factorial of n.
 
-        Raises:
-            ValueError: If n is negative.
-        """
-        if n < 0:
-            raise ValueError("n must be non-negative")
-        result = 1
-        for i in range(2, n + 1):
-            result *= i
-        return result
-    ```
+       Raises:
+           ValueError: If n is negative.
+       """
+       if n < 0:
+           raise ValueError("n must be non-negative")
+       result = 1
+       for i in range(2, n + 1):
+           result *= i
+       return result
+   ```
 
 4. **避免可变默认参数**：如前所述，使用 `None` 作为哨兵值，在函数内部初始化可变对象。
 5. **限制参数数量**：参数过多（例如超过 5 个）通常意味着函数职责过于复杂。考虑将其拆分为多个小函数，或者将相关参数组合成一个对象（如使用 `dataclass` 或 `namedtuple`）。
 6. **优先返回而非修改**：尽可能让函数返回一个新值，而不是修改传入的可变参数（如列表）。这减少了副作用，使代码更可预测。
 
-    ```python
-    # 更好：返回一个新列表
-    def add_prefix(words, prefix):
-        return [f"{prefix}_{word}" for word in words]
+   ```python
+   # 更好：返回一个新列表
+   def add_prefix(words, prefix):
+       return [f"{prefix}_{word}" for word in words]
 
-    my_words = ['apple', 'banana']
-    new_words = add_prefix(my_words, 'fruit')
-    print(my_words)   # 输出: ['apple', 'banana'] (未被修改)
-    print(new_words)  # 输出: ['fruit_apple', 'fruit_banana']
+   my_words = ['apple', 'banana']
+   new_words = add_prefix(my_words, 'fruit')
+   print(my_words)   # 输出: ['apple', 'banana'] (未被修改)
+   print(new_words)  # 输出: ['fruit_apple', 'fruit_banana']
 
-    # 更差：修改传入的列表（有副作用）
-    def add_prefix_bad(words, prefix):
-        for i in range(len(words)):
-            words[i] = f"{prefix}_{words[i]}"
+   # 更差：修改传入的列表（有副作用）
+   def add_prefix_bad(words, prefix):
+       for i in range(len(words)):
+           words[i] = f"{prefix}_{words[i]}"
 
-    add_prefix_bad(my_words, 'fruit')
-    print(my_words)   # 输出: ['fruit_apple', 'fruit_banana'] (被修改了)
-    ```
+   add_prefix_bad(my_words, 'fruit')
+   print(my_words)   # 输出: ['fruit_apple', 'fruit_banana'] (被修改了)
+   ```
 
 7. **利用类型注解**：即使不进行严格的静态类型检查，类型注解也能作为优秀的代码文档，帮助开发者和工具理解你的代码。
-8. **谨慎使用 `*args` 和 `**kwargs`**：它们非常强大，但会掩盖函数真实的签名，可能降低可读性。只在确实需要处理可变参数或进行装饰器等元编程时使用。
+8. **谨慎使用 `*args` 和 `**kwargs`\*\*：它们非常强大，但会掩盖函数真实的签名，可能降低可读性。只在确实需要处理可变参数或进行装饰器等元编程时使用。
 
 ## 7. 高级主题：装饰器（Decorator）
 

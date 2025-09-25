@@ -30,8 +30,8 @@ Vite 不仅是一个为 Web 应用设计的高速开发工具，其强大的构�
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
   build: {
@@ -41,10 +41,10 @@ export default defineConfig({
       // 库的名称
       name: 'MyLib',
       // 输出的文件名
-      fileName: 'my-lib'
-    }
-  }
-})
+      fileName: 'my-lib',
+    },
+  },
+});
 ```
 
 执行 `vite build` 后，Vite 会在 `dist` 目录下生成：
@@ -54,20 +54,20 @@ export default defineConfig({
 
 ### 3.2 进阶配置选项
 
-| 选项 | 类型 | 默认值 | 描述 |
-| :--- | :--- | :--- | :--- |
-| `entry` | string \| string[] \| { [entryAlias: string]: string } | - | **必填**。设置库的入口文件。 |
-| `name` | string | - | 暴露给 UMD/IIFE 格式的全局变量名。 |
-| `fileName` | string \| ((format: string) => string) | `'fileName'` | 生成的文件名模板。 |
-| `formats` | ('es' \| 'cjs' \| 'umd' \| 'iife')[] | `['es', 'umd']` | 需要构建的模块格式数组。 |
-| `cssFileName` | string \| ((format: string) => string) | 同 `fileName` | 提取的 CSS 文件名。 |
+| 选项          | 类型                                                   | 默认值          | 描述                               |
+| :------------ | :----------------------------------------------------- | :-------------- | :--------------------------------- |
+| `entry`       | string \| string[] \| { [entryAlias: string]: string } | -               | **必填**。设置库的入口文件。       |
+| `name`        | string                                                 | -               | 暴露给 UMD/IIFE 格式的全局变量名。 |
+| `fileName`    | string \| ((format: string) => string)                 | `'fileName'`    | 生成的文件名模板。                 |
+| `formats`     | ('es' \| 'cjs' \| 'umd' \| 'iife')[]                   | `['es', 'umd']` | 需要构建的模块格式数组。           |
+| `cssFileName` | string \| ((format: string) => string)                 | 同 `fileName`   | 提取的 CSS 文件名。                |
 
 一个更完整的配置示例：
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
   build: {
@@ -77,7 +77,7 @@ export default defineConfig({
       // 为不同格式生成不同的文件名
       fileName: (format) => `awesome-ui.${format}.js`,
       // 构建 ESM 和 CJS 两种格式
-      formats: ['es', 'cjs']
+      formats: ['es', 'cjs'],
     },
     // 可选：减少构建警告
     rollupOptions: {
@@ -86,12 +86,12 @@ export default defineConfig({
       output: {
         // 在 UMD 构建模式下为外部化的依赖提供一个全局变量
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
-  }
-})
+          vue: 'Vue',
+        },
+      },
+    },
+  },
+});
 ```
 
 ## 4. 完整示例：构建一个 Vue 3 组件库
@@ -125,12 +125,12 @@ my-vue-lib/
 
 <script setup lang="ts">
 defineProps<{
-  color?: string
-}>()
+  color?: string;
+}>();
 
 defineEmits<{
-  (e: 'click'): void
-}>()
+  (e: 'click'): void;
+}>();
 </script>
 
 <style scoped>
@@ -148,19 +148,19 @@ defineEmits<{
 
 ```typescript
 // 导出单个组件
-import MyButton from './components/MyButton.vue'
+import MyButton from './components/MyButton.vue';
 
 // 以插件形式进行全局安装的 install 函数
-import type { App } from 'vue'
+import type { App } from 'vue';
 export const install = (app: App) => {
-  app.component('MyButton', MyButton)
-}
+  app.component('MyButton', MyButton);
+};
 
 // 导出单个组件，供按需引入
-export { MyButton }
+export { MyButton };
 
 // 默认导出插件安装函数
-export default { install }
+export default { install };
 ```
 
 ### 4.3 Vite 配置
@@ -168,9 +168,9 @@ export default { install }
 `vite.config.js`:
 
 ```javascript
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -179,7 +179,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'MyVueLib',
-      fileName: (format) => `my-vue-lib.${format}.js`
+      fileName: (format) => `my-vue-lib.${format}.js`,
     },
     rollupOptions: {
       // 确保外部化处理 vue，不将其打包到库中
@@ -187,12 +187,12 @@ export default defineConfig({
       output: {
         // 为外部化的依赖提供 UMD 构建模式下的全局变量
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
-  }
-})
+          vue: 'Vue',
+        },
+      },
+    },
+  },
+});
 ```
 
 ### 4.4 `package.json` 配置
@@ -215,9 +215,7 @@ export default defineConfig({
     },
     "./style.css": "./dist/style.css"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "peerDependencies": {
     "vue": "^3.3.0"
   },
@@ -271,7 +269,7 @@ export default defineConfig({
 
 ```javascript
 // 在你的入口文件 (src/index.ts) 中
-import './style.css'
+import './style.css';
 ```
 
 如果你想提供按需引入组件并自动引入对应 CSS 的能力，可以考虑使用 <https://github.com/unplugin/unplugin-vue-components> 等插件，但这通常是在你的库的文档或预设中指导使用者配置的，而非在库的构建流程中完成。
@@ -286,8 +284,8 @@ rollupOptions: {
     'vue',
     'lodash',
     // 使用正则表达式匹配所有 node_modules 中的包
-    /node_modules/
-  ]
+    /node_modules/,
+  ];
 }
 ```
 
@@ -347,6 +345,7 @@ Vite 的库模式提供了一个高效、现代的库构建方案。其核心在
 遵循上述指南和最佳实践，你将能够利用 Vite 的高速与简洁，构建出高质量、可树摇、兼容性强的 JavaScript 库。
 
 ---
+
 **参考资源**:
 
 1. <https://vitejs.dev/guide/build.html>

@@ -330,13 +330,13 @@ def download_file(url, filename=None):
     """
     if filename is None:
         filename = os.path.basename(urllib.parse.urlparse(url).path)
-    
+
     def report_progress(block_num, block_size, total_size):
         downloaded = block_num * block_size
         if total_size > 0:
             percent = min(100, downloaded * 100 / total_size)
             print(f"\rDownloaded: {percent:.1f}% ({downloaded}/{total_size} bytes)", end='')
-    
+
     try:
         filename, headers = urlretrieve(url, filename, report_progress)
         print(f"\nDownload completed: {filename}")
@@ -378,7 +378,7 @@ def get_decompressed_response(url):
     try:
         request = urllib.request.Request(url)
         request.add_header('Accept-Encoding', 'gzip')
-        
+
         with urllib.request.urlopen(request) as response:
             if response.headers.get('Content-Encoding') == 'gzip':
                 compressed_data = response.read()
@@ -413,7 +413,7 @@ session = create_session()
 try:
     with session.open('https://httpbin.org/cookies/set/sessioncookie/123456789') as response:
         print("Cookie set")
-    
+
     with session.open('https://httpbin.org/cookies') as response:
         data = json.loads(response.read().decode('utf-8'))
         print(f"Cookies: {data['cookies']}")

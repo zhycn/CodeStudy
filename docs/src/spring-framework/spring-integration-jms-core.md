@@ -30,13 +30,13 @@ JMS 支持两种基本的消息传递模式 ：
 
 JMS 定义了多种消息类型，用于不同场景的数据传输 ：
 
-| 消息类型          | 描述                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| `TextMessage`     | 包含字符串内容的消息类型                                   |
-| `ObjectMessage`   | 包含可序列化 Java 对象的消息类型                           |
-| `MapMessage`      | 包含键值对集合的消息类型，值为原始数据类型                 |
-| `BytesMessage`    | 包含原始字节数据的消息类型                                 |
-| `StreamMessage`   | 包含 Java 原始值和字符串流的消息类型                       |
+| 消息类型        | 描述                                       |
+| --------------- | ------------------------------------------ |
+| `TextMessage`   | 包含字符串内容的消息类型                   |
+| `ObjectMessage` | 包含可序列化 Java 对象的消息类型           |
+| `MapMessage`    | 包含键值对集合的消息类型，值为原始数据类型 |
+| `BytesMessage`  | 包含原始字节数据的消息类型                 |
+| `StreamMessage` | 包含 Java 原始值和字符串流的消息类型       |
 
 ### 2.3 JMS 核心组件
 
@@ -101,7 +101,7 @@ public class JmsConfig {
         connectionFactory.setBrokerURL("tcp://localhost:61616");
         return connectionFactory;
     }
-    
+
     @Bean
     public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
@@ -116,29 +116,29 @@ public class JmsConfig {
 ```java
 @Component
 public class MessageProducerService {
-    
+
     private final JmsTemplate jmsTemplate;
-    
+
     @Autowired
     public MessageProducerService(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
-    
+
     // 发送简单文本消息
     public void sendTextMessage(String message) {
         jmsTemplate.send(session -> session.createTextMessage(message));
     }
-    
+
     // 使用 convertAndSend 简化消息发送
     public void sendMessageUsingConvertAndSend(Object message) {
         jmsTemplate.convertAndSend(message);
     }
-    
+
     // 发送到特定目的地
     public void sendToSpecificDestination(String destinationName, String message) {
         jmsTemplate.convertAndSend(destinationName, message);
     }
-    
+
     // 发送带有后处理器的消息
     public void sendMessageWithPostProcessor(String message) {
         jmsTemplate.convertAndSend("myQueue", message, new MessagePostProcessor() {
@@ -158,14 +158,14 @@ public class MessageProducerService {
 ```java
 @Component
 public class MessageConsumerService {
-    
+
     private final JmsTemplate jmsTemplate;
-    
+
     @Autowired
     public MessageConsumerService(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
-    
+
     // 同步接收消息
     public String receiveMessage() {
         Message message = jmsTemplate.receive();
@@ -178,12 +178,12 @@ public class MessageConsumerService {
         }
         return null;
     }
-    
+
     // 接收并转换消息
     public String receiveAndConvert() {
         return (String) jmsTemplate.receiveAndConvert();
     }
-    
+
     // 带超时的消息接收
     public String receiveMessageWithTimeout() {
         Message message = jmsTemplate.receive(5000); // 5秒超时
@@ -213,7 +213,7 @@ XML 配置方式：
 
 ```xml
 <!-- 配置消息监听器容器 -->
-<bean id="messageListenerContainer" 
+<bean id="messageListenerContainer"
       class="org.springframework.jms.listener.DefaultMessageListenerContainer">
     <property name="connectionFactory" ref="connectionFactory"/>
     <property name="destinationName" value="myQueue"/>
@@ -232,11 +232,11 @@ Java 配置方式：
 @Configuration
 @EnableJms
 public class JmsListenerConfig {
-    
+
     @Bean
     public DefaultMessageListenerContainerFactory jmsListenerContainerFactory(
             ConnectionFactory connectionFactory) {
-        DefaultMessageListenerContainerFactory factory = 
+        DefaultMessageListenerContainerFactory factory =
             new DefaultMessageListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setConcurrency("5-10");
@@ -253,12 +253,12 @@ public class JmsListenerConfig {
 ```java
 @Component
 public class OrderProcessingListener implements MessageListener {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(OrderProcessingListener.class);
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @Override
     public void onMessage(Message message) {
         try {
@@ -275,7 +275,7 @@ public class OrderProcessingListener implements MessageListener {
             throw new RuntimeException("Message processing failed", e);
         }
     }
-    
+
     private Order parseOrderJson(String orderJson) {
         // JSON 解析逻辑
         // 可以使用 Jackson、Gson 等库
@@ -291,30 +291,30 @@ Spring 提供了 `@JmsListener` 注解，可以更简洁地创建消息监听器
 ```java
 @Component
 public class AnnotatedJmsListeners {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(AnnotatedJmsListeners.class);
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @JmsListener(destination = "orders.queue")
     public void handleOrderMessage(Order order) {
         logger.info("Received order: {}", order.getId());
         orderService.processOrder(order);
     }
-    
+
     @JmsListener(destination = "notifications.topic")
     public void handleNotification(String notification) {
         logger.info("Received notification: {}", notification);
         // 处理通知逻辑
     }
-    
+
     @JmsListener(destination = "audit.queue", containerFactory = "auditContainerFactory")
     public void handleAuditMessage(String auditData) {
         logger.info("Received audit data: {}", auditData);
         // 处理审计逻辑
     }
-    
+
     // 接收原始 Message 对象
     @JmsListener(destination = "raw.message.queue")
     public void handleRawMessage(Message message) {
@@ -344,7 +344,7 @@ public class AnnotatedJmsListeners {
 @Configuration
 @EnableJms
 public class MessageConverterConfig {
-    
+
     @Bean
     public MessageConverter jacksonJmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
@@ -352,9 +352,9 @@ public class MessageConverterConfig {
         converter.setTypeIdPropertyName("_type");
         return converter;
     }
-    
+
     @Bean
-    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, 
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory,
                                   MessageConverter messageConverter) {
         JmsTemplate jmsTemplate = new JmsTemplate(connectionFactory);
         jmsTemplate.setMessageConverter(messageConverter);
@@ -367,13 +367,13 @@ public class MessageConverterConfig {
 
 ```java
 public class EmailMessageConverter implements MessageConverter {
-    
+
     @Override
     public Message toMessage(Object object, Session session) throws JMSException {
         if (!(object instanceof Email)) {
             throw new IllegalArgumentException("Object must be of type Email");
         }
-        
+
         Email email = (Email) object;
         MapMessage message = session.createMapMessage();
         message.setString("to", email.getTo());
@@ -382,13 +382,13 @@ public class EmailMessageConverter implements MessageConverter {
         message.setString("body", email.getBody());
         return message;
     }
-    
+
     @Override
     public Object fromMessage(Message message) throws JMSException {
         if (!(message instanceof MapMessage)) {
             throw new IllegalArgumentException("Message must be of type MapMessage");
         }
-        
+
         MapMessage mapMessage = (MapMessage) message;
         Email email = new Email();
         email.setTo(mapMessage.getString("to"));
@@ -414,7 +414,7 @@ Spring JMS 提供了完善的事务支持，主要通过 `JmsTransactionManager`
 @Configuration
 @EnableTransactionManagement
 public class TransactionConfig {
-    
+
     @Bean
     public PlatformTransactionManager transactionManager(ConnectionFactory connectionFactory) {
         return new JmsTransactionManager(connectionFactory);
@@ -428,33 +428,33 @@ public class TransactionConfig {
 @Service
 @Transactional
 public class OrderProcessingService {
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Autowired
     private JmsTemplate jmsTemplate;
-    
+
     public void processOrder(Order order) {
         // 数据库操作
         orderRepository.save(order);
-        
+
         // JMS 操作
         jmsTemplate.convertAndSend("processed.orders", order);
-        
+
         // 如果任何操作失败，整个事务将回滚
     }
-    
+
     @Transactional(rollbackFor = {OrderProcessingException.class})
     public void processOrderWithRollback(Order order) {
         try {
             // 业务逻辑
             orderRepository.save(order);
             jmsTemplate.convertAndSend("processed.orders", order);
-            
+
             // 可能抛出 OrderProcessingException 的操作
             someOperationThatMightFail();
-            
+
         } catch (OrderProcessingException e) {
             // 事务将自动回滚
             throw e;
@@ -468,28 +468,28 @@ public class OrderProcessingService {
 ```java
 @Service
 public class ProgrammaticTransactionService {
-    
+
     @Autowired
     private PlatformTransactionManager transactionManager;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Autowired
     private JmsTemplate jmsTemplate;
-    
+
     public void processOrderWithProgrammaticTx(Order order) {
         TransactionDefinition definition = new DefaultTransactionDefinition();
         TransactionStatus status = transactionManager.getTransaction(definition);
-        
+
         try {
             // 业务操作
             orderRepository.save(order);
             jmsTemplate.convertAndSend("processed.orders", order);
-            
+
             // 提交事务
             transactionManager.commit(status);
-            
+
         } catch (Exception e) {
             // 回滚事务
             transactionManager.rollback(status);
@@ -513,10 +513,10 @@ public class ProgrammaticTransactionService {
 ```java
 @Component
 public class Jms2_0FeaturesDemo {
-    
+
     @Autowired
     private JmsTemplate jmsTemplate;
-    
+
     // 使用 JMS 2.0 的简化 API
     public void demonstrateSimplifiedApi() {
         jmsTemplate.execute(session -> {
@@ -538,13 +538,13 @@ public class Jms2_0FeaturesDemo {
 public ConnectionFactory connectionFactory() {
     ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
     connectionFactory.setBrokerURL("tcp://localhost:61616");
-    
+
     // 使用连接池
     PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
     pooledConnectionFactory.setConnectionFactory(connectionFactory);
     pooledConnectionFactory.setMaxConnections(50);
     pooledConnectionFactory.setMaximumActiveSessionPerConnection(10);
-    
+
     return pooledConnectionFactory;
 }
 ```
@@ -555,7 +555,7 @@ public ConnectionFactory connectionFactory() {
 @Bean
 public DefaultMessageListenerContainerFactory listenerContainerFactory(
         ConnectionFactory connectionFactory) {
-    DefaultMessageListenerContainerFactory factory = 
+    DefaultMessageListenerContainerFactory factory =
         new DefaultMessageListenerContainerFactory();
     factory.setConnectionFactory(connectionFactory);
     factory.setConcurrency("5-10"); // 最小5个，最大10个消费者
@@ -574,7 +574,7 @@ public DefaultMessageListenerContainerFactory listenerContainerFactory(
 public class JmsErrorHandler implements ErrorHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(JmsErrorHandler.class);
-    
+
     @Override
     public void handleError(Throwable t) {
         logger.error("Error in JMS listener", t);
@@ -586,7 +586,7 @@ public class JmsErrorHandler implements ErrorHandler {
 @Bean
 public DefaultMessageListenerContainerFactory containerFactory(
         ConnectionFactory connectionFactory, JmsErrorHandler errorHandler) {
-    DefaultMessageListenerContainerFactory factory = 
+    DefaultMessageListenerContainerFactory factory =
         new DefaultMessageListenerContainerFactory();
     factory.setConnectionFactory(connectionFactory);
     factory.setErrorHandler(errorHandler);
@@ -605,7 +605,7 @@ public Queue deadLetterQueue() {
 @JmsListener(destination = "DLQ.>")
 public void handleDeadLetterMessage(Message message) {
     try {
-        logger.warn("Received message from dead letter queue: {}", 
+        logger.warn("Received message from dead letter queue: {}",
                    message.getJMSMessageID());
         // 处理死信消息，如记录日志、通知管理员等
     } catch (JMSException e) {
@@ -622,30 +622,30 @@ public void handleDeadLetterMessage(Message message) {
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class OrderMessageListenerTest {
-    
+
     @Mock
     private OrderService orderService;
-    
+
     @InjectMocks
     private OrderMessageListener orderMessageListener;
-    
+
     @Test
     void testOnMessageWithValidOrder() throws JMSException {
         // 创建测试消息
         TextMessage message = mock(TextMessage.class);
         when(message.getText()).thenReturn("{\"id\": \"123\", \"status\": \"NEW\"}");
-        
+
         // 调用测试方法
         orderMessageListener.onMessage(message);
-        
+
         // 验证行为
         verify(orderService).processOrder(any(Order.class));
     }
-    
+
     @Test
     void testOnMessageWithInvalidMessageType() throws JMSException {
         BytesMessage message = mock(BytesMessage.class);
-        
+
         // 应该记录警告但不抛出异常
         assertDoesNotThrow(() -> orderMessageListener.onMessage(message));
     }
@@ -660,30 +660,30 @@ class OrderMessageListenerTest {
 @Component
 @Aspect
 public class JmsMonitoringAspect {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(JmsMonitoringAspect);
-    
+
     @Around("@annotation(org.springframework.jms.annotation.JmsListener)")
     public Object monitorJmsListener(ProceedingJoinPoint joinPoint) throws Throwable {
         String destination = getDestinationFromJoinPoint(joinPoint);
         long startTime = System.currentTimeMillis();
-        
+
         try {
             Object result = joinPoint.proceed();
             long duration = System.currentTimeMillis() - startTime;
-            
-            logger.info("JMS message processed successfully - destination: {}, duration: {}ms", 
+
+            logger.info("JMS message processed successfully - destination: {}, duration: {}ms",
                        destination, duration);
             return result;
-            
+
         } catch (Exception e) {
             long duration = System.currentTimeMillis() - startTime;
-            logger.error("JMS message processing failed - destination: {}, duration: {}ms, error: {}", 
+            logger.error("JMS message processing failed - destination: {}, duration: {}ms, error: {}",
                         destination, duration, e.getMessage());
             throw e;
         }
     }
-    
+
     private String getDestinationFromJoinPoint(ProceedingJoinPoint joinPoint) {
         // 从连接点提取目的地信息
         return "unknown";

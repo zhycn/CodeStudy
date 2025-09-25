@@ -16,13 +16,13 @@
 
 Vite 本身的 Monorepo 支持是构建在包管理器的 **Workspace** 功能之上的。因此，选择合适的包管理器是第一步。
 
-| 特性 | pnpm | Yarn (v1/v2+) | npm |
-| :--- | :--- | :--- | :--- |
-| **Workspace 支持** | ✅ 优秀 | ✅ 优秀 | ✅ (v7+) |
-| **性能** | ⭐ 极快（内容寻址存储） | 快 | 较慢 |
-| **磁盘空间** | ⭐ 极高（依赖单例存储） | 高 | 低（每个项目独立） |
-| **严格性** | ⭐ 高（避免幽灵依赖） | 中 | 低 |
-| **社区趋势** | ⭐ Vite 生态首选 | 稳定 | 原生 |
+| 特性               | pnpm                    | Yarn (v1/v2+) | npm                |
+| :----------------- | :---------------------- | :------------ | :----------------- |
+| **Workspace 支持** | ✅ 优秀                 | ✅ 优秀       | ✅ (v7+)           |
+| **性能**           | ⭐ 极快（内容寻址存储） | 快            | 较慢               |
+| **磁盘空间**       | ⭐ 极高（依赖单例存储） | 高            | 低（每个项目独立） |
+| **严格性**         | ⭐ 高（避免幽灵依赖）   | 中            | 低                 |
+| **社区趋势**       | ⭐ Vite 生态首选        | 稳定          | 原生               |
 
 **推荐：** 对于新项目，我们强烈推荐使用 **pnpm**。其高效的磁盘利用和严格的依赖管理能避免 Monorepo 中许多常见问题。
 
@@ -75,48 +75,48 @@ my-vite-monorepo/
 
 - **根目录 `package.json`**: 通常包含所有项目共用的开发依赖（如 `vite`, `typescript`, `eslint`, `prettier` 等）。
 
-    ```json
-    {
-      "name": "my-vite-monorepo",
-      "private": true,
-      "scripts": {
-        "dev": "vite-dev-server", // 通常由工具调用，见下文
-        "build": "run-s build:lib build:app",
-        "build:lib": "pnpm -r --filter \"./packages/**\" build",
-        "build:app": "pnpm -r --filter \"./apps/**\" build"
-      },
-      "devDependencies": {
-        "vite": "^7.0.0",
-        "typescript": "^5.0.0",
-        "@types/node": "^20.0.0",
-        "npm-run-all": "^4.1.5"
-      }
+  ```json
+  {
+    "name": "my-vite-monorepo",
+    "private": true,
+    "scripts": {
+      "dev": "vite-dev-server", // 通常由工具调用，见下文
+      "build": "run-s build:lib build:app",
+      "build:lib": "pnpm -r --filter \"./packages/**\" build",
+      "build:app": "pnpm -r --filter \"./apps/**\" build"
+    },
+    "devDependencies": {
+      "vite": "^7.0.0",
+      "typescript": "^5.0.0",
+      "@types/node": "^20.0.0",
+      "npm-run-all": "^4.1.5"
     }
-    ```
+  }
+  ```
 
 - **子包 `package.json`**: 声明其自身的依赖。对于内部包之间的依赖，使用 `workspace:*` 协议。
 
-    ```json
-    // packages/ui-button/package.json
-    {
-      "name": "@my-project/ui-button",
-      "version": "1.0.0",
-      "main": "./dist/ui-button.umd.cjs",
-      "module": "./dist/ui-button.js",
-      "types": "./dist/index.d.ts",
-      "scripts": {
-        "dev": "vite build --watch",
-        "build": "vite build && vue-tsc --declaration --emitDeclarationOnly"
-      },
-      "dependencies": {
-        // 引用另一个 workspace 中的包
-        "@my-project/utils": "workspace:*"
-      },
-      "devDependencies": {}
-    }
-    ```
+  ```json
+  // packages/ui-button/package.json
+  {
+    "name": "@my-project/ui-button",
+    "version": "1.0.0",
+    "main": "./dist/ui-button.umd.cjs",
+    "module": "./dist/ui-button.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+      "dev": "vite build --watch",
+      "build": "vite build && vue-tsc --declaration --emitDeclarationOnly"
+    },
+    "dependencies": {
+      // 引用另一个 workspace 中的包
+      "@my-project/utils": "workspace:*"
+    },
+    "devDependencies": {}
+  }
+  ```
 
-    `workspace:*` 将会在发布时被替换为实际的版本号（使用 `pnpm publish -r`）。
+  `workspace:*` 将会在发布时被替换为实际的版本号（使用 `pnpm publish -r`）。
 
 ### 3.2 Vite 配置
 
@@ -126,10 +126,10 @@ my-vite-monorepo/
 
 ```typescript
 // packages/ui-button/vite.config.ts
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
-import { lib } from 'vite-lib-builder' // 一个有用的库模式构建工具，可选
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
+import { lib } from 'vite-lib-builder'; // 一个有用的库模式构建工具，可选
 
 // https://vitejs.dev/guide/build.html#library-mode
 export default defineConfig({
@@ -140,7 +140,7 @@ export default defineConfig({
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'MyUIButton',
       // 输出的文件名
-      fileName: 'my-ui-button'
+      fileName: 'my-ui-button',
     },
     rollupOptions: {
       // 确保外部化处理那些你不想打包进库的依赖
@@ -148,12 +148,12 @@ export default defineConfig({
       output: {
         // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
         globals: {
-          vue: 'Vue'
-        }
-      }
-    }
-  }
-})
+          vue: 'Vue',
+        },
+      },
+    },
+  },
+});
 ```
 
 **应用配置示例：**
@@ -161,9 +161,9 @@ export default defineConfig({
 
 ```typescript
 // apps/web-app/vite.config.ts
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -174,9 +174,9 @@ export default defineConfig({
   // 应用的配置
   build: {
     outDir: 'dist',
-    emptyOutDir: true
-  }
-})
+    emptyOutDir: true,
+  },
+});
 ```
 
 ## 4. 开发与构建
@@ -228,16 +228,16 @@ pnpm add -D vite-lib-builder # 或 vite-plugin-lib
 
 ```typescript
 // vite.config.ts
-import { lib } from 'vite-lib-builder'
+import { lib } from 'vite-lib-builder';
 
 export default defineConfig({
   plugins: [
     lib({
       // 自动根据 package.json 的 dependencies 和 peerDependencies 设置 external
       // 并生成对应的 .d.ts 声明文件（如果使用 TypeScript）
-    })
-  ]
-})
+    }),
+  ],
+});
 ```
 
 ### 5.2 类型声明 (TypeScript) 与路径解析
@@ -276,53 +276,53 @@ Vite 使用 `rollup-plugin-node-resolve`，因此通常不需要在 `vite.config
 
 1. **安装 Turborepo**：
 
-    ```bash
-    pnpm add -Dw turbo
-    ```
+   ```bash
+   pnpm add -Dw turbo
+   ```
 
 2. **配置 `turbo.json`**：
 
-    ```json
-    {
-      "pipeline": {
-        "build": {
-          // 一个包的 build 脚本依赖于其所有依赖项（通过 package.json 判断）的 build 任务先完成
-          "dependsOn": ["^build"],
-          // 缓存 build 任务的输出
-          "outputs": ["dist/**", "*.d.ts"]
-        },
-        "dev": {
-          "cache": false // dev 命令通常不缓存
-        },
-        "lint": {
-          // 这是一个示例任务，无关依赖
-          "outputs": []
-        }
-      }
-    }
-    ```
+   ```json
+   {
+     "pipeline": {
+       "build": {
+         // 一个包的 build 脚本依赖于其所有依赖项（通过 package.json 判断）的 build 任务先完成
+         "dependsOn": ["^build"],
+         // 缓存 build 任务的输出
+         "outputs": ["dist/**", "*.d.ts"]
+       },
+       "dev": {
+         "cache": false // dev 命令通常不缓存
+       },
+       "lint": {
+         // 这是一个示例任务，无关依赖
+         "outputs": []
+       }
+     }
+   }
+   ```
 
 3. **更新根目录 `package.json` 脚本**：
 
-    ```json
-    {
-      "scripts": {
-        "build": "turbo run build",
-        "dev": "turbo run dev --parallel",
-        "lint": "turbo run lint --parallel"
-      }
-    }
-    ```
+   ```json
+   {
+     "scripts": {
+       "build": "turbo run build",
+       "dev": "turbo run dev --parallel",
+       "lint": "turbo run lint --parallel"
+     }
+   }
+   ```
 
 4. **运行**：
 
-    ```bash
-    # 执行构建，turbo 会自动进行拓扑排序和缓存
-    pnpm run build
+   ```bash
+   # 执行构建，turbo 会自动进行拓扑排序和缓存
+   pnpm run build
 
-    # 运行所有 dev 脚本
-    pnpm run dev
-    ```
+   # 运行所有 dev 脚本
+   pnpm run dev
+   ```
 
 ### 5.4 版本管理与发布：使用 Changesets
 
@@ -330,10 +330,10 @@ Vite 使用 `rollup-plugin-node-resolve`，因此通常不需要在 `vite.config
 
 1. **安装 Changesets**：
 
-    ```bash
-    pnpm add -Dw @changesets/cli
-    pnpm changeset init
-    ```
+   ```bash
+   pnpm add -Dw @changesets/cli
+   pnpm changeset init
+   ```
 
 2. **添加 Changeset**：在修改代码后，运行 `pnpm changeset`，它会引导你选择要发布的包、版本类型（major/minor/patch）并编写变更日志。
 3. **版本发布**：运行 `pnpm changeset version` 会根据 changeset 文件 bump 版本号、更新依赖并生成 CHANGELOG。然后运行 `pnpm changeset publish` 进行发布。
@@ -341,20 +341,20 @@ Vite 使用 `rollup-plugin-node-resolve`，因此通常不需要在 `vite.config
 ## 6. 常见问题与解决方案 (Troubleshooting)
 
 1. **Cannot find package '@my-project/utils'**:
-    - **原因**: 包管理器 workspace 未正确链接。
-    - **解决**: 确保根目录有 `pnpm-workspace.yaml`，并运行 `pnpm install` 重新链接。
+   - **原因**: 包管理器 workspace 未正确链接。
+   - **解决**: 确保根目录有 `pnpm-workspace.yaml`，并运行 `pnpm install` 重新链接。
 
 2. **Vite HMR not working for linked packages**:
-    - **原因**: 某些文件路径解析问题。
-    - **解决**: 这很罕见。确保子包使用 Vite 构建（如配置 `vite build --watch` 或使用 `vite-lib-builder`），而不是传统的 `tsc --watch`。
+   - **原因**: 某些文件路径解析问题。
+   - **解决**: 这很罕见。确保子包使用 Vite 构建（如配置 `vite build --watch` 或使用 `vite-lib-builder`），而不是传统的 `tsc --watch`。
 
 3. **语法错误：包中使用了未声明的依赖 (Ghost dependencies)**:
-    - **原因**: pnpm 的严格性。如果包 A 依赖包 B，而包 B 依赖 `lodash`，那么包 A **不能**直接 `import 'lodash'`。
-    - **解决**: 让包 A 自己声明对 `lodash` 的依赖。这是正确的行为，能避免生产环境出错。
+   - **原因**: pnpm 的严格性。如果包 A 依赖包 B，而包 B 依赖 `lodash`，那么包 A **不能**直接 `import 'lodash'`。
+   - **解决**: 让包 A 自己声明对 `lodash` 的依赖。这是正确的行为，能避免生产环境出错。
 
 4. **TypeScript 无法找到 Monorepo 内其他包的类型**:
-    - **原因**: 类型声明文件 (`.d.ts`) 未生成或路径不正确。
-    - **解决**: 确保库包配置了 `"types": "./dist/index.d.ts"` 并正确生成了声明文件（例如，使用 `vue-tsc` 或 `tsc`）。
+   - **原因**: 类型声明文件 (`.d.ts`) 未生成或路径不正确。
+   - **解决**: 确保库包配置了 `"types": "./dist/index.d.ts"` 并正确生成了声明文件（例如，使用 `vue-tsc` 或 `tsc`）。
 
 ## 7. 总结
 
@@ -369,6 +369,7 @@ Vite 为 Monorepo 开发提供了强大而灵活的基础设施。成功搭建 V
 遵循这些最佳实践，你将能够构建一个高效、可维护且扩展性极强的 Vite Monorepo 项目结构，充分享受模块化开发和极致构建速度带来的好处。
 
 ---
+
 **参考文献与扩展阅读**:
 
 1. <https://vitejs.dev/guide/build.html>

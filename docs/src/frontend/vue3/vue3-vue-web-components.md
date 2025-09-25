@@ -50,23 +50,19 @@ customElements.define('my-component', MyComponent);
 Vue3 通过 `defineCustomElement` 方法提供一流的 Web Components 支持：
 
 ```javascript
-import { defineCustomElement } from 'vue'
+import { defineCustomElement } from 'vue';
 
 const MyVueElement = defineCustomElement({
   props: {
-    title: String
+    title: String,
   },
   setup(props) {
-    const count = ref(0)
-    
-    return () => (
-      h('div',
-        h('h2', props.title),
-        h('button', { onClick: () => count.value++ }, `Count: ${count.value}`)
-      )
-    )
+    const count = ref(0);
+
+    return () => h('div', h('h2', props.title), h('button', { onClick: () => count.value++ }, `Count: ${count.value}`));
   },
-  styles: [`
+  styles: [
+    `
     :host {
       display: block;
       border: 2px solid #42b883;
@@ -80,10 +76,11 @@ const MyVueElement = defineCustomElement({
       border-radius: 4px;
       cursor: pointer;
     }
-  `]
-})
+  `,
+  ],
+});
 
-customElements.define('my-vue-element', MyVueElement)
+customElements.define('my-vue-element', MyVueElement);
 ```
 
 ## 3. 创建 Vue 驱动的 Web Components
@@ -91,21 +88,21 @@ customElements.define('my-vue-element', MyVueElement)
 ### 3.1 基础组件定义
 
 ```javascript
-import { defineCustomElement, ref } from 'vue'
+import { defineCustomElement, ref } from 'vue';
 
 const CounterElement = defineCustomElement({
   props: {
-    initialCount: { type: Number, default: 0 }
+    initialCount: { type: Number, default: 0 },
   },
   setup(props) {
-    const count = ref(props.initialCount)
-    
-    const increment = () => count.value++
-    
+    const count = ref(props.initialCount);
+
+    const increment = () => count.value++;
+
     return {
       count,
-      increment
-    }
+      increment,
+    };
   },
   template: `
     <div class="counter">
@@ -113,7 +110,8 @@ const CounterElement = defineCustomElement({
       <button @click="increment">Increment</button>
     </div>
   `,
-  styles: [`
+  styles: [
+    `
     .counter {
       font-family: system-ui, sans-serif;
       padding: 1rem;
@@ -128,10 +126,11 @@ const CounterElement = defineCustomElement({
       border-radius: 4px;
       cursor: pointer;
     }
-  `]
-})
+  `,
+  ],
+});
 
-customElements.define('counter-element', CounterElement)
+customElements.define('counter-element', CounterElement);
 ```
 
 ### 3.2 使用 Vue SFC 创建 Web Components
@@ -153,23 +152,25 @@ export default {
     title: String,
     initialCount: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
-      count: this.initialCount
-    }
+      count: this.initialCount,
+    };
   },
   methods: {
     increment() {
-      this.count++
-      this.dispatchEvent(new CustomEvent('incremented', { 
-        detail: { count: this.count } 
-      }))
-    }
-  }
-}
+      this.count++;
+      this.dispatchEvent(
+        new CustomEvent('incremented', {
+          detail: { count: this.count },
+        })
+      );
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -201,28 +202,28 @@ button:hover {
 构建配置 (`vite.config.js`):
 
 ```javascript
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag.includes('-')
-        }
-      }
-    })
+          isCustomElement: (tag) => tag.includes('-'),
+        },
+      },
+    }),
   ],
   build: {
     lib: {
       entry: './src/components/counter.ce.vue',
       name: 'Counter',
       fileName: 'counter',
-      formats: ['es']
-    }
-  }
-})
+      formats: ['es'],
+    },
+  },
+});
 ```
 
 ## 4. 在 Vue 中使用 Web Components
@@ -231,13 +232,13 @@ export default defineConfig({
 
 ```javascript
 // main.js
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.config.compilerOptions.isCustomElement = (tag) => tag.includes('-')
-app.mount('#app')
+app.config.compilerOptions.isCustomElement = (tag) => tag.includes('-');
+app.mount('#app');
 ```
 
 ### 4.2 在 Vue 模板中使用 Web Components
@@ -246,63 +247,56 @@ app.mount('#app')
 <template>
   <div class="app">
     <h1>Vue 应用中使用 Web Components</h1>
-    
+
     <!-- 使用原生 Web Component -->
-    <my-native-component 
-      title="Native Component"
-      @message="handleMessage">
-    </my-native-component>
-    
+    <my-native-component title="Native Component" @message="handleMessage"> </my-native-component>
+
     <!-- 使用 Vue 构建的 Web Component -->
-    <counter-element 
-      ref="counterRef"
-      title="Vue-Powered Counter"
-      :initial-count="5"
-      @incremented="handleIncrement">
+    <counter-element ref="counterRef" title="Vue-Powered Counter" :initial-count="5" @incremented="handleIncrement">
     </counter-element>
-    
+
     <button @click="resetCounter">Reset Counter</button>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue';
 
 export default defineComponent({
   setup() {
-    const counterRef = ref(null)
-    
+    const counterRef = ref(null);
+
     const handleMessage = (event) => {
-      console.log('Received message:', event.detail)
-    }
-    
+      console.log('Received message:', event.detail);
+    };
+
     const handleIncrement = (event) => {
-      console.log('Increment event:', event.detail.count)
-    }
-    
+      console.log('Increment event:', event.detail.count);
+    };
+
     const resetCounter = () => {
       if (counterRef.value) {
-        counterRef.value.count = 0
+        counterRef.value.count = 0;
       }
-    }
-    
+    };
+
     onMounted(() => {
       // 访问自定义元素 API
       setTimeout(() => {
         if (counterRef.value) {
-          console.log('Counter current value:', counterRef.value.count)
+          console.log('Counter current value:', counterRef.value.count);
         }
-      }, 1000)
-    })
-    
+      }, 1000);
+    });
+
     return {
       counterRef,
       handleMessage,
       handleIncrement,
-      resetCounter
-    }
-  }
-})
+      resetCounter,
+    };
+  },
+});
 </script>
 
 <style>
@@ -332,19 +326,15 @@ Vue 自动处理以下类型转换：
 ```javascript
 defineCustomElement({
   props: {
-    userData: Object
+    userData: Object,
   },
   setup(props) {
     // 将 JSON 字符串转换为对象
-    const user = computed(() => 
-      typeof props.userData === 'string' 
-        ? JSON.parse(props.userData) 
-        : props.userData
-    )
-    
-    return { user }
-  }
-})
+    const user = computed(() => (typeof props.userData === 'string' ? JSON.parse(props.userData) : props.userData));
+
+    return { user };
+  },
+});
 ```
 
 ### 5.2 事件处理最佳实践
@@ -374,31 +364,31 @@ setup() {
 defineCustomElement({
   setup(props, { emit }) {
     onMounted(() => {
-      console.log('Custom element mounted to DOM')
-    })
-    
+      console.log('Custom element mounted to DOM');
+    });
+
     onBeforeUnmount(() => {
-      console.log('Custom element will be removed from DOM')
-    })
+      console.log('Custom element will be removed from DOM');
+    });
   },
-  
+
   // 原生生命周期钩子
   connectedCallback() {
-    console.log('Custom element connected')
+    console.log('Custom element connected');
   },
-  
+
   disconnectedCallback() {
-    console.log('Custom element disconnected')
+    console.log('Custom element disconnected');
   },
-  
+
   adoptedCallback() {
-    console.log('Custom element moved to new document')
+    console.log('Custom element moved to new document');
   },
-  
+
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Attribute ${name} changed`, oldValue, newValue)
-  }
-})
+    console.log(`Attribute ${name} changed`, oldValue, newValue);
+  },
+});
 ```
 
 ## 6. 性能优化
@@ -410,11 +400,11 @@ defineCustomElement({
 <button onclick="lazyLoadComponent()">Load Component</button>
 
 <script>
-function lazyLoadComponent() {
-  import('./counter-element.js').then(module => {
-    customElements.define('counter-element', module.default)
-  })
-}
+  function lazyLoadComponent() {
+    import('./counter-element.js').then((module) => {
+      customElements.define('counter-element', module.default);
+    });
+  }
 </script>
 ```
 
@@ -467,14 +457,14 @@ my-counter-element {
 ```javascript
 // 主应用加载微应用
 function loadMicroApp(name) {
-  const script = document.createElement('script')
-  script.src = `https://cdn.example.com/${name}.js`
-  script.type = 'module'
-  document.head.appendChild(script)
-  
-  return new Promise(resolve => {
-    script.onload = resolve
-  })
+  const script = document.createElement('script');
+  script.src = `https://cdn.example.com/${name}.js`;
+  script.type = 'module';
+  document.head.appendChild(script);
+
+  return new Promise((resolve) => {
+    script.onload = resolve;
+  });
 }
 
 // 加载后使用微应用组件
@@ -484,8 +474,8 @@ loadMicroApp('dashboard').then(() => {
     <main>
       <dashboard-app></dashboard-app>
     </main>
-  `
-})
+  `;
+});
 ```
 
 ## 总结

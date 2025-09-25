@@ -32,15 +32,15 @@ file = open(filename, mode, encoding)
 
 ### 文件打开模式
 
-| 模式 | 描述 |
-|------|------|
-| 'r' | 只读模式（默认） |
-| 'w' | 写入模式，会覆盖现有文件 |
-| 'x' | 独占创建模式，文件已存在则失败 |
-| 'a' | 追加模式，在文件末尾添加内容 |
-| 'b' | 二进制模式 |
-| 't' | 文本模式（默认） |
-| '+' | 更新模式（可读写） |
+| 模式 | 描述                           |
+| ---- | ------------------------------ |
+| 'r'  | 只读模式（默认）               |
+| 'w'  | 写入模式，会覆盖现有文件       |
+| 'x'  | 独占创建模式，文件已存在则失败 |
+| 'a'  | 追加模式，在文件末尾添加内容   |
+| 'b'  | 二进制模式                     |
+| 't'  | 文本模式（默认）               |
+| '+'  | 更新模式（可读写）             |
 
 ### 示例代码
 
@@ -162,7 +162,7 @@ with open('output.txt', 'a', encoding='utf-8') as file:
 def write_data_to_file(filename, data):
     """
     将数据写入文件
-    
+
     Args:
         filename: 文件名
         data: 可以是字符串、列表或任何可迭代对象
@@ -188,7 +188,7 @@ with open('example.txt', 'r', encoding='utf-8') as file:
     # 读取前10个字符
     content = file.read(10)
     print(f"前10个字符: {content}")
-    
+
     # 获取当前位置
     position = file.tell()
     print(f"当前位置: {position}")
@@ -200,11 +200,11 @@ with open('example.txt', 'r', encoding='utf-8') as file:
 with open('example.txt', 'r', encoding='utf-8') as file:
     # 移动到文件开头后的第5个字节
     file.seek(5)
-    
+
     # 读取从位置5开始的内容
     content = file.read()
     print(content)
-    
+
     # 移动到文件末尾
     file.seek(0, 2)  # 0表示偏移量，2表示从文件末尾计算
     end_position = file.tell()
@@ -217,11 +217,11 @@ with open('example.txt', 'r', encoding='utf-8') as file:
 def read_last_n_lines(filename, n=10):
     """
     读取文件的最后n行
-    
+
     Args:
         filename: 文件名
         n: 要读取的行数
-    
+
     Returns:
         list: 最后n行的列表
     """
@@ -229,31 +229,31 @@ def read_last_n_lines(filename, n=10):
         # 移动到文件末尾
         file.seek(0, 2)
         end_position = file.tell()
-        
+
         lines = []
         position = end_position
-        
+
         # 从后向前读取
         while position >= 0 and len(lines) <= n:
             file.seek(position)
             char = file.read(1)
-            
+
             if char == b'\n' and position != end_position - 1:
                 # 找到一行
                 file.seek(position + 1)
                 line = file.read(end_position - position - 1)
                 lines.append(line.decode('utf-8'))
                 end_position = position
-            
+
             position -= 1
-        
+
         # 添加第一行（如果有）
         if position < 0:
             file.seek(0)
             line = file.read(end_position)
             if line:
                 lines.append(line.decode('utf-8'))
-        
+
         return list(reversed(lines[-n:]))
 
 # 使用示例
@@ -280,7 +280,7 @@ with open('example.txt', 'r', encoding='utf-8') as file:
 # 同时处理多个文件
 with open('input.txt', 'r', encoding='utf-8') as input_file, \
      open('output.txt', 'w', encoding='utf-8') as output_file:
-    
+
     for line in input_file:
         processed_line = line.upper()  # 示例处理：转换为大写
         output_file.write(processed_line)
@@ -357,7 +357,7 @@ print(f"文件路径: {file_path}")
 # 检查文件是否存在
 if file_path.exists():
     print("文件存在")
-    
+
     # 读取文件内容
     content = file_path.read_text(encoding='utf-8')
     print(content)
@@ -382,11 +382,11 @@ from pathlib import Path
 def find_files(directory, pattern):
     """
     查找目录中匹配模式的所有文件
-    
+
     Args:
         directory: 目录路径
         pattern: 文件模式（如 '*.txt'）
-    
+
     Returns:
         list: 匹配的文件路径列表
     """
@@ -415,7 +415,7 @@ import csv
 def write_to_csv(filename, data, headers=None):
     """
     将数据写入CSV文件
-    
+
     Args:
         filename: 文件名
         data: 数据列表（每行是一个列表）
@@ -423,10 +423,10 @@ def write_to_csv(filename, data, headers=None):
     """
     with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
-        
+
         if headers:
             writer.writerow(headers)
-        
+
         for row in data:
             writer.writerow(row)
 
@@ -434,10 +434,10 @@ def write_to_csv(filename, data, headers=None):
 def read_from_csv(filename):
     """
     从CSV文件读取数据
-    
+
     Args:
         filename: 文件名
-    
+
     Returns:
         list: 包含所有行的列表
     """
@@ -470,7 +470,7 @@ import json
 def write_to_json(filename, data):
     """
     将数据写入JSON文件
-    
+
     Args:
         filename: 文件名
         data: 要写入的数据（可序列化为JSON的对象）
@@ -482,10 +482,10 @@ def write_to_json(filename, data):
 def read_from_json(filename):
     """
     从JSON文件读取数据
-    
+
     Args:
         filename: 文件名
-    
+
     Returns:
         object: 解析后的JSON数据
     """
@@ -517,12 +517,12 @@ from pathlib import Path
 def safe_file_operation(filename, operation='read', content=None):
     """
     安全的文件操作函数，包含异常处理
-    
+
     Args:
         filename: 文件名
         operation: 操作类型 ('read', 'write', 'append')
         content: 写入的内容（仅用于写操作）
-    
+
     Returns:
         object: 操作结果或None（如果失败）
     """
@@ -530,17 +530,17 @@ def safe_file_operation(filename, operation='read', content=None):
         if operation == 'read':
             with open(filename, 'r', encoding='utf-8') as file:
                 return file.read()
-                
+
         elif operation == 'write':
             with open(filename, 'w', encoding='utf-8') as file:
                 file.write(content)
                 return True
-                
+
         elif operation == 'append':
             with open(filename, 'a', encoding='utf-8') as file:
                 file.write(content)
                 return True
-                
+
     except FileNotFoundError:
         print(f"错误: 文件 '{filename}' 不存在")
     except PermissionError:
@@ -551,7 +551,7 @@ def safe_file_operation(filename, operation='read', content=None):
         print(f"错误: 文件 '{filename}' 编码问题")
     except Exception as e:
         print(f"处理文件时发生未知错误: {e}")
-    
+
     return None
 
 # 使用示例
@@ -572,10 +572,10 @@ import datetime
 def create_backup(filename):
     """
     创建文件的备份副本
-    
+
     Args:
         filename: 要备份的文件名
-    
+
     Returns:
         bool: 备份是否成功
     """
@@ -584,17 +584,17 @@ def create_backup(filename):
         if not file_path.exists():
             print(f"警告: 文件 '{filename}' 不存在，无法创建备份")
             return False
-        
+
         # 生成备份文件名（添加时间戳）
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         backup_name = f"{file_path.stem}_backup_{timestamp}{file_path.suffix}"
         backup_path = file_path.parent / backup_name
-        
+
         # 创建备份
         shutil.copy2(filename, backup_path)
         print(f"已创建备份: {backup_path}")
         return True
-        
+
     except Exception as e:
         print(f"创建备份时出错: {e}")
         return False
@@ -714,12 +714,12 @@ from pathlib import Path
 def safe_write(filename, content):
     """安全的文件写入，自动创建备份"""
     file_path = Path(filename)
-    
+
     # 如果文件已存在，创建备份
     if file_path.exists():
         backup_path = file_path.with_suffix('.bak')
         shutil.copy2(file_path, backup_path)
-    
+
     # 写入新内容
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(content)

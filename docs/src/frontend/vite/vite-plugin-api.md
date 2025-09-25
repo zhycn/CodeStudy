@@ -51,7 +51,9 @@ import myPlugin from './my-vite-plugin.js';
 
 export default defineConfig({
   plugins: [
-    myPlugin({ /* 插件选项 */ }),
+    myPlugin({
+      /* 插件选项 */
+    }),
   ],
 });
 ```
@@ -140,10 +142,7 @@ export default function myPlugin() {
     name: 'vite-plugin-html-inject',
     transformIndexHtml(html, ctx) {
       const { path, filename, server } = ctx;
-      return html.replace(
-        '</head>',
-        `  <script type="module" src="/src/my-inject.js"></script>\n</head>`
-      );
+      return html.replace('</head>', `  <script type="module" src="/src/my-inject.js"></script>\n</head>`);
     },
   };
 }
@@ -166,7 +165,7 @@ export default function myPlugin() {
         server.ws.send({
           type: 'custom',
           event: 'special-file-update',
-          data: { file, content }
+          data: { file, content },
         });
         // 返回一个空数组以防止该模块的默认 HMR 行为
         return [];
@@ -392,7 +391,7 @@ export default function svgComponentPlugin({ defaultExport = 'component' } = {})
               }
             }
             </script>
-          `
+          `,
         });
         const { code: vueCode } = compileTemplate({
           source: descriptor.template.content,
@@ -424,9 +423,7 @@ import { defineConfig } from 'vite';
 import svgComponentPlugin from './vite-plugin-svg-component.js';
 
 export default defineConfig({
-  plugins: [
-    svgComponentPlugin(),
-  ],
+  plugins: [svgComponentPlugin()],
 });
 ```
 
@@ -467,7 +464,7 @@ describe('my vite plugin', () => {
     const result = await buildVite({
       plugins: [myPlugin()],
     });
-    const indexHtml = result.output.find(f => f.name === 'index.html');
+    const indexHtml = result.output.find((f) => f.name === 'index.html');
     expect(indexHtml.source).toContain('my-inject.js');
   });
 });

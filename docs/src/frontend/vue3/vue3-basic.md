@@ -49,13 +49,13 @@ vue create my-project
   <div>
     <!-- 文本插值 -->
     <p>{{ message }}</p>
-    
+
     <!-- 原始 HTML -->
     <p v-html="rawHtml"></p>
-    
+
     <!-- 属性绑定 -->
     <a :href="url">Vue 官网</a>
-    
+
     <!-- JavaScript 表达式 -->
     <p>{{ reversedMessage }}</p>
   </div>
@@ -65,65 +65,69 @@ vue create my-project
 ### 2.2 响应式基础：ref 与 reactive
 
 ```javascript
-import { ref, reactive } from 'vue'
+import { ref, reactive } from 'vue';
 
 export default {
   setup() {
     // 基本类型使用 ref
-    const count = ref(0)
-    
+    const count = ref(0);
+
     // 对象类型使用 reactive
     const user = reactive({
       name: 'John',
-      age: 30
-    })
-    
+      age: 30,
+    });
+
     // 修改 ref 值
-    count.value++  // 注意需要 .value
-    
+    count.value++; // 注意需要 .value
+
     // 修改 reactive 对象
-    user.age = 31
-    
+    user.age = 31;
+
     return {
       count,
-      user
-    }
-  }
-}
+      user,
+    };
+  },
+};
 ```
 
 ### 2.3 计算属性
 
 ```javascript
-import { computed, reactive } from 'vue'
+import { computed, reactive } from 'vue';
 
 const state = reactive({
   firstName: 'John',
-  lastName: 'Doe'
-})
+  lastName: 'Doe',
+});
 
 const fullName = computed(() => {
-  return `${state.firstName} ${state.lastName}`
-})
+  return `${state.firstName} ${state.lastName}`;
+});
 ```
 
 ### 2.4 侦听器
 
 ```javascript
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
 
-const count = ref(0)
+const count = ref(0);
 
 // 基本侦听
 watch(count, (newValue, oldValue) => {
-  console.log(`计数从 ${oldValue} 变为 ${newValue}`)
-})
+  console.log(`计数从 ${oldValue} 变为 ${newValue}`);
+});
 
 // 深度侦听对象
-const user = ref({ name: 'Alice' })
-watch(user, (newValue) => {
-  console.log('用户信息变化', newValue)
-}, { deep: true })
+const user = ref({ name: 'Alice' });
+watch(
+  user,
+  (newValue) => {
+    console.log('用户信息变化', newValue);
+  },
+  { deep: true }
+);
 ```
 
 ## 三、条件渲染与列表渲染
@@ -136,7 +140,7 @@ watch(user, (newValue) => {
     <p v-if="score > 90">优秀</p>
     <p v-else-if="score > 60">及格</p>
     <p v-else>不及格</p>
-    
+
     <h1 v-show="isVisible">条件显示内容</h1>
   </div>
 </template>
@@ -148,14 +152,10 @@ watch(user, (newValue) => {
 <template>
   <ul>
     <!-- 遍历数组 -->
-    <li v-for="(item, index) in items" :key="item.id">
-      {{ index + 1 }}. {{ item.name }}
-    </li>
-    
+    <li v-for="(item, index) in items" :key="item.id">{{ index + 1 }}. {{ item.name }}</li>
+
     <!-- 遍历对象 -->
-    <li v-for="(value, key) in userInfo" :key="key">
-      {{ key }}: {{ value }}
-    </li>
+    <li v-for="(value, key) in userInfo" :key="key">{{ key }}: {{ value }}</li>
   </ul>
 </template>
 ```
@@ -166,26 +166,23 @@ watch(user, (newValue) => {
 <template>
   <form @submit.prevent="handleSubmit">
     <!-- 文本输入 -->
-    <input v-model="username" placeholder="用户名">
-    
+    <input v-model="username" placeholder="用户名" />
+
     <!-- 多行文本 -->
     <textarea v-model="bio"></textarea>
-    
+
     <!-- 复选框 -->
-    <input type="checkbox" v-model="agree" id="agree">
+    <input type="checkbox" v-model="agree" id="agree" />
     <label for="agree">我同意条款</label>
-    
+
     <!-- 单选按钮 -->
-    <input type="radio" v-model="gender" value="male"> 男
-    <input type="radio" v-model="gender" value="female"> 女
-    
+    <input type="radio" v-model="gender" value="male" /> 男 <input type="radio" v-model="gender" value="female" /> 女
+
     <!-- 下拉选择 -->
     <select v-model="selectedCity">
-      <option v-for="city in cities" :key="city.id" :value="city">
-        {{ city.name }}
-      </option>
+      <option v-for="city in cities" :key="city.id" :value="city">{{ city.name }}</option>
     </select>
-    
+
     <button type="submit">提交</button>
   </form>
 </template>
@@ -225,22 +222,18 @@ function increment() {
 ```html
 <!-- ParentComponent.vue -->
 <template>
-  <ChildComponent 
-    title="子组件示例" 
-    :count="parentCount"
-    @update-count="handleUpdate"
-  />
+  <ChildComponent title="子组件示例" :count="parentCount" @update-count="handleUpdate" />
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import ChildComponent from './ChildComponent.vue'
+  import { ref } from 'vue';
+  import ChildComponent from './ChildComponent.vue';
 
-const parentCount = ref(10)
+  const parentCount = ref(10);
 
-function handleUpdate(value) {
-  parentCount.value += value
-}
+  function handleUpdate(value) {
+    parentCount.value += value;
+  }
 </script>
 ```
 
@@ -267,9 +260,9 @@ function handleUpdate(value) {
   <template #header>
     <h1>页面标题</h1>
   </template>
-  
+
   <p>主要内容区域</p>
-  
+
   <template #footer>
     <p>© 2023</p>
   </template>
@@ -282,24 +275,24 @@ function handleUpdate(value) {
 
 ```html
 <script setup>
-// 自动暴露所有顶层变量
-import { ref, onMounted } from 'vue'
+  // 自动暴露所有顶层变量
+  import { ref, onMounted } from 'vue';
 
-const count = ref(0)
+  const count = ref(0);
 
-// 生命周期钩子
-onMounted(() => {
-  console.log('组件已挂载')
-})
+  // 生命周期钩子
+  onMounted(() => {
+    console.log('组件已挂载');
+  });
 
-// 函数
-function increment() {
-  count.value++
-}
+  // 函数
+  function increment() {
+    count.value++;
+  }
 
-// 使用 defineProps 和 defineEmits
-const props = defineProps(['initialCount'])
-const emit = defineEmits(['countChange'])
+  // 使用 defineProps 和 defineEmits
+  const props = defineProps(['initialCount']);
+  const emit = defineEmits(['countChange']);
 </script>
 ```
 
@@ -307,36 +300,36 @@ const emit = defineEmits(['countChange'])
 
 ```javascript
 // useCounter.js
-import { ref, computed } from 'vue'
+import { ref, computed } from 'vue';
 
 export function useCounter(initialValue = 0) {
-  const count = ref(initialValue)
-  
-  const double = computed(() => count.value * 2)
-  
+  const count = ref(initialValue);
+
+  const double = computed(() => count.value * 2);
+
   function increment() {
-    count.value++
+    count.value++;
   }
-  
+
   function decrement() {
-    count.value--
+    count.value--;
   }
-  
+
   return {
     count,
     double,
     increment,
-    decrement
-  }
+    decrement,
+  };
 }
 ```
 
 ```html
 <!-- 在组件中使用 -->
 <script setup>
-import { useCounter } from './useCounter'
+  import { useCounter } from './useCounter';
 
-const { count, increment } = useCounter(10)
+  const { count, increment } = useCounter(10);
 </script>
 ```
 
@@ -344,21 +337,21 @@ const { count, increment } = useCounter(10)
 
 ```javascript
 // 父组件
-import { provide, ref } from 'vue'
+import { provide, ref } from 'vue';
 
-const theme = ref('dark')
+const theme = ref('dark');
 
 provide('theme', {
   theme,
   toggleTheme: () => {
-    theme.value = theme.value === 'dark' ? 'light' : 'dark'
-  }
-})
+    theme.value = theme.value === 'dark' ? 'light' : 'dark';
+  },
+});
 
 // 子组件
-import { inject } from 'vue'
+import { inject } from 'vue';
 
-const { theme, toggleTheme } = inject('theme')
+const { theme, toggleTheme } = inject('theme');
 ```
 
 ## 七、最佳实践与性能优化
@@ -380,11 +373,9 @@ const { theme, toggleTheme } = inject('theme')
 3. **组件懒加载**
 
    ```javascript
-   import { defineAsyncComponent } from 'vue'
-   
-   const AsyncComp = defineAsyncComponent(() => 
-     import('./components/HeavyComponent.vue')
-   )
+   import { defineAsyncComponent } from 'vue';
+
+   const AsyncComp = defineAsyncComponent(() => import('./components/HeavyComponent.vue'));
    ```
 
 ### 7.2 代码组织规范
@@ -404,13 +395,13 @@ const { theme, toggleTheme } = inject('theme')
 
    ```html
    <template>...</template>
-   
+
    <script setup>
-   /* 组合式 API */
+     /* 组合式 API */
    </script>
-   
+
    <style scoped>
-   /* 组件样式 */
+     /* 组件样式 */
    </style>
    ```
 
@@ -430,7 +421,7 @@ const { theme, toggleTheme } = inject('theme')
    const renderer = createRenderer({
      template,
      runInNewContext: false, // 避免潜在的安全问题
-   })
+   });
    ```
 
 ## 八、常见问题与解决方案
@@ -441,34 +432,34 @@ const { theme, toggleTheme } = inject('theme')
 
   ```javascript
   // 错误方式
-  state.items[0] = newValue
-  
+  state.items[0] = newValue;
+
   // 正确方式
-  state.items.splice(0, 1, newValue)
+  state.items.splice(0, 1, newValue);
   ```
 
 - **对象属性添加**：
 
   ```javascript
   // 错误方式
-  state.user.age = 30
-  
+  state.user.age = 30;
+
   // 正确方式
-  state.user = {...state.user, age: 30}
+  state.user = { ...state.user, age: 30 };
   ```
 
 ### 8.2 生命周期钩子使用指南
 
-| Vue2 选项式 API | Vue3 组合式 API       | 执行时机               |
-|----------------|---------------------|----------------------|
-| beforeCreate   | 无直接替代           | 在实例初始化之后调用       |
-| created        | 无直接替代           | 在实例创建完成后调用       |
-| beforeMount    | onBeforeMount       | 在挂载开始之前调用        |
-| mounted        | onMounted           | 在实例挂载完成后调用       |
-| beforeUpdate   | onBeforeUpdate      | 在数据变化DOM更新前调用    |
-| updated        | onUpdated           | 在数据变化DOM更新后调用    |
-| beforeUnmount  | onBeforeUnmount     | 在实例卸载之前调用        |
-| unmounted      | onUnmounted         | 在实例卸载之后调用        |
+| Vue2 选项式 API | Vue3 组合式 API | 执行时机                |
+| --------------- | --------------- | ----------------------- |
+| beforeCreate    | 无直接替代      | 在实例初始化之后调用    |
+| created         | 无直接替代      | 在实例创建完成后调用    |
+| beforeMount     | onBeforeMount   | 在挂载开始之前调用      |
+| mounted         | onMounted       | 在实例挂载完成后调用    |
+| beforeUpdate    | onBeforeUpdate  | 在数据变化DOM更新前调用 |
+| updated         | onUpdated       | 在数据变化DOM更新后调用 |
+| beforeUnmount   | onBeforeUnmount | 在实例卸载之前调用      |
+| unmounted       | onUnmounted     | 在实例卸载之后调用      |
 
 ## 九、总结
 
@@ -490,12 +481,12 @@ Vue3 通过组合式 API 提供了更灵活、更强大的代码组织能力，�
 
 ## 附录：Vue 3 生态工具推荐
 
-| 工具名称       | 用途                     | 链接                      |
-|---------------|-------------------------|--------------------------|
-| Pinia         | 状态管理库                | <https://pinia.vuejs.org/> |
-| Vue Router    | 官方路由管理器             | <https://router.vuejs.org/> |
-| Vite          | 下一代前端构建工具          | <https://vitejs.dev/>      |
-| Vitest        | Vue 组件测试框架           | <https://vitest.dev/>      |
-| VueUse        | Vue 组合式工具集合         | <https://vueuse.org/>      |
-| Element Plus  | 桌面端组件库              | <https://element-plus.org/> |
-| Volar         | Vue IDE 支持              | <https://marketplace.visualstudio.com/items?itemName=Vue.volar> |
+| 工具名称     | 用途               | 链接                                                            |
+| ------------ | ------------------ | --------------------------------------------------------------- |
+| Pinia        | 状态管理库         | <https://pinia.vuejs.org/>                                      |
+| Vue Router   | 官方路由管理器     | <https://router.vuejs.org/>                                     |
+| Vite         | 下一代前端构建工具 | <https://vitejs.dev/>                                           |
+| Vitest       | Vue 组件测试框架   | <https://vitest.dev/>                                           |
+| VueUse       | Vue 组合式工具集合 | <https://vueuse.org/>                                           |
+| Element Plus | 桌面端组件库       | <https://element-plus.org/>                                     |
+| Volar        | Vue IDE 支持       | <https://marketplace.visualstudio.com/items?itemName=Vue.volar> |

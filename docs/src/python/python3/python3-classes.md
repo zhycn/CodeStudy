@@ -32,15 +32,15 @@
 ```python
 class Person:
     """一个简单的Person类示例"""
-    
+
     # 类属性，所有实例共享
     species = "Homo sapiens"
-    
+
     def __init__(self, name, age):
         # 实例属性，每个实例独有
         self.name = name
         self.age = age
-    
+
     def greet(self):
         return f"Hello, my name is {self.name} and I'm {self.age} years old."
 
@@ -63,7 +63,7 @@ class Rectangle:
         self.width = width
         self.height = height
         self.area = width * height  # 可以计算并存储派生属性
-    
+
     def describe(self):
         return f"Rectangle: {self.width}x{self.height}, area: {self.area}"
 
@@ -80,13 +80,13 @@ class Dog:
     # 类属性
     scientific_name = "Canis lupus familiaris"
     count = 0  # 跟踪创建的实例数量
-    
+
     def __init__(self, name, breed):
         # 实例属性
         self.name = name
         self.breed = breed
         Dog.count += 1  # 通过类名访问类属性
-    
+
     @classmethod
     def get_count(cls):
         return cls.count
@@ -105,7 +105,7 @@ print(f"Dogs created: {Dog.get_count()}")  # Dogs created: 2
 ```python
 class Example:
     class_attr = "Class attribute"
-    
+
     def __init__(self, instance_attr):
         self.instance_attr = instance_attr
         self.class_attr = "Instance shadows class"  # 实例属性遮蔽类属性
@@ -126,14 +126,14 @@ class BankAccount:
     def __init__(self, owner, balance=0):
         self.owner = owner
         self.balance = balance
-    
+
     # 实例方法
     def deposit(self, amount):
         if amount > 0:
             self.balance += amount
             return f"Deposited ${amount}. New balance: ${self.balance}"
         return "Deposit amount must be positive"
-    
+
     def withdraw(self, amount):
         if 0 < amount <= self.balance:
             self.balance -= amount
@@ -152,22 +152,22 @@ print(account.withdraw(200))  # Withdrew $200. New balance: $1300
 class Employee:
     company = "Tech Corp"
     employees = []
-    
+
     def __init__(self, name, position):
         self.name = name
         self.position = position
         Employee.employees.append(self)
-    
+
     @classmethod
     def from_string(cls, emp_string):
         """从字符串创建Employee实例的类方法"""
         name, position = emp_string.split(',')
         return cls(name.strip(), position.strip())
-    
+
     @classmethod
     def get_all_employees(cls):
         return cls.employees
-    
+
     @classmethod
     def change_company(cls, new_name):
         cls.company = new_name
@@ -190,11 +190,11 @@ class MathOperations:
     @staticmethod
     def add(a, b):
         return a + b
-    
+
     @staticmethod
     def multiply(a, b):
         return a * b
-    
+
     @staticmethod
     def factorial(n):
         if n == 0:
@@ -211,11 +211,11 @@ print(f"Factorial: {result2}")
 
 ### 方法类型对比
 
-| 方法类型 | 装饰器 | 第一个参数 | 访问权限 |
-|---------|--------|-----------|---------|
-| 实例方法 | 无 | `self` (实例引用) | 可访问实例和类属性 |
-| 类方法 | `@classmethod` | `cls` (类引用) | 只能访问类属性 |
-| 静态方法 | `@staticmethod` | 无 | 不能访问实例或类属性 |
+| 方法类型 | 装饰器          | 第一个参数        | 访问权限             |
+| -------- | --------------- | ----------------- | -------------------- |
+| 实例方法 | 无              | `self` (实例引用) | 可访问实例和类属性   |
+| 类方法   | `@classmethod`  | `cls` (类引用)    | 只能访问类属性       |
+| 静态方法 | `@staticmethod` | 无                | 不能访问实例或类属性 |
 
 ## 继承与多态
 
@@ -226,10 +226,10 @@ class Animal:
     def __init__(self, name, species):
         self.name = name
         self.species = species
-    
+
     def speak(self):
         raise NotImplementedError("Subclasses must implement this method")
-    
+
     def describe(self):
         return f"{self.name} is a {self.species}"
 
@@ -237,10 +237,10 @@ class Dog(Animal):
     def __init__(self, name, breed):
         super().__init__(name, "Dog")
         self.breed = breed
-    
+
     def speak(self):
         return "Woof!"
-    
+
     def describe(self):
         return f"{super().describe()} of breed {self.breed}"
 
@@ -248,10 +248,10 @@ class Cat(Animal):
     def __init__(self, name, color):
         super().__init__(name, "Cat")
         self.color = color
-    
+
     def speak(self):
         return "Meow!"
-    
+
     def describe(self):
         return f"{super().describe()} with {self.color} fur"
 
@@ -273,14 +273,14 @@ for animal in animals:
 class Flyable:
     def __init__(self, max_altitude=1000):
         self.max_altitude = max_altitude
-    
+
     def fly(self):
         return f"Flying up to {self.max_altitude} meters"
 
 class Swimmable:
     def __init__(self, max_depth=10):
         self.max_depth = max_depth
-    
+
     def swim(self):
         return f"Swimming up to {self.max_depth} meters deep"
 
@@ -289,7 +289,7 @@ class Duck(Flyable, Swimmable):
         self.name = name
         Flyable.__init__(self, max_altitude)
         Swimmable.__init__(self, max_depth)
-    
+
     def quack(self):
         return "Quack!"
 
@@ -301,7 +301,7 @@ print(duck.swim())  # Swimming up to 2 meters deep
 
 # 方法解析顺序（MRO）
 print(Duck.__mro__)
-# (<class '__main__.Duck'>, <class '__main__.Flyable'>, 
+# (<class '__main__.Duck'>, <class '__main__.Flyable'>,
 #  <class '__main__.Swimmable'>, <class 'object'>)
 ```
 
@@ -314,38 +314,38 @@ class Vector:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-    
+
     # 字符串表示
     def __str__(self):
         return f"Vector({self.x}, {self.y})"
-    
+
     def __repr__(self):
         return f"Vector({self.x}, {self.y})"
-    
+
     # 算术运算
     def __add__(self, other):
         return Vector(self.x + other.x, self.y + other.y)
-    
+
     def __sub__(self, other):
         return Vector(self.x - other.x, self.y - other.y)
-    
+
     def __mul__(self, scalar):
         return Vector(self.x * scalar, self.y * scalar)
-    
+
     # 比较运算
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
-    
+
     def __lt__(self, other):
         return self.magnitude() < other.magnitude()
-    
+
     # 其他方法
     def magnitude(self):
         return (self.x**2 + self.y**2)**0.5
-    
+
     def __len__(self):
         return int(self.magnitude())
-    
+
     def __getitem__(self, index):
         if index == 0:
             return self.x
@@ -374,23 +374,23 @@ class DatabaseConnection:
     def __init__(self, db_name):
         self.db_name = db_name
         self.connected = False
-    
+
     def __enter__(self):
         self.connect()
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
-    
+
     def connect(self):
         print(f"Connecting to {self.db_name}...")
         self.connected = True
-    
+
     def disconnect(self):
         if self.connected:
             print(f"Disconnecting from {self.db_name}...")
             self.connected = False
-    
+
     def execute(self, query):
         if not self.connected:
             raise ConnectionError("Not connected to database")
@@ -412,28 +412,28 @@ class BankAccount:
         self.account_holder = account_holder
         self._balance = initial_balance  # 受保护属性
         self.__pin = "1234"  # 私有属性
-    
+
     # 使用property装饰器控制属性访问
     @property
     def balance(self):
         return self._balance
-    
+
     @balance.setter
     def balance(self, value):
         if value < 0:
             raise ValueError("Balance cannot be negative")
         self._balance = value
-    
+
     # 只读属性
     @property
     def account_info(self):
         return f"Account holder: {self.account_holder}, Balance: ${self._balance}"
-    
+
     def deposit(self, amount):
         if amount <= 0:
             raise ValueError("Deposit amount must be positive")
         self._balance += amount
-    
+
     def withdraw(self, amount, pin):
         if pin != self.__pin:
             raise ValueError("Invalid PIN")
@@ -467,7 +467,7 @@ class Example:
         self.public = "public"
         self._protected = "protected"
         self.__private = "private"
-    
+
     def get_private(self):
         return self.__private
 
@@ -491,21 +491,21 @@ class Shape(ABC):
     @abstractmethod
     def area(self):
         pass
-    
+
     @abstractmethod
     def perimeter(self):
         pass
-    
+
     def describe(self):
         return f"{self.__class__.__name__}: area={self.area():.2f}, perimeter={self.perimeter():.2f}"
 
 class Circle(Shape):
     def __init__(self, radius):
         self.radius = radius
-    
+
     def area(self):
         return pi * self.radius ** 2
-    
+
     def perimeter(self):
         return 2 * pi * self.radius
 
@@ -513,10 +513,10 @@ class Rectangle(Shape):
     def __init__(self, width, height):
         self.width = width
         self.height = height
-    
+
     def area(self):
         return self.width * self.height
-    
+
     def perimeter(self):
         return 2 * (self.width + self.height)
 
@@ -556,14 +556,14 @@ class bankAccount:  # 应该使用驼峰命名法
 class Engine:
     def start(self):
         return "Engine started"
-    
+
     def stop(self):
         return "Engine stopped"
 
 class Wheels:
     def __init__(self, count):
         self.count = count
-    
+
     def rotate(self):
         return f"{self.count} wheels rotating"
 
@@ -571,7 +571,7 @@ class Car:
     def __init__(self):
         self.engine = Engine()
         self.wheels = Wheels(4)
-    
+
     def drive(self):
         return f"{self.engine.start()}, {self.wheels.rotate()}"
 
@@ -591,11 +591,11 @@ class Person:
     name: str
     age: int
     hobbies: List[str] = None
-    
+
     def __post_init__(self):
         if self.hobbies is None:
             self.hobbies = []
-    
+
     def add_hobby(self, hobby):
         self.hobbies.append(hobby)
 
@@ -614,7 +614,7 @@ class Color(Enum):
     RED = auto()
     GREEN = auto()
     BLUE = auto()
-    
+
     def describe(self):
         return f"{self.name} is a beautiful color"
 
@@ -642,14 +642,14 @@ class Product:
         self.name = name
         self.price = price
         self.in_stock = in_stock
-    
+
     def apply_discount(self, percentage: float) -> float:
         """应用折扣并返回新价格"""
         if not 0 <= percentage <= 100:
             raise ValueError("Discount percentage must be between 0 and 100")
         discounted_price = self.price * (1 - percentage / 100)
         return round(discounted_price, 2)
-    
+
     @classmethod
     def create_from_dict(cls, data: Dict[str, any]) -> 'Product':
         """从字典创建Product实例"""
@@ -670,7 +670,7 @@ print(f"Discounted price: ${discounted}")  # Discounted price: $849.99
 class BadExample:
     def __init__(self, items=[]):
         self.items = items
-    
+
     def add_item(self, item):
         self.items.append(item)
 
@@ -678,7 +678,7 @@ class BadExample:
 class GoodExample:
     def __init__(self, items=None):
         self.items = items if items is not None else []
-    
+
     def add_item(self, item):
         self.items.append(item)
 
@@ -726,7 +726,7 @@ d.method()
 # A.method
 
 print(D.mro())  # 方法解析顺序
-# [<class '__main__.D'>, <class '__main__.B'>, 
+# [<class '__main__.D'>, <class '__main__.B'>,
 #  <class '__main__.C'>, <class '__main__.A'>, <class 'object'>]
 ```
 
@@ -740,7 +740,7 @@ class RegularClass:
 
 class SlotsClass:
     __slots__ = ('x', 'y')
-    
+
     def __init__(self, x, y):
         self.x = x
         self.y = y

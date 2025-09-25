@@ -28,26 +28,26 @@
 2. **依赖管理**: 使用 `pip` 和 `requirements.txt` 或 `pyproject.toml` 来明确管理项目依赖。
 3. **环境变量**: 将配置（如密钥、数据库 URL）从代码中剥离，使用环境变量管理。可以使用 `python-dotenv` 在开发环境中加载 `.env` 文件，但在生产环境中应使用操作系统或容器平台提供的机制。
 
-    ```bash
-    # 安装 python-dotenv
-    pip install python-dotenv
-    ```
+   ```bash
+   # 安装 python-dotenv
+   pip install python-dotenv
+   ```
 
-    ```python
-    # app.py (示例片段)
-    from dotenv import load_dotenv
-    load_dotenv()  # 仅在开发时加载 .env 文件
+   ```python
+   # app.py (示例片段)
+   from dotenv import load_dotenv
+   load_dotenv()  # 仅在开发时加载 .env 文件
 
-    import os
-    database_url = os.environ.get('DATABASE_URL')
-    secret_key = os.environ.get('SECRET_KEY')
-    ```
+   import os
+   database_url = os.environ.get('DATABASE_URL')
+   secret_key = os.environ.get('SECRET_KEY')
+   ```
 
-    ```ini
-    # .env (切勿提交至版本控制！)
-    DATABASE_URL=postgresql://user:password@localhost:5432/mydb
-    SECRET_KEY=your-super-secret-key-here
-    ```
+   ```ini
+   # .env (切勿提交至版本控制！)
+   DATABASE_URL=postgresql://user:password@localhost:5432/mydb
+   SECRET_KEY=your-super-secret-key-here
+   ```
 
 4. **禁用调试模式**: 确保在生产环境中关闭应用的调试模式，以避免信息泄露和安全漏洞。
 
@@ -121,10 +121,10 @@ vacuum = true
 
 直接让应用服务器（如 Gunicorn）对外服务是不够专业的做法。最佳实践是在前端放置一个强大的 Web 服务器（如 Nginx 或 Apache）作为反向代理，其作用是：
 
-* **处理静态文件**：高效直接地提供 CSS、JS、图片等文件，减轻应用服务器负担。
-* **SSL 终止**：处理 HTTPS 加密和解密。
-* **负载均衡**：将请求分发到多个应用服务器实例。
-* **缓冲和防护**：保护后端应用免受慢速客户端或某些攻击的影响。
+- **处理静态文件**：高效直接地提供 CSS、JS、图片等文件，减轻应用服务器负担。
+- **SSL 终止**：处理 HTTPS 加密和解密。
+- **负载均衡**：将请求分发到多个应用服务器实例。
+- **缓冲和防护**：保护后端应用免受慢速客户端或某些攻击的影响。
 
 ### Nginx 配置示例
 
@@ -170,8 +170,8 @@ sudo systemctl reload nginx
 
 Django 和 Flask 等框架在开发模式下会提供静态文件，但在生产环境中效率很低。你需要预先收集或构建静态文件，并由 Nginx 直接提供。
 
-* **Django**: 使用 `python manage.py collectstatic` 命令将所有静态文件收集到 `STATIC_ROOT` 指定的目录中。
-* **Flask**: 在生产环境中，通常使用扩展如 `Flask-Assets` 来压缩和合并静态文件，或者在前端构建流程中处理（如 Webpack）。
+- **Django**: 使用 `python manage.py collectstatic` 命令将所有静态文件收集到 `STATIC_ROOT` 指定的目录中。
+- **Flask**: 在生产环境中，通常使用扩展如 `Flask-Assets` 来压缩和合并静态文件，或者在前端构建流程中处理（如 Webpack）。
 
 确保你的 Nginx 配置中的 `location /static/` 和 `location /media/` 指向正确的目录。
 
@@ -288,41 +288,41 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.13'
-    - name: Install Dependencies
-      run: |
-        pip install -r requirements.txt
-    - name: Run Tests
-      run: |
-        python -m pytest
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run Tests
+        run: |
+          python -m pytest
 
   deploy:
     needs: test
     runs-on: ubuntu-latest
     if: success()
     steps:
-    - name: Deploy to Server via Fabric
-      uses: actions/checkout@v4
-    - name: Install Fabric
-      run: pip install fabric
-    - name: Execute deployment command
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        fab -H your_username@your_server_ip deploy
+      - name: Deploy to Server via Fabric
+        uses: actions/checkout@v4
+      - name: Install Fabric
+        run: pip install fabric
+      - name: Execute deployment command
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          fab -H your_username@your_server_ip deploy
 ```
 
 ## 容器化部署
@@ -381,7 +381,7 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     expose:
-      - "8000"
+      - '8000'
     env_file:
       - .env.prod
     depends_on:
@@ -405,7 +405,7 @@ services:
       - media_volume:/app/media
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "80:80"
+      - '80:80'
     depends_on:
       - web
     restart: unless-stopped
@@ -422,10 +422,10 @@ volumes:
 
 如果你不想管理服务器，可以考虑使用 PaaS（平台即服务）提供商，它们抽象了底层基础设施的管理：
 
-* **Heroku**: 部署流程非常简单，通过 Git push 触发。
-* **PythonAnywhere**: 对 Python Web 应用非常友好，特别是 Django。
-* **Google App Engine (GAE)**: 谷歌的全托管服务。
-* **AWS Elastic Beanstalk / Azure App Service**: 云厂商提供的 PaaS 解决方案。
+- **Heroku**: 部署流程非常简单，通过 Git push 触发。
+- **PythonAnywhere**: 对 Python Web 应用非常友好，特别是 Django。
+- **Google App Engine (GAE)**: 谷歌的全托管服务。
+- **AWS Elastic Beanstalk / Azure App Service**: 云厂商提供的 PaaS 解决方案。
 
 这些平台通常有详细的文档指导如何部署 Python 应用。
 
@@ -433,16 +433,16 @@ volumes:
 
 ### 安全措施
 
-* **HTTPS**: 使用 Let's Encrypt 为你的域名申请免费 SSL 证书。
-* **防火墙**: 配置防火墙（如 `ufw`）只开放必要端口（如 80, 443, SSH）。
-* **依赖扫描**: 定期使用 `safety` 或 `github dependabot` 检查项目依赖是否存在已知漏洞。
-* **Headers**: 使用 `django-csp` 或 `secure` 等库添加安全相关的 HTTP 头（如 CSP, HSTS）。
+- **HTTPS**: 使用 Let's Encrypt 为你的域名申请免费 SSL 证书。
+- **防火墙**: 配置防火墙（如 `ufw`）只开放必要端口（如 80, 443, SSH）。
+- **依赖扫描**: 定期使用 `safety` 或 `github dependabot` 检查项目依赖是否存在已知漏洞。
+- **Headers**: 使用 `django-csp` 或 `secure` 等库添加安全相关的 HTTP 头（如 CSP, HSTS）。
 
 ### 监控与日志
 
-* **日志记录**: 确保应用和服务器（Gunicorn, Nginx）配置了适当的日志记录。Gunicorn 可以使用 `--access-logfile` 和 `--error-logfile` 选项。
-* **错误追踪**: 集成 Sentry 等服务，实时捕获和报告生产环境中的错误。
-* **性能监控**: 使用 APM（应用性能监控）工具如 Datadog APM 或 New Relic 来监控应用性能。
+- **日志记录**: 确保应用和服务器（Gunicorn, Nginx）配置了适当的日志记录。Gunicorn 可以使用 `--access-logfile` 和 `--error-logfile` 选项。
+- **错误追踪**: 集成 Sentry 等服务，实时捕获和报告生产环境中的错误。
+- **性能监控**: 使用 APM（应用性能监控）工具如 Datadog APM 或 New Relic 来监控应用性能。
 
 ## 完整示例项目
 

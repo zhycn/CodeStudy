@@ -8,13 +8,13 @@
 
 1. #概述
 2. #核心概念
-    * #分隔符与方言
+   - #分隔符与方言
 3. #读取-csv-文件
-    * #csvreader
-    * #csvdictreader
+   - #csvreader
+   - #csvdictreader
 4. #写入-csv-文件
-    * #csvwriter
-    * #csvdictwriter
+   - #csvwriter
+   - #csvdictwriter
 5. #方言-dialect-与自定义格式
 6. #错误处理与边缘情况
 7. #性能考量与最佳实践
@@ -28,10 +28,10 @@
 
 **主要功能：**
 
-* **自动处理字段分隔**：自动解析以特定分隔符（如逗号）分隔的字段，无需手动拆分字符串。
-* **处理复杂格式**：正确处理包含换行符、分隔符的字段（通常这些字段会被引号包围）。
-* **方言支持**：灵活处理不同来源、不同格式约定的 CSV 文件。
-* **字典读写**：支持将行映射为 `OrderedDict` 或 `dict`，使得列访问更直观（通过列名而非索引）。
+- **自动处理字段分隔**：自动解析以特定分隔符（如逗号）分隔的字段，无需手动拆分字符串。
+- **处理复杂格式**：正确处理包含换行符、分隔符的字段（通常这些字段会被引号包围）。
+- **方言支持**：灵活处理不同来源、不同格式约定的 CSV 文件。
+- **字典读写**：支持将行映射为 `OrderedDict` 或 `dict`，使得列访问更直观（通过列名而非索引）。
 
 ## 核心概念
 
@@ -39,9 +39,9 @@
 
 CSV 文件并非完全统一的标准，不同的应用可能会产生格式略有差异的 CSV 文件。这些差异主要体现在：
 
-* **分隔符 (delimiter)**：最常见的是逗号 `,`，也可能是制表符 `\t`、分号 `;` 等。
-* **引用符 (quotechar)**：用于包裹含有特殊字符（如分隔符、换行符）的字段，通常是双引号 `"`。
-* **引号行为**：控制读写时何时使用引用符。例如，`quoting=csv.QUOTE_ALL`（所有字段都引用）或 `quoting=csv.QUOTE_MINIMAL`（仅在必要时引用）。
+- **分隔符 (delimiter)**：最常见的是逗号 `,`，也可能是制表符 `\t`、分号 `;` 等。
+- **引用符 (quotechar)**：用于包裹含有特殊字符（如分隔符、换行符）的字段，通常是双引号 `"`。
+- **引号行为**：控制读写时何时使用引用符。例如，`quoting=csv.QUOTE_ALL`（所有字段都引用）或 `quoting=csv.QUOTE_MINIMAL`（仅在必要时引用）。
 
 `csv` 模块通过 **`Dialect`（方言）** 类来封装这些格式规则。模块内置了一些方言（如 `excel`、`excel-tab`、`unix`），也允许用户自定义。
 
@@ -66,16 +66,16 @@ with open('example.csv', newline='', encoding='utf-8') as csvfile:
 
 **关键参数：**
 
-* `delimiter`：字段分隔符，默认为 `,`。
-* `quotechar`：用于包裹字段的字符，默认为 `"`。
-* `quoting`：控制引号行为，常用常量：
-  * `csv.QUOTE_ALL`：所有字段都引用。
-  * `csv.QUOTE_MINIMAL`：只在字段包含特殊字符（如分隔符、换行符、引号符）时引用。**（默认）**
-  * `csv.QUOTE_NONNUMERIC`：所有非数字字段都被引用。
-  * `csv.QUOTE_NONE`：不引用任何字段。如果字段包含特殊字符，需配合 `escapechar` 使用。
-* `skipinitialspace`：是否忽略分隔符后的空格，默认为 `False`。
-* `newline=''`：在 `open()` 中设置此参数至关重要，它能避免在跨平台（如 Windows）处理换行时出现额外空行问题。
-* `encoding`：指定文件编码（如 `utf-8`、`gbk`），对于包含中文等非 ASCII 字符的文件是**必须的**。
+- `delimiter`：字段分隔符，默认为 `,`。
+- `quotechar`：用于包裹字段的字符，默认为 `"`。
+- `quoting`：控制引号行为，常用常量：
+  - `csv.QUOTE_ALL`：所有字段都引用。
+  - `csv.QUOTE_MINIMAL`：只在字段包含特殊字符（如分隔符、换行符、引号符）时引用。**（默认）**
+  - `csv.QUOTE_NONNUMERIC`：所有非数字字段都被引用。
+  - `csv.QUOTE_NONE`：不引用任何字段。如果字段包含特殊字符，需配合 `escapechar` 使用。
+- `skipinitialspace`：是否忽略分隔符后的空格，默认为 `False`。
+- `newline=''`：在 `open()` 中设置此参数至关重要，它能避免在跨平台（如 Windows）处理换行时出现额外空行问题。
+- `encoding`：指定文件编码（如 `utf-8`、`gbk`），对于包含中文等非 ASCII 字符的文件是**必须的**。
 
 ### `csv.DictReader`
 
@@ -96,7 +96,7 @@ with open('example.csv', newline='', encoding='utf-8') as csvfile:
 
 **关键参数：**
 
-* `fieldnames`：可选参数。如果 CSV 文件没有表头行，或者你想使用自定义的列名，可以传入一个列表，如 `fieldnames=['Name', 'Age', 'City']`。如果未提供且文件有表头，则自动使用第一行作为 `fieldnames`。
+- `fieldnames`：可选参数。如果 CSV 文件没有表头行，或者你想使用自定义的列名，可以传入一个列表，如 `fieldnames=['Name', 'Age', 'City']`。如果未提供且文件有表头，则自动使用第一行作为 `fieldnames`。
 
 ## 写入 CSV 文件
 
@@ -117,9 +117,9 @@ data = [
 ]
 
 with open('output.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    csv_writer = csv.writer(csvfile, 
+    csv_writer = csv.writer(csvfile,
                            delimiter=',',
-                           quotechar='"', 
+                           quotechar='"',
                            quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerows(data)
 ```
@@ -136,8 +136,8 @@ Charlie,35,"San Francisco
 
 **常用方法：**
 
-* `.writerow(row)`：写入单行数据。
-* `.writerows(rows)`：写入多行数据（接受一个包含多行数据的可迭代对象）。
+- `.writerow(row)`：写入单行数据。
+- `.writerows(rows)`：写入多行数据（接受一个包含多行数据的可迭代对象）。
 
 **关键参数：** 与 `csv.reader` 类似，如 `delimiter`, `quotechar`, `quoting` 等。
 
@@ -159,16 +159,16 @@ data_dicts = [
 
 with open('output_dict.csv', 'w', newline='', encoding='utf-8') as csvfile:
     csv_writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    
+
     csv_writer.writeheader() # 写入表头行
     csv_writer.writerows(data_dicts) # 写入所有数据行
 ```
 
 **关键方法：**
 
-* `.writeheader()`：将 `fieldnames` 列表作为第一行（表头）写入文件。
-* `.writerow(row_dict)`：写入一个字典代表的行。
-* `.writerows(row_dicts)`：写入多个字典代表的行。
+- `.writeheader()`：将 `fieldnames` 列表作为第一行（表头）写入文件。
+- `.writerow(row_dict)`：写入一个字典代表的行。
+- `.writerows(row_dicts)`：写入多个字典代表的行。
 
 如果字典中的键不在 `fieldnames` 中，默认会抛出 `ValueError`。可以通过设置 `extrasaction='ignore'` 参数来忽略额外的键。
 
@@ -192,7 +192,7 @@ with open('data.tsv', newline='', encoding='utf-8') as tsvfile:
 import csv
 
 # 注册一个名为 'my_dialect' 的新方言
-csv.register_dialect('my_dialect', 
+csv.register_dialect('my_dialect',
                      delimiter=';',       # 分号分隔
                      quotechar='\'',      # 单引号作为引用符
                      quoting=csv.QUOTE_ALL, # 所有字段都引用
@@ -284,7 +284,7 @@ try:
         # 创建 DictReader 和 DictWriter
         reader = csv.DictReader(infile)
         # 确保字段名一致
-        fieldnames = reader.fieldnames 
+        fieldnames = reader.fieldnames
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
 
         # 写入表头
@@ -316,9 +316,9 @@ except Exception as e:
 
 Python 的 `csv` 模块是一个轻量级但功能强大的工具，用于处理简单的表格数据交换。它的核心优势在于其纯 Python 实现、无需额外依赖以及处理各种 CSV“方言”的灵活性。
 
-* **对于简单读写和流式处理**：`csv.reader` 和 `csv.writer` 是完美选择。
-* **对于需要按列名操作的数据**：`csv.DictReader` 和 `csv.DictWriter` 极大提高了代码的可读性。
-* **对于复杂或大型数据任务**：应考虑使用 `pandas` 等更高级的数据分析库。
+- **对于简单读写和流式处理**：`csv.reader` 和 `csv.writer` 是完美选择。
+- **对于需要按列名操作的数据**：`csv.DictReader` 和 `csv.DictWriter` 极大提高了代码的可读性。
+- **对于复杂或大型数据任务**：应考虑使用 `pandas` 等更高级的数据分析库。
 
 遵循本文档中的最佳实践（如指定编码、使用 `newline=''`、显式定义格式参数）将帮助你稳健地处理大多数 CSV 文件任务。
 

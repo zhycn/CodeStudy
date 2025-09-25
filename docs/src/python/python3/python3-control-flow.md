@@ -248,11 +248,11 @@ with open('example.txt', 'r') as file:
 class ManagedResource:
     def __init__(self, name):
         self.name = name
-    
+
     def __enter__(self):
         print(f"获取资源: {self.name}")
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         print(f"释放资源: {self.name}")
         if exc_type:
@@ -359,7 +359,7 @@ with managed_resource("网络连接") as resource:
    def add_item(item, items=[]):
        items.append(item)
        return items
-   
+
    # 正确示例
    def add_item(item, items=None):
        if items is None:
@@ -376,7 +376,7 @@ with managed_resource("网络连接") as resource:
    for num in numbers:
        if num % 2 == 0:
            numbers.remove(num)  # 这会改变迭代对象
-   
+
    # 正确示例
    numbers = [1, 2, 3, 4, 5]
    numbers = [num for num in numbers if num % 2 != 0]  # 使用列表推导式
@@ -387,10 +387,10 @@ with managed_resource("网络连接") as resource:
    ```python
    # is 比较对象标识 (identity)
    # == 比较对象值 (equality)
-   
+
    a = [1, 2, 3]
    b = [1, 2, 3]
-   
+
    print(a == b)  # True, 值相等
    print(a is b)  # False, 不是同一个对象
    ```

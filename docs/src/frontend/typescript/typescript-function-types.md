@@ -21,7 +21,7 @@ function greet(name: string): string {
 }
 
 // 函数表达式
-const greet2 = function(name: string): string {
+const greet2 = function (name: string): string {
   return `Hello, ${name}!`;
 };
 
@@ -41,7 +41,7 @@ const greet3 = (name: string): string => {
 const names = ['Alice', 'Bob', 'Charlie'];
 
 // Contextual typing: name 被自动推断为 string 类型
-names.forEach(function(name) {
+names.forEach(function (name) {
   console.log(name.toUpperCase()); // OK
 });
 
@@ -64,7 +64,8 @@ names.forEach((name) => {
 type GreetFunction = (name: string) => void;
 
 // 实现这个函数
-const greeter: GreetFunction = (name) => { // name 被推断为 string
+const greeter: GreetFunction = (name) => {
+  // name 被推断为 string
   console.log(`Hello, ${name}`);
 };
 
@@ -92,7 +93,8 @@ interface SearchFunc {
 
 // 实现这个接口
 let mySearch: SearchFunc;
-mySearch = function(src, sub) { // 参数名可以不同，类型必须匹配
+mySearch = function (src, sub) {
+  // 参数名可以不同，类型必须匹配
   const result = src.search(sub);
   return result > -1;
 };
@@ -107,7 +109,7 @@ interface Counter {
 }
 
 function getCounter(): Counter {
-  let counter = function(start: number) {} as Counter;
+  let counter = function (start: number) {} as Counter;
   counter.interval = 123;
   counter.reset = () => {};
   return counter;
@@ -155,7 +157,7 @@ createPoint(undefined, 5); // [0, 5] - 需要显式传递 undefined
 
 ```typescript
 function multiply(n: number, ...m: number[]): number[] {
-  return m.map(x => n * x);
+  return m.map((x) => n * x);
 }
 
 const result = multiply(10, 1, 2, 3, 4); // result: [10, 20, 30, 40]
@@ -205,7 +207,7 @@ interface User {
 const user: User = {
   id: 123,
   admin: false,
-  becomeAdmin: function(this: User) {
+  becomeAdmin: function (this: User) {
     this.admin = true; // "this" 上下文被限定为 User 类型
   },
 };

@@ -8,20 +8,20 @@
 
 1. #概述
 2. #基本概念与语法
-    * #创建-symbol
-    * #symbol-的描述信息
-    * #symbol-的唯一性
+   - #创建-symbol
+   - #symbol-的描述信息
+   - #symbol-的唯一性
 3. #symbol-的常见用途
-    * #用作对象属性键
-    * #定义常量
-    * #实现迭代器
-    * #使用知名-symbol
+   - #用作对象属性键
+   - #定义常量
+   - #实现迭代器
+   - #使用知名-symbol
 4. #symbol-的静态方法与属性
-    * #symbolfor-与-symbolkeyfor
-    * #知名-symbol-well-known-symbols
+   - #symbolfor-与-symbolkeyfor
+   - #知名-symbol-well-known-symbols
 5. #typescript-中的-symbol-类型
-    * #类型注解
-    * #unique-symbol
+   - #类型注解
+   - #unique-symbol
 6. #最佳实践
 7. #总结
 
@@ -31,9 +31,9 @@
 
 核心特性：
 
-* **唯一性**：每个 `Symbol()` 调用返回的值都是唯一的，绝不与其他任何值（包括其他 Symbol）冲突。
-* **不可变性**：创建的 Symbol 值无法被更改。
-* **非字符串属性名**：它提供了一种创建非字符串对象属性键的方式，这是此前 JavaScript 中对象键只能是字符串的重大补充。
+- **唯一性**：每个 `Symbol()` 调用返回的值都是唯一的，绝不与其他任何值（包括其他 Symbol）冲突。
+- **不可变性**：创建的 Symbol 值无法被更改。
+- **非字符串属性名**：它提供了一种创建非字符串对象属性键的方式，这是此前 JavaScript 中对象键只能是字符串的重大补充。
 
 ## 基本概念与语法
 
@@ -83,13 +83,13 @@ const LOG_LEVEL = {
   DEBUG: Symbol('debug'),
   INFO: Symbol('info'),
   WARN: Symbol('warn'),
-  ERROR: Symbol('error')
+  ERROR: Symbol('error'),
 };
 
 // 使用 Symbol 作为键
 const myLogger = {
   [LOG_LEVEL.DEBUG]: 'This is a debug message',
-  [LOG_LEVEL.ERROR]: 'This is an error message'
+  [LOG_LEVEL.ERROR]: 'This is an error message',
 };
 
 console.log(myLogger[LOG_LEVEL.DEBUG]); // Output: "This is a debug message"
@@ -114,7 +114,7 @@ const DIRECTION = {
   NORTH: Symbol('north'),
   SOUTH: Symbol('south'),
   EAST: Symbol('east'),
-  WEST: Symbol('west')
+  WEST: Symbol('west'),
 };
 
 function move(direction: symbol) {
@@ -187,35 +187,35 @@ console.log(arr instanceof MyWeirdClass); // Output: true (因为 MyWeirdClass �
 
 ### Symbol.for() 与 Symbol.keyFor()
 
-* `Symbol.for(key)`: 在全局 Symbol 注册表中查找或创建一个与给定 `key` 相关联的 Symbol。这打破了 Symbol 的绝对唯一性，允许在不同的代码片段中共享同一个 Symbol。
+- `Symbol.for(key)`: 在全局 Symbol 注册表中查找或创建一个与给定 `key` 相关联的 Symbol。这打破了 Symbol 的绝对唯一性，允许在不同的代码片段中共享同一个 Symbol。
 
-    ```typescript
-    const sym1 = Symbol.for('globalKey');
-    const sym2 = Symbol.for('globalKey');
+  ```typescript
+  const sym1 = Symbol.for('globalKey');
+  const sym2 = Symbol.for('globalKey');
 
-    console.log(sym1 === sym2); // Output: true
-    ```
+  console.log(sym1 === sym2); // Output: true
+  ```
 
-* `Symbol.keyFor(sym)`: 返回一个已登记的 Symbol 的 `key`。如果查找的不是全局 Symbol，则返回 `undefined`。
+- `Symbol.keyFor(sym)`: 返回一个已登记的 Symbol 的 `key`。如果查找的不是全局 Symbol，则返回 `undefined`。
 
-    ```typescript
-    const localSym = Symbol('local');
-    const globalSym = Symbol.for('global');
+  ```typescript
+  const localSym = Symbol('local');
+  const globalSym = Symbol.for('global');
 
-    console.log(Symbol.keyFor(localSym)); // Output: undefined
-    console.log(Symbol.keyFor(globalSym)); // Output: "global"
-    ```
+  console.log(Symbol.keyFor(localSym)); // Output: undefined
+  console.log(Symbol.keyFor(globalSym)); // Output: "global"
+  ```
 
 ### 知名 Symbol (Well-Known Symbols)
 
 这些是内置的 Symbol 值，用于表示语言的内部行为。TypeScript 对它们提供了完整的类型定义。
 
-* `Symbol.iterator`: 一个方法，返回对象的默认迭代器。
-* `Symbol.asyncIterator`: 一个方法，返回对象的异步迭代器。
-* `Symbol.toStringTag`: 一个字符串，用于对象的默认描述。
-* `Symbol.hasInstance`: 一个方法，用于定制 `instanceof` 操作符的行为。
-* `Symbol.isConcatSpreadable`: 一个布尔值，表示对象能否被 `Array.prototype.concat` 展开。
-* ... 等等。
+- `Symbol.iterator`: 一个方法，返回对象的默认迭代器。
+- `Symbol.asyncIterator`: 一个方法，返回对象的异步迭代器。
+- `Symbol.toStringTag`: 一个字符串，用于对象的默认描述。
+- `Symbol.hasInstance`: 一个方法，用于定制 `instanceof` 操作符的行为。
+- `Symbol.isConcatSpreadable`: 一个布尔值，表示对象能否被 `Array.prototype.concat` 展开。
+- ... 等等。
 
 ## TypeScript 中的 Symbol 类型
 

@@ -176,23 +176,23 @@ git rebase --abort
 团队开发中常用的分支策略：
 
 1. **Git Flow**: 复杂但结构清晰，适合大型项目
-    - **main/master 分支**：仅包含已发布的稳定版本
-    - **develop 分支**：集成所有开发工作的主干分支
-    - **feature 分支**：从 develop 创建，用于功能开发
-    - **release 分支**：从 develop 创建，用于发布准备
-    - **hotfix 分支**：从 main/master 创建，用于紧急修复
-    - **bugfix 分支**：从 develop 创建，用于修复 bug
-    - **test 分支**：从 develop 创建，用于测试新功能
-    - **docs 分支**：从 develop 创建，用于文档更新
+   - **main/master 分支**：仅包含已发布的稳定版本
+   - **develop 分支**：集成所有开发工作的主干分支
+   - **feature 分支**：从 develop 创建，用于功能开发
+   - **release 分支**：从 develop 创建，用于发布准备
+   - **hotfix 分支**：从 main/master 创建，用于紧急修复
+   - **bugfix 分支**：从 develop 创建，用于修复 bug
+   - **test 分支**：从 develop 创建，用于测试新功能
+   - **docs 分支**：从 develop 创建，用于文档更新
 
 2. **GitHub Flow**: 简单直接，适合持续交付
-    - **main/master 分支**：主干分支
-    - **功能分支**：从 main/master 创建，通过 Pull Request 合并
+   - **main/master 分支**：主干分支
+   - **功能分支**：从 main/master 创建，通过 Pull Request 合并
 
 3. **GitLab Flow**: 兼顾两者优点，环境分支明确
-    - **main/master 分支**：主干分支
-    - **环境分支**：staging、production 等对应不同部署环境
-    - **功能分支**：从 main/master 创建，通过 Merge Request 合并
+   - **main/master 分支**：主干分支
+   - **环境分支**：staging、production 等对应不同部署环境
+   - **功能分支**：从 main/master 创建，通过 Merge Request 合并
 
 ## 5 远程协作与同步
 

@@ -18,7 +18,7 @@ author: zhycn
 // 传统方式：组件直接创建依赖，导致紧耦合
 public class TraditionalUserService {
     private UserRepository userRepository = new JdbcUserRepository();
-    
+
     public User findUser(Long id) {
         return userRepository.findById(id);
     }
@@ -27,11 +27,11 @@ public class TraditionalUserService {
 // DI方式：依赖由外部容器提供，实现松耦合
 public class DependencyInjectedUserService {
     private UserRepository userRepository;
-    
+
     public DependencyInjectedUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
+
     public User findUser(Long id) {
         return userRepository.findById(id);
     }
@@ -56,7 +56,7 @@ Spring 通过 `ApplicationContext` 或 `BeanFactory` 容器实现 IoC。这些�
 @Controller
 public class HelloController {
     private final Student student;
-    
+
     // 构造方法注入
     @Autowired
     public HelloController(Student student) {
@@ -85,7 +85,7 @@ Setter 注入是通过 Bean 的 setter 方法设置依赖对象，由 Spring 容
 @Controller
 public class HelloController {
     private Student student;
-    
+
     // Setter 方法注入
     @Autowired
     public void setStudent(Student student) {
@@ -116,7 +116,7 @@ public class UserService {
     // 属性注入
     @Autowired
     private Student s3;
-    
+
     public void print() {
         System.out.println(s3);
     }
@@ -196,7 +196,7 @@ Spring 提供了条件注入注解，可以根据条件动态注入 Bean。
 ```java
 @Configuration
 public class AppConfig {
-    
+
     @Bean
     @ConditionalOnProperty(name = "env", havingValue = "dev")
     public UserDAO devUserDAO() {
@@ -217,7 +217,7 @@ public class AppConfig {
 @Service
 public class ServiceA {
     private final ServiceB serviceB;
-    
+
     @Autowired
     public ServiceA(ServiceB serviceB) {
         this.serviceB = serviceB;
@@ -227,7 +227,7 @@ public class ServiceA {
 @Service
 public class ServiceB {
     private final ServiceA serviceA;
-    
+
     @Autowired
     public ServiceB(ServiceA serviceA) {
         this.serviceA = serviceA;
@@ -241,7 +241,7 @@ public class ServiceB {
 @Service
 public class ServiceC {
     private ServiceD serviceD;
-    
+
     @Autowired
     public void setServiceD(ServiceD serviceD) {
         this.serviceD = serviceD;
@@ -251,7 +251,7 @@ public class ServiceC {
 @Service
 public class ServiceD {
     private ServiceC serviceC;
-    
+
     @Autowired
     public void setServiceC(ServiceC serviceC) {
         this.serviceC = serviceC;
@@ -306,13 +306,13 @@ public interface UserService {
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final EmailService emailService;
-    
+
     // Spring 4.3+ 可以省略 @Autowired
     public UserServiceImpl(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
     }
-    
+
     @Override
     public User findUserById(Long id) {
         return userRepository.findById(id);
@@ -326,7 +326,7 @@ public class AppConfig {
     public UserRepository userRepository() {
         return new JpaUserRepository();
     }
-    
+
     @Bean
     public EmailService emailService() {
         return new SmtpEmailService();
@@ -342,23 +342,23 @@ public class AppConfig {
 
 ```java
 public class UserServiceTest {
-    
+
     @Test
     public void testFindUserById() {
         // 创建 mock 依赖
         UserRepository mockRepository = Mockito.mock(UserRepository.class);
         EmailService mockEmailService = Mockito.mock(EmailService.class);
-        
+
         // 创建被测试对象，直接注入依赖
         UserService userService = new UserServiceImpl(mockRepository, mockEmailService);
-        
+
         // 设置 mock 行为
         User expectedUser = new User(1L, "John");
         Mockito.when(mockRepository.findById(1L)).thenReturn(expectedUser);
-        
+
         // 执行测试
         User result = userService.findUserById(1L);
-        
+
         // 验证结果
         assertEquals(expectedUser, result);
     }
@@ -369,40 +369,40 @@ public class UserServiceTest {
 
 ### 核心依赖注入注解
 
-| 注解 | 作用描述 | 使用示例 |
-|------|----------|----------|
-| `@Autowired` | 自动按类型注入依赖对象 | `@Autowired private UserService userService;` |
-| `@Qualifier` | 按名称区分同类型的不同 Bean | `@Qualifier("mysqlRepo")` |
-| `@Resource` | 按名称注入（JSR-250） | `@Resource(name="myService")` |
-| `@Value` | 注入配置文件属性值 | `@Value("${app.url}")` |
-| `@Inject` | 功能类似 `@Autowired`（JSR-330） | `@Inject private UserService userService;` |
+| 注解         | 作用描述                         | 使用示例                                      |
+| ------------ | -------------------------------- | --------------------------------------------- |
+| `@Autowired` | 自动按类型注入依赖对象           | `@Autowired private UserService userService;` |
+| `@Qualifier` | 按名称区分同类型的不同 Bean      | `@Qualifier("mysqlRepo")`                     |
+| `@Resource`  | 按名称注入（JSR-250）            | `@Resource(name="myService")`                 |
+| `@Value`     | 注入配置文件属性值               | `@Value("${app.url}")`                        |
+| `@Inject`    | 功能类似 `@Autowired`（JSR-330） | `@Inject private UserService userService;`    |
 
 ### Bean 定义与管理注解
 
-| 注解 | 作用描述 | 使用示例 |
-|------|----------|----------|
-| `@Component` | 通用组件注解 | `@Component public class MyComponent {}` |
-| `@Service` | 服务层组件 | `@Service public class UserService {}` |
-| `@Repository` | 数据访问层组件 | `@Repository public class UserRepository {}` |
-| `@Controller` | Web 控制层组件 | `@Controller public class UserController {}` |
-| `@Configuration` | 声明配置类 | `@Configuration public class AppConfig {}` |
-| `@Bean` | 声明 Bean 的工厂方法 | `@Bean public DataSource dataSource() {}` |
+| 注解             | 作用描述             | 使用示例                                     |
+| ---------------- | -------------------- | -------------------------------------------- |
+| `@Component`     | 通用组件注解         | `@Component public class MyComponent {}`     |
+| `@Service`       | 服务层组件           | `@Service public class UserService {}`       |
+| `@Repository`    | 数据访问层组件       | `@Repository public class UserRepository {}` |
+| `@Controller`    | Web 控制层组件       | `@Controller public class UserController {}` |
+| `@Configuration` | 声明配置类           | `@Configuration public class AppConfig {}`   |
+| `@Bean`          | 声明 Bean 的工厂方法 | `@Bean public DataSource dataSource() {}`    |
 
 ### 条件与作用域注解
 
-| 注解 | 作用描述 | 使用示例 |
-|------|----------|----------|
-| `@Conditional` | 根据条件创建 Bean | `@Conditional(OnClassCondition.class)` |
-| `@Profile` | 指定环境配置 | `@Profile("dev")` |
-| `@Scope` | 控制 Bean 的作用域 | `@Scope("prototype")` |
-| `@Lazy` | 延迟初始化 Bean | `@Lazy` |
-| `@Primary` | 指定优先注入的 Bean | `@Primary` |
+| 注解           | 作用描述            | 使用示例                               |
+| -------------- | ------------------- | -------------------------------------- |
+| `@Conditional` | 根据条件创建 Bean   | `@Conditional(OnClassCondition.class)` |
+| `@Profile`     | 指定环境配置        | `@Profile("dev")`                      |
+| `@Scope`       | 控制 Bean 的作用域  | `@Scope("prototype")`                  |
+| `@Lazy`        | 延迟初始化 Bean     | `@Lazy`                                |
+| `@Primary`     | 指定优先注入的 Bean | `@Primary`                             |
 
 ### 生命周期回调注解
 
-| 注解 | 作用描述 | 使用示例 |
-|------|----------|----------|
-| `@PostConstruct` | 初始化后执行的方法 | `@PostConstruct public void init() {}` |
-| `@PreDestroy` | Bean 销毁前执行的方法 | `@PreDestroy public void destroy() {}` |
+| 注解             | 作用描述              | 使用示例                               |
+| ---------------- | --------------------- | -------------------------------------- |
+| `@PostConstruct` | 初始化后执行的方法    | `@PostConstruct public void init() {}` |
+| `@PreDestroy`    | Bean 销毁前执行的方法 | `@PreDestroy public void destroy() {}` |
 
 通过掌握 Spring DI 的各种注入方式和相关注解，开发者可以构建出松耦合、可测试、易维护的高质量应用程序。遵循最佳实践，结合具体业务场景选择合适的注入方式，是发挥 Spring 框架优势的关键。

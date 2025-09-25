@@ -196,81 +196,81 @@ print(first_letters) # 输出: {'A', 'B', 'C'} (唯一且无序)
 ## 8. 最佳实践与应用场景
 
 1. **快速去重 (Fast Deduplication)**
-    这是集合最直接和常见的用途。将列表等可迭代对象转换为集合是去除重复项的最高效方法。
+   这是集合最直接和常见的用途。将列表等可迭代对象转换为集合是去除重复项的最高效方法。
 
-    ```python
-    my_list = [1, 2, 2, 3, 4, 4, 4, 5]
-    unique_list = list(set(my_list)) # 先转集合去重，再转回列表
-    print(unique_list) # 输出: [1, 2, 3, 4, 5] (顺序可能丢失)
+   ```python
+   my_list = [1, 2, 2, 3, 4, 4, 4, 5]
+   unique_list = list(set(my_list)) # 先转集合去重，再转回列表
+   print(unique_list) # 输出: [1, 2, 3, 4, 5] (顺序可能丢失)
 
-    # 如果需要保留原始顺序，可以使用字典（Python 3.7+）
-    # 或者使用第三方库如 `collections.OrderedDict`
-    from collections import OrderedDict
-    unique_ordered_list = list(OrderedDict.fromkeys(my_list))
-    print(unique_ordered_list) # 输出: [1, 2, 3, 4, 5] (保留顺序)
-    ```
+   # 如果需要保留原始顺序，可以使用字典（Python 3.7+）
+   # 或者使用第三方库如 `collections.OrderedDict`
+   from collections import OrderedDict
+   unique_ordered_list = list(OrderedDict.fromkeys(my_list))
+   print(unique_ordered_list) # 输出: [1, 2, 3, 4, 5] (保留顺序)
+   ```
 
 2. **高效成员检测 (Efficient Membership Testing)**
-    使用 `in` 关键字检查元素是否在集合中，其平均时间复杂度为 O(1)，远优于列表的 O(n)。这在处理大量数据时至关重要。
+   使用 `in` 关键字检查元素是否在集合中，其平均时间复杂度为 O(1)，远优于列表的 O(n)。这在处理大量数据时至关重要。
 
-    ```python
-    huge_set = set(range(1000000))
-    huge_list = list(range(1000000))
+   ```python
+   huge_set = set(range(1000000))
+   huge_list = list(range(1000000))
 
-    # 以下操作在集合中极快，在列表中极慢
-    if 999999 in huge_set: # 推荐
-        print("Found in set!")
+   # 以下操作在集合中极快，在列表中极慢
+   if 999999 in huge_set: # 推荐
+       print("Found in set!")
 
-    # if 999999 in huge_list: # 不推荐用于大型列表
-    #     print("Found in list!")
-    ```
+   # if 999999 in huge_list: # 不推荐用于大型列表
+   #     print("Found in list!")
+   ```
 
 3. **数学集合运算 (Mathematical Set Operations)**
-    在处理关系型数据时，集合运算非常直观和高效。
+   在处理关系型数据时，集合运算非常直观和高效。
 
-    ```python
-    # 示例：找出两个用户列表的共同好友
-    alice_friends = {"Bob", "Charlie", "Diana"}
-    bob_friends = {"Charlie", "Eve", "Fred", "Alice"} # 注意 "Alice" 和 "Bob" 互为好友
+   ```python
+   # 示例：找出两个用户列表的共同好友
+   alice_friends = {"Bob", "Charlie", "Diana"}
+   bob_friends = {"Charlie", "Eve", "Fred", "Alice"} # 注意 "Alice" 和 "Bob" 互为好友
 
-    mutual_friends = alice_friends & bob_friends
-    print(mutual_friends) # 输出: {'Charlie'}
+   mutual_friends = alice_friends & bob_friends
+   print(mutual_friends) # 输出: {'Charlie'}
 
-    # 示例：找出只在第一个列表中的好友
-    only_alice_friends = alice_friends - bob_friends
-    print(only_alice_friends) # 输出: {'Bob', 'Diana'}
-    ```
+   # 示例：找出只在第一个列表中的好友
+   only_alice_friends = alice_friends - bob_friends
+   print(only_alice_friends) # 输出: {'Bob', 'Diana'}
+   ```
 
 4. **使用 `frozenset` 作为字典的键**
-    当你需要用一组唯一且不变的值作为键时，`frozenset` 是完美选择。
+   当你需要用一组唯一且不变的值作为键时，`frozenset` 是完美选择。
 
-    ```python
-    # 记录学生的选课组合
-    course_registry = {}
-    student1_courses = frozenset(["Math", "Physics"])
-    student2_courses = frozenset(["Physics", "Chemistry"])
+   ```python
+   # 记录学生的选课组合
+   course_registry = {}
+   student1_courses = frozenset(["Math", "Physics"])
+   student2_courses = frozenset(["Physics", "Chemistry"])
 
-    course_registry[student1_courses] = "Student A Plan"
-    course_registry[student2_courses] = "Student B Plan"
+   course_registry[student1_courses] = "Student A Plan"
+   course_registry[student2_courses] = "Student B Plan"
 
-    print(course_registry)
-    # 输出: {frozenset({'Physics', 'Math'}): 'Student A Plan', frozenset({'Chemistry', 'Physics'}): 'Student B Plan'}
-    ```
+   print(course_registry)
+   # 输出: {frozenset({'Physics', 'Math'}): 'Student A Plan', frozenset({'Chemistry', 'Physics'}): 'Student B Plan'}
+   ```
 
 5. **注意性能陷阱**
-    - 创建集合本身有 O(n) 的时间开销。如果只是为了做一次成员检测，直接遍历列表可能比先转成集合更快（除非数据量很大或需要多次检测）。
-    - 集合的无序性意味着你不能通过索引访问元素。如果需要按顺序处理元素，应先排序（`sorted(my_set)`）或使用列表。
+   - 创建集合本身有 O(n) 的时间开销。如果只是为了做一次成员检测，直接遍历列表可能比先转成集合更快（除非数据量很大或需要多次检测）。
+   - 集合的无序性意味着你不能通过索引访问元素。如果需要按顺序处理元素，应先排序（`sorted(my_set)`）或使用列表。
 
 ## 9. 总结
 
-| 特性/操作 | 描述 | 方法或运算符 |
-| :--- | :--- | :--- |
-| **创建** | 使用 `{}` 或 `set(iterable)` | `s = {1, 2}`, `s = set([1, 2])` |
-| **添加元素** | 添加单个或多个元素 | `add(elem)`, `update(iterable)` |
-| **删除元素** | 安全移除或引发错误 | `discard(elem)`, `remove(elem)`, `pop()` |
-| **集合运算** | 并集、交集、差集、对称差集 | `|`,`&`,`-`,`^` |
-| **关系检测** | 子集、超集、无交集 | `issubset()`, `issuperset()`, `isdisjoint()` |
-| **不可变版本** | 可哈希的集合 | `frozenset(iterable)` |
-| **核心优势** | 元素唯一、成员检测高效、集合运算强大 | - |
+| 特性/操作      | 描述                                 | 方法或运算符                                 |
+| :------------- | :----------------------------------- | :------------------------------------------- | ------------- |
+| **创建**       | 使用 `{}` 或 `set(iterable)`         | `s = {1, 2}`, `s = set([1, 2])`              |
+| **添加元素**   | 添加单个或多个元素                   | `add(elem)`, `update(iterable)`              |
+| **删除元素**   | 安全移除或引发错误                   | `discard(elem)`, `remove(elem)`, `pop()`     |
+| **集合运算**   | 并集、交集、差集、对称差集           | `                                            | `,`&`,`-`,`^` |
+| **关系检测**   | 子集、超集、无交集                   | `issubset()`, `issuperset()`, `isdisjoint()` |
+| **不可变版本** | 可哈希的集合                         | `frozenset(iterable)`                        |
+| **核心优势**   | 元素唯一、成员检测高效、集合运算强大 | -                                            |
 
 Python 的 `set` 是一个设计精良的工具。掌握它不仅能让你写出更简洁、易读的代码（尤其是去重和逻辑判断），还能显著提升程序的运行效率。在适合的场景下，请毫不犹豫地使用它来代替列表。

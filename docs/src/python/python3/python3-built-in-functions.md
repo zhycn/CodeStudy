@@ -99,7 +99,7 @@ class Vector:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-    
+
     def __abs__(self):
         return (self.x**2 + self.y**2)**0.5
 
@@ -399,10 +399,10 @@ class Person:
     def __init__(self, name, age):
         self.name = name
         self.age = age
-    
+
     def __hash__(self):
         return hash((self.name, self.age))
-    
+
     def __eq__(self, other):
         return (self.name, self.age) == (other.name, other.age)
 
@@ -425,10 +425,10 @@ class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-    
+
     def __str__(self):
         return f"Point({self.x}, {self.y})"
-    
+
     def __repr__(self):
         return f"Point(x={self.x}, y={self.y})"
 
@@ -622,8 +622,8 @@ print(top_three_heap)  # [9, 8, 5]
 # 链式处理
 numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 result = sum(
-    x ** 2 
-    for x in numbers 
+    x ** 2
+    for x in numbers
     if x % 2 == 0
 )
 print(result)  # 2^2 + 4^2 + 6^2 + 8^2 + 10^2 = 220

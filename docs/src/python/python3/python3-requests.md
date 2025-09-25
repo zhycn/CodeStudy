@@ -288,7 +288,7 @@ from requests.exceptions import RequestException, Timeout, HTTPError, Connection
 try:
     response = requests.get('https://httpbin.org/status/500', timeout=10)
     # 手动触发 HTTP 错误异常 (4xx, 5xx)
-    response.raise_for_status() 
+    response.raise_for_status()
 
     # 你的正常处理逻辑
     data = response.json()
@@ -312,13 +312,13 @@ except RequestException as err:
 2. **设置超时**：永远设置 `timeout` 参数，防止程序阻塞。
 3. **利用流式请求**：对于大文件下载，使用 `stream=True` 可以避免立即将整个内容加载到内存。
 
-    ```python
-    response = requests.get('https://httpbin.org/stream-bytes/1024', stream=True)
-    with open('large_file.bin', 'wb') as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            if chunk: # 过滤保持连接的 chunk
-                f.write(chunk)
-    ```
+   ```python
+   response = requests.get('https://httpbin.org/stream-bytes/1024', stream=True)
+   with open('large_file.bin', 'wb') as f:
+       for chunk in response.iter_content(chunk_size=8192):
+           if chunk: # 过滤保持连接的 chunk
+               f.write(chunk)
+   ```
 
 4. **处理重定向**：默认 `requests` 会处理重定向（`301`, `302`）。可以通过 `allow_redirects=False` 禁用。
 5. **尊重 `robots.txt`**：在进行爬虫时，检查目标网站的 `robots.txt` 文件。
@@ -334,7 +334,7 @@ except RequestException as err:
 
 **官方资源：**
 
-* <https://requests.readthedocs.io/en/latest/>
-* <https://github.com/psf/requests>
+- <https://requests.readthedocs.io/en/latest/>
+- <https://github.com/psf/requests>
 
 希望这篇详尽的指南能成为你掌握 Python3 `requests` 模块的得力助手！

@@ -8,7 +8,7 @@ author: zhycn
 
 ## 1. 概述
 
-PEP 8 是 Python Enhancement Proposal 第 8 号的简称，其标题为 *Style Guide for Python Code*。它由 Python 之父 Guido van Rossum 以及多位 Python 核心开发者共同撰写，是 Python 官方指定的代码风格指南。
+PEP 8 是 Python Enhancement Proposal 第 8 号的简称，其标题为 _Style Guide for Python Code_。它由 Python 之父 Guido van Rossum 以及多位 Python 核心开发者共同撰写，是 Python 官方指定的代码风格指南。
 
 **核心目标**：提高代码的可读性、一致性和可维护性，使其在广大的 Python 社区中如同一人编写。遵循 PEP 8 能使你的代码更专业、更易于被他人理解和协作。
 
@@ -76,9 +76,9 @@ result = some_function_that_takes_arguments(
 
 **规则**：使用空行来分隔代码逻辑块，提高可读性。
 
-* **顶层函数和类定义**：周围用两个空行包围。
-* **类内部的方法定义**：周围用一个空行包围。
-* **在函数内部**：使用空行来分隔逻辑相关的代码段（谨慎使用）。
+- **顶层函数和类定义**：周围用两个空行包围。
+- **类内部的方法定义**：周围用一个空行包围。
+- **在函数内部**：使用空行来分隔逻辑相关的代码段（谨慎使用）。
 
 **示例**：
 
@@ -113,13 +113,13 @@ def top_level_function():
 
 **规则**：
 
-* **单独成行**：每个导入应该独占一行。
-* **分组顺序**：导入应按以下顺序分组，组间用空行分隔：
-    1. **标准库导入** (Python 内置模块，如 `os`, `sys`)
-    2. **相关的第三方库导入** (如 `requests`, `numpy`, `django`)
-    3. **本地应用/库的特定导入** (你自己项目中的模块)
-* **绝对导入**：推荐使用绝对导入，因为它们更清晰。
-* **避免通配符导入** (`from module import *`)：因为它们会使得命名空间变得不清晰，不清楚哪些名称可用。
+- **单独成行**：每个导入应该独占一行。
+- **分组顺序**：导入应按以下顺序分组，组间用空行分隔：
+  1. **标准库导入** (Python 内置模块，如 `os`, `sys`)
+  2. **相关的第三方库导入** (如 `requests`, `numpy`, `django`)
+  3. **本地应用/库的特定导入** (你自己项目中的模块)
+- **绝对导入**：推荐使用绝对导入，因为它们更清晰。
+- **避免通配符导入** (`from module import *`)：因为它们会使得命名空间变得不清晰，不清楚哪些名称可用。
 
 **不建议**：
 
@@ -154,8 +154,8 @@ from .models import User  # 相对导入在包内也是可接受的
 
 **最佳实践**：选择一个规则并在整个项目中**保持一致**。PEP 8 没有硬性规定，但常见的约定是：
 
-* 使用双引号用于**三引号文档字符串**（`"""Like this"""`）。
-* 对于普通的字符串，**优先使用单引号**（`'string'`），除非字符串本身包含了单引号字符（`"It's a nice day"`）。
+- 使用双引号用于**三引号文档字符串**（`"""Like this"""`）。
+- 对于普通的字符串，**优先使用单引号**（`'string'`），除非字符串本身包含了单引号字符（`"It's a nice day"`）。
 
 许多项目采用 <https://www.python.org/dev/peps/pep-0257/> 关于文档字符串的约定，即使用三双引号。
 
@@ -187,111 +187,111 @@ def my_function():
 
 **立即避免**在以下情况中使用空格：
 
-* 紧贴在小括号、中括号或大括号内。
+- 紧贴在小括号、中括号或大括号内。
 
-    ```python
-    # 不好
-    spam( ham[ 1 ], { eggs: 2 } )
-    # 好
-    spam(ham[1], {eggs: 2})
-    ```
+  ```python
+  # 不好
+  spam( ham[ 1 ], { eggs: 2 } )
+  # 好
+  spam(ham[1], {eggs: 2})
+  ```
 
-* 在尾随的逗号和后面的右括号之间。
+- 在尾随的逗号和后面的右括号之间。
 
-    ```python
-    # 不好
-    foo = (0, )
-    # 好
-    foo = (0,)
-    ```
+  ```python
+  # 不好
+  foo = (0, )
+  # 好
+  foo = (0,)
+  ```
 
-* 紧贴在逗号、分号或冒号之前。
+- 紧贴在逗号、分号或冒号之前。
 
-    ```python
-    # 不好
-    if x == 4 : print(x, y); x, y = y , x
-    # 好
-    if x == 4: print(x, y); x, y = y, x
-    ```
+  ```python
+  # 不好
+  if x == 4 : print(x, y); x, y = y , x
+  # 好
+  if x == 4: print(x, y); x, y = y, x
+  ```
 
-* 函数调用时，参数列表的起始括号前。
+- 函数调用时，参数列表的起始括号前。
 
-    ```python
-    # 不好
-    func (1)
-    # 好
-    func(1)
-    ```
+  ```python
+  # 不好
+  func (1)
+  # 好
+  func(1)
+  ```
 
-* 索引或切片的起始括号前。
+- 索引或切片的起始括号前。
 
-    ```python
-    # 不好
-    dct ['key'] = lst [index]
-    # 好
-    dct['key'] = lst[index]
-    ```
+  ```python
+  # 不好
+  dct ['key'] = lst [index]
+  # 好
+  dct['key'] = lst[index]
+  ```
 
-* 为了与其它赋值操作对齐，在一个赋值运算符（`=`）周围使用多个空格。
+- 为了与其它赋值操作对齐，在一个赋值运算符（`=`）周围使用多个空格。
 
-    ```python
-    # 不好
-    x             = 1
-    y             = 2
-    long_variable = 3
-    # 好
-    x = 1
-    y = 2
-    long_variable = 3
-    ```
+  ```python
+  # 不好
+  x             = 1
+  y             = 2
+  long_variable = 3
+  # 好
+  x = 1
+  y = 2
+  long_variable = 3
+  ```
 
 ### 4.2 建议使用的空格
 
 **建议**在以下情况中使用一个空格：
 
-* 赋值 (`=`)、比较 (`==`, `<`, `>`, `!=`, `<>`, `<=`, `>=`, `in`, `not in`, `is`, `is not`)、布尔运算符 (`and`, `or`, `not`) 的周围。
+- 赋值 (`=`)、比较 (`==`, `<`, `>`, `!=`, `<>`, `<=`, `>=`, `in`, `not in`, `is`, `is not`)、布尔运算符 (`and`, `or`, `not`) 的周围。
 
-    ```python
-    # 好
-    i = i + 1
-    submitted += 1
-    x = x * 2 - 1
-    hypot2 = x*x + y*y
-    c = (a+b) * (a-b)
-    
-    if x == 4:
-        print(f"{x} squared is {x * x}")
-    if item not in my_list and x is not None:
-        pass
-    ```
+  ```python
+  # 好
+  i = i + 1
+  submitted += 1
+  x = x * 2 - 1
+  hypot2 = x*x + y*y
+  c = (a+b) * (a-b)
 
-* 在切片语法中，冒号就像一个二元运算符，其两侧应该具有相等的空格量（就像优先级最低的操作符）。对于扩展切片，所有冒号必须有相同的间距。
+  if x == 4:
+      print(f"{x} squared is {x * x}")
+  if item not in my_list and x is not None:
+      pass
+  ```
 
-    ```python
-    # 好
-    ham[1:9], ham[1:9:3], ham[:9:3], ham[1::3], ham[1:9:]
-    ham[lower:upper], ham[lower:upper:], ham[lower::step]
-    ham[lower+offset : upper+offset]
-    ham[: upper_fn(x) : step_fn(x)], ham[:: step_fn(x)]
-    ```
+- 在切片语法中，冒号就像一个二元运算符，其两侧应该具有相等的空格量（就像优先级最低的操作符）。对于扩展切片，所有冒号必须有相同的间距。
 
-* 在函数注释的冒号后有一个空格，在 `->` 箭头的前后各有一个空格。
+  ```python
+  # 好
+  ham[1:9], ham[1:9:3], ham[:9:3], ham[1::3], ham[1:9:]
+  ham[lower:upper], ham[lower:upper:], ham[lower::step]
+  ham[lower+offset : upper+offset]
+  ham[: upper_fn(x) : step_fn(x)], ham[:: step_fn(x)]
+  ```
 
-    ```python
-    # 好
-    def munge(input: AnyStr): ...
-    def munge(sep: AnyStr = None): ...
-    def munge() -> AnyStr: ...
-    def munge(input: AnyStr, sep: AnyStr = None, limit=1000): ...
-    ```
+- 在函数注释的冒号后有一个空格，在 `->` 箭头的前后各有一个空格。
 
-* 不要在关键字参数或参数默认值的等号两边加空格。
+  ```python
+  # 好
+  def munge(input: AnyStr): ...
+  def munge(sep: AnyStr = None): ...
+  def munge() -> AnyStr: ...
+  def munge(input: AnyStr, sep: AnyStr = None, limit=1000): ...
+  ```
 
-    ```python
-    # 好
-    def complex(real, imag=0.0):
-        return magic(r=real, i=imag)
-    ```
+- 不要在关键字参数或参数默认值的等号两边加空格。
+
+  ```python
+  # 好
+  def complex(real, imag=0.0):
+      return magic(r=real, i=imag)
+  ```
 
 ## 5. 注释
 
@@ -299,8 +299,8 @@ def my_function():
 
 ### 5.1 块注释
 
-* **用途**：解释跟随其后的一段代码。
-* **格式**：每行以 `#` 和一个空格开始。段落之间用只含 `#` 的行分隔。
+- **用途**：解释跟随其后的一段代码。
+- **格式**：每行以 `#` 和一个空格开始。段落之间用只含 `#` 的行分隔。
 
 ```python
 # 这是一个块注释的例子。
@@ -312,8 +312,8 @@ x = 10  # 执行某个重要操作
 
 ### 5.2 行内注释
 
-* **用途**：解释单条语句，谨慎使用。
-* **格式**：与语句在同一行，至少用两个空格与语句分开。
+- **用途**：解释单条语句，谨慎使用。
+- **格式**：与语句在同一行，至少用两个空格与语句分开。
 
 ```python
 x = x + 1  # 补偿边界条件
@@ -323,139 +323,139 @@ x = x + 1  # 补偿边界条件
 
 PEP 257 定义了编写文档字符串的规范。它为所有公共模块、函数、类和方法编写文档字符串。
 
-* **格式**：使用三引号字符串 (`"""`)。
-* **单行文档字符串**：首尾引号在同一行。
+- **格式**：使用三引号字符串 (`"""`)。
+- **单行文档字符串**：首尾引号在同一行。
 
-    ```python
-    """Return the pathname of ``foo``."""
-    ```
+  ```python
+  """Return the pathname of ``foo``."""
+  ```
 
-* **多行文档字符串**：首行是摘要，之后空一行，然后是更详细的描述。
+- **多行文档字符串**：首行是摘要，之后空一行，然后是更详细的描述。
 
-    ```python
-    """这是一个多行文档字符串的示例。
-    
-    这是更详细的部分，可以解释参数、返回值、异常等。
-    通常遵循 reStructuredText 或 Google 风格。
-    
-    Args:
-        name (str): 用户的名称。
-        
-    Returns:
-        str: 一句友好的问候语。
-    """
-    ```
+  ```python
+  """这是一个多行文档字符串的示例。
+
+  这是更详细的部分，可以解释参数、返回值、异常等。
+  通常遵循 reStructuredText 或 Google 风格。
+
+  Args:
+      name (str): 用户的名称。
+
+  Returns:
+      str: 一句友好的问候语。
+  """
+  ```
 
 ## 6. 命名约定
 
 这是 PEP 8 中最重要且被严格执行的部分之一。
 
-| 类型 | 约定 | 示例 |
-| :--- | :--- | :--- |
-| **函数** | 使用小写字母，单词之间用下划线分隔。（蛇形命名法） | `def calculate_total():` |
-| **变量** | 使用小写字母，单词之间用下划线分隔。（蛇形命名法） | `user_id`, `max_connections` |
-| **类** | 使用驼峰命名法（每个单词首字母大写，不带下划线）。（帕斯卡命名法） | `class MyClass:`, `class HttpServer` |
-| **方法** | 使用小写字母，单词之间用下划线分隔。（蛇形命名法） | `def get_name(self):` |
-| **常量** | 使用大写字母，单词之间用下划线分隔。 | `MAX_OVERFLOW`, `DEFAULT_PORT` |
-| **模块** | 使用简短、全小写字母的名称。可以使用下划线。 | `module.py`, `my_module.py` |
-| **包** | 使用简短、全小写字母的名称。**不要**使用下划线。 | `mypackage` |
+| 类型     | 约定                                                               | 示例                                 |
+| :------- | :----------------------------------------------------------------- | :----------------------------------- |
+| **函数** | 使用小写字母，单词之间用下划线分隔。（蛇形命名法）                 | `def calculate_total():`             |
+| **变量** | 使用小写字母，单词之间用下划线分隔。（蛇形命名法）                 | `user_id`, `max_connections`         |
+| **类**   | 使用驼峰命名法（每个单词首字母大写，不带下划线）。（帕斯卡命名法） | `class MyClass:`, `class HttpServer` |
+| **方法** | 使用小写字母，单词之间用下划线分隔。（蛇形命名法）                 | `def get_name(self):`                |
+| **常量** | 使用大写字母，单词之间用下划线分隔。                               | `MAX_OVERFLOW`, `DEFAULT_PORT`       |
+| **模块** | 使用简短、全小写字母的名称。可以使用下划线。                       | `module.py`, `my_module.py`          |
+| **包**   | 使用简短、全小写字母的名称。**不要**使用下划线。                   | `mypackage`                          |
 
 **重要提示**：
 
-* 避免使用单个字符作为名称（如 `l`, `O`, `I`），除非是计数器（`i`, `j`, `k`）或在异常中（`e`）。
-* 不要用大写和小写来区分不同的对象（如 `myfunction` 和 `MyFunction`）。
-* `_single_leading_underscore`: 弱“内部使用”指示器。`from M import *` 不会导入以下划线开头的对象。
-* `single_trailing_underscore_`: 用于避免与 Python 关键字冲突。`class_`, `type_`
-* `__double_leading_underscore`: 当用于命名类属性时，会触发名称改写（Name Mangling），例如在类 `FooBar` 中，`__boo` 会被改写为 `_FooBar__boo`。
-* `__double_leading_and_trailing_underscore__`: “魔法”对象或属性，存在于用户控制的命名空间中。例如 `__init__`, `__str__`。**不要自己发明这样的名字**，只使用文档中定义的那些。
+- 避免使用单个字符作为名称（如 `l`, `O`, `I`），除非是计数器（`i`, `j`, `k`）或在异常中（`e`）。
+- 不要用大写和小写来区分不同的对象（如 `myfunction` 和 `MyFunction`）。
+- `_single_leading_underscore`: 弱“内部使用”指示器。`from M import *` 不会导入以下划线开头的对象。
+- `single_trailing_underscore_`: 用于避免与 Python 关键字冲突。`class_`, `type_`
+- `__double_leading_underscore`: 当用于命名类属性时，会触发名称改写（Name Mangling），例如在类 `FooBar` 中，`__boo` 会被改写为 `_FooBar__boo`。
+- `__double_leading_and_trailing_underscore__`: “魔法”对象或属性，存在于用户控制的命名空间中。例如 `__init__`, `__str__`。**不要自己发明这样的名字**，只使用文档中定义的那些。
 
 ## 7. 编程建议
 
-* **代码应以其实现不影响其它实现的方式编写**（Python 有多种实现，如 CPython, Jython, IronPython, PyPy）。
-* **与 None 比较时应使用 `is` 或 `is not`**，而不是相等运算符。
+- **代码应以其实现不影响其它实现的方式编写**（Python 有多种实现，如 CPython, Jython, IronPython, PyPy）。
+- **与 None 比较时应使用 `is` 或 `is not`**，而不是相等运算符。
 
-    ```python
-    # 好
-    if x is None:
-        ...
-    if x is not None:
-        ...
-    
-    # 不好
-    if x == None:
-        ...
-    ```
+  ```python
+  # 好
+  if x is None:
+      ...
+  if x is not None:
+      ...
 
-* **使用 `is not` 而非 `not ... is`**。
+  # 不好
+  if x == None:
+      ...
+  ```
 
-    ```python
-    # 好
-    if x is not None:
-        ...
-    
-    # 不好
-    if not x is None:
-        ...
-    ```
+- **使用 `is not` 而非 `not ... is`**。
 
-* **使用基于异常的错误处理**，而不是返回错误代码。
-* **使用 `.startswith()` 和 `.endswith()`** 而不是字符串切片来检查前缀或后缀。
+  ```python
+  # 好
+  if x is not None:
+      ...
 
-    ```python
-    # 好
-    if word.startswith('prefix'):
-        ...
-    if word.endswith('suffix'):
-        ...
-    
-    # 不好
-    if word[:6] == 'prefix':
-        ...
-    ```
+  # 不好
+  if not x is None:
+      ...
+  ```
 
-* **使用 isinstance()** 比较类型，而不是直接比较类型。
+- **使用基于异常的错误处理**，而不是返回错误代码。
+- **使用 `.startswith()` 和 `.endswith()`** 而不是字符串切片来检查前缀或后缀。
 
-    ```python
-    # 好
-    if isinstance(obj, int):
-        ...
-    
-    # 不好
-    if type(obj) is type(1):
-        ...
-    ```
+  ```python
+  # 好
+  if word.startswith('prefix'):
+      ...
+  if word.endswith('suffix'):
+      ...
 
-* **布尔值的比较**：不要用 `==` 将布尔值与 `True` 或 `False` 比较。
+  # 不好
+  if word[:6] == 'prefix':
+      ...
+  ```
 
-    ```python
-    # 好
-    if greeting:
-        ...
-    if not greeting:
-        ...
-    
-    # 不好
-    if greeting == True:
-        ...
-    if greeting is True: # 同样不Pythonic
-        ...
-    ```
+- **使用 isinstance()** 比较类型，而不是直接比较类型。
+
+  ```python
+  # 好
+  if isinstance(obj, int):
+      ...
+
+  # 不好
+  if type(obj) is type(1):
+      ...
+  ```
+
+- **布尔值的比较**：不要用 `==` 将布尔值与 `True` 或 `False` 比较。
+
+  ```python
+  # 好
+  if greeting:
+      ...
+  if not greeting:
+      ...
+
+  # 不好
+  if greeting == True:
+      ...
+  if greeting is True: # 同样不Pythonic
+      ...
+  ```
 
 ## 8. 类型提示 (Type Hints)
 
 PEP 484 引入了类型提示，这虽然不是 PEP 8 的原始内容，但已成为现代 Python 开发的最佳实践。它与代码风格密切相关。
 
-* **用途**：为函数参数和返回值添加类型信息，有助于静态分析、IDE 智能提示和文档生成。
-* **格式**：使用冒号 (`:`) 注明参数类型，使用箭头 (`->`) 注明返回类型。
+- **用途**：为函数参数和返回值添加类型信息，有助于静态分析、IDE 智能提示和文档生成。
+- **格式**：使用冒号 (`:`) 注明参数类型，使用箭头 (`->`) 注明返回类型。
 
 ```python
 def greeting(name: str, age: int = 30) -> str:
     """生成一句问候语。
-    
+
     Args:
         name: 用户的姓名，必须是字符串。
         age: 用户的年龄，默认为30。
-        
+
     Returns:
         返回生成的问候语句子。
     """
@@ -480,9 +480,9 @@ def process_items(items: List[str],
 
 **Flake8**: 最流行的工具之一，它聚合了：
 
-* **PyFlakes**: 检查语法错误和简单的逻辑错误。
-* **pycodestyle** (原 pep8): 检查代码是否符合 PEP 8 风格。
-* **McCabe**: 检查代码的圈复杂度。
+- **PyFlakes**: 检查语法错误和简单的逻辑错误。
+- **pycodestyle** (原 pep8): 检查代码是否符合 PEP 8 风格。
+- **McCabe**: 检查代码的圈复杂度。
 
 **安装与使用**：
 

@@ -9,13 +9,13 @@
 Vue 的模板语法在底层会被编译为**渲染函数**。渲染函数是返回虚拟 DOM 树的 JavaScript 函数。与模板相比，渲染函数提供更底层的控制能力。
 
 ```javascript
-import { h } from 'vue'
+import { h } from 'vue';
 
 export default {
   render() {
-    return h('h1', { class: 'title' }, 'Hello Vue!')
-  }
-}
+    return h('h1', { class: 'title' }, 'Hello Vue!');
+  },
+};
 ```
 
 ### 1.2 为何使用渲染函数？
@@ -27,14 +27,14 @@ export default {
 
 ### 1.3 渲染函数 vs 模板
 
-| 特性 | 模板 | 渲染函数 |
-|------|------|----------|
-| 学习曲线 | 平缓 | 陡峭 |
-| 灵活性 | 中等 | 极高 |
-| 类型支持 | 有限 | 优秀 |
-| 动态逻辑 | 需 v-if/v-for | 原生 JS |
-| 编译优化 | ✅ | 部分 ✅ |
-| 可读性 | 高 | 中等 |
+| 特性     | 模板          | 渲染函数 |
+| -------- | ------------- | -------- |
+| 学习曲线 | 平缓          | 陡峭     |
+| 灵活性   | 中等          | 极高     |
+| 类型支持 | 有限          | 优秀     |
+| 动态逻辑 | 需 v-if/v-for | 原生 JS  |
+| 编译优化 | ✅            | 部分 ✅  |
+| 可读性   | 高            | 中等     |
 
 ## 2. `h()` 函数详解
 
@@ -46,41 +46,38 @@ export default {
 h(
   // {String | Object | Function} 标签名/组件
   'div',
-  
+
   // {Object} 属性/Props
-  { 
+  {
     id: 'container',
     class: ['wrapper', { active: true }],
-    onClick: () => console.log('Clicked')
+    onClick: () => console.log('Clicked'),
   },
-  
+
   // {String | Array | Object} 子节点
-  [
-    h('span', 'Hello'),
-    'World!'
-  ]
-)
+  [h('span', 'Hello'), 'World!']
+);
 ```
 
 ### 2.2 处理不同内容类型
 
 ```javascript
 // 文本内容
-h('div', 'Hello Text')
+h('div', 'Hello Text');
 
 // 数组子节点
-h('div', [h('span', 'A'), h('span', 'B')])
+h('div', [h('span', 'A'), h('span', 'B')]);
 
 // 嵌套组件
-import CustomComponent from './CustomComponent.vue'
-h(CustomComponent, { title: 'Props Value' })
+import CustomComponent from './CustomComponent.vue';
+h(CustomComponent, { title: 'Props Value' });
 
 // 插槽处理
 h(MyComponent, null, {
   default: () => 'Default Slot',
   header: () => h('h1', 'Header Slot'),
-  footer: () => [h('p', 'Footer Line 1'), h('p', 'Footer Line 2')]
-})
+  footer: () => [h('p', 'Footer Line 1'), h('p', 'Footer Line 2')],
+});
 ```
 
 ## 3. JSX 在 Vue 中的使用
@@ -104,17 +101,17 @@ export default {
 ```jsx
 export default {
   setup() {
-    const count = ref(0)
-    
+    const count = ref(0);
+
     return () => (
       <div class="counter">
         <button onClick={() => count.value--}>-</button>
         <span>{count.value}</span>
         <button onClick={() => count.value++}>+</button>
       </div>
-    )
-  }
-}
+    );
+  },
+};
 ```
 
 ### 3.3 JSX 特殊处理
@@ -141,11 +138,11 @@ const DynamicComponent = defineComponent({
   props: ['type'],
   setup(props) {
     return () => {
-      const Tag = props.type || 'div'
-      return <Tag class="dynamic">Content</Tag>
-    }
-  }
-})
+      const Tag = props.type || 'div';
+      return <Tag class="dynamic">Content</Tag>;
+    };
+  },
+});
 ```
 
 ### 4.2 作用域插槽
@@ -175,20 +172,18 @@ const ParentComponent = defineComponent({
 ### 4.3 渲染函数中的指令
 
 ```javascript
-import { resolveDirective, withDirectives } from 'vue'
+import { resolveDirective, withDirectives } from 'vue';
 
 export default {
   setup() {
-    const vTooltip = resolveDirective('tooltip')
-    
+    const vTooltip = resolveDirective('tooltip');
+
     return () => {
-      const node = h('div', 'Hover me')
-      return withDirectives(node, [
-        [vTooltip, 'Tooltip content']
-      ])
-    }
-  }
-}
+      const node = h('div', 'Hover me');
+      return withDirectives(node, [[vTooltip, 'Tooltip content']]);
+    };
+  },
+};
 ```
 
 ## 5. 性能优化技巧
@@ -196,15 +191,17 @@ export default {
 ### 5.1 减少不必要的重渲染
 
 ```jsx
-import { shallowRef } from 'vue'
+import { shallowRef } from 'vue';
 
 const HeavyComponent = defineComponent({
   setup() {
-    const data = shallowRef({ /* 大数据对象 */ })
-    
-    return () => <ExpensiveComponent data={data.value} />
-  }
-})
+    const data = shallowRef({
+      /* 大数据对象 */
+    });
+
+    return () => <ExpensiveComponent data={data.value} />;
+  },
+});
 ```
 
 ### 5.2 高效列表渲染
@@ -213,7 +210,7 @@ const HeavyComponent = defineComponent({
 const BigList = defineComponent({
   setup() {
     const items = ref([...]) // 大型数组
-    
+
     return () => (
       <div>
         {items.value.map(item => (
@@ -237,7 +234,7 @@ const VirtualList = defineComponent({
       allItems,
       { itemHeight: 50 }
     )
-    
+
     return () => (
       <div {...containerProps} style={{ height: '500px' }}>
         <div {...wrapperProps}>
@@ -260,23 +257,19 @@ const VirtualList = defineComponent({
 const ComplexComponent = defineComponent({
   setup() {
     // 逻辑状态...
-    
-    const renderHeader = () => (
-      <header>...</header>
-    )
-    
-    const renderBody = () => (
-      <section>...</section>
-    )
-    
+
+    const renderHeader = () => <header>...</header>;
+
+    const renderBody = () => <section>...</section>;
+
     return () => (
       <div class="container">
         {renderHeader()}
         {renderBody()}
       </div>
-    )
-  }
-})
+    );
+  },
+});
 ```
 
 ### 6.2 类型安全实践
@@ -285,36 +278,35 @@ const ComplexComponent = defineComponent({
 // 使用 defineComponent 和类型注解
 interface UserCardProps {
   user: {
-    name: string
-    avatar: string
-    role: 'admin' | 'user'
-  }
+    name: string;
+    avatar: string;
+    role: 'admin' | 'user';
+  };
 }
 
 const UserCard = defineComponent({
   props: {
     user: {
       type: Object as PropType<UserCardProps['user']>,
-      required: true
-    }
+      required: true,
+    },
   },
-  
+
   setup(props) {
     return () => (
       <div class="user-card">
-        
         <span class={props.user.role}>{props.user.name}</span>
       </div>
-    )
-  }
-})
+    );
+  },
+});
 ```
 
 ### 6.3 可读性提升技巧
 
 ```jsx
 // 使用 Fragment 减少不必要的包装元素
-import { Fragment } from 'vue'
+import { Fragment } from 'vue';
 
 const CleanLayout = defineComponent({
   setup() {
@@ -324,9 +316,9 @@ const CleanLayout = defineComponent({
         <main>Content</main>
         <footer>Footer</footer>
       </>
-    )
-  }
-})
+    );
+  },
+});
 ```
 
 ### 6.4 组件命名约定
@@ -335,13 +327,9 @@ const CleanLayout = defineComponent({
 // JSX 组件使用 PascalCase 命名
 const SpecialButton = defineComponent({
   setup(_, { slots }) {
-    return () => (
-      <button class="special">
-        {slots.default?.()}
-      </button>
-    )
-  }
-})
+    return () => <button class="special">{slots.default?.()}</button>;
+  },
+});
 
 // 使用：<SpecialButton>Click</SpecialButton>
 ```
@@ -355,23 +343,23 @@ const SpecialButton = defineComponent({
 const BadPractice = defineComponent({
   props: ['user'],
   setup(props) {
-    const { user } = props // 解构导致响应性丢失
-    
-    return () => <div>{user.name}</div>
-  }
-})
+    const { user } = props; // 解构导致响应性丢失
+
+    return () => <div>{user.name}</div>;
+  },
+});
 
 // 正确：使用 toRefs 保持响应性
-import { toRefs } from 'vue'
+import { toRefs } from 'vue';
 
 const GoodPractice = defineComponent({
   props: ['user'],
   setup(props) {
-    const { user } = toRefs(props)
-    
-    return () => <div>{user.value.name}</div>
-  }
-})
+    const { user } = toRefs(props);
+
+    return () => <div>{user.value.name}</div>;
+  },
+});
 ```
 
 ### 7.2 JSX 与 TypeScript 类型冲突
@@ -387,46 +375,44 @@ const TypeSafeComponent = defineComponent({
       >
         Content
       </div>
-    )
-  }
-})
+    );
+  },
+});
 ```
 
 ### 7.3 组件递归引用
 
 ```jsx
 // 使用 defineAsyncComponent 解决循环引用
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue';
 
 const TreeItem = defineComponent({
   name: 'TreeItem',
   setup(props) {
-    const ChildItem = defineAsyncComponent(() => 
-      import('./TreeItem.vue')
-    )
-    
+    const ChildItem = defineAsyncComponent(() => import('./TreeItem.vue'));
+
     return () => (
       <div>
-        {props.children?.map(child => (
+        {props.children?.map((child) => (
           <ChildItem item={child} />
         ))}
       </div>
-    )
-  }
-})
+    );
+  },
+});
 ```
 
 ## 8. 迁移建议
 
 ### 8.1 Vue 2 到 Vue 3 渲染函数变化
 
-| Vue 2 特性 | Vue 3 等价方案 |
-|------------|----------------|
-| `createElement` | `h` |
-| `this.$scopedSlots` | `useSlots()` |
-| `functional` 组件 | `setup()` 函数 |
-| 上下文注入 | `useAttrs()`, `useSlots()` |
-| `VNode.data` | 扁平化 props 结构 |
+| Vue 2 特性          | Vue 3 等价方案             |
+| ------------------- | -------------------------- |
+| `createElement`     | `h`                        |
+| `this.$scopedSlots` | `useSlots()`               |
+| `functional` 组件   | `setup()` 函数             |
+| 上下文注入          | `useAttrs()`, `useSlots()` |
+| `VNode.data`        | 扁平化 props 结构          |
 
 ### 8.2 迁移工具
 

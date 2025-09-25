@@ -100,7 +100,7 @@ const onSubmit = () => {
   // 触发事件，并传递一个包含用户名和密码的对象作为参数
   emit('submit', {
     username: username.value,
-    password: password.value
+    password: password.value,
   });
 
   // 清空表单
@@ -159,7 +159,7 @@ const emit = defineEmits({
       return emailRegex.test(email);
     }
     return false;
-  }
+  },
 });
 
 const email = ref('');
@@ -182,10 +182,7 @@ const onInput = () => {
 ```vue
 <!-- CustomInput.vue -->
 <template>
-  <input
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
-  />
+  <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
 </template>
 
 <script setup>
@@ -267,11 +264,7 @@ const lastName = defineModel('lastName');
     <p>名: {{ first }}</p>
     <p>姓: {{ last }}</p>
 
-    <UserProfile
-      v-model="username"
-      v-model:firstName="first"
-      v-model:lastName="last"
-    />
+    <UserProfile v-model="username" v-model:firstName="first" v-model:lastName="last" />
   </div>
 </template>
 
@@ -323,10 +316,7 @@ const emitObject = (obj: { id: number; name: string }) => {
 ```vue
 <!-- ParentComponent.vue -->
 <template>
-  <TypedEmitter
-    @stringEvent="handleStringEvent"
-    @objectEvent="handleObjectEvent"
-  />
+  <TypedEmitter @stringEvent="handleStringEvent" @objectEvent="handleObjectEvent" />
 </template>
 
 <script setup lang="ts">
@@ -347,22 +337,22 @@ const handleObjectEvent = (payload: { id: number; name: string }) => {
 ## 6. 最佳实践
 
 1. **命名规范**：
-    * **事件名**：始终使用 **kebab-case**（短横线命名法）来命名事件，例如 `update-value`。因为 HTML 属性是不区分大小写的，`@myEvent` 会被解析为 `@myevent`，导致无法监听。使用 kebab-case 可以避免这个问题。
-    * **避免重名**：事件名不要与原生 DOM 事件重名（如 `click`），除非你确实想要覆盖原生行为。必要时可以添加前缀，如 `submit-form` 而非 `submit`。
+   - **事件名**：始终使用 **kebab-case**（短横线命名法）来命名事件，例如 `update-value`。因为 HTML 属性是不区分大小写的，`@myEvent` 会被解析为 `@myevent`，导致无法监听。使用 kebab-case 可以避免这个问题。
+   - **避免重名**：事件名不要与原生 DOM 事件重名（如 `click`），除非你确实想要覆盖原生行为。必要时可以添加前缀，如 `submit-form` 而非 `submit`。
 
 2. **定义清晰的接口**：
-    * **明确参数**：在触发事件时，传递的参数应该清晰明确。优先传递对象而不是多个原始值。例如，`emit('user-updated', { userId, newName })` 比 `emit('user-updated', userId, newName)` 更好。
-    * **添加 JSDoc/TS 注释**：为事件和其参数添加注释，说明其用途和负载结构。
+   - **明确参数**：在触发事件时，传递的参数应该清晰明确。优先传递对象而不是多个原始值。例如，`emit('user-updated', { userId, newName })` 比 `emit('user-updated', userId, newName)` 更好。
+   - **添加 JSDoc/TS 注释**：为事件和其参数添加注释，说明其用途和负载结构。
 
 3. **保持单向数据流**：
-    * 事件用于 **子组件通知父组件** 发生了某件事。父组件接收到通知后，应该通过修改 props 或自身状态来做出响应，而不是直接让子组件修改父组件的状态。这使数据流更容易理解。
+   - 事件用于 **子组件通知父组件** 发生了某件事。父组件接收到通知后，应该通过修改 props 或自身状态来做出响应，而不是直接让子组件修改父组件的状态。这使数据流更容易理解。
 
 4. **适度使用**：
-    * 对于简单的状态提升，事件是完美的。但对于复杂的跨组件状态管理（如用户信息、主题等），应考虑使用 **Pinia** 这样的状态管理库。
+   - 对于简单的状态提升，事件是完美的。但对于复杂的跨组件状态管理（如用户信息、主题等），应考虑使用 **Pinia** 这样的状态管理库。
 
 5. **使用最新的语法**：
-    * 在新的项目中，优先使用 `<script setup>` 和 `defineEmits`。
-    * 关注并适时采用像 `defineModel()` 这样的新特性来简化代码。
+   - 在新的项目中，优先使用 `<script setup>` 和 `defineEmits`。
+   - 关注并适时采用像 `defineModel()` 这样的新特性来简化代码。
 
 ## 总结
 

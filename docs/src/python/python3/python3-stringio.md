@@ -16,10 +16,10 @@
 
 `io.StringIO` 的主要用途包括：
 
-* **模拟文件对象**：为那些需要一个文件对象作为参数的函数或方法提供一个内存中的替代品。
-* **字符串捕获**：重定向或捕获程序的输出（例如，将 `print` 函数的输出捕获到字符串中）。
-* **单元测试**：在测试中模拟文件输入或捕获输出，而无需创建真实的临时文件。
-* **高性能字符串操作**：当需要频繁进行复杂的字符串构建和修改，并且文件 API 更合适时，它可以比普通的字符串拼接更高效和清晰。
+- **模拟文件对象**：为那些需要一个文件对象作为参数的函数或方法提供一个内存中的替代品。
+- **字符串捕获**：重定向或捕获程序的输出（例如，将 `print` 函数的输出捕获到字符串中）。
+- **单元测试**：在测试中模拟文件输入或捕获输出，而无需创建真实的临时文件。
+- **高性能字符串操作**：当需要频繁进行复杂的字符串构建和修改，并且文件 API 更合适时，它可以比普通的字符串拼接更高效和清晰。
 
 ## 3. 基本用法
 
@@ -111,8 +111,8 @@ List of lines: ['First line.\n', 'Second line.\n', 'Third line.']
 
 `seek(offset, whence)` 用于移动文件指针。
 
-* `offset`：移动的偏移量。
-* `whence`：参考位置。默认为 `0`（文件开头），可选 `1`（当前位置），`2`（文件末尾）。
+- `offset`：移动的偏移量。
+- `whence`：参考位置。默认为 `0`（文件开头），可选 `1`（当前位置），`2`（文件末尾）。
 
 `tell()` 返回当前指针的位置。
 
@@ -183,13 +183,13 @@ print(content)  # 在外部依然可以访问 content 变量
 
 `io` 模块提供了两个类似的内存缓冲区类：
 
-| 特性 | `io.StringIO` | `io.BytesIO` |
-| :--- | :--- | :--- |
-| **数据类型** | 文本（**str**） | 二进制（**bytes**） |
-| **写入方法** | `write(str)` | `write(bytes)` |
-| **读取方法** | `read() -> str` | `read() -> bytes` |
-| **初始值** | `io.StringIO(initial_str)` | `io.BytesIO(initial_bytes)` |
-| **获取值** | `getvalue() -> str` | `getvalue() -> bytes` |
+| 特性         | `io.StringIO`              | `io.BytesIO`                     |
+| :----------- | :------------------------- | :------------------------------- |
+| **数据类型** | 文本（**str**）            | 二进制（**bytes**）              |
+| **写入方法** | `write(str)`               | `write(bytes)`                   |
+| **读取方法** | `read() -> str`            | `read() -> bytes`                |
+| **初始值**   | `io.StringIO(initial_str)` | `io.BytesIO(initial_bytes)`      |
+| **获取值**   | `getvalue() -> str`        | `getvalue() -> bytes`            |
 | **适用场景** | 处理文本数据，模拟文本文件 | 处理二进制数据，如图片、压缩包等 |
 
 **简单来说：用 `StringIO` 处理文本，用 `BytesIO` 处理二进制数据。**
@@ -198,8 +198,8 @@ print(content)  # 在外部依然可以访问 content 变量
 
 ### 5.1 性能考量
 
-* **优点**：对于大量的小规模字符串操作，避免了磁盘 I/O，通常比操作真实文件快得多。
-* **缺点**：对于**非常大**的字符串（例如几百 MB 或 GB），将其全部保存在内存中可能导致较高的内存消耗。在这种情况下，使用临时文件 (`tempfile` 模块) 可能是更好的选择。
+- **优点**：对于大量的小规模字符串操作，避免了磁盘 I/O，通常比操作真实文件快得多。
+- **缺点**：对于**非常大**的字符串（例如几百 MB 或 GB），将其全部保存在内存中可能导致较高的内存消耗。在这种情况下，使用临时文件 (`tempfile` 模块) 可能是更好的选择。
 
 ### 5.2 确保资源释放
 
@@ -247,29 +247,29 @@ print(repr(content))  # 'Some text'
 
 **适合使用 `StringIO` 的场景：**
 
-* 单元测试中模拟 `sys.stdin` 或捕获 `sys.stdout`/`sys.stderr`。
-* 使用需要文件对象 API 的库（如 `csv` 模块）来处理字符串数据。
+- 单元测试中模拟 `sys.stdin` 或捕获 `sys.stdout`/`sys.stderr`。
+- 使用需要文件对象 API 的库（如 `csv` 模块）来处理字符串数据。
 
-    ```python
-    import io
-    import csv
+  ```python
+  import io
+  import csv
 
-    csv_data = "Name,Age,City\nAlice,30,New York\nBob,25,London"
-    buffer = io.StringIO(csv_data)
+  csv_data = "Name,Age,City\nAlice,30,New York\nBob,25,London"
+  buffer = io.StringIO(csv_data)
 
-    with buffer:
-        reader = csv.DictReader(buffer)
-        for row in reader:
-            print(row)
-    # Output: {'Name': 'Alice', 'Age': '30', 'City': 'New York'}, ...
-    ```
+  with buffer:
+      reader = csv.DictReader(buffer)
+      for row in reader:
+          print(row)
+  # Output: {'Name': 'Alice', 'Age': '30', 'City': 'New York'}, ...
+  ```
 
-* 动态构建一个最终需要以字符串形式呈现的复杂文本（如报告、模板）。
+- 动态构建一个最终需要以字符串形式呈现的复杂文本（如报告、模板）。
 
 **不适合的场景：**
 
-* 处理超过内存容量的大型数据。
-* 简单的字符串拼接（`str.join()` 通常更快更直接）。
+- 处理超过内存容量的大型数据。
+- 简单的字符串拼接（`str.join()` 通常更快更直接）。
 
 ## 6. 总结
 

@@ -14,34 +14,34 @@ TypeScript 作为 JavaScript 的超集，完全继承了 JavaScript 的所有运
 
 TypeScript 运算符大致可以分为以下几类：
 
-* **算术运算符**
-* **赋值运算符**
-* **比较（关系）运算符**
-* **逻辑运算符**
-* **位运算符**
-* **字符串运算符**
-* **条件（三元）运算符**
-* **特殊运算符**
-  * 类型运算符 (`typeof`, `instanceof`)
-  * 可选链运算符 (`?.`)
-  * 空值合并运算符 (`??`)
-  * 非空断言运算符 (`!`)
-* **扩展运算符 (`...`)**
+- **算术运算符**
+- **赋值运算符**
+- **比较（关系）运算符**
+- **逻辑运算符**
+- **位运算符**
+- **字符串运算符**
+- **条件（三元）运算符**
+- **特殊运算符**
+  - 类型运算符 (`typeof`, `instanceof`)
+  - 可选链运算符 (`?.`)
+  - 空值合并运算符 (`??`)
+  - 非空断言运算符 (`!`)
+- **扩展运算符 (`...`)**
 
 ## 3. 算术运算符
 
 算术运算符用于执行基本的数学计算。
 
-| 运算符 | 描述 | 示例 | 结果 |
-| :--- | :--- | :--- | :--- |
-| `+` | 加法 | `10 + 5` | `15` |
-| `-` | 减法 | `10 - 5` | `5` |
-| `*` | 乘法 | `10 * 5` | `50` |
-| `/` | 除法 | `10 / 4` | `2.5` |
-| `%` | 取模（余数） | `10 % 4` | `2` |
-| `**` | 指数 | `2 ** 3` | `8` |
-| `++` | 自增（前缀/后缀） | `let a=5; ++a;` | `6` |
-| `--` | 自减（前缀/后缀） | `let a=5; --a;` | `4` |
+| 运算符 | 描述              | 示例            | 结果  |
+| :----- | :---------------- | :-------------- | :---- |
+| `+`    | 加法              | `10 + 5`        | `15`  |
+| `-`    | 减法              | `10 - 5`        | `5`   |
+| `*`    | 乘法              | `10 * 5`        | `50`  |
+| `/`    | 除法              | `10 / 4`        | `2.5` |
+| `%`    | 取模（余数）      | `10 % 4`        | `2`   |
+| `**`   | 指数              | `2 ** 3`        | `8`   |
+| `++`   | 自增（前缀/后缀） | `let a=5; ++a;` | `6`   |
+| `--`   | 自减（前缀/后缀） | `let a=5; --a;` | `4`   |
 
 **TypeScript 注意事项**：TypeScript 的类型系统会检查运算的操作数类型。
 
@@ -50,8 +50,8 @@ let num1: number = 10;
 let num2: number = 5;
 let result: number = num1 + num2; // 正确，结果为 15
 
-let str: string = "5";
-// let errorResult: number = num1 + str; 
+let str: string = '5';
+// let errorResult: number = num1 + str;
 // Error: Operator '+' cannot be applied to types 'number' and 'string'.
 // 但 TypeScript 实际上会将 `num1 + str` 推断为 string 类型，结果为 "105"
 ```
@@ -62,39 +62,39 @@ let str: string = "5";
 
 赋值运算符用于给变量赋值。
 
-| 运算符 | 示例 | 等价于 |
-| :--- | :--- | :--- |
-| `=` | `x = y` | `x = y` |
-| `+=` | `x += y` | `x = x + y` |
-| `-=` | `x -= y` | `x = x - y` |
-| `*=` | `x *= y` | `x = x * y` |
-| `/=` | `x /= y` | `x = x / y` |
-| `%=` | `x %= y` | `x = x % y` |
-| `**=` | `x **= y` | `x = x ** y` |
+| 运算符 | 示例      | 等价于       |
+| :----- | :-------- | :----------- |
+| `=`    | `x = y`   | `x = y`      |
+| `+=`   | `x += y`  | `x = x + y`  |
+| `-=`   | `x -= y`  | `x = x - y`  |
+| `*=`   | `x *= y`  | `x = x * y`  |
+| `/=`   | `x /= y`  | `x = x / y`  |
+| `%=`   | `x %= y`  | `x = x % y`  |
+| `**=`  | `x **= y` | `x = x ** y` |
 
 **示例**：
 
 ```typescript
 let count: number = 0;
 count += 10; // count 现在是 10
-count -= 2;  // count 现在是 8
-count *= 3;  // count 现在是 24
+count -= 2; // count 现在是 8
+count *= 3; // count 现在是 24
 ```
 
 ## 5. 比较运算符
 
 比较运算符用于比较两个值，返回一个布尔值 (`true` 或 `false`)。
 
-| 运算符 | 描述 | 示例 | 结果 |
-| :--- | :--- | :--- | :--- |
-| `==` | 等于（值相等） | `5 == '5'` | `true` |
-| `===` | 严格等于（值和类型都相等） | `5 === '5'` | `false` |
-| `!=` | 不等于 | `5 != '5'` | `false` |
-| `!==` | 严格不等于 | `5 !== '5'` | `true` |
-| `>` | 大于 | `10 > 5` | `true` |
-| `<` | 小于 | `10 < 5` | `false` |
-| `>=` | 大于等于 | `10 >= 10` | `true` |
-| `<=` | 小于等于 | `10 <= 5` | `false` |
+| 运算符 | 描述                       | 示例        | 结果    |
+| :----- | :------------------------- | :---------- | :------ |
+| `==`   | 等于（值相等）             | `5 == '5'`  | `true`  |
+| `===`  | 严格等于（值和类型都相等） | `5 === '5'` | `false` |
+| `!=`   | 不等于                     | `5 != '5'`  | `false` |
+| `!==`  | 严格不等于                 | `5 !== '5'` | `true`  |
+| `>`    | 大于                       | `10 > 5`    | `true`  |
+| `<`    | 小于                       | `10 < 5`    | `false` |
+| `>=`   | 大于等于                   | `10 >= 10`  | `true`  |
+| `<=`   | 小于等于                   | `10 <= 5`   | `false` |
 
 **最佳实践**：**始终使用 `===` 和 `!==`**。它们避免了 JavaScript 中令人困惑的类型强制转换（type coercion），使得比较行为更加可预测和安全，这也是 TypeScript 所鼓励的。
 
@@ -102,13 +102,13 @@ count *= 3;  // count 现在是 24
 let value: number = 5;
 
 // 不推荐，可能产生意外结果
-if (value == "5") { 
-  console.log("This is true with ==");
+if (value == '5') {
+  console.log('This is true with ==');
 }
 
 // 推荐，类型安全
-if (value === 5) { 
-  console.log("This is true with ===");
+if (value === 5) {
+  console.log('This is true with ===');
 }
 // if (value === "5") { ... } // TypeScript 会报错：Comparison between types 'number' and 'string'
 ```
@@ -117,27 +117,27 @@ if (value === 5) {
 
 逻辑运算符用于连接布尔表达式或执行逻辑操作。
 
-| 运算符 | 描述 | 示例 | 结果 |
-| :--- | :--- | :--- | :--- |
-| `&&` | 逻辑与 | `true && false` | `false` |
-| `\|\|` | 逻辑或 | `true \|\| false` | `true` |
-| `!` | 逻辑非 | `!true` | `false` |
+| 运算符 | 描述   | 示例              | 结果    |
+| :----- | :----- | :---------------- | :------ |
+| `&&`   | 逻辑与 | `true && false`   | `false` |
+| `\|\|` | 逻辑或 | `true \|\| false` | `true`  |
+| `!`    | 逻辑非 | `!true`           | `false` |
 
 **短路求值**：`&&` 和 `||` 是短路运算符。如果第一个操作数就能确定结果，则不会计算第二个操作数。
 
 ```typescript
 function isValid(): boolean {
-  console.log("Validation called");
+  console.log('Validation called');
   return true;
 }
 
 let shouldValidate = false;
 // 由于 shouldValidate 为 false，isValid() 函数不会被调用
-let result = shouldValidate && isValid(); 
+let result = shouldValidate && isValid();
 
-let name = "";
+let name = '';
 // 使用空字符串（falsy 值）作为默认值
-let displayName = name || "Guest"; 
+let displayName = name || 'Guest';
 console.log(displayName); // 输出 "Guest"
 ```
 
@@ -147,24 +147,24 @@ console.log(displayName); // 输出 "Guest"
 
 位运算符直接操作数值的二进制位，在实际业务开发中使用较少，常用于底层优化或特定算法。
 
-| 运算符 | 描述 | 示例 |
-| :--- | :--- | :--- |
-| `&` | 按位与 | `5 & 1` (二进制 `0101 & 0001`) 结果为 `1` |
-| `\|` | 按位或 | `5 \| 1` (二进制 `0101 \| 0001`) 结果为 `5` |
-| `~` | 按位非 | `~5` 结果为 `-6` |
-| `^` | 按位异或 | `5 ^ 1` (二进制 `0101 ^ 0001`) 结果为 `4` |
-| `<<` | 左移 | `5 << 1` (二进制 `0101` 左移 1 位) 结果为 `10` |
-| `>>` | 右移 | `5 >> 1` (二进制 `0101` 右移 1 位) 结果为 `2` |
-| `>>>` | 无符号右移 | `-5 >>> 2` 结果是一个很大的正数 |
+| 运算符 | 描述       | 示例                                           |
+| :----- | :--------- | :--------------------------------------------- |
+| `&`    | 按位与     | `5 & 1` (二进制 `0101 & 0001`) 结果为 `1`      |
+| `\|`   | 按位或     | `5 \| 1` (二进制 `0101 \| 0001`) 结果为 `5`    |
+| `~`    | 按位非     | `~5` 结果为 `-6`                               |
+| `^`    | 按位异或   | `5 ^ 1` (二进制 `0101 ^ 0001`) 结果为 `4`      |
+| `<<`   | 左移       | `5 << 1` (二进制 `0101` 左移 1 位) 结果为 `10` |
+| `>>`   | 右移       | `5 >> 1` (二进制 `0101` 右移 1 位) 结果为 `2`  |
+| `>>>`  | 无符号右移 | `-5 >>> 2` 结果是一个很大的正数                |
 
 ## 8. 字符串运算符
 
 `+` 运算符除了用于数学加法，还用于字符串拼接。
 
 ```typescript
-let greeting: string = "Hello, ";
-let userName: string = "Alice";
-let message: string = greeting + userName + "!"; // "Hello, Alice!"
+let greeting: string = 'Hello, ';
+let userName: string = 'Alice';
+let message: string = greeting + userName + '!'; // "Hello, Alice!"
 
 // 模板字符串（Template Literals）是更现代、更清晰的选择
 let messageTemplate: string = `${greeting}${userName}!`; // "Hello, Alice!"
@@ -174,7 +174,7 @@ let messageTemplate: string = `${greeting}${userName}!`; // "Hello, Alice!"
 
 ```typescript
 let price: number = 99.95;
-let product: string = "TypeScript Handbook";
+let product: string = 'TypeScript Handbook';
 
 // 使用模板字符串
 console.log(`The price of ${product} is $${price}.`);
@@ -189,7 +189,7 @@ console.log(`The price of ${product} is $${price}.`);
 
 ```typescript
 let age: number = 20;
-let status: string = age >= 18 ? "Adult" : "Minor";
+let status: string = age >= 18 ? 'Adult' : 'Minor';
 console.log(status); // 输出 "Adult"
 ```
 
@@ -197,7 +197,7 @@ console.log(status); // 输出 "Adult"
 
 ```typescript
 // 嵌套三元运算符可读性差，不推荐
-let message = isMember ? "Welcome back!" : onTrial ? "Try it out!" : "Please sign up";
+let message = isMember ? 'Welcome back!' : onTrial ? 'Try it out!' : 'Please sign up';
 
 // 使用 if-else 或 switch 更清晰
 ```
@@ -212,28 +212,30 @@ let message = isMember ? "Welcome back!" : onTrial ? "Try it out!" : "Please sig
 
 1. **在值上下文中**：返回一个表示操作数类型的字符串（运行时行为，与 JavaScript 相同）。
 
-    ```typescript
-    let str = "hello";
-    let t: string = typeof str; // t 的值为 "string"
-    ```
+   ```typescript
+   let str = 'hello';
+   let t: string = typeof str; // t 的值为 "string"
+   ```
 
 2. **在类型上下文中**：用于获取变量或属性的类型（编译时行为，TypeScript 特有）。
 
-    ```typescript
-    let s = "hello";
-    let n: typeof s; // n 的类型是 string
+   ```typescript
+   let s = 'hello';
+   let n: typeof s; // n 的类型是 string
 
-    function f() { return { x: 10, y: 3 }; }
-    type P = ReturnType<typeof f>; // P 的类型是 { x: number; y: number; }
-    ```
+   function f() {
+     return { x: 10, y: 3 };
+   }
+   type P = ReturnType<typeof f>; // P 的类型是 { x: number; y: number; }
+   ```
 
 #### `instanceof`
 
 用于检查一个对象是否是某个构造函数的实例（基于原型链）。
 
 ```typescript
-class Animal { }
-class Dog extends Animal { }
+class Animal {}
+class Dog extends Animal {}
 
 let myPet = new Dog();
 console.log(myPet instanceof Dog); // true
@@ -247,13 +249,14 @@ console.log(myPet instanceof Animal); // true (因为 Dog 继承自 Animal)
 ```typescript
 interface User {
   name: string;
-  address?: { // address 是可选的
+  address?: {
+    // address 是可选的
     street?: string; // street 也是可选的
     city: string;
   };
 }
 
-let user: User = { name: "John" };
+let user: User = { name: 'John' };
 
 // 传统的繁琐写法
 let streetOldWay = user.address && user.address.street; // 可能是 string | undefined
@@ -275,17 +278,17 @@ let result = someObject?.someMethod?.(); // 如果 someMethod 存在才调用
 
 ```typescript
 let inputValue: string | null | undefined = getInputFromUser(); // 可能返回 null
-let defaultValue = "default";
+let defaultValue = 'default';
 
 // 使用逻辑或 || 的问题：它会过滤所有 falsy 值（如空字符串、0）
-let data1 = inputValue || defaultValue; 
+let data1 = inputValue || defaultValue;
 
 // 使用空值合并 ??：只关心 null 或 undefined
-let data2 = inputValue ?? defaultValue; 
+let data2 = inputValue ?? defaultValue;
 
-console.log(""); // 空字符串是 falsy
-console.log("" || "default"); // 输出 "default"
-console.log("" ?? "default"); // 输出 ""
+console.log(''); // 空字符串是 falsy
+console.log('' || 'default'); // 输出 "default"
+console.log('' ?? 'default'); // 输出 ""
 
 console.log(0 || 10); // 输出 10
 console.log(0 ?? 10); // 输出 0
@@ -307,7 +310,7 @@ function liveDangerously(x?: number | null) {
 }
 
 liveDangerously(3.14); // 正常运行，输出 "3"
-liveDangerously();     // 运行时错误：Cannot read properties of undefined (reading 'toFixed')
+liveDangerously(); // 运行时错误：Cannot read properties of undefined (reading 'toFixed')
 ```
 
 **最佳实践**：**谨慎使用**。只有在你有绝对把握（例如，刚刚检查过该值不为空，但类型系统无法识别）时才使用它。滥用此运算符会破坏 TypeScript 的类型安全性，可能导致运行时错误。
@@ -320,7 +323,7 @@ liveDangerously();     // 运行时错误：Cannot read properties of undefined 
 
 ```typescript
 let parts = ['shoulders', 'knees'];
-let lyrics = ['head', ...parts, 'and', 'toes']; 
+let lyrics = ['head', ...parts, 'and', 'toes'];
 // ['head', 'shoulders', 'knees', 'and', 'toes']
 
 let arr1 = [1, 2, 3];
@@ -331,8 +334,8 @@ let merged = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]
 **用于对象**（对象扩展是 ES2018 的特性）：
 
 ```typescript
-let defaults = { food: "spicy", price: "$$", ambiance: "noisy" };
-let search = { ...defaults, food: "rich" }; 
+let defaults = { food: 'spicy', price: '$$', ambiance: 'noisy' };
+let search = { ...defaults, food: 'rich' };
 // { food: "rich", price: "$$", ambiance: "noisy" }
 // 后面的属性会覆盖前面的
 

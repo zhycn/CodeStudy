@@ -13,20 +13,18 @@
 ```html
 <template>
   <ul>
-    <li v-for="(item, index) in items" :key="item.id">
-      {{ index + 1 }}. {{ item.name }}
-    </li>
+    <li v-for="(item, index) in items" :key="item.id">{{ index + 1 }}. {{ item.name }}</li>
   </ul>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref } from 'vue';
 
-const items = ref([
-  { id: 1, name: 'Vue.js' },
-  { id: 2, name: 'React' },
-  { id: 3, name: 'Angular' }
-]);
+  const items = ref([
+    { id: 1, name: 'Vue.js' },
+    { id: 2, name: 'React' },
+    { id: 3, name: 'Angular' },
+  ]);
 </script>
 ```
 
@@ -35,20 +33,18 @@ const items = ref([
 ```html
 <template>
   <ul>
-    <li v-for="(value, key, index) in user" :key="key">
-      {{ index }}. {{ key }}: {{ value }}
-    </li>
+    <li v-for="(value, key, index) in user" :key="key">{{ index }}. {{ key }}: {{ value }}</li>
   </ul>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref } from 'vue';
 
-const user = ref({
-  name: 'John Doe',
-  email: 'john@example.com',
-  role: 'Developer'
-});
+  const user = ref({
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'Developer',
+  });
 </script>
 ```
 
@@ -65,6 +61,7 @@ const user = ref({
 ### 3.1 为什么需要 Key
 
 在 Vue 的虚拟 DOM 算法中，`key` 用于识别 VNode（虚拟节点），具有以下作用：
+
 - **跟踪组件身份**：确定何时复用或重建组件
 - **维护内部组件状态**：避免状态在列表更新时丢失
 - **提高渲染性能**：减少不必要的 DOM 操作
@@ -79,29 +76,25 @@ const user = ref({
 <li v-for="(item, index) in items" :key="index">...</li>
 ```
 
-| Key 类型 | 适用场景 | 稳定性 | 性能影响 |
-|----------|----------|--------|----------|
-| 唯一 ID | 数据库项目 | 高 | 最佳 |
-| 复合键 | 组合字段 | 中 | 良好 |
-| 索引 | 静态列表 | 低 | 差 |
+| Key 类型 | 适用场景   | 稳定性 | 性能影响 |
+| -------- | ---------- | ------ | -------- |
+| 唯一 ID  | 数据库项目 | 高     | 最佳     |
+| 复合键   | 组合字段   | 中     | 良好     |
+| 索引     | 静态列表   | 低     | 差       |
 
 ## 4. 性能优化策略
 
 ### 4.1 虚拟滚动技术
 
 对于大型列表（>1000 项），使用虚拟滚动库：
+
 ```bash
 npm install vue-virtual-scroller
 ```
 
 ```html
 <template>
-  <RecycleScroller
-    class="scroller"
-    :items="largeList"
-    :item-size="50"
-    key-field="id"
-  >
+  <RecycleScroller class="scroller" :items="largeList" :item-size="50" key-field="id">
     <template #default="{ item }">
       <div>{{ item.name }}</div>
     </template>
@@ -119,7 +112,7 @@ const largeList = ref([...]); // 大型响应式数组
 import { shallowRef } from 'vue';
 
 // 使用浅层响应式
-const largeList = shallowRef([...]); 
+const largeList = shallowRef([...]);
 
 // 或冻结不需要变更的数据
 Object.freeze(largeList.value);
@@ -130,13 +123,7 @@ Object.freeze(largeList.value);
 ```html
 <template>
   <ul>
-    <li 
-      v-for="item in staticItems" 
-      :key="item.id"
-      v-once
-    >
-      {{ item.content }}
-    </li>
+    <li v-for="item in staticItems" :key="item.id" v-once>{{ item.content }}</li>
   </ul>
 </template>
 ```
@@ -146,6 +133,7 @@ Object.freeze(largeList.value);
 ### 5.1 Vue3 响应式方法
 
 Vue3 能自动检测以下数组方法的变化：
+
 - `push()`
 - `pop()`
 - `shift()`
@@ -171,21 +159,19 @@ items.value[2] = { ...items.value[2], updated: true };
 ```html
 <template>
   <ul>
-    <li v-for="user in activeUsers" :key="user.id">
-      {{ user.name }}
-    </li>
+    <li v-for="user in activeUsers" :key="user.id">{{ user.name }}</li>
   </ul>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+  import { computed, ref } from 'vue';
 
-const users = ref([...]);
+  const users = ref([...]);
 
-const activeUsers = computed(() => {
-  return users.value.filter(user => user.isActive)
-                   .sort((a, b) => a.name.localeCompare(b.name));
-});
+  const activeUsers = computed(() => {
+    return users.value.filter(user => user.isActive)
+                     .sort((a, b) => a.name.localeCompare(b.name));
+  });
 </script>
 ```
 
@@ -206,17 +192,12 @@ const activeUsers = computed(() => {
 ```html
 <template>
   <div>
-    <user-card 
-      v-for="user in users" 
-      :key="user.id"
-      :user="user"
-      @delete="handleDelete"
-    />
+    <user-card v-for="user in users" :key="user.id" :user="user" @delete="handleDelete" />
   </div>
 </template>
 
 <script setup>
-import UserCard from './UserCard.vue';
+  import UserCard from './UserCard.vue';
 </script>
 ```
 
@@ -249,13 +230,17 @@ import UserCard from './UserCard.vue';
 ## 9. 常见问题解答
 
 ### Q：为什么我的列表更新时组件状态会丢失？
+
 A：可能原因：
+
 1. 使用了索引作为 key
 2. 组件内部状态未正确管理
 3. 列表项组件缺少 key 属性
 
 ### Q：如何强制重新渲染单个列表项？
+
 A：最佳实践：
+
 ```javascript
 // 在组件内部使用 watch 监听特定变化
 watch(() => props.item, (newVal) => {
@@ -267,7 +252,9 @@ watch(() => props.item, (newVal) => {
 ```
 
 ### Q：v-for 和 v-if 一起使用有什么问题？
+
 A：解决方案：
+
 ```html
 <!-- 不推荐 ❌ -->
 <li v-for="item in items" v-if="item.active">...</li>
@@ -284,16 +271,14 @@ A：解决方案：
 
 ```html
 <script setup>
-import { defineProps } from 'vue';
+  import { defineProps } from 'vue';
 
-const props = defineProps({
-  items: Array
-});
+  const props = defineProps({
+    items: Array,
+  });
 
-// 在 setup 中直接访问 props
-const processedItems = computed(() => 
-  props.items.map(item => ({ ...item, processed: true }))
-);
+  // 在 setup 中直接访问 props
+  const processedItems = computed(() => props.items.map((item) => ({ ...item, processed: true })));
 </script>
 ```
 
@@ -302,23 +287,21 @@ const processedItems = computed(() =>
 ```html
 <template>
   <TransitionGroup name="list" tag="ul">
-    <li v-for="item in items" :key="item.id">
-      {{ item.text }}
-    </li>
+    <li v-for="item in items" :key="item.id">{{ item.text }}</li>
   </TransitionGroup>
 </template>
 
 <style>
-.list-move, /* 对移动中的元素应用的过渡 */
+  .list-move, /* 对移动中的元素应用的过渡 */
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.5s ease;
-}
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
+    transition: all 0.5s ease;
+  }
+  .list-enter-from,
+  .list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
 </style>
 ```
 

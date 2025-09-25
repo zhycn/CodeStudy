@@ -8,15 +8,15 @@
 
 1. #概述
 2. #核心概念with-语句
-3. #上下文管理器协议__enter__-与-__exit__
+3. #上下文管理器协议**enter**-与-**exit**
 4. #实现方式
-    1. #基于类的上下文管理器
-    2. #使用-contextlib-模块
+   1. #基于类的上下文管理器
+   2. #使用-contextlib-模块
 5. #高级用法与最佳实践
-    1. #处理异常
-    2. #嵌套上下文管理器
-    3. #带参数的上下文管理器
-    4. #使用-contextmanager-的最佳实践
+   1. #处理异常
+   2. #嵌套上下文管理器
+   3. #带参数的上下文管理器
+   4. #使用-contextmanager-的最佳实践
 6. #异步上下文管理器-async-with
 7. #总结
 
@@ -54,24 +54,24 @@ with Expression [as Target]:
     # 执行你的代码
 ```
 
-* __`Expression`__: 这是一个返回上下文管理器对象的表达式（例如 `open('file.txt')`）。
-* __`as Target`__ (可选): 将上下文管理器的 `__enter__()` 方法的返回值绑定到变量 `Target` 上。
-* __`with-body`__: 缩进的代码块。在此代码块执行前，资源被分配；执行后（或发生异常时），资源被释放。
+- **`Expression`**: 这是一个返回上下文管理器对象的表达式（例如 `open('file.txt')`）。
+- **`as Target`** (可选): 将上下文管理器的 `__enter__()` 方法的返回值绑定到变量 `Target` 上。
+- **`with-body`**: 缩进的代码块。在此代码块执行前，资源被分配；执行后（或发生异常时），资源被释放。
 
 ## 上下文管理器协议：`__enter__` 与 `__exit__`
 
 任何一个实现了上下文管理器协议的对象都可以与 `with` 语句一起使用。这个协议包含两个魔法方法：
 
-1. __`object.__enter__(self)`__
-    * 进入上下文时调用。它的返回值会赋值给 `as` 子句后面的变量。如果不需要返回值，此方法可以返回 `self` 或 `None`。
+1. **`object.**enter**(self)`**
+   - 进入上下文时调用。它的返回值会赋值给 `as` 子句后面的变量。如果不需要返回值，此方法可以返回 `self` 或 `None`。
 
-2. __`object.__exit__(self, exc_type, exc_val, exc_tb)`__
-    * 退出上下文时调用。它负责执行所有的清理工作。
-    * 参数：
-        * `exc_type`: 异常类型（如 `ValueError`）。如果没有异常发生，则为 `None`。
-        * `exc_val`: 异常实例。如果没有异常发生，则为 `None`。
-        * `exc_tb`: 异常回溯对象（Traceback）。如果没有异常发生，则为 `None`。
-    * __返回值__: 一个布尔值。如果为 `True`，则表示异常已被处理，`with` 语句后的代码会继续执行，就像什么都没发生一样。如果为 `False`（默认），异常会在 `__exit__` 方法完成后被重新抛出。
+2. **`object.**exit**(self, exc_type, exc_val, exc_tb)`**
+   - 退出上下文时调用。它负责执行所有的清理工作。
+   - 参数：
+     - `exc_type`: 异常类型（如 `ValueError`）。如果没有异常发生，则为 `None`。
+     - `exc_val`: 异常实例。如果没有异常发生，则为 `None`。
+     - `exc_tb`: 异常回溯对象（Traceback）。如果没有异常发生，则为 `None`。
+   - **返回值**: 一个布尔值。如果为 `True`，则表示异常已被处理，`with` 语句后的代码会继续执行，就像什么都没发生一样。如果为 `False`（默认），异常会在 `__exit__` 方法完成后被重新抛出。
 
 ## 实现方式
 
@@ -79,22 +79,22 @@ with Expression [as Target]:
 
 通过定义一个类并实现 `__enter__` 和 `__exit__` 方法，可以创建自定义的上下文管理器。这是最灵活的方式。
 
-__示例：创建一个管理数据库连接的上下文管理器__
+**示例：创建一个管理数据库连接的上下文管理器**
 
 ```python
 class DatabaseConnection:
     """一个模拟数据库连接的上下文管理器"""
-    
+
     def __init__(self, db_name):
         self.db_name = db_name
         self.connection = None
-        
+
     def __enter__(self):
         print(f"Connecting to database '{self.db_name}'...")
         # 模拟建立连接
         self.connection = f"Connection to {self.db_name}"
         return self.connection  # 将连接对象返回，以便在 with 块中使用
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         print(f"Closing connection to '{self.db_name}'...")
         # 模拟关闭连接，释放资源
@@ -116,7 +116,7 @@ with DatabaseConnection('my_app_db') as conn:
 print("Outside the with block, connection is closed.")
 ```
 
-__输出：__
+**输出：**
 
 ```
 Connecting to database 'my_app_db'...
@@ -154,11 +154,11 @@ with managed_file('example.txt', 'w') as f:
     print("File written to.")
 ```
 
-__关键点：__
+**关键点：**
 
-* `yield` 之前的代码相当于 `__enter__` 方法。
-* `yield` 的值会赋值给 `as` 子句的变量。
-* `yield` 之后的代码相当于 `__exit__` 方法，被放在 `finally` 块中以确保执行。
+- `yield` 之前的代码相当于 `__enter__` 方法。
+- `yield` 的值会赋值给 `as` 子句的变量。
+- `yield` 之后的代码相当于 `__exit__` 方法，被放在 `finally` 块中以确保执行。
 
 #### 2. `closing(thing)`
 
@@ -215,24 +215,24 @@ with some_api(use_context=True) as f:
 
 在 `__exit__` 或 `@contextmanager` 的 `finally` 块中，你可以根据异常信息决定如何处理。
 
-* __忽略异常__：检查 `exc_type`，如果是你期望的异常，返回 `True`。
+- **忽略异常**：检查 `exc_type`，如果是你期望的异常，返回 `True`。
 
-    ```python
-    class IgnoreValueError:
-        def __enter__(self):
-            return self
-        def __exit__(self, exc_type, exc_val, exc_tb):
-            if exc_type == ValueError:
-                print(f"Ignoring ValueError: {exc_val}")
-                return True  # 抑制 ValueError
-            return False     # 让其他异常继续传播
+  ```python
+  class IgnoreValueError:
+      def __enter__(self):
+          return self
+      def __exit__(self, exc_type, exc_val, exc_tb):
+          if exc_type == ValueError:
+              print(f"Ignoring ValueError: {exc_val}")
+              return True  # 抑制 ValueError
+          return False     # 让其他异常继续传播
 
-    with IgnoreValueError():
-        raise ValueError("This will be caught and ignored.")
-    # 这里不会报错
-    ```
+  with IgnoreValueError():
+      raise ValueError("This will be caught and ignored.")
+  # 这里不会报错
+  ```
 
-* __执行回滚__：如果发生异常，在释放资源前执行一些回滚操作（如数据库事务回滚）。
+- **执行回滚**：如果发生异常，在释放资源前执行一些回滚操作（如数据库事务回滚）。
 
 ### 嵌套上下文管理器
 
@@ -256,12 +256,12 @@ class Timer:
     def __init__(self, name="Task"):
         self.name = name
         self.start_time = None
-        
+
     def __enter__(self):
         import time
         self.start_time = time.time()
         return self
-        
+
     def __exit__(self, *args):
         import time
         elapsed = time.time() - self.start_time
@@ -275,9 +275,9 @@ with Timer("Data Processing"):
 
 ### 使用 `@contextmanager` 的最佳实践
 
-* __总是使用 `try...finally`__：确保在 `finally` 块中执行清理操作，这样即使生成器中发生异常，资源也会被释放。
-* __只 yield 一次__：一个函数被 `@contextmanager` 装饰后，只能有一个 `yield` 语句。
-* __处理异常__：如果需要，可以在 `yield` 语句周围包裹 `try...except` 来处理块内发生的异常。
+- **总是使用 `try...finally`**：确保在 `finally` 块中执行清理操作，这样即使生成器中发生异常，资源也会被释放。
+- **只 yield 一次**：一个函数被 `@contextmanager` 装饰后，只能有一个 `yield` 语句。
+- **处理异常**：如果需要，可以在 `yield` 语句周围包裹 `try...except` 来处理块内发生的异常。
 
 ## 异步上下文管理器 (`async with`)
 
@@ -291,12 +291,12 @@ class AsyncSessionManager:
     def __init__(self, url):
         self.url = url
         self.session = None
-        
+
     async def __aenter__(self):
         self.session = aiohttp.ClientSession()
         response = await self.session.get(self.url)
         return response
-        
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.session.close()
 
@@ -314,17 +314,17 @@ async def main():
 
 ## 总结
 
-| 特性/方式 | 优点 | 缺点 | 适用场景 |
-| :--- | :--- | :--- | :--- |
-| __基于类__ | 功能最强大、最灵活，可精细控制异常处理 | 代码量稍多 | 复杂的资源管理，需要自定义异常处理逻辑 |
-| __`@contextmanager`__ | 代码简洁，符合 Pythonic 风格 | 对异常的处理不如类方式直接 | 快速创建简单的上下文管理器，逻辑清晰 |
-| __内置管理器__ (如 `open`) | 无需实现，开箱即用，性能最佳 | 功能固定 | 文件操作、锁、数据库连接等标准操作 |
+| 特性/方式                  | 优点                                   | 缺点                       | 适用场景                               |
+| :------------------------- | :------------------------------------- | :------------------------- | :------------------------------------- |
+| **基于类**                 | 功能最强大、最灵活，可精细控制异常处理 | 代码量稍多                 | 复杂的资源管理，需要自定义异常处理逻辑 |
+| **`@contextmanager`**      | 代码简洁，符合 Pythonic 风格           | 对异常的处理不如类方式直接 | 快速创建简单的上下文管理器，逻辑清晰   |
+| **内置管理器** (如 `open`) | 无需实现，开箱即用，性能最佳           | 功能固定                   | 文件操作、锁、数据库连接等标准操作     |
 
 上下文管理器是 Python 资源管理的基石。它通过 `with` 语句提供了一种清晰、可靠且简洁的范式，来替代容易出错的 `try...finally` 语句。掌握创建和使用上下文管理器的技能，将使你编写的代码更具可读性、健壮性和可维护性。
 
-__最佳实践建议__：
+**最佳实践建议**：
 
-1. __默认使用 `with`__：对于任何涉及资源分配和释放的操作，优先考虑使用 `with` 语句。
-2. __利用现有管理器__：首先查看标准库或第三方库是否已提供了你需要的上下文管理器（如 `open`, `threading.Lock`）。
-3. __简洁至上__：对于简单场景，使用 `@contextmanager` 装饰器。对于需要复杂状态或异常处理的场景，使用基于类的方式。
-4. __确保安全__：在 `__exit__` 或 `finally` 块中执行清理操作，保证异常安全。
+1. **默认使用 `with`**：对于任何涉及资源分配和释放的操作，优先考虑使用 `with` 语句。
+2. **利用现有管理器**：首先查看标准库或第三方库是否已提供了你需要的上下文管理器（如 `open`, `threading.Lock`）。
+3. **简洁至上**：对于简单场景，使用 `@contextmanager` 装饰器。对于需要复杂状态或异常处理的场景，使用基于类的方式。
+4. **确保安全**：在 `__exit__` 或 `finally` 块中执行清理操作，保证异常安全。

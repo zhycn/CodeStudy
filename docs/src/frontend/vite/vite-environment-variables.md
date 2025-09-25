@@ -100,22 +100,22 @@ VITE_API_BASE_URL=https://api.staging.example.com
 ### 2.2 重要规则
 
 1. **安全：** 为了防止意外地将敏感环境变量泄漏到客户端，Vite **默认只暴露以 `VITE_` 开头的变量**。这是最重要的规则。
-    - `VITE_APP_API_URL=...` （会被暴露）
-    - `DB_PASSWORD=...` （不会被暴露）
+   - `VITE_APP_API_URL=...` （会被暴露）
+   - `DB_PASSWORD=...` （不会被暴露）
 
 2. **取值：** 在你的 Vite 处理后的代码中，通过 `import.meta.env` 对象访问这些变量。
 
-    ```javascript
-    console.log(import.meta.env.VITE_APP_API_URL);
-    ```
+   ```javascript
+   console.log(import.meta.env.VITE_APP_API_URL);
+   ```
 
 3. `.env.local` 和 `.env.[mode].local` 文件应被添加到 `.gitignore` 中，用于存储本地覆盖或包含敏感信息的变量。
 
-    ```bash
-    # .gitignore
-    .env.local
-    *.local
-    ```
+   ```bash
+   # .gitignore
+   .env.local
+   *.local
+   ```
 
 ## 3. 在代码中使用环境变量
 

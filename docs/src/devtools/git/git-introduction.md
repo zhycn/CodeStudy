@@ -56,17 +56,17 @@ Git 的基本工作流程通常遵循以下步骤：
 
 Git 提供了一系列基础命令用于日常版本控制操作，以下是核心命令及其作用：
 
-| 命令 | 作用描述 |
-|------|----------|
-| `git init` | 初始化一个新的 Git 仓库 |
-| `git clone <url>` | 克隆远程仓库到本地 |
-| `git add <file>` | 添加文件到暂存区 |
-| `git commit -m "msg"` | 提交变更到本地仓库 |
-| `git status` | 查看工作区状态 |
-| `git diff` | 查看变更内容 |
-| `git log` | 查看提交历史 |
+| 命令                  | 作用描述                |
+| --------------------- | ----------------------- |
+| `git init`            | 初始化一个新的 Git 仓库 |
+| `git clone <url>`     | 克隆远程仓库到本地      |
+| `git add <file>`      | 添加文件到暂存区        |
+| `git commit -m "msg"` | 提交变更到本地仓库      |
+| `git status`          | 查看工作区状态          |
+| `git diff`            | 查看变更内容            |
+| `git log`             | 查看提交历史            |
 
-*表：Git 基础常用命令*
+_表：Git 基础常用命令_
 
 ```bash
 # 初始化新仓库
@@ -119,8 +119,8 @@ git branch -d feature-authentication
 
 - **主分支**（main/master）：保持稳定可发布版本
 - **开发分支**（develop）：作为日常开发集成的基础分支
-- **功能分支**（feature/*）：用于新功能开发，从 develop 创建，完成后合并回 develop
-- **热修复分支**（hotfix/*）：用于紧急生产问题修复，从 main 创建，修复后同时合并到 main 和 develop
+- **功能分支**（feature/\*）：用于新功能开发，从 develop 创建，完成后合并回 develop
+- **热修复分支**（hotfix/\*）：用于紧急生产问题修复，从 main 创建，修复后同时合并到 main 和 develop
 
 ### 3.3 远程协作
 
@@ -245,10 +245,10 @@ Git Flow 是一种较为复杂但结构清晰的分支模型，适用于有计�
 
 - **主分支（main/master）**：存放正式发布版本，保持稳定
 - **开发分支（develop）**：开发主分支，集成各功能分支
-- **功能分支（feature/*）**：新功能开发分支，从 develop 创建，完成后合并回 develop
-- **发布分支（release/*）**：用于准备发布新版本，从 develop 创建，测试完成后合并到 main 和 develop
-- **热修复分支（hotfix/*）**：紧急修复生产环境问题，从 main 创建，修复后同时合并到 main 和 develop
-- **测试分支（test/*）**：用于测试新功能或修复的分支，从 develop 创建，测试完成后合并回 develop
+- **功能分支（feature/\*）**：新功能开发分支，从 develop 创建，完成后合并回 develop
+- **发布分支（release/\*）**：用于准备发布新版本，从 develop 创建，测试完成后合并到 main 和 develop
+- **热修复分支（hotfix/\*）**：紧急修复生产环境问题，从 main 创建，修复后同时合并到 main 和 develop
+- **测试分支（test/\*）**：用于测试新功能或修复的分支，从 develop 创建，测试完成后合并回 develop
 
 **GitHub Flow 工作流程**：
 GitHub Flow 是一种更轻量级的工作流程，适用于持续交付和部署的环境。

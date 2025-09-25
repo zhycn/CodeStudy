@@ -37,7 +37,7 @@ function greet(name: string): string {
 #### 函数表达式
 
 ```typescript
-const greet: (name: string) => string = function(name: string): string {
+const greet: (name: string) => string = function (name: string): string {
   return `Hello, ${name}!`;
 };
 ```
@@ -50,7 +50,8 @@ const greet: (name: string) => string = function(name: string): string {
 // 类型别名
 type GreetFunction = (name: string) => string;
 
-const greet: GreetFunction = (name) => { // TypeScript 能推断出返回类型，这里可省略
+const greet: GreetFunction = (name) => {
+  // TypeScript 能推断出返回类型，这里可省略
   return `Hello, ${name}!`;
 };
 
@@ -84,21 +85,21 @@ function buildName(firstName: string, lastName?: string): string {
   }
 }
 
-console.log(buildName("John")); // OK
-console.log(buildName("John", "Doe")); // OK
+console.log(buildName('John')); // OK
+console.log(buildName('John', 'Doe')); // OK
 // console.log(buildName("John", "Doe", "Sr.")); // Error: Expected 1-2 arguments
 ```
 
 你可以为参数提供**默认值**。带有默认值的参数也被视为可选参数。
 
 ```typescript
-function buildName(firstName: string, lastName: string = "Smith"): string {
+function buildName(firstName: string, lastName: string = 'Smith'): string {
   return `${firstName} ${lastName}`;
 }
 
-console.log(buildName("John")); // John Smith
-console.log(buildName("John", undefined)); // John Smith
-console.log(buildName("John", "Doe")); // John Doe
+console.log(buildName('John')); // John Smith
+console.log(buildName('John', undefined)); // John Smith
+console.log(buildName('John', 'Doe')); // John Doe
 ```
 
 **最佳实践**：将必需参数放在前面，可选和默认参数放在后面。
@@ -138,14 +139,14 @@ function getDate(input: number | string): Date | string {
 }
 
 const dateFromNumber: Date = getDate(1609459200000); // OK，根据输入类型推断返回 Date
-const dateFromString: string = getDate("2021-01-01"); // OK，根据输入类型推断返回 string
+const dateFromString: string = getDate('2021-01-01'); // OK，根据输入类型推断返回 string
 // const errorCase = getDate(true); // Error: No overload matches this call.
 ```
 
 **最佳实践**：
 
-* 重载签名应按照从最具体到最一般的顺序排列。
-* 重载适用于参数类型组合相对较少且明确的情况。对于复杂的条件逻辑，有时使用**联合类型**和**类型守卫**可能更清晰。
+- 重载签名应按照从最具体到最一般的顺序排列。
+- 重载适用于参数类型组合相对较少且明确的情况。对于复杂的条件逻辑，有时使用**联合类型**和**类型守卫**可能更清晰。
 
 ### 5. 箭头函数
 
@@ -153,11 +154,11 @@ const dateFromString: string = getDate("2021-01-01"); // OK，根据输入类型
 
 ```typescript
 class Person {
-  name: string = "John";
+  name: string = 'John';
 
   // 传统函数，this 取决于调用方式，可能导致错误
   traditionalGreet() {
-    setTimeout(function() {
+    setTimeout(function () {
       console.log(`Hello, ${this.name}`); // Error: 'this' 是 undefined (严格模式下)
     }, 100);
   }
@@ -192,19 +193,20 @@ interface Deck {
 }
 
 let deck: Deck = {
-  suits: ["hearts", "spades", "clubs", "diamonds"],
+  suits: ['hearts', 'spades', 'clubs', 'diamonds'],
   cards: Array(52),
-  createCardPicker: function(this: Deck) { // 实现中也注解 this
+  createCardPicker: function (this: Deck) {
+    // 实现中也注解 this
     return () => {
       let pickedCard = Math.floor(Math.random() * 52);
       let pickedSuit = Math.floor(pickedCard / 13);
 
-      return { 
+      return {
         suit: this.suits[pickedSuit], // 这里的 this 是 Deck 类型，安全访问
-        card: pickedCard % 13 
+        card: pickedCard % 13,
       };
     };
-  }
+  },
 };
 
 let cardPicker = deck.createCardPicker();
@@ -223,7 +225,7 @@ function identity<T>(arg: T): T {
 }
 
 // 类型由调用时推断
-let output1 = identity<string>("myString"); // output1 的类型是 string
+let output1 = identity<string>('myString'); // output1 的类型是 string
 let output2 = identity(42); // output2 的类型是 number (类型推断)
 
 // 更常见的例子：从数组中获取最后一个元素
@@ -245,7 +247,8 @@ const lastStr: string | undefined = getLastElement(strArray); // 'c'
 
 ```typescript
 // 异步函数总是返回一个 Promise
-async function fetchData(url: string): Promise<{ data: any }> { // 显式注解返回 Promise 类型
+async function fetchData(url: string): Promise<{ data: any }> {
+  // 显式注解返回 Promise 类型
   const response = await fetch(url);
   const data = await response.json();
   return { data }; // 等同于 return Promise.resolve({ data })
@@ -254,12 +257,11 @@ async function fetchData(url: string): Promise<{ data: any }> { // 显式注解�
 // 等价于
 function fetchDataOldWay(url: string): Promise<{ data: any }> {
   return fetch(url)
-    .then(response => response.json())
-    .then(data => ({ data }));
+    .then((response) => response.json())
+    .then((data) => ({ data }));
 }
 
-fetchData("https://api.example.com/data")
-  .then(result => console.log(result.data));
+fetchData('https://api.example.com/data').then((result) => console.log(result.data));
 ```
 
 ### 9. 类型谓词函数
@@ -274,7 +276,8 @@ interface Dog {
   bark(): void;
 }
 
-function isCat(animal: Cat | Dog): animal is Cat { // 类型谓词
+function isCat(animal: Cat | Dog): animal is Cat {
+  // 类型谓词
   return (animal as Cat).meow !== undefined;
 }
 

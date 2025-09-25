@@ -18,15 +18,15 @@
 // 变量可以是 string 或 number 类型
 let identifier: string | number;
 identifier = 123; // OK
-identifier = "ABC456"; // OK
+identifier = 'ABC456'; // OK
 identifier = true; // Error: Type 'boolean' is not assignable to type 'string | number'.
 
 // 函数参数可以是 string 或 string 数组
 function formatInput(input: string | string[]) {
   // ...
 }
-formatInput("hello");
-formatInput(["hello", "world"]);
+formatInput('hello');
+formatInput(['hello', 'world']);
 ```
 
 ## 2. 类型收缩 (Narrowing)：处理联合类型的关键
@@ -39,7 +39,7 @@ formatInput(["hello", "world"]);
 
 ```typescript
 function printId(id: string | number) {
-  if (typeof id === "string") {
+  if (typeof id === 'string') {
     // 在这个分支内，TypeScript 知道 id 是 string 类型
     console.log(id.toUpperCase()); // OK
   } else {
@@ -56,12 +56,12 @@ function printId(id: string | number) {
 ```typescript
 class Company {
   announce() {
-    console.log("We are hiring!");
+    console.log('We are hiring!');
   }
 }
 class User {
   greet() {
-    console.log("Hello!");
+    console.log('Hello!');
   }
 }
 
@@ -89,7 +89,7 @@ interface Runner {
 }
 
 function play(sportsman: Swimmer | Runner) {
-  if ("swim" in sportsman) {
+  if ('swim' in sportsman) {
     sportsman.swim(); // OK，类型被收缩为 Swimmer
   } else {
     sportsman.run(); // OK，类型被收缩为 Runner
@@ -135,17 +135,17 @@ function greetPet(pet: Cat | Dog) {
 ```typescript
 // 每个接口都有一个共同的属性 kind，但拥有不同的字面量类型值
 interface SuccessResponse {
-  kind: "success"; // 字面量类型，是判别属性
+  kind: 'success'; // 字面量类型，是判别属性
   data: string;
   statusCode: number;
 }
 interface ErrorResponse {
-  kind: "error"; // 字面量类型，是判别属性
+  kind: 'error'; // 字面量类型，是判别属性
   message: string;
   statusCode: number;
 }
 interface PendingResponse {
-  kind: "pending"; // 字面量类型，是判别属性
+  kind: 'pending'; // 字面量类型，是判别属性
   requestId: string;
 }
 
@@ -155,15 +155,15 @@ type ApiResponse = SuccessResponse | ErrorResponse | PendingResponse;
 // 处理函数可以利用判别属性进行完美的类型收缩
 function handleResponse(response: ApiResponse) {
   switch (response.kind) {
-    case "success":
+    case 'success':
       // TypeScript 知道 response 是 SuccessResponse
       console.log(`Data: ${response.data}`);
       break;
-    case "error":
+    case 'error':
       // TypeScript 知道 response 是 ErrorResponse
       console.error(`Error: ${response.message}`);
       break;
-    case "pending":
+    case 'pending':
       // TypeScript 知道 response 是 PendingResponse
       console.log(`Request ID: ${response.requestId}`);
       break;
@@ -178,9 +178,9 @@ function handleResponse(response: ApiResponse) {
 
 **优势：**
 
-* **极佳的类型安全性**：TypeScript 可以基于判别属性进行彻底且无错误的类型收缩。
-* **可扩展性**：添加新的联合成员时，`switch` 语句中的 `default` 分支（配合 `never` 类型）会提示你需要处理新的情况。
-* **代码清晰**：数据结构与处理逻辑之间的关系一目了然。
+- **极佳的类型安全性**：TypeScript 可以基于判别属性进行彻底且无错误的类型收缩。
+- **可扩展性**：添加新的联合成员时，`switch` 语句中的 `default` 分支（配合 `never` 类型）会提示你需要处理新的情况。
+- **代码清晰**：数据结构与处理逻辑之间的关系一目了然。
 
 ## 4. 联合类型常见用例与最佳实践
 
@@ -209,20 +209,18 @@ function getLengthSafe(s: string | null): number {
 结合可区分联合，可以清晰地表达函数可能的不同结果。
 
 ```typescript
-type Result<T, E = string> =
-  | { kind: "ok"; value: T }
-  | { kind: "err"; error: E };
+type Result<T, E = string> = { kind: 'ok'; value: T } | { kind: 'err'; error: E };
 
 function safeParseNumber(str: string): Result<number> {
   const num = parseFloat(str);
   if (isNaN(num)) {
-    return { kind: "err", error: `'${str}' is not a number` };
+    return { kind: 'err', error: `'${str}' is not a number` };
   }
-  return { kind: "ok", value: num };
+  return { kind: 'ok', value: num };
 }
 
-const result = safeParseNumber("42");
-if (result.kind === "ok") {
+const result = safeParseNumber('42');
+if (result.kind === 'ok') {
   console.log(result.value * 2); // 84
 } else {
   console.error(result.error);
@@ -234,8 +232,8 @@ if (result.kind === "ok") {
 联合类型非常适合定义一组明确的、可选的值。
 
 ```typescript
-type ButtonSize = "small" | "medium" | "large";
-type ButtonVariant = "primary" | "secondary" | "outline";
+type ButtonSize = 'small' | 'medium' | 'large';
+type ButtonVariant = 'primary' | 'secondary' | 'outline';
 
 interface ButtonProps {
   size?: ButtonSize; // 只能是这三个字符串之一
@@ -246,10 +244,10 @@ interface ButtonProps {
 
 // 使用时会获得自动补全和类型检查
 const myButtonProps: ButtonProps = {
-  size: "medium",
-  variant: "primary", // 拼写错误如 'primery' 会被 TypeScript 捕获
-  onClick: () => console.log("Clicked"),
-  children: "Click Me",
+  size: 'medium',
+  variant: 'primary', // 拼写错误如 'primery' 会被 TypeScript 捕获
+  onClick: () => console.log('Clicked'),
+  children: 'Click Me',
 };
 ```
 
@@ -257,24 +255,24 @@ const myButtonProps: ButtonProps = {
 
 1. **在收缩前访问公共成员**：只能安全地访问联合类型中所有成员都存在的公共属性或方法。
 
-    ```typescript
-    interface Bird {
-      fly: () => void;
-      layEgg: () => void;
-    }
-    interface Fish {
-      swim: () => void;
-      layEgg: () => void;
-    }
+   ```typescript
+   interface Bird {
+     fly: () => void;
+     layEgg: () => void;
+   }
+   interface Fish {
+     swim: () => void;
+     layEgg: () => void;
+   }
 
-    function getAnimal(): Bird | Fish {
-      // ... 返回 Bird 或 Fish
-    }
+   function getAnimal(): Bird | Fish {
+     // ... 返回 Bird 或 Fish
+   }
 
-    const animal = getAnimal();
-    animal.layEgg(); // OK，因为 Bird 和 Fish 都有 layEgg
-    animal.fly(); // Error: Property 'fly' does not exist on type 'Bird | Fish'.
-    ```
+   const animal = getAnimal();
+   animal.layEgg(); // OK，因为 Bird 和 Fish 都有 layEgg
+   animal.fly(); // Error: Property 'fly' does not exist on type 'Bird | Fish'.
+   ```
 
 2. **过度使用 `any` 或类型断言**：不要因为觉得类型收缩麻烦就使用 `as any` 或 `as SomeType`。这破坏了 TypeScript 的类型安全性。应优先使用上述的类型收缩技术。
 
@@ -282,13 +280,13 @@ const myButtonProps: ButtonProps = {
 
 ## 总结
 
-| 场景 | 推荐技术 | 示例 |
-| :--- | :--- | :--- |
-| **原始类型联合** | `typeof` | `if (typeof val === 'string')` |
-| **类实例联合** | `instanceof` | `if (obj instanceof MyClass)` |
-| **对象联合（有唯一属性）** | `in` 运算符 | `if ('key' in obj)` |
-| **复杂对象联合** | **可区分联合** | `if (obj.kind === 'success')` |
-| **复杂自定义逻辑** | **自定义类型守卫** | `function isCat(animal): animal is Cat` |
-| **定义一组选项** | **字面量类型联合** | `type Size = 'small' \| 'medium' \| 'large'` |
+| 场景                       | 推荐技术           | 示例                                         |
+| :------------------------- | :----------------- | :------------------------------------------- |
+| **原始类型联合**           | `typeof`           | `if (typeof val === 'string')`               |
+| **类实例联合**             | `instanceof`       | `if (obj instanceof MyClass)`                |
+| **对象联合（有唯一属性）** | `in` 运算符        | `if ('key' in obj)`                          |
+| **复杂对象联合**           | **可区分联合**     | `if (obj.kind === 'success')`                |
+| **复杂自定义逻辑**         | **自定义类型守卫** | `function isCat(animal): animal is Cat`      |
+| **定义一组选项**           | **字面量类型联合** | `type Size = 'small' \| 'medium' \| 'large'` |
 
 联合类型是 TypeScript 强大类型系统的基石。通过掌握类型收缩技术和拥抱**可区分联合**这一最佳实践，你可以极大地提高代码的健壮性、可读性和可维护性，让 TypeScript 真正成为你开发过程中的得力助手。

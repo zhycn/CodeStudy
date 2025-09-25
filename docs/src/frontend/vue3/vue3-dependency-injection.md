@@ -41,8 +41,8 @@ export default {
   data() {
     return {
       message: 'Hello from Parent!',
-      count: 0
-    }
+      count: 0,
+    };
   },
   provide() {
     // 使用函数形式可以访问 `this`
@@ -52,15 +52,15 @@ export default {
       // 提供响应式数据
       providedCount: this.count,
       // 提供方法
-      providedIncrement: this.increment
-    }
+      providedIncrement: this.increment,
+    };
   },
   methods: {
     increment() {
-      this.count++
-    }
-  }
-}
+      this.count++;
+    },
+  },
+};
 </script>
 ```
 
@@ -101,16 +101,12 @@ provide('providedReadonlyCount', readonly(count));
 <!-- ConsumerComponent.vue -->
 <script>
 export default {
-  inject: [
-    'providedMessage',
-    'providedCount',
-    'providedIncrement'
-  ],
+  inject: ['providedMessage', 'providedCount', 'providedIncrement'],
   created() {
     console.log(this.providedMessage); // 'Static Message'
     console.log(this.providedCount); // 0 (但不会是响应式的，除非提供的是 ref)
-  }
-}
+  },
+};
 </script>
 ```
 
@@ -170,8 +166,8 @@ provide('count', count); // 响应式
 const state = reactive({
   user: 'Alice',
   preferences: {
-    theme: 'dark'
-  }
+    theme: 'dark',
+  },
 });
 provide('user', toRefs(state).user); // 响应式
 provide('preferences', toRefs(state).preferences); // 响应式
@@ -236,7 +232,7 @@ provide('logger', createLogger('App'));
 
 const apiConfig = {
   baseURL: 'https://api.example.com',
-  timeout: 5000
+  timeout: 5000,
 };
 provide('apiConfig', apiConfig);
 </script>
@@ -294,7 +290,7 @@ import { ref, provide, computed } from 'vue';
 
 const todos = ref([]);
 const completedTodosCount = computed(() => {
-  return todos.value.filter(todo => todo.done).length;
+  return todos.value.filter((todo) => todo.done).length;
 });
 
 provide('todos', todos);
@@ -316,7 +312,9 @@ const app = createApp(App);
 // 提供全局配置、路由实例、Pinia 实例或自定义插件接口
 app.provide('globalVersion', '1.0.0');
 app.provide('globalApi', {
-  fetchData: () => { /* ... */ }
+  fetchData: () => {
+    /* ... */
+  },
 });
 
 app.mount('#app');
@@ -326,31 +324,31 @@ app.mount('#app');
 
 ## 7. 与 Props 的对比：何时使用？
 
-| 特性 | Props | Provide / Inject |
-| :--- | :--- | :--- |
-| **数据流** | 父组件 -> 直接子组件 (单向，显式) | 祖先组件 -> 任意深层子孙组件 (单向，隐式) |
-| **可读性** | **高**。组件的接口清晰明了。 | **较低**。依赖关系隐藏在组件内部，需要查看代码或文档才能知道注入了什么。 |
-| **耦合度** | **低**。组件只与其直接父组件耦合。 | **较高**。子孙组件与特定的祖先组件耦合，降低了可复用性。 |
-| **适用场景** | 绝大部分父子组件通信 | 1. 全局配置 (主题、语言) <br> 2. 共享复杂的组件逻辑 (表单、布局) <br> 3. 开发组件库 |
+| 特性         | Props                              | Provide / Inject                                                                    |
+| :----------- | :--------------------------------- | :---------------------------------------------------------------------------------- |
+| **数据流**   | 父组件 -> 直接子组件 (单向，显式)  | 祖先组件 -> 任意深层子孙组件 (单向，隐式)                                           |
+| **可读性**   | **高**。组件的接口清晰明了。       | **较低**。依赖关系隐藏在组件内部，需要查看代码或文档才能知道注入了什么。            |
+| **耦合度**   | **低**。组件只与其直接父组件耦合。 | **较高**。子孙组件与特定的祖先组件耦合，降低了可复用性。                            |
+| **适用场景** | 绝大部分父子组件通信               | 1. 全局配置 (主题、语言) <br> 2. 共享复杂的组件逻辑 (表单、布局) <br> 3. 开发组件库 |
 
 **简单决策树：**
 
-* 如果只是父传子，用 **Props**。
-* 如果需要穿透一层或多层组件传递，且中间组件不关心该数据，用 **Provide / Inject**。
-* 如果需要跨多个不相关组件共享复杂状态，优先考虑 **Pinia**。
+- 如果只是父传子，用 **Props**。
+- 如果需要穿透一层或多层组件传递，且中间组件不关心该数据，用 **Provide / Inject**。
+- 如果需要跨多个不相关组件共享复杂状态，优先考虑 **Pinia**。
 
 ## 8. 与状态管理库 (如 Pinia) 的对比
 
 Pinia 是 Vue 官方推荐的状态管理库。它们之间有重叠，但侧重点不同。
 
-|  | Provide / Inject | Pinia |
-| :--- | :--- | :--- |
-| **范围** | 主要与组件树结构相关 | 全局，与组件树无关 |
-| **目的** | 组件通信 | 状态管理 |
-| **响应性** | 需要手动维护 | 自动 |
-| **DevTools 支持** | 有限 | **优秀**（时间旅行、状态快照） |
-| **可测试性** | 较难，依赖组件上下文 | 容易，store 是独立的 |
-| **适用场景** | 局部、有上下文的逻辑共享 | 全局、需要持久化或复杂管理的状态（用户信息、购物车） |
+|                   | Provide / Inject         | Pinia                                                |
+| :---------------- | :----------------------- | :--------------------------------------------------- |
+| **范围**          | 主要与组件树结构相关     | 全局，与组件树无关                                   |
+| **目的**          | 组件通信                 | 状态管理                                             |
+| **响应性**        | 需要手动维护             | 自动                                                 |
+| **DevTools 支持** | 有限                     | **优秀**（时间旅行、状态快照）                       |
+| **可测试性**      | 较难，依赖组件上下文     | 容易，store 是独立的                                 |
+| **适用场景**      | 局部、有上下文的逻辑共享 | 全局、需要持久化或复杂管理的状态（用户信息、购物车） |
 
 **结论：** 对于简单的、局部的状态共享（例如一个表单内多个输入框的联动），`provide/inject` 是轻量且完美的选择。对于全局的、需要强大开发工具支持的状态管理，请选择 Pinia。
 

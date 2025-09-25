@@ -170,15 +170,15 @@ U = TypeVar('U')
 class Stack(Generic[T]):
     def __init__(self) -> None:
         self.items: List[T] = []
-    
+
     def push(self, item: T) -> None:
         self.items.append(item)
-    
+
     def pop(self) -> Optional[T]:
         if not self.items:
             return None
         return self.items.pop()
-    
+
     def peek(self) -> Optional[T]:
         if not self.items:
             return None
@@ -242,11 +242,11 @@ class Person:
     age: int
     email: Optional[str] = None
     hobbies: List[str] = None
-    
+
     def __post_init__(self):
         if self.hobbies is None:
             self.hobbies = []
-    
+
     def greet(self) -> str:
         return f"Hello, my name is {self.name} and I'm {self.age} years old"
 
@@ -284,12 +284,12 @@ ignore_missing_imports = True
 
 ```json
 {
-    "venv": ".venv",
-    "pythonVersion": "3.9",
-    "typeCheckingMode": "strict",
-    "reportMissingImports": true,
-    "reportUnusedVariable": true,
-    "reportUnusedFunction": true
+  "venv": ".venv",
+  "pythonVersion": "3.9",
+  "typeCheckingMode": "strict",
+  "reportMissingImports": true,
+  "reportUnusedVariable": true,
+  "reportUnusedFunction": true
 }
 ```
 
@@ -346,7 +346,7 @@ class User:
     def __init__(self, name: str, email: Optional[str] = None):
         self.name = name
         self.email = email
-    
+
     def get_email_domain(self) -> Optional[str]:
         if self.email is None:
             return None
@@ -401,7 +401,7 @@ class StringReader:
     def __init__(self, data: str):
         self.data = data.encode()
         self.position = 0
-    
+
     def read(self, size: int = -1) -> bytes:
         if size == -1:
             result = self.data[self.position:]
@@ -428,7 +428,7 @@ class Node:
     def __init__(self, value: int, next: Optional[Node] = None):
         self.value = value
         self.next = next
-    
+
     def set_next(self, node: Node) -> None:
         self.next = node
 ```

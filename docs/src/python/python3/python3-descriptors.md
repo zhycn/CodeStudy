@@ -29,14 +29,14 @@ class SimpleDescriptor:
     def __get__(self, instance, owner):
         print(f"Getting value from {instance} of {owner}")
         return instance._value
-    
+
     def __set__(self, instance, value):
         print(f"Setting value to {value} for {instance}")
         instance._value = value
 
 class MyClass:
     value = SimpleDescriptor()
-    
+
     def __init__(self, value):
         self._value = value
 
@@ -68,23 +68,23 @@ obj.value = 20    # 触发 __set__
 class ValidatedDescriptor:
     def __init__(self, name=None):
         self.name = name
-    
+
     def __set_name__(self, owner, name):
         if self.name is None:
             self.name = name
-    
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
         return instance.__dict__.get(self.name)
-    
+
     def __set__(self, instance, value):
         self.validate(value)
         instance.__dict__[self.name] = value
-    
+
     def __delete__(self, instance):
         del instance.__dict__[self.name]
-    
+
     def validate(self, value):
         # 基类验证方法，由子类实现具体逻辑
         pass
@@ -102,7 +102,7 @@ class PositiveField(ValidatedDescriptor):
 class Person:
     age = IntegerField()
     salary = PositiveField()
-    
+
     def __init__(self, age, salary):
         self.age = age
         self.salary = salary
@@ -129,7 +129,7 @@ except ValueError as e:
 class DataDescriptor:
     def __get__(self, instance, owner):
         return f"DataDescriptor value for {instance}"
-    
+
     def __set__(self, instance, value):
         print(f"Setting value to {value}")
 
@@ -167,15 +167,15 @@ class TypedDescriptor:
     def __init__(self, expected_type):
         self.expected_type = expected_type
         self.private_name = None
-    
+
     def __set_name__(self, owner, name):
         self.private_name = f"_{name}"
-    
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
         return getattr(instance, self.private_name)
-    
+
     def __set__(self, instance, value):
         if not isinstance(value, self.expected_type):
             raise TypeError(f"Expected {self.expected_type.__name__}, "
@@ -185,7 +185,7 @@ class TypedDescriptor:
 class User:
     name = TypedDescriptor(str)
     age = TypedDescriptor(int)
-    
+
     def __init__(self, name, age):
         self.name = name
         self.age = age
@@ -207,18 +207,18 @@ class LazyProperty:
     def __init__(self, func):
         self.func = func
         self.attr_name = None
-    
+
     def __set_name__(self, owner, name):
         self.attr_name = name
-    
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
-        
+
         if not hasattr(instance, f"_{self.attr_name}"):
             value = self.func(instance)
             setattr(instance, f"_{self.attr_name}", value)
-        
+
         return getattr(instance, f"_{self.attr_name}")
 
 class ExpensiveComputation:
@@ -249,13 +249,13 @@ print(f"Results are equal: {result1 == result2}")
 class Observable:
     def __init__(self):
         self._observers = []
-    
+
     def add_observer(self, observer):
         self._observers.append(observer)
-    
+
     def remove_observer(self, observer):
         self._observers.remove(observer)
-    
+
     def notify_observers(self, name, value):
         for observer in self._observers:
             observer(name, value)
@@ -264,18 +264,18 @@ class ObservableDescriptor:
     def __init__(self, default=None):
         self.default = default
         self.private_name = None
-    
+
     def __set_name__(self, owner, name):
         self.private_name = f"_{name}"
         # 确保所有者类继承自 Observable
         if not hasattr(owner, 'add_observer'):
             raise TypeError("Owner class must inherit from Observable")
-    
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
         return getattr(instance, self.private_name, self.default)
-    
+
     def __set__(self, instance, value):
         old_value = getattr(instance, self.private_name, self.default)
         setattr(instance, self.private_name, value)
@@ -308,12 +308,12 @@ class BetterDescriptor:
     def __set_name__(self, owner, name):
         self.name = name
         self.private_name = f"_{name}"
-    
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
         return getattr(instance, self.private_name)
-    
+
     def __set__(self, instance, value):
         setattr(instance, self.private_name, value)
 ```
@@ -338,12 +338,12 @@ import weakref
 class WeakRefDescriptor:
     def __init__(self):
         self.data = weakref.WeakKeyDictionary()
-    
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
         return self.data.get(instance)
-    
+
     def __set__(self, instance, value):
         self.data[instance] = value
 ```
@@ -374,12 +374,12 @@ class PositiveEvenDescriptor:
     def __set_name__(self, owner, name):
         self.name = name
         self.private_name = f"_{name}"
-    
+
     def __get__(self, instance, owner):
         if instance is None:
             return self
         return getattr(instance, self.private_name)
-    
+
     def __set__(self, instance, value):
         setattr(instance, self.private_name, value)
 
@@ -404,10 +404,10 @@ except ValueError as e:
 class BaseDescriptor:
     def __init__(self):
         self.values = {}
-    
+
     def __get__(self, instance, owner):
         return self.values.get(instance)
-    
+
     def __set__(self, instance, value):
         self.values[instance] = value
 
@@ -446,7 +446,7 @@ class DescriptorWithMeta:
     def __set_name__(self, owner, name):
         print(f"Setting name {name} for class {owner.__name__}")
         self.name = name
-    
+
     def __get__(self, instance, owner):
         return f"Value for {self.name}"
 

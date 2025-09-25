@@ -42,12 +42,7 @@ function processData(data: UserData) {
 
 ```typescript
 function isUserData(data: unknown): data is UserData {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'id' in data &&
-    'name' in data
-  );
+  return typeof data === 'object' && data !== null && 'id' in data && 'name' in data;
 }
 
 function safeProcess(data: unknown) {
@@ -91,8 +86,8 @@ type ReadonlyUser = Readonly<UserData>; // 映射类型
 
 大型联合类型（超过 100 个成员）可能会增加类型检查的成本。如果遇到性能问题，可以考虑以下策略：
 
-* **使用子类型化**：将大型联合拆分为更小的、有层次的类型。
-* **谨慎使用枚举**：TypeScript 枚举会生成额外的运行时代码，并有其自身的编译开销。可以考虑使用字面量联合类型作为轻量级替代方案。
+- **使用子类型化**：将大型联合拆分为更小的、有层次的类型。
+- **谨慎使用枚举**：TypeScript 枚举会生成额外的运行时代码，并有其自身的编译开销。可以考虑使用字面量联合类型作为轻量级替代方案。
 
 **枚举 (运行时有开销) ❌:**
 
@@ -133,7 +128,7 @@ const level = LogLevel.Debug; // 编译为 JavaScript: const level = 0;
 ```json
 {
   "compilerOptions": {
-    "incremental": true,
+    "incremental": true
     // ... 其他选项
   }
 }
@@ -146,7 +141,7 @@ const level = LogLevel.Debug; // 编译为 JavaScript: const level = 0;
 ```json
 {
   "compilerOptions": {
-    "skipLibCheck": true,
+    "skipLibCheck": true
     // ... 其他选项
   }
 }
@@ -181,10 +176,7 @@ my-monorepo/
     "composite": true,
     "outDir": "../../dist/app"
   },
-  "references": [
-    { "path": "../core" },
-    { "path": "../utils" }
-  ],
+  "references": [{ "path": "../core" }, { "path": "../utils" }],
   "include": ["src/**/*"]
 }
 ```
@@ -210,7 +202,7 @@ tsc -b app
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
-    "lib": ["ES2020", "DOM"],
+    "lib": ["ES2020", "DOM"]
     // ... 其他选项
   }
 }
@@ -222,9 +214,9 @@ tsc -b app
 
 考虑使用基于 Go 或 Rust 的现代打包工具，如 **esbuild** 或 **SWC**，它们通常在编译/转换速度上远超传统的 `tsc` 或 Babel。
 
-* **esbuild**: 极快的 JavaScript 打包器，内置 TypeScript 转换（仅擦除类型，不进行检查）。
-* **SWC**: 基于 Rust 的快速 TypeScript/JavaScript 编译器。
-* **Vite**: 基于 esbuild 进行依赖预构建，提供极佳的开发服务器启动和热更新速度。
+- **esbuild**: 极快的 JavaScript 打包器，内置 TypeScript 转换（仅擦除类型，不进行检查）。
+- **SWC**: 基于 Rust 的快速 TypeScript/JavaScript 编译器。
+- **Vite**: 基于 esbuild 进行依赖预构建，提供极佳的开发服务器启动和热更新速度。
 
 通常的工作流是：**用 `tsc --noEmit` 进行类型检查，用 esbuild/SWC 进行代码转换和打包**。
 
@@ -232,8 +224,8 @@ tsc -b app
 
 在 CI 流水线中，可以利用缓存来避免每次从头开始编译。
 
-* **缓存 `node_modules`**：使用 CI 提供的缓存机制（如 GitHub Actions 的 `actions/cache`）。
-* **缓存 TypeScript 的增量编译文件**：将 `.tsbuildinfo` 文件也纳入缓存，这样下次 CI 运行时可以基于上一次的完整构建进行增量编译。
+- **缓存 `node_modules`**：使用 CI 提供的缓存机制（如 GitHub Actions 的 `actions/cache`）。
+- **缓存 TypeScript 的增量编译文件**：将 `.tsbuildinfo` 文件也纳入缓存，这样下次 CI 运行时可以基于上一次的完整构建进行增量编译。
 
 **GitHub Actions 示例:**
 
@@ -325,14 +317,14 @@ Total time:                 3.10s
 
 优化 TypeScript 性能是一个多层面的工作，涉及类型设计、编译器配置、构建工具选择和开发习惯。下表总结了关键优化策略：
 
-| 优化领域 | 具体策略 | 收益 |
-| :--- | :--- | :--- |
-| **类型系统** | 使用精确类型，优先 `interface`，优化联合类型 | 提升类型检查效率，减少错误 |
-| **编译器配置** | `incremental: true`, `skipLibCheck: true` | **极大提升编译速度** |
-| **项目结构** | 使用 Project References | 优化大型 Monorepo 的增量构建 |
-| **构建工具** | 采用 esbuild、SWC、Vite | **极致的编译和打包速度** |
-| **开发习惯** | 避免复杂类型陷阱，慎用重导出链 | 保持代码库健康，避免性能衰退 |
-| **分析监控** | 使用 `--generateTrace`, `--extendedDiagnostics` | 数据驱动，精准定位瓶颈 |
+| 优化领域       | 具体策略                                        | 收益                         |
+| :------------- | :---------------------------------------------- | :--------------------------- |
+| **类型系统**   | 使用精确类型，优先 `interface`，优化联合类型    | 提升类型检查效率，减少错误   |
+| **编译器配置** | `incremental: true`, `skipLibCheck: true`       | **极大提升编译速度**         |
+| **项目结构**   | 使用 Project References                         | 优化大型 Monorepo 的增量构建 |
+| **构建工具**   | 采用 esbuild、SWC、Vite                         | **极致的编译和打包速度**     |
+| **开发习惯**   | 避免复杂类型陷阱，慎用重导出链                  | 保持代码库健康，避免性能衰退 |
+| **分析监控**   | 使用 `--generateTrace`, `--extendedDiagnostics` | 数据驱动，精准定位瓶颈       |
 
 最佳实践是：**在开发阶段优先考虑开发体验（如使用 Vite + SWC 获得极速热更新），并在生产构建或 CI 阶段通过严格的类型检查（`tsc --noEmit`）和优化后的打包流程来保证代码质量和运行时性能**。
 

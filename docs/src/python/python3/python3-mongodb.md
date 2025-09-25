@@ -10,10 +10,10 @@ MongoDB 是一个基于分布式文件存储的 NoSQL 数据库，由 C++ 语言
 
 与传统的关系型数据库（如 MySQL）相比，MongoDB 的主要优势在于：
 
-* **模式自由（Schema-less）**：集合中的文档可以拥有不同的字段，同一字段的数据类型也可以不同。
-* **数据结构灵活**：文档模型与应用程序中的对象结构对应，开发自然高效。
-* **扩展性强**：通过分片（Sharding）和副本集（Replica Set）易于实现水平扩展和高可用性。
-* **性能优异**：嵌入式文档和数组减少了昂贵的 JOIN 操作，查询速度快。
+- **模式自由（Schema-less）**：集合中的文档可以拥有不同的字段，同一字段的数据类型也可以不同。
+- **数据结构灵活**：文档模型与应用程序中的对象结构对应，开发自然高效。
+- **扩展性强**：通过分片（Sharding）和副本集（Replica Set）易于实现水平扩展和高可用性。
+- **性能优异**：嵌入式文档和数组减少了昂贵的 JOIN 操作，查询速度快。
 
 Python 通过 `PyMongo` 这个官方驱动库与 MongoDB 进行交互，提供了非常直观和 Pythonic 的 API。
 
@@ -63,7 +63,7 @@ try:
     client = MongoClient('localhost', 27017)
     # 或者使用连接字符串
     # client = MongoClient('mongodb://localhost:27017/')
-    
+
     # 发送一个 ping 命令以确认连接成功
     client.admin.command('ping')
     print("Successfully connected to MongoDB!")
@@ -351,6 +351,6 @@ def shutdown():
 
 **请注意：** 本文中的代码示例均基于 PyMongo 4.0+ 和 MongoDB 5.0+ 编写。在实际开发中，请务必查阅官方文档以获取最新 API 和功能信息。
 
-* <https://pymongo.readthedocs.io/>
-* <https://www.mongodb.com/docs/>
-* <https://learn.mongodb.com/> (免费课程)
+- <https://pymongo.readthedocs.io/>
+- <https://www.mongodb.com/docs/>
+- <https://learn.mongodb.com/> (免费课程)

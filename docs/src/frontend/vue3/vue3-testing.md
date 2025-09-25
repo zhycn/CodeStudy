@@ -65,7 +65,7 @@ Vue 官方推荐测试金字塔策略：
 
 ```bash
 # 安装核心测试依赖
-npm install -D jest @vue/test-utils@next vue-jest@next 
+npm install -D jest @vue/test-utils@next vue-jest@next
 npm install -D @testing-library/vue @testing-library/jest-dom
 npm install -D cypress
 ```
@@ -78,11 +78,11 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     transformMode: {
-      web: [/\.vue$/, /\.jsx?$/]
+      web: [/\.vue$/, /\.jsx?$/],
     },
-    setupFiles: ['./tests/setup.js']
-  }
-})
+    setupFiles: ['./tests/setup.js'],
+  },
+});
 ```
 
 ### 测试脚本配置 (package.json)
@@ -104,52 +104,52 @@ export default defineConfig({
 ### 基础组件测试
 
 ```javascript
-import { mount } from '@vue/test-utils'
-import Button from './Button.vue'
+import { mount } from '@vue/test-utils';
+import Button from './Button.vue';
 
 describe('Button Component', () => {
   it('renders with default props', () => {
-    const wrapper = mount(Button)
-    expect(wrapper.text()).toContain('Click me')
-    expect(wrapper.classes()).toContain('btn')
-  })
-  
+    const wrapper = mount(Button);
+    expect(wrapper.text()).toContain('Click me');
+    expect(wrapper.classes()).toContain('btn');
+  });
+
   it('emits click event', async () => {
-    const wrapper = mount(Button)
-    await wrapper.trigger('click')
-    expect(wrapper.emitted('click')).toHaveLength(1)
-  })
-  
+    const wrapper = mount(Button);
+    await wrapper.trigger('click');
+    expect(wrapper.emitted('click')).toHaveLength(1);
+  });
+
   it('applies custom props', () => {
     const wrapper = mount(Button, {
       props: {
         variant: 'primary',
-        disabled: true
-      }
-    })
-    
-    expect(wrapper.classes()).toContain('btn-primary')
-    expect(wrapper.attributes('disabled')).toBeDefined()
-  })
-})
+        disabled: true,
+      },
+    });
+
+    expect(wrapper.classes()).toContain('btn-primary');
+    expect(wrapper.attributes('disabled')).toBeDefined();
+  });
+});
 ```
 
 ### 异步行为测试
 
 ```javascript
 it('loads data asynchronously', async () => {
-  const wrapper = mount(AsyncComponent)
-  
+  const wrapper = mount(AsyncComponent);
+
   // 初始状态
-  expect(wrapper.find('.loading').exists()).toBe(true)
-  
+  expect(wrapper.find('.loading').exists()).toBe(true);
+
   // 等待异步操作完成
-  await flushPromises()
-  
+  await flushPromises();
+
   // 验证结果
-  expect(wrapper.find('.content').exists()).toBe(true)
-  expect(wrapper.findAll('.item')).toHaveLength(5)
-})
+  expect(wrapper.find('.content').exists()).toBe(true);
+  expect(wrapper.findAll('.item')).toHaveLength(5);
+});
 ```
 
 ### 插槽测试
@@ -159,13 +159,13 @@ it('renders named slots correctly', () => {
   const wrapper = mount(CardComponent, {
     slots: {
       header: '<h2>Custom Header</h2>',
-      default: '<p>Main Content</p>'
-    }
-  })
-  
-  expect(wrapper.find('h2').text()).toBe('Custom Header')
-  expect(wrapper.find('p').text()).toBe('Main Content')
-})
+      default: '<p>Main Content</p>',
+    },
+  });
+
+  expect(wrapper.find('h2').text()).toBe('Custom Header');
+  expect(wrapper.find('p').text()).toBe('Main Content');
+});
 ```
 
 ---
@@ -174,34 +174,34 @@ it('renders named slots correctly', () => {
 
 ```javascript
 // useCounter.js
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 export function useCounter(initialValue = 0) {
-  const count = ref(initialValue)
-  
-  const increment = () => count.value++
-  const decrement = () => count.value--
-  
-  return { count, increment, decrement }
+  const count = ref(initialValue);
+
+  const increment = () => count.value++;
+  const decrement = () => count.value--;
+
+  return { count, increment, decrement };
 }
 
 // useCounter.spec.js
-import { useCounter } from './useCounter'
+import { useCounter } from './useCounter';
 
 describe('useCounter', () => {
   test('increments count', () => {
-    const { count, increment } = useCounter()
-    expect(count.value).toBe(0)
-    
-    increment()
-    expect(count.value).toBe(1)
-  })
-  
+    const { count, increment } = useCounter();
+    expect(count.value).toBe(0);
+
+    increment();
+    expect(count.value).toBe(1);
+  });
+
   test('accepts initial value', () => {
-    const { count } = useCounter(5)
-    expect(count.value).toBe(5)
-  })
-})
+    const { count } = useCounter(5);
+    expect(count.value).toBe(5);
+  });
+});
 ```
 
 ---
@@ -211,49 +211,49 @@ describe('useCounter', () => {
 ### Vue Router 测试
 
 ```javascript
-import { createRouter, createWebHistory } from 'vue-router'
-import { mount } from '@vue/test-utils'
+import { createRouter, createWebHistory } from 'vue-router';
+import { mount } from '@vue/test-utils';
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [{ path: '/', component: Home }]
-})
+  routes: [{ path: '/', component: Home }],
+});
 
 test('renders route component', async () => {
-  router.push('/')
-  await router.isReady()
-  
+  router.push('/');
+  await router.isReady();
+
   const wrapper = mount(App, {
     global: {
-      plugins: [router]
-    }
-  })
-  
-  expect(wrapper.findComponent(Home).exists()).toBe(true)
-})
+      plugins: [router],
+    },
+  });
+
+  expect(wrapper.findComponent(Home).exists()).toBe(true);
+});
 ```
 
 ### Pinia 状态测试
 
 ```javascript
-import { setActivePinia, createPinia } from 'pinia'
-import { useUserStore } from '@/stores/user'
+import { setActivePinia, createPinia } from 'pinia';
+import { useUserStore } from '@/stores/user';
 
 describe('User Store', () => {
   beforeEach(() => {
-    setActivePinia(createPinia())
-  })
-  
+    setActivePinia(createPinia());
+  });
+
   it('logs in user', async () => {
-    const store = useUserStore()
-    expect(store.isLoggedIn).toBe(false)
-    
-    await store.login({ email: 'test@example.com', password: 'password' })
-    
-    expect(store.isLoggedIn).toBe(true)
-    expect(store.user.email).toBe('test@example.com')
-  })
-})
+    const store = useUserStore();
+    expect(store.isLoggedIn).toBe(false);
+
+    await store.login({ email: 'test@example.com', password: 'password' });
+
+    expect(store.isLoggedIn).toBe(true);
+    expect(store.user.email).toBe('test@example.com');
+  });
+});
 ```
 
 ---
@@ -266,24 +266,24 @@ describe('User Store', () => {
 // login.spec.cy.js
 describe('Authentication', () => {
   it('successfully logs in', () => {
-    cy.visit('/login')
-    cy.get('#email').type('user@example.com')
-    cy.get('#password').type('password123')
-    cy.get('button[type="submit"]').click()
-    
-    cy.url().should('include', '/dashboard')
-    cy.contains('Welcome, User!')
-  })
-  
+    cy.visit('/login');
+    cy.get('#email').type('user@example.com');
+    cy.get('#password').type('password123');
+    cy.get('button[type="submit"]').click();
+
+    cy.url().should('include', '/dashboard');
+    cy.contains('Welcome, User!');
+  });
+
   it('handles invalid credentials', () => {
-    cy.visit('/login')
-    cy.get('#email').type('invalid@example.com')
-    cy.get('#password').type('wrongpassword')
-    cy.get('button[type="submit"]').click()
-    
-    cy.contains('.error', 'Invalid credentials')
-  })
-})
+    cy.visit('/login');
+    cy.get('#email').type('invalid@example.com');
+    cy.get('#password').type('wrongpassword');
+    cy.get('button[type="submit"]').click();
+
+    cy.contains('.error', 'Invalid credentials');
+  });
+});
 ```
 
 ---
@@ -300,11 +300,11 @@ describe('Authentication', () => {
 ### 2. 高效测试策略
 
 ```markdown
-| 测试类型       | 建议比例 | 执行频率 |
-|----------------|----------|----------|
-| 单元测试       | 70%      | 每次保存 |
-| 组件集成测试   | 20%      | 提交前   |
-| 端到端测试     | 10%      | 每日构建 |
+| 测试类型     | 建议比例 | 执行频率 |
+| ------------ | -------- | -------- |
+| 单元测试     | 70%      | 每次保存 |
+| 组件集成测试 | 20%      | 提交前   |
+| 端到端测试   | 10%      | 每日构建 |
 ```
 
 ### 3. 组件测试指南
@@ -316,7 +316,7 @@ describe('Authentication', () => {
 ```
 
 ```javascript
-wrapper.find('[data-testid="submit-btn"]')
+wrapper.find('[data-testid="submit-btn"]');
 ```
 
 - 优先使用 `findComponent` 查找组件
@@ -340,51 +340,51 @@ wrapper.find('[data-testid="submit-btn"]')
 const wrapper = mount(Component, {
   global: {
     stubs: ['FontAwesomeIcon'],
-    plugins: [i18n]
-  }
-})
+    plugins: [i18n],
+  },
+});
 ```
 
 ### 2. 如何测试 Vue 生命周期钩子？
 
 ```javascript
-const spy = vi.spyOn(console, 'log')
+const spy = vi.spyOn(console, 'log');
 mount(Component, {
   mounted() {
-    console.log('Component mounted')
-  }
-})
-expect(spy).toHaveBeenCalledWith('Component mounted')
+    console.log('Component mounted');
+  },
+});
+expect(spy).toHaveBeenCalledWith('Component mounted');
 ```
 
 ### 3. 如何处理异步数据请求？
 
 ```javascript
-import { vi } from 'vitest'
+import { vi } from 'vitest';
 
 vi.mock('axios', () => ({
   default: {
-    get: vi.fn(() => Promise.resolve({ data: [{ id: 1, name: 'Item' }] }))
-  }
-}))
+    get: vi.fn(() => Promise.resolve({ data: [{ id: 1, name: 'Item' }] })),
+  },
+}));
 ```
 
 ### 4. 如何测试定时器？
 
 ```javascript
 beforeEach(() => {
-  vi.useFakeTimers()
-})
+  vi.useFakeTimers();
+});
 
 afterEach(() => {
-  vi.useRealTimers()
-})
+  vi.useRealTimers();
+});
 
 it('updates after timeout', () => {
-  const wrapper = mount(Component)
-  vi.advanceTimersByTime(1000)
-  expect(wrapper.text()).toContain('Updated!')
-})
+  const wrapper = mount(Component);
+  vi.advanceTimersByTime(1000);
+  expect(wrapper.text()).toContain('Updated!');
+});
 ```
 
 ---
@@ -399,10 +399,10 @@ module.exports = {
       branches: 80,
       functions: 85,
       lines: 90,
-      statements: 90
-    }
-  }
-}
+      statements: 90,
+    },
+  },
+};
 ```
 
 ## 结论

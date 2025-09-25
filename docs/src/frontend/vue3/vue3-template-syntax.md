@@ -145,7 +145,7 @@ const isChecked = ref(false);
 const objectOfAttrs = ref({
   id: 'container',
   class: 'wrapper',
-  'data-value': '123'
+  'data-value': '123',
 });
 </script>
 ```
@@ -167,10 +167,10 @@ const objectOfAttrs = ref({
   <a :href="url"> ... </a>
 
   <!-- 监听点击事件 -->
-  <button v-on:click="doSomething"> ... </button>
+  <button v-on:click="doSomething">...</button>
 
   <!-- 简写 -->
-  <button @click="doSomething"> ... </button>
+  <button @click="doSomething">...</button>
 </template>
 ```
 
@@ -248,9 +248,7 @@ const type = ref('B');
 ```vue
 <template>
   <ul>
-    <li v-for="(item, index) in items" :key="item.id">
-      {{ index }} - {{ item.text }}
-    </li>
+    <li v-for="(item, index) in items" :key="item.id">{{ index }} - {{ item.text }}</li>
   </ul>
 </template>
 
@@ -258,7 +256,7 @@ const type = ref('B');
 const items = ref([
   { id: 1, text: 'Learn JavaScript' },
   { id: 2, text: 'Learn Vue' },
-  { id: 3, text: 'Build something awesome' }
+  { id: 3, text: 'Build something awesome' },
 ]);
 </script>
 ```
@@ -294,49 +292,21 @@ const ok = ref(true);
   <div class="todo-app">
     <h1>{{ appTitle }}</h1>
     <form @submit.prevent="addNewTodo">
-      <input
-        v-model="newTodoText"
-        :placeholder="inputPlaceholder"
-        class="todo-input"
-      />
+      <input v-model="newTodoText" :placeholder="inputPlaceholder" class="todo-input" />
       <button :disabled="!newTodoText" type="submit">Add Todo</button>
     </form>
     <ul v-if="todos.length" class="todo-list">
-      <li
-        v-for="todo in filteredTodos"
-        :key="todo.id"
-        class="todo-item"
-        :class="{ completed: todo.completed }"
-      >
-        <input
-          type="checkbox"
-          v-model="todo.completed"
-          @change="updateTodo(todo)"
-        />
+      <li v-for="todo in filteredTodos" :key="todo.id" class="todo-item" :class="{ completed: todo.completed }">
+        <input type="checkbox" v-model="todo.completed" @change="updateTodo(todo)" />
         <span @dblclick="editTodo(todo)">{{ todo.text }}</span>
         <button @click="removeTodo(todo)" class="remove-btn">×</button>
       </li>
     </ul>
     <p v-else>No todos left! Add one above.</p>
     <div class="filters">
-      <button
-        @click="visibility = 'all'"
-        :class="{ active: visibility === 'all' }"
-      >
-        All
-      </button>
-      <button
-        @click="visibility = 'active'"
-        :class="{ active: visibility === 'active' }"
-      >
-        Active
-      </button>
-      <button
-        @click="visibility = 'completed'"
-        :class="{ active: visibility === 'completed' }"
-      >
-        Completed
-      </button>
+      <button @click="visibility = 'all'" :class="{ active: visibility === 'all' }">All</button>
+      <button @click="visibility = 'active'" :class="{ active: visibility === 'active' }">Active</button>
+      <button @click="visibility = 'completed'" :class="{ active: visibility === 'completed' }">Completed</button>
     </div>
   </div>
 </template>
@@ -354,9 +324,9 @@ const visibility = ref('all'); // 'all', 'active', 'completed'
 const filteredTodos = computed(() => {
   switch (visibility.value) {
     case 'active':
-      return todos.value.filter(todo => !todo.completed);
+      return todos.value.filter((todo) => !todo.completed);
     case 'completed':
-      return todos.value.filter(todo => todo.completed);
+      return todos.value.filter((todo) => todo.completed);
     default:
       return todos.value;
   }
@@ -368,24 +338,24 @@ const addNewTodo = () => {
     todos.value.push({
       id: Date.now(),
       text: newTodoText.value,
-      completed: false
+      completed: false,
     });
     newTodoText.value = ''; // 清空输入框
   }
 };
 
 // 移除待办事项
-const removeTodo = todo => {
-  todos.value = todos.value.filter(t => t.id !== todo.id);
+const removeTodo = (todo) => {
+  todos.value = todos.value.filter((t) => t.id !== todo.id);
 };
 
 // 模拟更新操作（在实际应用中，这里可能是 API 调用）
-const updateTodo = todo => {
+const updateTodo = (todo) => {
   console.log('Updated todo:', todo);
 };
 
 // 模拟编辑操作
-const editTodo = todo => {
+const editTodo = (todo) => {
   const newText = prompt('Edit todo:', todo.text);
   if (newText !== null && newText.trim() !== '') {
     todo.text = newText.trim();

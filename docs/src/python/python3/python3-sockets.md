@@ -36,21 +36,21 @@ import threading
 def handle_client(client_socket, address):
     """处理客户端连接"""
     print(f"[+] 连接来自 {address[0]}:{address[1]}")
-    
+
     try:
         while True:
             # 接收数据
             data = client_socket.recv(1024)
             if not data:
                 break
-                
+
             # 处理数据（示例：转换为大写）
             response = data.decode().upper().encode()
-            
+
             # 发送响应
             client_socket.send(response)
             print(f"[*] 收到来自 {address} 的数据: {data.decode()}")
-            
+
     except ConnectionResetError:
         print(f"[-] 客户端 {address} 异常断开连接")
     except Exception as e:
@@ -63,30 +63,30 @@ def tcp_server(host='127.0.0.1', port=8888):
     """TCP 服务器示例"""
     # 创建 TCP socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
+
     # 设置地址重用选项（避免地址占用错误）
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    
+
     try:
         # 绑定地址和端口
         server_socket.bind((host, port))
-        
+
         # 开始监听，设置最大连接数
         server_socket.listen(5)
         print(f"[*] 服务器启动在 {host}:{port}")
-        
+
         while True:
             # 接受客户端连接
             client_socket, address = server_socket.accept()
-            
+
             # 为每个客户端创建新线程
             client_thread = threading.Thread(
-                target=handle_client, 
+                target=handle_client,
                 args=(client_socket, address)
             )
             client_thread.daemon = True  # 设置守护线程
             client_thread.start()
-            
+
     except KeyboardInterrupt:
         print("\n[*] 服务器正在关闭...")
     except Exception as e:
@@ -107,26 +107,26 @@ def tcp_client(host='127.0.0.1', port=8888):
     """TCP 客户端示例"""
     # 创建 TCP socket
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
+
     try:
         # 连接到服务器
         client_socket.connect((host, port))
         print(f"[+] 已连接到服务器 {host}:{port}")
-        
+
         while True:
             # 获取用户输入
             message = input("请输入消息 (输入 'quit' 退出): ")
-            
+
             if message.lower() == 'quit':
                 break
-                
+
             # 发送数据
             client_socket.send(message.encode())
-            
+
             # 接收响应
             response = client_socket.recv(1024)
             print(f"服务器响应: {response.decode()}")
-            
+
     except ConnectionRefusedError:
         print("[-] 连接被拒绝，请检查服务器是否运行")
     except ConnectionResetError:
@@ -152,21 +152,21 @@ def udp_server(host='127.0.0.1', port=8888):
     """UDP 服务器示例"""
     # 创建 UDP socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    
+
     # 绑定地址和端口
     server_socket.bind((host, port))
     print(f"[*] UDP 服务器启动在 {host}:{port}")
-    
+
     try:
         while True:
             # 接收数据和客户端地址
             data, client_address = server_socket.recvfrom(1024)
             print(f"[*] 收到来自 {client_address} 的数据: {data.decode()}")
-            
+
             # 处理数据并发送响应
             response = f"已收到: {data.decode()}".encode()
             server_socket.sendto(response, client_address)
-            
+
     except KeyboardInterrupt:
         print("\n[*] 服务器正在关闭...")
     except Exception as e:
@@ -187,30 +187,30 @@ def udp_client(host='127.0.0.1', port=8888):
     """UDP 客户端示例"""
     # 创建 UDP socket
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    
+
     # 设置超时时间（秒）
     client_socket.settimeout(5.0)
-    
+
     server_address = (host, port)
-    
+
     try:
         while True:
             # 获取用户输入
             message = input("请输入消息 (输入 'quit' 退出): ")
-            
+
             if message.lower() == 'quit':
                 break
-                
+
             # 发送数据
             client_socket.sendto(message.encode(), server_address)
-            
+
             try:
                 # 接收响应
                 response, _ = client_socket.recvfrom(1024)
                 print(f"服务器响应: {response.decode()}")
             except socket.timeout:
                 print("[-] 请求超时，服务器可能未响应")
-                
+
     except Exception as e:
         print(f"[-] 客户端错误: {e}")
     finally:
@@ -234,7 +234,7 @@ def modern_tcp_server(host='127.0.0.1', port=8888):
     with socket.create_server((host, port), reuse_port=True) as server:
         print(f"[*] 服务器启动在 {host}:{port}")
         server.listen()
-        
+
         while True:
             client, addr = server.accept()
             with client:
@@ -285,7 +285,7 @@ def efficient_server(host='127.0.0.1', port=8888):
     print(f"[*] 监听 {host}:{port}")
     lsock.setblocking(False)
     sel.register(lsock, selectors.EVENT_READ, data=None)
-    
+
     try:
         while True:
             events = sel.select(timeout=None)
@@ -331,18 +331,18 @@ def robust_socket_example():
         # 创建 socket 并设置超时
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(10.0)  # 10 秒超时
-        
+
         # 连接服务器
         sock.connect(('example.com', 80))
-        
+
         # 设置发送和接收缓冲区大小
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, 8192)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 8192)
-        
+
         # 发送数据
         request = b"GET / HTTP/1.1\r\nHost: example.com\r\n\r\n"
         sock.sendall(request)
-        
+
         # 接收数据
         response = b""
         while True:
@@ -359,9 +359,9 @@ def robust_socket_example():
                     break
                 else:
                     raise
-                    
+
         print(f"收到 {len(response)} 字节数据")
-        
+
     except socket.timeout:
         print("连接或操作超时")
     except socket.gaierror:
@@ -390,22 +390,22 @@ def ssl_client(host='www.example.com', port=443):
     """SSL 客户端示例"""
     # 创建 TCP socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
+
     # 包装 socket 为 SSL
     context = ssl.create_default_context()
-    
+
     # 对于测试，可以跳过证书验证（生产环境不推荐）
     # context.check_hostname = False
     # context.verify_mode = ssl.CERT_NONE
-    
+
     with context.wrap_socket(sock, server_hostname=host) as ssock:
         ssock.connect((host, port))
         print(f"[+] SSL 连接建立，协议: {ssock.version()}")
-        
+
         # 发送 HTTP 请求
         request = f"GET / HTTP/1.1\r\nHost: {host}\r\nConnection: close\r\n\r\n"
         ssock.send(request.encode())
-        
+
         # 接收响应
         response = ssock.recv(4096)
         print(f"收到响应: {response.decode()[:200]}...")
@@ -424,23 +424,23 @@ def ssl_server(host='127.0.0.1', port=8443):
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind((host, port))
     sock.listen(5)
-    
+
     # 创建 SSL 上下文
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    
+
     # 加载证书和私钥
     context.load_cert_chain('server.crt', 'server.key')
-    
+
     print(f"[*] SSL 服务器启动在 {host}:{port}")
-    
+
     try:
         while True:
             client, addr = sock.accept()
             print(f"[+] 连接来自 {addr}")
-            
+
             # 包装为 SSL
             ssl_client = context.wrap_socket(client, server_side=True)
-            
+
             try:
                 data = ssl_client.recv(1024)
                 print(f"收到加密数据: {data.decode()}")
@@ -449,7 +449,7 @@ def ssl_server(host='127.0.0.1', port=8443):
                 print(f"SSL 错误: {e}")
             finally:
                 ssl_client.close()
-                
+
     except KeyboardInterrupt:
         print("\n[*] 服务器关闭中...")
     finally:
@@ -471,13 +471,13 @@ def simple_http_server(host='127.0.0.1', port=8080):
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((host, port))
     server_socket.listen(5)
-    
+
     print(f"[*] HTTP 服务器启动在 http://{host}:{port}")
-    
+
     def handle_request(client_socket):
         request = client_socket.recv(1024).decode()
         print(f"[*] 请求内容:\n{request}")
-        
+
         # 构建简单的 HTTP 响应
         response_body = f"""
         <html>
@@ -490,7 +490,7 @@ def simple_http_server(host='127.0.0.1', port=8080):
         </body>
         </html>
         """
-        
+
         response_headers = [
             "HTTP/1.1 200 OK",
             "Content-Type: text/html; charset=utf-8",
@@ -498,11 +498,11 @@ def simple_http_server(host='127.0.0.1', port=8080):
             "Connection: close",
             ""
         ]
-        
+
         response = "\r\n".join(response_headers) + response_body
         client_socket.send(response.encode())
         client_socket.close()
-    
+
     try:
         while True:
             client_socket, address = server_socket.accept()

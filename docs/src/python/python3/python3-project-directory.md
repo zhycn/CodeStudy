@@ -20,7 +20,7 @@
   - #setuppy-setupcfg
   - #requirementstxt
   - #manifestin
-  - #__init__py
+  - #**init**py
 - #最佳实践总结
 
 ## 核心原则
@@ -240,20 +240,20 @@ __all__ = ["main_function", "useful_class", "__version__"]
 1. **使用 `src` 目录布局:** 这是目前最被推崇的做法，能有效避免开发环境和已安装环境的混淆。
 2. **拥抱 `pyproject.toml`:** 使用它来声明项目元数据、依赖和构建配置。这是 Python 打包的未来。
 3. **区分库和应用的依赖管理:**
-    - **库:** 在 `pyproject.toml` 中声明**最低要求**的依赖。
-    - **应用:** 使用 `pyproject.toml` 声明依赖，并使用 `requirements.txt` 或 `pipenv`/`poetry` 锁文件来**锁定**精确版本，以确保环境一致性。
+   - **库:** 在 `pyproject.toml` 中声明**最低要求**的依赖。
+   - **应用:** 使用 `pyproject.toml` 声明依赖，并使用 `requirements.txt` 或 `pipenv`/`poetry` 锁文件来**锁定**精确版本，以确保环境一致性。
 4. **清晰的分离:**
-    - 将源代码 (`src`)、测试代码 (`tests`)、文档 (`docs`) 严格分离。
-    - 使用 `__init__.py` 合理组织包和模块的导出接口。
+   - 将源代码 (`src`)、测试代码 (`tests`)、文档 (`docs`) 严格分离。
+   - 使用 `__init__.py` 合理组织包和模块的导出接口。
 5. **工具链标准化:**
-    - 使用 `black` 和 `isort` 自动格式化代码。
-    - 使用 `flake8` 或 `pylint` 进行代码风格检查。
-    - 使用 `pytest` 作为测试框架。
-    - 使用 `tox` 或 `nox` 进行多环境测试。
+   - 使用 `black` 和 `isort` 自动格式化代码。
+   - 使用 `flake8` 或 `pylint` 进行代码风格检查。
+   - 使用 `pytest` 作为测试框架。
+   - 使用 `tox` 或 `nox` 进行多环境测试。
 6. **不可忽视的文档:**
-    - 编写清晰的 `README.md`。
-    - 为函数、类和方法编写 Docstrings。
-    - 使用 `Sphinx` 生成项目文档并托管在 `Read the Docs` 上。
+   - 编写清晰的 `README.md`。
+   - 为函数、类和方法编写 Docstrings。
+   - 使用 `Sphinx` 生成项目文档并托管在 `Read the Docs` 上。
 7. **包含开源项目必要文件:** 如 `LICENSE`, `CHANGELOG.md`, `.gitignore`, `CONTRIBUTING.md` 等。
 
 遵循这些结构和实践，你的 Python 项目将更加专业、易于维护和协作。记住，没有绝对唯一的“正确”结构，最重要的是在同一个项目中保持一致性，并与你的团队和社区的标准相匹配。

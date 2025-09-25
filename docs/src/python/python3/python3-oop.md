@@ -10,26 +10,26 @@
 
 1. #核心概念类与对象
 2. #类的三大特性
-    1. #封装
-    2. #继承
-    3. #多态
+   1. #封装
+   2. #继承
+   3. #多态
 3. #特殊方法与魔术方法
 4. #高级主题与最佳实践
-    1. #property-装饰器
-    2. #类方法与静态方法
-    3. #__slots__-与内存优化
-    4. #抽象基类abc
-    5. #数据类dataclass
-    6. #组合优于继承
+   1. #property-装饰器
+   2. #类方法与静态方法
+   3. #**slots**-与内存优化
+   4. #抽象基类abc
+   5. #数据类dataclass
+   6. #组合优于继承
 5. #总结
 
 ---
 
 ## 核心概念：类与对象
 
-__类（Class）__ 是创建对象的蓝图或模板。它定义了对象所共有的__属性（数据）__ 和__方法（函数）__。
+**类（Class）** 是创建对象的蓝图或模板。它定义了对象所共有的**属性（数据）** 和**方法（函数）**。
 
-__对象（Object）__ 是类的实例。它是一个拥有状态和行为的实体。
+**对象（Object）** 是类的实例。它是一个拥有状态和行为的实体。
 
 ```python
 # 定义一个简单的 Dog 类
@@ -63,7 +63,7 @@ print(buddy.description()) # 输出: Buddy is 9 years old
 print(miles.speak("Woof Woof")) # 输出: Miles says Woof Woof
 ```
 
-__关键点：__
+**关键点：**
 
 - `self` 参数是实例本身的引用，必须在实例方法的第一个参数位置显式声明，但在调用时由 Python 自动传入。
 - `__init__` 是一个特殊的魔术方法，在创建新实例时自动调用，用于初始化对象的状态。
@@ -74,9 +74,9 @@ __关键点：__
 
 封装是将数据（属性）和操作数据的方法捆绑在一起的过程，并限制对对象内部组件的直接访问。在 Python 中，封装通过命名约定来实现，而非严格的访问控制。
 
-- __公有成员（Public）__: 任何地方都可访问。例如：`self.name`
-- __保护成员（Protected）__: 以一个下划线 `_` 开头。这是一个约定，告诉开发者“请将其视为非公有部分”。例如：`self._protected_var`
-- __私有成员（Private）__: 以两个下划线 `__` 开头。Python 会进行__名称修饰（Name Mangling）__，使其实际上难以被外部直接访问。例如：`self.__private_var`
+- **公有成员（Public）**: 任何地方都可访问。例如：`self.name`
+- **保护成员（Protected）**: 以一个下划线 `_` 开头。这是一个约定，告诉开发者“请将其视为非公有部分”。例如：`self._protected_var`
+- **私有成员（Private）**: 以两个下划线 `__` 开头。Python 会进行**名称修饰（Name Mangling）**，使其实际上难以被外部直接访问。例如：`self.__private_var`
 
 ```python
 class Car:
@@ -143,7 +143,7 @@ print(jack.coat_color)  # 子类自有属性: white with brown
 print(jack.speak())     # 调用重写后的方法: Jack says Arf! loudly!
 ```
 
-__`super()` 函数__：用于调用父类（超类）的一个方法。它是实现协作式多重继承的推荐方式。
+**`super()` 函数**：用于调用父类（超类）的一个方法。它是实现协作式多重继承的推荐方式。
 
 ### 多态
 
@@ -221,7 +221,7 @@ other_book = Book("Python Crash Course", "Eric Matthes", 506)
 print(my_book == other_book) # 输出: True (基于我们定义的 __eq__)
 ```
 
-__常用魔术方法：__
+**常用魔术方法：**
 
 - `__init__`, `__new__`: 构造和初始化
 - `__str__`, `__repr__`: 字符串表示
@@ -236,7 +236,7 @@ __常用魔术方法：__
 
 ### @property 装饰器
 
-`@property` 装饰器允许你将一个方法“变成”一个属性，从而提供一种优雅的方式来定义__获取器（getter）__、__设置器（setter）__ 和__删除器（deleter）__，实现对私有属性的安全访问和验证。
+`@property` 装饰器允许你将一个方法“变成”一个属性，从而提供一种优雅的方式来定义**获取器（getter）**、**设置器（setter）** 和**删除器（deleter）**，实现对私有属性的安全访问和验证。
 
 ```python
 class Circle:
@@ -279,9 +279,9 @@ print(my_circle.area)    # 输出: 314.16
 
 ### 类方法与静态方法
 
-- __实例方法（Instance Method）__: 第一个参数是 `self`，操作实例属性。
-- __类方法（Class Method）__: 使用 `@classmethod` 装饰器，第一个参数是 `cls`，操作类属性，常用于创建替代构造器。
-- __静态方法（Static Method）__: 使用 `@staticmethod` 装饰器，没有 `self` 或 `cls` 参数，它与类相关但不需要访问类或实例的状态。
+- **实例方法（Instance Method）**: 第一个参数是 `self`，操作实例属性。
+- **类方法（Class Method）**: 使用 `@classmethod` 装饰器，第一个参数是 `cls`，操作类属性，常用于创建替代构造器。
+- **静态方法（Static Method）**: 使用 `@staticmethod` 装饰器，没有 `self` 或 `cls` 参数，它与类相关但不需要访问类或实例的状态。
 
 ```python
 class MyClass:
@@ -355,11 +355,11 @@ print(hasattr(r, '__dict__')) # 输出: True
 print(hasattr(s, '__dict__')) # 输出: False
 ```
 
-__最佳实践__：仅在内存优化是首要任务，且你确信不需要动态添加属性时使用 `__slots__`。
+**最佳实践**：仅在内存优化是首要任务，且你确信不需要动态添加属性时使用 `__slots__`。
 
 ### 抽象基类（ABC）
 
-`abc` 模块提供了定义__抽象基类（Abstract Base Classes）__ 的功能。抽象基类不能被实例化，它强制其子类实现特定的方法。这是一种定义接口契约的强大方式。
+`abc` 模块提供了定义**抽象基类（Abstract Base Classes）** 的功能。抽象基类不能被实例化，它强制其子类实现特定的方法。这是一种定义接口契约的强大方式。
 
 ```python
 from abc import ABC, abstractmethod
@@ -486,25 +486,25 @@ print(my_car.start()) # 输出: Car: Electric motor energized and Radio on
 
 Python 的面向对象编程提供了强大而灵活的工具来构建复杂、可维护的应用程序。掌握以下核心概念至关重要：
 
-1. __类与对象__：理解 `self`、`__init__` 和实例化。
-2. __三大特性__：
-    - __封装__：使用命名约定（`_`，`__`）和 `@property` 来控制访问。
-    - __继承__：使用 `super()` 实现代码重用和扩展。
-    - __多态__：利用鸭子类型编写通用接口。
-3. __魔术方法__：通过实现 `__str__`、`__eq__` 等方法，让自定义类行为像内置类型。
-4. __高级实践__：
-    - 使用 `@classmethod` 创建替代构造器，使用 `@staticmethod` 组织相关工具函数。
-    - 在需要处理大量对象时考虑使用 `__slots__` 优化内存。
-    - 使用 `abc` 模块定义清晰的接口契约。
-    - 优先使用 `dataclass` 来创建主要存储数据的类，减少样板代码。
-    - 牢记“组合优于继承”的原则，设计更灵活的系统。
+1. **类与对象**：理解 `self`、`__init__` 和实例化。
+2. **三大特性**：
+   - **封装**：使用命名约定（`_`，`__`）和 `@property` 来控制访问。
+   - **继承**：使用 `super()` 实现代码重用和扩展。
+   - **多态**：利用鸭子类型编写通用接口。
+3. **魔术方法**：通过实现 `__str__`、`__eq__` 等方法，让自定义类行为像内置类型。
+4. **高级实践**：
+   - 使用 `@classmethod` 创建替代构造器，使用 `@staticmethod` 组织相关工具函数。
+   - 在需要处理大量对象时考虑使用 `__slots__` 优化内存。
+   - 使用 `abc` 模块定义清晰的接口契约。
+   - 优先使用 `dataclass` 来创建主要存储数据的类，减少样板代码。
+   - 牢记“组合优于继承”的原则，设计更灵活的系统。
 
 通过遵循这些概念和最佳实践，你可以编写出更 Pythonic、更清晰、更健壮的面向对象代码。
 
 ---
 
-__推荐学习路径：__
+**推荐学习路径：**
 
-1. __官方文档__：<https://docs.python.org/3/tutorial/classes.html>
-2. __Real Python__：搜索 “Python Object-Oriented Programming” 系列教程。
-3. __书籍__：《Fluent Python》 by Luciano Ramalho（深入探讨 Python 的 OOP 机制和高级特性）。
+1. **官方文档**：<https://docs.python.org/3/tutorial/classes.html>
+2. **Real Python**：搜索 “Python Object-Oriented Programming” 系列教程。
+3. **书籍**：《Fluent Python》 by Luciano Ramalho（深入探讨 Python 的 OOP 机制和高级特性）。

@@ -45,7 +45,7 @@ const error = ref(null);
 
 const classObject = computed(() => ({
   active: isActive.value && !error.value,
-  'text-danger': error.value && error.value.type === 'fatal'
+  'text-danger': error.value && error.value.type === 'fatal',
 }));
 </script>
 ```
@@ -130,7 +130,7 @@ const isActive = ref(true);
 const styleObject = computed(() => ({
   color: isActive.value ? 'var(--primary)' : 'var(--secondary)',
   transform: isActive.value ? 'scale(1.1)' : 'none',
-  transition: 'all 0.3s ease'
+  transition: 'all 0.3s ease',
 }));
 </script>
 ```
@@ -147,12 +147,12 @@ const styleObject = computed(() => ({
 <script setup>
 const baseStyles = {
   padding: '1rem',
-  margin: '1rem auto'
+  margin: '1rem auto',
 };
 
 const overridingStyles = {
   backgroundColor: 'var(--surface)',
-  borderRadius: '8px'
+  borderRadius: '8px',
 };
 </script>
 ```
@@ -163,11 +163,13 @@ Vue 会自动为需要浏览器引擎前缀的 CSS 属性添加前缀（如 `tra
 
 ```vue
 <template>
-  <div :style="{
-    margin: 10, // 自动转换为 '10px'
-    opacity: 0.5, // 自动转换为 '0.5'
-    'font-weight': 'bold' // 推荐使用驼峰式: fontWeight
-  }"></div>
+  <div
+    :style="{
+      margin: 10, // 自动转换为 '10px'
+      opacity: 0.5, // 自动转换为 '0.5'
+      'font-weight': 'bold', // 推荐使用驼峰式: fontWeight
+    }"
+  ></div>
 </template>
 ```
 
@@ -198,7 +200,7 @@ Vue 会自动为需要浏览器引擎前缀的 CSS 属性添加前缀（如 `tra
    <template>
      <div :class="$style.container"></div>
    </template>
-   
+
    <style module>
    .container {
      padding: 1rem;
@@ -211,9 +213,12 @@ Vue 会自动为需要浏览器引擎前缀的 CSS 属性添加前缀（如 `tra
 1. **使用实用类库（如 Tailwind CSS）**：
 
    ```vue
-   <div class="p-4 bg-blue-500 text-white rounded-lg" :class="{
-     'opacity-50': isDisabled
-   }"></div>
+   <div
+     class="p-4 bg-blue-500 text-white rounded-lg"
+     :class="{
+       'opacity-50': isDisabled,
+     }"
+   ></div>
    ```
 
 2. **创建可复用的类组合**：
@@ -225,9 +230,7 @@ Vue 会自动为需要浏览器引擎前缀的 CSS 属性添加前缀（如 `tra
      'px-4',
      'rounded',
      'transition-all',
-     variant === 'primary' 
-       ? 'bg-blue-600 text-white hover:bg-blue-700' 
-       : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+     variant === 'primary' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-800 hover:bg-gray-300',
    ];
    ```
 
@@ -244,10 +247,10 @@ Vue 会自动为需要浏览器引擎前缀的 CSS 属性添加前缀（如 `tra
   <div
     :class="[
       'transition-all duration-300',
-      { 
+      {
         'translate-y-0 opacity-100': isVisible,
-        'translate-y-4 opacity-0': !isVisible
-      }
+        'translate-y-4 opacity-0': !isVisible,
+      },
     ]"
   >
     <!-- 内容 -->
@@ -259,10 +262,10 @@ Vue 会自动为需要浏览器引擎前缀的 CSS 属性添加前缀（如 `tra
 
 ```vue
 <template>
-  <div 
-    :class="{'sr-only': !isVisible}" 
+  <div
+    :class="{ 'sr-only': !isVisible }"
     :style="{
-      'aria-hidden': !isVisible ? 'true' : 'false'
+      'aria-hidden': !isVisible ? 'true' : 'false',
     }"
   >
     隐藏但可被屏幕阅读器读取的内容
@@ -298,10 +301,12 @@ Vue 会自动为需要浏览器引擎前缀的 CSS 属性添加前缀（如 `tra
 
 ```vue
 <template>
-  <div :class="{
-    'mobile-layout': windowWidth < 768,
-    'desktop-layout': windowWidth >= 768
-  }"></div>
+  <div
+    :class="{
+      'mobile-layout': windowWidth < 768,
+      'desktop-layout': windowWidth >= 768,
+    }"
+  ></div>
 </template>
 
 <script setup>
@@ -338,14 +343,11 @@ const chartContainer = ref(null);
 const chartData = ref(/* ... */);
 
 onMounted(() => {
-  const chart = d3.select(chartContainer.value)
-    .append('svg')
-    .attr('width', 500)
-    .attr('height', 300);
+  const chart = d3.select(chartContainer.value).append('svg').attr('width', 500).attr('height', 300);
 
   // 应用动态类
   chart.classed('interactive-chart', true);
-  
+
   renderChart();
 });
 
@@ -380,8 +382,8 @@ export function dynamicClasses(baseClasses, conditionalClasses) {
   return [
     baseClasses,
     Object.keys(conditionalClasses)
-      .filter(key => conditionalClasses[key])
-      .join(' ')
+      .filter((key) => conditionalClasses[key])
+      .join(' '),
   ].join(' ');
 }
 
@@ -395,8 +397,8 @@ export function cssVarBinding(vars) {
 
 ```vue
 <template>
-  <div 
-    :class="dynamicClasses('base-class', { 'active': isActive })"
+  <div
+    :class="dynamicClasses('base-class', { active: isActive })"
     :style="cssVarBinding({ 'primary-color': primaryColor })"
   >
     <!-- 内容 -->

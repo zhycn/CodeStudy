@@ -120,9 +120,9 @@ print(db2.connection_string)  # 输出: mysql://localhost:3306/mydb (注意，�
 
 1. `type(obj)`: 获取对象的类型。
 2. `type(name, bases, attrs)`: 动态地创建一个新的类。
-    - `name`: 类名。
-    - `bases`: 继承的基类元组。
-    - `attrs`: 包含属性和方法的字典。
+   - `name`: 类名。
+   - `bases`: 继承的基类元组。
+   - `attrs`: 包含属性和方法的字典。
 
 ```python
 # 使用 type 动态创建类，这等价于 `class Foo: bar = True`
@@ -192,7 +192,7 @@ class EnforceDocstringMeta(type):
 # 使用这个元类
 class DocumentedClass(metaclass=EnforceDocstringMeta):
     """这是一个有文档字符串的类。"""
-    
+
     def well_documented_method(self):
         """这个方法也有文档。"""
         pass
@@ -204,7 +204,7 @@ class DocumentedClass(metaclass=EnforceDocstringMeta):
 # 这个方法会引发警告
 class AnotherClass(metaclass=EnforceDocstringMeta):
     """这个类没问题。"""
-    
+
     def undocumented_method(self): # 这里会收到 UserWarning
         pass
 ```

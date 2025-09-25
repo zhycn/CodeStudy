@@ -39,10 +39,10 @@ export default {
   plugins: {
     // 示例插件，实际使用时需要 npm install
     'postcss-import': {},
-    'tailwindcss': {},
-    'autoprefixer': {},
+    tailwindcss: {},
+    autoprefixer: {},
   },
-}
+};
 ```
 
 你也可以使用 `require` 语法，这在某些 CommonJS 环境中是必需的。
@@ -51,10 +51,10 @@ export default {
 // postcss.config.cjs
 module.exports = {
   plugins: {
-    'tailwindcss': {},
-    'autoprefixer': {},
+    tailwindcss: {},
+    autoprefixer: {},
   },
-}
+};
 ```
 
 ### 3.2. 在 `vite.config.js` 中配置
@@ -63,19 +63,15 @@ module.exports = {
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   css: {
     postcss: {
-      plugins: [
-        require('postcss-import')(),
-        require('tailwindcss')(),
-        require('autoprefixer')(),
-      ],
+      plugins: [require('postcss-import')(), require('tailwindcss')(), require('autoprefixer')()],
     },
   },
-})
+});
 ```
 
 **优先级**： 如果同时存在 `postcss.config.js` 和 `vite.config.js` 中的 `css.postcss` 配置，Vite 会优先使用后者，并**不会**自动合并它们。
@@ -100,7 +96,7 @@ export default {
   plugins: {
     autoprefixer: {},
   },
-}
+};
 ```
 
 你可以在 `package.json` 中指定需要兼容的浏览器范围，Autoprefixer 会据此生成相应的前缀。
@@ -108,11 +104,7 @@ export default {
 ```json
 // package.json
 {
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not dead"]
 }
 ```
 
@@ -136,11 +128,11 @@ export default {
       // 选项配置，例如指定 stage
       stage: 3,
       features: {
-        'nesting-rules': true
-      }
+        'nesting-rules': true,
+      },
     },
   },
-}
+};
 ```
 
 **注意**： 使用 `postcss-preset-env` 后，通常可以不再单独配置 `autoprefixer`。
@@ -165,24 +157,24 @@ export default {
   plugins: {
     'postcss-preset-env': {},
     // 仅在生产环境下使用 cssnano
-    ...(isProduction ? { cssnano: {} } : {})
+    ...(isProduction ? { cssnano: {} } : {}),
   },
-}
+};
 ```
 
 ### 4.4. 与流行 CSS 框架结合的插件
 
 - **TailwindCSS**: 本身是一个 PostCSS 插件。
 
-    ```javascript
-    // postcss.config.js
-    export default {
-      plugins: {
-        tailwindcss: {},
-        autoprefixer: {},
-      },
-    }
-    ```
+  ```javascript
+  // postcss.config.js
+  export default {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  };
+  ```
 
 - **UnoCSS**: 通常通过其 Vite 插件 (`unplugin-unocss/vite`) 集成，但也可以作为 PostCSS 插件使用。
 
@@ -207,13 +199,13 @@ PostCSS 插件的执行顺序是**从上到下**的。错误的顺序可能导�
 export default {
   plugins: {
     'postcss-import': {},
-    'tailwindcss': {},
+    tailwindcss: {},
     'postcss-preset-env': {
       features: { 'nesting-rules': true },
     },
     autoprefixer: {},
   },
-}
+};
 ```
 
 ### 5.2. 为不同 CSS 文件应用不同配置
@@ -239,28 +231,28 @@ npm install -D postcss-import
 export default {
   plugins: {
     'postcss-import': {}, // 放在第一位
-    'tailwindcss': {},
+    tailwindcss: {},
     // ... other plugins
   },
-}
+};
 ```
 
 ## 6. 故障排除 (Troubleshooting)
 
 1. **配置未生效**：
-    - 检查配置文件名称和路径是否正确。
-    - 检查插件是否已正确安装 (`npm install -D xxxx`)。
-    - 运行 `npx vite --force` 强制重新构建依赖。
+   - 检查配置文件名称和路径是否正确。
+   - 检查插件是否已正确安装 (`npm install -D xxxx`)。
+   - 运行 `npx vite --force` 强制重新构建依赖。
 
 2. **“Plugin didn't set a Plugin API version” 警告**：
-    - 这通常是因为新旧版本插件混用。尝试升级你的 PostCSS 插件到最新版本。`npm update`
+   - 这通常是因为新旧版本插件混用。尝试升级你的 PostCSS 插件到最新版本。`npm update`
 
 3. **嵌套语法 (`&`) 报错**：
-    - 你缺少处理嵌套的插件（如 `postcss-nesting` 或 `postcss-preset-env` 并开启 `nesting-rules` 功能）。请安装并配置。
+   - 你缺少处理嵌套的插件（如 `postcss-nesting` 或 `postcss-preset-env` 并开启 `nesting-rules` 功能）。请安装并配置。
 
 4. **Vite 报错 “Failed to load PostCSS config”**：
-    - 如果你的项目是 ESM 格式（`package.json` 中设置了 `"type": "module"`），请确保使用 `.js` 或 `.mjs` 配置文件，并使用 `export default` 语法。
-    - 如果是 CJS 项目，请使用 `.cjs` 扩展名和 `module.exports` 语法。
+   - 如果你的项目是 ESM 格式（`package.json` 中设置了 `"type": "module"`），请确保使用 `.js` 或 `.mjs` 配置文件，并使用 `export default` 语法。
+   - 如果是 CJS 项目，请使用 `.cjs` 扩展名和 `module.exports` 语法。
 
 ## 7. 总结
 
@@ -274,6 +266,7 @@ Vite 与 PostCSS 的结合提供了强大且灵活的现代 CSS 开发体验。�
 掌握 Vite 的 PostCSS 配置，将是你构建高性能、可维护现代 Web 应用的重要一环。
 
 ---
+
 **参考资源**:
 
 1. <https://vitejs.dev/guide/features.html#css>

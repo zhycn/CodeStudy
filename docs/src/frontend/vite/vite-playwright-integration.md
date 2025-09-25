@@ -132,7 +132,6 @@ import { test, expect } from '@playwright/test';
 
 // 测试套件：描述应用程序的基本功能
 test.describe('Vite + Playwright Integration', () => {
-
   // 测试用例：页面应正确加载并显示标题
   test('should load the app and display the correct title', async ({ page }) => {
     // 导航到应用程序的主页
@@ -148,14 +147,14 @@ test.describe('Vite + Playwright Integration', () => {
   // 测试用例：验证 HMR 是否正常工作（可选，高级示例）
   test('should reflect changes after HMR', async ({ page }) => {
     await page.goto('/');
-    
+
     // 获取初始文本内容
     const initialText = await page.locator('.some-element').textContent();
-    
+
     // 注意：这个测试需要与文件系统交互来模拟更改，
     // 通常在 CI 中不这样做。这只是一个概念证明。
     // 在实际项目中，你可能会专注于测试 HMR 后的UI状态，而不是触发 HMR 本身。
-    
+
     // 断言页面包含一些预期的内容
     await expect(page.locator('button')).toBeVisible();
   });
@@ -183,13 +182,13 @@ Vite 项目通常是单页应用 (SPA)。Playwright 提供了强大的 API 来�
 ```typescript
 test('should navigate to about page', async ({ page }) => {
   await page.goto('/');
-  
+
   // 点击一个导航链接，该链接使用客户端路由 (e.g., React Router, Vue Router)
   await page.getByRole('link', { name: 'About' }).click();
-  
+
   // 等待 URL 改变
   await page.waitForURL('**/about');
-  
+
   // 断言新页面上的内容
   await expect(page.locator('h1')).toHaveText('About Us');
 });
@@ -202,9 +201,9 @@ Playwright 可以拦截和修改网络请求，这对于测试加载状态、错
 ```typescript
 test('should show loading state and then display data', async ({ page }) => {
   // 在页面加载前，拦截对 /api/data 的 GET 请求
-  await page.route('**/api/data', async route => {
+  await page.route('**/api/data', async (route) => {
     // 模拟一个 500ms 延迟的 API 响应
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     // 然后继续请求（或者使用 route.fulfill 返回模拟数据）
     route.continue();
     // 或者返回模拟的 JSON 数据
@@ -216,13 +215,13 @@ test('should show loading state and then display data', async ({ page }) => {
   });
 
   await page.goto('/data-page');
-  
+
   // 验证加载指示器是否出现
   await expect(page.locator('.loader')).toBeVisible();
-  
+
   // 等待加载指示器消失（表示数据已加载）
   await expect(page.locator('.loader')).toBeHidden();
-  
+
   // 验证数据是否显示在页面上
   await expect(page.locator('.data-container')).toContainText('Mocked Data!');
 });
@@ -237,32 +236,32 @@ test('should show loading state and then display data', async ({ page }) => {
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 ```
 
 **优化 CI 速度**：
@@ -307,7 +306,7 @@ setup('authenticate', async ({ page }) => {
   await page.getByRole('button', { name: 'Sign in' }).click();
   // 等待登录成功后的跳转或元素
   await page.waitForURL('**/dashboard');
-  
+
   // 将当前页面的认证状态存储起来
   await page.context().storageState({ path: 'playwright/.auth/user.json' });
 });
@@ -333,6 +332,7 @@ Vite 和 Playwright 的组合为现代 Web 开发提供了“强强联合”的�
 立即尝试将 Playwright 集成到你的 Vite 项目中，体验高质量、高速度的开发工作流。
 
 ---
+
 **参考资源：**
 
 - <https://playwright.dev/docs/intro>

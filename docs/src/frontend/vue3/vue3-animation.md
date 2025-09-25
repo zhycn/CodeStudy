@@ -294,71 +294,71 @@ const shuffle = () => {
 ## 6. 最佳实践与性能优化
 
 1. **优先使用 CSS 而非 JavaScript**
-    - 浏览器对 CSS 动画的优化通常比 JavaScript 更好。尽可能使用 `transition` 和 `@keyframes` 来实现动画。
+   - 浏览器对 CSS 动画的优化通常比 JavaScript 更好。尽可能使用 `transition` 和 `@keyframes` 来实现动画。
 
 2. **使用 `transform` 和 `opacity` 属性**
-    - 这两个属性的变化不会触发昂贵的重排（Layout）和重绘（Paint），只会触发合成（Composite），因此性能开销极低。避免使用 `height`、`width`、`margin`、`padding` 等会触发重排的属性。
-    - **好的选择**: `transform: translateX(50px) scale(1.2); opacity: 0.5;`
-    - **坏的选择**: `margin-left: 50px; width: 200px;`
+   - 这两个属性的变化不会触发昂贵的重排（Layout）和重绘（Paint），只会触发合成（Composite），因此性能开销极低。避免使用 `height`、`width`、`margin`、`padding` 等会触发重排的属性。
+   - **好的选择**: `transform: translateX(50px) scale(1.2); opacity: 0.5;`
+   - **坏的选择**: `margin-left: 50px; width: 200px;`
 
 3. **强制硬件加速**
-    - 在某些情况下，可以通过 `transform: translateZ(0)` 或 `will-change: transform, opacity;` 来提示浏览器使用 GPU 进行渲染，提升复杂动画的流畅度。但需谨慎使用，过度使用会浪费内存资源。
+   - 在某些情况下，可以通过 `transform: translateZ(0)` 或 `will-change: transform, opacity;` 来提示浏览器使用 GPU 进行渲染，提升复杂动画的流畅度。但需谨慎使用，过度使用会浪费内存资源。
 
 4. **合理设置 `:css="false"`**
-    - 当完全使用 JavaScript 钩子制作动画时，设置 `:css="false"` 可以避免 Vue 花费时间去自动侦听 CSS 过渡，提升性能。
+   - 当完全使用 JavaScript 钩子制作动画时，设置 `:css="false"` 可以避免 Vue 花费时间去自动侦听 CSS 过渡，提升性能。
 
 5. **保持动画简短流畅**
-    - 大多数微交互动画应在 **200ms 到 500ms** 之间。时间太短会让人感觉紧张，太长则会让用户感到不耐烦。
+   - 大多数微交互动画应在 **200ms 到 500ms** 之间。时间太短会让人感觉紧张，太长则会让用户感到不耐烦。
 
 6. **考虑可访问性 (A11y)**
-    - 尊重用户偏好。对于偏好减少动画的用户，可以使用 CSS 媒体查询 `@media (prefers-reduced-motion: reduce)` 来关闭或简化动画。
+   - 尊重用户偏好。对于偏好减少动画的用户，可以使用 CSS 媒体查询 `@media (prefers-reduced-motion: reduce)` 来关闭或简化动画。
 
-    ```css
-    @media (prefers-reduced-motion: reduce) {
-      .fade-enter-active,
-      .fade-leave-active {
-        transition: none;
-      }
-    }
-    ```
+   ```css
+   @media (prefers-reduced-motion: reduce) {
+     .fade-enter-active,
+     .fade-leave-active {
+       transition: none;
+     }
+   }
+   ```
 
 7. **复用动画：自定义 Transition 组件**
-    - 如果你有一个非常出色的动画效果，可以将其封装成一个可复用的自定义组件。
+   - 如果你有一个非常出色的动画效果，可以将其封装成一个可复用的自定义组件。
 
-    ```vue
-    <!-- ReusableFadeTransition.vue -->
-    <template>
-      <transition
-        name="reusable-fade"
-        mode="out-in"
-        v-bind="$attrs" <!-- 传递所有属性 -->
-        @enter="$emit('enter', $arguments)" <!-- 传递所有事件 -->
-        @leave="$emit('leave', $arguments)"
-      >
-        <slot></slot> <!-- 插槽内容会被动画 -->
-      </transition>
-    </template>
+   ```vue
+   <!-- ReusableFadeTransition.vue -->
+   <template>
+     <transition
+       name="reusable-fade"
+       mode="out-in"
+       v-bind="$attrs" <!-- 传递所有属性 -->
+       @enter="$emit('enter', $arguments)" <!-- 传递所有事件 -->
+       @leave="$emit('leave', $arguments)"
+     >
+       <slot></slot> <!-- 插槽内容会被动画 -->
+     </transition>
+   </template>
 
-    <style scoped>
-    .reusable-fade-enter-active,
-    .reusable-fade-leave-active {
-      transition: opacity 0.3s ease-in-out;
-    }
-    .reusable-fade-enter-from,
-    .reusable-fade-leave-to {
-      opacity: 0;
-    }
-    </style>
-    ```
+   <style scoped>
+   .reusable-fade-enter-active,
+   .reusable-fade-leave-active {
+     transition: opacity 0.3s ease-in-out;
+   }
+   .reusable-fade-enter-from,
+   .reusable-fade-leave-to {
+     opacity: 0;
+   }
+   </style>
+   ```
 
-    ```vue
-    <!-- 使用自定义过渡组件 -->
-    <template>
-      <ReusableFadeTransition mode="out-in">
-        <component :is="currentView"></component>
-      </ReusableFadeTransition>
-    </template>
-    ```
+   ```vue
+   <!-- 使用自定义过渡组件 -->
+   <template>
+     <ReusableFadeTransition mode="out-in">
+       <component :is="currentView"></component>
+     </ReusableFadeTransition>
+   </template>
+   ```
 
 ## 总结
 

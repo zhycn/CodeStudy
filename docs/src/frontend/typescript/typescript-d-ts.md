@@ -250,20 +250,20 @@ npm install --save-dev @types/lodash
 如果你是库的作者，强烈建议**将声明文件与库一起捆绑发布**。
 
 1. **方式一：内联声明**（最简单）
-    将声明直接写在你的 `.ts` 文件中，编译器会在生成 `.js` 文件的同时生成 `.d.ts` 文件。在 `tsconfig.json` 中设置 `"declaration": true`。
+   将声明直接写在你的 `.ts` 文件中，编译器会在生成 `.js` 文件的同时生成 `.d.ts` 文件。在 `tsconfig.json` 中设置 `"declaration": true`。
 
 2. **方式二：分离声明文件**
-    如果你的库是用 JavaScript 写的，可以编写一个单独的 `.d.ts` 文件，然后在 `package.json` 中使用 `types` 字段指向它。
+   如果你的库是用 JavaScript 写的，可以编写一个单独的 `.d.ts` 文件，然后在 `package.json` 中使用 `types` 字段指向它。
 
-    ```json
-    // package.json
-    {
-      "name": "awesome-js-library",
-      "version": "1.0.0",
-      "main": "./dist/index.js",
-      "types": "./dist/index.d.ts" // 指向主声明文件
-    }
-    ```
+   ```json
+   // package.json
+   {
+     "name": "awesome-js-library",
+     "version": "1.0.0",
+     "main": "./dist/index.js",
+     "types": "./dist/index.d.ts" // 指向主声明文件
+   }
+   ```
 
 ## 6. 常见问题与解决方案
 
@@ -300,9 +300,9 @@ import data from './data.json'; // data 的类型被自动推断为 { ... }
 
 ### 6.3 声明文件应该放在哪里？
 
-* **全局库**：放在项目根目录或 `@types` 文件夹中，并在 `tsconfig.json` 的 `"include"` 字段中包含它们。
-* **模块库**：与实现的 `.js` 文件放在同一目录下。TypeScript 编译器会自动查找同名的 `.d.ts` 文件。
-* **通过 `@types/` 安装**：无需手动管理，Node.js 模块解析机制会自动找到它们。
+- **全局库**：放在项目根目录或 `@types` 文件夹中，并在 `tsconfig.json` 的 `"include"` 字段中包含它们。
+- **模块库**：与实现的 `.js` 文件放在同一目录下。TypeScript 编译器会自动查找同名的 `.d.ts` 文件。
+- **通过 `@types/` 安装**：无需手动管理，Node.js 模块解析机制会自动找到它们。
 
 ## 7. 总结
 

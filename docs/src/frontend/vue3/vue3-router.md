@@ -26,42 +26,42 @@ npm install vue-router@4
 
 ```javascript
 // 1. 导入必要的 API
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 // 2. 定义路由组件
 // 建议使用懒加载，详见后续章节
-import HomeView from '../views/HomeView.vue'
-const AboutView = () => import('../views/AboutView.vue') // 懒加载
+import HomeView from '../views/HomeView.vue';
+const AboutView = () => import('../views/AboutView.vue'); // 懒加载
 
 // 3. 定义路由配置
 const routes = [
   {
     path: '/',
     name: 'home', // 命名路由，用于编程式导航，非常有用
-    component: HomeView
+    component: HomeView,
   },
   {
     path: '/about',
     name: 'about',
-    component: AboutView
+    component: AboutView,
   },
   // 动态路由匹配
   {
     path: '/user/:id',
     name: 'user',
-    component: () => import('../views/UserView.vue')
-  }
-]
+    component: () => import('../views/UserView.vue'),
+  },
+];
 
 // 4. 创建路由实例
 const router = createRouter({
   // 使用 HTML5 History 模式
   history: createWebHistory(process.env.BASE_URL),
-  routes // `routes: routes` 的简写
-})
+  routes, // `routes: routes` 的简写
+});
 
 // 5. 导出路由实例，以便在 main.js 中使用
-export default router
+export default router;
 ```
 
 **挂载到 Vue 实例**：
@@ -69,15 +69,15 @@ export default router
 在 `main.js` 中，将路由实例挂载到根 Vue 实例上。
 
 ```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router' // 自动导入 ./router/index.js
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router'; // 自动导入 ./router/index.js
 
-const app = createApp(App)
+const app = createApp(App);
 
-app.use(router) // 使用路由插件
+app.use(router); // 使用路由插件
 
-app.mount('#app')
+app.mount('#app');
 ```
 
 ### 1.2 路由视图与导航
@@ -91,9 +91,8 @@ app.mount('#app')
 <template>
   <div id="app">
     <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link :to="{ name: 'user', params: { id: 123 }}">User 123</router-link>
+      <router-link to="/">Home</router-link> | <router-link to="/about">About</router-link> |
+      <router-link :to="{ name: 'user', params: { id: 123 } }">User 123</router-link>
     </nav>
     <!-- 路由匹配到的组件将渲染在这里 -->
     <router-view />
@@ -124,16 +123,16 @@ export default {
   methods: {
     goToAbout() {
       // 使用路由名称和参数（如果需要）
-      this.$router.push({ name: 'about' })
+      this.$router.push({ name: 'about' });
       // 等价于 this.$router.push('/about')
     },
     goBack() {
       // 模拟浏览器后退
-      this.$router.go(-1)
+      this.$router.go(-1);
       // 或者使用 this.$router.back()
-    }
-  }
-}
+    },
+  },
+};
 </script>
 ```
 
@@ -141,18 +140,18 @@ export default {
 
 ```vue
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
 
-const router = useRouter()
-const route = useRoute() // 当前路由对象，包含 params, query 等信息
+const router = useRouter();
+const route = useRoute(); // 当前路由对象，包含 params, query 等信息
 
 const navigate = () => {
   // 跳转到用户 123 页面
-  router.push({ name: 'user', params: { id: 123 } })
-}
+  router.push({ name: 'user', params: { id: 123 } });
+};
 
 // 获取当前路由的参数
-const userId = route.params.id
+const userId = route.params.id;
 </script>
 ```
 
@@ -171,8 +170,8 @@ const routes = [
   // 可选参数 /users 和 /users/admin
   { path: '/users/:role?', component: Users },
   // 使用正则匹配 /user/123 （只匹配数字）
-  { path: '/user/:id(\\d+)', component: User }
-]
+  { path: '/user/:id(\\d+)', component: User },
+];
 ```
 
 在组件中，可以通过 `$route.params` 访问这些参数。
@@ -188,15 +187,15 @@ export default {
   watch: {
     '$route.params.id'(newId, oldId) {
       // 对路由变化做出响应，例如重新获取用户数据
-      this.fetchUserData(newId)
-    }
+      this.fetchUserData(newId);
+    },
   },
   methods: {
     fetchUserData(id) {
       // ... 获取数据
-    }
-  }
-}
+    },
+  },
+};
 </script>
 ```
 
@@ -204,23 +203,23 @@ export default {
 
 ```vue
 <script setup>
-import { watch, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
-const route = useRoute()
+const route = useRoute();
 
 // 在 mounted 时获取数据
 onMounted(() => {
-  fetchUserData(route.params.id)
-})
+  fetchUserData(route.params.id);
+});
 
 // 监听参数变化
 watch(
   () => route.params.id,
   (newId) => {
-    fetchUserData(newId)
+    fetchUserData(newId);
   }
-)
+);
 
 function fetchUserData(id) {
   // ... 获取数据
@@ -248,10 +247,10 @@ const routes = [
       // 当匹配 /user/:id/posts
       { path: 'posts', component: UserPosts },
       // 默认子路由，当 /user/:id 时渲染
-      { path: '', component: UserDashboard }
-    ]
-  }
-]
+      { path: '', component: UserDashboard },
+    ],
+  },
+];
 ```
 
 **父组件 (`User.vue`)**：
@@ -287,10 +286,10 @@ router.beforeEach((to, from) => {
     return {
       path: '/login',
       // 保存我们所在的位置，以便以后再来
-      query: { redirect: to.fullPath }
-    }
+      query: { redirect: to.fullPath },
+    };
   }
-})
+});
 ```
 
 **路由独享的守卫 (`beforeEnter`)**：
@@ -305,11 +304,11 @@ const routes = [
       // 仅在此路由上生效
       // 拒绝任何非管理员用户的访问
       if (!userIsAdmin()) {
-        return { path: '/forbidden' }
+        return { path: '/forbidden' };
       }
-    }
-  }
-]
+    },
+  },
+];
 ```
 
 **组件内的守卫**：
@@ -327,15 +326,15 @@ export default {
     // 在当前路由改变，但是该组件被复用时调用
     // 例如，对于一个带有动态参数的路径 `/user/:id`，在 `/user/1` 和 `/user/2` 之间跳转的时候
     // 可以访问组件实例 `this`
-    this.fetchData(to.params.id)
+    this.fetchData(to.params.id);
   },
   beforeRouteLeave(to, from) {
     // 在导航离开渲染该组件的对应路由时调用
     // 可以访问组件实例 `this`
-    const answer = window.confirm('真的要离开吗？有未保存的更改哦！')
-    if (!answer) return false // 取消导航
-  }
-}
+    const answer = window.confirm('真的要离开吗？有未保存的更改哦！');
+    if (!answer) return false; // 取消导航
+  },
+};
 </script>
 ```
 
@@ -343,19 +342,19 @@ export default {
 
 ```vue
 <script setup>
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router';
 
 onBeforeRouteUpdate(async (to, from) => {
   // 仅当 id 改变时才重新获取数据
   if (to.params.id !== from.params.id) {
-    userData.value = await fetchUserData(to.params.id)
+    userData.value = await fetchUserData(to.params.id);
   }
-})
+});
 
 onBeforeRouteLeave((to, from) => {
-  const answer = window.confirm('真的要离开吗？有未保存的更改哦！')
-  if (!answer) return false
-})
+  const answer = window.confirm('真的要离开吗？有未保存的更改哦！');
+  if (!answer) return false;
+});
 </script>
 ```
 
@@ -370,15 +369,15 @@ const routes = [
   {
     path: '/posts',
     component: Posts,
-    meta: { requiresAuth: true, title: 'Posts Page' }
-  }
-]
+    meta: { requiresAuth: true, title: 'Posts Page' },
+  },
+];
 
 // 在全局守卫中访问
 router.beforeEach((to, from) => {
-  document.title = to.meta.title || 'My Default App Title'
+  document.title = to.meta.title || 'My Default App Title';
   // ...
-})
+});
 ```
 
 **过渡动效**：
@@ -436,12 +435,9 @@ const router = createRouter({
 
 ```javascript
 // 将以下路由组件打包到同一个 chunk 中
-const UserDetails = () =>
-  import(/* webpackChunkName: "group-user" */ './UserDetails.vue')
-const UserDashboard = () =>
-  import(/* webpackChunkName: "group-user" */ './UserDashboard.vue')
-const UserProfileEdit = () =>
-  import(/* webpackChunkName: "group-user" */ './UserProfileEdit.vue')
+const UserDetails = () => import(/* webpackChunkName: "group-user" */ './UserDetails.vue');
+const UserDashboard = () => import(/* webpackChunkName: "group-user" */ './UserDashboard.vue');
+const UserProfileEdit = () => import(/* webpackChunkName: "group-user" */ './UserProfileEdit.vue');
 ```
 
 ### 3.2 模块化路由配置
@@ -465,25 +461,25 @@ const routes = [
   {
     path: '/products',
     name: 'products',
-    component: () => import('@/views/Products/Index.vue')
+    component: () => import('@/views/Products/Index.vue'),
   },
   {
     path: '/products/:id',
     name: 'product-detail',
-    component: () => import('@/views/Products/Detail.vue')
-  }
-]
+    component: () => import('@/views/Products/Detail.vue'),
+  },
+];
 
-export default routes
+export default routes;
 ```
 
 **在主路由文件中合并 (`router/index.js`)**：
 
 ```javascript
-import { createRouter, createWebHistory } from 'vue-router'
-import adminRoutes from './modules/admin'
-import authRoutes from './modules/auth'
-import productRoutes from './modules/products'
+import { createRouter, createWebHistory } from 'vue-router';
+import adminRoutes from './modules/admin';
+import authRoutes from './modules/auth';
+import productRoutes from './modules/products';
 
 // 合并路由
 const routes = [
@@ -492,15 +488,15 @@ const routes = [
   ...productRoutes,
   // 别忘了可能还有根路由和404路由
   { path: '/', redirect: '/home' },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('@/views/NotFound.vue') }
-]
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('@/views/NotFound.vue') },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
 ```
 
 ### 3.3 滚动行为 (Scroll Behavior)
@@ -514,19 +510,19 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     // 如果存在保存的位置，则恢复（例如使用浏览器的前进/后退）
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     }
     // 滚动到锚点
     if (to.hash) {
       return {
         el: to.hash,
-        behavior: 'smooth' // 平滑滚动
-      }
+        behavior: 'smooth', // 平滑滚动
+      };
     }
     // 默认滚动到页面顶部
-    return { top: 0, left: 0 }
-  }
-})
+    return { top: 0, left: 0 };
+  },
+});
 ```
 
 ### 3.4 数据获取策略
@@ -568,14 +564,14 @@ A: 使用 `useRouter` 和 `useRoute` 组合式函数。
 
 ```vue
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
 
-const router = useRouter() // 用于导航
-const route = useRoute()   // 用于获取当前路由信息 (只读)
+const router = useRouter(); // 用于导航
+const route = useRoute(); // 用于获取当前路由信息 (只读)
 
-const userId = route.params.id
+const userId = route.params.id;
 function navigate() {
-  router.push('/home')
+  router.push('/home');
 }
 </script>
 ```

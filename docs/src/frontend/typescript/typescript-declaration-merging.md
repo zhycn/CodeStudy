@@ -63,7 +63,7 @@ interface Clash {
   prop: number;
 }
 interface Clash {
-  prop: string; 
+  prop: string;
   // Error: Subsequent property declarations must have the same type.
   // Property 'prop' must be of type 'number', but here has type 'string'.
 }
@@ -73,12 +73,12 @@ interface Clash {
 
 ```typescript
 interface Document {
-  createElement(tagName: "div"): HTMLDivElement;
-  createElement(tagName: "span"): HTMLSpanElement;
+  createElement(tagName: 'div'): HTMLDivElement;
+  createElement(tagName: 'span'): HTMLSpanElement;
 }
 
 interface Document {
-  createElement(tagName: "canvas"): HTMLCanvasElement;
+  createElement(tagName: 'canvas'): HTMLCanvasElement;
   createElement(tagName: string): HTMLElement; // 更泛化的签名
 }
 
@@ -122,12 +122,12 @@ class Album {
 }
 namespace Album {
   export class AlbumLabel {} // 为 Album 类添加静态成员
-  export const year = 2023;  // 为 Album 类添加静态属性
+  export const year = 2023; // 为 Album 类添加静态属性
 }
 
 const album = new Album();
 const label = new Album.AlbumLabel(); // 访问静态成员
-const year = Album.year;              // 访问静态属性
+const year = Album.year; // 访问静态属性
 ```
 
 - **与函数合并**：
@@ -137,12 +137,12 @@ function buildLabel(name: string): string {
   return buildLabel.prefix + name + buildLabel.suffix;
 }
 namespace buildLabel {
-  export const suffix = "!";
-  export const prefix = "Hello, ";
+  export const suffix = '!';
+  export const prefix = 'Hello, ';
 }
 
-console.log(buildLabel("TypeScript")); // Output: Hello, TypeScript!
-console.log(buildLabel.prefix);        // Output: Hello,
+console.log(buildLabel('TypeScript')); // Output: Hello, TypeScript!
+console.log(buildLabel.prefix); // Output: Hello,
 ```
 
 - **与枚举合并**：
@@ -158,7 +158,7 @@ namespace Color {
   }
 }
 
-console.log(Color.Red);    // Output: 1
+console.log(Color.Red); // Output: 1
 console.log(Color.mix(Color.Green)); // Output: Mixed Green
 ```
 
@@ -173,15 +173,15 @@ function reverse(x: number): number;
 function reverse(x: string): string;
 // 函数实现
 function reverse(x: number | string): number | string {
-  if (typeof x === "number") {
-    return Number(x.toString().split("").reverse().join(""));
+  if (typeof x === 'number') {
+    return Number(x.toString().split('').reverse().join(''));
   } else {
-    return x.split("").reverse().join("");
+    return x.split('').reverse().join('');
   }
 }
 
 const numResult = reverse(12345); // Type: number
-const strResult = reverse("hello"); // Type: string
+const strResult = reverse('hello'); // Type: string
 ```
 
 ### 2.4 枚举合并
@@ -190,12 +190,12 @@ const strResult = reverse("hello"); // Type: string
 
 ```typescript
 enum Size {
-  Small = "S",
-  Medium = "M",
+  Small = 'S',
+  Medium = 'M',
 }
 enum Size {
-  Large = "L", 
-  XLarge = "XL", // 合并新的成员
+  Large = 'L',
+  XLarge = 'XL', // 合并新的成员
 }
 
 console.log(Size.Medium); // Output: M
@@ -206,13 +206,21 @@ console.log(Size.XLarge); // Output: XL
 
 ```typescript
 // 这是可以的
-enum E { A }
-enum E { B = 2 }
+enum E {
+  A,
+}
+enum E {
+  B = 2,
+}
 
 // 这会报错
-enum F { A = 1 }
-enum F { B } 
-// Error: In an enum with multiple declarations, 
+enum F {
+  A = 1,
+}
+enum F {
+  B,
+}
+// Error: In an enum with multiple declarations,
 // only one declaration can omit an initializer for its first enum element.
 ```
 
@@ -244,8 +252,8 @@ declare namespace ThirdPartyLib {
 // 在你的业务代码中
 const user: ThirdPartyLib.User = {
   id: 1,
-  name: "Alice",
-  sessionId: "abc123def456", // 现在可以合法地添加 sessionId 了
+  name: 'Alice',
+  sessionId: 'abc123def456', // 现在可以合法地添加 sessionId 了
 };
 ```
 
@@ -264,7 +272,7 @@ declare global {
 }
 
 // 在你的业务代码中
-window.__MY_APP_STATE__ = { key: "value" }; // 现在不会报错了
+window.__MY_APP_STATE__ = { key: 'value' }; // 现在不会报错了
 ```
 
 ## 4. 最佳实践与注意事项
@@ -277,17 +285,17 @@ window.__MY_APP_STATE__ = { key: "value" }; // 现在不会报错了
 
 4. **使用 JSDoc 增强可读性**：当进行模块增强时，使用 JSDoc 注释来说明添加的成员的目的，这对于团队协作至关重要。
 
-    ```typescript
-    declare namespace ThirdPartyLib {
-      interface User {
-        /**
-         * A custom session identifier injected by our application.
-         * Used for tracking user activity across requests.
-         */
-        sessionId: string;
-      }
-    }
-    ```
+   ```typescript
+   declare namespace ThirdPartyLib {
+     interface User {
+       /**
+        * A custom session identifier injected by our application.
+        * Used for tracking user activity across requests.
+        */
+       sessionId: string;
+     }
+   }
+   ```
 
 5. **模块化增强**：将所有的类型增强放在一个专门的文件中（如 `types/augmentations.d.ts`），并在 `tsconfig.json` 中确保该文件被包含，这样可以集中管理所有扩展。
 

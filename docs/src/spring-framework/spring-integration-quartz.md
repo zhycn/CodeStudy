@@ -27,14 +27,14 @@ Spring Boot 与 Quartz 的集成带来了多重优势：**简化配置与集成*
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-quartz</artifactId>
     </dependency>
-    
+
     <!-- 如果使用数据库持久化，需要添加数据库驱动 -->
     <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <scope>runtime</scope>
     </dependency>
-    
+
     <!-- Spring Boot Web (可选，用于提供Web管理接口) -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -50,7 +50,7 @@ Spring Boot 与 Quartz 的集成带来了多重优势：**简化配置与集成*
 ```yaml
 spring:
   quartz:
-    job-store-type: memory  # 存储类型，可选memory或jdbc
+    job-store-type: memory # 存储类型，可选memory或jdbc
     properties:
       org:
         quartz:
@@ -58,10 +58,10 @@ spring:
             instanceName: MyScheduler
             instanceId: AUTO
           threadPool:
-            threadCount: 10  # 线程池大小
+            threadCount: 10 # 线程池大小
           jobStore:
             useProperties: false
-            misfireThreshold: 60000  # 错过触发阈值(毫秒)
+            misfireThreshold: 60000 # 错过触发阈值(毫秒)
 ```
 
 对于需要**持久化任务**的场景，可以配置使用数据库存储：
@@ -71,7 +71,7 @@ spring:
   quartz:
     job-store-type: jdbc
     jdbc:
-      initialize-schema: always  # 自动初始化数据库表结构
+      initialize-schema: always # 自动初始化数据库表结构
     properties:
       org:
         quartz:
@@ -82,7 +82,7 @@ spring:
             class: org.quartz.impl.jdbcjobstore.JobStoreTX
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
             tablePrefix: QRTZ_
-            isClustered: true  # 开启集群支持
+            isClustered: true # 开启集群支持
             clusterCheckinInterval: 20000
           threadPool:
             threadCount: 10
@@ -120,12 +120,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SimpleJob implements Job {
-    
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         // 在这里编写任务逻辑
         System.out.println("SimpleJob executed at: " + new Date());
-        
+
         // 可以获取JobDetail中存储的数据
         JobDataMap dataMap = context.getJobDetail().getJobDataMap();
         String jobName = dataMap.getString("jobName");
@@ -283,7 +283,7 @@ public class BusinessJob implements Job {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private EmailService emailService;
 
@@ -292,7 +292,7 @@ public class BusinessJob implements Job {
         // 现在可以使用注入的Spring Bean了
         List<User> users = userService.findInactiveUsers();
         emailService.sendReminderEmails(users);
-        
+
         System.out.println("BusinessJob executed successfully at: " + new Date());
     }
 }
@@ -314,7 +314,7 @@ spring:
   quartz:
     job-store-type: jdbc
     jdbc:
-      initialize-schema: always  # 自动初始化数据库表
+      initialize-schema: always # 自动初始化数据库表
     properties:
       org:
         quartz:
@@ -388,10 +388,10 @@ public class DynamicJobService {
     private Scheduler scheduler;
 
     // 添加新任务
-    public void addJob(String jobName, String jobGroup, String triggerName, String triggerGroup, 
-                      Class<? extends Job> jobClass, String cronExpression, JobDataMap jobData) 
+    public void addJob(String jobName, String jobGroup, String triggerName, String triggerGroup,
+                      Class<? extends Job> jobClass, String cronExpression, JobDataMap jobData)
                       throws SchedulerException {
-        
+
         JobDetail jobDetail = JobBuilder.newJob(jobClass)
                 .withIdentity(jobName, jobGroup)
                 .usingJobData(jobData != null ? jobData : new JobDataMap())
@@ -427,17 +427,17 @@ public class DynamicJobService {
     }
 
     // 更新任务调度时间
-    public void updateJobCron(String triggerName, String triggerGroup, String cronExpression) 
+    public void updateJobCron(String triggerName, String triggerGroup, String cronExpression)
                              throws SchedulerException {
         TriggerKey triggerKey = new TriggerKey(triggerName, triggerGroup);
         CronTrigger oldTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-        
+
         if (oldTrigger != null) {
             CronTrigger newTrigger = TriggerBuilder.newTrigger()
                     .withIdentity(triggerKey)
                     .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                     .build();
-            
+
             scheduler.rescheduleJob(triggerKey, newTrigger);
         }
     }
@@ -480,9 +480,9 @@ public class CustomJobListener implements JobListener {
     @Override
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
         String jobName = context.getJobDetail().getKey().getName();
-        
+
         if (jobException != null) {
-            System.err.println("Job: " + jobName + " execution failed with exception: " 
+            System.err.println("Job: " + jobName + " execution failed with exception: "
                               + jobException.getMessage());
             // 这里可以添加错误处理逻辑，如发送警报、重试等
         } else {
@@ -510,13 +510,13 @@ public class ListenerConfig {
     public Scheduler scheduler(Trigger... triggers) throws SchedulerException {
         SchedulerFactory schedulerFactory = new StdSchedulerFactory();
         Scheduler scheduler = schedulerFactory.getScheduler();
-        
+
         // 添加Job监听器
         scheduler.getListenerManager().addJobListener(customJobListener);
-        
+
         // 可以添加Trigger监听器
         // scheduler.getListenerManager().addTriggerListener(customTriggerListener);
-        
+
         return scheduler;
     }
 }
@@ -533,7 +533,7 @@ public class TransactionalJob implements Job {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private AuditLogRepository auditLogRepository;
 
@@ -544,13 +544,13 @@ public class TransactionalJob implements Job {
             User user = userRepository.findByUsername("testuser");
             user.setLastActive(new Date());
             userRepository.save(user);
-            
+
             // 记录审计日志
             AuditLog log = new AuditLog();
             log.setAction("USER_UPDATE");
             log.setTimestamp(new Date());
             auditLogRepository.save(log);
-            
+
         } catch (Exception e) {
             throw new JobExecutionException("Transactional job failed", e);
         }
@@ -571,7 +571,7 @@ spring:
       org:
         quartz:
           threadPool:
-            threadCount: 15  # 根据任务数量调整
+            threadCount: 15 # 根据任务数量调整
             threadPriority: 5
             class: org.quartz.simpl.SimpleThreadPool
 ```
@@ -599,28 +599,28 @@ CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/5 * 
 public class MonitoredJob implements Job {
 
     private static final Logger logger = LoggerFactory.getLogger(MonitoredJob.class);
-    
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         long startTime = System.currentTimeMillis();
         String jobName = context.getJobDetail().getKey().getName();
-        
+
         try {
             logger.info("Job {} started", jobName);
-            
+
             // 执行任务逻辑
             doWork();
-            
+
             long duration = System.currentTimeMillis() - startTime;
             logger.info("Job {} completed successfully in {} ms", jobName, duration);
-            
+
         } catch (Exception e) {
             long duration = System.currentTimeMillis() - startTime;
             logger.error("Job {} failed after {} ms: {}", jobName, duration, e.getMessage(), e);
             throw new JobExecutionException("Job execution failed", e);
         }
     }
-    
+
     private void doWork() {
         // 实际任务逻辑
     }

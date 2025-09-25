@@ -11,6 +11,7 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 
 - [Spring IoC 容器详解与最佳实践](./spring-ioc-container.md)
 - [Spring Container 详解与最佳实践](./spring-container.md)
+- [Spring ApplicationContext 详解与最佳实践](./spring-applicationcontext.md)
 - [Spring Bean 详解与最佳实践](./spring-bean.md)
 - [Spring Bean 动态创建详解与最佳实践](./spring-bean-dynamic.md)
 - [Spring Bean 的作用域详解与最佳实践](./spring-bean-scope.md)
@@ -29,14 +30,18 @@ Spring Framework 是一个开源的 Java 平台，用于构建企业级应用程
 - [Spring Events 事件机制详解与最佳实践](./spring-event.md)
 - [Spring AOT 详解与最佳实践](./spring-aot.md)
 - [Spring ASM 详解与最佳实践](./spring-asm.md)
+- [Spring JNDI 详解与最佳实践](./spring-jndi.md)
 - [Spring Messaging 模块核心组件详解与最佳实践](./spring-messaging.md)
 - [Spring Null-safety 详解与最佳实践](./spring-null-safety.md)
 - [Spring Retry 详解与最佳实践](./spring-retry.md)
 - [Spring 拦截器详解与最佳实践](./spring-interceptor.md)
 - [Spring Filter 过滤器详解与最佳实践](./spring-filter.md)
 - [Spring Converter 转换器详解与最佳实践](./spring-converter.md)
+- [Spring Formatter 格式化器详解与最佳实践](./spring-formatter.md)
 - [Spring IO 详解与最佳实践](./spring-io.md)
 - [Spring 工具类完全指南](./spring-utils.md)
+- [Spring Framework 6.x 注解完全指南](./spring-annotations.md)
+- [Spring Framework 6.x Aware 完全指南](./spring-aware.md)
 
 ## Testing
 
@@ -110,30 +115,30 @@ Spring Framework 6.x 要求 **JDK 17+** 并全面支持 **Jakarta EE 9+**（包�
 
 以下是 Spring Framework 6.x 主要模块的简介，仅供参考：
 
-| 模块名称                   | 简介                                                                                                                              |
-| :------------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
-| **spring-aop**             | 提供面向切面编程（AOP）的支持，允许将横切关注点（如日志、事务）模块化，通过动态代理技术实现方法拦截和增强。 |
-| **spring-aspects**         | 集成了 AspectJ 框架，提供更强大的 AOP 功能，如编译时织入（CTW）和加载时织入（LTW）。                          |
-| **spring-beans**           | Spring 框架的核心模块之一，提供了对 JavaBean 的配置、创建和管理的基础支持，实现了控制反转（IoC）容器的基础。   |
-| **spring-context**         | 在 `spring-beans` 基础上构建，提供应用上下文管理、国际化、事件传播、资源加载等企业级功能。                       |
-| **spring-context-indexer** | 在编译时生成组件索引文件，加速大型应用中 Spring 容器的启动速度，避免昂贵的类路径扫描。                                   |
-| **spring-context-support** | 提供了对缓存、任务调度、邮件服务等常见企业级功能的集成支持。                                                               |
-| **spring-core**            | 框架的基础核心模块，包含核心工具类、资源访问、类型转换等基础设施，是其他模块的基础。                           |
-| **spring-core-test**       | 为 `spring-core` 模块提供测试支持。                                                                                    |
-| **spring-expression**      | 提供了强大的表达式语言（SpEL），支持在运行时查询和操作对象图。                                                             |
-| **spring-instrument**      | 提供了类植入（Instrumentation）支持和类加载器的实现，用于应用服务器环境。                                                 |
-| **spring-jdbc**            | 提供了对 JDBC 的抽象和封装，简化数据库操作，减少样板代码，并提供统一的异常处理。                               |
-| **spring-jms**             | 用于与 Java Message Service (JMS) 消息队列进行集成，实现异步消息传递。                                      |
-| **spring-messaging**       | 为消息传递应用提供基础抽象，是 Spring WebSocket 和 Spring Integration 等模块的基石。                                     |
-| **spring-orm**             | 提供了对流行的对象关系映射（ORM）框架（如 Hibernate, JPA）的集成支持。                                      |
-| **spring-oxm**             | 支持对象/XML 映射（Object/XML Mapping），用于实现对象与 XML 之间的相互转换。                                             |
-| **spring-r2dbc**           | 提供了对反应式关系型数据库连接（R2DBC）的支持，用于在响应式应用中访问关系型数据库。                                       |
+| 模块名称                   | 简介                                                                                                         |
+| :------------------------- | :----------------------------------------------------------------------------------------------------------- |
+| **spring-aop**             | 提供面向切面编程（AOP）的支持，允许将横切关注点（如日志、事务）模块化，通过动态代理技术实现方法拦截和增强。  |
+| **spring-aspects**         | 集成了 AspectJ 框架，提供更强大的 AOP 功能，如编译时织入（CTW）和加载时织入（LTW）。                         |
+| **spring-beans**           | Spring 框架的核心模块之一，提供了对 JavaBean 的配置、创建和管理的基础支持，实现了控制反转（IoC）容器的基础。 |
+| **spring-context**         | 在 `spring-beans` 基础上构建，提供应用上下文管理、国际化、事件传播、资源加载等企业级功能。                   |
+| **spring-context-indexer** | 在编译时生成组件索引文件，加速大型应用中 Spring 容器的启动速度，避免昂贵的类路径扫描。                       |
+| **spring-context-support** | 提供了对缓存、任务调度、邮件服务等常见企业级功能的集成支持。                                                 |
+| **spring-core**            | 框架的基础核心模块，包含核心工具类、资源访问、类型转换等基础设施，是其他模块的基础。                         |
+| **spring-core-test**       | 为 `spring-core` 模块提供测试支持。                                                                          |
+| **spring-expression**      | 提供了强大的表达式语言（SpEL），支持在运行时查询和操作对象图。                                               |
+| **spring-instrument**      | 提供了类植入（Instrumentation）支持和类加载器的实现，用于应用服务器环境。                                    |
+| **spring-jdbc**            | 提供了对 JDBC 的抽象和封装，简化数据库操作，减少样板代码，并提供统一的异常处理。                             |
+| **spring-jms**             | 用于与 Java Message Service (JMS) 消息队列进行集成，实现异步消息传递。                                       |
+| **spring-messaging**       | 为消息传递应用提供基础抽象，是 Spring WebSocket 和 Spring Integration 等模块的基石。                         |
+| **spring-orm**             | 提供了对流行的对象关系映射（ORM）框架（如 Hibernate, JPA）的集成支持。                                       |
+| **spring-oxm**             | 支持对象/XML 映射（Object/XML Mapping），用于实现对象与 XML 之间的相互转换。                                 |
+| **spring-r2dbc**           | 提供了对反应式关系型数据库连接（R2DBC）的支持，用于在响应式应用中访问关系型数据库。                          |
 | **spring-test**            | 提供了对 Spring 应用进行单元测试和集成测试的丰富支持，包括与 JUnit 的集成。                                  |
-| **spring-tx**              | 提供了声明式和编程式事务管理的抽象接口和实现，是 Spring 事务管理的核心。                                      |
-| **spring-web**             | 提供了基本的 Web 开发支持，包括文件上传、Servlet 过滤器等基础设施，为 WebMVC 和 WebFlux 模块奠定基础。                    |
+| **spring-tx**              | 提供了声明式和编程式事务管理的抽象接口和实现，是 Spring 事务管理的核心。                                     |
+| **spring-web**             | 提供了基本的 Web 开发支持，包括文件上传、Servlet 过滤器等基础设施，为 WebMVC 和 WebFlux 模块奠定基础。       |
 | **spring-webflux**         | Spring 的反应式 Web 框架，用于构建基于 Reactive Streams 的非阻塞、异步 Web 应用。                            |
-| **spring-webmvc**          | 基于 Servlet API 的传统 Web MVC 框架，用于构建模型-视图-控制器架构的 Web 应用程序。                           |
-| **spring-websocket**       | 提供了 WebSocket 通信的支持，用于在 Web 应用中实现双向、实时的消息传递。                                                 |
+| **spring-webmvc**          | 基于 Servlet API 的传统 Web MVC 框架，用于构建模型-视图-控制器架构的 Web 应用程序。                          |
+| **spring-websocket**       | 提供了 WebSocket 通信的支持，用于在 Web 应用中实现双向、实时的消息传递。                                     |
 
 ### 常用测试框架
 

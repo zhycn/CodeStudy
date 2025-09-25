@@ -25,13 +25,13 @@ Spring Test Mock 组件基于 **模拟对象设计模式** (Mock Object Pattern)
 
 Spring Test Mock 组件按其用途主要分为以下几类：
 
-| **类别** | **核心组件** | **主要用途** |
-| :--- | :--- | :--- |
-| **Servlet API 模拟** | `MockHttpServletRequest`, `MockHttpServletResponse`, `MockHttpSession`, `MockServletContext`, `MockFilterChain` | 模拟 Servlet 容器环境，用于 Web 层测试。 |
-| **响应式 Web 模拟** | `MockServerHttpRequest`, `MockServerHttpResponse`, `MockServerWebExchange` | 模拟 WebFlux 响应式环境，用于响应式编程测试。 |
-| **环境与配置模拟** | `MockEnvironment`, `MockPropertySource` | 模拟应用运行环境（如配置文件、系统属性）。 |
-| **JNDI 模拟** | `SimpleNamingContext` | 模拟 JNDI 上下文，用于测试依赖 JNDI 查找的代码。 |
-| **其他 Web 模拟** | `MockMultipartHttpServletRequest`, `MockPageContext` | 模拟文件上传、JSP 上下文等特定 Web 场景。 |
+| **类别**             | **核心组件**                                                                                                    | **主要用途**                                     |
+| :------------------- | :-------------------------------------------------------------------------------------------------------------- | :----------------------------------------------- |
+| **Servlet API 模拟** | `MockHttpServletRequest`, `MockHttpServletResponse`, `MockHttpSession`, `MockServletContext`, `MockFilterChain` | 模拟 Servlet 容器环境，用于 Web 层测试。         |
+| **响应式 Web 模拟**  | `MockServerHttpRequest`, `MockServerHttpResponse`, `MockServerWebExchange`                                      | 模拟 WebFlux 响应式环境，用于响应式编程测试。    |
+| **环境与配置模拟**   | `MockEnvironment`, `MockPropertySource`                                                                         | 模拟应用运行环境（如配置文件、系统属性）。       |
+| **JNDI 模拟**        | `SimpleNamingContext`                                                                                           | 模拟 JNDI 上下文，用于测试依赖 JNDI 查找的代码。 |
+| **其他 Web 模拟**    | `MockMultipartHttpServletRequest`, `MockPageContext`                                                            | 模拟文件上传、JSP 上下文等特定 Web 场景。        |
 
 ## 2 核心 Mock 组件详解
 
@@ -249,11 +249,11 @@ Spring Test Mock 组件的设计遵循了一系列优秀的软件工程原则和
 
 Spring Boot Test 支持不同粒度的测试：
 
-| **测试类型** | **特点** | **适用注解** | **Mock 策略** |
-| :--- | :--- | :--- | :--- |
-| **单元测试 (Unit Test)** | 测试单个方法或类，速度快。 | `@Test`, `@ExtendWith(MockitoExtension.class)` | 使用 Mockito 的 `@Mock`、`@InjectMocks` 手动管理依赖。 |
-| **切片测试 (Slice Test)** | 测试特定层（如 Web、Data），只加载部分 Bean。 | `@WebMvcTest`, `@DataJpaTest`, `@JsonTest` | 使用 `@MockitoBean` 自动替换 Spring 上下文中的特定 Bean。 |
-| **集成测试 (Integration Test)** | 测试完整功能，加载接近完整的上下文。 | `@SpringBootTest` | 混合策略：使用 `@MockitoBean` 替换外部依赖（如邮件服务），使用真实内部依赖。 |
+| **测试类型**                    | **特点**                                      | **适用注解**                                   | **Mock 策略**                                                                |
+| :------------------------------ | :-------------------------------------------- | :--------------------------------------------- | :--------------------------------------------------------------------------- |
+| **单元测试 (Unit Test)**        | 测试单个方法或类，速度快。                    | `@Test`, `@ExtendWith(MockitoExtension.class)` | 使用 Mockito 的 `@Mock`、`@InjectMocks` 手动管理依赖。                       |
+| **切片测试 (Slice Test)**       | 测试特定层（如 Web、Data），只加载部分 Bean。 | `@WebMvcTest`, `@DataJpaTest`, `@JsonTest`     | 使用 `@MockitoBean` 自动替换 Spring 上下文中的特定 Bean。                    |
+| **集成测试 (Integration Test)** | 测试完整功能，加载接近完整的上下文。          | `@SpringBootTest`                              | 混合策略：使用 `@MockitoBean` 替换外部依赖（如邮件服务），使用真实内部依赖。 |
 
 #### 4.1.1 使用 `@MockitoBean` 进行集成测试 Mock
 
@@ -423,31 +423,31 @@ public class UserControllerIntegrationTest {
 
 - **使用 Java Faker 等库生成逼真数据**：在测试中，可以使用像 <https://github.com/DiUS/java-faker> 这样的库来生成更真实、更多样的测试数据，避免使用简单的 "test" 或 "abc"。
 
-    ```java
-    Faker faker = new Faker();
-    String name = faker.name().fullName();
-    String email = faker.internet().emailAddress();
-    ```
+  ```java
+  Faker faker = new Faker();
+  String name = faker.name().fullName();
+  String email = faker.internet().emailAddress();
+  ```
 
 - **使用 `@DirtiesContext` 避免 Mock 状态泄漏**：默认情况下，Spring Test 会缓存 `ApplicationContext` 以提升测试速度。但如果一个测试中的 `@MockitoBean` 定义了特定行为，它可能会在后续测试中意外存在，导致测试间相互影响。使用 `@DirtiesContext` 注解可以标记测试结束后重置上下文，确保测试隔离性。
 
-    ```java
-    @SpringBootTest
-    @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // 每个测试方法后都重置上下文
-    public class ServiceWithMockStateTest {
-        // ... 测试方法 ...
-    }
-    ```
+  ```java
+  @SpringBootTest
+  @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // 每个测试方法后都重置上下文
+  public class ServiceWithMockStateTest {
+      // ... 测试方法 ...
+  }
+  ```
 
 ## 5 常见问题与性能优化
 
 ### 5.1 常见陷阱与解决方案
 
 1. **`@MockitoBean` 导致上下文重启**：过度使用 `@MockitoBean` 或在测试类之间使用不同的 Mock 配置，会导致 Spring 为每个测试类创建新的 `ApplicationContext`，大幅增加测试总时间。
-    - **解决方案**：尽量将相同 Mock 配置的测试类放在同一个测试上下文中。考虑使用 **`@TestConfiguration`** 在配置类中统一定义 Mock Bean，然后在测试类中导入（`@Import`），而不是在每个类中使用 `@MockitoBean`。
+   - **解决方案**：尽量将相同 Mock 配置的测试类放在同一个测试上下文中。考虑使用 **`@TestConfiguration`** 在配置类中统一定义 Mock Bean，然后在测试类中导入（`@Import`），而不是在每个类中使用 `@MockitoBean`。
 
 2. **误用 Mock：测试变得毫无意义**：过度 Mock 会导致测试只验证了 Mock 的行为，而非实际代码逻辑。
-    - **解决方案**：遵循 **“只 Mock 外部依赖”** 的原则。数据库、第三方 API、消息队列、文件系统等都是合理的 Mock 对象。应用内部的核心服务（如 `UserService` 调用 `UserRepository`）在集成测试中应谨慎 Mock。
+   - **解决方案**：遵循 **“只 Mock 外部依赖”** 的原则。数据库、第三方 API、消息队列、文件系统等都是合理的 Mock 对象。应用内部的核心服务（如 `UserService` 调用 `UserRepository`）在集成测试中应谨慎 Mock。
 
 ### 5.2 性能优化策略
 

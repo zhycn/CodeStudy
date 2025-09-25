@@ -66,62 +66,62 @@ npm run dev
 **vite.config.js 最佳实践**：
 
 ```javascript
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   build: {
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['vue', 'vue-router', 'pinia']
-        }
-      }
-    }
+          vendor: ['vue', 'vue-router', 'pinia'],
+        },
+      },
+    },
   },
   server: {
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  }
-})
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+});
 ```
 
 ### 插件生态系统
 
-| 插件名称 | 功能 | 安装命令 |
-|----------|------|----------|
-| @vitejs/plugin-vue | Vue3 单文件组件支持 | `npm i -D @vitejs/plugin-vue` |
-| unplugin-vue-components | 自动导入组件 | `npm i -D unplugin-vue-components` |
-| vite-plugin-pwa | PWA 支持 | `npm i -D vite-plugin-pwa` |
-| vite-plugin-svg-icons | SVG 图标处理 | `npm i -D vite-plugin-svg-icons` |
-| vite-plugin-compression | 资源压缩 | `npm i -D vite-plugin-compression` |
+| 插件名称                | 功能                | 安装命令                           |
+| ----------------------- | ------------------- | ---------------------------------- |
+| @vitejs/plugin-vue      | Vue3 单文件组件支持 | `npm i -D @vitejs/plugin-vue`      |
+| unplugin-vue-components | 自动导入组件        | `npm i -D unplugin-vue-components` |
+| vite-plugin-pwa         | PWA 支持            | `npm i -D vite-plugin-pwa`         |
+| vite-plugin-svg-icons   | SVG 图标处理        | `npm i -D vite-plugin-svg-icons`   |
+| vite-plugin-compression | 资源压缩            | `npm i -D vite-plugin-compression` |
 
 ### 性能优化技巧
 
 ```javascript
 // 自动导入组件配置
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 export default defineConfig({
   plugins: [
     Components({
       resolvers: [ElementPlusResolver()],
-      dts: true // 生成类型声明文件
-    })
-  ]
-})
+      dts: true, // 生成类型声明文件
+    }),
+  ],
+});
 ```
 
 ## 路由管理最佳实践
@@ -134,7 +134,7 @@ export default defineConfig({
 
 ```javascript
 // src/router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
@@ -145,41 +145,41 @@ const routes = [
         path: '',
         name: 'Home',
         component: () => import('@/views/HomeView.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true },
       },
       // 其他子路由...
-    ]
-  }
-]
+    ],
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { top: 0 }
-  }
-})
+    return savedPosition || { top: 0 };
+  },
+});
 ```
 
 **路由守卫最佳实践**：
 
 ```javascript
 router.beforeEach((to, from) => {
-  const authStore = useAuthStore()
-  
+  const authStore = useAuthStore();
+
   // 身份验证检查
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    return { name: 'Login', query: { redirect: to.fullPath } }
+    return { name: 'Login', query: { redirect: to.fullPath } };
   }
-  
+
   // 页面访问分析
   if (import.meta.env.PROD) {
-    analytics.trackPageView(to.name)
+    analytics.trackPageView(to.name);
   }
-  
+
   // 页面标题设置
-  document.title = to.meta.title ? `${to.meta.title} | My App` : 'My App'
-})
+  document.title = to.meta.title ? `${to.meta.title} | My App` : 'My App';
+});
 ```
 
 ### 动态路由加载策略
@@ -187,17 +187,17 @@ router.beforeEach((to, from) => {
 ```javascript
 // 按用户权限加载路由
 export function setupDynamicRoutes(userRoles) {
-  const routes = []
-  
+  const routes = [];
+
   if (userRoles.includes('admin')) {
     routes.push({
       path: '/admin',
       component: () => import('@/views/admin/Dashboard.vue'),
-      meta: { requiresAdmin: true }
-    })
+      meta: { requiresAdmin: true },
+    });
   }
-  
-  routes.forEach(route => router.addRoute(route))
+
+  routes.forEach((route) => router.addRoute(route));
 }
 ```
 
@@ -218,32 +218,32 @@ export function setupDynamicRoutes(userRoles) {
 
 ```javascript
 // stores/counter.js
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({ count: 0 }),
   getters: {
-    doubleCount: (state) => state.count * 2
+    doubleCount: (state) => state.count * 2,
   },
   actions: {
     increment() {
-      this.count++
+      this.count++;
     },
     async fetchInitialCount() {
-      const res = await api.getCount()
-      this.count = res.data.count
-    }
-  }
-})
+      const res = await api.getCount();
+      this.count = res.data.count;
+    },
+  },
+});
 ```
 
 **组件中使用**：
 
 ```vue
 <script setup>
-import { useCounterStore } from '@/stores/counter'
+import { useCounterStore } from '@/stores/counter';
 
-const counter = useCounterStore()
+const counter = useCounterStore();
 </script>
 
 <template>
@@ -256,18 +256,18 @@ const counter = useCounterStore()
 ### 状态持久化策略
 
 ```javascript
-import { defineStore } from 'pinia'
-import { useStorage } from '@vueuse/core'
+import { defineStore } from 'pinia';
+import { useStorage } from '@vueuse/core';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     token: useStorage('token', null),
     preferences: useStorage('preferences', {
       theme: 'light',
-      locale: 'en-US'
-    })
-  })
-})
+      locale: 'en-US',
+    }),
+  }),
+});
 ```
 
 ## 测试策略与工具
@@ -301,28 +301,28 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     coverage: {
-      reporter: ['text', 'json', 'html']
-    }
-  }
-})
+      reporter: ['text', 'json', 'html'],
+    },
+  },
+});
 ```
 
 **组件测试示例**：
 
 ```javascript
-import { render } from '@testing-library/vue'
-import Counter from '@/components/Counter.vue'
+import { render } from '@testing-library/vue';
+import Counter from '@/components/Counter.vue';
 
 test('increments value on click', async () => {
-  const { getByText } = render(Counter)
-  
-  getByText('Count: 0')
-  
-  const button = getByText('Increment')
-  await button.click()
-  
-  getByText('Count: 1')
-})
+  const { getByText } = render(Counter);
+
+  getByText('Count: 0');
+
+  const button = getByText('Increment');
+  await button.click();
+
+  getByText('Count: 1');
+});
 ```
 
 ### 端到端测试方案
@@ -331,13 +331,13 @@ test('increments value on click', async () => {
 // Cypress 组件测试
 describe('Login', () => {
   it('successfully logs in', () => {
-    cy.visit('/login')
-    cy.get('[data-testid="email"]').type('user@example.com')
-    cy.get('[data-testid="password"]').type('password123')
-    cy.get('[data-testid="submit"]').click()
-    cy.url().should('include', '/dashboard')
-  })
-})
+    cy.visit('/login');
+    cy.get('[data-testid="email"]').type('user@example.com');
+    cy.get('[data-testid="password"]').type('password123');
+    cy.get('[data-testid="submit"]').click();
+    cy.url().should('include', '/dashboard');
+  });
+});
 ```
 
 ## 代码质量与规范
@@ -354,19 +354,14 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:vue/vue3-recommended',
-    '@vue/typescript/recommended',
-    '@vue/prettier'
-  ],
+  extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', '@vue/typescript/recommended', '@vue/prettier'],
   rules: {
     'vue/multi-word-component-names': 'off',
     'vue/component-api-style': ['error', ['script-setup']],
     'vue/require-default-prop': 'off',
-    '@typescript-eslint/no-explicit-any': 'off'
-  }
-}
+    '@typescript-eslint/no-explicit-any': 'off',
+  },
+};
 ```
 
 **.prettierrc**：
@@ -393,10 +388,7 @@ module.exports = {
     "format": "prettier --write ."
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,vue}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "*.{js,jsx,ts,tsx,vue}": ["eslint --fix", "prettier --write"]
   }
 }
 ```
@@ -427,29 +419,26 @@ graph LR
 
 ```vue
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue';
 
 // 异步组件加载
-const HeavyComponent = defineAsyncComponent(() =>
-  import('@/components/HeavyComponent.vue')
-)
+const HeavyComponent = defineAsyncComponent(() => import('@/components/HeavyComponent.vue'));
 
 // 图片懒加载
-const imageRef = ref(null)
+const imageRef = ref(null);
 onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) {
-      entries[0].target.src = entries[0].target.dataset.src
-      observer.unobserve(entries[0].target)
+      entries[0].target.src = entries[0].target.dataset.src;
+      observer.unobserve(entries[0].target);
     }
-  })
-  
-  observer.observe(imageRef.value)
-})
+  });
+
+  observer.observe(imageRef.value);
+});
 </script>
 
 <template>
-  
   <HeavyComponent v-if="showHeavyComponent" />
 </template>
 ```

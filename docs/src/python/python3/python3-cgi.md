@@ -285,37 +285,37 @@ CGI 脚本直接由服务器执行，且常处理用户输入，因此安全至�
 
 1. **永远不要信任用户输入**：所有从客户端接收的数据（`QUERY_STRING`, `POST` 数据、Cookie、头信息）都必须被视为不可信的，必须进行验证、清理和转义。
 
-    ```python
-    # 不好的做法
-    user_input = params['filename'][0]
-    os.system(f"cat /var/data/{user_input}") # 致命的安全漏洞！
+   ```python
+   # 不好的做法
+   user_input = params['filename'][0]
+   os.system(f"cat /var/data/{user_input}") # 致命的安全漏洞！
 
-    # 好的做法：使用白名单验证
-    allowed_files = {'report1.txt', 'report2.txt'}
-    if user_input not in allowed_files:
-        # 返回错误
-        pass
-    ```
+   # 好的做法：使用白名单验证
+   allowed_files = {'report1.txt', 'report2.txt'}
+   if user_input not in allowed_files:
+       # 返回错误
+       pass
+   ```
 
 2. **小心调用 Shell**：避免使用 `os.system()`、`os.popen()` 或 `subprocess` 的 `shell=True` 参数。如果必须调用外部命令，使用 `subprocess.run()` 并传递参数列表。
 
-    ```python
-    # 危险！
-    os.system(f"rm {user_file}")
+   ```python
+   # 危险！
+   os.system(f"rm {user_file}")
 
-    # 安全得多
-    import subprocess
-    subprocess.run(['rm', user_file]) # 但仍需验证 user_file
-    ```
+   # 安全得多
+   import subprocess
+   subprocess.run(['rm', user_file]) # 但仍需验证 user_file
+   ```
 
 3. **转义输出**：在将用户数据输出到 HTML 时，务必进行转义，以防止跨站脚本（XSS）攻击。
 
-    ```python
-    import html
-    user_comment = params.get('comment', [''])[0]
-    # 转义后再输出
-    print(f"<p>你的评论: {html.escape(user_comment)}</p>")
-    ```
+   ```python
+   import html
+   user_comment = params.get('comment', [''])[0]
+   # 转义后再输出
+   print(f"<p>你的评论: {html.escape(user_comment)}</p>")
+   ```
 
 4. **使用 HTTPS**：任何涉及敏感信息（密码、个人信息）的表单都必须通过 HTTPS 提交。
 

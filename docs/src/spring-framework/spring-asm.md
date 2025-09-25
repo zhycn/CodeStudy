@@ -32,12 +32,15 @@ ASM 能够直接操作 Java 字节码指令，提供了对字节码的精细控�
 ASM 的核心架构基于访问者模式（Visitor Pattern），主要包含以下核心组件：
 
 #### ClassReader
+
 `ClassReader` 是字节码的读取与分析引擎，负责解析输入的 `.class` 文件。它采用类似 SAX 的事件读取机制，当有事件发生时，会调用注册的 `ClassVisitor`、`AnnotationVisitor`、`FieldVisitor`、`MethodVisitor` 进行相应处理。
 
 #### ClassVisitor
-`ClassVisitor` 是一个抽象类，定义了在读取 Class 字节码时会触发的事件。其方法调用必须遵循特定顺序：`visit` → `visitSource` → `visitOuterClass` → (`visitAnnotation` | `visitTypeAnnotation` | `visitAttribute`)* → (`visitInnerClass` | `visitField` | `visitMethod`)* → `visitEnd`。
+
+`ClassVisitor` 是一个抽象类，定义了在读取 Class 字节码时会触发的事件。其方法调用必须遵循特定顺序：`visit` → `visitSource` → `visitOuterClass` → (`visitAnnotation` | `visitTypeAnnotation` | `visitAttribute`)_ → (`visitInnerClass` | `visitField` | `visitMethod`)_ → `visitEnd`。
 
 #### ClassWriter
+
 `ClassWriter` 实现了 `ClassVisitor` 接口，用于生成符合 Java 类文件格式的字节码数组。它可以单独使用来"从零开始"生成 Java 类，也可以与一个或多个 `ClassReader` 及适配器类访问者一起使用，从现有 Java 类生成修改后的类。
 
 ### 2.2 API 类型：Core API vs Tree API
@@ -45,6 +48,7 @@ ASM 的核心架构基于访问者模式（Visitor Pattern），主要包含以�
 ASM 提供了两种 API 用于操作字节码：
 
 #### Core API（核心 API）
+
 基于事件驱动模型，类似于解析 XML 的 SAX 方式。Core API 的处理过程类似于遍历语法树，每个 visit 方法代表树的一个节点。这种 API 性能更高，适合处理大型类。
 
 ```java
@@ -54,7 +58,7 @@ ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 
 classReader.accept(new ClassVisitor(ASM7, classWriter) {
     @Override
-    public MethodVisitor visitMethod(int access, String name, String descriptor, 
+    public MethodVisitor visitMethod(int access, String name, String descriptor,
                                    String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
         // 自定义逻辑
@@ -64,6 +68,7 @@ classReader.accept(new ClassVisitor(ASM7, classWriter) {
 ```
 
 #### Tree API（树状 API）
+
 基于对象模型，类似于解析 XML 的 DOM 方式。Tree API 允许直接操作类结构中的各个元素，提供更直观的编程方式，但性能略低于 Core API。
 
 ```java
@@ -77,13 +82,13 @@ classReader.accept(classNode, 0);
 
 下表展示了 ASM 与其他主流字节码操作工具的对比：
 
-| 工具 | 编程难度 | 性能 | 可读性 | 应用场景 | 维护状态 |
-|------|----------|------|--------|----------|----------|
-| ASM | 高 | 🟢 快 | 🔴 差 | 框架底层、高性能场景 | ✅ 积极维护 |
-| Javassist | 中 | 🟡 中 | 🟡 中 | 快速开发、简单插桩 | ⚠️ 维护较慢 |
-| ByteBuddy | 低 | 🟢 快 | 🟢 高 | APM、Agent、AOP | ✅ 非常活跃 |
-| CGLIB | 低 | 🟡 中 | 🟢 高 | 动态代理 | ⚠️ 不再更新 |
-| BCEL | 高 | 🟡 中 | 🔴 差 | 教学/研究 | ❌ 停止维护 |
+| 工具      | 编程难度 | 性能  | 可读性 | 应用场景             | 维护状态    |
+| --------- | -------- | ----- | ------ | -------------------- | ----------- |
+| ASM       | 高       | 🟢 快 | 🔴 差  | 框架底层、高性能场景 | ✅ 积极维护 |
+| Javassist | 中       | 🟡 中 | 🟡 中  | 快速开发、简单插桩   | ⚠️ 维护较慢 |
+| ByteBuddy | 低       | 🟢 快 | 🟢 高  | APM、Agent、AOP      | ✅ 非常活跃 |
+| CGLIB     | 低       | 🟡 中 | 🟢 高  | 动态代理             | ⚠️ 不再更新 |
+| BCEL      | 高       | 🟡 中 | 🔴 差  | 教学/研究            | ❌ 停止维护 |
 
 ## 3. Spring 中的 ASM 应用机制
 
@@ -111,6 +116,7 @@ String[] interfaceNames = visitor.getInterfaceNames();
 Spring AOP 广泛使用字节码操作技术来实现面向切面编程。当目标类没有实现接口时，Spring 会使用 CGLIB（基于 ASM）来创建子类代理。
 
 **CGLIB 动态代理示例：**
+
 ```java
 // 原始类
 public class UserService {
@@ -122,13 +128,13 @@ public class UserService {
 // CGLIB 增强后的代理类
 public class UserService$$EnhancerByCGLIB extends UserService {
     private MethodInterceptor interceptor;
-    
+
     @Override
     public void saveUser(User user) {
         // 前置增强
-        interceptor.intercept(this, 
-            MethodProxy.find(UserService.class, "saveUser"), 
-            new Object[]{user}, 
+        interceptor.intercept(this,
+            MethodProxy.find(UserService.class, "saveUser"),
+            new Object[]{user},
             methodProxy);
         // 后置增强
     }
@@ -152,17 +158,17 @@ import org.objectweb.asm.*;
 
 public class LoggingClassVisitor extends ClassVisitor {
     private String className;
-    
+
     public LoggingClassVisitor(ClassVisitor cv, String className) {
         super(Opcodes.ASM7, cv);
         this.className = className;
     }
-    
+
     @Override
-    public MethodVisitor visitMethod(int access, String name, String descriptor, 
+    public MethodVisitor visitMethod(int access, String name, String descriptor,
                                    String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
-        
+
         if (!name.equals("<init>") && !name.equals("<clinit>")) {
             return new LoggingMethodVisitor(mv, className, name);
         }
@@ -173,28 +179,28 @@ public class LoggingClassVisitor extends ClassVisitor {
 class LoggingMethodVisitor extends MethodVisitor {
     private String className;
     private String methodName;
-    
+
     public LoggingMethodVisitor(MethodVisitor mv, String className, String methodName) {
         super(Opcodes.ASM7, mv);
         this.className = className;
         this.methodName = methodName;
     }
-    
+
     @Override
     public void visitCode() {
         // 在方法开始处插入日志
         mv.visitLdcInsn("Entering method: " + className + "." + methodName);
-        mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "out", 
+        mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "out",
                           "(Ljava/lang/String;)V", false);
         super.visitCode();
     }
-    
+
     @Override
     public void visitInsn(int opcode) {
         // 在返回指令前插入日志
         if (opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) {
             mv.visitLdcInsn("Exiting method: " + className + "." + methodName);
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "out", 
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "out",
                               "(Ljava/lang/String;)V", false);
         }
         super.visitInsn(opcode);
@@ -216,7 +222,7 @@ import java.security.ProtectionDomain;
 
 @Component
 public class ASMBeanPostProcessor implements BeanPostProcessor {
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         // 对特定 Bean 进行字节码增强
@@ -229,24 +235,24 @@ public class ASMBeanPostProcessor implements BeanPostProcessor {
         }
         return bean;
     }
-    
+
     private Object enhanceBean(Object bean) throws Exception {
         Class<?> beanClass = bean.getClass();
         byte[] originalBytes = // 获取原始字节码
         byte[] enhancedBytes = enhanceClassWithASM(originalBytes);
-        
+
         // 使用自定义 ClassLoader 加载增强后的类
         ASMEnabledClassLoader loader = new ASMEnabledClassLoader(beanClass.getClassLoader());
         Class<?> enhancedClass = loader.defineClass(beanClass.getName(), enhancedBytes);
-        
+
         return enhancedClass.newInstance();
     }
-    
+
     private byte[] enhanceClassWithASM(byte[] classBytes) {
         ClassReader cr = new ClassReader(classBytes);
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         ClassVisitor cv = new LoggingClassVisitor(cw, cr.getClassName());
-        
+
         cr.accept(cv, ClassReader.EXPAND_FRAMES);
         return cw.toByteArray();
     }
@@ -257,7 +263,7 @@ class ASMEnabledClassLoader extends ClassLoader {
     public ASMEnabledClassLoader(ClassLoader parent) {
         super(parent);
     }
-    
+
     public Class<?> defineClass(String name, byte[] bytes) {
         return defineClass(name, bytes, 0, bytes.length);
     }
@@ -273,23 +279,23 @@ public class PerformanceMonitorMethodVisitor extends MethodVisitor {
     private String className;
     private String methodName;
     private int variableIndex;
-    
+
     public PerformanceMonitorMethodVisitor(MethodVisitor mv, String className, String methodName) {
         super(Opcodes.ASM7, mv);
         this.className = className;
         this.methodName = methodName;
     }
-    
+
     @Override
     public void visitCode() {
         // 在方法开始时插入开始时间记录
         mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
         variableIndex = newLocal(Type.LONG_TYPE);
         mv.visitVarInsn(Opcodes.LSTORE, variableIndex);
-        
+
         super.visitCode();
     }
-    
+
     @Override
     public void visitInsn(int opcode) {
         if ((opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) || opcode == Opcodes.ATHROW) {
@@ -297,12 +303,12 @@ public class PerformanceMonitorMethodVisitor extends MethodVisitor {
             mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
             mv.visitVarInsn(Opcodes.LLOAD, variableIndex);
             mv.visitInsn(Opcodes.LSUB);
-            
+
             // 记录执行时间
             mv.visitVarInsn(Opcodes.LSTORE, variableIndex + 1);
             mv.visitLdcInsn(className + "." + methodName);
             mv.visitVarInsn(Opcodes.LLOAD, variableIndex + 1);
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "com/example/PerformanceMonitor", "record", 
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "com/example/PerformanceMonitor", "record",
                               "(Ljava/lang/String;J)V", false);
         }
         super.visitInsn(opcode);
@@ -317,12 +323,13 @@ public class PerformanceMonitorMethodVisitor extends MethodVisitor {
 在使用 ASM 进行字节码操作时，性能优化至关重要。以下是一些最佳实践：
 
 #### 缓存机制
+
 对于频繁操作的类，使用缓存避免重复解析：
 
 ```java
 public class ASMClassCache {
     private static final Map<String, byte[]> classCache = new ConcurrentHashMap<>();
-    
+
     public static byte[] getEnhancedClassBytes(String className) throws IOException {
         return classCache.computeIfAbsent(className, k -> {
             try {
@@ -340,9 +347,11 @@ public class ASMClassCache {
 ```
 
 #### 减少 AST 遍历次数
+
 在修改字节码时，尽量减少对抽象语法树（AST）的遍历次数，合并多个修改操作在一次遍历中完成。
 
 #### 使用 COMPUTE_MAXS 和 COMPUTE_FRAMES
+
 合理使用 `ClassWriter` 的计算模式：
 
 ```java
@@ -353,6 +362,7 @@ ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_
 ### 5.2 错误处理与调试
 
 #### 异常处理
+
 确保字节码操作过程中的异常被恰当处理：
 
 ```java
@@ -360,9 +370,9 @@ public class SafeClassVisitor extends ClassVisitor {
     public SafeClassVisitor(ClassVisitor cv) {
         super(Opcodes.ASM7, cv);
     }
-    
+
     @Override
-    public MethodVisitor visitMethod(int access, String name, String descriptor, 
+    public MethodVisitor visitMethod(int access, String name, String descriptor,
                                    String signature, String[] exceptions) {
         try {
             MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
@@ -376,6 +386,7 @@ public class SafeClassVisitor extends ClassVisitor {
 ```
 
 #### 字节码验证
+
 在开发阶段使用 ASM 的检查工具验证生成的字节码：
 
 ```java
@@ -388,6 +399,7 @@ cr.accept(checker, ClassReader.EXPAND_FRAMES);
 ### 5.3 与 Spring 整合的最佳实践
 
 #### 条件化增强
+
 只在需要时进行字节码增强，避免不必要的性能开销：
 
 ```java
@@ -399,17 +411,18 @@ public class ConditionalASMEnhancer implements BeanPostProcessor {
 ```
 
 #### 配置文件管理
+
 通过配置文件管理 ASM 增强策略：
 
 ```yaml
 asm:
   enhancement:
     enabled: true
-    packages: 
-      - "com.example.service"
-      - "com.example.controller"
+    packages:
+      - 'com.example.service'
+      - 'com.example.controller'
     exclude:
-      - "com.example.config.*"
+      - 'com.example.config.*'
 ```
 
 ## 6. 常见问题与解决方案
@@ -419,16 +432,17 @@ asm:
 **问题**：ASM 版本与 Java 版本不兼容，出现 "Unsupported class file major version" 错误。
 
 **解决方案**：
+
 ```java
 // 确保使用支持目标 Java 版本的 ASM
 public class VersionAwareClassVisitor extends ClassVisitor {
     private final int version;
-    
+
     public VersionAwareClassVisitor(ClassVisitor cv, int version) {
         super(getASMVersion(version), cv);
         this.version = version;
     }
-    
+
     private static int getASMVersion(int classVersion) {
         if (classVersion >= 59) return Opcodes.ASM9; // Java 15
         if (classVersion >= 58) return Opcodes.ASM8; // Java 14
@@ -444,6 +458,7 @@ public class VersionAwareClassVisitor extends ClassVisitor {
 **问题**：修改字节码后出现栈映射帧（Stack Map Frame）验证错误。
 
 **解决方案**：
+
 ```java
 // 使用 COMPUTE_FRAMES 让 ASM 自动计算帧
 ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
@@ -461,6 +476,7 @@ public class FrameAwareMethodVisitor extends MethodVisitor {
 ### 6.3 调试技巧
 
 #### 字节码调试工具
+
 使用 ASM 工具类输出字节码信息用于调试：
 
 ```java
@@ -469,7 +485,7 @@ public class ASMDebugUtil {
         ClassReader cr = new ClassReader(bytes);
         ClassNode cn = new ClassNode();
         cr.accept(cn, ClassReader.EXPAND_FRAMES);
-        
+
         // 打印类信息
         System.out.println("Class: " + cn.name);
         System.out.println("Methods: " + cn.methods.size());

@@ -9,19 +9,19 @@
 1. #引言
 2. #类的基本概念
 3. #类的成员
-    1. #字段
-    2. #构造函数
-    3. #方法
-    4. #存取器
+   1. #字段
+   2. #构造函数
+   3. #方法
+   4. #存取器
 4. #类的继承
-    1. #extends-继承
-    2. #super-调用
-    3. #方法重写
+   1. #extends-继承
+   2. #super-调用
+   3. #方法重写
 5. #成员可见性
-    1. #public
-    2. #protected
-    3. #private
-    4. #ecmascript-private-fields
+   1. #public
+   2. #protected
+   3. #private
+   4. #ecmascript-private-fields
 6. #静态成员
 7. #抽象类
 8. #类型检查-this-instanceof
@@ -78,7 +78,10 @@ class Point {
 ```typescript
 class Point {
   // 使用参数属性，等同于在构造函数中执行 this.x = x; this.y = y;
-  constructor(public x: number, public y: number) {}
+  constructor(
+    public x: number,
+    public y: number
+  ) {}
 }
 
 const point = new Point(10, 20);
@@ -183,7 +186,7 @@ class Dog extends Animal {
 
 const dog = new Dog();
 dog.move(10); // 继承自 Animal 的方法
-dog.bark();   // Dog 类自己的方法
+dog.bark(); // Dog 类自己的方法
 ```
 
 ### super 调用
@@ -366,7 +369,10 @@ console.log(MathHelper.calculateCircleArea(5)); // 输出: 78.53975
 abstract class Department {
   protected employees: string[] = [];
 
-  constructor(protected readonly id: string, public name: string) {}
+  constructor(
+    protected readonly id: string,
+    public name: string
+  ) {}
 
   // 抽象方法，必须在子类中实现
   abstract describe(this: Department): void;
@@ -379,7 +385,10 @@ abstract class Department {
 
 // 具体子类
 class ITDepartment extends Department {
-  constructor(id: string, public admins: string[]) {
+  constructor(
+    id: string,
+    public admins: string[]
+  ) {
     super(id, 'IT');
   }
 
@@ -450,29 +459,29 @@ move(new Fish()); // 输出: Swimming...
 
 1. **优先使用组合而非继承 (Composition over Inheritance)**：继承会带来紧耦合。优先考虑使用组合（将类作为其他类的属性）来复用代码，这通常更灵活。
 
-    ```typescript
-    // 不推荐的深层继承
-    class A { ... }
-    class B extends A { ... }
-    class C extends B { ... } // 非常脆弱
+   ```typescript
+   // 不推荐的深层继承
+   class A { ... }
+   class B extends A { ... }
+   class C extends B { ... } // 非常脆弱
 
-    // 推荐：使用组合
-    class Engine { start() { ... } }
-    class Wheels { rotate() { ... } }
+   // 推荐：使用组合
+   class Engine { start() { ... } }
+   class Wheels { rotate() { ... } }
 
-    class Car {
-      private engine: Engine;
-      private wheels: Wheels;
-      constructor() {
-        this.engine = new Engine();
-        this.wheels = new Wheels();
-      }
-      drive() {
-        this.engine.start();
-        this.wheels.rotate();
-      }
-    }
-    ```
+   class Car {
+     private engine: Engine;
+     private wheels: Wheels;
+     constructor() {
+       this.engine = new Engine();
+       this.wheels = new Wheels();
+     }
+     drive() {
+       this.engine.start();
+       this.wheels.rotate();
+     }
+   }
+   ```
 
 2. **遵循单一职责原则 (Single Responsibility Principle)**：一个类应该只有一个引起变化的原因。如果一个类承担了太多职责，它就应该被拆分。
 
@@ -480,44 +489,44 @@ move(new Fish()); // 输出: Swimming...
 
 4. **善用 `readonly` 修饰符**：将不应在初始化后改变的字段标记为 `readonly`，这可以防止意外修改并明确设计意图。
 
-    ```typescript
-    class Configuration {
-      // 初始化后不可更改
-      public readonly apiUrl: string;
-      constructor(apiUrl: string) {
-        this.apiUrl = apiUrl;
-      }
-    }
-    ```
+   ```typescript
+   class Configuration {
+     // 初始化后不可更改
+     public readonly apiUrl: string;
+     constructor(apiUrl: string) {
+       this.apiUrl = apiUrl;
+     }
+   }
+   ```
 
 5. **使用接口定义契约**：对于类之间的交互，优先考虑使用接口来定义契约，而不是依赖具体的类实现。这降低了耦合度。
 
-    ```typescript
-    // 定义一个接口
-    interface Logger {
-      log(message: string): void;
-    }
+   ```typescript
+   // 定义一个接口
+   interface Logger {
+     log(message: string): void;
+   }
 
-    // 类实现接口
-    class ConsoleLogger implements Logger {
-      log(message: string): void {
-        console.log(message);
-      }
-    }
+   // 类实现接口
+   class ConsoleLogger implements Logger {
+     log(message: string): void {
+       console.log(message);
+     }
+   }
 
-    // 依赖注入，接收任何实现了 Logger 接口的对象
-    class Service {
-      constructor(private logger: Logger) {}
-      doWork() {
-        this.logger.log('Work done!');
-      }
-    }
+   // 依赖注入，接收任何实现了 Logger 接口的对象
+   class Service {
+     constructor(private logger: Logger) {}
+     doWork() {
+       this.logger.log('Work done!');
+     }
+   }
 
-    const service = new Service(new ConsoleLogger());
-    service.doWork();
-    ```
+   const service = new Service(new ConsoleLogger());
+   service.doWork();
+   ```
 
-6. **谨慎使用继承**：只有在确实是“is-a”关系（例如，`Dog` *is a* `Animal`）且需要复用实现时，才使用继承。考虑使用抽象类来定义基础结构。
+6. **谨慎使用继承**：只有在确实是“is-a”关系（例如，`Dog` _is a_ `Animal`）且需要复用实现时，才使用继承。考虑使用抽象类来定义基础结构。
 
 ## 总结
 

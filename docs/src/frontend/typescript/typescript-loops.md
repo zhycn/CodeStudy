@@ -33,8 +33,8 @@ for (let count: number = 0; count < 5; count++) {
 
 **最佳实践**:
 
-* 使用 `let` 声明循环变量，确保块级作用域。
-* TypeScript 能自动推断数组元素的类型，提供自动补全和类型检查，无需在循环内再次显式声明类型（如 `const fruit = fruits[i];` 即可）。
+- 使用 `let` 声明循环变量，确保块级作用域。
+- TypeScript 能自动推断数组元素的类型，提供自动补全和类型检查，无需在循环内再次显式声明类型（如 `const fruit = fruits[i];` 即可）。
 
 ### 2.2 while 循环
 
@@ -61,8 +61,8 @@ while (!isCompleted && attempts < maxAttempts) {
 
 **最佳实践**:
 
-* **务必确保循环条件有机会变为 `false`**，否则会导致无限循环。TypeScript 无法检测逻辑错误，但良好的代码结构可以避免。
-* 使用字面量类型（如 `maxAttempts: number = 3`）可以让意图更清晰。
+- **务必确保循环条件有机会变为 `false`**，否则会导致无限循环。TypeScript 无法检测逻辑错误，但良好的代码结构可以避免。
+- 使用字面量类型（如 `maxAttempts: number = 3`）可以让意图更清晰。
 
 ### 2.3 do...while 循环
 
@@ -81,7 +81,7 @@ console.log('Got the positive confirmation!');
 
 **最佳实践**:
 
-* 适用于那些**必须至少执行一次**的场景，例如初始化、请求用户输入等。
+- 适用于那些**必须至少执行一次**的场景，例如初始化、请求用户输入等。
 
 ## 3. 迭代循环语句 (用于可迭代对象)
 
@@ -101,7 +101,7 @@ for (const num of magicNumbers) {
 }
 
 // 遍历字符串
-const greeting: string = "Hello";
+const greeting: string = 'Hello';
 for (const char of greeting) {
   console.log(char); // H, e, l, l, o
 }
@@ -109,7 +109,7 @@ for (const char of greeting) {
 // 遍历 Map
 const personMap = new Map<string, any>([
   ['name', 'Alice'],
-  ['age', 30]
+  ['age', 30],
 ]);
 for (const value of personMap.values()) {
   console.log(value); // 'Alice', 30
@@ -118,9 +118,9 @@ for (const value of personMap.values()) {
 
 **最佳实践**:
 
-* **首选 `for...of` 来遍历数组**，它避免了使用索引的繁琐和潜在的错误。
-* 使用 `const` 声明迭代变量，除非你需要在循环体内修改它。
-* TypeScript 的强大之处在于它能根据集合的类型，精确推断出迭代变量的类型。
+- **首选 `for...of` 来遍历数组**，它避免了使用索引的繁琐和潜在的错误。
+- 使用 `const` 声明迭代变量，除非你需要在循环体内修改它。
+- TypeScript 的强大之处在于它能根据集合的类型，精确推断出迭代变量的类型。
 
 ### 3.2 for...in 循环
 
@@ -129,13 +129,14 @@ for (const value of personMap.values()) {
 ```typescript
 const person: { name: string; age: number; role?: string } = {
   name: 'Bob',
-  age: 25
+  age: 25,
 };
 
 for (const key in person) {
   // TypeScript 知道 key 是 string 类型，但不知道是具体的 "name" | "age"
   // 需要使用类型断言或守卫来安全访问
-  if (person.hasOwnProperty(key)) { // 检查是否是自身属性（非原型链上的）
+  if (person.hasOwnProperty(key)) {
+    // 检查是否是自身属性（非原型链上的）
     // 使用类型守卫缩小范围
     if (key === 'name' || key === 'age' || key === 'role') {
       const value = person[key];
@@ -146,16 +147,17 @@ for (const key in person) {
 
 // 一个更安全的现代方法是使用 Object.keys
 const keys = Object.keys(person) as Array<keyof typeof person>; // 类型断言获取键的联合类型
-for (const key of keys) { // 现在可以用 for...of 安全地迭代
+for (const key of keys) {
+  // 现在可以用 for...of 安全地迭代
   console.log(`${key}: ${person[key]}`);
 }
 ```
 
 **最佳实践与警告**:
 
-* **不要使用 `for...in` 来遍历数组**。它会遍历所有可枚举属性，包括数组原型链上的方法和索引，且顺序不一定可靠。
-* 始终使用 `hasOwnProperty` 检查或更现代的 `Object.keys()` 来避免遍历到原型链上的属性。
-* `for...in` 迭代出的 `key` 是 `string` 类型，直接用它索引对象是不安全的，需要配合**类型断言（Type Assertion）** 或**类型守卫（Type Guard）**。
+- **不要使用 `for...in` 来遍历数组**。它会遍历所有可枚举属性，包括数组原型链上的方法和索引，且顺序不一定可靠。
+- 始终使用 `hasOwnProperty` 检查或更现代的 `Object.keys()` 来避免遍历到原型链上的属性。
+- `for...in` 迭代出的 `key` 是 `string` 类型，直接用它索引对象是不安全的，需要配合**类型断言（Type Assertion）** 或**类型守卫（Type Guard）**。
 
 ## 4. 高级迭代方法与函数式循环
 
@@ -181,8 +183,8 @@ numbers.forEach((value, index) => {
 
 **最佳实践**:
 
-* 适用于简单的遍历操作，不需要改变原数组。
-* **无法使用 `break` 或 `continue`** 来提前终止或跳过迭代。如果需要此功能，应使用简单的 `for` 循环或 `for...of` 循环。
+- 适用于简单的遍历操作，不需要改变原数组。
+- **无法使用 `break` 或 `continue`** 来提前终止或跳过迭代。如果需要此功能，应使用简单的 `for` 循环或 `for...of` 循环。
 
 ### 4.2 函数式方法 (map, filter, reduce, etc.)
 
@@ -192,26 +194,26 @@ numbers.forEach((value, index) => {
 const scores: number[] = [80, 95, 60, 70, 88];
 
 // map: 转换数组，生成一个新数组
-const curvedScores: number[] = scores.map(score => score + 5); // [85, 100, 65, 75, 93]
+const curvedScores: number[] = scores.map((score) => score + 5); // [85, 100, 65, 75, 93]
 
 // filter: 过滤数组，生成一个子集数组
-const passingScores: number[] = scores.filter(score => score >= 70); // [80, 95, 70, 88]
+const passingScores: number[] = scores.filter((score) => score >= 70); // [80, 95, 70, 88]
 
 // reduce: 将数组归约成一个单一值
 const totalScore: number = scores.reduce((sum, score) => sum + score, 0); // 393
 
 // find: 查找符合条件的第一个元素
-const firstFailure: number | undefined = scores.find(score => score < 65); // 60
+const firstFailure: number | undefined = scores.find((score) => score < 65); // 60
 
 // some / every: 检查条件
-const didAnyoneFail: boolean = scores.some(score => score < 65); // true
-const didEveryonePass: boolean = scores.every(score => score >= 70); // false
+const didAnyoneFail: boolean = scores.some((score) => score < 65); // true
+const didEveryonePass: boolean = scores.every((score) => score >= 70); // false
 ```
 
 **最佳实践**:
 
-* **强烈推荐使用这些方法代替传统的循环**。它们更声明式、更简洁、更易于测试和理解。
-* TypeScript 能完美地推断出输入和输出的类型，例如 `filter(Boolean)` 可以正确地过滤掉 falsy 值并收缩类型。
+- **强烈推荐使用这些方法代替传统的循环**。它们更声明式、更简洁、更易于测试和理解。
+- TypeScript 能完美地推断出输入和输出的类型，例如 `filter(Boolean)` 可以正确地过滤掉 falsy 值并收缩类型。
 
 ## 5. TypeScript 中的最佳实践与注意事项
 
@@ -253,8 +255,8 @@ for (const pet of pets) {
 
 ### 5.2 性能考量
 
-* **大数据集**：对于非常大的数组，传统的 `for` 循环（正序或倒序）有时可能比 `forEach` 或 `for...of` 有微小的性能优势，因为在某些引擎中函数调用会有开销。但在绝大多数情况下，可读性比这点微优化更重要。**首先选择可读性最高的方式，只有在确认为性能瓶颈后再进行优化**。
-* **异步循环**：`forEach` 本身对 `async/await` 的支持不好，它会并行启动所有异步操作，而不是顺序执行。如果需要顺序执行异步操作，应使用 `for...of`。
+- **大数据集**：对于非常大的数组，传统的 `for` 循环（正序或倒序）有时可能比 `forEach` 或 `for...of` 有微小的性能优势，因为在某些引擎中函数调用会有开销。但在绝大多数情况下，可读性比这点微优化更重要。**首先选择可读性最高的方式，只有在确认为性能瓶颈后再进行优化**。
+- **异步循环**：`forEach` 本身对 `async/await` 的支持不好，它会并行启动所有异步操作，而不是顺序执行。如果需要顺序执行异步操作，应使用 `for...of`。
 
 ```typescript
 // 错误：不会按顺序等待
@@ -286,9 +288,9 @@ async function parallelAsyncExample() {
 
 ### 5.3 跳出循环
 
-* `break`：终止整个循环。
-* `continue`：跳过当前迭代，进入下一次。
-* `return`：终止整个函数（如果在函数内）。
+- `break`：终止整个循环。
+- `continue`：跳过当前迭代，进入下一次。
+- `return`：终止整个函数（如果在函数内）。
 
 `forEach` 和函数式方法无法使用 `break` 或 `continue`。如果需要提前终止，应选择 `for`, `for...of`, `while`, 或 `do...while`。
 
@@ -308,15 +310,15 @@ console.log(found);
 
 ## 6. 总结与选择指南
 
-| 循环方法 | 主要用途 | 能否跳出？ | 特点 | 推荐场景 |
-| :--- | :--- | :--- | :--- | :--- |
-| **`for`** | 通用循环，基于索引 | ✅ | 最灵活，控制力最强 | 需要索引、复杂循环条件、性能极致优化 |
-| **`for...of`** | **遍历可迭代对象的值** | ✅ | **简洁、安全、现代** | **遍历数组、字符串、Map、Set（首选）** |
-| **`for...in`** | 遍历对象的键 | ✅ | 易出错，需谨慎使用 | **遍历普通对象的属性**（配合 `Object.keys` 更佳） |
-| **`while`** | 条件循环 | ✅ | 条件为先 | 循环次数未知（如读取流、游戏循环） |
-| **`do...while`** | 条件循环 | ✅ | 至少执行一次 | 初始化、必须执行一次的操作 |
-| **`forEach`** | 遍历数组 | ❌ | 声明式，无法跳出 | 简单的数组遍历，无需中断 |
-| **`map/filter`** | **转换/过滤数组** | ❌ | **声明式，纯函数** | **处理数据集合，生成新数组（强烈推荐）** |
+| 循环方法         | 主要用途               | 能否跳出？ | 特点                 | 推荐场景                                          |
+| :--------------- | :--------------------- | :--------- | :------------------- | :------------------------------------------------ |
+| **`for`**        | 通用循环，基于索引     | ✅         | 最灵活，控制力最强   | 需要索引、复杂循环条件、性能极致优化              |
+| **`for...of`**   | **遍历可迭代对象的值** | ✅         | **简洁、安全、现代** | **遍历数组、字符串、Map、Set（首选）**            |
+| **`for...in`**   | 遍历对象的键           | ✅         | 易出错，需谨慎使用   | **遍历普通对象的属性**（配合 `Object.keys` 更佳） |
+| **`while`**      | 条件循环               | ✅         | 条件为先             | 循环次数未知（如读取流、游戏循环）                |
+| **`do...while`** | 条件循环               | ✅         | 至少执行一次         | 初始化、必须执行一次的操作                        |
+| **`forEach`**    | 遍历数组               | ❌         | 声明式，无法跳出     | 简单的数组遍历，无需中断                          |
+| **`map/filter`** | **转换/过滤数组**      | ❌         | **声明式，纯函数**   | **处理数据集合，生成新数组（强烈推荐）**          |
 
 **核心建议**：
 

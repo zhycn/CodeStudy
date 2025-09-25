@@ -8,23 +8,23 @@
 
 1. #概述
 2. #核心函数
-    * #subprocessrun
-    * #subprocesspopen
+   - #subprocessrun
+   - #subprocesspopen
 3. #常用参数详解
-    * #args-指定要执行的命令
-    * #stdin-stdout-stderr-标准流配置
-    * #shell-shell-执行模式
-    * #cwd-设置工作目录
-    * #timeout-设置超时
-    * #check-检查返回码
-    * #text--encoding-文本模式
+   - #args-指定要执行的命令
+   - #stdin-stdout-stderr-标准流配置
+   - #shell-shell-执行模式
+   - #cwd-设置工作目录
+   - #timeout-设置超时
+   - #check-检查返回码
+   - #text--encoding-文本模式
 4. #高级用法与最佳实践
-    * #1-安全地构造命令使用列表而非字符串
-    * #2-正确处理输入和输出
-    * #3-实时处理输出
-    * #4-执行复杂的-shell-命令管道重定向
-    * #5-超时与异常处理
-    * #6-平台兼容性注意事项
+   - #1-安全地构造命令使用列表而非字符串
+   - #2-正确处理输入和输出
+   - #3-实时处理输出
+   - #4-执行复杂的-shell-命令管道重定向
+   - #5-超时与异常处理
+   - #6-平台兼容性注意事项
 5. #常见问题-faq
 6. #总结
 7. #延伸阅读
@@ -35,9 +35,9 @@
 
 **主要设计目标：**
 
-* **统一接口**：提供一个统一的高级 API (`subprocess.run`) 和更底层的控制 (`subprocess.Popen`)。
-* **安全性**：鼓励将命令作为参数列表传递，以避免 Shell 注入漏洞。
-* **灵活性**：提供对子进程的 stdin, stdout, stderr 的完全控制。
+- **统一接口**：提供一个统一的高级 API (`subprocess.run`) 和更底层的控制 (`subprocess.Popen`)。
+- **安全性**：鼓励将命令作为参数列表传递，以避免 Shell 注入漏洞。
+- **灵活性**：提供对子进程的 stdin, stdout, stderr 的完全控制。
 
 ## 核心函数
 
@@ -48,8 +48,8 @@
 **基本语法：**
 
 ```python
-subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None, 
-               shell=False, cwd=None, timeout=None, check=False, encoding=None, 
+subprocess.run(args, *, stdin=None, input=None, stdout=None, stderr=None,
+               shell=False, cwd=None, timeout=None, check=False, encoding=None,
                errors=None, text=None, env=None, universal_newlines=None)
 ```
 
@@ -71,11 +71,11 @@ print(f"Return code: {result.returncode}")
 **基本语法：**
 
 ```python
-subprocess.Popen(args, bufsize=-1, executable=None, stdin=None, stdout=None, 
-                 stderr=None, preexec_fn=None, close_fds=True, shell=False, 
-                 cwd=None, env=None, universal_newlines=None, startupinfo=None, 
-                 creationflags=0, restore_signals=True, start_new_session=False, 
-                 pass_fds=(), *, group=None, extra_groups=None, user=None, 
+subprocess.Popen(args, bufsize=-1, executable=None, stdin=None, stdout=None,
+                 stderr=None, preexec_fn=None, close_fds=True, shell=False,
+                 cwd=None, env=None, universal_newlines=None, startupinfo=None,
+                 creationflags=0, restore_signals=True, start_new_session=False,
+                 pass_fds=(), *, group=None, extra_groups=None, user=None,
                  umask=-1, encoding=None, errors=None, text=None)
 ```
 
@@ -103,25 +103,25 @@ print("Process finished.")
 
 这是唯一一个必须指定的参数。它可以是一个字符串序列（推荐）或一个单个字符串。
 
-* **列表形式 (推荐)**: `['ls', '-l', '/tmp']`
-  * 更安全，无需担心 Shell 的转义问题。
-  * 第一个元素是程序名，后续元素是参数。
-* **字符串形式 (需 `shell=True`)**: `'ls -l /tmp'`
-  * 只有当 `shell=True` 时才使用。存在安全风险（Shell 注入）。
+- **列表形式 (推荐)**: `['ls', '-l', '/tmp']`
+  - 更安全，无需担心 Shell 的转义问题。
+  - 第一个元素是程序名，后续元素是参数。
+- **字符串形式 (需 `shell=True`)**: `'ls -l /tmp'`
+  - 只有当 `shell=True` 时才使用。存在安全风险（Shell 注入）。
 
 ### `stdin`, `stdout`, `stderr`: 标准流配置
 
 这些参数用于配置子进程的输入和输出。
 
-* `subprocess.PIPE`: 创建一个新的管道，允许 Python 程序与子进程通信。
-* `subprocess.DEVNULL`: 将特殊文件 `os.devnull` 用作输入/输出。
-* `subprocess.STDOUT`: 将标准错误重定向到标准输出，用于将两者合并。
-* `None` (默认): 不进行重定向。子进程从父进程继承流。
+- `subprocess.PIPE`: 创建一个新的管道，允许 Python 程序与子进程通信。
+- `subprocess.DEVNULL`: 将特殊文件 `os.devnull` 用作输入/输出。
+- `subprocess.STDOUT`: 将标准错误重定向到标准输出，用于将两者合并。
+- `None` (默认): 不进行重定向。子进程从父进程继承流。
 
 ### `shell`: Shell 执行模式
 
-* `False` (默认): 直接执行程序。`args` 通常应为列表。
-* `True`: 通过系统的 Shell (如 `/bin/sh` on Unix, `cmd.exe` on Windows) 执行命令。`args` 应为一个字符串。**使用此选项时需格外小心，如果 `args` 包含用户输入，可能导致命令注入漏洞。**
+- `False` (默认): 直接执行程序。`args` 通常应为列表。
+- `True`: 通过系统的 Shell (如 `/bin/sh` on Unix, `cmd.exe` on Windows) 执行命令。`args` 应为一个字符串。**使用此选项时需格外小心，如果 `args` 包含用户输入，可能导致命令注入漏洞。**
 
 ### `cwd`: 设置工作目录
 
@@ -324,18 +324,18 @@ else:
 
 ### 6. 平台兼容性注意事项
 
-* **路径分隔符**: Unix 用 `/`，Windows 用 `\`。使用 `os.path.join()` 来构建路径。
-* **命令可用性**: 像 `ls`, `cp`, `echo` 在 Windows 上默认不可用。考虑使用 Python 的内置功能（如 `os.listdir()`, `shutil.copy2()`）或在编写跨平台脚本时检查命令是否存在。
-* **Shell**: Windows 上，`shell=True` 使用 `cmd.exe`。它的语法与 Unix Shell (bash, zsh) 不同。
+- **路径分隔符**: Unix 用 `/`，Windows 用 `\`。使用 `os.path.join()` 来构建路径。
+- **命令可用性**: 像 `ls`, `cp`, `echo` 在 Windows 上默认不可用。考虑使用 Python 的内置功能（如 `os.listdir()`, `shutil.copy2()`）或在编写跨平台脚本时检查命令是否存在。
+- **Shell**: Windows 上，`shell=True` 使用 `cmd.exe`。它的语法与 Unix Shell (bash, zsh) 不同。
 
 ## 常见问题 (FAQ)
 
 **Q: `subprocess.call()`, `subprocess.check_call()`, `subprocess.check_output()` 是什么？**
 A: 这些是 Python 3.5 之前常用的高级函数。它们现在都被 `subprocess.run()` 的不同参数组合所取代：
 
-* `subprocess.call(...)` -> `subprocess.run(...).returncode`
-* `subprocess.check_call(...)` -> `subprocess.run(..., check=True)`
-* `subprocess.check_output(...)` -> `subprocess.run(..., stdout=subprocess.PIPE, check=True).stdout`
+- `subprocess.call(...)` -> `subprocess.run(...).returncode`
+- `subprocess.check_call(...)` -> `subprocess.run(..., check=True)`
+- `subprocess.check_output(...)` -> `subprocess.run(..., stdout=subprocess.PIPE, check=True).stdout`
 
 **Q: 如何设置环境变量？**
 A: 使用 `env` 参数。**最佳实践是拷贝当前环境并修改**，而不是完全替换。
@@ -355,15 +355,15 @@ A: `subprocess.run()` 和 `Popen.wait()` 会等待进程结束。使用 `timeout
 
 ## 总结
 
-| 场景 | 推荐方法 |
-| :--- | :--- |
-| **执行简单命令并等待** | `subprocess.run(args, check=True)` |
-| **捕获输出** | `subprocess.run(args, stdout=subprocess.PIPE, text=True, check=True)` |
-| **安全地执行用户提供的命令** | 使用列表 `args`，避免 `shell=True` |
-| **需要执行复杂 Shell 功能** | 谨慎使用 `shell=True`，或使用多个 `Popen` 模拟 |
-| **实时处理输出流** | `subprocess.Popen(args, stdout=subprocess.PIPE, text=True)` 并循环读取 |
-| **设置超时** | `subprocess.run(args, timeout=sec)` |
-| **跨平台脚本** | 尽量使用 Python 内置函数，避免依赖系统命令 |
+| 场景                         | 推荐方法                                                               |
+| :--------------------------- | :--------------------------------------------------------------------- |
+| **执行简单命令并等待**       | `subprocess.run(args, check=True)`                                     |
+| **捕获输出**                 | `subprocess.run(args, stdout=subprocess.PIPE, text=True, check=True)`  |
+| **安全地执行用户提供的命令** | 使用列表 `args`，避免 `shell=True`                                     |
+| **需要执行复杂 Shell 功能**  | 谨慎使用 `shell=True`，或使用多个 `Popen` 模拟                         |
+| **实时处理输出流**           | `subprocess.Popen(args, stdout=subprocess.PIPE, text=True)` 并循环读取 |
+| **设置超时**                 | `subprocess.run(args, timeout=sec)`                                    |
+| **跨平台脚本**               | 尽量使用 Python 内置函数，避免依赖系统命令                             |
 
 `subprocess` 模块是 Python 与系统交互的瑞士军刀。遵循这些最佳实践（**优先使用列表参数、谨慎使用 `shell=True`、始终检查返回码和处理异常**）将帮助你编写出更安全、可靠和可维护的脚本。
 

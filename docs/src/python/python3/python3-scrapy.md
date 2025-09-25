@@ -104,14 +104,14 @@ myproject/
 
 ### 3.3 核心组件说明
 
-| 组件 | 功能描述 | 配置文件 |
-|------|----------|----------|
-| Spider | 定义爬取行为和解析逻辑 | spiders/ |
-| Item | 定义数据结构 | items.py |
-| Pipeline | 处理爬取的数据 | pipelines.py |
-| Middleware | 处理请求和响应的钩子 | middlewares.py |
-| Scheduler | 调度请求 | 内置组件 |
-| Downloader | 下载网页内容 | 内置组件 |
+| 组件       | 功能描述               | 配置文件       |
+| ---------- | ---------------------- | -------------- |
+| Spider     | 定义爬取行为和解析逻辑 | spiders/       |
+| Item       | 定义数据结构           | items.py       |
+| Pipeline   | 处理爬取的数据         | pipelines.py   |
+| Middleware | 处理请求和响应的钩子   | middlewares.py |
+| Scheduler  | 调度请求               | 内置组件       |
+| Downloader | 下载网页内容           | 内置组件       |
 
 ## 4 创建第一个 Scrapy 爬虫
 
@@ -144,7 +144,7 @@ class BooksSpider(scrapy.Spider):
     name = "books"
     allowed_domains = ["books.toscrape.com"]
     start_urls = ["http://books.toscrape.com"]
-    
+
     # 自定义设置（会覆盖settings.py中的配置）
     custom_settings = {
         'CONCURRENT_REQUESTS': 8,
@@ -163,23 +163,23 @@ class BooksSpider(scrapy.Spider):
     def parse(self, response):
         # 提取书籍列表
         books = response.css('article.product_pod')
-        
+
         for book in books:
             item = BookItem()
-            
+
             # 使用CSS选择器提取数据
             item['title'] = book.css('h3 a::attr(title)').get()
             item['price'] = book.css('p.price_color::text').get()
             item['rating'] = book.css('p.star-rating::attr(class)').get().split()[-1]
             item['product_url'] = response.urljoin(book.css('h3 a::attr(href)').get())
-            
+
             # 跟进到详情页
             yield scrapy.Request(
-                item['product_url'], 
+                item['product_url'],
                 callback=self.parse_book_detail,
                 meta={'item': item}
             )
-        
+
         # 处理分页
         next_page = response.css('li.next a::attr(href)').get()
         if next_page:
@@ -187,13 +187,13 @@ class BooksSpider(scrapy.Spider):
 
     def parse_book_detail(self, response):
         item = response.meta['item']
-        
+
         # 提取详情页信息
         item['description'] = response.css('div#product_description + p::text').get()
         item['availability'] = response.css('p.availability::text').getall()[1].strip()
         item['image_url'] = response.urljoin(response.css('div.item img::attr(src)').get())
         item['category'] = response.css('ul.breadcrumb li:nth-last-child(2) a::text').get()
-        
+
         yield item
 ```
 
@@ -220,11 +220,11 @@ scrapy crawl books -s CLOSESPIDER_PAGECOUNT=10
 
 ### 5.1 数据提取方法比较
 
-| 方法 | 优点 | 缺点 | 适用场景 |
-|------|------|------|----------|
-| CSS 选择器 | 语法简单，易上手 | 功能相对有限 | 简单的HTML结构 |
-| XPath | 功能强大，灵活 | 语法复杂 | 复杂的HTML/XML结构 |
-| 正则表达式 | 处理非结构化文本 | 可读性差，维护难 | 文本模式匹配 |
+| 方法       | 优点             | 缺点             | 适用场景           |
+| ---------- | ---------------- | ---------------- | ------------------ |
+| CSS 选择器 | 语法简单，易上手 | 功能相对有限     | 简单的HTML结构     |
+| XPath      | 功能强大，灵活   | 语法复杂         | 复杂的HTML/XML结构 |
+| 正则表达式 | 处理非结构化文本 | 可读性差，维护难 | 文本模式匹配       |
 
 ### 5.2 数据清洗管道
 
@@ -237,23 +237,23 @@ from scrapy.exceptions import DropItem
 class DataCleaningPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        
+
         # 清理价格数据
         if 'price' in adapter:
             price = adapter['price']
             # 移除货币符号和多余空格
             price = re.sub(r'[^\d.]', '', price)
             adapter['price'] = float(price) if price else 0.0
-        
+
         # 清理评分数据
         if 'rating' in adapter:
             rating_map = {'One': 1, 'Two': 2, 'Three': 3, 'Four': 4, 'Five': 5}
             adapter['rating'] = rating_map.get(adapter['rating'], 0)
-        
+
         # 清理描述文本
         if 'description' in adapter and adapter['description']:
             adapter['description'] = adapter['description'].strip()
-        
+
         return item
 
 class DuplicatesPipeline:
@@ -296,10 +296,10 @@ class DatabasePipeline:
 
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        
+
         # 插入数据
         self.cursor.execute('''
-            INSERT OR IGNORE INTO books 
+            INSERT OR IGNORE INTO books
             (title, price, rating, description, availability, image_url, product_url, category)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
@@ -313,7 +313,7 @@ class DatabasePipeline:
             adapter.get('category')
         ))
         self.conn.commit()
-        
+
         return item
 
     def close_spider(self, spider):
@@ -535,11 +535,11 @@ from scrapy.http import FormRequest
 class LoginSpider(scrapy.Spider):
     name = 'login_example'
     start_urls = ['https://example.com/login']
-    
+
     def parse(self, response):
         # 提取CSRF令牌
         csrf_token = response.css('input[name=csrf_token]::attr(value)').get()
-        
+
         # 提交登录表单
         return FormRequest.from_response(
             response,
@@ -550,16 +550,16 @@ class LoginSpider(scrapy.Spider):
             },
             callback=self.after_login
         )
-    
+
     def after_login(self, response):
         # 检查登录是否成功
         if "authentication failed" in response.text:
             self.logger.error("Login failed")
             return
-        
+
         # 登录成功后继续爬取
         return scrapy.Request("https://example.com/dashboard", self.parse_dashboard)
-    
+
     def parse_dashboard(self, response):
         # 解析需要登录后才能访问的页面
         pass
@@ -660,21 +660,21 @@ class AdvancedCrawlSpider(CrawlSpider):
     name = 'advanced_crawler'
     allowed_domains = ['example.com']
     start_urls = ['https://example.com']
-    
+
     rules = (
         # 提取所有详情页链接
         Rule(LinkExtractor(restrict_css='.product-detail'), callback='parse_item'),
-        
+
         # 跟随分页链接，但不提取数据
         Rule(LinkExtractor(restrict_css='.pagination')),
     )
-    
+
     def parse_item(self, response):
         # 解析详情页
         item = {}
         # ... 提取逻辑
         return item
-    
+
     def parse_start_url(self, response):
         # 处理起始URL的特殊逻辑
         return self.parse_item(response)

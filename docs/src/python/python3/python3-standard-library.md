@@ -134,7 +134,7 @@ with zipfile.ZipFile('example.zip', 'w') as zipf:
     # 添加单个文件
     if os.path.exists('example.txt'):
         zipf.write('example.txt')
-    
+
     # 添加目录中的所有文件
     for root, dirs, files in os.walk('my_directory'):
         for file in files:
@@ -146,10 +146,10 @@ with zipfile.ZipFile('example.zip', 'r') as zipf:
     # 列出所有文件
     file_list = zipf.namelist()
     print("ZIP 文件内容:", file_list)
-    
+
     # 提取单个文件
     zipf.extract('example.txt', 'extracted_dir')
-    
+
     # 提取所有文件
     zipf.extractall('extracted_all')
 ```
@@ -171,7 +171,7 @@ with ThreadPoolExecutor(max_workers=3) as executor:
     # 提交单个任务
     future = executor.submit(task, 5)
     print(f"任务结果: {future.result()}")
-    
+
     # 批量提交
     results = executor.map(task, [1, 2, 3, 4, 5])
     print(f"批量结果: {list(results)}")
@@ -304,26 +304,26 @@ try:
     # 可能抛出异常的代码
     with open('file.txt', 'r') as f:
         content = f.read()
-        
+
 except FileNotFoundError as e:
     # 处理特定异常
     print(f"文件未找到: {e}")
     # 记录日志或采取恢复措施
-    
+
 except IOError as e:
     # 处理IO相关异常
     print(f"IO错误: {e}")
-    
+
 except Exception as e:
     # 通用异常处理（谨慎使用）
     print(f"未知错误: {e}")
     # 考虑重新抛出或记录详细日志
     raise
-    
+
 else:
     # 如果没有异常发生，执行这里的代码
     print("文件读取成功")
-    
+
 finally:
     # 无论是否发生异常，都会执行
     print("清理操作")
@@ -394,7 +394,7 @@ for index, fruit in enumerate(fruits, start=1):
 def factorial(n):
     """
     计算阶乘
-    
+
     >>> factorial(5)
     120
     >>> factorial(0)

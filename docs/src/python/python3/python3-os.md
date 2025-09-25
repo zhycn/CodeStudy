@@ -29,11 +29,11 @@ import os
 
 **主要功能分类：**
 
-* **路径操作**： 处理文件路径的解析、拼接和检查。
-* **文件与目录操作**： 创建、删除、重命名文件和目录，遍历目录树等。
-* **进程管理**： 启动新进程、管理当前进程、终止进程等。
-* **环境变量**： 读取、设置和操作系统的环境变量。
-* **系统信息**： 获取当前工作目录、用户信息、权限信息等。
+- **路径操作**： 处理文件路径的解析、拼接和检查。
+- **文件与目录操作**： 创建、删除、重命名文件和目录，遍历目录树等。
+- **进程管理**： 启动新进程、管理当前进程、终止进程等。
+- **环境变量**： 读取、设置和操作系统的环境变量。
+- **系统信息**： 获取当前工作目录、用户信息、权限信息等。
 
 ## 路径操作：`os.path` 子模块
 
@@ -41,21 +41,21 @@ import os
 
 ### 常用函数
 
-| 函数 | 描述 | 示例 |
-| :--- | :--- | :--- |
-| `os.path.join(path, *paths)` | **智能地拼接**多个路径组件。它会根据操作系统自动使用正确的分隔符（`/` 或 `\`）。 | `os.path.join('dir', 'subdir', 'file.txt')` |
-| `os.path.abspath(path)` | 返回路径的**绝对路径**。 | `os.path.abspath('file.txt')` |
-| `os.path.normpath(path)` | **规范化**路径，处理多余的 `..`、`.` 和分隔符。 | `os.path.normpath('/var/www/../log/./app.log')` |
-| `os.path.basename(path)` | 返回路径的**最后一部分**（通常是文件名或目录名）。 | `os.path.basename('/home/user/file.txt')` -> `'file.txt'` |
-| `os.path.dirname(path)` | 返回路径的**目录部分**。 | `os.path.dirname('/home/user/file.txt')` -> `'/home/user'` |
-| `os.path.split(path)` | 将路径分割为 **(目录, 文件名)** 的元组。 | `os.path.split('/home/user/file.txt')` -> `('/home/user', 'file.txt')` |
-| `os.path.splitext(path)` | 将路径分割为 **(root, ext)** 的元组，其中 `ext` 是**扩展名**（包含点）。 | `os.path.splitext('archive.tar.gz')` -> `('archive.tar', '.gz')` |
-| `os.path.exists(path)` | 检查路径（文件或目录）**是否存在**。 | `os.path.exists('/etc/hosts')` |
-| `os.path.isfile(path)` | 检查路径是否是**文件**。 | `os.path.isfile('/etc/hosts')` |
-| `os.path.isdir(path)` | 检查路径是否是**目录**。 | `os.path.isdir('/home/user')` |
-| `os.path.islink(path)` | 检查路径是否是**符号链接**。 | `os.path.islink('/usr/bin/python')` |
-| `os.path.getsize(path)` | 返回文件的**大小**（字节）。 | `os.path.getsize('large_file.iso')` |
-| `os.path.getmtime(path)` | 返回文件的**最后修改时间**（时间戳）。 | `os.path.getmtime('file.txt')` |
+| 函数                         | 描述                                                                             | 示例                                                                   |
+| :--------------------------- | :------------------------------------------------------------------------------- | :--------------------------------------------------------------------- |
+| `os.path.join(path, *paths)` | **智能地拼接**多个路径组件。它会根据操作系统自动使用正确的分隔符（`/` 或 `\`）。 | `os.path.join('dir', 'subdir', 'file.txt')`                            |
+| `os.path.abspath(path)`      | 返回路径的**绝对路径**。                                                         | `os.path.abspath('file.txt')`                                          |
+| `os.path.normpath(path)`     | **规范化**路径，处理多余的 `..`、`.` 和分隔符。                                  | `os.path.normpath('/var/www/../log/./app.log')`                        |
+| `os.path.basename(path)`     | 返回路径的**最后一部分**（通常是文件名或目录名）。                               | `os.path.basename('/home/user/file.txt')` -> `'file.txt'`              |
+| `os.path.dirname(path)`      | 返回路径的**目录部分**。                                                         | `os.path.dirname('/home/user/file.txt')` -> `'/home/user'`             |
+| `os.path.split(path)`        | 将路径分割为 **(目录, 文件名)** 的元组。                                         | `os.path.split('/home/user/file.txt')` -> `('/home/user', 'file.txt')` |
+| `os.path.splitext(path)`     | 将路径分割为 **(root, ext)** 的元组，其中 `ext` 是**扩展名**（包含点）。         | `os.path.splitext('archive.tar.gz')` -> `('archive.tar', '.gz')`       |
+| `os.path.exists(path)`       | 检查路径（文件或目录）**是否存在**。                                             | `os.path.exists('/etc/hosts')`                                         |
+| `os.path.isfile(path)`       | 检查路径是否是**文件**。                                                         | `os.path.isfile('/etc/hosts')`                                         |
+| `os.path.isdir(path)`        | 检查路径是否是**目录**。                                                         | `os.path.isdir('/home/user')`                                          |
+| `os.path.islink(path)`       | 检查路径是否是**符号链接**。                                                     | `os.path.islink('/usr/bin/python')`                                    |
+| `os.path.getsize(path)`      | 返回文件的**大小**（字节）。                                                     | `os.path.getsize('large_file.iso')`                                    |
+| `os.path.getmtime(path)`     | 返回文件的**最后修改时间**（时间戳）。                                           | `os.path.getmtime('file.txt')`                                         |
 
 ### 代码示例：路径操作
 
@@ -96,17 +96,17 @@ else:
 
 ### 常用函数
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `os.getcwd()` | 返回当前工作目录（Current Working Directory）。 |
-| `os.chdir(path)` | 改变当前工作目录到指定路径。 |
-| `os.listdir(path='.')` | 返回指定目录下的文件和目录名**列表**。 |
-| `os.mkdir(path, mode=0o777)` | 创建**单个目录**。如果目录已存在，会抛出 `FileExistsError`。 |
-| `os.makedirs(name, mode=0o777, exist_ok=False)` | **递归地**创建目录，创建所有必要的中间级目录。`exist_ok=True` 时忽略已存在的目录错误。 |
-| `os.remove(path)` | **删除文件**。 |
-| `os.rmdir(path)` | **删除空目录**。 |
-| `os.removedirs(path)` | 递归删除**空目录**，从子目录开始向上删除。 |
-| `os.rename(src, dst)` | 将文件或目录从 `src` 重命名或移动到 `dst`。 |
+| 函数                                                          | 描述                                                                                                                          |
+| :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------- |
+| `os.getcwd()`                                                 | 返回当前工作目录（Current Working Directory）。                                                                               |
+| `os.chdir(path)`                                              | 改变当前工作目录到指定路径。                                                                                                  |
+| `os.listdir(path='.')`                                        | 返回指定目录下的文件和目录名**列表**。                                                                                        |
+| `os.mkdir(path, mode=0o777)`                                  | 创建**单个目录**。如果目录已存在，会抛出 `FileExistsError`。                                                                  |
+| `os.makedirs(name, mode=0o777, exist_ok=False)`               | **递归地**创建目录，创建所有必要的中间级目录。`exist_ok=True` 时忽略已存在的目录错误。                                        |
+| `os.remove(path)`                                             | **删除文件**。                                                                                                                |
+| `os.rmdir(path)`                                              | **删除空目录**。                                                                                                              |
+| `os.removedirs(path)`                                         | 递归删除**空目录**，从子目录开始向上删除。                                                                                    |
+| `os.rename(src, dst)`                                         | 将文件或目录从 `src` 重命名或移动到 `dst`。                                                                                   |
 | `os.walk(top, topdown=True, onerror=None, followlinks=False)` | 生成目录树中的文件名，通过遍历树（从上到下或从下到上）。返回一个生成器，每次产生一个三元组 `(dirpath, dirnames, filenames)`。 |
 
 ### 代码示例：目录遍历与文件操作
@@ -152,14 +152,14 @@ os.removedirs(sub_dir) # Now the directories are empty and can be deleted
 
 `os` 模块可以用于启动新的进程或与当前进程交互。
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `os.system(command)` | 在子 shell 中执行命令（字符串）。**简单但不推荐**，难以捕获输出和错误。 |
-| `os.popen(cmd, mode='r', buffering=-1)` | 打开一个到命令的管道。也已不推荐，被 `subprocess` 模块取代。 |
-| `os.getpid()` | 返回当前进程的 ID。 |
-| `os.getppid()` | 返回父进程的 ID。 |
-| `os.kill(pid, sig)` | 发送一个信号 `sig` 到进程 `pid`。 |
-| `os._exit(n)` | 以状态码 `n` 立即退出进程（不会清理，如刷新缓冲区）。 |
+| 函数                                    | 描述                                                                    |
+| :-------------------------------------- | :---------------------------------------------------------------------- |
+| `os.system(command)`                    | 在子 shell 中执行命令（字符串）。**简单但不推荐**，难以捕获输出和错误。 |
+| `os.popen(cmd, mode='r', buffering=-1)` | 打开一个到命令的管道。也已不推荐，被 `subprocess` 模块取代。            |
+| `os.getpid()`                           | 返回当前进程的 ID。                                                     |
+| `os.getppid()`                          | 返回父进程的 ID。                                                       |
+| `os.kill(pid, sig)`                     | 发送一个信号 `sig` 到进程 `pid`。                                       |
+| `os._exit(n)`                           | 以状态码 `n` 立即退出进程（不会清理，如刷新缓冲区）。                   |
 
 **最佳实践：** 对于进程管理，现代 Python 程序应优先使用更强大、更安全的 `subprocess` 模块来运行外部命令。`os.system()` 和 `os.popen()` 应仅在快速脚本或简单场景中使用。
 
@@ -181,11 +181,11 @@ print(f"The command exited with code: {return_code}")
 
 环境变量是操作系统提供的键值对，常用于配置应用程序。
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `os.environ` | 一个表示环境变量的**映射对象**。可以像字典一样使用。 |
-| `os.getenv(key, default=None)` | 获取环境变量 `key` 的值。如果不存在，返回 `default`。 |
-| `os.putenv(key, value)` | 设置环境变量 `key` 的值为 `value`。**注意**：直接修改 `os.environ` 是更推荐的方式。 |
+| 函数                           | 描述                                                                                |
+| :----------------------------- | :---------------------------------------------------------------------------------- |
+| `os.environ`                   | 一个表示环境变量的**映射对象**。可以像字典一样使用。                                |
+| `os.getenv(key, default=None)` | 获取环境变量 `key` 的值。如果不存在，返回 `default`。                               |
+| `os.putenv(key, value)`        | 设置环境变量 `key` 的值为 `value`。**注意**：直接修改 `os.environ` 是更推荐的方式。 |
 
 ### 代码示例：环境变量
 
@@ -211,12 +211,12 @@ print(f"CUSTOM_VAR: {os.getenv('CUSTOM_VAR')}")
 
 ## 系统信息与权限
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `os.name` | 导入的操作系统依赖模块的名称（如 `'posix'`, `'nt'`, `'java'`）。 |
-| `os.sep` | 操作系统用来分隔路径名的字符串（如 Linux/macOS 是 `'/'`，Windows 是 `'\\'`）。 |
-| `os.pathsep` | 操作系统用于分隔搜索路径（如 `PATH`）中不同组件的字符（通常是 `':'` 或 `';'`）。 |
-| `os.access(path, mode)` | 使用真实的 uid/gid 测试对路径的访问权限（读、写、执行、存在）。 |
+| 函数                    | 描述                                                                             |
+| :---------------------- | :------------------------------------------------------------------------------- |
+| `os.name`               | 导入的操作系统依赖模块的名称（如 `'posix'`, `'nt'`, `'java'`）。                 |
+| `os.sep`                | 操作系统用来分隔路径名的字符串（如 Linux/macOS 是 `'/'`，Windows 是 `'\\'`）。   |
+| `os.pathsep`            | 操作系统用于分隔搜索路径（如 `PATH`）中不同组件的字符（通常是 `':'` 或 `';'`）。 |
+| `os.access(path, mode)` | 使用真实的 uid/gid 测试对路径的访问权限（读、写、执行、存在）。                  |
 
 ### 代码示例：系统与权限
 
@@ -245,39 +245,39 @@ else:
 ## 最佳实践与常见陷阱
 
 1. **使用 `os.path.join()` 代替手动拼接路径**
-    * **错误示例**： `path = directory + '/' + filename`
-    * **正确示例**： `path = os.path.join(directory, filename)`
-    * **原因**： 保证代码的跨平台兼容性，避免因硬编码分隔符导致的错误。
+   - **错误示例**： `path = directory + '/' + filename`
+   - **正确示例**： `path = os.path.join(directory, filename)`
+   - **原因**： 保证代码的跨平台兼容性，避免因硬编码分隔符导致的错误。
 
 2. **检查路径是否存在后再操作**
-    * 在执行删除、重命名等破坏性操作前，使用 `os.path.exists()`, `os.path.isfile()`, `os.path.isdir()` 进行检查，或使用 `try...except` 块捕获异常。
+   - 在执行删除、重命名等破坏性操作前，使用 `os.path.exists()`, `os.path.isfile()`, `os.path.isdir()` 进行检查，或使用 `try...except` 块捕获异常。
 
-    ```python
-    file_path = 'important.txt'
-    # 方法一：先检查
-    if os.path.exists(file_path):
-        os.remove(file_path)
-    else:
-        print("File not found, skipping deletion.")
+   ```python
+   file_path = 'important.txt'
+   # 方法一：先检查
+   if os.path.exists(file_path):
+       os.remove(file_path)
+   else:
+       print("File not found, skipping deletion.")
 
-    # 方法二：尝试操作并处理异常 (EAFP - Easier to Ask for Forgiveness than Permission)
-    try:
-        os.remove(file_path)
-    except FileNotFoundError:
-        print("File not found, skipping deletion.")
-    ```
+   # 方法二：尝试操作并处理异常 (EAFP - Easier to Ask for Forgiveness than Permission)
+   try:
+       os.remove(file_path)
+   except FileNotFoundError:
+       print("File not found, skipping deletion.")
+   ```
 
 3. **优先使用 `subprocess` 模块代替 `os.system()`**
-    * `subprocess.run()` 提供了更详细的控制（输入、输出、错误捕获、返回码），是运行外部命令的现代标准。
+   - `subprocess.run()` 提供了更详细的控制（输入、输出、错误捕获、返回码），是运行外部命令的现代标准。
 
 4. **修改环境变量时，操作 `os.environ` 而非 `os.putenv()`**
-    * 直接修改 `os.environ` 字典可以保证修改立即在当前进程和其后启动的子进程中生效，行为更可预测。
+   - 直接修改 `os.environ` 字典可以保证修改立即在当前进程和其后启动的子进程中生效，行为更可预测。
 
 5. **小心使用 `os.walk()` 的 `followlinks` 参数**
-    * 默认 (`False`) 下，`os.walk()` 不会进入符号链接目录，避免可能出现的无限循环。除非你明确需要遍历链接目录，否则保持默认。
+   - 默认 (`False`) 下，`os.walk()` 不会进入符号链接目录，避免可能出现的无限循环。除非你明确需要遍历链接目录，否则保持默认。
 
 6. **处理文件和目录名时注意字符编码**
-    * 在旧系统或特定环境下，文件名可能包含非 UTF-8 编码的字符。使用 `os.fsencode()` 和 `os.fsdecode()` 进行安全的编码转换。
+   - 在旧系统或特定环境下，文件名可能包含非 UTF-8 编码的字符。使用 `os.fsencode()` 和 `os.fsdecode()` 进行安全的编码转换。
 
 ## 总结
 
@@ -287,7 +287,7 @@ Python 的 `os` 模块是一个功能强大且必不可少的工具，它架起�
 
 **官方资源：**
 
-* <https://docs.python.org/3/library/os.html>
-* <https://docs.python.org/3/library/os.path.html>
+- <https://docs.python.org/3/library/os.html>
+- <https://docs.python.org/3/library/os.path.html>
 
 ---

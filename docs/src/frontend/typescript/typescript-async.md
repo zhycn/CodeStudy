@@ -16,9 +16,9 @@
 
 一个 Promise 对象必然处于以下三种状态之一：
 
-* **Pending（待定）**: 初始状态，既没有被兑现，也没有被拒绝。
-* **Fulfilled（已兑现）**: 意味着操作成功完成。
-* **Rejected（已拒绝）**: 意味着操作失败。
+- **Pending（待定）**: 初始状态，既没有被兑现，也没有被拒绝。
+- **Fulfilled（已兑现）**: 意味着操作成功完成。
+- **Rejected（已拒绝）**: 意味着操作失败。
 
 状态一旦改变（从 `pending` 变为 `fulfilled` 或 `rejected`），就不可再变。
 
@@ -33,9 +33,9 @@ const myPromise = new Promise<string>((resolve, reject) => {
     const success = Math.random() > 0.3; // 70% 的成功率
 
     if (success) {
-      resolve("Data successfully fetched!"); // 操作成功，传递结果
+      resolve('Data successfully fetched!'); // 操作成功，传递结果
     } else {
-      reject(new Error("Failed to fetch data")); // 操作失败，传递错误原因
+      reject(new Error('Failed to fetch data')); // 操作失败，传递错误原因
     }
   }, 1000);
 });
@@ -47,9 +47,9 @@ const myPromise = new Promise<string>((resolve, reject) => {
 
 创建 Promise 后，我们使用以下方法来处理它的最终状态。
 
-* `.then(onFulfilled, onRejected?)`: 用于注册当 Promise 被兑现或拒绝时的回调函数。它返回一个新的 Promise，允许链式调用。
-* `.catch(onRejected)`: 是 `.then(null, onRejected)` 的语法糖，专门用于处理错误。
-* `.finally(onFinally)`: 无论 Promise 最终状态如何，都会执行的回调。常用于清理工作。
+- `.then(onFulfilled, onRejected?)`: 用于注册当 Promise 被兑现或拒绝时的回调函数。它返回一个新的 Promise，允许链式调用。
+- `.catch(onRejected)`: 是 `.then(null, onRejected)` 的语法糖，专门用于处理错误。
+- `.finally(onFinally)`: 无论 Promise 最终状态如何，都会执行的回调。常用于清理工作。
 
 ```typescript
 myPromise
@@ -69,7 +69,7 @@ myPromise
   })
   .finally(() => {
     // 无论成功或失败都会执行
-    console.log("Operation attempt finished.");
+    console.log('Operation attempt finished.');
   });
 ```
 
@@ -90,7 +90,7 @@ async function fetchUserId(): Promise<number> {
 
 // 这个函数返回 Promise<void>
 async function handleError(): Promise<void> {
-  throw new Error("Something went wrong!"); // 等价于 return Promise.reject(new Error(...));
+  throw new Error('Something went wrong!'); // 等价于 return Promise.reject(new Error(...));
 }
 ```
 
@@ -101,7 +101,7 @@ async function handleError(): Promise<void> {
 ```typescript
 async function fetchUserData() {
   try {
-    console.log("Fetching user...");
+    console.log('Fetching user...');
     // 执行在此暂停，直到 myPromise 完成
     const result = await myPromise; // myPromise 来自上一节的例子
     // 上一行完成后，才继续执行下一行
@@ -118,7 +118,7 @@ async function fetchUserData() {
     // 在 catch 块中抛出错误，等同于 reject
     throw error;
   } finally {
-    console.log("User data fetch process completed.");
+    console.log('User data fetch process completed.');
   }
 }
 
@@ -142,9 +142,9 @@ async function getData() {
     console.log(processedData);
   } catch (error) {
     // 捕获 try 块中任何 await 操作的 rejection 或同步错误
-    console.error("An error occurred in getData:", error);
+    console.error('An error occurred in getData:', error);
     // 应用级错误处理，例如上报日志、显示用户友好提示
-    notifyUser("Could not load data. Please try again later.");
+    notifyUser('Could not load data. Please try again later.');
   }
 }
 ```
@@ -159,7 +159,7 @@ someAsyncOperationThatMightFail()
   .then(console.log)
   .catch((error) => {
     // 捕获链中任何步骤发生的错误
-    console.error("An error occurred in the chain:", error);
+    console.error('An error occurred in the chain:', error);
   });
 ```
 
@@ -174,17 +174,17 @@ const promises = [promise1, promise2, promise3];
 
 // 任何一个失败，立即进入 catch
 Promise.all(promises)
-  .then((results) => console.log("All succeeded:", results))
-  .catch((error) => console.error("One failed:", error));
+  .then((results) => console.log('All succeeded:', results))
+  .catch((error) => console.error('One failed:', error));
 
 // 等待所有 Promise 完成，无论成功失败
 Promise.allSettled(promises).then((results) => {
   results.forEach((result) => {
-    if (result.status === "fulfilled") {
-      console.log("Value:", result.value);
+    if (result.status === 'fulfilled') {
+      console.log('Value:', result.value);
     } else {
       // 即使有 rejected，也不会中断，可以在这里处理单个错误
-      console.error("Reason for rejection:", result.reason);
+      console.error('Reason for rejection:', result.reason);
     }
   });
 });
@@ -198,11 +198,19 @@ Promise.allSettled(promises).then((results) => {
 
 ```typescript
 getUser((user) => {
-  getProfile(user, (profile) => {
-    getPosts(profile, (posts) => {
-      // 深层嵌套，难以阅读和维护
-    }, handleError);
-  }, handleError);
+  getProfile(
+    user,
+    (profile) => {
+      getPosts(
+        profile,
+        (posts) => {
+          // 深层嵌套，难以阅读和维护
+        },
+        handleError
+      );
+    },
+    handleError
+  );
 }, handleError);
 ```
 
@@ -233,7 +241,7 @@ async function updateAndLogUser(userId: number) {
   await saveUser(user); // 错误：这个函数返回的是 Promise<void>，而不是 Promise<User>
 }
 
-updateAndLogUser(1).then(updatedUser => console.log(updatedUser)); // 输出：undefined
+updateAndLogUser(1).then((updatedUser) => console.log(updatedUser)); // 输出：undefined
 
 // 修正后
 async function updateAndLogUserFixed(userId: number): Promise<User> {
@@ -246,30 +254,25 @@ async function updateAndLogUserFixed(userId: number): Promise<User> {
 
 ### 5.3 明智地使用 Promise 工具方法
 
-* `Promise.all(iterable)`: 当所有输入的 Promise 都成功时才成功。**用于并行执行无依赖关系的任务**。
-* `Promise.allSettled(iterable)`: 等待所有 Promise 完成（成功或失败）。**用于需要知道所有结果，即使有失败的场景**。
-* `Promise.race(iterable)`: 只要有一个 Promise 完成（成功或失败），就采用其结果。**可用于设置超时**。
-* `Promise.any(iterable)`: 只要有一个 Promise 成功，就采用其结果。**用于获取第一个成功的结果**。
+- `Promise.all(iterable)`: 当所有输入的 Promise 都成功时才成功。**用于并行执行无依赖关系的任务**。
+- `Promise.allSettled(iterable)`: 等待所有 Promise 完成（成功或失败）。**用于需要知道所有结果，即使有失败的场景**。
+- `Promise.race(iterable)`: 只要有一个 Promise 完成（成功或失败），就采用其结果。**可用于设置超时**。
+- `Promise.any(iterable)`: 只要有一个 Promise 成功，就采用其结果。**用于获取第一个成功的结果**。
 
 ```typescript
 // 设置超时
 function fetchWithTimeout(url: string, timeoutMs: number): Promise<Response> {
   return Promise.race([
     fetch(url),
-    new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("Request timed out")), timeoutMs)
-    ),
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('Request timed out')), timeoutMs)),
   ]);
 }
 
 // 获取第一个成功的响应
-const mirrors = [
-  "https://mirror1.example.com/data",
-  "https://mirror2.example.com/data",
-];
+const mirrors = ['https://mirror1.example.com/data', 'https://mirror2.example.com/data'];
 Promise.any(mirrors.map((url) => fetch(url)))
-  .then((response) => console.log("First successful response from:", response.url))
-  .catch((error) => console.error("All mirrors failed", error));
+  .then((response) => console.log('First successful response from:', response.url))
+  .catch((error) => console.error('All mirrors failed', error));
 ```
 
 ### 5.4 将回调式函数转换为 Promise
@@ -300,7 +303,7 @@ async function logFileContent() {
     const content = await readFileAsync('file.txt', 'utf8');
     console.log(content);
   } catch (error) {
-    console.error("Error reading file:", error);
+    console.error('Error reading file:', error);
   }
 }
 ```
@@ -309,73 +312,73 @@ async function logFileContent() {
 
 1. **忘记 Await 或 .then**:
 
-    ```typescript
-    // 错误：'response' 是一个 Promise 对象，不是结果
-    const response = fetch('api/data');
-    console.log(response.json());
+   ```typescript
+   // 错误：'response' 是一个 Promise 对象，不是结果
+   const response = fetch('api/data');
+   console.log(response.json());
 
-    // 正确
-    const response = await fetch('api/data');
-    console.log(await response.json());
-    ```
+   // 正确
+   const response = await fetch('api/data');
+   console.log(await response.json());
+   ```
 
 2. **在 async 函数外使用 await**:
 
-    ```typescript
-    // 语法错误
-    function main() {
-      await asyncTask(); 
-    }
+   ```typescript
+   // 语法错误
+   function main() {
+     await asyncTask();
+   }
 
-    // 正确
-    async function main() {
-      await asyncTask();
-    }
-    // 或者在顶层使用 IIAFE (现代环境也支持顶层 await)
-    (async () => {
-      await asyncTask();
-    })();
-    ```
+   // 正确
+   async function main() {
+     await asyncTask();
+   }
+   // 或者在顶层使用 IIAFE (现代环境也支持顶层 await)
+   (async () => {
+     await asyncTask();
+   })();
+   ```
 
 3. **错误处理不当**:
 
-    ```typescript
-    // 错误：如果 asyncOperation 失败，错误会被“吞掉”
-    async function riskyFunction() {
-      try {
-        return await asyncOperation();
-      } catch (error) {
-        console.log(error); // 只是打印，没有重新抛出
-      }
-    }
-    riskyFunction().then(...); // 这里认为函数总是成功
+   ```typescript
+   // 错误：如果 asyncOperation 失败，错误会被“吞掉”
+   async function riskyFunction() {
+     try {
+       return await asyncOperation();
+     } catch (error) {
+       console.log(error); // 只是打印，没有重新抛出
+     }
+   }
+   riskyFunction().then(...); // 这里认为函数总是成功
 
-    // 正确：根据意图，要么处理错误，要么重新抛出
-    async function riskyFunctionFixed() {
-      try {
-        return await asyncOperation();
-      } catch (error) {
-        console.error(error);
-        throw new Error("riskyFunction failed", { cause: error }); // 重新抛出，保留原始错误
-      }
-    }
-    ```
+   // 正确：根据意图，要么处理错误，要么重新抛出
+   async function riskyFunctionFixed() {
+     try {
+       return await asyncOperation();
+     } catch (error) {
+       console.error(error);
+       throw new Error("riskyFunction failed", { cause: error }); // 重新抛出，保留原始错误
+     }
+   }
+   ```
 
 4. **并行任务误用串行等待**:
 
-    ```typescript
-    // 低效：三个操作依次执行，总时间 ~3000ms
-    async function serial() {
-      const a = await task(1000);
-      const b = await task(1000);
-      const c = await task(1000);
-    }
+   ```typescript
+   // 低效：三个操作依次执行，总时间 ~3000ms
+   async function serial() {
+     const a = await task(1000);
+     const b = await task(1000);
+     const c = await task(1000);
+   }
 
-    // 高效：三个操作并行执行，总时间 ~1000ms
-    async function parallel() {
-      const [a, b, c] = await Promise.all([task(1000), task(1000), task(1000)]);
-    }
-    ```
+   // 高效：三个操作并行执行，总时间 ~1000ms
+   async function parallel() {
+     const [a, b, c] = await Promise.all([task(1000), task(1000), task(1000)]);
+   }
+   ```
 
 ## 总结
 
@@ -383,10 +386,10 @@ TypeScript 极大地增强了 JavaScript 的异步编程体验。通过结合 `P
 
 **核心要点**:
 
-* **使用 `async/await`** 来编写更清晰、更像同步代码的异步流程。
-* **始终使用 `try/catch`** 或在 Promise 链的末端使用 `.catch()` 来妥善处理错误。
-* **利用类型系统** 为你的 Promise 添加泛型类型（`Promise<T>`）。
-* **选择合适的并发模式**：使用 `Promise.all` 进行并行操作，使用链式调用进行串行操作。
-* **避免常见陷阱**，如忘记 `await` 或不正确的错误处理。
+- **使用 `async/await`** 来编写更清晰、更像同步代码的异步流程。
+- **始终使用 `try/catch`** 或在 Promise 链的末端使用 `.catch()` 来妥善处理错误。
+- **利用类型系统** 为你的 Promise 添加泛型类型（`Promise<T>`）。
+- **选择合适的并发模式**：使用 `Promise.all` 进行并行操作，使用链式调用进行串行操作。
+- **避免常见陷阱**，如忘记 `await` 或不正确的错误处理。
 
 掌握这些概念和最佳实践，将使你能够构建出高效、可靠且易于理解的 TypeScript 应用程序。

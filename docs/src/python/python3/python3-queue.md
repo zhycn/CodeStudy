@@ -24,24 +24,24 @@
 
 **关键特性：**
 
-* **线程安全 (Thread-Safe)**：所有操作都是原子的，避免了竞态条件。
-* **阻塞操作**：当队列为空时，消费者线程会被阻塞，直到有数据可用；当队列满时，生产者线程会被阻塞，直到有空间可用。
-* **丰富的队列类型**：支持 FIFO、LIFO 和优先级队列。
+- **线程安全 (Thread-Safe)**：所有操作都是原子的，避免了竞态条件。
+- **阻塞操作**：当队列为空时，消费者线程会被阻塞，直到有数据可用；当队列满时，生产者线程会被阻塞，直到有空间可用。
+- **丰富的队列类型**：支持 FIFO、LIFO 和优先级队列。
 
 ## 队列类型
 
 `queue` 模块主要提供了三种队列类：
 
-| 类名 | 构造函数 | 描述 | 顺序 |
-| :--- | :--- | :--- | :--- |
-| **`Queue`** | `queue.Queue(maxsize=0)` | 先进先出队列 (First-In, First-Out) | `元素1` → `元素2` → `元素3` |
-| **`LifoQueue`** | `queue.LifoQueue(maxsize=0)` | 后进先出队列 (Last-In, First-Out)，类似于栈 | `元素3` → `元素2` → `元素1` |
-| **`PriorityQueue`** | `queue.PriorityQueue(maxsize=0)` | 优先级队列 | 最小的元素先出（最低值最高优先级） |
+| 类名                | 构造函数                         | 描述                                        | 顺序                               |
+| :------------------ | :------------------------------- | :------------------------------------------ | :--------------------------------- |
+| **`Queue`**         | `queue.Queue(maxsize=0)`         | 先进先出队列 (First-In, First-Out)          | `元素1` → `元素2` → `元素3`        |
+| **`LifoQueue`**     | `queue.LifoQueue(maxsize=0)`     | 后进先出队列 (Last-In, First-Out)，类似于栈 | `元素3` → `元素2` → `元素1`        |
+| **`PriorityQueue`** | `queue.PriorityQueue(maxsize=0)` | 优先级队列                                  | 最小的元素先出（最低值最高优先级） |
 
 **参数 `maxsize`：**
 
-* 默认为 `0`，表示队列大小无限制，直到内存耗尽。
-* 如果设置为大于 `0` 的整数，则队列大小受限。当队列达到最大容量时，插入操作 (`put`) 将会阻塞，直到消费者线程取出元素腾出空间。
+- 默认为 `0`，表示队列大小无限制，直到内存耗尽。
+- 如果设置为大于 `0` 的整数，则队列大小受限。当队列达到最大容量时，插入操作 (`put`) 将会阻塞，直到消费者线程取出元素腾出空间。
 
 ## 通用方法与属性
 
@@ -49,20 +49,20 @@
 
 ### 核心方法
 
-* **`put(item, block=True, timeout=None)`**
-  * 将 `item` 放入队列。
-  * `block`: 如果为 `True` (默认)，且队列已满，则调用线程将被阻塞，直到有空位可用。如果为 `False`，且队列已满，会立即抛出 `queue.Full` 异常。
-  * `timeout`: 如果 `block` 为 `True`，`timeout` 指定了最多阻塞的秒数。如果超时，会抛出 `queue.Full` 异常。`None` (默认) 表示无限期阻塞。
+- **`put(item, block=True, timeout=None)`**
+  - 将 `item` 放入队列。
+  - `block`: 如果为 `True` (默认)，且队列已满，则调用线程将被阻塞，直到有空位可用。如果为 `False`，且队列已满，会立即抛出 `queue.Full` 异常。
+  - `timeout`: 如果 `block` 为 `True`，`timeout` 指定了最多阻塞的秒数。如果超时，会抛出 `queue.Full` 异常。`None` (默认) 表示无限期阻塞。
 
-* **`get(block=True, timeout=None)`**
-  * 从队列中移除并返回一个项目。
-  * `block` 和 `timeout` 参数的行为与 `put` 类似，只是在队列为空时抛出 `queue.Empty` 异常。
+- **`get(block=True, timeout=None)`**
+  - 从队列中移除并返回一个项目。
+  - `block` 和 `timeout` 参数的行为与 `put` 类似，只是在队列为空时抛出 `queue.Empty` 异常。
 
-* **`qsize()`**
-  * 返回队列的大致大小。**注意**：在多线程环境中，`qsize()` 返回的值在返回后可能立即被另一个线程改变，因此其结果并不可靠。**通常应避免使用**，而依赖 `get` 和 `put` 的阻塞行为。
+- **`qsize()`**
+  - 返回队列的大致大小。**注意**：在多线程环境中，`qsize()` 返回的值在返回后可能立即被另一个线程改变，因此其结果并不可靠。**通常应避免使用**，而依赖 `get` 和 `put` 的阻塞行为。
 
-* **`empty()`**
-  * 如果队列为空则返回 `True`，否则返回 `False`。和 `qsize()` 存在同样的可靠性问题，**不应**用于流程控制（例如 `if not q.empty():`）。
+- **`empty()`**
+  - 如果队列为空则返回 `True`，否则返回 `False`。和 `qsize()` 存在同样的可靠性问题，**不应**用于流程控制（例如 `if not q.empty():`）。
 
         ```python
         # 错误示范！不要这样写！
@@ -70,23 +70,23 @@
             item = q.get() # 在 if 判断和 get() 之间，其他线程可能已经取走了元素，导致 get() 阻塞
         ```
 
-* **`full()`**
-  * 如果队列已满则返回 `True`，否则返回 `False`。同样存在可靠性问题。
+- **`full()`**
+  - 如果队列已满则返回 `True`，否则返回 `False`。同样存在可靠性问题。
 
-* **`task_done()`**
-  * 用于消费者线程。表示之前从队列中获取的一个任务已经完成。
-  * 必须与 `join()` 配合使用。
+- **`task_done()`**
+  - 用于消费者线程。表示之前从队列中获取的一个任务已经完成。
+  - 必须与 `join()` 配合使用。
 
-* **`join()`**
-  * 阻塞当前线程，直到队列中的所有项目都被获取并处理（即每个项目都调用了 `task_done()`）。
+- **`join()`**
+  - 阻塞当前线程，直到队列中的所有项目都被获取并处理（即每个项目都调用了 `task_done()`）。
 
 ### 非阻塞便捷方法
 
-* **`put_nowait(item)`**
-  * 等同于 `put(item, block=False)`。
+- **`put_nowait(item)`**
+  - 等同于 `put(item, block=False)`。
 
-* **`get_nowait()`**
-  * 等同于 `get(block=False)`。
+- **`get_nowait()`**
+  - 等同于 `get(block=False)`。
 
 ## 代码示例与详解
 
@@ -178,12 +178,12 @@ while not pq.empty():
 
 ```
 (1, 'Highest priority task')
-(1, 'Another high priority') 
+(1, 'Another high priority')
 (2, 'Medium priority task')
 (3, 'Low priority task')
 ```
 
-*注意：如果两个元素的优先级数字相同（如两个 `(1, ...)`），它们之间的出队顺序是不确定的，因为它们无法被比较。为确保完全确定性，可以在优先级后添加一个次级比较键（例如插入顺序的计数器）。*
+_注意：如果两个元素的优先级数字相同（如两个 `(1, ...)`），它们之间的出队顺序是不确定的，因为它们无法被比较。为确保完全确定性，可以在优先级后添加一个次级比较键（例如插入顺序的计数器）。_
 
 ### 3. 使用 `join()` 和 `task_done()` 进行阻塞
 
@@ -265,23 +265,23 @@ print(sq.empty())   # Output: True
 4. **设置合理的 `maxsize`**：对于 I/O 密集型任务（如网络请求、文件读写），限制队列大小可以防止生产者生产过快，导致内存被大量未处理的任务占满，起到背压 (Backpressure) 作用。
 5. **处理异常**：在 `put_nowait` 或 `get_nowait` 时，记得捕获和处理 `queue.Full` 或 `queue.Empty` 异常。
 
-    ```python
-    try:
-        item = q.get_nowait()
-        # process the item
-    except queue.Empty:
-        # handle the empty queue case
-        print("Queue is empty, nothing to do.")
-    ```
+   ```python
+   try:
+       item = q.get_nowait()
+       # process the item
+   except queue.Empty:
+       # handle the empty queue case
+       print("Queue is empty, nothing to do.")
+   ```
 
 6. **`with` 语句 (上下文管理器)**：从 Python 3.13 开始，队列对象支持上下文管理器协议。在 `with` 块中成功获取项目后，退出块时会自动调用 `task_done()`。这可以避免忘记调用 `task_done()`。
 
-    ```python
-    # Requires Python >= 3.13
-    with q as item:  # 等同于 item = q.get(); ... ; q.task_done()
-        print(f'Processing {item}')
-    # 这里自动调用了 q.task_done()
-    ```
+   ```python
+   # Requires Python >= 3.13
+   with q as item:  # 等同于 item = q.get(); ... ; q.task_done()
+       print(f'Processing {item}')
+   # 这里自动调用了 q.task_done()
+   ```
 
 ## 常见问题与解答 (FAQ)
 
@@ -294,9 +294,9 @@ print(sq.empty())   # Output: True
 **Q3: 如何等待多个队列？**
 **A:** 一个线程不能同时阻塞在多个队列的 `get()` 操作上。解决方案通常是：
 
-* 使用一个单独的线程来等待每个队列。
-* 使用 `select` 模块（如果队列底层是文件描述符，但标准队列不是）或更高级的并发框架（如 `asyncio`）。
-* 使用 `get_nowait()` 轮询多个队列（效率较低）。
+- 使用一个单独的线程来等待每个队列。
+- 使用 `select` 模块（如果队列底层是文件描述符，但标准队列不是）或更高级的并发框架（如 `asyncio`）。
+- 使用 `get_nowait()` 轮询多个队列（效率较低）。
 
 **Q4: `queue.Queue` 和 `collections.deque` 有什么区别？**
 **A:** `collections.deque` 是一个高效的双端队列，但它**不是线程安全**的。`queue.Queue` 的内部实现实际上使用了 `deque`，但为其所有操作都添加了锁同步，使其成为线程安全的。**规则是：在单线程中用 `deque`，在多线程中用 `Queue`。**

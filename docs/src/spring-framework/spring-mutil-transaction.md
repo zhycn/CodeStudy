@@ -48,7 +48,7 @@ public interface PlatformTransactionManager {
 @Configuration
 @EnableTransactionManagement
 public class TransactionConfig {
-    
+
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
@@ -57,10 +57,10 @@ public class TransactionConfig {
 
 @Service
 public class OrderService {
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Transactional(
         propagation = Propagation.REQUIRED,
         isolation = Isolation.READ_COMMITTED,
@@ -102,34 +102,34 @@ public class OrderService {
 ```java
 @Service
 public class UserService {
-    
+
     private final PlatformTransactionManager transactionManager;
     private final JdbcTemplate jdbcTemplate;
-    
-    public UserService(PlatformTransactionManager transactionManager, 
+
+    public UserService(PlatformTransactionManager transactionManager,
                        JdbcTemplate jdbcTemplate) {
         this.transactionManager = transactionManager;
         this.jdbcTemplate = jdbcTemplate;
     }
-    
+
     public void complexOperation(User user) {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         TransactionStatus status = transactionManager.getTransaction(def);
-        
+
         try {
             // 业务操作1
             jdbcTemplate.update(
                 "UPDATE users SET balance = balance - ? WHERE id = ?",
                 user.getAmount(), user.getId()
             );
-            
+
             // 业务操作2
             jdbcTemplate.update(
                 "INSERT INTO audit_log(action, user_id) VALUES(?, ?)",
                 "UPDATE", user.getId()
             );
-            
+
             transactionManager.commit(status);
         } catch (Exception ex) {
             transactionManager.rollback(status);
@@ -141,12 +141,12 @@ public class UserService {
 
 ### 3.3 两种方式对比
 
-| **事务管理方式** | **优点** | **缺点** | **适用场景** |
-|----------------|----------|----------|--------------|
-| **声明式事务** | 非侵入式，配置简单，易维护 | 灵活性稍差 | 大多数常规业务场景 |
-| **编程式事务** | 灵活性高，可精确控制事务 | 侵入性强，代码冗余 | 复杂的事务控制场景 |
+| **事务管理方式** | **优点**                   | **缺点**           | **适用场景**       |
+| ---------------- | -------------------------- | ------------------ | ------------------ |
+| **声明式事务**   | 非侵入式，配置简单，易维护 | 灵活性稍差         | 大多数常规业务场景 |
+| **编程式事务**   | 灵活性高，可精确控制事务   | 侵入性强，代码冗余 | 复杂的事务控制场景 |
 
-*表：Spring 事务管理方式对比*
+_表：Spring 事务管理方式对比_
 
 ## 4. 事务属性详解
 
@@ -154,35 +154,35 @@ public class UserService {
 
 Spring 定义了 7 种事务传播行为，控制事务边界：
 
-| **传播行为** | **说明** | **适用场景** |
-|--------------|----------|--------------|
-| **REQUIRED** (默认) | 支持当前事务，不存在则新建 | 默认设置，适用于大多数操作 |
-| **SUPPORTS** | 支持当前事务，不存在则以非事务执行 | 查询操作 |
-| **MANDATORY** | 必须在已有事务中执行 | 必须由事务调用的方法 |
-| **REQUIRES_NEW** | 挂起当前事务，创建新事务 | 独立操作（如日志记录） |
-| **NOT_SUPPORTED** | 非事务执行，挂起当前事务 | 不涉及数据修改的操作 |
-| **NEVER** | 必须在非事务环境执行 | 只读操作 |
-| **NESTED** | 在当前事务中嵌套子事务 | 复杂业务中的部分回滚 |
+| **传播行为**        | **说明**                           | **适用场景**               |
+| ------------------- | ---------------------------------- | -------------------------- |
+| **REQUIRED** (默认) | 支持当前事务，不存在则新建         | 默认设置，适用于大多数操作 |
+| **SUPPORTS**        | 支持当前事务，不存在则以非事务执行 | 查询操作                   |
+| **MANDATORY**       | 必须在已有事务中执行               | 必须由事务调用的方法       |
+| **REQUIRES_NEW**    | 挂起当前事务，创建新事务           | 独立操作（如日志记录）     |
+| **NOT_SUPPORTED**   | 非事务执行，挂起当前事务           | 不涉及数据修改的操作       |
+| **NEVER**           | 必须在非事务环境执行               | 只读操作                   |
+| **NESTED**          | 在当前事务中嵌套子事务             | 复杂业务中的部分回滚       |
 
-*表：Spring 事务传播行为*
+_表：Spring 事务传播行为_
 
 **代码示例**：
 
 ```java
 @Service
 public class BankingService {
-    
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void transfer(Account from, Account to, BigDecimal amount) {
         withdraw(from, amount); // 内部方法调用
         deposit(to, amount);
     }
-    
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void withdraw(Account account, BigDecimal amount) {
         // 扣款逻辑
     }
-    
+
     public void deposit(Account account, BigDecimal amount) {
         // 存款逻辑
     }
@@ -193,21 +193,21 @@ public class BankingService {
 
 Spring 支持标准 SQL 隔离级别，解决并发问题：
 
-| **隔离级别** | **脏读** | **不可重复读** | **幻读** | **性能影响** |
-|--------------|----------|----------------|----------|--------------|
-| **READ_UNCOMMITTED** | 可能 | 可能 | 可能 | 最低 |
-| **READ_COMMITTED** | 不可能 | 可能 | 可能 | 中等 |
-| **REPEATABLE_READ** | 不可能 | 不可能 | 可能 | 较高 |
-| **SERIALIZABLE** | 不可能 | 不可能 | 不可能 | 最高 |
+| **隔离级别**         | **脏读** | **不可重复读** | **幻读** | **性能影响** |
+| -------------------- | -------- | -------------- | -------- | ------------ |
+| **READ_UNCOMMITTED** | 可能     | 可能           | 可能     | 最低         |
+| **READ_COMMITTED**   | 不可能   | 可能           | 可能     | 中等         |
+| **REPEATABLE_READ**  | 不可能   | 不可能         | 可能     | 较高         |
+| **SERIALIZABLE**     | 不可能   | 不可能         | 不可能   | 最高         |
 
-*表：事务隔离级别对比*
+_表：事务隔离级别对比_
 
 **配置示例**：
 
 ```java
 @Service
 public class FinancialReportService {
-    
+
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public BigDecimal calculateTotalAssets() {
         // 复杂计算需要多次读取相同数据
@@ -257,19 +257,19 @@ Spring 为不同持久化技术提供了相应的事务管理器：
 @Configuration
 @EnableTransactionManagement
 public class TransactionConfig {
-    
+
     // JDBC 和 MyBatis 事务管理器
     @Bean
     public PlatformTransactionManager jdbcTransactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
-    
+
     // JPA 事务管理器
     @Bean
     public PlatformTransactionManager jpaTransactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
-    
+
     // Hibernate 事务管理器
     @Bean
     public PlatformTransactionManager hibernateTransactionManager(SessionFactory sessionFactory) {
@@ -287,13 +287,13 @@ RabbitMQ 基于 AMQP 协议实现了事务机制，Spring AMQP 也提供了对�
 ```java
 @Configuration
 public class RabbitMQTransactionConfig {
-    
+
     // RabbitMQ 事务管理器
     @Bean
     public RabbitTransactionManager rabbitTransactionManager(ConnectionFactory connectionFactory) {
         return new RabbitTransactionManager(connectionFactory);
     }
-    
+
     // 事务 RabbitTemplate
     @Bean("transRabbitTemplate")
     public RabbitTemplate transRabbitTemplate(ConnectionFactory connectionFactory) {
@@ -333,30 +333,30 @@ spring:
 ```java
 @Service
 public class RabbitMQService implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnCallback {
-    
+
     @Autowired
     private RabbitTemplate transRabbitTemplate;
-    
+
     @PostConstruct
     public void init() {
         transRabbitTemplate.setConfirmCallback(this);
         transRabbitTemplate.setReturnCallback(this);
     }
-    
+
     @Transactional(transactionManager = "rabbitTransactionManager")
     public void publishWithTransaction(String message) {
         // 第一条消息
         transRabbitTemplate.convertAndSend("exchange", "routingKey", "Message 1");
-        
+
         // 模拟业务操作
         // ...
-        
+
         // 第二条消息
         transRabbitTemplate.convertAndSend("exchange", "routingKey", "Message 2");
-        
+
         // 如果此处抛出异常，两条消息都会回滚
     }
-    
+
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
         if (ack) {
@@ -365,9 +365,9 @@ public class RabbitMQService implements RabbitTemplate.ConfirmCallback, RabbitTe
             System.out.println("消息确认失败:" + correlationData + ";原因:" + cause);
         }
     }
-    
+
     @Override
-    public void returnedMessage(Message message, int replyCode, String replyText, 
+    public void returnedMessage(Message message, int replyCode, String replyText,
                                String exchange, String routingKey) {
         System.out.println("消息发送失败: " + new String(message.getBody()) + ", 请处理");
     }
@@ -381,33 +381,33 @@ public class RabbitMQService implements RabbitTemplate.ConfirmCallback, RabbitTe
 ```java
 @Service
 public class OrderProcessingService {
-    
+
     @Autowired
     private PlatformTransactionManager transactionManager;
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     public void processOrderWithPayment(Order order, Payment payment) {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         TransactionStatus status = transactionManager.getTransaction(def);
-        
+
         try {
             // 1. 数据库操作：保存订单
             orderRepository.save(order);
-            
+
             // 2. 消息队列操作：发送支付请求
             rabbitTemplate.convertAndSend("payment-exchange", "payment.routing", payment);
-            
+
             // 3. 模拟业务异常
             if (payment.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
                 throw new RuntimeException("无效的支付金额");
             }
-            
+
             transactionManager.commit(status);
         } catch (Exception ex) {
             transactionManager.rollback(status);
@@ -424,22 +424,22 @@ public class OrderProcessingService {
 
 1. **合理设置超时**：避免长时间事务阻塞
 
-    ```java
-    @Transactional(timeout = 30) // 30秒超时
-    public void longRunningOperation() {
-        // 业务逻辑
-    }
-    ```
+   ```java
+   @Transactional(timeout = 30) // 30秒超时
+   public void longRunningOperation() {
+       // 业务逻辑
+   }
+   ```
 
 2. **只读事务优化**：
 
-    ```java
-    @Transactional(readOnly = true)
-    public List<Order> findOrdersByUser(User user) {
-        // 查询操作
-        return orderRepository.findByUserId(user.getId());
-    }
-    ```
+   ```java
+   @Transactional(readOnly = true)
+   public List<Order> findOrdersByUser(User user) {
+       // 查询操作
+       return orderRepository.findByUserId(user.getId());
+   }
+   ```
 
 3. **避免大事务**：将长事务拆分为多个小事务
 
@@ -447,76 +447,76 @@ public class OrderProcessingService {
 
 1. **正确配置回滚异常**：
 
-    ```java
-    @Transactional(rollbackFor = Exception.class)
-    public void updateData() throws Exception {
-        // 可能抛出检查型异常的操作
-        if (businessError) {
-            throw new Exception("业务异常"); // 会触发回滚
-        }
-    }
-    ```
+   ```java
+   @Transactional(rollbackFor = Exception.class)
+   public void updateData() throws Exception {
+       // 可能抛出检查型异常的操作
+       if (businessError) {
+           throw new Exception("业务异常"); // 会触发回滚
+       }
+   }
+   ```
 
 2. **避免异常被捕获**：
 
-    ```java
-    @Transactional
-    public void updateData() {
-        try {
-            // 可能抛出异常的操作
-            jdbcTemplate.update(...);
-        } catch (DataAccessException ex) {
-            // 捕获异常导致回滚失效
-            throw new RuntimeException(ex); // 必须重新抛出RuntimeException
-        }
-    }
-    ```
+   ```java
+   @Transactional
+   public void updateData() {
+       try {
+           // 可能抛出异常的操作
+           jdbcTemplate.update(...);
+       } catch (DataAccessException ex) {
+           // 捕获异常导致回滚失效
+           throw new RuntimeException(ex); // 必须重新抛出RuntimeException
+       }
+   }
+   ```
 
 ### 6.3 常见陷阱与解决方案
 
 1. **自调用问题**：
 
-    ```java
-    // 错误示例
-    public class ServiceA {
-        public void methodA() {
-            methodB(); // 事务注解失效
-        }
-        
-        @Transactional
-        public void methodB() {
-            // ...
-        }
-    }
-    
-    // 解决方案：通过代理对象调用
-    public class ServiceA {
-        @Autowired
-        private ServiceA selfProxy; // 注入自身代理
-        
-        public void methodA() {
-            selfProxy.methodB(); // 正确的事务调用
-        }
-    }
-    ```
+   ```java
+   // 错误示例
+   public class ServiceA {
+       public void methodA() {
+           methodB(); // 事务注解失效
+       }
+
+       @Transactional
+       public void methodB() {
+           // ...
+       }
+   }
+
+   // 解决方案：通过代理对象调用
+   public class ServiceA {
+       @Autowired
+       private ServiceA selfProxy; // 注入自身代理
+
+       public void methodA() {
+           selfProxy.methodB(); // 正确的事务调用
+       }
+   }
+   ```
 
 2. **方法可见性问题**：
 
-    ```java
-    public class UserService {
-        // 错误：protected方法上的事务可能不生效
-        @Transactional
-        protected void internalOperation() {
-            // ...
-        }
-        
-        // 正确：使用public方法
-        @Transactional
-        public void publicOperation() {
-            // ...
-        }
-    }
-    ```
+   ```java
+   public class UserService {
+       // 错误：protected方法上的事务可能不生效
+       @Transactional
+       protected void internalOperation() {
+           // ...
+       }
+
+       // 正确：使用public方法
+       @Transactional
+       public void publicOperation() {
+           // ...
+       }
+   }
+   ```
 
 ## 7. 监控与性能优化
 
@@ -528,22 +528,22 @@ public class OrderProcessingService {
 @Aspect
 @Component
 public class TransactionMonitoringAspect {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(TransactionMonitoringAspect.class);
-    
+
     @AfterReturning(pointcut = "@within(org.springframework.transaction.annotation.Transactional) || " +
-                              "@annotation(org.springframework.transaction.annotation.Transactional)", 
+                              "@annotation(org.springframework.transaction.annotation.Transactional)",
                     returning = "result")
     public void logTransactionSuccess(JoinPoint joinPoint, Object result) {
-        logger.info("事务成功 - 方法: {}, 返回结果: {}", 
+        logger.info("事务成功 - 方法: {}, 返回结果: {}",
                    joinPoint.getSignature().toShortString(), result);
     }
-    
+
     @AfterThrowing(pointcut = "@within(org.springframework.transaction.annotation.Transactional) || " +
-                             "@annotation(org.springframework.transaction.annotation.Transactional)", 
+                             "@annotation(org.springframework.transaction.annotation.Transactional)",
                    throwing = "ex")
     public void logTransactionFailure(JoinPoint joinPoint, Exception ex) {
-        logger.error("事务回滚 - 方法: {}, 异常: {}", 
+        logger.error("事务回滚 - 方法: {}, 异常: {}",
                     joinPoint.getSignature().toShortString(), ex.getMessage());
     }
 }
@@ -554,19 +554,19 @@ public class TransactionMonitoringAspect {
 1. **连接池优化**：配置合适的数据库连接池参数
 2. **批处理优化**：减少事务提交频率
 
-    ```java
-    @Transactional
-    public void batchInsert(List<Entity> entities) {
-        for (int i = 0; i < entities.size(); i++) {
-            entityRepository.save(entities.get(i));
-            // 每100条记录刷新一次
-            if (i % 100 == 0) {
-                entityManager.flush();
-                entityManager.clear();
-            }
-        }
-    }
-    ```
+   ```java
+   @Transactional
+   public void batchInsert(List<Entity> entities) {
+       for (int i = 0; i < entities.size(); i++) {
+           entityRepository.save(entities.get(i));
+           // 每100条记录刷新一次
+           if (i % 100 == 0) {
+               entityManager.flush();
+               entityManager.clear();
+           }
+       }
+   }
+   ```
 
 ## 8. 总结
 

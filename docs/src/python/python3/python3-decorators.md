@@ -46,7 +46,7 @@ def outer_function(msg):
     def inner_function():
         # inner_function 可以访问其外部作用域的 'message'
         print(message)
-    
+
     # 返回内部函数对象，而不是调用它
     return inner_function
 
@@ -279,13 +279,13 @@ slow_hello()  # 会等待2秒后打印
 3. **谨慎处理返回值**: 确保你的 `wrapper` 函数返回了原始函数的返回值，除非你 intentionally 想修改它。
 4. **注意执行顺序**: 多个装饰器会从下往上应用。
 
-    ```python
-    @decorator_a
-    @decorator_b
-    def my_func():
-        pass
-    # 等价于: my_func = decorator_a(decorator_b(my_func))
-    ```
+   ```python
+   @decorator_a
+   @decorator_b
+   def my_func():
+       pass
+   # 等价于: my_func = decorator_a(decorator_b(my_func))
+   ```
 
 5. **避免副作用**: 装饰器在模块导入时就会执行（装饰器函数本身被调用），而被装饰的函数只有在显式调用时才会执行。不要在装饰器外层（接收 `func` 参数的那层之外）写不必要的逻辑。
 6. **可调试性**: 为你的装饰器编写清晰的文档字符串，说明其功能和参数。
@@ -327,16 +327,16 @@ print(result)  # 输出: 4
 
 ## 总结
 
-| 特性 | 实现方式 | 关键点 |
-| :--- | :--- | :--- |
-| **基础装饰器** | 两层嵌套函数 | 使用 `*args, **kwargs` 传递参数 |
-| **保留元信息** | `@functools.wraps` | **必备最佳实践** |
-| **带参数装饰器** | 三层嵌套函数 | 最外层接收装饰器参数 |
-| **类装饰器** | 实现 `__init__` 和 `__call__` 方法 | 易于维护状态（如计数器） |
+| 特性             | 实现方式                           | 关键点                          |
+| :--------------- | :--------------------------------- | :------------------------------ |
+| **基础装饰器**   | 两层嵌套函数                       | 使用 `*args, **kwargs` 传递参数 |
+| **保留元信息**   | `@functools.wraps`                 | **必备最佳实践**                |
+| **带参数装饰器** | 三层嵌套函数                       | 最外层接收装饰器参数            |
+| **类装饰器**     | 实现 `__init__` 和 `__call__` 方法 | 易于维护状态（如计数器）        |
 
 装饰器是 Python 语言的 **语法糖**，但其背后是函数式编程思想的体现。它极大地提高了代码的**可复用性**和**可读性**。掌握装饰器，意味着你能够编写出更 Pythonic、更专业、更易于维护的代码。
 
 ---
 
-*本文内容参考并综合了 Python 官方文档、Real Python、Stack Overflow 以及多位核心开发者的技术博客，旨在提供当前（2024年）公认的最佳实践。*  
-*The Python Software Foundation 拥有 Python 商标和相关版权。*
+_本文内容参考并综合了 Python 官方文档、Real Python、Stack Overflow 以及多位核心开发者的技术博客，旨在提供当前（2024年）公认的最佳实践。_  
+_The Python Software Foundation 拥有 Python 商标和相关版权。_

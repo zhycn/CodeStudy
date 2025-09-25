@@ -61,13 +61,13 @@ print(html_output)
 
 ### 1.3 如何选择？
 
-| 特性 | mistune | Python-Markdown |
-| :--- | :--- | :--- |
-| **速度** | ⚡️ **非常快** | 🚀 快 |
-| **标准符合度** | 符合 CommonMark | John Gruber 标准，通过扩展支持 CommonMark |
-| **扩展性** | 通过渲染器（Renderer）自定义 | 通过丰富的**扩展（Extension）** 系统 |
-| **易用性** | API 简洁直观 | API 简单，学习扩展系统需一定时间 |
-| **适用场景** | 高性能解析、自定义渲染、不需要复杂扩展 | 需要开箱即用的复杂功能（表格、元数据、目录等） |
+| 特性           | mistune                                | Python-Markdown                                |
+| :------------- | :------------------------------------- | :--------------------------------------------- |
+| **速度**       | ⚡️ **非常快**                         | 🚀 快                                          |
+| **标准符合度** | 符合 CommonMark                        | John Gruber 标准，通过扩展支持 CommonMark      |
+| **扩展性**     | 通过渲染器（Renderer）自定义           | 通过丰富的**扩展（Extension）** 系统           |
+| **易用性**     | API 简洁直观                           | API 简单，学习扩展系统需一定时间               |
+| **适用场景**   | 高性能解析、自定义渲染、不需要复杂扩展 | 需要开箱即用的复杂功能（表格、元数据、目录等） |
 
 **建议：** 对于大多数新项目，特别是追求性能和需要高度自定义渲染输出的场景，推荐从 `mistune` 开始。如果需要大量开箱即用的高级语法支持，则选择 `Python-Markdown`。
 
@@ -77,7 +77,7 @@ print(html_output)
 
 `mistune` 的核心是创建了一个 `markdown` 函数，直接调用即可完成转换。
 
-```python
+````python
 import mistune
 
 markdown_text = """
@@ -89,14 +89,14 @@ https://www.python.org
 
 ```python
 print("Hello, World!") # Code block
-```
+````
 
 """
 
 html_content = mistune.html(markdown_text)
 print(html_content)
 
-```
+````
 
 ### 2.2 使用 `Python-Markdown` 及扩展
 
@@ -123,7 +123,7 @@ Some content here.
 extensions = ['extra', 'toc']
 html_content = markdown.markdown(markdown_text, extensions=extensions)
 print(html_content)
-```
+````
 
 ## 3. 高级用法与自定义
 
@@ -192,97 +192,98 @@ print("HTML Content:", html_content)
 
 1. 首先安装 `Pygments`：
 
-    ```bash
-    pip install Pygments
-    ```
+   ```bash
+   pip install Pygments
+   ```
 
 2. 使用 `codehilite` 扩展：
 
-    ```python
-    import markdown
+   ````python
+   import markdown
 
-    text = """
-    ```python
-    def hello():
-        print("Hello, World!")
-    ```
+   text = """
+   ```python
+   def hello():
+       print("Hello, World!")
+   ````
 
-    """
+   """
 
-    html_content = markdown.markdown(text, extensions=['codehilite'])
-    print(html_content)
+   html_content = markdown.markdown(text, extensions=['codehilite'])
+   print(html_content)
 
-    ```
-    输出的 HTML 会包含 `Pygments` 生成的带 CSS 类的标签。你还需要生成或引入对应的 CSS 主题文件（`pygmentize -S monokai -f html -a .codehilite > style.css`）。
+   ```
+   输出的 HTML 会包含 `Pygments` 生成的带 CSS 类的标签。你还需要生成或引入对应的 CSS 主题文件（`pygmentize -S monokai -f html -a .codehilite > style.css`）。
+   ```
 
 ## 4. 最佳实践
 
 1. **安全性：处理用户输入**
-    如果 Markdown 内容来自用户输入，直接渲染成 HTML 会有 XSS 攻击风险。**务必对最终输出的 HTML 进行净化（Sanitize）**。推荐使用 `bleach` 库。
+   如果 Markdown 内容来自用户输入，直接渲染成 HTML 会有 XSS 攻击风险。**务必对最终输出的 HTML 进行净化（Sanitize）**。推荐使用 `bleach` 库。
 
-    ```python
-    import mistune
-    import bleach
+   ```python
+   import mistune
+   import bleach
 
-    # 允许的 HTML 标签和属性
-    ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS | {'p', 'h1', 'h2', 'h3', 'br', 'pre', 'code', 'span'}
-    ALLOWED_ATTRIBUTES = {
-        'a': ['href', 'title', 'target', 'rel'],
-        'code': ['class'],
-        'span': ['class'],
-    }
+   # 允许的 HTML 标签和属性
+   ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS | {'p', 'h1', 'h2', 'h3', 'br', 'pre', 'code', 'span'}
+   ALLOWED_ATTRIBUTES = {
+       'a': ['href', 'title', 'target', 'rel'],
+       'code': ['class'],
+       'span': ['class'],
+   }
 
-    markdown_parser = mistune.create_markdown()
-    raw_user_input = "Some markdown <script>alert('XSS')</script> with javascript:alert('XSS')"
+   markdown_parser = mistune.create_markdown()
+   raw_user_input = "Some markdown <script>alert('XSS')</script> with javascript:alert('XSS')"
 
-    # 1. 首先将 Markdown 转换为 HTML
-    unclean_html = markdown_parser(raw_user_input)
-    # 2. 使用 bleach 进行清理和链接净化
-    clean_html = bleach.clean(
-        unclean_html,
-        tags=ALLOWED_TAGS,
-        attributes=ALLOWED_ATTRIBUTES,
-        protocols=['http', 'https', 'mailto'], # 允许的链接协议，禁掉 javascript:
-        strip=True # 剥离不允许的标签
-    )
+   # 1. 首先将 Markdown 转换为 HTML
+   unclean_html = markdown_parser(raw_user_input)
+   # 2. 使用 bleach 进行清理和链接净化
+   clean_html = bleach.clean(
+       unclean_html,
+       tags=ALLOWED_TAGS,
+       attributes=ALLOWED_ATTRIBUTES,
+       protocols=['http', 'https', 'mailto'], # 允许的链接协议，禁掉 javascript:
+       strip=True # 剥离不允许的标签
+   )
 
-    print(clean_html)
-    ```
+   print(clean_html)
+   ```
 
 2. **性能考虑：缓存已解析的内容**
-    对于静态内容（如博客文章），不要在每次请求时都重新解析 Markdown。应该在构建或发布时解析一次，然后将生成的 HTML 存储或缓存起来。
+   对于静态内容（如博客文章），不要在每次请求时都重新解析 Markdown。应该在构建或发布时解析一次，然后将生成的 HTML 存储或缓存起来。
 
 3. **一致性：使用锁定的版本**
-    在 `requirements.txt` 或 `pyproject.toml` 中锁定你选择的 Markdown 库的版本，以避免因库更新导致解析结果意外变化。
+   在 `requirements.txt` 或 `pyproject.toml` 中锁定你选择的 Markdown 库的版本，以避免因库更新导致解析结果意外变化。
 
-    ```txt
-    # requirements.txt
-    mistune==3.0.2
-    bleach==6.1.0
-    ```
+   ```txt
+   # requirements.txt
+   mistune==3.0.2
+   bleach==6.1.0
+   ```
 
 4. **可维护性：封装工具函数**
-    将 Markdown 处理逻辑（如解析、清理、自定义渲染）封装成项目中的工具函数或类，避免在业务代码中散落各处。
+   将 Markdown 处理逻辑（如解析、清理、自定义渲染）封装成项目中的工具函数或类，避免在业务代码中散落各处。
 
-    ```python
-    # utils/markdown_utils.py
-    import mistune
-    import bleach
+   ```python
+   # utils/markdown_utils.py
+   import mistune
+   import bleach
 
-    class SafeMarkdownParser:
-        def __init__(self):
-            self._parser = mistune.create_markdown()
-            self._allowed_tags = {...}
-            self._allowed_attributes = {...}
+   class SafeMarkdownParser:
+       def __init__(self):
+           self._parser = mistune.create_markdown()
+           self._allowed_tags = {...}
+           self._allowed_attributes = {...}
 
-        def parse(self, text: str) -> str:
-            html = self._parser(text)
-            clean_html = bleach.clean(html, tags=self._allowed_tags, attributes=self._allowed_attributes, ...)
-            return clean_html
+       def parse(self, text: str) -> str:
+           html = self._parser(text)
+           clean_html = bleach.clean(html, tags=self._allowed_tags, attributes=self._allowed_attributes, ...)
+           return clean_html
 
-    # 在项目中全局使用一个实例
-    md_parser = SafeMarkdownParser()
-    ```
+   # 在项目中全局使用一个实例
+   md_parser = SafeMarkdownParser()
+   ```
 
 ## 5. 总结与推荐工作流
 
@@ -291,8 +292,8 @@ print("HTML Content:", html_content)
 1. **库选择**：优先选择 `mistune`（性能好，API 现代）或 `Python-Markdown`（功能多，扩展丰富）。
 2. **内容创作**：使用标准的 CommonMark 语法编写 `.md` 文件。
 3. **解析处理**：在 Python 中使用你选择的库解析 Markdown。
-    * 如果需要高度自定义输出，为 `mistune` 编写自定义渲染器。
-    * 如果需要表格、目录等特性，为 `Python-Markdown` 配置相应扩展。
+   - 如果需要高度自定义输出，为 `mistune` 编写自定义渲染器。
+   - 如果需要表格、目录等特性，为 `Python-Markdown` 配置相应扩展。
 4. **安全净化**：**如果内容来源不可信**，使用 `bleach` 对最终生成的 HTML 进行净化。
 5. **部署发布**：对于静态内容，在构建时完成步骤 3 和 4，直接发布或存储生成的 HTML，提升运行时性能。
 

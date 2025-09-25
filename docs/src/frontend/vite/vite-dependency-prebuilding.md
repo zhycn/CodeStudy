@@ -2,7 +2,7 @@
 
 本文在撰写前，我已综合分析并总结了来自 Vite 官方文档、`vite-plugin-optimize-persist` 插件说明、多位社区专家（如 Anthony Fu、Matias Capeletto）的深度文章，以及 Stack Overflow 和 GitHub Discussions 上的相关讨论，旨在为您提供经过实践验证的最佳方案。
 
-***
+---
 
 # Vite 依赖预构建详解与最佳实践
 
@@ -50,7 +50,7 @@ flowchart TD
 A[Vite dev server 启动] --> B{检查 .vite/deps 缓存}
 B -- 缓存有效且<br>未发现变更 --> C[直接使用缓存<br>极速启动]
 B -- 缓存不存在<br>或依赖项有变更 --> D[启动预构建过程]
-    
+
 subgraph D[预构建子流程]
     D1[扫描源码<br>识别依赖导入] --> D2[使用 Esbuild<br>打包转换 CommonJS 等依赖] --> D3[将优化后的 ESM 文件<br>写入 .vite/deps 缓存]
 end
@@ -66,8 +66,8 @@ C --> E
 在 `vite.config.ts` 中，你可以通过 `optimizeDeps` 选项对预构建行为进行精细控制。
 
 ```typescript
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
@@ -76,7 +76,7 @@ export default defineConfig({
     include: [
       'linked-package-name',
       'lodash-es', // 明确包含一个包
-      'some-component-library/*.ts' // 你也可以使用 glob 模式
+      'some-component-library/*.ts', // 你也可以使用 glob 模式
     ],
 
     // 2. 控制排除的依赖：排除不需要预构建的依赖。
@@ -94,10 +94,10 @@ export default defineConfig({
         // 可以添加 Esbuild 插件来处理特殊文件
       ],
       jsx: 'automatic', // 例如，为依赖项设置 JSX 处理方式
-      target: 'es2020' // 设置构建目标
-    }
-  }
-})
+      target: 'es2020', // 设置构建目标
+    },
+  },
+});
 ```
 
 ### 3.2 常见场景与最佳实践配置示例
@@ -113,10 +113,10 @@ export default defineConfig({
     include: ['my-dep-with-bad-entry'],
     esbuildOptions: {
       // 如果这个依赖有特殊的加载方式，可以在这里指定
-      mainFields: ['module', 'main', 'browser']
-    }
-  }
-})
+      mainFields: ['module', 'main', 'browser'],
+    },
+  },
+});
 ```
 
 #### 场景 2：优化大型 UI 库（如 Ant Design, Element Plus）
@@ -137,9 +137,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       // 构建时的优化选项...
-    }
-  }
-})
+    },
+  },
+});
 ```
 
 #### 场景 3：解决缓存失效问题
@@ -149,27 +149,25 @@ export default defineConfig({
 1. **重启服务器**：最直接的方法，重启 Dev Server 会触发重新预构建。
 2. **使用 `--force` 标志**：通过命令行强制 Vite 重新构建。
 
-    ```bash
-    vite --force
-    ```
+   ```bash
+   vite --force
+   ```
 
 3. **使用 `vite-plugin-optimize-persist`**：这是一个社区插件，它可以解决在包管理器（如 pnpm）安装后缓存失效的问题。它会将 Vite 的预构建信息持久化到 `package.json` 中，确保所有开发者和环境的一致性。
 
-    ```bash
-    npm i -D vite-plugin-optimize-persist
-    ```
+   ```bash
+   npm i -D vite-plugin-optimize-persist
+   ```
 
-    ```typescript
-    // vite.config.ts
-    import { defineConfig } from 'vite'
-    import OptimizationPersist from 'vite-plugin-optimize-persist'
+   ```typescript
+   // vite.config.ts
+   import { defineConfig } from 'vite';
+   import OptimizationPersist from 'vite-plugin-optimize-persist';
 
-    export default defineConfig({
-      plugins: [
-        OptimizationPersist()
-      ]
-    })
-    ```
+   export default defineConfig({
+     plugins: [OptimizationPersist()],
+   });
+   ```
 
 ## 4. 最佳实践总结
 
@@ -189,12 +187,12 @@ export default defineConfig({
 
 Vite 的依赖预构建是其实现“飞速”开发体验的基石魔法。它巧妙地弥补了 ESM 原生特性和现有 npm 生态之间的鸿沟。
 
-| 特性/方面 | 说明 |
-| :--- | :--- |
-| **目的** | 转换 CJS/UMD 模块为 ESM、合并请求以优化性能、解析裸模块导入 |
-| **关键工具** | ESBuild（极速打包） |
-| **缓存位置** | `node_modules/.vite/deps` |
+| 特性/方面    | 说明                                                                 |
+| :----------- | :------------------------------------------------------------------- |
+| **目的**     | 转换 CJS/UMD 模块为 ESM、合并请求以优化性能、解析裸模块导入          |
+| **关键工具** | ESBuild（极速打包）                                                  |
+| **缓存位置** | `node_modules/.vite/deps`                                            |
 | **核心配置** | `optimizeDeps.include`, `optimizeDeps.exclude`, `optimizeDeps.force` |
-| **核心原则** | **约定大于配置**，大多数项目无需任何配置即可完美运行 |
+| **核心原则** | **约定大于配置**，大多数项目无需任何配置即可完美运行                 |
 
 理解其工作原理和配置方法，将帮助你在遇到棘手的依赖问题时能够从容应对，并最终充分发挥 Vite 的强大能力。

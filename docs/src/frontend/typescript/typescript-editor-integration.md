@@ -23,36 +23,32 @@
 2. **Node.js 与 npm**: TypeScript 编译器需要通过 npm 安装。
 3. **TypeScript**: 建议在项目中本地安装，而非全局安装，以确保团队成员和构建系统使用一致的版本。
 
-    ```bash
-    # 在项目根目录下执行
-    npm init -y
-    npm install typescript --save-dev
+   ```bash
+   # 在项目根目录下执行
+   npm init -y
+   npm install typescript --save-dev
 
-    # 或者使用 Yarn
-    yarn add typescript --dev
+   # 或者使用 Yarn
+   yarn add typescript --dev
 
-    # 检查安装的版本
-    npx tsc --version
-    ```
+   # 检查安装的版本
+   npx tsc --version
+   ```
 
 ### 安装推荐的 VSCode 扩展
 
 虽然 VSCode 自带了对 TypeScript 的出色支持，但以下扩展能进一步提升体验：
 
-* **TypeScript Hero**: 提供更强大的代码组织功能，如自动管理 `import` 语句。
-* **TypeScript Importer**: 在编码时自动识别和提供可导入的模块。
-* **Error Lens**: 在代码行内更醒目地内联显示错误和警告信息，无需将鼠标悬停在波浪线上。
-* **Code Spell Checker**: 检查变量名和字符串中的拼写错误，与 TypeScript 提示互补。
+- **TypeScript Hero**: 提供更强大的代码组织功能，如自动管理 `import` 语句。
+- **TypeScript Importer**: 在编码时自动识别和提供可导入的模块。
+- **Error Lens**: 在代码行内更醒目地内联显示错误和警告信息，无需将鼠标悬停在波浪线上。
+- **Code Spell Checker**: 检查变量名和字符串中的拼写错误，与 TypeScript 提示互补。
 
 你可以在 `.vscode/extensions.json` 中为项目推荐扩展：
 
 ```json
 {
-  "recommendations": [
-    "ms-vscode.vscode-typescript-next",
-    "bradgashler.htmltagwrap",
-    "formulahendry.auto-rename-tag"
-  ]
+  "recommendations": ["ms-vscode.vscode-typescript-next", "bradgashler.htmltagwrap", "formulahendry.auto-rename-tag"]
 }
 ```
 
@@ -67,15 +63,15 @@ TypeScript 能即使在没有显式类型注解的情况下，也能推断出变
 ```typescript
 // 示例 1: 自动推断
 const user = {
-  firstName: "Angela",
-  lastName: "Davis",
-  role: "Professor",
+  firstName: 'Angela',
+  lastName: 'Davis',
+  role: 'Professor',
 };
 // 输入 `user.` 后，VSCode 会自动提示 `firstName`, `lastName`, `role`，而不会提示 `name`。
 console.log(user.name); // ❌ 编辑器会立即用红色波浪线报错：Property 'name' does not exist on type '{ firstName: string; lastName: string; role: string; }'.
 
 // 示例 2: 函数自动完成
-const myArray = ["A", "B", "C"];
+const myArray = ['A', 'B', 'C'];
 // 输入 `myArray.` 后，VSCode 会根据类型（string[]）提示所有数组方法，如 `map`, `filter`, `slice` 等。
 const firstTwo = myArray.slice(0, 2); // ✅ 正确
 const firstTwoError = myArray.trim(0, 2); // ❌ 立即报错：Property 'trim' does not exist on type 'string[]'.
@@ -89,11 +85,11 @@ const firstTwoError = myArray.trim(0, 2); // ❌ 立即报错：Property 'trim' 
 
 ### 3. 代码导航与重构
 
-* **转到定义 (Go to Definition) `F12`**: 跳转到变量、函数或类型的定义处。
-* **查看定义 (Peek Definition) `Alt+F12`**: 在不离开当前文件的情况下查看定义。
-* **查找所有引用 (Find All References) `Shift+F12`**: 查找代码库中所有使用该符号的地方。
-* **重命名符号 (Rename Symbol) `F2`**: 安全地重命名变量、函数等，所有引用处会自动更新。
-* **自动导入 (Auto Import)**: 当你在代码中输入一个来自其他模块的标识符时，VSCode 会自动提示并为你添加 `import` 语句。
+- **转到定义 (Go to Definition) `F12`**: 跳转到变量、函数或类型的定义处。
+- **查看定义 (Peek Definition) `Alt+F12`**: 在不离开当前文件的情况下查看定义。
+- **查找所有引用 (Find All References) `Shift+F12`**: 查找代码库中所有使用该符号的地方。
+- **重命名符号 (Rename Symbol) `F2`**: 安全地重命名变量、函数等，所有引用处会自动更新。
+- **自动导入 (Auto Import)**: 当你在代码中输入一个来自其他模块的标识符时，VSCode 会自动提示并为你添加 `import` 语句。
 
 ### 4. 悬停信息 (Hover Information)
 
@@ -145,7 +141,8 @@ function welcome(user: Account) {
     /* 模块解析 */
     "moduleResolution": "node", // 使用 Node.js 的模块解析策略
     "baseUrl": "./", // 解析非相对模块名的基准目录
-    "paths": { // 模块名到基于 `baseUrl` 的路径映射
+    "paths": {
+      // 模块名到基于 `baseUrl` 的路径映射
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"]
     },
@@ -159,16 +156,8 @@ function welcome(user: Account) {
     /* 额外功能 */
     "skipLibCheck": true // 跳过声明文件的类型检查，可加速编译
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "tests/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
 ```
 
@@ -194,57 +183,58 @@ VSCode 默认使用其内置的 TypeScript 版本。为了确保编辑器使用�
 
 对于现有的 JavaScript 项目，无需一次性全部重写为 TypeScript。可以逐步迁移。
 
-* **`// @ts-check`**: 在 `.js` 文件顶部添加此注释，VSCode 会尽最大努力对该文件进行类型检查，发现潜在错误。
+- **`// @ts-check`**: 在 `.js` 文件顶部添加此注释，VSCode 会尽最大努力对该文件进行类型检查，发现潜在错误。
 
-    ```javascript
-    // @ts-check
+  ```javascript
+  // @ts-check
 
-    function compact(arr) {
-      if (orr.length > 10) { // ❌ 立即报错：Cannot find name 'orr'. Did you mean 'arr'?
-        return arr.trim(0, 10); // ❌ 稍后报错：Property 'trim' does not exist on type 'any[]'.
-      }
-      return arr;
+  function compact(arr) {
+    if (orr.length > 10) {
+      // ❌ 立即报错：Cannot find name 'orr'. Did you mean 'arr'?
+      return arr.trim(0, 10); // ❌ 稍后报错：Property 'trim' does not exist on type 'any[]'.
     }
-    ```
+    return arr;
+  }
+  ```
 
-* **JSDoc 注解**: 使用 JSDoc 为 JavaScript 代码提供类型信息，获得类似 TypeScript 的体验。
+- **JSDoc 注解**: 使用 JSDoc 为 JavaScript 代码提供类型信息，获得类似 TypeScript 的体验。
 
-    ```javascript
-    // @ts-check
+  ```javascript
+  // @ts-check
 
-    /**
-     * @param {any[]} arr
-     * @returns {any[]}
-     */
-    function compact(arr) {
-      if (arr.length > 10) {
-        return arr.slice(0, 10); // ✅ 现在知道 `arr` 是一个数组，提示正确的方法
-      }
-      return arr;
+  /**
+   * @param {any[]} arr
+   * @returns {any[]}
+   */
+  function compact(arr) {
+    if (arr.length > 10) {
+      return arr.slice(0, 10); // ✅ 现在知道 `arr` 是一个数组，提示正确的方法
     }
+    return arr;
+  }
 
-    /**
-     * @typedef {Object} User
-     * @property {string} firstName
-     * @property {string} lastName
-     * @property {"Admin" | "User"} role
-     */
+  /**
+   * @typedef {Object} User
+   * @property {string} firstName
+   * @property {string} lastName
+   * @property {"Admin" | "User"} role
+   */
 
-    /** @type {User} */
-    const myUser = {
-      firstName: "John",
-      lastName: "Doe",
-      role: "User" // ✅ 字符串字面量类型检查
-    };
-    ```
+  /** @type {User} */
+  const myUser = {
+    firstName: 'John',
+    lastName: 'Doe',
+    role: 'User', // ✅ 字符串字面量类型检查
+  };
+  ```
 
 ### 3. 自动重构
 
 充分利用 VSCode 的重构功能：
 
-* **提取函数/变量**: 选中一段代码，使用快速修复（`Ctrl+.`）将其提取为函数或变量。
-* **生成 Get 和 Set 访问器**: 为类字段快速生成访问器。
-* **在接口和类型别名之间转换**: 使用快速修复轻松转换。
+- **提取函数/变量**: 选中一段代码，使用快速修复（`Ctrl+.`）将其提取为函数或变量。
+- **生成 Get 和 Set 访问器**: 为类字段快速生成访问器。
+- **在接口和类型别名之间转换**: 使用快速修复轻松转换。
 
 ### 4. 调试 TypeScript
 
@@ -263,32 +253,32 @@ VSCode 默认使用其内置的 TypeScript 版本。为了确保编辑器使用�
 
 ### 2. 无法找到模块或其类型声明
 
-* **对于 JS 库**: 尝试安装对应的类型定义包 `@types/<library-name>` (e.g., `npm install --save-dev @types/lodash`)。
-* **对于无类型声明的库**: 可以在项目顶层创建一个 `global.d.ts` 或 `types.d.ts` 文件进行声明：
+- **对于 JS 库**: 尝试安装对应的类型定义包 `@types/<library-name>` (e.g., `npm install --save-dev @types/lodash`)。
+- **对于无类型声明的库**: 可以在项目顶层创建一个 `global.d.ts` 或 `types.d.ts` 文件进行声明：
 
-    ```typescript
-    // types.d.ts
-    declare module "library-without-types" {
-      export function someFunction(input: string): number;
-      // ... 其他声明
-    }
-    ```
+  ```typescript
+  // types.d.ts
+  declare module 'library-without-types' {
+    export function someFunction(input: string): number;
+    // ... 其他声明
+  }
+  ```
 
-* **对于图片等资源文件**: 同样通过声明模块解决。
+- **对于图片等资源文件**: 同样通过声明模块解决。
 
-    ```typescript
-    // assets.d.ts
-    declare module "*.png" {
-      const value: string;
-      export default value;
-    }
-    declare module "*.svg" {
-      import React = require("react");
-      export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
-      const src: string;
-      export default src;
-    }
-    ```
+  ```typescript
+  // assets.d.ts
+  declare module '*.png' {
+    const value: string;
+    export default value;
+  }
+  declare module '*.svg' {
+    import React = require('react');
+    export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
+    const src: string;
+    export default src;
+  }
+  ```
 
 ### 3. 智能感知 (IntelliSense) 突然失效或变慢
 
@@ -302,12 +292,12 @@ VSCode 默认使用其内置的 TypeScript 版本。为了确保编辑器使用�
 
 **最佳实践清单**:
 
-* ✅ **始终开启严格模式 (`strict`)**。
-* ✅ **在项目本地安装 TypeScript，并使用工作区版本**。
-* ✅ **充分利用 `tsconfig.json` 进行精准配置**，特别是路径别名。
-* ✅ **不要忽略编辑器错误**，将其视为必做的待办事项。
-* ✅ **熟练掌握代码导航和重构快捷键**。
-* ✅ **对现有 JS 项目，使用 `// @ts-check` 和 JSDoc 进行渐进式迁移**。
+- ✅ **始终开启严格模式 (`strict`)**。
+- ✅ **在项目本地安装 TypeScript，并使用工作区版本**。
+- ✅ **充分利用 `tsconfig.json` 进行精准配置**，特别是路径别名。
+- ✅ **不要忽略编辑器错误**，将其视为必做的待办事项。
+- ✅ **熟练掌握代码导航和重构快捷键**。
+- ✅ **对现有 JS 项目，使用 `// @ts-check` 和 JSDoc 进行渐进式迁移**。
 
 通过遵循本文的指南，你将能最大限度地发挥 TypeScript 和 VSCode 的潜力，显著提升开发效率和代码质量。
 

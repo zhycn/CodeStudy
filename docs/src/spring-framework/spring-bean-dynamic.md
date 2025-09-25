@@ -65,28 +65,28 @@ author: zhycn
 ```java
 @Configuration
 public class ConditionalConfig {
-    
+
     // 基于配置属性的条件
     @Bean
     @ConditionalOnProperty(name = "datasource.type", havingValue = "mysql")
     public DataSource mysqlDataSource() {
         return new MySQLDataSource();
     }
-    
+
     // 基于类存在的条件
     @Bean
     @ConditionalOnClass(name = "com.mongodb.client.MongoClient")
     public DataSource mongoDataSource() {
         return new MongoDBDataSource();
     }
-    
+
     // 基于Bean存在的条件
     @Bean
     @ConditionalOnMissingBean(DataSource.class)
     public DataSource defaultDataSource() {
         return new H2DataSource();
     }
-    
+
     // 基于SpEL表达式的复杂条件
     @Bean
     @ConditionalOnExpression("#{environment.getProperty('app.feature.enabled') == 'true'}")
@@ -106,7 +106,7 @@ public class OnEnvironmentCondition implements Condition {
         Map<String, Object> attributes = metadata.getAnnotationAttributes(ConditionalOnEnvironment.class.getName());
         String[] envs = (String[]) attributes.get("value");
         String activeEnv = context.getEnvironment().getProperty("app.environment");
-        
+
         for (String env : envs) {
             if (env.equalsIgnoreCase(activeEnv)) {
                 return true;
@@ -145,37 +145,37 @@ public class EnvironmentSpecificConfig {
 ```java
 @Component
 public class ServiceRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
-    
+
     @Autowired
     private Environment environment;
-    
+
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         // 获取服务配置
         String[] serviceTypes = environment.getProperty("app.services.enabled", String[].class, new String[0]);
-        
+
         // 动态注册服务Bean
         for (String serviceType : serviceTypes) {
             registerServiceBean(registry, serviceType);
         }
     }
-    
+
     private void registerServiceBean(BeanDefinitionRegistry registry, String serviceType) {
         // 根据服务类型确定具体实现类
         Class<?> serviceClass = getServiceClassByType(serviceType);
         if (serviceClass == null) return;
-        
+
         // 创建Bean定义
         BeanDefinitionBuilder builder = BeanDefinitionBuilder
             .genericBeanDefinition(serviceClass)
             .setScope(BeanDefinition.SCOPE_SINGLETON)
             .setLazyInit(false);
-        
+
         // 注册Bean定义
         String beanName = serviceType + "Service";
         registry.registerBeanDefinition(beanName, builder.getBeanDefinition());
     }
-    
+
     private Class<?> getServiceClassByType(String serviceType) {
         switch (serviceType.toLowerCase()) {
             case "email": return EmailServiceImpl.class;
@@ -184,7 +184,7 @@ public class ServiceRegistryPostProcessor implements BeanDefinitionRegistryPostP
             default: return null;
         }
     }
-    
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         // 可以进一步处理已注册的Bean定义
@@ -197,10 +197,10 @@ public class ServiceRegistryPostProcessor implements BeanDefinitionRegistryPostP
 ```java
 @Component
 public class DynamicModuleLoader implements BeanDefinitionRegistryPostProcessor {
-    
+
     @Autowired
     private ResourceLoader resourceLoader;
-    
+
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         try {
@@ -214,7 +214,7 @@ public class DynamicModuleLoader implements BeanDefinitionRegistryPostProcessor 
             throw new BeanCreationException("Failed to load dynamic modules", e);
         }
     }
-    
+
     private void loadAndRegisterModules(BeanDefinitionRegistry registry, Resource moduleDir) throws Exception {
         // 实现模块发现和注册逻辑
         // 读取每个模块的配置文件，根据启用状态决定是否注册
@@ -249,39 +249,39 @@ public @interface HttpClient {
 
 // Registrar实现
 public class HttpClientRegistrar implements ImportBeanDefinitionRegistrar {
-    
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         // 解析注解属性
         Map<String, Object> attributes = metadata.getAnnotationAttributes(EnableHttpClients.class.getName());
-        
+
         // 获取要扫描的包路径
         List<String> basePackages = getBasePackages(attributes, metadata);
-        
+
         // 扫描并注册HttpClient接口
         for (String basePackage : basePackages) {
             registerHttpClientsInPackage(registry, basePackage);
         }
     }
-    
+
     private List<String> getBasePackages(Map<String, Object> attributes, AnnotationMetadata metadata) {
         List<String> basePackages = new ArrayList<>();
-        
+
         // 处理basePackages属性
         for (String pkg : (String[]) attributes.get("basePackages")) {
             if (StringUtils.hasText(pkg)) {
                 basePackages.add(pkg);
             }
         }
-        
+
         // 如果没有指定包，使用导入类的包
         if (basePackages.isEmpty()) {
             basePackages.add(ClassUtils.getPackageName(metadata.getClassName()));
         }
-        
+
         return basePackages;
     }
-    
+
     private void registerHttpClientsInPackage(BeanDefinitionRegistry registry, String basePackage) {
         // 使用ClassPathScanningCandidateComponentProvider扫描接口
         // 为每个接口创建动态代理的Bean定义
@@ -298,14 +298,14 @@ public class HttpClientRegistrar implements ImportBeanDefinitionRegistrar {
 ```java
 @Configuration
 public class FactoryBeanConfig {
-    
+
     // 工具类，包含静态方法
     public static class DateUtil {
         public static String getCurrentDate() {
             return java.time.LocalDate.now().toString();
         }
     }
-    
+
     // 通过静态工厂方法创建Bean
     @Bean(name = "currentDate")
     public MethodInvokingFactoryBean currentDate() {
@@ -314,14 +314,14 @@ public class FactoryBeanConfig {
         factoryBean.setTargetMethod("getCurrentDate");
         return factoryBean;
     }
-    
+
     // 实例工厂方法示例
     @Bean
     public UserService userService() {
         return new UserService();
     }
-    
-    @Bean(name = "userFullName") 
+
+    @Bean(name = "userFullName")
     public MethodInvokingFactoryBean userFullName(UserService userService) {
         MethodInvokingFactoryBean factoryBean = new MethodInvokingFactoryBean();
         factoryBean.setTargetObject(userService);
@@ -335,10 +335,10 @@ public class FactoryBeanConfig {
 
 ```java
 public class DynamicDataSourceFactoryBean implements FactoryBean<DataSource> {
-    
+
     private String databaseType;
     private Properties connectionProperties;
-    
+
     @Override
     public DataSource getObject() throws Exception {
         // 根据类型和配置动态创建DataSource
@@ -349,17 +349,17 @@ public class DynamicDataSourceFactoryBean implements FactoryBean<DataSource> {
         }
         throw new IllegalArgumentException("Unsupported database type: " + databaseType);
     }
-    
+
     @Override
     public Class<?> getObjectType() {
         return DataSource.class;
     }
-    
+
     @Override
     public boolean isSingleton() {
         return true;
     }
-    
+
     // setter方法省略...
 }
 ```
@@ -373,68 +373,68 @@ public class DynamicDataSourceFactoryBean implements FactoryBean<DataSource> {
 ```java
 @Component
 public class DynamicBeanRegistry {
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     /**
      * 动态注册Bean实例
      */
     public synchronized <T> void registerBean(String beanName, Class<T> beanClass, T beanInstance) {
         DefaultListableBeanFactory beanFactory = getBeanFactory();
-        
+
         // 使用Supplier方式直接提供Bean实例
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
             .genericBeanDefinition(beanClass, () -> beanInstance);
         BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
         beanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
-        
+
         // 如果Bean已存在，先移除（实现覆盖功能）
         if (beanFactory.containsBeanDefinition(beanName)) {
             beanFactory.removeBeanDefinition(beanName);
         }
-        
+
         // 注册新的Bean定义
         beanFactory.registerBeanDefinition(beanName, beanDefinition);
     }
-    
+
     /**
      * 动态注册Class-based Bean
      */
     public <T> void registerBeanClass(String beanName, Class<T> beanClass, Object... constructorArgs) {
         DefaultListableBeanFactory beanFactory = getBeanFactory();
-        
+
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClass);
-        
+
         // 处理构造函数参数
         for (Object arg : constructorArgs) {
             builder.addConstructorArgValue(arg);
         }
-        
+
         builder.setScope(BeanDefinition.SCOPE_SINGLETON);
-        
+
         BeanDefinition beanDefinition = builder.getRawBeanDefinition();
-        
+
         if (beanFactory.containsBeanDefinition(beanName)) {
             beanFactory.removeBeanDefinition(beanName);
         }
-        
+
         beanFactory.registerBeanDefinition(beanName, beanDefinition);
     }
-    
+
     /**
      * 移除Bean定义
      */
     public synchronized boolean removeBean(String beanName) {
         DefaultListableBeanFactory beanFactory = getBeanFactory();
-        
+
         if (beanFactory.containsBeanDefinition(beanName)) {
             beanFactory.removeBeanDefinition(beanName);
             return true;
         }
         return false;
     }
-    
+
     @SuppressWarnings("unchecked")
     private DefaultListableBeanFactory getBeanFactory() {
         return (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
@@ -445,17 +445,17 @@ public class DynamicBeanRegistry {
 #### 3.5.2 线程安全增强版工具类
 
 ```java
-@Component 
+@Component
 public class SynchronizedDynamicBeanRegistry {
-    
+
     private final ApplicationContext applicationContext;
     private final Map<String, Object> trackedBeans = new ConcurrentHashMap<>();
     private final Object lock = new Object();
-    
+
     public SynchronizedDynamicBeanRegistry(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
-    
+
     /**
      * 线程安全的Bean注册方法
      */
@@ -466,42 +466,42 @@ public class SynchronizedDynamicBeanRegistry {
                 if (!isValidBeanName(beanName)) {
                     throw new IllegalArgumentException("非法的Bean名称: " + beanName);
                 }
-                
+
                 DefaultListableBeanFactory beanFactory = getBeanFactory();
-                
+
                 // 构建BeanDefinition
                 BeanDefinition definition = BeanDefinitionBuilder
                     .genericBeanDefinition(beanClass, () -> instance)
                     .setScope(BeanDefinition.SCOPE_SINGLETON)
                     .getBeanDefinition();
-                
+
                 // 处理已存在的Bean定义
                 if (beanFactory.containsBeanDefinition(beanName)) {
                     beanFactory.removeBeanDefinition(beanName);
                     log.warn("替换已存在的Bean定义: {}", beanName);
                 }
-                
+
                 // 注册Bean定义
                 beanFactory.registerBeanDefinition(beanName, definition);
-                
+
                 // 跟踪已注册的Bean
                 trackedBeans.put(beanName, instance);
-                
+
                 log.info("成功注册Bean: {}", beanName);
                 return true;
-                
+
             } catch (Exception e) {
                 log.error("注册Bean失败: {}", beanName, e);
                 return false;
             }
         }
     }
-    
+
     private boolean isValidBeanName(String beanName) {
-        return beanName != null && !beanName.trim().isEmpty() && 
+        return beanName != null && !beanName.trim().isEmpty() &&
                beanName.matches("[a-zA-Z_][a-zA-Z0-9_]*");
     }
-    
+
     private DefaultListableBeanFactory getBeanFactory() {
         return (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
     }
@@ -515,56 +515,56 @@ public class SynchronizedDynamicBeanRegistry {
 ```java
 @Service
 public class DataSourceManager {
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     @Autowired
     private DynamicBeanRegistry beanRegistry;
-    
+
     /**
      * 为新的租户动态注册数据源
      */
     public void registerTenantDataSource(String tenantId, DataSourceConfig config) {
         // 创建数据源实例
         DataSource dataSource = createDataSourceFromConfig(config);
-        
+
         // 注册数据源Bean
         beanRegistry.registerBean(tenantId + "DataSource", DataSource.class, dataSource);
-        
+
         // 注册对应的JdbcTemplate
         JdbcTemplate tenantJdbcTemplate = new JdbcTemplate(dataSource);
         beanRegistry.registerBean(tenantId + "JdbcTemplate", JdbcTemplate.class, tenantJdbcTemplate);
-        
+
         // 注册租户特定的Service
         registerTenantSpecificServices(tenantId, dataSource);
-        
+
         log.info("成功为租户{}注册数据源和相关组件", tenantId);
     }
-    
+
     /**
      * 移除租户数据源（客户注销）
      */
     public void unregisterTenantDataSource(String tenantId) {
         String[] beanNames = {
             tenantId + "DataSource",
-            tenantId + "JdbcTemplate", 
+            tenantId + "JdbcTemplate",
             tenantId + "UserService",
             tenantId + "OrderService"
         };
-        
+
         for (String beanName : beanNames) {
             beanRegistry.removeBean(beanName);
         }
-        
+
         log.info("成功移除租户{}的数据源和相关组件", tenantId);
     }
-    
+
     private void registerTenantSpecificServices(String tenantId, DataSource dataSource) {
         // 动态创建租户特定的Service实例
         UserService userService = new TenantUserService(dataSource);
         OrderService orderService = new TenantOrderService(dataSource);
-        
+
         beanRegistry.registerBean(tenantId + "UserService", UserService.class, userService);
         beanRegistry.registerBean(tenantId + "OrderService", OrderService.class, orderService);
     }
@@ -589,7 +589,7 @@ public class StrictRiskControl implements RiskControlStrategy {
     }
 }
 
-@Component 
+@Component
 public class RelaxedRiskControl implements RiskControlStrategy {
     @Override
     public boolean checkRisk(Order order) {
@@ -601,19 +601,19 @@ public class RelaxedRiskControl implements RiskControlStrategy {
 // 策略管理服务
 @Service
 public class RiskControlService {
-    
+
     @Autowired
     private DynamicBeanRegistry beanRegistry;
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     /**
      * 根据策略模式切换风控实现
      */
     public void switchStrategy(String strategyMode) {
         RiskControlStrategy strategy;
-        
+
         switch (strategyMode) {
             case "strict":
                 strategy = createStrictStrategy();
@@ -627,22 +627,22 @@ public class RiskControlService {
             default:
                 strategy = createDefaultStrategy();
         }
-        
+
         // 动态注册为primary策略Bean
         beanRegistry.registerBean("riskControlStrategy", RiskControlStrategy.class, strategy);
-        
+
         // 确保依赖此策略的Bean能重新注入
         refreshDependentBeans();
     }
-    
+
     private RiskControlStrategy createStrictStrategy() {
         return new StrictRiskControl();
     }
-    
+
     private RiskControlStrategy createRelaxedStrategy() {
         return new RelaxedRiskControl();
     }
-    
+
     private RiskControlStrategy createDynamicStrategy() {
         // 基于运行时数据动态创建策略
         return order -> {
@@ -650,7 +650,7 @@ public class RiskControlService {
             return Math.random() > 0.5; // 示例逻辑
         };
     }
-    
+
     private void refreshDependentBeans() {
         // 获取所有依赖风控策略的Bean并刷新
         // 注意：实际项目中需要谨慎处理，可能涉及事务管理等复杂问题
@@ -663,28 +663,28 @@ public class RiskControlService {
 ```java
 @Service
 public class FeatureToggleService {
-    
+
     @Autowired
     private DynamicBeanRegistry beanRegistry;
-    
+
     @Autowired
     private UserContext userContext;
-    
+
     /**
      * 根据用户分组动态注入不同的业务实现
      */
     public <T> T getFeatureImplementation(Class<T> interfaceType, String featureName) {
         String userGroup = getUserGroup(userContext.getCurrentUserId(), featureName);
         String beanName = interfaceType.getSimpleName() + "_" + userGroup;
-        
+
         if (!beanRegistry.containsBean(beanName)) {
             T implementation = createImplementation(interfaceType, userGroup);
             beanRegistry.registerBean(beanName, interfaceType, implementation);
         }
-        
+
         return applicationContext.getBean(beanName, interfaceType);
     }
-    
+
     private <T> T createImplementation(Class<T> interfaceType, String userGroup) {
         // 根据分组创建不同的实现
         if ("A".equals(userGroup)) {
@@ -692,10 +692,10 @@ public class FeatureToggleService {
         } else if ("B".equals(userGroup)) {
             return createImplementationB(interfaceType);
         }
-        
+
         throw new IllegalArgumentException("Unknown user group: " + userGroup);
     }
-    
+
     private String getUserGroup(String userId, String featureName) {
         // 简单的分组逻辑示例
         int hash = Math.abs(userId.hashCode());
@@ -730,19 +730,19 @@ registerBean("myService", MyService.class, service);
 ```java
 @Component
 public class LifecycleAwareBeanRegistry {
-    
+
     private final Map<String, DisposableBean> disposableBeans = new ConcurrentHashMap<>();
-    
+
     public <T> void registerBeanWithLifecycle(String beanName, T instance) {
         // 注册Bean
         registerBean(beanName, instance.getClass(), instance);
-        
+
         // 如果Bean实现了DisposableBean，跟踪以便后续销毁
         if (instance instanceof DisposableBean) {
             disposableBeans.put(beanName, (DisposableBean) instance);
         }
     }
-    
+
     @PreDestroy
     public void destroyAll() {
         disposableBeans.forEach((name, bean) -> {
@@ -764,28 +764,28 @@ public class LifecycleAwareBeanRegistry {
 
 ```java
 public class AopAwareBeanRegistry {
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     public <T> void registerBeanWithAop(String beanName, Class<T> targetClass, Object... constructorArgs) {
         DefaultListableBeanFactory beanFactory = getBeanFactory();
-        
+
         // 使用Class方式注册，让Spring管理完整的生命周期
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(targetClass);
-        
+
         for (Object arg : constructorArgs) {
             builder.addConstructorArgValue(arg);
         }
-        
+
         // 设置代理模式
         builder.setScope(BeanDefinition.SCOPE_SINGLETON);
         builder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
-        
+
         BeanDefinition beanDefinition = builder.getRawBeanDefinition();
         beanDefinition.setAttribute("org.springframework.context.annotation.ConfigurationClassPostProcessor"
             + ".configurationClass", "full");
-        
+
         beanFactory.registerBeanDefinition(beanName, beanDefinition);
     }
 }
@@ -814,12 +814,12 @@ public class AopAwareBeanRegistry {
 ```java
 @Component
 public class PerformanceOptimizedBeanRegistry {
-    
+
     private final Cache<String, Boolean> beanCache = Caffeine.newBuilder()
         .maximumSize(1000)
         .expireAfterWrite(10, TimeUnit.MINUTES)
         .build();
-    
+
     /**
      * 带缓存的Bean注册，避免重复注册
      */
@@ -829,24 +829,24 @@ public class PerformanceOptimizedBeanRegistry {
             log.debug("Bean {} 已存在，跳过注册", beanName);
             return false;
         }
-        
+
         boolean success = registerBean(beanName, beanClass, instance);
         if (success) {
             beanCache.put(beanName, true);
         }
-        
+
         return success;
     }
-    
+
     /**
      * 批量注册优化
      */
     public void registerBeansInBatch(Map<String, Object> beans) {
         DefaultListableBeanFactory beanFactory = getBeanFactory();
-        
+
         // 开启批量操作模式
         beanFactory.setAllowBeanDefinitionOverriding(false);
-        
+
         try {
             beans.forEach((name, instance) -> {
                 registerBean(name, instance.getClass(), instance);
@@ -863,25 +863,25 @@ public class PerformanceOptimizedBeanRegistry {
 ```java
 @Component
 public class BeanRegistryMetrics {
-    
+
     private final MeterRegistry meterRegistry;
     private final Counter registrationSuccessCounter;
     private final Counter registrationFailureCounter;
     private final Timer registrationTimer;
-    
+
     public BeanRegistryMetrics(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
         this.registrationSuccessCounter = meterRegistry.counter("bean.registration.success");
         this.registrationFailureCounter = meterRegistry.counter("bean.registration.failure");
         this.registrationTimer = meterRegistry.timer("bean.registration.duration");
     }
-    
+
     public <T> boolean registerBeanWithMetrics(String beanName, Class<T> beanClass, T instance) {
         Timer.Sample sample = Timer.start(meterRegistry);
-        
+
         try {
             boolean success = registerBean(beanName, beanClass, instance);
-            
+
             if (success) {
                 registrationSuccessCounter.increment();
                 sample.stop(registrationTimer);
@@ -890,7 +890,7 @@ public class BeanRegistryMetrics {
                 registrationFailureCounter.increment();
                 log.error("Bean注册失败: {}", beanName);
             }
-            
+
             return success;
         } catch (Exception e) {
             registrationFailureCounter.increment();

@@ -60,57 +60,57 @@
 
 ### 3.1 基础选项
 
-| 选项 | 类型 | 默认值 | 描述 |
-| :--- | :--- | :--- | :--- |
-| **`target`** | `string` | `"ES3"` | **指定编译后的 ECMAScript 目标版本**。例如：`"ES5"`, `"ES2015"`, `"ES2020"`, `"ESNext"`。推荐设置为你的目标运行环境所支持的最高版本（如 `Node.js 18+` 可使用 `"ES2022"`）。 |
-| **`module`** | `string` | `"commonjs"` (当 `target` 为 `"ES3"` 或 `"ES5"` 时) | **指定生成代码的模块系统**。例如：`"CommonJS"`, `"ES6"`/`"ES2015"`, `"ES2020"`, `"ESNext"`, `"UMD"`, `"AMD"`。在 Node.js 环境中常用 `"CommonJS"`，在前端项目中常用 `"ES6"` 并与打包工具（如 Webpack, Vite）结合使用。 |
-| **`lib`** | `string[]` | - | **指定要包含在编译中的库文件声明**。这决定了你可以使用哪些全局对象和方法（如 `DOM`, `ES6`, `ES2015.Collection`, `ES2015.Promise`）。通常不需要手动设置，编译器会根据 `target` 自动选择。如需在 Node.js 中使用 `setImmediate`，则需要包含 `["DOM"]`，但这通常不是好主意，更推荐安装 `@types/node`。 |
-| **`outDir`** | `string` | - | **指定编译后输出的 `.js`（以及 `.d.ts`, `.js.map` 等）文件的目录**。 |
-| **`rootDir`** | `string` | - | **指定输入文件的根目录**。编译器会使用此目录来构建输出文件在 `outDir` 中的目录结构。通常不设置，让编译器自动推断。 |
-| **`strict`** | `boolean` | `false` | **启用所有严格的类型检查选项**。这是 TypeScript 的最佳实践，**强烈建议在任何新项目中将其设置为 `true`**。它相当于同时开启了以下一系列严格选项。 |
-| **`esModuleInterop`** | `boolean` | `false` (如果 `module` 不是 `commonjs` 则为 `true`) | **启用对 CommonJS/AMD/UMD 模块的兼容性处理**。允许你使用 `import React from 'react'` 而不是 `import * as React from 'react'`。**应始终设置为 `true`**。 |
+| 选项                  | 类型       | 默认值                                              | 描述                                                                                                                                                                                                                                                                                               |
+| :-------------------- | :--------- | :-------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`target`**          | `string`   | `"ES3"`                                             | **指定编译后的 ECMAScript 目标版本**。例如：`"ES5"`, `"ES2015"`, `"ES2020"`, `"ESNext"`。推荐设置为你的目标运行环境所支持的最高版本（如 `Node.js 18+` 可使用 `"ES2022"`）。                                                                                                                        |
+| **`module`**          | `string`   | `"commonjs"` (当 `target` 为 `"ES3"` 或 `"ES5"` 时) | **指定生成代码的模块系统**。例如：`"CommonJS"`, `"ES6"`/`"ES2015"`, `"ES2020"`, `"ESNext"`, `"UMD"`, `"AMD"`。在 Node.js 环境中常用 `"CommonJS"`，在前端项目中常用 `"ES6"` 并与打包工具（如 Webpack, Vite）结合使用。                                                                              |
+| **`lib`**             | `string[]` | -                                                   | **指定要包含在编译中的库文件声明**。这决定了你可以使用哪些全局对象和方法（如 `DOM`, `ES6`, `ES2015.Collection`, `ES2015.Promise`）。通常不需要手动设置，编译器会根据 `target` 自动选择。如需在 Node.js 中使用 `setImmediate`，则需要包含 `["DOM"]`，但这通常不是好主意，更推荐安装 `@types/node`。 |
+| **`outDir`**          | `string`   | -                                                   | **指定编译后输出的 `.js`（以及 `.d.ts`, `.js.map` 等）文件的目录**。                                                                                                                                                                                                                               |
+| **`rootDir`**         | `string`   | -                                                   | **指定输入文件的根目录**。编译器会使用此目录来构建输出文件在 `outDir` 中的目录结构。通常不设置，让编译器自动推断。                                                                                                                                                                                 |
+| **`strict`**          | `boolean`  | `false`                                             | **启用所有严格的类型检查选项**。这是 TypeScript 的最佳实践，**强烈建议在任何新项目中将其设置为 `true`**。它相当于同时开启了以下一系列严格选项。                                                                                                                                                    |
+| **`esModuleInterop`** | `boolean`  | `false` (如果 `module` 不是 `commonjs` 则为 `true`) | **启用对 CommonJS/AMD/UMD 模块的兼容性处理**。允许你使用 `import React from 'react'` 而不是 `import * as React from 'react'`。**应始终设置为 `true`**。                                                                                                                                            |
 
 ### 3.2 严格类型检查选项（由 `strict` 控制）
 
-| 选项 | 描述 |
-| :--- | :--- |
-| **`noImplicitAny`** | 禁止表达式和声明上有隐含的 `any` 类型。强制你明确类型，这是 TypeScript 的核心价值。 |
-| **`strictNullChecks`** | 启用严格的 `null` 和 `undefined` 检查。避免经典的 `Cannot read property 'x' of undefined` 运行时错误。 |
-| **`strictFunctionTypes`** | 对函数类型参数进行严格检查，确保类型安全。 |
-| **`strictBindCallApply`** | 对 `bind`, `call`, `apply` 方法的使用进行严格检查。 |
-| **`strictPropertyInitialization`** | 确保类的非 `undefined` 属性已在构造函数中初始化。常与 `strictNullChecks` 配合使用。 |
-| **`noImplicitThis`** | 禁止 `this` 表达式有隐含的 `any` 类型。 |
-| **`alwaysStrict`** | 以严格模式解析代码并为每个源文件生成 `"use strict"`。 |
+| 选项                               | 描述                                                                                                   |
+| :--------------------------------- | :----------------------------------------------------------------------------------------------------- |
+| **`noImplicitAny`**                | 禁止表达式和声明上有隐含的 `any` 类型。强制你明确类型，这是 TypeScript 的核心价值。                    |
+| **`strictNullChecks`**             | 启用严格的 `null` 和 `undefined` 检查。避免经典的 `Cannot read property 'x' of undefined` 运行时错误。 |
+| **`strictFunctionTypes`**          | 对函数类型参数进行严格检查，确保类型安全。                                                             |
+| **`strictBindCallApply`**          | 对 `bind`, `call`, `apply` 方法的使用进行严格检查。                                                    |
+| **`strictPropertyInitialization`** | 确保类的非 `undefined` 属性已在构造函数中初始化。常与 `strictNullChecks` 配合使用。                    |
+| **`noImplicitThis`**               | 禁止 `this` 表达式有隐含的 `any` 类型。                                                                |
+| **`alwaysStrict`**                 | 以严格模式解析代码并为每个源文件生成 `"use strict"`。                                                  |
 
 ### 3.3 模块解析选项
 
-| 选项 | 描述 |
-| :--- | :--- |
-| **`moduleResolution`** | 指定模块解析策略。通常不需要手动设置，`module` 为 `CommonJS` 时默认为 `"node"`，为 `ES6` 时默认为 `"classic"`。**现代项目建议使用 `"Node"` 或 `"NodeNext"`/`"Bundler"`**。 |
-| **`baseUrl`** | 解析非绝对名称模块的基目录。 |
-| **`paths`** | 基于 `baseUrl` 的路径映射。常用于配置别名（Alias），类似于 Webpack 的 `resolve.alias`。 |
-| **`resolveJsonModule`** | 允许导入 `.json` 模块。 |
-| **`allowSyntheticDefaultImports`** | 允许从没有默认导出的模块中进行默认导入。这仅用于类型检查，不会影响生成的代码。当 `esModuleInterop` 为 `true` 时，此选项自动为 `true`。 |
+| 选项                               | 描述                                                                                                                                                                       |
+| :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`moduleResolution`**             | 指定模块解析策略。通常不需要手动设置，`module` 为 `CommonJS` 时默认为 `"node"`，为 `ES6` 时默认为 `"classic"`。**现代项目建议使用 `"Node"` 或 `"NodeNext"`/`"Bundler"`**。 |
+| **`baseUrl`**                      | 解析非绝对名称模块的基目录。                                                                                                                                               |
+| **`paths`**                        | 基于 `baseUrl` 的路径映射。常用于配置别名（Alias），类似于 Webpack 的 `resolve.alias`。                                                                                    |
+| **`resolveJsonModule`**            | 允许导入 `.json` 模块。                                                                                                                                                    |
+| **`allowSyntheticDefaultImports`** | 允许从没有默认导出的模块中进行默认导入。这仅用于类型检查，不会影响生成的代码。当 `esModuleInterop` 为 `true` 时，此选项自动为 `true`。                                     |
 
 ### 3.4 源码映射 (Source Map) 选项
 
-| 选项 | 描述 |
-| :--- | :--- |
-| **`sourceMap`** | 生成相应的 `.map` 文件，用于调试器映射回原始 TypeScript 源代码。**在开发环境中应启用**。 |
-| **`declaration`** | 生成相应的 `.d.ts` 声明文件。**在编写库/包时应启用**。 |
-| **`declarationMap`** | 为声明文件生成 source map，允许像 “Go to Definition” 这样的编辑器功能跳转到原始的 TypeScript 源文件。 |
-| **`inlineSourceMap`** | 将 source map 作为 data URI 内联在生成的 `.js` 文件中。 |
-| **`inlineSources`** | 将原始 `.ts` 源码内联到 source map 中。与 `inlineSourceMap` 或 `sourceMap` 一起使用。 |
+| 选项                  | 描述                                                                                                  |
+| :-------------------- | :---------------------------------------------------------------------------------------------------- |
+| **`sourceMap`**       | 生成相应的 `.map` 文件，用于调试器映射回原始 TypeScript 源代码。**在开发环境中应启用**。              |
+| **`declaration`**     | 生成相应的 `.d.ts` 声明文件。**在编写库/包时应启用**。                                                |
+| **`declarationMap`**  | 为声明文件生成 source map，允许像 “Go to Definition” 这样的编辑器功能跳转到原始的 TypeScript 源文件。 |
+| **`inlineSourceMap`** | 将 source map 作为 data URI 内联在生成的 `.js` 文件中。                                               |
+| **`inlineSources`**   | 将原始 `.ts` 源码内联到 source map 中。与 `inlineSourceMap` 或 `sourceMap` 一起使用。                 |
 
 ### 3.5 其他实用选项
 
-| 选项 | 描述 |
-| :--- | :--- |
-| **`forceConsistentCasingInFileNames`** | 确保区分大小写的一致性，防止在不同大小写敏感的文件系统上导入文件时出错。**应始终启用**。 |
-| **`skipLibCheck`** | 跳过所有 `.d.ts` 声明文件的类型检查。可以显著加快编译速度，但会牺牲一些类型安全性。**在大型项目中建议启用**。 |
-| **`allowJs`** | 允许编译 JavaScript 文件。用于从 JavaScript 项目逐步迁移到 TypeScript。 |
-| **`checkJs`** | 与 `allowJs` 一起使用，在 `.js` 文件中报告错误。相当于在 JavaScript 文件中启用了 `@ts-check`。 |
-| **`jsx`** | 在 `.tsx` 文件中支持 JSX。可选值：`"preserve"`, `"react"`, `"react-jsx"`, `"react-native"`。 |
+| 选项                                   | 描述                                                                                                          |
+| :------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
+| **`forceConsistentCasingInFileNames`** | 确保区分大小写的一致性，防止在不同大小写敏感的文件系统上导入文件时出错。**应始终启用**。                      |
+| **`skipLibCheck`**                     | 跳过所有 `.d.ts` 声明文件的类型检查。可以显著加快编译速度，但会牺牲一些类型安全性。**在大型项目中建议启用**。 |
+| **`allowJs`**                          | 允许编译 JavaScript 文件。用于从 JavaScript 项目逐步迁移到 TypeScript。                                       |
+| **`checkJs`**                          | 与 `allowJs` 一起使用，在 `.js` 文件中报告错误。相当于在 JavaScript 文件中启用了 `@ts-check`。                |
+| **`jsx`**                              | 在 `.tsx` 文件中支持 JSX。可选值：`"preserve"`, `"react"`, `"react-jsx"`, `"react-native"`。                  |
 
 ## 4. 配置示例与最佳实践
 

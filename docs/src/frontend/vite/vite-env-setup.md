@@ -21,8 +21,8 @@ Vite 要求 Node.js 版本 **14.18+**、**16+** 或 **18+**。强烈建议使用
 
 **最佳实践：使用 `nvm` (Node Version Manager)**
 
-* **Windows 用户**：使用 <https://github.com/coreybutler/nvm-windows。>
-* **macOS/Linux 用户**：使用 <https://github.com/nvm-sh/nvm。>
+- **Windows 用户**：使用 <https://github.com/coreybutler/nvm-windows。>
+- **macOS/Linux 用户**：使用 <https://github.com/nvm-sh/nvm。>
 
 **安装与使用 nvm：**
 
@@ -125,24 +125,24 @@ pnpm run dev
 
 许多上层框架基于 Vite 进行了深度定制，并提供了自己的脚手架工具。这些工具通常预配置了路由、状态管理、测试等方案，是更面向生产的最佳实践。
 
-* **Vue**: `create-vue` (基于 Vite)
+- **Vue**: `create-vue` (基于 Vite)
 
-    ```bash
-    npm create vue@latest
-    ```
+  ```bash
+  npm create vue@latest
+  ```
 
-* **React**: `create-react-app` 的替代品，如 `Vite` 本身已是最佳选择。
-* **Svelte**: `create-svelte`
+- **React**: `create-react-app` 的替代品，如 `Vite` 本身已是最佳选择。
+- **Svelte**: `create-svelte`
 
-    ```bash
-    npm create svelte@latest
-    ```
+  ```bash
+  npm create svelte@latest
+  ```
 
-* **SolidJS**: `create-solid`
+- **SolidJS**: `create-solid`
 
-    ```bash
-    npx degit solidjs/templates/js my-solid-app
-    ```
+  ```bash
+  npx degit solidjs/templates/js my-solid-app
+  ```
 
 ## 4. 项目结构与关键文件解析
 
@@ -171,34 +171,34 @@ my-react-app/
 **关键文件详解：**
 
 1. **`index.html`**：
-    * 这是 Vite 项目的**入口**。与 Webpack 不同，它位于项目根目录。
-    * Vite 会自动解析 `<script type="module" src="...">` 所指向的 JavaScript 入口文件。
-    * **最佳实践**：你可以使用 EJS 类似的语法在 HTML 中引用环境变量，例如 `<title><%- VITE_APP_TITLE %></title>`。
+   - 这是 Vite 项目的**入口**。与 Webpack 不同，它位于项目根目录。
+   - Vite 会自动解析 `<script type="module" src="...">` 所指向的 JavaScript 入口文件。
+   - **最佳实践**：你可以使用 EJS 类似的语法在 HTML 中引用环境变量，例如 `<title><%- VITE_APP_TITLE %></title>`。
 
 2. **`vite.config.ts`**：
-    * 这是 Vite 的**核心配置文件**。使用 TypeScript 可以获得智能提示。
-    * 所有插件和自定义构建选项都在这里配置。
+   - 这是 Vite 的**核心配置文件**。使用 TypeScript 可以获得智能提示。
+   - 所有插件和自定义构建选项都在这里配置。
 
 3. **`src/main.tsx`**：
-    * 应用的 JavaScript 入口文件。这里通常负责挂载根组件（如 ReactDOM.createRoot）。
+   - 应用的 JavaScript 入口文件。这里通常负责挂载根组件（如 ReactDOM.createRoot）。
 
 4. **`src/vite-env.d.ts`**：
-    * Vite 为客户端的类型定义文件，例如 `import.meta.env` 上的环境变量。
+   - Vite 为客户端的类型定义文件，例如 `import.meta.env` 上的环境变量。
 
 ## 5. 核心配置文件 `vite.config.ts` 详解
 
 一个功能丰富的 `vite.config.ts` 示例（以 React 为例）：
 
 ```typescript
-import { defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
   // loadEnv 会根据当前 mode 加载 .env 文件中的环境变量
   // 第三个参数 '' 表示加载所有前缀的变量（默认只加载 VITE_ 开头的）
-  const env = loadEnv(mode, process.cwd(), '')
+  const env = loadEnv(mode, process.cwd(), '');
 
   return {
     // 插件配置
@@ -257,25 +257,25 @@ export default defineConfig(({ mode, command }) => {
 
     // 环境变量前缀，默认为 'VITE_'
     envPrefix: 'VITE_',
-  }
-})
+  };
+});
 ```
 
 **最佳实践提示**：
 
-* 使用 `defineConfig` 可以获得良好的 TypeScript 智能提示。
-* 使用 `loadEnv` 在配置中灵活读取环境变量。
-* 使用**路径别名(`alias`)** 来简化导入，避免 `../../../` 这种难以维护的路径。
-* 提前配置好 `proxy`，为后续联调后端 API 做好准备。
+- 使用 `defineConfig` 可以获得良好的 TypeScript 智能提示。
+- 使用 `loadEnv` 在配置中灵活读取环境变量。
+- 使用**路径别名(`alias`)** 来简化导入，避免 `../../../` 这种难以维护的路径。
+- 提前配置好 `proxy`，为后续联调后端 API 做好准备。
 
 ## 6. 环境变量与模式
 
 Vite 使用 `dotenv` 从你的项目根目录中的 `.env` 文件加载额外的环境变量。
 
-* `.env`：所有模式都会加载
-* `.env.local`：所有模式都会加载，但会被 git 忽略
-* `.env.[mode]`：只在指定模式下加载（如 `.env.production`）
-* `.env.[mode].local`：只在指定模式下加载，但会被 git 忽略
+- `.env`：所有模式都会加载
+- `.env.local`：所有模式都会加载，但会被 git 忽略
+- `.env.[mode]`：只在指定模式下加载（如 `.env.production`）
+- `.env.[mode].local`：只在指定模式下加载，但会被 git 忽略
 
 **定义变量**：只有以 `VITE_` 为前缀的变量才会被 Vite 暴露给客户端代码。这是出于安全考虑，避免意外地将敏感密钥泄漏到客户端。
 
@@ -293,7 +293,7 @@ VITE_API_BASE_URL=https://api.my-domain.com
 
 ```typescript
 // src/api/client.ts
-const baseURL = import.meta.env.VITE_API_BASE_URL
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 // 在 HTML 中使用（需要在 vite.config.ts 中配置 loadEnv）
 // <title><%- VITE_APP_TITLE %></title>
@@ -326,9 +326,9 @@ pnpm run build --mode staging
 
 ### 7.2 调试技巧
 
-* 在浏览器开发者工具的 **Sources** 面板中，你可以直接调试原始的 `src/` 目录下的源代码，因为 Vite 默认提供高质量的 Source Map。
-* 使用 `console.log(import.meta.env)` 检查所有暴露的环境变量。
-* 在 `vite.config.ts` 中运行调试，可以使用 `console.log` 输出配置信息。
+- 在浏览器开发者工具的 **Sources** 面板中，你可以直接调试原始的 `src/` 目录下的源代码，因为 Vite 默认提供高质量的 Source Map。
+- 使用 `console.log(import.meta.env)` 检查所有暴露的环境变量。
+- 在 `vite.config.ts` 中运行调试，可以使用 `console.log` 输出配置信息。
 
 ## 8. 从其他构建工具迁移
 

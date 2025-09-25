@@ -51,7 +51,7 @@ UserService userService = (UserService) factory.getBean("userService");
 - 功能相对简单，不支持注解驱动等高级特性
 - 适用于资源受限的环境，如移动设备或小程序
 
-*注意：从 Spring 3.1 开始，XmlBeanFactory 已被标记为过时，现代 Spring 应用通常使用 ApplicationContext。*
+_注意：从 Spring 3.1 开始，XmlBeanFactory 已被标记为过时，现代 Spring 应用通常使用 ApplicationContext。_
 
 ### 2.2 ApplicationContext：高级容器
 
@@ -65,12 +65,12 @@ UserService userService = context.getBean(UserService.class);
 
 **ApplicationContext 的主要实现类**：
 
-| 实现类 | 描述 | 适用场景 |
-|--------|------|----------|
-| `ClassPathXmlApplicationContext` | 从类路径加载 XML 配置文件 | 传统 XML 配置项目 |
-| `FileSystemXmlApplicationContext` | 从文件系统加载 XML 配置文件 | 需要外部配置文件的场景 |
-| `AnnotationConfigApplicationContext` | 基于注解配置类加载配置 | 现代注解驱动开发 |
-| `AnnotationConfigWebApplicationContext` | Web 环境的注解配置 | Spring Web 应用 |
+| 实现类                                  | 描述                        | 适用场景               |
+| --------------------------------------- | --------------------------- | ---------------------- |
+| `ClassPathXmlApplicationContext`        | 从类路径加载 XML 配置文件   | 传统 XML 配置项目      |
+| `FileSystemXmlApplicationContext`       | 从文件系统加载 XML 配置文件 | 需要外部配置文件的场景 |
+| `AnnotationConfigApplicationContext`    | 基于注解配置类加载配置      | 现代注解驱动开发       |
+| `AnnotationConfigWebApplicationContext` | Web 环境的注解配置          | Spring Web 应用        |
 
 **ApplicationContext 的增强功能**：
 
@@ -84,16 +84,16 @@ UserService userService = context.getBean(UserService.class);
 
 下表详细比较了两者的主要区别 ：
 
-| 特性 | BeanFactory | ApplicationContext |
-|------|-------------|-------------------|
-| **初始化时机** | 懒加载（按需创建） | 预加载（启动时创建所有单例 Bean） |
-| **注解支持** | 有限 | 完整支持 `@Autowired`、`@Qualifier` 等 |
-| **国际化** | 不支持 | 支持（MessageSource） |
-| **事件机制** | 不支持 | 支持（ApplicationEvent 发布/监听） |
-| **AOP 支持** | 需手动配置 | 自动集成 |
-| **企业级服务** | 基础功能 | 提供完整企业级服务 |
-| **资源占用** | 较低 | 较高 |
-| **启动速度** | 较快 | 相对较慢 |
+| 特性           | BeanFactory        | ApplicationContext                     |
+| -------------- | ------------------ | -------------------------------------- |
+| **初始化时机** | 懒加载（按需创建） | 预加载（启动时创建所有单例 Bean）      |
+| **注解支持**   | 有限               | 完整支持 `@Autowired`、`@Qualifier` 等 |
+| **国际化**     | 不支持             | 支持（MessageSource）                  |
+| **事件机制**   | 不支持             | 支持（ApplicationEvent 发布/监听）     |
+| **AOP 支持**   | 需手动配置         | 自动集成                               |
+| **企业级服务** | 基础功能           | 提供完整企业级服务                     |
+| **资源占用**   | 较低               | 较高                                   |
+| **启动速度**   | 较快               | 相对较慢                               |
 
 **实践建议**：在现代 Spring 应用开发中，几乎总是选择 ApplicationContext，除非在资源极度受限的环境下才考虑使用 BeanFactory 。
 
@@ -111,9 +111,9 @@ XML 是 Spring 最早支持的配置方式，通过 XML 文件显式声明 Bean 
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
-    
+
     <bean id="userRepository" class="com.example.repository.UserRepository"/>
-    
+
     <bean id="userService" class="com.example.service.UserService">
         <property name="userRepository" ref="userRepository"/>
     </bean>
@@ -145,7 +145,7 @@ public class UserRepository {
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    
+
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -161,11 +161,11 @@ public class AppConfig {
 
 **常用注解说明**：
 
-| 注解 | 层级 | 描述 |
-|------|------|------|
-| `@Component` | 通用 | 标记任意 Spring 管理组件 |
-| `@Controller` | Web 层 | 标记 Web 控制器 |
-| `@Service` | 业务层 | 标记业务逻辑组件 |
+| 注解          | 层级   | 描述                           |
+| ------------- | ------ | ------------------------------ |
+| `@Component`  | 通用   | 标记任意 Spring 管理组件       |
+| `@Controller` | Web 层 | 标记 Web 控制器                |
+| `@Service`    | 业务层 | 标记业务逻辑组件               |
 | `@Repository` | 持久层 | 标记数据访问组件，提供异常转换 |
 
 **优缺点分析**：
@@ -180,12 +180,12 @@ Spring 3.0 引入的 Java 配置方式，完全用 Java 代码替代 XML 配置�
 ```java
 @Configuration
 public class AppConfig {
-    
+
     @Bean
     public UserRepository userRepository() {
         return new UserRepository();
     }
-    
+
     @Bean
     public UserService userService() {
         return new UserService(userRepository());
@@ -253,14 +253,14 @@ public class UserService {
 
 Spring 支持多种 Bean 作用域，决定 Bean 的生命周期和可见性 。
 
-| 作用域 | 描述 | 适用场景 |
-|--------|------|----------|
-| `singleton` | 默认作用域，每个容器中只有一个实例 | 无状态服务、DAO、工具类 |
-| `prototype` | 每次请求都创建新实例 | 有状态对象、需要独立状态的场景 |
-| `request` | 每个 HTTP 请求创建一个实例 | Web 应用中请求相关组件 |
-| `session` | 每个 HTTP 会话创建一个实例 | 用户会话中保持状态的对象 |
-| `application` | 整个 Web 应用共享一个实例 | 全局共享数据或配置 |
-| `websocket` | 每个 WebSocket 会话创建一个实例 | WebSocket 相关组件 |
+| 作用域        | 描述                               | 适用场景                       |
+| ------------- | ---------------------------------- | ------------------------------ |
+| `singleton`   | 默认作用域，每个容器中只有一个实例 | 无状态服务、DAO、工具类        |
+| `prototype`   | 每次请求都创建新实例               | 有状态对象、需要独立状态的场景 |
+| `request`     | 每个 HTTP 请求创建一个实例         | Web 应用中请求相关组件         |
+| `session`     | 每个 HTTP 会话创建一个实例         | 用户会话中保持状态的对象       |
+| `application` | 整个 Web 应用共享一个实例          | 全局共享数据或配置             |
+| `websocket`   | 每个 WebSocket 会话创建一个实例    | WebSocket 相关组件             |
 
 ```java
 // 作用域示例
@@ -299,46 +299,46 @@ Spring 容器管理 Bean 的完整生命周期，从创建到销毁 。
 ```java
 public class ExampleBean implements BeanNameAware, InitializingBean, DisposableBean {
     private String name;
-    
+
     public ExampleBean() {
         System.out.println("1. 构造函数调用");
     }
-    
+
     @Autowired
     public void setDependency(SomeDependency dep) {
         System.out.println("2. 依赖注入");
     }
-    
+
     @Override
     public void setBeanName(String name) {
         this.name = name;
         System.out.println("3. BeanNameAware: " + name);
     }
-    
+
     @PostConstruct
     public void postConstruct() {
         System.out.println("4. @PostConstruct 方法");
     }
-    
+
     @Override
     public void afterPropertiesSet() {
         System.out.println("5. InitializingBean.afterPropertiesSet()");
     }
-    
+
     public void customInit() {
         System.out.println("6. 自定义初始化方法");
     }
-    
+
     @PreDestroy
     public void preDestroy() {
         System.out.println("7. @PreDestroy 方法");
     }
-    
+
     @Override
     public void destroy() {
         System.out.println("8. DisposableBean.destroy()");
     }
-    
+
     public void customDestroy() {
         System.out.println("9. 自定义销毁方法");
     }
@@ -347,7 +347,7 @@ public class ExampleBean implements BeanNameAware, InitializingBean, DisposableB
 
 ```xml
 <!-- XML 配置生命周期方法 -->
-<bean id="exampleBean" class="com.example.ExampleBean" 
+<bean id="exampleBean" class="com.example.ExampleBean"
       init-method="customInit" destroy-method="customDestroy"/>
 ```
 
@@ -364,7 +364,7 @@ public class ExampleBean implements BeanNameAware, InitializingBean, DisposableB
 public class OrderService {
     private final UserRepository userRepository;
     private final PaymentService paymentService;
-    
+
     // 构造函数注入
     @Autowired  // Spring 4.3+ 可省略当只有一个构造函数时
     public OrderService(UserRepository userRepository, PaymentService paymentService) {
@@ -388,7 +388,7 @@ public class OrderService {
 @Service
 public class EmailService {
     private NotificationSender sender;
-    
+
     // Setter 注入
     @Autowired
     public void setSender(NotificationSender sender) {
@@ -423,13 +423,13 @@ public class UserController {
 // 定义多个同类型 Bean
 @Configuration
 public class NotificationConfig {
-    
+
     @Bean
     @Primary  // 设置为主要候选
     public NotificationSender emailSender() {
         return new EmailSender();
     }
-    
+
     @Bean
     public NotificationSender smsSender() {
         return new SmsSender();
@@ -440,7 +440,7 @@ public class NotificationConfig {
 @Service
 public class NotificationService {
     private final NotificationSender sender;
-    
+
     @Autowired
     public NotificationService(@Qualifier("smsSender") NotificationSender sender) {
         this.sender = sender;
@@ -459,14 +459,14 @@ BeanPostProcessor 允许在 Bean 初始化前后插入自定义逻辑。
 ```java
 @Component
 public class CustomBeanPostProcessor implements BeanPostProcessor {
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         System.out.println("初始化前: " + beanName);
         // 可返回包装后的 Bean
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         System.out.println("初始化后: " + beanName);
@@ -486,11 +486,11 @@ BeanFactoryPostProcessor 允许在容器加载 Bean 定义后、实例化前修�
 ```java
 @Component
 public class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
-    
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
         System.out.println("修改 Bean 定义信息");
-        
+
         // 获取 Bean 定义并修改
         BeanDefinition beanDefinition = beanFactory.getBeanDefinition("userService");
         beanDefinition.setLazyInit(true);  // 修改延迟加载设置
@@ -505,31 +505,31 @@ Spring 允许注册自定义作用域满足特殊需求。
 ```java
 @Component
 public class CustomScope implements Scope {
-    
+
     private final Map<String, Object> scopedObjects = Collections.synchronizedMap(new HashMap<>());
     private final Map<String, Runnable> destructionCallbacks = Collections.synchronizedMap(new HashMap<>());
-    
+
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
         // 实现自定义获取逻辑
         return scopedObjects.computeIfAbsent(name, k -> objectFactory.getObject());
     }
-    
+
     @Override
     public void registerDestructionCallback(String name, Runnable callback) {
         destructionCallbacks.put(name, callback);
     }
-    
+
     // 其他方法实现...
 }
 
 // 注册自定义作用域
 @Configuration
 public class ScopeConfig {
-    
+
     @Autowired
     private ConfigurableBeanFactory beanFactory;
-    
+
     @PostConstruct
     public void registerScope() {
         beanFactory.registerScope("custom", new CustomScope());
@@ -543,12 +543,12 @@ public class ScopeConfig {
 
 根据项目特点选择合适的配置方式：
 
-| 项目类型 | 推荐配置方式 | 理由 |
-|----------|--------------|------|
-| 传统遗留项目 | XML 配置 | 平滑迁移，配置集中管理 |
-| 新中小型项目 | 注解配置 | 开发效率高，代码简洁 |
-| 大型复杂项目 | Java 配置类 | 类型安全，模块化配置 |
-| 微服务项目 | Spring Boot | 快速启动，约定优于配置 |
+| 项目类型     | 推荐配置方式 | 理由                   |
+| ------------ | ------------ | ---------------------- |
+| 传统遗留项目 | XML 配置     | 平滑迁移，配置集中管理 |
+| 新中小型项目 | 注解配置     | 开发效率高，代码简洁   |
+| 大型复杂项目 | Java 配置类  | 类型安全，模块化配置   |
+| 微服务项目   | Spring Boot  | 快速启动，约定优于配置 |
 
 ### 7.2 性能优化建议
 
@@ -592,21 +592,21 @@ public class ServiceB {
 ```java
 @SpringBootTest
 class UserServiceTest {
-    
+
     @Autowired
     private UserService userService;
-    
+
     @MockitoBean
     private UserRepository userRepository;
-    
+
     @Test
     void testUserService() {
         // 给定
         given(userRepository.findById(1L)).willReturn(new User("test"));
-        
+
         // 当
         User user = userService.getUser(1L);
-        
+
         // 那么
         assertThat(user.getName()).isEqualTo("test");
     }

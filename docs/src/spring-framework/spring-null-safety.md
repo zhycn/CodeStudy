@@ -40,7 +40,7 @@ public class UserService {
         // 查询用户邮箱逻辑
         return userRepository.findEmailById(userId);
     }
-    
+
     // 参数可以为null
     public void updateUserProfile(User user, @Nullable String nickname) {
         if (nickname != null) {
@@ -66,7 +66,7 @@ public class ProductService {
         }
         return product;
     }
-    
+
     // 参数不能为null
     public void validateProduct(@NonNull Product product) {
         if (product.getPrice() <= 0) {
@@ -101,7 +101,7 @@ public class OrderService {
         // 方法实现
         return order;
     }
-    
+
     // 明确标记可能返回null的方法
     @Nullable
     public Order findOrderByCriteria(OrderCriteria criteria) {
@@ -134,7 +134,7 @@ public class User {
     private String username;        // 默认非null
     private String email;           // 默认非null
     @Nullable private String bio;   // 明确标记可为null
-    
+
     // 构造方法和方法
     public User(String username, String email) {
         this.username = username;
@@ -168,7 +168,7 @@ import org.jspecify.annotations.Nullable;
 public class FileService {
     // 可能为null的字段
     private @Nullable String encoding;
-    
+
     // 可能返回null的方法
     public @Nullable String readFile(String path) {
         // 方法实现
@@ -245,7 +245,7 @@ public class OrderProcessor {
             logger.warn("Received null order, skipping processing");
             return;
         }
-        
+
         // 处理订单逻辑
         order.validate();
         orderRepository.save(order);
@@ -262,10 +262,10 @@ public class UserService {
         User user = userRepository.findById(userId);
         return Optional.ofNullable(user);
     }
-    
+
     public void processUser(Long userId) {
         Optional<User> userOptional = findUserById(userId);
-        
+
         // 函数式风格处理可能缺失的值
         String userName = userOptional.map(User::getName)
                                      .orElse("Unknown User");
@@ -283,20 +283,20 @@ public class ProductServiceTest {
     @Test
     public void testGetProductByIdWithNullId() {
         ProductService service = new ProductService();
-        
+
         // 测试对null参数的处理
         assertThrows(InvalidArgumentException.class, () -> {
             service.getProductById(null);
         });
     }
-    
+
     @Test
     public void testFindProductByCriteriaWithNullableResult() {
         ProductService service = new ProductService();
-        
+
         // 测试可能返回null的方法
         Product product = service.findProductByCriteria(new Criteria("nonexistent"));
-        
+
         assertNull(product); // 验证允许返回null
     }
 }
@@ -310,7 +310,7 @@ public class ProductServiceTest {
 public class LazyInitService {
     @SuppressWarnings("NullAway.Init")
     private @Nullable Data cachedData;
-    
+
     public Data getData() {
         if (cachedData == null) {
             cachedData = loadData();
@@ -349,12 +349,12 @@ Spring 的空安全注解与其他常见库（如 Reactor 和 Spring Data）提�
 // Kotlin 代码调用 Spring 空安全注解的 Java API
 fun processUserData() {
     val userService = applicationContext.getBean(UserService::class.java)
-    
+
     // Kotlin 能识别 Spring 的 @Nullable 注解
     val email: String? = userService.findUserEmail(123L) // 识别为可空类型
-    
+
     // 需要安全调用
-    email?.let { 
+    email?.let {
         sendEmail(it)
     }
 }

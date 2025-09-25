@@ -64,29 +64,29 @@ npm run dev
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Vue 3 CDN Example</title>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-</head>
-<body>
-  <div id="app">{{ message }}</div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vue 3 CDN Example</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">{{ message }}</div>
 
-  <script>
-    const { createApp, ref } = Vue
+    <script>
+      const { createApp, ref } = Vue;
 
-    const app = createApp({
-      setup() {
-        const message = ref('Hello Vue 3!')
-        return {
-          message
-        }
-      }
-    })
+      const app = createApp({
+        setup() {
+          const message = ref('Hello Vue 3!');
+          return {
+            message,
+          };
+        },
+      });
 
-    app.mount('#app')
-  </script>
-</body>
+      app.mount('#app');
+    </script>
+  </body>
 </html>
 ```
 
@@ -108,40 +108,40 @@ Vue 3 的核心是响应式数据。当数据改变时，视图会自动更新�
     <p>Count: {{ count }}</p>
     <button @click="increment">Increment</button>
     <p>User: {{ user.name }}, Age: {{ user.age }}</p>
-    <input v-model="user.name" placeholder="Edit name">
+    <input v-model="user.name" placeholder="Edit name" />
   </div>
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref, reactive } from 'vue';
 
 export default {
   name: 'MyComponent',
   setup() {
     // 使用 ref 定义基本类型
-    const count = ref(0)
-    const title = ref('Vue 3 Composition API')
+    const count = ref(0);
+    const title = ref('Vue 3 Composition API');
 
     // 使用 reactive 定义对象
     const user = reactive({
       name: 'Alice',
-      age: 30
-    })
+      age: 30,
+    });
 
     // 定义方法
     const increment = () => {
-      count.value++ // 注意：在 JS 中需要 .value
-    }
+      count.value++; // 注意：在 JS 中需要 .value
+    };
 
     // 暴露给模板
     return {
       title,
       count,
       user,
-      increment
-    }
-  }
-}
+      increment,
+    };
+  },
+};
 </script>
 ```
 
@@ -164,26 +164,26 @@ export default {
 
 <script setup>
 // 所有导入自动可用，无需在 setup() 中返回
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
 
 // 响应式状态
-const firstName = ref('John')
-const lastName = ref('Doe')
-const isHighlighted = ref(false)
+const firstName = ref('John');
+const lastName = ref('Doe');
+const isHighlighted = ref(false);
 
 // 计算属性
-const fullName = computed(() => `${firstName.value} ${lastName.value}`)
+const fullName = computed(() => `${firstName.value} ${lastName.value}`);
 
 // 方法
 function toggleHighlight() {
-  isHighlighted.value = !isHighlighted.value
+  isHighlighted.value = !isHighlighted.value;
 }
 
 // 生命周期钩子
 onMounted(() => {
-  console.log('Component is mounted!')
+  console.log('Component is mounted!');
   // 可以在这里进行初始化数据获取等操作
-})
+});
 </script>
 
 <style scoped>
@@ -197,17 +197,17 @@ onMounted(() => {
 
 在组合式 API 中，生命周期钩子以 `onX` 的形式导入和使用。
 
-| Options API       | Composition API (inside `setup`) |
-| ----------------- | -------------------------------- |
-| `beforeCreate`    | Not Needed*                      |
-| `created`         | Not Needed*                      |
-| `beforeMount`     | `onBeforeMount`                  |
-| `mounted`         | `onMounted`                      |
-| `beforeUpdate`    | `onBeforeUpdate`                 |
-| `updated`         | `onUpdated`                      |
-| `beforeUnmount`   | `onBeforeUnmount`                |
-| `unmounted`       | `onUnmounted`                    |
-| `errorCaptured`   | `onErrorCaptured`                |
+| Options API     | Composition API (inside `setup`) |
+| --------------- | -------------------------------- |
+| `beforeCreate`  | Not Needed\*                     |
+| `created`       | Not Needed\*                     |
+| `beforeMount`   | `onBeforeMount`                  |
+| `mounted`       | `onMounted`                      |
+| `beforeUpdate`  | `onBeforeUpdate`                 |
+| `updated`       | `onUpdated`                      |
+| `beforeUnmount` | `onBeforeUnmount`                |
+| `unmounted`     | `onUnmounted`                    |
+| `errorCaptured` | `onErrorCaptured`                |
 
 `*`：`setup` 本身发生在 `beforeCreate` 和 `created` 之间，在这两个钩子里编写的代码都应直接放在 `setup` 函数中。
 
@@ -249,15 +249,15 @@ npm install pinia
 
 ```javascript
 // main.js
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import App from './App.vue'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import App from './App.vue';
 
-const pinia = createPinia()
-const app = createApp(App)
+const pinia = createPinia();
+const app = createApp(App);
 
-app.use(pinia)
-app.mount('#app')
+app.use(pinia);
+app.mount('#app');
 ```
 
 ### 4.2 定义一个 Store
@@ -266,31 +266,31 @@ app.mount('#app')
 
 ```javascript
 // stores/user.js
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 
 // 'user' 是 store 的唯一 ID
 export const useUserStore = defineStore('user', () => {
   // State
-  const name = ref('Guest User')
-  const age = ref(0)
-  const isAuthenticated = ref(false)
+  const name = ref('Guest User');
+  const age = ref(0);
+  const isAuthenticated = ref(false);
 
   // Getters (Computed)
-  const isAdult = computed(() => age.value >= 18)
-  const username = computed(() => name.value.toUpperCase())
+  const isAdult = computed(() => age.value >= 18);
+  const username = computed(() => name.value.toUpperCase());
 
   // Actions (Methods)
   function login(userData) {
-    name.value = userData.name
-    age.value = userData.age
-    isAuthenticated.value = true
+    name.value = userData.name;
+    age.value = userData.age;
+    isAuthenticated.value = true;
   }
 
   function logout() {
-    name.value = 'Guest User'
-    age.value = 0
-    isAuthenticated.value = false
+    name.value = 'Guest User';
+    age.value = 0;
+    isAuthenticated.value = false;
   }
 
   // 暴露 state 和 function
@@ -301,9 +301,9 @@ export const useUserStore = defineStore('user', () => {
     isAdult,
     username,
     login,
-    logout
-  }
-})
+    logout,
+  };
+});
 ```
 
 ### 4.3 在组件中使用 Store
@@ -321,16 +321,16 @@ export const useUserStore = defineStore('user', () => {
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/user';
 
 // 在 setup 中调用 useUserStore
-const userStore = useUserStore()
+const userStore = useUserStore();
 
 function handleLogin() {
   userStore.login({
     name: 'Alice Johnson',
-    age: 28
-  })
+    age: 28,
+  });
 }
 </script>
 ```
@@ -351,42 +351,42 @@ npm install vue-router@4
 
 ```javascript
 // router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '../views/HomeView.vue';
+import AboutView from '../views/AboutView.vue';
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
   },
   {
     path: '/about',
     name: 'about',
-    component: AboutView
-  }
-]
+    component: AboutView,
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
 ```
 
 在 `main.js` 中注册：
 
 ```javascript
 // main.js
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
+const app = createApp(App);
+app.use(router);
+app.mount('#app');
 ```
 
 ### 5.2 在组件中使用
@@ -420,21 +420,21 @@ app.mount('#app')
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-const router = useRouter()
+const router = useRouter();
 
 // 编程式导航示例
 function navigateToAbout() {
-  router.push('/about')
+  router.push('/about');
   // 或者使用命名路由：router.push({ name: 'about' })
 }
 
 onMounted(() => {
   // 访问路由信息
-  console.log('Current route:', router.currentRoute.value)
-})
+  console.log('Current route:', router.currentRoute.value);
+});
 </script>
 ```
 
@@ -459,33 +459,33 @@ module.exports = {
     'eslint:recommended',
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting', // 让 Prettier 控制格式化
-    'plugin:vue/vue3-essential' // Vue 3 基础规则
+    'plugin:vue/vue3-essential', // Vue 3 基础规则
     // 'plugin:vue/vue3-strongly-recommended', // Vue 3 更强规则
     // 'plugin:vue/vue3-recommended' // Vue 3 最严格规则
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
   },
   rules: {
-    'vue/multi-word-component-names': 'warn' // 允许单文件组件名称为单个单词
-  }
-}
+    'vue/multi-word-component-names': 'warn', // 允许单文件组件名称为单个单词
+  },
+};
 ```
 
 ### 6.3 性能优化建议
 
 1. **惰性加载路由**：使用 `import()` 动态导入来分割代码。
 
-    ```javascript
-    // router/index.js
-    const routes = [
-      {
-        path: '/about',
-        name: 'about',
-        component: () => import('../views/AboutView.vue') // 懒加载
-      }
-    ]
-    ```
+   ```javascript
+   // router/index.js
+   const routes = [
+     {
+       path: '/about',
+       name: 'about',
+       component: () => import('../views/AboutView.vue'), // 懒加载
+     },
+   ];
+   ```
 
 2. **使用 `v-once` 和 `v-memo`**：对极少变化的静态内容使用 `v-once`，对复杂节点列表的重复渲染优化使用 `v-memo`。
 3. **computed 和 watch 的谨慎使用**：避免在 computed 中进行昂贵计算，避免深度 watch 大型对象。

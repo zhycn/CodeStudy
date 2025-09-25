@@ -71,12 +71,12 @@ const score = ref(85);
 
 ### 2.1 渲染机制区别
 
-| 特性         | v-if                      | v-show                    |
-|--------------|---------------------------|---------------------------|
-| **DOM 操作** | 条件为假时移除 DOM 元素   | 仅切换 CSS display 属性  |
-| **初始渲染** | 惰性渲染（条件为真才渲染）| 无论条件如何都渲染        |
-| **切换开销** | 较高的切换开销            | 较低的切换开销            |
-| **编译过程** | 有条件的块（可配合 v-else）| 仅简单切换显示/隐藏       |
+| 特性         | v-if                        | v-show                  |
+| ------------ | --------------------------- | ----------------------- |
+| **DOM 操作** | 条件为假时移除 DOM 元素     | 仅切换 CSS display 属性 |
+| **初始渲染** | 惰性渲染（条件为真才渲染）  | 无论条件如何都渲染      |
+| **切换开销** | 较高的切换开销              | 较低的切换开销          |
+| **编译过程** | 有条件的块（可配合 v-else） | 仅简单切换显示/隐藏     |
 
 ### 2.2 使用场景建议
 
@@ -84,7 +84,6 @@ const score = ref(85);
   - 条件很少改变时
   - 需要完全销毁/重建组件时
   - 组件包含重量级资源（如视频播放器）
-  
 - 使用 `v-show` 当：
   - 需要频繁切换显示状态（如选项卡切换）
   - 初始渲染成本较高但需要快速切换时
@@ -94,11 +93,9 @@ const score = ref(85);
   <div>
     <!-- 适合使用 v-if -->
     <ExpensiveComponent v-if="showExpensive" />
-    
+
     <!-- 适合使用 v-show -->
-    <div v-show="activeTab === 'settings'">
-      Settings Panel
-    </div>
+    <div v-show="activeTab === 'settings'">Settings Panel</div>
   </div>
 </template>
 ```
@@ -139,7 +136,7 @@ const isAdmin = ref(true);
 <template>
   <!-- 不推荐：大组件频繁切换性能差 -->
   <HeavyComponent v-if="showHeavy" />
-  
+
   <!-- 推荐：使用 v-show 替代 -->
   <HeavyComponent v-show="showHeavy" />
 </template>
@@ -169,7 +166,7 @@ const isAdmin = ref(true);
       </div>
     </div>
   </div>
-  
+
   <!-- 推荐：使用计算属性简化 -->
   <div v-if="shouldShowContent">
     <!-- ... -->
@@ -203,7 +200,7 @@ const statusMessages = {
   loading: 'Loading data...',
   success: 'Data loaded successfully!',
   error: 'Error loading data',
-  empty: 'No data available'
+  empty: 'No data available',
 };
 </script>
 ```
@@ -219,9 +216,7 @@ const statusMessages = {
       <div v-if="show" key="content">
         <!-- 内容 -->
       </div>
-      <div v-else key="placeholder">
-        Loading...
-      </div>
+      <div v-else key="placeholder">Loading...</div>
     </Transition>
   </div>
 </template>
@@ -249,8 +244,8 @@ const statusMessages = {
 <template>
   <div>
     <!-- 输入框切换时会保留输入内容 -->
-    <input v-if="isEmailLogin" placeholder="Email" key="email">
-    <input v-else placeholder="Username" key="username">
+    <input v-if="isEmailLogin" placeholder="Email" key="email" />
+    <input v-else placeholder="Username" key="username" />
   </div>
 </template>
 ```
@@ -267,12 +262,12 @@ const statusMessages = {
   <li v-for="item in items" v-if="item.isActive">
     {{ item.name }}
   </li>
-  
+
   <!-- 推荐方案1：使用计算属性过滤 -->
   <li v-for="item in activeItems" :key="item.id">
     {{ item.name }}
   </li>
-  
+
   <!-- 推荐方案2：使用 <template> 包裹 -->
   <template v-for="item in items" :key="item.id">
     <li v-if="item.isActive">
@@ -287,7 +282,7 @@ import { computed } from 'vue';
 const items = ref([...]);
 
 // 推荐方案1
-const activeItems = computed(() => 
+const activeItems = computed(() =>
   items.value.filter(item => item.isActive)
 );
 </script>

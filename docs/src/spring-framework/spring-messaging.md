@@ -24,15 +24,15 @@ Spring Messaging 模块诞生于 Spring Framework 4，引入了从 Spring Integr
 
 - **异步通信**（消息服务）：发送者（生产者）将消息发送到一个中间人（消息代理），然后就可以继续处理其他任务，无需等待。接收者（消费者）在准备好时，从中间人那里获取并处理消息。这种方式提供了应用解耦、resiliency（一个服务挂掉不影响消息发送，恢复后可以继续处理）、缓冲消峰（应对突发流量）、灵活性（可以轻松增加消费者）等优势。
 
-*表：同步通信与异步通信的比较*
+_表：同步通信与异步通信的比较_
 
-| **特性** | **同步通信** | **异步通信** |
-|----------|--------------|--------------|
-| **耦合性** | 紧耦合 | 松耦合 |
-| **性能** | 受限于响应最慢的服务 | 更高的吞吐量和响应能力 |
-| **可用性** | 调用方依赖被调用方可用性 | 双方依赖消息代理的可用性 |
-| **复杂性** | 相对简单 | 相对复杂 |
-| **典型场景** | 实时查询、立即响应操作 | 通知、日志记录、耗时任务处理 |
+| **特性**     | **同步通信**             | **异步通信**                 |
+| ------------ | ------------------------ | ---------------------------- |
+| **耦合性**   | 紧耦合                   | 松耦合                       |
+| **性能**     | 受限于响应最慢的服务     | 更高的吞吐量和响应能力       |
+| **可用性**   | 调用方依赖被调用方可用性 | 双方依赖消息代理的可用性     |
+| **复杂性**   | 相对简单                 | 相对复杂                     |
+| **典型场景** | 实时查询、立即响应操作   | 通知、日志记录、耗时任务处理 |
 
 ### 1.3 设计目标与核心原则
 
@@ -71,11 +71,11 @@ public interface Message<T> {
 @FunctionalInterface
 public interface MessageChannel {
     long INDEFINITE_TIMEOUT = -1;
-    
+
     default boolean send(Message<?> message) {
         return send(message, INDEFINITE_TIMEOUT);
     }
-    
+
     boolean send(Message<?> message, long timeout);
 }
 ```
@@ -114,7 +114,7 @@ Spring 提供了丰富的 `MessageHandler` 实现，包括用于消息转换、�
 public interface MessageConverter {
     @Nullable
     Message<?> toMessage(Object payload, @Nullable MessageHeaders headers);
-    
+
     @Nullable
     Object fromMessage(Message<?> message, Class<?> targetClass);
 }
@@ -171,13 +171,13 @@ Spring Messaging 提供了多种消息监听注解，用于将方法声明为消
 ```java
 @Component
 public class OrderProcessor {
-    
+
     @RabbitListener(queues = "order.queue")
     public void processOrder(Order order) {
         // 处理订单消息
         System.out.println("Received order: " + order);
     }
-    
+
     @JmsListener(destination = "notification.topic")
     public void handleNotification(Notification notification) {
         // 处理通知消息
@@ -197,17 +197,17 @@ Spring Messaging 提供了一系列注解，用于将消息的不同部分绑定
 ```java
 @RabbitListener(queues = "order.queue")
 public void processOrder(
-        @Payload Order order, 
-        @Header("priority") String priority, 
+        @Payload Order order,
+        @Header("priority") String priority,
         @Headers Map<String, Object> headers) {
-    
+
     if ("high".equals(priority)) {
         // 优先处理高优先级订单
         processHighPriorityOrder(order);
     } else {
         processNormalOrder(order);
     }
-    
+
     log.debug("Message headers: {}", headers);
 }
 ```
@@ -233,7 +233,7 @@ public ResponseMessage handleRequest(RequestMessage request) {
 ```java
 @Component
 public class OrderProcessor {
-    
+
     @RabbitListener(queues = "order.queue")
     public void processOrder(Order order) {
         // 可能抛出异常的业务逻辑
@@ -241,7 +241,7 @@ public class OrderProcessor {
         processPayment(order);
         fulfillOrder(order);
     }
-    
+
     @MessageExceptionHandler
     public void handleOrderException(OrderException ex) {
         // 处理订单相关的异常
@@ -284,15 +284,15 @@ spring:
 ```java
 @Component
 public class OrderSender {
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     @Bean
     public Queue orderQueue() {
         return new Queue("order.queue", true); // true表示持久化
     }
-    
+
     public void sendOrder(Order order) {
         // convertAndSend方法会将order对象自动序列化并发送到指定队列
         rabbitTemplate.convertAndSend("order.queue", order);
@@ -306,13 +306,13 @@ public class OrderSender {
 ```java
 @Component
 public class OrderReceiver {
-    
+
     @RabbitListener(queues = "order.queue")
     public void receiveOrder(Order order) {
         System.out.println(" [x] Received order: '" + order + "'");
         processOrder(order);
     }
-    
+
     private void processOrder(Order order) {
         // 处理订单的业务逻辑
     }
@@ -326,30 +326,30 @@ RabbitMQ 的强大之处在于其 Exchange 机制，支持 Direct、Fanout、Top
 ```java
 @Configuration
 public class RabbitMQConfig {
-    
+
     // 定义Exchange和队列常量
     public static final String ORDER_TOPIC_EXCHANGE = "order.topic.exchange";
     public static final String STOCK_QUEUE = "stock.queue";
     public static final String LOG_QUEUE = "log.queue";
     public static final String ORDER_ROUTING_KEY = "order.created";
-    
+
     // 声明Topic Exchange
     @Bean
     public TopicExchange orderTopicExchange() {
         return new TopicExchange(ORDER_TOPIC_EXCHANGE);
     }
-    
+
     // 声明队列
     @Bean
     public Queue stockQueue() {
         return new Queue(STOCK_QUEUE, true);
     }
-    
+
     @Bean
     public Queue logQueue() {
         return new Queue(LOG_QUEUE, true);
     }
-    
+
     // 绑定队列到Exchange
     @Bean
     public Binding bindingStock(Queue stockQueue, TopicExchange orderTopicExchange) {
@@ -357,7 +357,7 @@ public class RabbitMQConfig {
                 .to(orderTopicExchange)
                 .with(ORDER_ROUTING_KEY);
     }
-    
+
     @Bean
     public Binding bindingLog(Queue logQueue, TopicExchange orderTopicExchange) {
         return BindingBuilder.bind(logQueue)
@@ -385,7 +385,7 @@ Apache Kafka 是高性能的分布式流平台，Spring 通过 `spring-kafka` �
 ```java
 @Configuration
 public class KafkaProducerConfig {
-    
+
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -394,7 +394,7 @@ public class KafkaProducerConfig {
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
-    
+
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
@@ -403,10 +403,10 @@ public class KafkaProducerConfig {
 
 @Component
 public class KafkaMessageProducer {
-    
+
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-    
+
     public void sendMessage(String topic, String message) {
         kafkaTemplate.send(topic, message);
         System.out.println("Sent message: " + message + " to topic: " + topic);
@@ -420,7 +420,7 @@ public class KafkaMessageProducer {
 @Configuration
 @EnableKafka
 public class KafkaConsumerConfig {
-    
+
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -430,10 +430,10 @@ public class KafkaConsumerConfig {
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
-    
+
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, String> factory = 
+        ConcurrentKafkaListenerContainerFactory<String, String> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
@@ -442,7 +442,7 @@ public class KafkaConsumerConfig {
 
 @Component
 public class KafkaMessageConsumer {
-    
+
     @KafkaListener(topics = "test-topic", groupId = "test-group")
     public void listen(String message) {
         System.out.println("Received message: " + message);
@@ -461,14 +461,14 @@ Spring Messaging 为 WebSocket 消息提供了 STOMP（Simple Text Oriented Mess
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-    
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws") // WebSocket端点
                 .setAllowedOrigins("*") // 允许跨域
                 .withSockJS(); // 兼容SockJS
     }
-    
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topic"); // 配置消息代理（广播）
@@ -482,7 +482,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 ```java
 @Controller
 public class ChatController {
-    
+
     @MessageMapping("/chat") // 监听"/app/chat"
     @SendTo("/topic/messages") // 将消息广播到"/topic/messages"
     public MessageDTO sendMessage(MessageDTO message) {
@@ -499,27 +499,25 @@ public class ChatController {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
 <script>
-    var socket = new SockJS('/ws'); // 连接WebSocket端点
-    var stompClient = Stomp.over(socket);
-    
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        
-        // 订阅"/topic/messages"以接收服务器推送的消息
-        stompClient.subscribe('/topic/messages', function (message) {
-            var received = JSON.parse(message.body);
-            console.log("Received message: ", received);
-            document.getElementById("messages").innerHTML += 
-                "<p><b>" + received.from + ":</b> " + received.content + "</p>";
-        });
+  var socket = new SockJS('/ws'); // 连接WebSocket端点
+  var stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+
+    // 订阅"/topic/messages"以接收服务器推送的消息
+    stompClient.subscribe('/topic/messages', function (message) {
+      var received = JSON.parse(message.body);
+      console.log('Received message: ', received);
+      document.getElementById('messages').innerHTML += '<p><b>' + received.from + ':</b> ' + received.content + '</p>';
     });
-    
-    function sendMessage() {
-        var from = document.getElementById("name").value;
-        var content = document.getElementById("message").value;
-        stompClient.send("/app/chat", {}, 
-            JSON.stringify({from: from, content: content}));
-    }
+  });
+
+  function sendMessage() {
+    var from = document.getElementById('name').value;
+    var content = document.getElementById('message').value;
+    stompClient.send('/app/chat', {}, JSON.stringify({ from: from, content: content }));
+  }
 </script>
 ```
 
@@ -549,7 +547,7 @@ spring:
 
 ```java
 @RabbitListener(queues = "order.queue")
-public void receiveOrder(Order order, Channel channel, 
+public void receiveOrder(Order order, Channel channel,
                         @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
     try {
         processOrder(order); // 处理订单
@@ -574,16 +572,16 @@ public Queue orderQueue() {
 
 @Component
 public class OrderSender {
-    
+
     public void sendOrder(Order order) {
         // 构建消息时设置持久化属性
         MessageProperties properties = new MessageProperties();
         properties.setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-        
+
         Message message = MessageBuilder.withPayload(order)
                 .andProperties(properties)
                 .build();
-        
+
         rabbitTemplate.send("order.queue", message);
     }
 }
@@ -615,25 +613,25 @@ spring:
 ```java
 @Configuration
 public class DeadLetterConfig {
-    
+
     // 定义死信Exchange和队列
     @Bean
     public DirectExchange dlxExchange() {
         return new DirectExchange("dlx.exchange");
     }
-    
+
     @Bean
     public Queue dlxQueue() {
         return new Queue("dlx.queue", true);
     }
-    
+
     @Bean
     public Binding dlxBinding() {
         return BindingBuilder.bind(dlxQueue())
                 .to(dlxExchange())
                 .with("dlx.routingkey");
     }
-    
+
     // 主队列配置，指向死信Exchange
     @Bean
     public Queue orderQueue() {
@@ -661,7 +659,7 @@ spring:
 ```java
 @Configuration
 public class ExecutorConfig {
-    
+
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -670,11 +668,11 @@ public class ExecutorConfig {
         executor.setQueueCapacity(1000);
         return executor;
     }
-    
+
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
             ConnectionFactory connectionFactory, TaskExecutor taskExecutor) {
-        
+
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setTaskExecutor(taskExecutor);
@@ -693,7 +691,7 @@ Spring Messaging 支持本地事务和分布式事务，确保消息处理的一
 @Configuration
 @EnableTransactionManagement
 public class TransactionConfig {
-    
+
     @Bean
     public RabbitTransactionManager rabbitTransactionManager(ConnectionFactory connectionFactory) {
         return new RabbitTransactionManager(connectionFactory);
@@ -702,18 +700,18 @@ public class TransactionConfig {
 
 @Service
 public class OrderService {
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     @Transactional
     public void processOrderWithTransaction(Order order) {
         // 数据库操作
         orderRepository.save(order);
-        
+
         // 消息发送（在同一事务中）
         rabbitTemplate.convertAndSend("order.processed", order);
-        
+
         // 如果后续操作失败，消息发送也会回滚
         updateInventory(order);
     }
@@ -736,10 +734,10 @@ management:
 @RestController
 @RequestMapping("/management")
 public class MessageMonitorController {
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     @GetMapping("/queue/count")
     public ResponseEntity<Integer> getQueueCount(@RequestParam String queueName) {
         try {

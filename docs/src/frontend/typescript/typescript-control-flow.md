@@ -11,22 +11,22 @@
 ## 目录
 
 1. #条件语句
-    1. #if-语句
-    2. #switch-语句
-    3. #条件三元运算符
+   1. #if-语句
+   2. #switch-语句
+   3. #条件三元运算符
 2. #循环语句
-    1. #for-循环
-    2. #while-与-dowhile-循环
-    3. #forof-与-forin-循环
+   1. #for-循环
+   2. #while-与-dowhile-循环
+   3. #forof-与-forin-循环
 3. #跳转语句
-    1. #break-与-continue
-    2. #return
+   1. #break-与-continue
+   2. #return
 4. #typescript-中的控制流分析与类型收窄
-    1. #typeof-类型守卫
-    2. #instanceof-类型守卫
-    3. #in-操作符类型守卫
-    4. #字面量类型守卫
-    5. #自定义类型守卫
+   1. #typeof-类型守卫
+   2. #instanceof-类型守卫
+   3. #in-操作符类型守卫
+   4. #字面量类型守卫
+   5. #自定义类型守卫
 5. #最佳实践总结
 
 ---
@@ -40,10 +40,10 @@
 `if` 语句是最基础的条件判断语句。
 
 ```typescript
-let value: number | string = Math.random() > 0.5 ? "hello" : 42;
+let value: number | string = Math.random() > 0.5 ? 'hello' : 42;
 
 // 基础 if 语句
-if (typeof value === "string") {
+if (typeof value === 'string') {
   // 在此代码块内，TypeScript 知道 value 是 string 类型
   console.log(value.toUpperCase()); // 安全调用字符串方法
 } else {
@@ -56,39 +56,39 @@ let score: number = 85;
 let grade: string;
 
 if (score >= 90) {
-  grade = "A";
+  grade = 'A';
 } else if (score >= 80) {
-  grade = "B";
+  grade = 'B';
 } else if (score >= 70) {
-  grade = "C";
+  grade = 'C';
 } else {
-  grade = "D";
+  grade = 'D';
 }
 console.log(`Grade: ${grade}`); // 输出: Grade: B
 ```
 
 **最佳实践**：
 
-* 利用 `if` 语句进行类型收窄，避免不必要的类型断言。
-* 保持条件清晰简洁，过于复杂的条件可以考虑提取为函数或变量。
+- 利用 `if` 语句进行类型收窄，避免不必要的类型断言。
+- 保持条件清晰简洁，过于复杂的条件可以考虑提取为函数或变量。
 
 ### switch 语句
 
 `switch` 语句用于基于一个表达式匹配多个可能的值。
 
 ```typescript
-type EventType = "click" | "doubleClick" | "keydown" | "keyup";
+type EventType = 'click' | 'doubleClick' | 'keydown' | 'keyup';
 
 function handleEvent(event: EventType, message?: string): void {
   switch (event) {
-    case "click":
-      console.log("Clicked!", message);
+    case 'click':
+      console.log('Clicked!', message);
       break; // 必须使用 break 或 return 来避免“穿透”
-    case "doubleClick":
-      console.log("Double clicked!", message);
+    case 'doubleClick':
+      console.log('Double clicked!', message);
       break;
-    case "keydown":
-    case "keyup": //  case 可以合并
+    case 'keydown':
+    case 'keyup': //  case 可以合并
       console.log(`Key event: ${event}`, message);
       break;
     default:
@@ -100,16 +100,16 @@ function handleEvent(event: EventType, message?: string): void {
   }
 }
 
-handleEvent("click"); // OK
-handleEvent("keydown"); // OK
+handleEvent('click'); // OK
+handleEvent('keydown'); // OK
 // handleEvent("scroll"); // 编译时错误：类型“"scroll"”的参数不能赋给类型“EventType”的参数
 ```
 
 **最佳实践**：
 
-* 始终使用 `break`、`return` 或注释 `// falls through` 来明确表示是否希望 case 穿透，避免意外错误。
-* 使用 `default` 分支，并结合 `never` 类型进行**穷尽性检查（Exhaustiveness Checking）**，确保所有可能的联合类型值都被处理。这是 TypeScript 中一个非常强大的模式。
-* 优先使用字面量联合类型（如 `EventType`）作为 switch 的条件，以获得最佳的类型收窄效果。
+- 始终使用 `break`、`return` 或注释 `// falls through` 来明确表示是否希望 case 穿透，避免意外错误。
+- 使用 `default` 分支，并结合 `never` 类型进行**穷尽性检查（Exhaustiveness Checking）**，确保所有可能的联合类型值都被处理。这是 TypeScript 中一个非常强大的模式。
+- 优先使用字面量联合类型（如 `EventType`）作为 switch 的条件，以获得最佳的类型收窄效果。
 
 ### 条件（三元）运算符
 
@@ -117,11 +117,15 @@ handleEvent("keydown"); // OK
 
 ```typescript
 let isLoggedIn: boolean = true;
-let welcomeMessage: string = isLoggedIn ? "Welcome back!" : "Please sign in.";
+let welcomeMessage: string = isLoggedIn ? 'Welcome back!' : 'Please sign in.';
 
 // 也可以用于执行函数
-function logSuccess() { console.log("Success!"); }
-function logError() { console.log("Error!"); }
+function logSuccess() {
+  console.log('Success!');
+}
+function logError() {
+  console.log('Error!');
+}
 
 let operationSucceeded: boolean = true;
 operationSucceeded ? logSuccess() : logError();
@@ -131,8 +135,8 @@ console.log(welcomeMessage);
 
 **最佳实践**：
 
-* 保持三元运算符的简洁性。如果逻辑过于复杂，应优先使用 `if` 语句以提高可读性。
-* 避免嵌套多个三元运算符，这会使代码难以阅读。
+- 保持三元运算符的简洁性。如果逻辑过于复杂，应优先使用 `if` 语句以提高可读性。
+- 避免嵌套多个三元运算符，这会使代码难以阅读。
 
 ## 循环语句
 
@@ -144,7 +148,7 @@ console.log(welcomeMessage);
 
 ```typescript
 // 遍历数组
-let fruits: string[] = ["Apple", "Banana", "Mango"];
+let fruits: string[] = ['Apple', 'Banana', 'Mango'];
 for (let i = 0; i < fruits.length; i++) {
   console.log(`Fruit at index ${i} is ${fruits[i]}`);
 }
@@ -158,8 +162,8 @@ for (let i = 0; i < fruits.length; i++) {
 
 **最佳实践**：
 
-* 在循环体内，如果循环变量不会改变，使用 `const` 而不是 `let`。
-* 考虑使用更现代的 `for...of` 来简化数组遍历。
+- 在循环体内，如果循环变量不会改变，使用 `const` 而不是 `let`。
+- 考虑使用更现代的 `for...of` 来简化数组遍历。
 
 ### while 与 do...while 循环
 
@@ -176,30 +180,31 @@ while (count < 5) {
 // do...while 循环
 let input: string;
 do {
-  input = prompt("Enter 'yes' to continue:") || ""; // 模拟用户输入
-} while (input.toLowerCase() !== "yes");
-console.log("Continuing...");
+  input = prompt("Enter 'yes' to continue:") || ''; // 模拟用户输入
+} while (input.toLowerCase() !== 'yes');
+console.log('Continuing...');
 ```
 
 **最佳实践**：
 
-* 确保循环条件最终会变为 `false`，否则会导致无限循环。
-* `do...while` 适用于必须先执行一次操作然后再检查条件的场景（如读取用户输入）。
+- 确保循环条件最终会变为 `false`，否则会导致无限循环。
+- `do...while` 适用于必须先执行一次操作然后再检查条件的场景（如读取用户输入）。
 
 ### for...of 与 for...in 循环
 
-* `for...of`：用于遍历**可迭代对象**（如 Array, String, Map, Set）的**值**。这是遍历数组的首选方式。
-* `for...in`：用于遍历对象的**可枚举属性名（键）**。遍历的是键，而不是值。
+- `for...of`：用于遍历**可迭代对象**（如 Array, String, Map, Set）的**值**。这是遍历数组的首选方式。
+- `for...in`：用于遍历对象的**可枚举属性名（键）**。遍历的是键，而不是值。
 
 ```typescript
 // for...of (遍历值)
 let numbers: number[] = [10, 20, 30];
-for (const num of numbers) { // 使用 const，因为每次迭代都是新的绑定
+for (const num of numbers) {
+  // 使用 const，因为每次迭代都是新的绑定
   console.log(num); // 10, 20, 30
 }
 
 // for...in (遍历键)
-let person = { name: "Alice", age: 30, job: "Developer" };
+let person = { name: 'Alice', age: 30, job: 'Developer' };
 for (const key in person) {
   // 使用类型断言或类型守卫来安全访问
   console.log(`${key}: ${person[key as keyof typeof person]}`);
@@ -213,15 +218,15 @@ for (const key in person) {
   }
 }
 // 更推荐的方式：使用 Object.keys
-Object.keys(person).forEach(key => {
+Object.keys(person).forEach((key) => {
   console.log(key, person[key as keyof typeof person]);
 });
 ```
 
 **最佳实践**：
 
-* **遍历数组时，优先使用 `for...of`**。它更简洁，且直接操作值，避免了索引操作。
-* 使用 `for...in` 遍历对象时，务必注意它可能会遍历到继承的属性。结合 `hasOwnProperty` 或使用 `Object.keys()` 是更安全的选择。
+- **遍历数组时，优先使用 `for...of`**。它更简洁，且直接操作值，避免了索引操作。
+- 使用 `for...in` 遍历对象时，务必注意它可能会遍历到继承的属性。结合 `hasOwnProperty` 或使用 `Object.keys()` 是更安全的选择。
 
 ## 跳转语句
 
@@ -229,8 +234,8 @@ Object.keys(person).forEach(key => {
 
 ### break 与 continue
 
-* `break`：立即终止整个循环或 `switch` 语句。
-* `continue`：跳过当前循环的剩余语句，直接进入下一次迭代。
+- `break`：立即终止整个循环或 `switch` 语句。
+- `continue`：跳过当前循环的剩余语句，直接进入下一次迭代。
 
 ```typescript
 // break 示例
@@ -254,8 +259,8 @@ for (let i = 0; i < 10; i++) {
 
 **最佳实践**：
 
-* 谨慎使用 `break` 和 `continue`，过度使用可能会降低代码的可读性，有时可以用条件语句来替代。
-* 使用带标签的语句（Labeled Statements）可以跳出多层嵌套循环，但应尽量避免，通常可以通过重构函数来使逻辑更清晰。
+- 谨慎使用 `break` 和 `continue`，过度使用可能会降低代码的可读性，有时可以用条件语句来替代。
+- 使用带标签的语句（Labeled Statements）可以跳出多层嵌套循环，但应尽量避免，通常可以通过重构函数来使逻辑更清晰。
 
 ```typescript
 // 标签示例 (尽量避免)
@@ -289,8 +294,8 @@ console.log(index); // 1
 
 **最佳实践**：
 
-* 函数应有一个清晰的返回类型注解。
-* 确保所有代码路径都有返回值（或者明确返回 `void`）。TypeScript 会帮助检查这一点。
+- 函数应有一个清晰的返回类型注解。
+- 确保所有代码路径都有返回值（或者明确返回 `void`）。TypeScript 会帮助检查这一点。
 
 ## TypeScript 中的控制流分析与类型收窄
 
@@ -302,9 +307,9 @@ console.log(index); // 1
 
 ```typescript
 function padLeft(value: string | number, padding: string | number): string {
-  if (typeof padding === "number") {
+  if (typeof padding === 'number') {
     // 在此分支，padding 被收窄为 number 类型
-    return " ".repeat(padding) + value;
+    return ' '.repeat(padding) + value;
   }
   // 在此分支，padding 被收窄为 string 类型
   return padding + value;
@@ -331,10 +336,10 @@ async function handleError(error: Error) {
     console.log(`API Error ${error.code}: ${error.message}`);
   } else if (error instanceof NetworkError) {
     // 此处 error 被收窄为 NetworkError 类型
-    console.log("Network Error:", error.message);
+    console.log('Network Error:', error.message);
   } else {
     // 此处 error 仍然是通用的 Error 类型
-    console.log("Unknown Error:", error.message);
+    console.log('Unknown Error:', error.message);
   }
 }
 ```
@@ -355,12 +360,14 @@ interface Fish {
 
 function getSmallPet(): Bird | Fish {
   // ... 返回 Bird 或 Fish 的逻辑
-  return Math.random() > 0.5 ? { fly: () => {}, layEggs: () => {} } as Bird : { swim: () => {}, layEggs: () => {} } as Fish;
+  return Math.random() > 0.5
+    ? ({ fly: () => {}, layEggs: () => {} } as Bird)
+    : ({ swim: () => {}, layEggs: () => {} } as Fish);
 }
 
 let pet = getSmallPet();
 
-if ("fly" in pet) {
+if ('fly' in pet) {
   // 此处 pet 被收窄为 Bird 类型
   pet.fly();
 } else {
@@ -374,15 +381,17 @@ if ("fly" in pet) {
 当联合类型包含字面量类型（如字符串、数字字面量）时，直接检查该字面量即可收窄类型。
 
 ```typescript
-type Result = { status: "success"; data: string[] } | { status: "error"; message: string };
+type Result = { status: 'success'; data: string[] } | { status: 'error'; message: string };
 
 function handleResult(result: Result) {
-  switch (result.status) { // 检查字面量属性
-    case "success":
+  switch (
+    result.status // 检查字面量属性
+  ) {
+    case 'success':
       // 此处 result 被收窄为 { status: "success"; data: string[] }
-      console.log(result.data.join(", "));
+      console.log(result.data.join(', '));
       break;
-    case "error":
+    case 'error':
       // 此处 result 被收窄为 { status: "error"; message: string }
       console.error(result.message);
       break;
@@ -405,7 +414,8 @@ interface Dog {
   bark(): void;
 }
 
-function isCat(animal: Cat | Dog): animal is Cat { // 类型谓词
+function isCat(animal: Cat | Dog): animal is Cat {
+  // 类型谓词
   // 检查是否存在猫特有的方法
   return (animal as Cat).meow !== undefined;
 }
@@ -423,8 +433,8 @@ function animalSound(animal: Cat | Dog) {
 
 **最佳实践**：
 
-* 优先使用内置的类型守卫（`typeof`, `instanceof`, `in`）。
-* 对于复杂的对象结构判断，定义自定义类型守卫是保持代码清晰和类型安全的最佳方式。
+- 优先使用内置的类型守卫（`typeof`, `instanceof`, `in`）。
+- 对于复杂的对象结构判断，定义自定义类型守卫是保持代码清晰和类型安全的最佳方式。
 
 ## 最佳实践总结
 

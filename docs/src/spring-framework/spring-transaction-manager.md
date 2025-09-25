@@ -95,7 +95,7 @@ Spring 为不同的持久化技术提供了相应的事务管理器实现：
 </bean>
 
 <!-- 配置事务管理器 -->
-<bean id="transactionManager" 
+<bean id="transactionManager"
       class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
 </bean>
@@ -111,7 +111,7 @@ Spring 为不同的持久化技术提供了相应的事务管理器实现：
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.example")
 public class AppConfig {
-    
+
     @Bean
     public DataSource dataSource() {
         // 创建并配置数据源
@@ -122,7 +122,7 @@ public class AppConfig {
         dataSource.setPassword("password");
         return dataSource;
     }
-    
+
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
@@ -136,7 +136,7 @@ public class AppConfig {
 @Configuration
 @EnableTransactionManagement
 public class TransactionConfig {
-    
+
     // 创建数据库连接池
     @Bean
     public DataSource getDataSource() {
@@ -147,7 +147,7 @@ public class TransactionConfig {
         dataSource.setPassword("root");
         return dataSource;
     }
-    
+
     // 创建 JdbcTemplate 对象
     @Bean
     public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
@@ -155,7 +155,7 @@ public class TransactionConfig {
         jdbcTemplate.setDataSource(dataSource);
         return jdbcTemplate;
     }
-    
+
     // 创建事务管理器
     @Bean
     public PlatformTransactionManager getTransactionManager(DataSource dataSource) {
@@ -170,38 +170,38 @@ public class TransactionConfig {
 
 Spring 定义了 7 种事务传播行为：
 
-| 传播行为 | 说明 | 适用场景 |
-|---------|------|---------|
-| **REQUIRED** | 如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入这个事务中 | 最常见的选择，适用于大多数操作 |
-| **SUPPORTS** | 如果当前有事务，则加入该事务，如果没有事务，则以非事务方式执行 | 查询操作 |
-| **MANDATORY** | 如果当前有事务，则加入该事务，如果没有事务，则抛出异常 | 必须由事务调用的方法 |
-| **REQUIRES_NEW** | 新建事务，如果当前存在事务，则挂起当前事务 | 独立操作（如日志记录） |
-| **NOT_SUPPORTED** | 以非事务方式执行操作，如果当前存在事务，则挂起当前事务 | 不涉及数据修改的操作 |
-| **NEVER** | 以非事务方式执行，如果当前存在事务，则抛出异常 | 只读操作 |
-| **NESTED** | 如果当前没有事务，则行为类似于 REQUIRED。如果当前存在事务，则在嵌套事务内执行 | 复杂业务中的部分回滚 |
+| 传播行为          | 说明                                                                          | 适用场景                       |
+| ----------------- | ----------------------------------------------------------------------------- | ------------------------------ |
+| **REQUIRED**      | 如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入这个事务中      | 最常见的选择，适用于大多数操作 |
+| **SUPPORTS**      | 如果当前有事务，则加入该事务，如果没有事务，则以非事务方式执行                | 查询操作                       |
+| **MANDATORY**     | 如果当前有事务，则加入该事务，如果没有事务，则抛出异常                        | 必须由事务调用的方法           |
+| **REQUIRES_NEW**  | 新建事务，如果当前存在事务，则挂起当前事务                                    | 独立操作（如日志记录）         |
+| **NOT_SUPPORTED** | 以非事务方式执行操作，如果当前存在事务，则挂起当前事务                        | 不涉及数据修改的操作           |
+| **NEVER**         | 以非事务方式执行，如果当前存在事务，则抛出异常                                | 只读操作                       |
+| **NESTED**        | 如果当前没有事务，则行为类似于 REQUIRED。如果当前存在事务，则在嵌套事务内执行 | 复杂业务中的部分回滚           |
 
 ### 4.1 传播行为代码示例
 
 ```java
 @Service
 public class BankingService {
-    
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void transfer(Account from, Account to, BigDecimal amount) {
         withdraw(from, amount);
         deposit(to, amount);
     }
-    
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void withdraw(Account account, BigDecimal amount) {
         // 扣款逻辑
         account.setBalance(account.getBalance().subtract(amount));
         accountRepository.save(account);
-        
+
         // 记录日志
         auditService.logWithdrawal(account, amount);
     }
-    
+
     @Transactional(propagation = Propagation.NESTED)
     public void deposit(Account account, BigDecimal amount) {
         // 存款逻辑
@@ -219,13 +219,13 @@ public class BankingService {
 
 Spring 支持的标准事务隔离级别：
 
-| 隔离级别 | 脏读 | 不可重复读 | 幻读 | 性能影响 | 说明 |
-|---------|------|------------|------|---------|------|
-| **READ_UNCOMMITTED** | 可能 | 可能 | 可能 | 最低 | 允许读取未提交的数据变更 |
-| **READ_COMMITTED** | 不可能 | 可能 | 可能 | 中等 | 只能读取已提交的数据变更 |
-| **REPEATABLE_READ** | 不可能 | 不可能 | 可能 | 较高 | 确保同一事务中多次读取同样数据结果一致 |
-| **SERIALIZABLE** | 不可能 | 不可能 | 不可能 | 最高 | 完全串行化执行，最高隔离级别 |
-| **DEFAULT** | - | - | - | - | 使用底层数据库的默认隔离级别 |
+| 隔离级别             | 脏读   | 不可重复读 | 幻读   | 性能影响 | 说明                                   |
+| -------------------- | ------ | ---------- | ------ | -------- | -------------------------------------- |
+| **READ_UNCOMMITTED** | 可能   | 可能       | 可能   | 最低     | 允许读取未提交的数据变更               |
+| **READ_COMMITTED**   | 不可能 | 可能       | 可能   | 中等     | 只能读取已提交的数据变更               |
+| **REPEATABLE_READ**  | 不可能 | 不可能     | 可能   | 较高     | 确保同一事务中多次读取同样数据结果一致 |
+| **SERIALIZABLE**     | 不可能 | 不可能     | 不可能 | 最高     | 完全串行化执行，最高隔离级别           |
+| **DEFAULT**          | -      | -          | -      | -        | 使用底层数据库的默认隔离级别           |
 
 ### 5.2 并发问题说明
 
@@ -238,13 +238,13 @@ Spring 支持的标准事务隔离级别：
 ```java
 @Service
 public class FinancialService {
-    
+
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public BigDecimal getAccountBalance(Long accountId) {
         // 读取账户余额
         return accountRepository.getBalance(accountId);
     }
-    
+
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public BigDecimal calculateTotalAssets(Long userId) {
         // 复杂计算需要多次读取相同数据
@@ -252,7 +252,7 @@ public class FinancialService {
         BigDecimal investments = investmentService.getPortfolioValue(userId);
         return cash.add(investments);
     }
-    
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void executeCriticalTransaction(Transaction transaction) {
         // 关键金融交易，需要最高级别的隔离
@@ -273,7 +273,7 @@ Spring 声明式事务默认只在抛出 `RuntimeException` 和 `Error` 时回�
 ```java
 @Service
 public class BusinessService {
-    
+
     @Transactional(
         rollbackFor = {BusinessException.class, InsufficientFundsException.class},
         noRollbackFor = {ValidationException.class}
@@ -295,16 +295,16 @@ public class BusinessService {
 ```java
 @Service
 public class OrderProcessingService {
-    
+
     @Transactional
     public void processOrder(Order order) {
         try {
             // 嵌套事务 - 库存预留
             inventoryService.reserveItems(order);
-            
+
             // 嵌套事务 - 支付处理
             paymentService.processPayment(order);
-            
+
         } catch (InventoryException ex) {
             // 库存异常仅回滚库存操作
             handleInventoryFailure();
@@ -316,7 +316,7 @@ public class OrderProcessingService {
 
 @Service
 public class InventoryService {
-    
+
     @Transactional(propagation = Propagation.NESTED)
     public void reserveItems(Order order) {
         // 库存预留逻辑
@@ -334,30 +334,30 @@ public class InventoryService {
 ```java
 @Service
 public class UserService {
-    
+
     @Autowired
     private PlatformTransactionManager transactionManager;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     public void complexOperation(User user) {
         // 定义事务属性
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         definition.setTimeout(30); // 30秒超时
-        
+
         // 获取事务状态
         TransactionStatus status = transactionManager.getTransaction(definition);
-        
+
         try {
             // 业务操作1
             userRepository.updateProfile(user);
-            
+
             // 业务操作2
             auditService.logOperation(user);
-            
+
             // 提交事务
             transactionManager.commit(status);
         } catch (Exception ex) {
@@ -376,19 +376,19 @@ public class UserService {
 ```java
 @Service
 public class OrderService {
-    
+
     @Autowired
     private TransactionTemplate transactionTemplate;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     public Order createOrder(Order order) {
         // 配置TransactionTemplate
         transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         transactionTemplate.setTimeout(30);
-        
+
         // 执行事务操作
         return transactionTemplate.execute(status -> {
             // 业务逻辑
@@ -397,7 +397,7 @@ public class OrderService {
             return order;
         });
     }
-    
+
     public void processMultipleOrders(List<Order> orders) {
         transactionTemplate.executeWithoutResult(status -> {
             for (Order order : orders) {
@@ -431,25 +431,25 @@ public class OrderService {
     noRollbackFor = {ValidationException.class}
 )
 public class OrderService {
-    
+
     @Transactional(readOnly = true)
     public Order getOrderById(Long orderId) {
         // 只读查询
         return orderRepository.findById(orderId);
     }
-    
+
     public Order createOrder(Order order) {
         // 写操作，使用类级别的事务配置
         validateOrder(order);
         return orderRepository.save(order);
     }
-    
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateInventory(Order order) {
         // 独立事务更新库存
         inventoryService.reduceStock(order);
     }
-    
+
     @Transactional(propagation = Propagation.NESTED)
     public void processPayment(Order order) {
         // 嵌套事务处理支付
@@ -462,7 +462,7 @@ public class OrderService {
 
 ```xml
 <!-- 配置事务管理器 -->
-<bean id="transactionManager" 
+<bean id="transactionManager"
       class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
 </bean>
@@ -474,13 +474,13 @@ public class OrderService {
         <tx:method name="get*" read-only="true"/>
         <tx:method name="find*" read-only="true"/>
         <tx:method name="search*" read-only="true"/>
-        
+
         <!-- 其他方法使用默认事务设置 -->
         <tx:method name="save*" propagation="REQUIRED"/>
         <tx:method name="update*" propagation="REQUIRED"/>
         <tx:method name="delete*" propagation="REQUIRED"/>
         <tx:method name="process*" propagation="REQUIRED" timeout="120"/>
-        
+
         <!-- 特殊方法使用独立事务 -->
         <tx:method name="audit*" propagation="REQUIRES_NEW"/>
     </tx:attributes>
@@ -488,7 +488,7 @@ public class OrderService {
 
 <!-- 配置AOP，将事务通知应用到Service层 -->
 <aop:config>
-    <aop:pointcut id="serviceMethods" 
+    <aop:pointcut id="serviceMethods"
                   expression="execution(* com.example.service.*.*(..))"/>
     <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
 </aop:config>
@@ -502,33 +502,33 @@ public class OrderService {
 
 1. **合理设置超时时间**：避免长时间事务阻塞
 
-    ```java
-    @Transactional(timeout = 30) // 30秒超时
-    public void processData() {
-        // 业务逻辑
-    }
-    ```
+   ```java
+   @Transactional(timeout = 30) // 30秒超时
+   public void processData() {
+       // 业务逻辑
+   }
+   ```
 
 2. **使用只读事务优化查询性能**：
 
-    ```java
-    @Transactional(readOnly = true)
-    public List<Order> findOrdersByUser(User user) {
-        // 查询操作
-        return orderRepository.findByUser(user);
-    }
-    ```
+   ```java
+   @Transactional(readOnly = true)
+   public List<Order> findOrdersByUser(User user) {
+       // 查询操作
+       return orderRepository.findByUser(user);
+   }
+   ```
 
 3. **避免大事务**：将长事务拆分为多个小事务
 
 4. **明确指定异常回滚规则**：
 
-    ```java
-    @Transactional(rollbackFor = {BusinessException.class, DataAccessException.class})
-    public void executeBusinessOperation() {
-        // 业务逻辑
-    }
-    ```
+   ```java
+   @Transactional(rollbackFor = {BusinessException.class, DataAccessException.class})
+   public void executeBusinessOperation() {
+       // 业务逻辑
+   }
+   ```
 
 ### 9.2 事务使用最佳实践
 
@@ -536,50 +536,50 @@ public class OrderService {
 
 2. **避免自调用问题**：同一个类中方法调用 `@Transactional` 会失效
 
-    ```java
-    // 错误示例 - 事务注解失效
-    public class ServiceA {
-        public void methodA() {
-            methodB(); // 事务注解失效
-        }
-        
-        @Transactional
-        public void methodB() {
-            // ...
-        }
-    }
-    
-    // 解决方案 - 通过代理对象调用
-    public class ServiceA {
-        @Autowired
-        private ServiceA selfProxy; // 注入自身代理
-        
-        public void methodA() {
-            selfProxy.methodB(); // 正确的事务调用
-        }
-        
-        @Transactional
-        public void methodB() {
-            // ...
-        }
-    }
-    ```
+   ```java
+   // 错误示例 - 事务注解失效
+   public class ServiceA {
+       public void methodA() {
+           methodB(); // 事务注解失效
+       }
+
+       @Transactional
+       public void methodB() {
+           // ...
+       }
+   }
+
+   // 解决方案 - 通过代理对象调用
+   public class ServiceA {
+       @Autowired
+       private ServiceA selfProxy; // 注入自身代理
+
+       public void methodA() {
+           selfProxy.methodB(); // 正确的事务调用
+       }
+
+       @Transactional
+       public void methodB() {
+           // ...
+       }
+   }
+   ```
 
 3. **正确处理异常**：
 
-    ```java
-    @Transactional
-    public void updateData() {
-        try {
-            // 可能抛出SQLException的操作
-            jdbcTemplate.update(...);
-        } catch (DataAccessException ex) {
-            // 捕获异常导致回滚失效
-            // 必须重新抛出RuntimeException或标记回滚
-            throw new BusinessException(ex);
-        }
-    }
-    ```
+   ```java
+   @Transactional
+   public void updateData() {
+       try {
+           // 可能抛出SQLException的操作
+           jdbcTemplate.update(...);
+       } catch (DataAccessException ex) {
+           // 捕获异常导致回滚失效
+           // 必须重新抛出RuntimeException或标记回滚
+           throw new BusinessException(ex);
+       }
+   }
+   ```
 
 4. **选择合适的事务传播行为**：根据业务需求选择传播行为
 
@@ -638,11 +638,11 @@ Spring Framework 的 **事务管理机制** 为开发者提供了强大而灵活
 
 ## 附录：常用数据库默认隔离级别
 
-| 数据库 | 默认隔离级别 | 说明 |
-|--------|--------------|------|
-| MySQL | REPEATABLE_READ | 可重复读 |
-| Oracle | READ_COMMITTED | 读已提交 |
-| SQL Server | READ_COMMITTED | 读已提交 |
-| PostgreSQL | READ_COMMITTED | 读已提交 |
+| 数据库     | 默认隔离级别    | 说明     |
+| ---------- | --------------- | -------- |
+| MySQL      | REPEATABLE_READ | 可重复读 |
+| Oracle     | READ_COMMITTED  | 读已提交 |
+| SQL Server | READ_COMMITTED  | 读已提交 |
+| PostgreSQL | READ_COMMITTED  | 读已提交 |
 
 **注意**：不同数据库对隔离级别的实现和支持程度可能有所不同，在实际应用中应根据具体数据库特性进行配置。

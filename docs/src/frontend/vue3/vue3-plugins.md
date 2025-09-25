@@ -15,9 +15,10 @@ Vue 3 在插件机制上保持了与 Vue 2 的兼容性，但其基于 `createAp
 一个 Vue 插件本质上是一个暴露 `install` 方法的对象（或者就是一个函数本身，该函数被视为 `install` 方法）。当通过 `app.use()` 方法使用插件时，会自动调用该 `install` 方法。
 
 **核心概念：**
+
 - **`install` 方法**：这是插件的核心。它接收两个参数：
-    1. `app`: Vue 应用实例（由 `createApp` 创建）。
-    2. `options`: (可选) 传递给插件的配置对象。
+  1. `app`: Vue 应用实例（由 `createApp` 创建）。
+  2. `options`: (可选) 传递给插件的配置对象。
 - **全局性**：在 `install` 方法内部，你可以操作 `app` 实例，注册全局资源（如组件、指令、混入）、注入全局属性或提供全局服务。
 
 ## 3. 插件的基本结构
@@ -32,7 +33,7 @@ const MyPlugin = {
     // 1. 添加全局方法或属性
     app.config.globalProperties.$myMethod = () => {
       // 逻辑...
-    }
+    };
 
     // 2. 注册全局组件
     // app.component('comp-name', MyComponent)
@@ -45,29 +46,29 @@ const MyPlugin = {
 
     // 5. 其他操作，例如使用混入、路由守卫等
     // app.mixin({ ... })
-  }
-}
+  },
+};
 
-export default MyPlugin
+export default MyPlugin;
 ```
 
 使用插件：
 
 ```javascript
 // main.js
-import { createApp } from 'vue'
-import App from './App.vue'
-import MyPlugin from './plugins/my-plugin'
+import { createApp } from 'vue';
+import App from './App.vue';
+import MyPlugin from './plugins/my-plugin';
 
-const app = createApp(App)
+const app = createApp(App);
 
 // 使用插件，可以传入可选的配置选项
 app.use(MyPlugin, {
   // 一些可选的配置
-  someOption: true
-})
+  someOption: true,
+});
 
-app.mount('#app')
+app.mount('#app');
 ```
 
 ## 4. 开发一个完整的插件：示例与实践
@@ -83,15 +84,15 @@ app.mount('#app')
 export default {
   install(app, options) {
     // 注入一个全局可用的版本号
-    app.config.globalProperties.$version = '1.0.0'
+    app.config.globalProperties.$version = '1.0.0';
 
     // 注入一个带配置的全局方法
-    const greetings = options?.greetings || {}
+    const greetings = options?.greetings || {};
     app.config.globalProperties.$greet = (name) => {
-      return `${greetings.hello || 'Hello'}, ${name}!`
-    }
-  }
-}
+      return `${greetings.hello || 'Hello'}, ${name}!`;
+    };
+  },
+};
 ```
 
 在组件中使用：
@@ -131,28 +132,28 @@ console.log(greet?.(‘Developer’))
 // 定义一个 v-focus 指令
 const focusDirective = {
   mounted(el) {
-    el.focus()
-  }
-}
+    el.focus();
+  },
+};
 
 // 定义一个 v-highlight 指令，支持配置颜色
 const createHighlightDirective = (defaultColor = 'yellow') => {
   return {
     mounted(el, binding) {
-      el.style.backgroundColor = binding.value || defaultColor
+      el.style.backgroundColor = binding.value || defaultColor;
     },
     updated(el, binding) {
-      el.style.backgroundColor = binding.value || defaultColor
-    }
-  }
-}
+      el.style.backgroundColor = binding.value || defaultColor;
+    },
+  };
+};
 
 export default {
   install(app, options) {
-    app.directive('focus', focusDirective)
-    app.directive('highlight', createHighlightDirective(options?.highlightColor))
-  }
-}
+    app.directive('focus', focusDirective);
+    app.directive('highlight', createHighlightDirective(options?.highlightColor));
+  },
+};
 ```
 
 使用：
@@ -160,14 +161,14 @@ export default {
 ```javascript
 // main.js
 app.use(directivesPlugin, {
-  highlightColor: 'lightblue'
-})
+  highlightColor: 'lightblue',
+});
 ```
 
 ```vue
 <!-- MyComponent.vue -->
 <template>
-  <input v-focus type="text" placeholder="这个输入框会自动聚焦">
+  <input v-focus type="text" placeholder="这个输入框会自动聚焦" />
   <p v-highlight="'#ffa'">这个段落会被高亮显示</p>
   <p v-highlight>这个段落会使用默认颜色高亮</p>
 </template>
@@ -179,33 +180,33 @@ app.use(directivesPlugin, {
 
 ```javascript
 // plugins/useToast.js
-import { ref, provide, inject } from 'vue'
+import { ref, provide, inject } from 'vue';
 
 // 创建一个唯一的 Symbol 作为 key
-const ToastSymbol = Symbol('toast')
+const ToastSymbol = Symbol('toast');
 
 // 在插件中提供状态的 Provider
 export function provideToast(config = {}) {
-  const toasts = ref([])
-  const defaultDuration = config.duration || 3000
+  const toasts = ref([]);
+  const defaultDuration = config.duration || 3000;
 
   function showToast(message, type = 'info', duration = defaultDuration) {
-    const id = Symbol('toast-id')
-    const newToast = { id, message, type, duration }
-    toasts.value.push(newToast)
+    const id = Symbol('toast-id');
+    const newToast = { id, message, type, duration };
+    toasts.value.push(newToast);
 
     // 自动关闭
     if (duration > 0) {
       setTimeout(() => {
-        removeToast(id)
-      }, duration)
+        removeToast(id);
+      }, duration);
     }
   }
 
   function removeToast(id) {
-    const index = toasts.value.findIndex(t => t.id === id)
+    const index = toasts.value.findIndex((t) => t.id === id);
     if (index > -1) {
-      toasts.value.splice(index, 1)
+      toasts.value.splice(index, 1);
     }
   }
 
@@ -213,31 +214,31 @@ export function provideToast(config = {}) {
   provide(ToastSymbol, {
     toasts,
     showToast,
-    removeToast
-  })
+    removeToast,
+  });
 
-  return { toasts, showToast } // 可选返回，供根组件使用
+  return { toasts, showToast }; // 可选返回，供根组件使用
 }
 
 // 在组件中注入使用的函数
 export function useToast() {
-  const toastContext = inject(ToastSymbol)
+  const toastContext = inject(ToastSymbol);
 
   if (!toastContext) {
-    throw new Error('useToast must be used within a component that calls provideToast!')
+    throw new Error('useToast must be used within a component that calls provideToast!');
   }
 
-  return toastContext
+  return toastContext;
 }
 
 // 也可以包装成传统插件形式
 export const toastPlugin = {
   install(app, config) {
-    const provided = provideToast(config)
+    const provided = provideToast(config);
     // 如果需要，也可以挂载到全局属性
     // app.config.globalProperties.$toast = provided.showToast
-  }
-}
+  },
+};
 ```
 
 在应用根组件提供状态：
@@ -252,11 +253,11 @@ export const toastPlugin = {
 </template>
 
 <script setup>
-import { provideToast } from './plugins/useToast'
-import ToastContainer from './components/ToastContainer.vue'
+import { provideToast } from './plugins/useToast';
+import ToastContainer from './components/ToastContainer.vue';
 
 // 在应用顶层提供 Toast 功能
-provideToast({ duration: 5000 })
+provideToast({ duration: 5000 });
 </script>
 ```
 
@@ -269,13 +270,13 @@ provideToast({ duration: 5000 })
 </template>
 
 <script setup>
-import { useToast } from '../plugins/useToast'
+import { useToast } from '../plugins/useToast';
 
-const { showToast } = useToast()
+const { showToast } = useToast();
 
 const showSuccess = () => {
-  showToast('操作成功！', 'success')
-}
+  showToast('操作成功！', 'success');
+};
 </script>
 ```
 
@@ -299,9 +300,9 @@ const showSuccess = () => {
 </template>
 
 <script setup>
-import { useToast } from '../plugins/useToast'
+import { useToast } from '../plugins/useToast';
 
-const { toasts, removeToast } = useToast()
+const { toasts, removeToast } = useToast();
 </script>
 
 <style scoped>
@@ -319,16 +320,26 @@ const { toasts, removeToast } = useToast()
   cursor: pointer;
   min-width: 200px;
 }
-.toast-success { background-color: #4caf50; }
-.toast-error { background-color: #f44336; }
-.toast-info { background-color: #2196f3; }
-.toast-warning { background-color: #ff9800; }
+.toast-success {
+  background-color: #4caf50;
+}
+.toast-error {
+  background-color: #f44336;
+}
+.toast-info {
+  background-color: #2196f3;
+}
+.toast-warning {
+  background-color: #ff9800;
+}
 
 /* 过渡动画 */
-.toast-enter-active, .toast-leave-active {
+.toast-enter-active,
+.toast-leave-active {
   transition: all 0.5s ease;
 }
-.toast-enter-from, .toast-leave-to {
+.toast-enter-from,
+.toast-leave-to {
   opacity: 0;
   transform: translateX(100%);
 }
@@ -345,11 +356,11 @@ const { toasts, removeToast } = useToast()
     // types/shims-vue.d.ts 或单独的类型文件
     declare module 'vue' {
       interface ComponentCustomProperties {
-        $version: string
-        $greet: (name: string) => string
+        $version: string;
+        $greet: (name: string) => string;
       }
     }
-    export {} // 确保这是一个模块
+    export {}; // 确保这是一个模块
     ```
 5.  **优雅降级**：检查插件所需的环境或依赖（例如，一个路由插件需要 Vue Router），并在缺失时给出友好的警告或错误信息。
 6.  **利用 Composition API**：对于提供响应式状态或逻辑的插件，优先使用 `provide` / `inject` 和 Composables 模式，而不是旧的全局混入 (mixin) 或属性模式。这使代码更清晰、更可维护，并且与 `<script setup>` 兼容性更好。

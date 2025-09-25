@@ -55,13 +55,13 @@ npm install --save-dev vite-plugin-prettier
 }
 ```
 
-* `semi`: 语句末尾不加分号。
-* `singleQuote`: 使用单引号。
-* `printWidth`: 每行代码最大长度。
-* `trailingComma`: 多行结构尽可能加上尾随逗号。
-* `tabWidth`: 缩进空格数。
-* `useTabs`: 使用空格而非 Tab 缩进。
-* `endOfLine`: 根据环境自动识别换行符（`lf` 或 `crlf`）。
+- `semi`: 语句末尾不加分号。
+- `singleQuote`: 使用单引号。
+- `printWidth`: 每行代码最大长度。
+- `trailingComma`: 多行结构尽可能加上尾随逗号。
+- `tabWidth`: 缩进空格数。
+- `useTabs`: 使用空格而非 Tab 缩进。
+- `endOfLine`: 根据环境自动识别换行符（`lf` 或 `crlf`）。
 
 同时，建议创建一个 `.prettierignore` 文件，告诉 Prettier 哪些文件或目录不需要格式化。
 
@@ -121,9 +121,9 @@ npm install --save-dev vite-plugin-prettier
 **`vite.config.ts`**
 
 ```typescript
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue' // 以 Vue 项目为例
-import vitePrettier from 'vite-plugin-prettier'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue'; // 以 Vue 项目为例
+import vitePrettier from 'vite-plugin-prettier';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -139,7 +139,7 @@ export default defineConfig({
       build: true,
     }),
   ],
-})
+});
 ```
 
 配置好后，运行 `vite build` 时，如果代码不符合 Prettier 规范，构建过程将会**失败**并输出错误信息。这能有效保证生产构建产物的代码风格一致性。
@@ -150,8 +150,8 @@ export default defineConfig({
 
 为了彻底解决 Prettier（格式化）和 ESLint（代码质量）可能存在的规则冲突，我们需要使用 `eslint-plugin-prettier` 和 `eslint-config-prettier`。
 
-* `eslint-plugin-prettier`: 将 Prettier 作为 ESLint 规则运行，将格式化问题以 ESLint 错误的形式呈现。
-* `eslint-config-prettier`: 关闭所有与 Prettier 冲突的不必要的或可能导致问题的 ESLint 规则。
+- `eslint-plugin-prettier`: 将 Prettier 作为 ESLint 规则运行，将格式化问题以 ESLint 错误的形式呈现。
+- `eslint-config-prettier`: 关闭所有与 Prettier 冲突的不必要的或可能导致问题的 ESLint 规则。
 
 首先，确保你的 `.eslintrc.cjs` (或对应的 ESLint 配置文件) 正确扩展了 Prettier 的配置。
 
@@ -165,14 +165,14 @@ module.exports = {
     '@vue/eslint-config-typescript', // 如果是 Vue + TS 项目
     '@vue/eslint-config-prettier', // 这通常已经包含了 eslint-config-prettier
     // 确保 Prettier 的配置在最后，以便覆盖其他扩展中的格式规则
-    'plugin:prettier/recommended' // 这等价于 extends: ['prettier'] 和 plugins: ['prettier']
+    'plugin:prettier/recommended', // 这等价于 extends: ['prettier'] 和 plugins: ['prettier']
   ],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   rules: {
     // 你的其他 ESLint 规则
-    'prettier/prettier': 'error' // 由 plugin:prettier/recommended 自动添加
-  }
-}
+    'prettier/prettier': 'error', // 由 plugin:prettier/recommended 自动添加
+  },
+};
 ```
 
 `plugin:prettier/recommended` 做了三件事：
@@ -204,9 +204,9 @@ module.exports = {
 }
 ```
 
-* `npm run lint:eslint`: 运行 ESLint 并自动修复。
-* `npm run lint:prettier`: 格式化所有指定类型的文件。
-* `npm run lint:check`: 检查文件格式是否符合规范，但不修改文件（常用于 CI）。
+- `npm run lint:eslint`: 运行 ESLint 并自动修复。
+- `npm run lint:prettier`: 格式化所有指定类型的文件。
+- `npm run lint:check`: 检查文件格式是否符合规范，但不修改文件（常用于 CI）。
 
 ### 5.2 通过 Git Hooks 强制格式化
 
@@ -226,10 +226,7 @@ npm pkg set scripts.prepare="husky install"
 ```json
 {
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,vue,css,scss,html,md,json}": [
-      "prettier --write",
-      "eslint --fix" 
-    ]
+    "*.{js,jsx,ts,tsx,vue,css,scss,html,md,json}": ["prettier --write", "eslint --fix"]
   }
 }
 ```

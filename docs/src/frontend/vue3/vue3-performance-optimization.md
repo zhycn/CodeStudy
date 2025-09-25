@@ -23,24 +23,24 @@ Vue3 在架构层面进行了多项重大优化：
 
 ```javascript
 // 使用 Composition API 优化逻辑组织
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
 
 export default {
   setup() {
-    const count = ref(0)
-    const double = computed(() => count.value * 2)
-    
+    const count = ref(0);
+    const double = computed(() => count.value * 2);
+
     onMounted(() => {
-      console.log('Component mounted')
-    })
-    
+      console.log('Component mounted');
+    });
+
     function increment() {
-      count.value++
+      count.value++;
     }
-    
-    return { count, double, increment }
-  }
-}
+
+    return { count, double, increment };
+  },
+};
 ```
 
 ## 编译时优化策略
@@ -53,7 +53,7 @@ Vue3 编译器会自动提升静态节点，避免重复创建
 <div>
   <!-- 静态节点会被提升到渲染函数外部 -->
   <div class="header">Static Header</div>
-  
+
   <!-- 动态内容 -->
   <div>{{ dynamicContent }}</div>
 </div>
@@ -65,9 +65,14 @@ Vue3 编译器会自动提升静态节点，避免重复创建
 
 ```javascript
 // 编译生成的代码示例
-createElementVNode("div", {
-  class: normalizeClass({ active: isActive })
-}, null, 2 /* CLASS */)
+createElementVNode(
+  'div',
+  {
+    class: normalizeClass({ active: isActive }),
+  },
+  null,
+  2 /* CLASS */
+);
 ```
 
 ### 3. 树结构拍平 (Tree Flattening)
@@ -76,14 +81,16 @@ createElementVNode("div", {
 
 ```javascript
 // 优化前：深层嵌套
-<A>
-  <B>
-    <C/>
-  </B>
-</A>
-
-// 优化后：拍平的虚拟DOM树
-[A, B, C]
+(
+  <A>
+    <B>
+      <C />
+    </B>
+  </A>
+)[
+  // 优化后：拍平的虚拟DOM树
+  (A, B, C)
+];
 ```
 
 ## 运行时性能优化技巧
@@ -132,9 +139,7 @@ createElementVNode("div", {
 <template>
   <ul>
     <!-- 使用唯一稳定的 key -->
-    <li v-for="item in items" :key="item.id">
-      {{ item.name }}
-    </li>
+    <li v-for="item in items" :key="item.id">{{ item.name }}</li>
   </ul>
 </template>
 ```
@@ -146,17 +151,15 @@ createElementVNode("div", {
 使用 `defineAsyncComponent` 减少初始包大小
 
 ```javascript
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue';
 
-const AsyncComponent = defineAsyncComponent(() =>
-  import('./components/HeavyComponent.vue')
-)
+const AsyncComponent = defineAsyncComponent(() => import('./components/HeavyComponent.vue'));
 
 export default {
   components: {
-    AsyncComponent
-  }
-}
+    AsyncComponent,
+  },
+};
 ```
 
 ### 2. 合理使用 `keep-alive`
@@ -180,10 +183,10 @@ const router = createRouter({
   routes: [
     {
       path: '/dashboard',
-      component: () => import('./views/Dashboard.vue')
-    }
-  ]
-})
+      component: () => import('./views/Dashboard.vue'),
+    },
+  ],
+});
 ```
 
 ## 状态管理与数据优化
@@ -194,10 +197,10 @@ const router = createRouter({
 
 ```javascript
 // 使用 computed 精确控制更新
-const user = reactive({ name: 'John', age: 30 })
+const user = reactive({ name: 'John', age: 30 });
 
 // 仅当 age 变化时更新
-const age = computed(() => user.age)
+const age = computed(() => user.age);
 ```
 
 ### 2. 合理使用 `shallowRef` 和 `shallowReactive`
@@ -205,16 +208,18 @@ const age = computed(() => user.age)
 减少深层响应式带来的性能开销
 
 ```javascript
-import { shallowRef, shallowReactive } from 'vue'
+import { shallowRef, shallowReactive } from 'vue';
 
 // 仅对顶层属性响应
-const largeList = shallowRef([])
+const largeList = shallowRef([]);
 
 // 只跟踪顶层字段
 const config = shallowReactive({
   theme: 'dark',
-  settings: { /* 深层对象不响应 */ }
-})
+  settings: {
+    /* 深层对象不响应 */
+  },
+});
 ```
 
 ### 3. 优化大型列表渲染
@@ -224,16 +229,8 @@ const config = shallowReactive({
 ```html
 <template>
   <!-- 使用虚拟滚动组件 -->
-  <RecycleScroller
-    class="scroller"
-    :items="largeList"
-    :item-size="50"
-    key-field="id"
-    v-slot="{ item }"
-  >
-    <div class="user">
-      {{ item.name }}
-    </div>
+  <RecycleScroller class="scroller" :items="largeList" :item-size="50" key-field="id" v-slot="{ item }">
+    <div class="user">{{ item.name }}</div>
   </RecycleScroller>
 </template>
 ```
@@ -261,10 +258,10 @@ module.exports = {
         chunks: 'all',
         minSize: 10000,
         maxSize: 250000,
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 ```
 
 ### 3. Gzip/Brotli 压缩
@@ -292,17 +289,17 @@ brotli_types text/plain text/css application/json application/javascript;
 自定义性能标记点
 
 ```javascript
-import { onMounted } from 'vue'
+import { onMounted } from 'vue';
 
 export default {
   setup() {
     onMounted(() => {
-      performance.mark('component-mounted')
+      performance.mark('component-mounted');
       // 业务逻辑...
-      performance.measure('component-init', 'component-mounted')
-    })
-  }
-}
+      performance.measure('component-init', 'component-mounted');
+    });
+  },
+};
 ```
 
 ### 4. Lighthouse 评分优化

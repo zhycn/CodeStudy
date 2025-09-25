@@ -21,44 +21,44 @@ PyPI (发音为 "pie-pee-eye")，也称作 **The Cheese Shop**，是一个存储
 
 1. **`pip`**: Python 的包安装器。它是大多数 Python 用户与 PyPI 交互的主要方式，用于从 PyPI 安装包。
 
-    ```bash
-    # 安装最新版本
-    pip install package_name
+   ```bash
+   # 安装最新版本
+   pip install package_name
 
-    # 安装指定版本
-    pip install package_name==1.0.4
+   # 安装指定版本
+   pip install package_name==1.0.4
 
-    # 升级包
-    pip install --upgrade package_name
+   # 升级包
+   pip install --upgrade package_name
 
-    # 从 requirements.txt 安装所有依赖
-    pip install -r requirements.txt
-    ```
+   # 从 requirements.txt 安装所有依赖
+   pip install -r requirements.txt
+   ```
 
 2. **`build`**: 一个简单的 PEP 517 兼容的包构建器。它用于从 `pyproject.toml` 创建一个源代码分发包（sdist）和一个轮子文件（wheel）。
 
-    ```bash
-    # 安装 build
-    pip install build
+   ```bash
+   # 安装 build
+   pip install build
 
-    # 在项目根目录下运行，构建包
-    python -m build
-    ```
+   # 在项目根目录下运行，构建包
+   python -m build
+   ```
 
-    这将生成一个 `dist/` 目录，里面包含 `.tar.gz` (sdist) 和 `.whl` (wheel) 文件。
+   这将生成一个 `dist/` 目录，里面包含 `.tar.gz` (sdist) 和 `.whl` (wheel) 文件。
 
 3. **`twine`**: 一个用于将 Python 包安全地发布到 PyPI 的工具。它取代了旧式的 `setup.py upload` 命令，通过 HTTPS 上传，更加安全。
 
-    ```bash
-    # 安装 twine
-    pip install twine
+   ```bash
+   # 安装 twine
+   pip install twine
 
-    # 上传到 TestPyPI 进行测试
-    twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+   # 上传到 TestPyPI 进行测试
+   twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
-    # 上传到正式的 PyPI
-    twine upload dist/*
-    ```
+   # 上传到正式的 PyPI
+   twine upload dist/*
+   ```
 
 ## 3. 项目结构：`pyproject.toml` 是现代标准
 
@@ -152,53 +152,53 @@ plot = ["matplotlib>=3.0.0"]
 1. **准备账户**: 在 <https://pypi.org/account/register/> 和 <https://test.pypi.org/account/register/> 上注册账户。**强烈建议启用双因素认证 (2FA)**。
 
 2. **配置认证**: 不再推荐在命令行中输入密码。使用 API Token。
-    - 在 PyPI 账户设置中，生成一个 **API Token**，作用域（scope）限定为整个账户或单个项目。
-    - 在本地创建或编辑 `~/.pypirc` 文件，配置 token：
+   - 在 PyPI 账户设置中，生成一个 **API Token**，作用域（scope）限定为整个账户或单个项目。
+   - 在本地创建或编辑 `~/.pypirc` 文件，配置 token：
 
-      ```ini
-      [pypi]
-      username = __token__
-      password = pypi-YourAPITokenHere
+     ```ini
+     [pypi]
+     username = __token__
+     password = pypi-YourAPITokenHere
 
-      [testpypi]
-      username = __token__
-      password = pypi-YourTestPyPIAPITokenHere
-      ```
+     [testpypi]
+     username = __token__
+     password = pypi-YourTestPyPIAPITokenHere
+     ```
 
-    这将使 `twine` 自动使用 token 进行认证，更加安全。
+   这将使 `twine` 自动使用 token 进行认证，更加安全。
 
 3. **清理构建**: 确保每次构建都是从干净的状态开始。
 
-    ```bash
-    # 清理之前的构建文件
-    rm -rf dist/ build/ *.egg-info
-    ```
+   ```bash
+   # 清理之前的构建文件
+   rm -rf dist/ build/ *.egg-info
+   ```
 
 4. **构建包**:
 
-    ```bash
-    python -m build
-    ```
+   ```bash
+   python -m build
+   ```
 
-    检查 `dist/` 目录下的文件是否正确。
+   检查 `dist/` 目录下的文件是否正确。
 
 5. **上传到 TestPyPI (测试)**:
 
-    ```bash
-    twine upload --repository testpypi dist/*
-    ```
+   ```bash
+   twine upload --repository testpypi dist/*
+   ```
 
-    在 TestPyPI 上测试安装你的包：
+   在 TestPyPI 上测试安装你的包：
 
-    ```bash
-    pip install --index-url https://test.pypi.org/simple/ --no-deps my-awesome-package
-    ```
+   ```bash
+   pip install --index-url https://test.pypi.org/simple/ --no-deps my-awesome-package
+   ```
 
 6. **上传到正式 PyPI**:
 
-    ```bash
-    twine upload dist/*
-    ```
+   ```bash
+   twine upload dist/*
+   ```
 
 ### 4.2 版本管理最佳实践
 
@@ -213,9 +213,9 @@ plot = ["matplotlib>=3.0.0"]
 1. **使用 API Token 而非密码**。
 2. **启用 PyPI 账户的 2FA**。
 3. **谨慎处理依赖**:
-    - 定期运行 `pip list --outdated` 检查更新。
-    - 使用 `pip-audit` 检查依赖中已知的漏洞。
-    - 在项目中考虑使用 `pip-compile` (来自 `pip-tools`) 来生成精确的 `requirements.txt`，或者使用 `poetry`/`pdm` 这类现代工具来管理依赖锁文件。
+   - 定期运行 `pip list --outdated` 检查更新。
+   - 使用 `pip-audit` 检查依赖中已知的漏洞。
+   - 在项目中考虑使用 `pip-compile` (来自 `pip-tools`) 来生成精确的 `requirements.txt`，或者使用 `poetry`/`pdm` 这类现代工具来管理依赖锁文件。
 4. **发布时验证包内容**: 上传前，使用 `twine check dist/*` 检查你的包是否有常见的元数据错误。
 
 ## 5. 高级主题：打包 C 扩展

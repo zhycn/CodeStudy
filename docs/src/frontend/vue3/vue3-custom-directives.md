@@ -14,15 +14,15 @@ Vue 3 在兼容 Vue 2 自定义指令语法的基础上，对其生命周期钩�
 
 Vue 3 中的自定义指令拥有一组类似组件的生命周期钩子，用于在指令绑定的元素生命周期的不同阶段插入逻辑：
 
-| 钩子名称 (Vue 3) | 对应 Vue 2 钩子 | 调用时机 |
-| :--- | :--- | :--- |
-| **created** | - | 在元素的 attribute 或事件监听器被应用之前调用。 |
-| **beforeMount** | `bind` | 在指令第一次绑定到元素时调用，此时 DOM 还未插入父节点。 |
-| **mounted** | `inserted` | 在绑定元素的父组件及自身的 DOM 都挂载完成后调用。**这是执行 DOM 操作最常用的钩子。** |
-| **beforeUpdate** | `update` (Vue 2) | 在绑定元素的父组件更新**前**调用（但子组件可能已更新）。 |
-| **updated** | `componentUpdated` | 在绑定元素的父组件及**所有**子组件都更新**后**调用。 |
-| **beforeUnmount** | `unbind` | 在绑定元素的父组件卸载**前**调用。 |
-| **unmounted** | `unbind` | 在绑定元素的父组件卸载**后**调用。**这是执行清理操作（如移除事件监听器）最常用的钩子。** |
+| 钩子名称 (Vue 3)  | 对应 Vue 2 钩子    | 调用时机                                                                                 |
+| :---------------- | :----------------- | :--------------------------------------------------------------------------------------- |
+| **created**       | -                  | 在元素的 attribute 或事件监听器被应用之前调用。                                          |
+| **beforeMount**   | `bind`             | 在指令第一次绑定到元素时调用，此时 DOM 还未插入父节点。                                  |
+| **mounted**       | `inserted`         | 在绑定元素的父组件及自身的 DOM 都挂载完成后调用。**这是执行 DOM 操作最常用的钩子。**     |
+| **beforeUpdate**  | `update` (Vue 2)   | 在绑定元素的父组件更新**前**调用（但子组件可能已更新）。                                 |
+| **updated**       | `componentUpdated` | 在绑定元素的父组件及**所有**子组件都更新**后**调用。                                     |
+| **beforeUnmount** | `unbind`           | 在绑定元素的父组件卸载**前**调用。                                                       |
+| **unmounted**     | `unbind`           | 在绑定元素的父组件卸载**后**调用。**这是执行清理操作（如移除事件监听器）最常用的钩子。** |
 
 > **重要变化**：Vue 3 将 Vue 2 的 `bind` 和 `inserted` 合并为更直观的 `beforeMount` 和 `mounted`，并将 `unbind` 拆分为了 `beforeUnmount` 和 `unmounted`，使其与组件生命周期对齐。
 
@@ -57,7 +57,7 @@ app.directive('focus', {
   // 在绑定元素的父组件及自身的 DOM 都挂载后调用
   mounted(el) {
     el.focus(); // 使元素自动获得焦点
-  }
+  },
 });
 
 app.mount('#app');
@@ -66,7 +66,7 @@ app.mount('#app');
 ```vue
 <!-- 在任何组件的模板中即可使用 -->
 <template>
-  <input v-focus placeholder="这个 input 会自动聚焦">
+  <input v-focus placeholder="这个 input 会自动聚焦" />
 </template>
 ```
 
@@ -86,10 +86,10 @@ export default {
     highlight: {
       mounted(el, binding) {
         el.style.backgroundColor = binding.value;
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 </script>
 ```
 
@@ -115,11 +115,11 @@ export default {
       mounted(el, binding) {
         // 设置定位方式
         el.style.position = 'fixed';
-        
+
         // 根据参数 (arg) 设置定位方向
         const arg = binding.arg || 'top'; // 默认 top
         el.style[arg] = binding.value + 'px';
-        
+
         // 根据修饰符 (modifiers) 设置其他方向
         if (binding.modifiers.right) {
           el.style.right = binding.value + 'px';
@@ -139,10 +139,10 @@ export default {
         if (binding.modifiers.bottom) {
           el.style.bottom = binding.value + 'px';
         }
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 </script>
 ```
 
@@ -169,7 +169,7 @@ const permission = {
     } else {
       throw new Error(`需要指定权限角色数组，例如 v-permission="['admin']"`);
     }
-  }
+  },
 };
 
 export default permission;
@@ -202,7 +202,7 @@ const debounce = {
   mounted(el, binding) {
     let delay = binding.arg ? parseInt(binding.arg) : 300; // 默认 300ms
     let timer = null;
-    
+
     // 检查 binding.value 是否是一个函数
     if (typeof binding.value !== 'function') {
       throw new Error('v-debounce 指令的回调必须是一个函数');
@@ -220,7 +220,7 @@ const debounce = {
     // 在实际实现中，需要保存监听器的引用以便移除。
     // 这里是一个简化的例子，更复杂的实现需要管理监听器。
     console.log('指令卸载，可在此进行清理');
-  }
+  },
 };
 
 export default debounce;
@@ -228,10 +228,7 @@ export default debounce;
 
 ```vue
 <template>
-  <input 
-    v-debounce:500="onInput" 
-    placeholder="输入后 500ms 才会触发"
-  >
+  <input v-debounce:500="onInput" placeholder="输入后 500ms 才会触发" />
 </template>
 
 <script>
@@ -240,9 +237,9 @@ export default {
     onInput(event) {
       console.log('防抖后的输入值:', event.target.value);
       // 这里可以发起 API 请求等操作
-    }
-  }
-}
+    },
+  },
+};
 </script>
 ```
 
@@ -256,29 +253,33 @@ const lazy = {
   mounted(el, binding) {
     // 用一个临时图片占位
     el.setAttribute('src', '//via.placeholder.com/300x200/efefef/666?text=Loading...');
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { // 如果元素进入视口
-          // 加载真实图片
-          const realSrc = binding.value;
-          el.setAttribute('src', realSrc);
-          // 图片加载完成后，可做一些处理（可选）
-          el.onload = () => {
-            console.log('图片加载完成');
-          };
-          // 停止观察该元素
-          observer.unobserve(el);
-        }
-      });
-    }, {
-      rootMargin: '0px',
-      threshold: 0.1 // 当 10% 的图片进入视口时触发
-    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // 如果元素进入视口
+            // 加载真实图片
+            const realSrc = binding.value;
+            el.setAttribute('src', realSrc);
+            // 图片加载完成后，可做一些处理（可选）
+            el.onload = () => {
+              console.log('图片加载完成');
+            };
+            // 停止观察该元素
+            observer.unobserve(el);
+          }
+        });
+      },
+      {
+        rootMargin: '0px',
+        threshold: 0.1, // 当 10% 的图片进入视口时触发
+      }
+    );
 
     // 开始观察元素
     observer.observe(el);
-    
+
     // 将 observer 保存在元素上，以便在 unmounted 时断开连接
     el._lazyObserver = observer;
   },
@@ -288,7 +289,7 @@ const lazy = {
       el._lazyObserver.disconnect();
       delete el._lazyObserver;
     }
-  }
+  },
 };
 
 export default lazy;
@@ -299,7 +300,6 @@ export default lazy;
   <div>
     <div v-for="img in imageList" :key="img.id">
       <!-- 滚动到图片位置时才加载真实图片 -->
-      
     </div>
   </div>
 </template>
@@ -312,9 +312,9 @@ export default {
         { id: 1, url: 'https://picsum.photos/400/300?random=1', name: 'Image 1' },
         { id: 2, url: 'https://picsum.photos/400/300?random=2', name: 'Image 2' },
         // ... 更多图片
-      ]
+      ],
     };
-  }
+  },
 };
 </script>
 ```
@@ -331,7 +331,7 @@ const copy = {
 
     const handleClick = async () => {
       const textToCopy = binding.value || el.innerText;
-      
+
       try {
         await navigator.clipboard.writeText(textToCopy);
         // 复制成功反馈
@@ -369,7 +369,7 @@ const copy = {
       el.removeEventListener('click', el._copyHandler);
       delete el._copyHandler;
     }
-  }
+  },
 };
 
 // 显示提示的辅助函数
@@ -413,9 +413,9 @@ export default copy;
 export default {
   data() {
     return {
-      copyText: '这是要被复制的神秘文本'
+      copyText: '这是要被复制的神秘文本',
     };
-  }
+  },
 };
 </script>
 ```
@@ -436,9 +436,9 @@ export default {
   directives: {
     color: (el, binding) => {
       el.style.color = binding.value;
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ```vue
@@ -450,9 +450,9 @@ export default {
 export default {
   data() {
     return {
-      activeColor: 'green'
+      activeColor: 'green',
     };
-  }
+  },
 };
 </script>
 ```
@@ -470,6 +470,7 @@ export default {
 通过遵循这些准则，你可以创建出强大、高效且易于维护的 Vue 自定义指令，从而极大地提升开发效率和项目质量。
 
 ---
+
 **文档作者**: Vue3 技术专家
 **最后更新日期**: 2023-10-27
 **参考来源**: <https://vuejs.org/guide/reusability/custom-directives.html> 及多篇社区优质实践文章。

@@ -4,7 +4,6 @@ description: 详细介绍 Python 3 开发工具链的详细内容，包括解释
 author: zhycn
 ---
 
-
 # Python 3 开发工具链完整指南
 
 本文是一份全面的指南，旨在为初学者和有经验的开发者提供构建现代、高效、可维护的 Python 3 开发环境所需的一切知识。我们将从最基础的安装开始，一直深入到专业的工具和工作流。
@@ -96,21 +95,21 @@ python -m venv .venv
 
 - **Windows (PowerShell):**
 
-    ```powershell
-    .\.venv\Scripts\Activate.ps1
-    ```
+  ```powershell
+  .\.venv\Scripts\Activate.ps1
+  ```
 
 - **Windows (Command Prompt):**
 
-    ```cmd
-    .\.venv\Scripts\activate.bat
-    ```
+  ```cmd
+  .\.venv\Scripts\activate.bat
+  ```
 
 - **Unix/macOS:**
 
-    ```bash
-    source .venv/bin/activate
-    ```
+  ```bash
+  source .venv/bin/activate
+  ```
 
 激活后，你的命令行提示符前通常会显示虚拟环境的名字（如 `(.venv)`），表示你正工作在该环境中。此后所有通过 `pip` 安装的包都只会安装到这个环境中。
 
@@ -378,7 +377,7 @@ repos:
     rev: v0.1.6
     hooks:
       - id: ruff
-        args: [ --fix ]
+        args: [--fix]
 ```
 
 安装并使用：

@@ -32,9 +32,9 @@ Spring Bean 的完整生命周期从创建 Spring 容器开始，直到最终 Sp
 以下是 Spring Bean 生命周期的完整流程图，展示了各阶段的执行顺序：
 
 ```bash
-Bean 定义加载 → 实例化 → 属性填充 → Aware 接口回调 → BeanPostProcessor(before) → 
-初始化方法(@PostConstruct → afterPropertiesSet → init-method) → 
-BeanPostProcessor(after) → Bean 就绪 → 使用阶段 → 
+Bean 定义加载 → 实例化 → 属性填充 → Aware 接口回调 → BeanPostProcessor(before) →
+初始化方法(@PostConstruct → afterPropertiesSet → init-method) →
+BeanPostProcessor(after) → Bean 就绪 → 使用阶段 →
 销毁方法(@PreDestroy → destroy → destroy-method)
 ```
 
@@ -85,7 +85,7 @@ public class UserService {
 public class OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
-    
+
     // 构造器注入
     public OrderService(UserRepository userRepository, ProductRepository productRepository) {
         this.userRepository = userRepository;
@@ -100,7 +100,7 @@ public class OrderService {
 @Service
 public class UserService {
     private UserRepository userRepository;
-    
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -131,17 +131,17 @@ Aware 接口让 Bean 能感知到 Spring 容器的特定信息：
 ```java
 @Component
 public class MyBean implements BeanNameAware, BeanFactoryAware, ApplicationContextAware {
-    
+
     @Override
     public void setBeanName(String name) {
         System.out.println("Bean 名称: " + name);
     }
-    
+
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         System.out.println("BeanFactory 已注入");
     }
-    
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         System.out.println("ApplicationContext 已注入");
@@ -156,14 +156,14 @@ BeanPostProcessor 允许在初始化前后对 Bean 进行增强处理：
 ```java
 @Component
 public class CustomBeanPostProcessor implements BeanPostProcessor {
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         System.out.println("Before初始化: " + beanName);
         // 可以在此处修改 Bean 实例或返回代理对象
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         System.out.println("After初始化: " + beanName);
@@ -303,7 +303,7 @@ BeanPostProcessor 是 Spring 扩展的基石，允许开发者对新创建的 Be
 ```java
 @Component
 public class ValidationBeanPostProcessor implements BeanPostProcessor {
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         // 在初始化前进行验证
@@ -312,7 +312,7 @@ public class ValidationBeanPostProcessor implements BeanPostProcessor {
         }
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         // 在初始化后进行处理
@@ -321,7 +321,7 @@ public class ValidationBeanPostProcessor implements BeanPostProcessor {
         }
         return bean;
     }
-    
+
     private Object createCacheProxy(Object target) {
         // 创建缓存代理
         return Proxy.newProxyInstance(
@@ -350,7 +350,7 @@ Spring 通过**三级缓存机制**解决单例 Bean 的循环依赖问题：
 // 当 BeanA 依赖 BeanB，BeanB 又依赖 BeanA 时
 public class BeanA {
     private BeanB beanB;
-    
+
     @Autowired
     public void setBeanB(BeanB beanB) {
         this.beanB = beanB;
@@ -359,7 +359,7 @@ public class BeanA {
 
 public class BeanB {
     private BeanA beanA;
-    
+
     @Autowired
     public void setBeanA(BeanA beanA) {
         this.beanA = beanA;
@@ -376,32 +376,32 @@ Spring 的处理策略：
 
 不同作用域的 Bean 具有不同的生命周期管理方式：
 
-| 作用域 | 生命周期管理 | 适用场景 |
-|--------|--------------|----------|
-| **Singleton** | 容器管理完整生命周期 | 无状态服务，线程安全 |
-| **Prototype** | 容器只管理到初始化，需手动销毁 | 有状态对象，线程不安全 |
-| **Request** | 绑定到 HTTP 请求 | Web 上下文相关 Bean |
-| **Session** | 绑定到用户会话 | 用户会话数据 |
-| **Application** | 绑定到 ServletContext | 全局应用数据 |
+| 作用域          | 生命周期管理                   | 适用场景               |
+| --------------- | ------------------------------ | ---------------------- |
+| **Singleton**   | 容器管理完整生命周期           | 无状态服务，线程安全   |
+| **Prototype**   | 容器只管理到初始化，需手动销毁 | 有状态对象，线程不安全 |
+| **Request**     | 绑定到 HTTP 请求               | Web 上下文相关 Bean    |
+| **Session**     | 绑定到用户会话                 | 用户会话数据           |
+| **Application** | 绑定到 ServletContext          | 全局应用数据           |
 
 **作用域配置示例**：
 
 ```java
 @Configuration
 public class ScopeConfig {
-    
+
     @Bean
     @Scope("singleton") // 默认值，可省略
     public SingletonService singletonService() {
         return new SingletonService();
     }
-    
+
     @Bean
     @Scope("prototype")
     public PrototypeService prototypeService() {
         return new PrototypeService();
     }
-    
+
     @Bean
     @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public RequestScopedBean requestScopedBean() {
@@ -423,7 +423,7 @@ public class ScopeConfig {
 public class DatabaseConnectionPool {
     private DataSource dataSource;
     private volatile boolean initialized = false;
-    
+
     @PostConstruct
     public synchronized void initializePool() {
         if (!initialized) {
@@ -435,12 +435,12 @@ public class DatabaseConnectionPool {
             config.setPassword("password");
             config.setMaximumPoolSize(20);
             config.setMinimumIdle(5);
-            
+
             this.dataSource = new HikariDataSource(config);
             this.initialized = true;
         }
     }
-    
+
     @PreDestroy
     public void cleanup() {
         if (dataSource instanceof HikariDataSource) {
@@ -448,7 +448,7 @@ public class DatabaseConnectionPool {
             System.out.println("数据库连接池已关闭");
         }
     }
-    
+
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
@@ -462,12 +462,12 @@ public class DatabaseConnectionPool {
 public class CacheManager implements InitializingBean, DisposableBean {
     private RedisConnectionFactory redisConnectionFactory;
     private RedisTemplate<String, Object> redisTemplate;
-    
+
     @Autowired
     public CacheManager(RedisConnectionFactory redisConnectionFactory) {
         this.redisConnectionFactory = redisConnectionFactory;
     }
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         System.out.println("初始化 Redis 模板");
@@ -477,7 +477,7 @@ public class CacheManager implements InitializingBean, DisposableBean {
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         redisTemplate.afterPropertiesSet();
     }
-    
+
     @Override
     public void destroy() throws Exception {
         System.out.println("关闭 Redis 连接");
@@ -541,7 +541,7 @@ public interface ServiceBInterface {
 @Service
 public class ServiceA implements ServiceAInterface {
     private final ServiceBInterface serviceB;
-    
+
     public ServiceA(ServiceBInterface serviceB) {
         this.serviceB = serviceB;
     }
@@ -550,7 +550,7 @@ public class ServiceA implements ServiceAInterface {
 @Service
 public class ServiceB implements ServiceBInterface {
     private final ServiceAInterface serviceA;
-    
+
     public ServiceB(ServiceAInterface serviceA) {
         this.serviceA = serviceA;
     }
@@ -565,11 +565,11 @@ public class ServiceB implements ServiceBInterface {
 @Component
 public class ResourceHolder {
     private List<Closeable> resources = new ArrayList<>();
-    
+
     public void addResource(Closeable resource) {
         resources.add(resource);
     }
-    
+
     @PreDestroy
     public void releaseAll() {
         System.out.println("开始释放所有资源");
@@ -593,7 +593,7 @@ public class ResourceHolder {
 ```java
 @Component
 public class SafeInitializer {
-    
+
     @PostConstruct
     public void initialize() {
         try {
@@ -608,7 +608,7 @@ public class SafeInitializer {
             }
         }
     }
-    
+
     private boolean isCriticalComponent() {
         // 判断是否为关键组件
         return true;
@@ -639,9 +639,9 @@ public class SafeInitializer {
 ```java
 @Component
 public class LifecycleEventListener implements ApplicationListener<ApplicationEvent> {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(LifecycleEventListener.class);
-    
+
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
@@ -659,13 +659,13 @@ public class LifecycleEventListener implements ApplicationListener<ApplicationEv
 @Component
 public class TimingBeanPostProcessor implements BeanPostProcessor {
     private Map<String, Long> startTimes = new ConcurrentHashMap<>();
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         startTimes.put(beanName, System.currentTimeMillis());
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         Long startTime = startTimes.remove(beanName);
@@ -717,55 +717,55 @@ Spring 提供了丰富的 Aware 接口，让 Bean 能感知到容器的基础设
 
 ### 容器基础设施类 Aware 接口
 
-| 接口名 | 作用 | 方法签名 | 调用时机 |
-|--------|------|----------|----------|
-| **BeanNameAware** | 获取 Bean 在容器中的名称 | `setBeanName(String name)` | 属性注入后，初始化前 |
+| 接口名                   | 作用                       | 方法签名                                      | 调用时机             |
+| ------------------------ | -------------------------- | --------------------------------------------- | -------------------- |
+| **BeanNameAware**        | 获取 Bean 在容器中的名称   | `setBeanName(String name)`                    | 属性注入后，初始化前 |
 | **BeanClassLoaderAware** | 获取加载该 Bean 的类加载器 | `setBeanClassLoader(ClassLoader classLoader)` | 属性注入后，初始化前 |
-| **BeanFactoryAware** | 获取 BeanFactory 引用 | `setBeanFactory(BeanFactory beanFactory)` | 属性注入后，初始化前 |
+| **BeanFactoryAware**     | 获取 BeanFactory 引用      | `setBeanFactory(BeanFactory beanFactory)`     | 属性注入后，初始化前 |
 
 ### 应用程序上下文类 Aware 接口
 
-| 接口名 | 作用 | 方法签名 | 调用时机 |
-|--------|------|----------|----------|
-| **EnvironmentAware** | 获取环境配置信息 | `setEnvironment(Environment environment)` | 通过 ApplicationContextAwareProcessor 回调 |
-| **EmbeddedValueResolverAware** | 解析嵌入值（如 `${}`） | `setEmbeddedValueResolver(StringValueResolver resolver)` | 通过 ApplicationContextAwareProcessor 回调 |
-| **ResourceLoaderAware** | 获取资源加载器 | `setResourceLoader(ResourceLoader resourceLoader)` | 通过 ApplicationContextAwareProcessor 回调 |
-| **ApplicationEventPublisherAware** | 发布应用事件 | `setApplicationEventPublisher(ApplicationEventPublisher publisher)` | 通过 ApplicationContextAwareProcessor 回调 |
-| **MessageSourceAware** | 国际化消息处理 | `setMessageSource(MessageSource messageSource)` | 通过 ApplicationContextAwareProcessor 回调 |
-| **ApplicationContextAware** | 获取 ApplicationContext 引用 | `setApplicationContext(ApplicationContext context)` | 通过 ApplicationContextAwareProcessor 回调 |
+| 接口名                             | 作用                         | 方法签名                                                            | 调用时机                                   |
+| ---------------------------------- | ---------------------------- | ------------------------------------------------------------------- | ------------------------------------------ |
+| **EnvironmentAware**               | 获取环境配置信息             | `setEnvironment(Environment environment)`                           | 通过 ApplicationContextAwareProcessor 回调 |
+| **EmbeddedValueResolverAware**     | 解析嵌入值（如 `${}`）       | `setEmbeddedValueResolver(StringValueResolver resolver)`            | 通过 ApplicationContextAwareProcessor 回调 |
+| **ResourceLoaderAware**            | 获取资源加载器               | `setResourceLoader(ResourceLoader resourceLoader)`                  | 通过 ApplicationContextAwareProcessor 回调 |
+| **ApplicationEventPublisherAware** | 发布应用事件                 | `setApplicationEventPublisher(ApplicationEventPublisher publisher)` | 通过 ApplicationContextAwareProcessor 回调 |
+| **MessageSourceAware**             | 国际化消息处理               | `setMessageSource(MessageSource messageSource)`                     | 通过 ApplicationContextAwareProcessor 回调 |
+| **ApplicationContextAware**        | 获取 ApplicationContext 引用 | `setApplicationContext(ApplicationContext context)`                 | 通过 ApplicationContextAwareProcessor 回调 |
 
 ### Aware 接口使用示例
 
 ```java
 @Component
-public class ComprehensiveAwareBean implements 
+public class ComprehensiveAwareBean implements
         BeanNameAware, BeanFactoryAware, ApplicationContextAware,
         EnvironmentAware, ResourceLoaderAware {
-    
+
     private String beanName;
     private BeanFactory beanFactory;
     private ApplicationContext applicationContext;
     private Environment environment;
     private ResourceLoader resourceLoader;
-    
+
     @Override
     public void setBeanName(String name) {
         this.beanName = name;
         System.out.println("Bean 名称: " + name);
     }
-    
+
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
         System.out.println("BeanFactory 已设置");
     }
-    
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
         System.out.println("ApplicationContext 已设置");
     }
-    
+
     @Override
     public void setEnvironment(Environment environment) {
         this.environment = environment;
@@ -774,13 +774,13 @@ public class ComprehensiveAwareBean implements
         String value = environment.getProperty("app.name");
         System.out.println("应用名称: " + value);
     }
-    
+
     @Override
     public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
         System.out.println("ResourceLoader 已设置");
     }
-    
+
     @PostConstruct
     public void init() {
         System.out.println("开始使用 Aware 接口获取的资源");

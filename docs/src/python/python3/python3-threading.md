@@ -248,26 +248,26 @@ def waiter_thread(thread_id):
     print(f"Waiter-{thread_id} is waiting for the start signal...")
     start_event.wait() # 阻塞，直到 start_event 被设置
     print(f"Waiter-{thread_id} received start signal! Working...")
-    
+
     # 模拟工作，但会检查停止事件
     while not stop_event.is_set():
         print(f"Waiter-{thread_id} is working...")
         time.sleep(1)
-    
+
     print(f"Waiter-{thread_id} received stop signal. Shutting down.")
 
 def controller_thread():
     """控制其他线程的控制器线程"""
     print("Controller is sleeping for 2 seconds before starting workers...")
     time.sleep(2)
-    
+
     # 发出开始信号
     print("Controller is setting the start event!")
     start_event.set()
-    
+
     # 让 workers 工作一会儿
     time.sleep(5)
-    
+
     # 发出停止信号
     print("Controller is setting the stop event!")
     stop_event.set()
@@ -313,14 +313,14 @@ class Producer(threading.Thread):
                 while len(buffer) >= BUFFER_SIZE:
                     print(f"Buffer full. {self.name} is waiting...")
                     buffer_lock.wait() # 释放锁并等待通知
-                
+
                 # 生产物品并放入缓冲区
                 buffer.append(item)
                 print(f"{self.name} produced {item}. Buffer: {buffer}")
-                
+
                 # 通知可能正在等待的消费者
                 buffer_lock.notify_all()
-            
+
             # 模拟生产时间
             time.sleep(random.uniform(0.1, 0.5))
 
@@ -333,14 +333,14 @@ class Consumer(threading.Thread):
                 while len(buffer) == 0:
                     print(f"Buffer empty. {self.name} is waiting...")
                     buffer_lock.wait() # 释放锁并等待通知
-                
+
                 # 从缓冲区取出物品并消费
                 item = buffer.pop(0)
                 print(f"{self.name} consumed {item}. Buffer: {buffer}")
-                
+
                 # 通知可能正在等待的生产者
                 buffer_lock.notify_all()
-            
+
             # 模拟消费时间
             time.sleep(random.uniform(0.2, 0.8))
 
@@ -367,62 +367,62 @@ print("Producer-Consumer simulation finished.")
 1. **使用 `join()` 管理线程生命周期**： 始终在主线程或父线程中调用 `join()` 来等待子线程完成，确保资源得到正确清理，并避免主线程提前退出导致子线程意外终止。
 2. **优先使用上下文管理器（`with` 语句）**： 对于锁（`Lock`, `RLock`）、信号量（`Semaphore`）和条件变量（`Condition`），使用 `with` 语句可以确保锁在任何情况下（包括异常发生）都能被正确释放，避免死锁。
 
-    ```python
-    # 推荐
-    with my_lock:
-        # 临界区代码
-        shared_variable += 1
+   ```python
+   # 推荐
+   with my_lock:
+       # 临界区代码
+       shared_variable += 1
 
-    # 不推荐
-    my_lock.acquire()
-    try:
-        shared_variable += 1
-    finally:
-        my_lock.release()
-    ```
+   # 不推荐
+   my_lock.acquire()
+   try:
+       shared_variable += 1
+   finally:
+       my_lock.release()
+   ```
 
 3. **设置清晰的线程名称**： 为线程设置一个有意义的 `name`，这在调试和日志记录时非常有用，可以帮助你识别不同线程的活动。
 4. **理解并使用守护线程**： 将那些不需要显式停止、可以在程序退出时直接终止的线程（如后台监控、心跳线程）设置为守护线程 (`daemon=True`)。
 5. **使用 `threading.local()` 进行线程状态隔离**： 避免使用全局变量在不同线程间传递状态，除非有充分的同步措施。使用线程本地存储来保存线程特定的状态。
 6. **优先使用高层模块**： 对于复杂的并发任务，考虑使用 `concurrent.futures` 模块（特别是 `ThreadPoolExecutor`），它提供了更简单的接口来管理线程池，减少了手动管理线程的复杂性。
 
-    ```python
-    from concurrent.futures import ThreadPoolExecutor
+   ```python
+   from concurrent.futures import ThreadPoolExecutor
 
-    def task(n):
-        return n * n
+   def task(n):
+       return n * n
 
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        # 提交任务并获取 Future 对象
-        futures = [executor.submit(task, i) for i in range(10)]
-        # 获取结果
-        results = [f.result() for f in futures]
-        print(results)
-    ```
+   with ThreadPoolExecutor(max_workers=3) as executor:
+       # 提交任务并获取 Future 对象
+       futures = [executor.submit(task, i) for i in range(10)]
+       # 获取结果
+       results = [f.result() for f in futures]
+       print(results)
+   ```
 
 ### 4.2 常见陷阱与规避方法
 
 1. **竞争条件（Race Condition）**：
-    - **问题**： 多个线程同时访问和修改同一共享数据，导致结果依赖于线程执行的精确时序。
-    - **规避**： **始终使用适当的同步原语（如 `Lock`）来保护对共享状态的所有访问**。将所有访问共享资源的代码段放入临界区。
+   - **问题**： 多个线程同时访问和修改同一共享数据，导致结果依赖于线程执行的精确时序。
+   - **规避**： **始终使用适当的同步原语（如 `Lock`）来保护对共享状态的所有访问**。将所有访问共享资源的代码段放入临界区。
 
 2. **死锁（Deadlock）**：
-    - **问题**： 两个或多个线程相互等待对方持有的资源，导致所有线程都无法继续执行。
-    - **规避**：
-        - **按固定顺序获取锁**： 如果多个锁是必需的，确保所有线程都以相同的顺序请求它们。
-        - **使用超时**： 在 `acquire()` 或 `join()` 时使用 `timeout` 参数，超时后可以做错误处理或重试，避免无限期等待。
-        - **避免嵌套锁**： 尽量减小临界区范围，尽快释放锁。必要时使用 `RLock`。
+   - **问题**： 两个或多个线程相互等待对方持有的资源，导致所有线程都无法继续执行。
+   - **规避**：
+     - **按固定顺序获取锁**： 如果多个锁是必需的，确保所有线程都以相同的顺序请求它们。
+     - **使用超时**： 在 `acquire()` 或 `join()` 时使用 `timeout` 参数，超时后可以做错误处理或重试，避免无限期等待。
+     - **避免嵌套锁**： 尽量减小临界区范围，尽快释放锁。必要时使用 `RLock`。
 
 3. **GIL 对 CPU 密集型任务的限制**：
-    - **问题**： GIL 使得多线程无法充分利用多核 CPU 进行并行计算。
-    - **规避**：
-        - **使用多进程（`multiprocessing` 模块）**： 将 CPU 密集型任务分配到多个进程中，每个进程有独立的 Python 解释器和 GIL。
-        - **使用 C 扩展**： 在 C 扩展中释放 GIL，例如使用 NumPy、SciPy 等库的核心计算部分通常已经这样做了。
-        - **使用其他解释器**： 如 Jython 或 IronPython，它们没有 GIL。
+   - **问题**： GIL 使得多线程无法充分利用多核 CPU 进行并行计算。
+   - **规避**：
+     - **使用多进程（`multiprocessing` 模块）**： 将 CPU 密集型任务分配到多个进程中，每个进程有独立的 Python 解释器和 GIL。
+     - **使用 C 扩展**： 在 C 扩展中释放 GIL，例如使用 NumPy、SciPy 等库的核心计算部分通常已经这样做了。
+     - **使用其他解释器**： 如 Jython 或 IronPython，它们没有 GIL。
 
 4. **线程饥饿（Starvation）**：
-    - **问题**： 某个线程因为优先级太低或调度问题，长时间无法获得执行机会。
-    - **规避**： 合理设计线程优先级（虽然 Python `threading` 未直接提供优先级设置），避免某些线程长时间持有锁。
+   - **问题**： 某个线程因为优先级太低或调度问题，长时间无法获得执行机会。
+   - **规避**： 合理设计线程优先级（虽然 Python `threading` 未直接提供优先级设置），避免某些线程长时间持有锁。
 
 ## 5. 常见问题解答（FAQ）
 

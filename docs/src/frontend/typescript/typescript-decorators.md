@@ -35,8 +35,8 @@
   "compilerOptions": {
     "target": "ES2022", // 或更高版本
     "experimentalDecorators": false, // 明确禁用旧版装饰器
-    "emitDecoratorMetadata": false,  // 不再需要
-    "useDefineForClassFields": true  // 建议启用
+    "emitDecoratorMetadata": false, // 不再需要
+    "useDefineForClassFields": true // 建议启用
   }
 }
 ```
@@ -50,11 +50,14 @@
 **签名**：
 
 ```typescript
-type ClassDecorator = (value: Function, context: {
-  kind: "class";
-  name: string | undefined;
-  addInitializer(initializer: () => void): void;
-}) => Function | void;
+type ClassDecorator = (
+  value: Function,
+  context: {
+    kind: 'class';
+    name: string | undefined;
+    addInitializer(initializer: () => void): void;
+  }
+) => Function | void;
 ```
 
 **示例：添加元数据**
@@ -87,10 +90,7 @@ console.log(Reflect.getMetadata('scope', MyService)); // 输出: singleton
 
 ```typescript
 // 一个装饰器，它将所有方法包装在 try-catch 中
-function withErrorHandling<T extends new (...args: any[]) => object>(
-  Class: T,
-  context: ClassDecoratorContext
-) {
+function withErrorHandling<T extends new (...args: any[]) => object>(Class: T, context: ClassDecoratorContext) {
   return class extends Class {
     constructor(...args: any[]) {
       super(...args);
@@ -116,14 +116,17 @@ class MyController {
 **签名**：
 
 ```typescript
-type MethodDecorator = (value: Function, context: {
-  kind: "method";
-  name: string | symbol;
-  access: { get(): unknown };
-  static: boolean;
-  private: boolean;
-  addInitializer(initializer: () => void): void;
-}) => Function | void;
+type MethodDecorator = (
+  value: Function,
+  context: {
+    kind: 'method';
+    name: string | symbol;
+    access: { get(): unknown };
+    static: boolean;
+    private: boolean;
+    addInitializer(initializer: () => void): void;
+  }
+) => Function | void;
 ```
 
 **示例：测量执行时间**
@@ -151,7 +154,7 @@ class DataProcessor {
   processData(data: string[]) {
     // 模拟耗时操作
     for (let i = 0; i < 10_000_000; i++) {}
-    return data.map(item => item.toUpperCase());
+    return data.map((item) => item.toUpperCase());
   }
 }
 
@@ -205,10 +208,7 @@ clickHandler(); // 正确输出: Button Submit clicked! (如果没有 @autoBind�
 
 ```typescript
 function configurable<T>(value: boolean) {
-  return function <This, Return>(
-    target: (this: This) => Return,
-    context: ClassAccessorDecoratorContext<This, Return>
-  ) {
+  return function <This, Return>(target: (this: This) => Return, context: ClassAccessorDecoratorContext<This, Return>) {
     // 注意：新版标准下，直接修改描述符更复杂
     // 通常返回一个新的 setter/getter
     context.addInitializer(function () {
@@ -240,13 +240,16 @@ class Person {
 **签名**：
 
 ```typescript
-type PropertyDecorator = (value: undefined, context: {
-  kind: "field";
-  name: string | symbol;
-  access: { get(): unknown, set(value: unknown): void };
-  static: boolean;
-  private: boolean;
-}) => void;
+type PropertyDecorator = (
+  value: undefined,
+  context: {
+    kind: 'field';
+    name: string | symbol;
+    access: { get(): unknown; set(value: unknown): void };
+    static: boolean;
+    private: boolean;
+  }
+) => void;
 ```
 
 **示例：依赖注入（简单版）**
@@ -318,13 +321,16 @@ try {
 **签名**：
 
 ```typescript
-type ParameterDecorator = (value: undefined, context: {
-  kind: "parameter";
-  name: string | symbol;
-  index: number;
-  static: boolean;
-  private: boolean;
-}) => void;
+type ParameterDecorator = (
+  value: undefined,
+  context: {
+    kind: 'parameter';
+    name: string | symbol;
+    index: number;
+    static: boolean;
+    private: boolean;
+  }
+) => void;
 ```
 
 **示例：标记必需参数（常用于 Web 框架）**
@@ -335,7 +341,8 @@ import 'reflect-metadata';
 function Body(paramName?: string) {
   return function (target: any, context: ClassMethodDecoratorContext, parameterIndex: number) {
     // 获取现有元数据或初始化
-    const existingBodyParameters: { [key: number]: string } = Reflect.getMetadata('body_parameters', target, context.name) || {};
+    const existingBodyParameters: { [key: number]: string } =
+      Reflect.getMetadata('body_parameters', target, context.name) || {};
     // 存储参数索引和对应的名称
     existingBodyParameters[parameterIndex] = paramName || `arg${parameterIndex}`;
     // 定义元数据
@@ -378,10 +385,10 @@ class MyClass {
 **执行顺序**：
 
 1. **求值（Evaluation）**：计算每个装饰器的表达式。顺序是**从上到下**。
-    - `DecoratorA` -> `DecoratorB` -> `DecoratorC` -> `DecoratorD`
+   - `DecoratorA` -> `DecoratorB` -> `DecoratorC` -> `DecoratorD`
 2. **应用（Application）**：调用装饰器函数。顺序是**从下到上**（从内到外）。
-    - 对于类：`DecoratorB` -> `DecoratorA`
-    - 对于方法：`DecoratorD` -> `DecoratorC`
+   - 对于类：`DecoratorB` -> `DecoratorA`
+   - 对于方法：`DecoratorD` -> `DecoratorC`
 
 **不同类型装饰器的组合顺序**（应用于同一个类时）：
 

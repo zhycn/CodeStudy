@@ -92,12 +92,12 @@ async def main():
     task2 = asyncio.create_task(say_after(2, 'World'))
 
     print(f"Started at {time.strftime('%X')}")
-    
+
     # 等待两个任务都完成
     await task1
-    await task2 
+    await task2
     # 或者使用 await asyncio.gather(task1, task2)
-    
+
     print(f"Finished at {time.strftime('%X')}") # 总耗时约 2 秒
 
 # 错误方式：顺序执行，没有并发
@@ -126,13 +126,13 @@ async def set_after(fut, delay, value):
 async def main():
     # 获取当前事件循环
     loop = asyncio.get_running_loop()
-    
+
     # 创建一个 Future 对象
     fut = loop.create_future()
-    
+
     # 创建一个任务来设置 Future 的结果
     loop.create_task(set_after(fut, 1, '... world!'))
-    
+
     # 等待 Future 的结果
     result = await fut
     print('hello', result) # 输出 "hello ... world!"
@@ -147,57 +147,57 @@ asyncio.run(main())
 
 - **`asyncio.gather()`**: **首选方法**。用于并发运行多个可等待对象，并**收集它们的所有结果**。它会等待所有任务完成（或某个任务出错）。
 
-    ```python
-    import asyncio
+  ```python
+  import asyncio
 
-    async def fetch_data(id, delay):
-        await asyncio.sleep(delay)
-        return {'id': id, 'data': f'sample data after {delay}s'}
+  async def fetch_data(id, delay):
+      await asyncio.sleep(delay)
+      return {'id': id, 'data': f'sample data after {delay}s'}
 
-    async def main():
-        tasks = [
-            fetch_data(1, 2.0),
-            fetch_data(2, 1.0),
-            fetch_data(3, 3.0)
-        ]
-        
-        # 等待所有任务完成，并获取结果列表（按提交顺序，而非完成顺序）
-        results = await asyncio.gather(*tasks)
-        for result in results:
-            print(f"Received: {result}")
-            
-        # 处理异常：return_exceptions=True 会将异常作为结果返回，而不是抛出
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        for result in results:
-            if isinstance(result, Exception):
-                print(f"Task failed: {result}")
-            else:
-                print(f"Task succeeded: {result}")
+  async def main():
+      tasks = [
+          fetch_data(1, 2.0),
+          fetch_data(2, 1.0),
+          fetch_data(3, 3.0)
+      ]
 
-    asyncio.run(main())
-    ```
+      # 等待所有任务完成，并获取结果列表（按提交顺序，而非完成顺序）
+      results = await asyncio.gather(*tasks)
+      for result in results:
+          print(f"Received: {result}")
+
+      # 处理异常：return_exceptions=True 会将异常作为结果返回，而不是抛出
+      results = await asyncio.gather(*tasks, return_exceptions=True)
+      for result in results:
+          if isinstance(result, Exception):
+              print(f"Task failed: {result}")
+          else:
+              print(f"Task succeeded: {result}")
+
+  asyncio.run(main())
+  ```
 
 - **`asyncio.wait()`**: 更底层的函数，提供更灵活的控制。它可以等待任务完成，也可以等待第一个任务完成（`FIRST_COMPLETED`），或者第一个任务异常（`FIRST_EXCEPTION`）。它返回一个包含 `(done, pending)` 两个集合的元组。
 
-    ```python
-    async def main():
-        tasks = [asyncio.create_task(fetch_data(i, i)) for i in range(1, 4)]
-        
-        # 等待直到有至少一个任务完成
-        done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-        
-        print(f"Completed: {len(done)}")
-        print(f"Pending: {len(pending)}")
-        
-        # 取消所有未完成的任务
-        for task in pending:
-            task.cancel()
-        
-        # 等待被取消的任务真正结束（避免警告）
-        await asyncio.gather(*pending, return_exceptions=True)
+  ```python
+  async def main():
+      tasks = [asyncio.create_task(fetch_data(i, i)) for i in range(1, 4)]
 
-    asyncio.run(main())
-    ```
+      # 等待直到有至少一个任务完成
+      done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+
+      print(f"Completed: {len(done)}")
+      print(f"Pending: {len(pending)}")
+
+      # 取消所有未完成的任务
+      for task in pending:
+          task.cancel()
+
+      # 等待被取消的任务真正结束（避免警告）
+      await asyncio.gather(*pending, return_exceptions=True)
+
+  asyncio.run(main())
+  ```
 
 ### 3.2 控制并发度：信号量 (Semaphore) 和 `asyncio.sleep`
 
@@ -209,7 +209,7 @@ import asyncio
 class LimitedResource:
     def __init__(self, concurrency_limit):
         self.semaphore = asyncio.Semaphore(concurrency_limit)
-    
+
     async def access(self, id):
         # 只有获得信号量许可后才能进入代码块
         async with self.semaphore:
@@ -252,7 +252,7 @@ async def main_new_way():
             result = await slow_operation(5)
             print(result)
     except TimeoutError: # 注意这里捕获的是内置的 TimeoutError
-        print("The operation timed out (new way)!") 
+        print("The operation timed out (new way)!")
 
 asyncio.run(main_old_way())
 # asyncio.run(main_new_way())
@@ -278,16 +278,16 @@ def cpu_intensive_calculation(n):
 
 async def main():
     loop = asyncio.get_running_loop()
-    
+
     # 1. 首选：在默认的线程池执行器中运行阻塞 IO 操作 (Python 3.9+)
     result = await asyncio.to_thread(blocking_io_operation)
     print(result)
-    
+
     # 2. 使用 run_in_executor 指定执行器
     # 对于 IO 阻塞，使用默认的线程池
     result = await loop.run_in_executor(None, blocking_io_operation)
     print(result)
-    
+
     # 对于 CPU 密集型任务，最好使用进程池，避免阻塞线程池中的所有线程
     with concurrent.futures.ProcessPoolExecutor() as pool:
         result = await loop.run_in_executor(pool, cpu_intensive_calculation, 10_000_000)
@@ -324,12 +324,12 @@ async def main():
         'https://httpbin.org/status/404',
         'https://httpbin.org/status/500'
     ]
-    
+
     # 使用一个共享的 aiohttp 会话（Session），这是最佳实践
     async with aiohttp.ClientSession() as session:
         tasks = [fetch_url(session, url) for url in urls]
         results = await asyncio.gather(*tasks, return_exceptions=True)
-        
+
         for result in results:
             print(result)
 
@@ -363,7 +363,7 @@ async def main():
     data = "Hello, Asyncio World!\n" * 1000
     await async_write_file('test_async.txt', data)
     content = await async_read_file('test_async.txt')
-    
+
     # 并发读写多个文件
     tasks = [
         async_write_file(f'file_{i}.txt', f'Content of file {i}')
@@ -392,12 +392,12 @@ asyncio.run(main())
 - **启用调试模式**：设置 `PYTHONASYNCIODEBUG=1` 环境变量或 `asyncio.run(main(), debug=True)`。
 - **查看任务状态**：
 
-    ```python
-    tasks = [asyncio.create_task(...) for ...]
-    # ... 一段时间后
-    for task in tasks:
-        print(f"Task: {task.get_name()}, Done: {task.done()}, Cancelled: {task.cancelled()}")
-    ```
+  ```python
+  tasks = [asyncio.create_task(...) for ...]
+  # ... 一段时间后
+  for task in tasks:
+      print(f"Task: {task.get_name()}, Done: {task.done()}, Cancelled: {task.cancelled()}")
+  ```
 
 - **使用日志**：Asyncio 内置了日志记录，可以通过 `logging` 模块配置。
 

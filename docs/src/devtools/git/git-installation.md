@@ -22,10 +22,10 @@ Git 的**核心优势**包括三个方面：1) **分布式架构**确保每个�
 
 1. 访问 <https://git-scm.com/> 下载 Windows 版本的安装程序（通常是一个 `.exe` 文件）。
 2. 双击下载的安装程序，按照安装向导提示进行操作。在 "Select Components" 界面，建议勾选以下组件：
-    - `Git Bash`：基于 Mintty 的终端模拟器，提供 Linux 风格的命令行体验
-    - `Git GUI`：提供图形化界面操作（可选）
-    - `Git LFS`：大文件支持（可选）
-    - `Associate .git* configuration files with the default text editor`：将 Git 配置文件与默认文本编辑器关联
+   - `Git Bash`：基于 Mintty 的终端模拟器，提供 Linux 风格的命令行体验
+   - `Git GUI`：提供图形化界面操作（可选）
+   - `Git LFS`：大文件支持（可选）
+   - `Associate .git* configuration files with the default text editor`：将 Git 配置文件与默认文本编辑器关联
 3. 在 "Adjusting your PATH environment" 界面，选择 **"Git from the command line and also from 3rd-party software"** 以确保 Git 命令在标准命令提示符和第三方软件中可用。
 4. 在 "Choosing the default behavior of `git pull`" 界面，建议使用默认设置（`Fast-forward or merge`）。
 5. 在 "Configuring extra options" 界面，启用 **"Enable file system caching"** 和 **"Enable Git Credential Manager"** 以提高性能和方便凭据管理。
@@ -37,16 +37,16 @@ Git 的**核心优势**包括三个方面：1) **分布式架构**确保每个�
 
 1. **使用 Homebrew**（推荐）：
 
-    ```bash
-    # 首先安装 Homebrew（如果尚未安装）
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    # 使用 Homebrew 安装 Git
-    brew install git
-    ```
+   ```bash
+   # 首先安装 Homebrew（如果尚未安装）
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   # 使用 Homebrew 安装 Git
+   brew install git
+   ```
 
 2. **使用官方安装包**：
-    - 访问 <https://git-scm.com/> 下载 macOS 版本的 `.dmg` 安装包
-    - 双击下载的文件并按照图形化界面提示完成安装
+   - 访问 <https://git-scm.com/> 下载 macOS 版本的 `.dmg` 安装包
+   - 双击下载的文件并按照图形化界面提示完成安装
 
 ### 2.3 Linux 系统安装
 
@@ -54,44 +54,44 @@ Git 的**核心优势**包括三个方面：1) **分布式架构**确保每个�
 
 - **Debian/Ubuntu** 系统：
 
-    ```bash
-    sudo apt-get update
-    sudo apt-get install git
-    ```
+  ```bash
+  sudo apt-get update
+  sudo apt-get install git
+  ```
 
 - **CentOS/RHEL/Fedora** 系统：
 
-    ```bash
-    # CentOS/RHEL
-    sudo yum install git
-    # Fedora
-    sudo dnf install git
-    ```
+  ```bash
+  # CentOS/RHEL
+  sudo yum install git
+  # Fedora
+  sudo dnf install git
+  ```
 
 - **从源码编译安装**（适用于需要最新版本或自定义选项的高级用户）：
 
-    ```bash
-    # 下载最新版本 Git 源码
-    wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.43.0.tar.gz
-    # 解压
-    tar -zxvf git-2.43.0.tar.gz
-    cd git-2.43.0
-    # 编译并安装
-    ./configure
-    make
-    sudo make install
-    ```
+  ```bash
+  # 下载最新版本 Git 源码
+  wget https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.43.0.tar.gz
+  # 解压
+  tar -zxvf git-2.43.0.tar.gz
+  cd git-2.43.0
+  # 编译并安装
+  ./configure
+  make
+  sudo make install
+  ```
 
-*表：各操作系统 Git 安装方法总结*
+_表：各操作系统 Git 安装方法总结_
 
-| **操作系统** | **推荐安装方法** | **命令/操作** | **注意事项** |
-| ------------ | ---------------- | ------------- | ------------ |
-| Windows | 官方安装包 | 下载 `.exe` 文件并运行安装向导 | 注意 PATH 环境变量配置 |
-| macOS | Homebrew | `brew install git` | 需要先安装 Homebrew |
-| macOS | 官方安装包 | 下载 `.dmg` 文件并安装 | 适合不熟悉命令行的用户 |
-| Ubuntu/Debian | apt | `sudo apt-get install git` | 需要 sudo 权限 |
-| CentOS/RHEL | yum | `sudo yum install git` | 需要 sudo 权限 |
-| Fedora | dnf | `sudo dnf install git` | 需要 sudo 权限 |
+| **操作系统**  | **推荐安装方法** | **命令/操作**                  | **注意事项**           |
+| ------------- | ---------------- | ------------------------------ | ---------------------- |
+| Windows       | 官方安装包       | 下载 `.exe` 文件并运行安装向导 | 注意 PATH 环境变量配置 |
+| macOS         | Homebrew         | `brew install git`             | 需要先安装 Homebrew    |
+| macOS         | 官方安装包       | 下载 `.dmg` 文件并安装         | 适合不熟悉命令行的用户 |
+| Ubuntu/Debian | apt              | `sudo apt-get install git`     | 需要 sudo 权限         |
+| CentOS/RHEL   | yum              | `sudo yum install git`         | 需要 sudo 权限         |
+| Fedora        | dnf              | `sudo dnf install git`         | 需要 sudo 权限         |
 
 ## 3 Git 的基础配置与个性化设置
 
@@ -158,9 +158,9 @@ git config --global core.autocrlf input   # Linux/macOS 系统
 
 Git 提供三个配置级别，优先级从高到低为：
 
-1. **本地配置** (``--local``)：仅对当前仓库有效，配置存储在 `.git/config` 文件中
-2. **全局配置** (``--global``)：对当前用户所有仓库有效，配置存储在 `~/.gitconfig` 文件中
-3. **系统配置** (``--system``)：对所有用户有效，需要管理员权限，配置存储在 `/etc/gitconfig` 文件中
+1. **本地配置** (`--local`)：仅对当前仓库有效，配置存储在 `.git/config` 文件中
+2. **全局配置** (`--global`)：对当前用户所有仓库有效，配置存储在 `~/.gitconfig` 文件中
+3. **系统配置** (`--system`)：对所有用户有效，需要管理员权限，配置存储在 `/etc/gitconfig` 文件中
 
 使用以下命令查看所有配置及其来源：
 
@@ -298,20 +298,20 @@ Git 的基本工作流程包括以下步骤：
 
 ### 6.2 常用命令速查表
 
-| **命令** | **描述** | **示例** |
-| -------- | -------- | -------- |
-| `git init` | 初始化新仓库 | `git init` |
-| `git clone` | 克隆现有仓库 | `git clone https://github.com/user/repo.git` |
-| `git add` | 添加文件到暂存区 | `git add file.txt` 或 `git add .` |
-| `git commit` | 提交更改 | `git commit -m "消息"` |
-| `git status` | 查看仓库状态 | `git status` |
-| `git log` | 查看提交历史 | `git log --oneline --graph` |
-| `git branch` | 管理分支 | `git branch new-feature` |
-| `git checkout` | 切换分支 | `git checkout main` |
-| `git merge` | 合并分支 | `git merge feature` |
-| `git pull` | 拉取远程更新 | `git pull origin main` |
-| `git push` | 推送更改到远程 | `git push origin main` |
-| `git diff` | 查看更改差异 | `git diff HEAD` |
+| **命令**       | **描述**         | **示例**                                     |
+| -------------- | ---------------- | -------------------------------------------- |
+| `git init`     | 初始化新仓库     | `git init`                                   |
+| `git clone`    | 克隆现有仓库     | `git clone https://github.com/user/repo.git` |
+| `git add`      | 添加文件到暂存区 | `git add file.txt` 或 `git add .`            |
+| `git commit`   | 提交更改         | `git commit -m "消息"`                       |
+| `git status`   | 查看仓库状态     | `git status`                                 |
+| `git log`      | 查看提交历史     | `git log --oneline --graph`                  |
+| `git branch`   | 管理分支         | `git branch new-feature`                     |
+| `git checkout` | 切换分支         | `git checkout main`                          |
+| `git merge`    | 合并分支         | `git merge feature`                          |
+| `git pull`     | 拉取远程更新     | `git pull origin main`                       |
+| `git push`     | 推送更改到远程   | `git push origin main`                       |
+| `git diff`     | 查看更改差异     | `git diff HEAD`                              |
 
 ### 6.3 获取帮助
 

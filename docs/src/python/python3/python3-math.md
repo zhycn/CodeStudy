@@ -42,13 +42,13 @@ print(f"直角边为 {a} 和 {b} 的斜边长度是: {c}")
 
 `math` 模块提供了一系列高精度的数学常数，无需手动定义。
 
-| 常数 | 描述 | 近似值 |
-| :--- | :--- | :--- |
-| `math.pi` | 圆周率 π | 3.141592653589793 |
-| `math.e` | 自然常数 e | 2.718281828459045 |
-| `math.tau` | 圆周率的两倍，2π | 6.283185307179586 |
-| `math.inf` | 正无穷大 | inf |
-| `math.nan` | 非数字 (Not a Number) | nan |
+| 常数       | 描述                  | 近似值            |
+| :--------- | :-------------------- | :---------------- |
+| `math.pi`  | 圆周率 π              | 3.141592653589793 |
+| `math.e`   | 自然常数 e            | 2.718281828459045 |
+| `math.tau` | 圆周率的两倍，2π      | 6.283185307179586 |
+| `math.inf` | 正无穷大              | inf               |
+| `math.nan` | 非数字 (Not a Number) | nan               |
 
 **示例：**
 
@@ -64,16 +64,16 @@ print(f"τ = {math.tau}") # 在许多涉及整个圆周的场景中比 2*pi 更�
 
 ### 3.1 幂函数与对数函数
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `math.pow(x, y)` | 返回 x 的 y 次幂，`x**y` |
-| `math.sqrt(x)` | 返回 x 的平方根 |
-| `math.exp(x)` | 返回 e 的 x 次幂 |
-| `math.expm1(x)` | 返回 `e^x - 1`，对于接近 0 的 x 精度更高 |
-| `math.log(x[, base])` | 返回 x 的对数（默认底数为 e） |
-| `math.log10(x)` | 返回 x 的以 10 为底的对数 |
-| `math.log1p(x)` | 返回 `1+x` 的自然对数，用于接近 0 的 x |
-| `math.log2(x)` | 返回 x 的以 2 为底的对数 |
+| 函数                  | 描述                                     |
+| :-------------------- | :--------------------------------------- |
+| `math.pow(x, y)`      | 返回 x 的 y 次幂，`x**y`                 |
+| `math.sqrt(x)`        | 返回 x 的平方根                          |
+| `math.exp(x)`         | 返回 e 的 x 次幂                         |
+| `math.expm1(x)`       | 返回 `e^x - 1`，对于接近 0 的 x 精度更高 |
+| `math.log(x[, base])` | 返回 x 的对数（默认底数为 e）            |
+| `math.log10(x)`       | 返回 x 的以 10 为底的对数                |
+| `math.log1p(x)`       | 返回 `1+x` 的自然对数，用于接近 0 的 x   |
+| `math.log2(x)`        | 返回 x 的以 2 为底的对数                 |
 
 **示例与最佳实践：**
 
@@ -105,15 +105,15 @@ print(math.log2(8)) # 输出: 3.0
 
 所有三角函数的角度单位都是**弧度**，而不是角度。
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `math.sin(x)` | 正弦函数 |
-| `math.cos(x)` | 余弦函数 |
-| `math.tan(x)` | 正切函数 |
-| `math.asin(x)` | 反正弦函数 |
-| `math.acos(x)` | 反余弦函数 |
-| `math.atan(x)` | 反正切函数 |
-| `math.atan2(y, x)` | 返回 `y/x` 的反正切值，正确处理象限 |
+| 函数               | 描述                                   |
+| :----------------- | :------------------------------------- |
+| `math.sin(x)`      | 正弦函数                               |
+| `math.cos(x)`      | 余弦函数                               |
+| `math.tan(x)`      | 正切函数                               |
+| `math.asin(x)`     | 反正弦函数                             |
+| `math.acos(x)`     | 反余弦函数                             |
+| `math.atan(x)`     | 反正切函数                             |
+| `math.atan2(y, x)` | 返回 `y/x` 的反正切值，正确处理象限    |
 | `math.hypot(x, y)` | 返回欧几里得范数，即 `sqrt(x*x + y*y)` |
 
 **示例与最佳实践：**
@@ -146,16 +146,16 @@ print(f"距离为: {distance:.2f}") # 输出: 距离为: 1.41
 
 ### 3.3 数值修约与绝对值函数
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `math.ceil(x)` | 返回大于等于 x 的最小整数 |
-| `math.floor(x)` | 返回小于等于 x 的最大整数 |
-| `math.trunc(x)` | 返回 x 的整数部分（向零取整） |
-| `math.fabs(x)` | 返回 x 的绝对值（总是返回浮点数） |
-| `math.fmod(x, y)` | 返回 x 除以 y 的余数（浮点数取模） |
-| `math.modf(x)` | 返回 x 的小数部分和整数部分 |
-| `math.remainder(x, y)` | 返回 IEEE 754 标准的 x 相对于 y 的余数 |
-| `math.isclose(a, b, *, rel_tol=1e-09, abs_tol=0.0)` | 判断两个浮点数是否“接近” |
+| 函数                                                | 描述                                   |
+| :-------------------------------------------------- | :------------------------------------- |
+| `math.ceil(x)`                                      | 返回大于等于 x 的最小整数              |
+| `math.floor(x)`                                     | 返回小于等于 x 的最大整数              |
+| `math.trunc(x)`                                     | 返回 x 的整数部分（向零取整）          |
+| `math.fabs(x)`                                      | 返回 x 的绝对值（总是返回浮点数）      |
+| `math.fmod(x, y)`                                   | 返回 x 除以 y 的余数（浮点数取模）     |
+| `math.modf(x)`                                      | 返回 x 的小数部分和整数部分            |
+| `math.remainder(x, y)`                              | 返回 IEEE 754 标准的 x 相对于 y 的余数 |
+| `math.isclose(a, b, *, rel_tol=1e-09, abs_tol=0.0)` | 判断两个浮点数是否“接近”               |
 
 **示例与最佳实践：**
 
@@ -173,7 +173,7 @@ print(f"trunc(-{x}) = {math.trunc(-x)}") # 输出: -3 (对于负数，与 ceil �
 a = 0.1 + 0.1 + 0.1
 b = 0.3
 print(a == b) # 输出: False ( 由于浮点精度误差
-print(f"{a} == {b}? {a == b}") 
+print(f"{a} == {b}? {a == b}")
 # 最佳实践：使用 math.isclose
 print(math.isclose(a, b)) # 输出: True
 # 可以调整容忍度
@@ -190,18 +190,18 @@ print(f"-10.5 % 3.2 = {-10.5 % 3.2:.1f}")                   # 输出: 2.3 (结�
 
 ### 3.4 其他常用函数
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `math.factorial(n)` | 返回 n 的阶乘 |
-| `math.gcd(*integers)` | 返回给定整数参数的最大公约数 |
-| `math.lcm(*integers)` | 返回给定整数参数的最小公倍数 |
-| `math.perm(n, k=None)` | 返回排列数 |
-| `math.comb(n, k)` | 返回组合数 |
-| `math.prod(iterable, *, start=1)` | 计算可迭代对象中所有元素的积 |
-| `math.dist(p, q)` | 返回两点 p 和 q 之间的欧几里得距离 |
-| `math.isfinite(x)` | 判断 x 是否是有限数 |
-| `math.isinf(x)` | 判断 x 是否是无穷大 |
-| `math.isnan(x)` | 判断 x 是否是非数字 |
+| 函数                              | 描述                               |
+| :-------------------------------- | :--------------------------------- |
+| `math.factorial(n)`               | 返回 n 的阶乘                      |
+| `math.gcd(*integers)`             | 返回给定整数参数的最大公约数       |
+| `math.lcm(*integers)`             | 返回给定整数参数的最小公倍数       |
+| `math.perm(n, k=None)`            | 返回排列数                         |
+| `math.comb(n, k)`                 | 返回组合数                         |
+| `math.prod(iterable, *, start=1)` | 计算可迭代对象中所有元素的积       |
+| `math.dist(p, q)`                 | 返回两点 p 和 q 之间的欧几里得距离 |
+| `math.isfinite(x)`                | 判断 x 是否是有限数                |
+| `math.isinf(x)`                   | 判断 x 是否是无穷大                |
+| `math.isnan(x)`                   | 判断 x 是否是非数字                |
 
 **示例：**
 
@@ -239,11 +239,11 @@ print(math.isinf(math.inf))    # True
 
 Python 3.11 及更高版本引入了几个用于求和与求积的特殊函数，具有更高的数值稳定性。
 
-| 函数 | 描述 |
-| :--- | :--- |
-| `math.sumprod(p, q)` | 返回两个可迭代对象 p 和 q 的点积 |
-| `math.nextafter(x, y)` | 返回 x 趋向于 y 的下一个浮点数 |
-| `math.ulp(x)` | 返回 x 的最小有效位单位的值 |
+| 函数                   | 描述                             |
+| :--------------------- | :------------------------------- |
+| `math.sumprod(p, q)`   | 返回两个可迭代对象 p 和 q 的点积 |
+| `math.nextafter(x, y)` | 返回 x 趋向于 y 的下一个浮点数   |
+| `math.ulp(x)`          | 返回 x 的最小有效位单位的值      |
 
 **示例（如果运行环境是 Python 3.11+）：**
 
@@ -260,8 +260,8 @@ if hasattr(math, 'sumprod'):
 
 ### 5.1 `math` vs `cmath`
 
-* **`math`**: 仅用于**实数**运算。如果传入复数参数，会抛出 `TypeError`。
-* **`cmath`**: 用于**复数**运算。它提供了与 `math` 模块类似的函数集，但支持复数。
+- **`math`**: 仅用于**实数**运算。如果传入复数参数，会抛出 `TypeError`。
+- **`cmath`**: 用于**复数**运算。它提供了与 `math` 模块类似的函数集，但支持复数。
 
 ```python
 import math
@@ -280,23 +280,23 @@ print(f"cmath.sin({z}) = {cmath.sin(z)}") # 输出: (3.853738-27.01681j)
 
 浮点数运算存在固有的精度限制（IEEE 754 标准）。
 
-* **不要直接比较浮点数**：始终使用 `math.isclose(a, b)` 来检查两个浮点数是否在可接受的误差范围内相等。
-* **注意大数吃小数**：当两个数量级相差巨大的数相加时，小数可能被忽略。
+- **不要直接比较浮点数**：始终使用 `math.isclose(a, b)` 来检查两个浮点数是否在可接受的误差范围内相等。
+- **注意大数吃小数**：当两个数量级相差巨大的数相加时，小数可能被忽略。
 
-    ```python
-    big = 1e15
-    small = 1.0
-    result = big + small - big
-    print(result) # 输出: 0.0 ( 而不是 1.0
-    ```
+  ```python
+  big = 1e15
+  small = 1.0
+  result = big + small - big
+  print(result) # 输出: 0.0 ( 而不是 1.0
+  ```
 
-    **解决方案**：调整计算顺序或使用 `math.fsum()` 对可迭代对象进行高精度求和。
+  **解决方案**：调整计算顺序或使用 `math.fsum()` 对可迭代对象进行高精度求和。
 
-    ```python
-    numbers = [1e15, 1.0, -1e15]
-    better_result = math.fsum(numbers)
-    print(better_result) # 输出: 1.0
-    ```
+  ```python
+  numbers = [1e15, 1.0, -1e15]
+  better_result = math.fsum(numbers)
+  print(better_result) # 输出: 1.0
+  ```
 
 ### 5.3 性能考量
 
@@ -331,12 +331,12 @@ except ValueError as e:
 
 **最佳实践清单**：
 
-* **导入**：使用 `import math`。
-* **比较**：使用 `math.isclose()`，而非 `==`。
-* **取整**：根据需求选择 `ceil`, `floor`, `trunc`。
-* **复数**：使用 `cmath` 模块。
-* **精度**：注意浮点误差，对大数和小数混合运算使用 `math.fsum()`。
-* **错误**：使用 `try...except` 处理可能的 `ValueError`。
+- **导入**：使用 `import math`。
+- **比较**：使用 `math.isclose()`，而非 `==`。
+- **取整**：根据需求选择 `ceil`, `floor`, `trunc`。
+- **复数**：使用 `cmath` 模块。
+- **精度**：注意浮点误差，对大数和小数混合运算使用 `math.fsum()`。
+- **错误**：使用 `try...except` 处理可能的 `ValueError`。
 
 对于更高级的数值计算需求（如矩阵运算、线性代数、傅里叶变换等），推荐使用 **NumPy** 和 **SciPy** 等第三方库，它们构建在 `math` 等基础模块之上，提供了更强大的功能和性能。
 

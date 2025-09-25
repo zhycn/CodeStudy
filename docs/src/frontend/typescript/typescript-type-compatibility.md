@@ -30,15 +30,15 @@ interface Person {
 let person: Person;
 
 // ✅ `obj` 拥有 `Person` 所要求的 `name` 和 `age` 属性，且类型匹配
-const obj = { name: "Alice", age: 30, gender: "female" };
+const obj = { name: 'Alice', age: 30, gender: 'female' };
 person = obj; // OK
 
 // ❌ `obj2` 缺少 `age` 属性，不兼容
-const obj2 = { name: "Bob" };
+const obj2 = { name: 'Bob' };
 person = obj2; // Error: Property 'age' is missing in type '{ name: string; }' but required in type 'Person'.
 
 // ❌ `obj3` 的 `age` 属性类型不匹配
-const obj3 = { name: "Charlie", age: "twenty-five" };
+const obj3 = { name: 'Charlie', age: 'twenty-five' };
 person = obj3; // Error: Type 'string' is not assignable to type 'number'.
 ```
 
@@ -75,10 +75,10 @@ handler2 = handler1; // Error: Type '(a: number, b: number) => void' is not assi
 
 ```typescript
 let func1: () => { name: string; age: number } = () => ({
-  name: "Alice",
+  name: 'Alice',
   age: 30,
 });
-let func2: () => { name: string } = () => ({ name: "Bob" });
+let func2: () => { name: string } = () => ({ name: 'Bob' });
 
 // ✅ func1 的返回值类型 {name, age} 包含 func2 的返回值类型 {name}
 // 所以 func1 可以安全地赋值给 func2（调用者会得到比预期更多的信息）
@@ -96,15 +96,15 @@ func1 = func2; // Error: Property 'age' is missing in type '{ name: string; }' b
 ```typescript
 class Animal {
   constructor(public name: string) {}
-  private secret: string = "secret";
+  private secret: string = 'secret';
 }
 class Person {
   constructor(public name: string) {}
-  private secret: string = "different secret";
+  private secret: string = 'different secret';
 }
 
-let animal: Animal = new Animal("Dog");
-let person: Person = new Person("Alice");
+let animal: Animal = new Animal('Dog');
+let person: Person = new Person('Alice');
 
 // ❌ 虽然结构相似，但私有成员 `secret` 来自不同的类声明，因此不兼容
 animal = person; // Error: Type 'Person' is not assignable to type 'Animal'. Types have separate declarations of a private property 'secret'.
@@ -144,17 +144,17 @@ TypeScript 提供了两种语法形式：
 
 1. **角括号语法**：
 
-    ```typescript
-    let someValue: any = "this is a string";
-    let strLength: number = (<string>someValue).length;
-    ```
+   ```typescript
+   let someValue: any = 'this is a string';
+   let strLength: number = (<string>someValue).length;
+   ```
 
 2. **`as` 语法**（在 JSX 中必须使用这种语法）：
 
-    ```typescript
-    let someValue: any = "this is a string";
-    let strLength: number = (someValue as string).length;
-    ```
+   ```typescript
+   let someValue: any = 'this is a string';
+   let strLength: number = (someValue as string).length;
+   ```
 
 两种语法功能完全等效。**现代 TypeScript 开发中更推荐使用 `as` 语法**，因为它更清晰，并且避免了与 JSX 语法(`<div>`)的冲突。
 
@@ -179,7 +179,7 @@ function getName(animal: Cat | Fish): string {
 function isFish(animal: Cat | Fish): boolean {
   // 直接调用 animal.swim() 会报错
   // 使用类型断言告诉编译器 animal 就是 Fish
-  if (typeof (animal as Fish).swim === "function") {
+  if (typeof (animal as Fish).swim === 'function') {
     return true;
   }
   return false;
@@ -191,7 +191,7 @@ function isFish(animal: Cat | Fish): boolean {
 ```typescript
 // 更好的方式：使用类型守卫
 function isFishBetter(animal: Cat | Fish): animal is Fish {
-  return typeof (animal as Fish).swim === "function";
+  return typeof (animal as Fish).swim === 'function';
 }
 
 if (isFishBetter(animal)) {
@@ -206,22 +206,22 @@ if (isFishBetter(animal)) {
 有时我们会遇到 TypeScript 过于严格而无法理解的场景，导致编译错误。此时，我们可以使用 `as any` 来暂时绕过检查。
 
 ```typescript
-const root = document.getElementById("root");
+const root = document.getElementById('root');
 // ❌ Error: Object is possibly 'null'
-root.innerHTML = "hello";
+root.innerHTML = 'hello';
 
 // ✅ 使用类型断言，假设我们确定该元素一定存在
-(root as any).innerHTML = "hello";
+(root as any).innerHTML = 'hello';
 ```
 
 **最佳实践**：**`any` 会彻底失去类型保护，应极其谨慎地使用**。这应该是最后的手段。上例中，更好的做法是使用**可选链（Optional Chaining）** 和**空值合并（Nullish Coalescing）** 或明确的空检查。
 
 ```typescript
 // 更好的方式：使用可选链和空值合并
-root?.innerHTML = "hello";
+root?.innerHTML = 'hello';
 // 或明确的判断
 if (root) {
-  root.innerHTML = "hello";
+  root.innerHTML = 'hello';
 }
 ```
 
@@ -241,7 +241,7 @@ interface User {
 }
 
 // ✅ 将返回的 any 断言为 User 类型，后续使用就具有了类型检查
-const user = getCacheData("user_001") as User;
+const user = getCacheData('user_001') as User;
 console.log(user.name); // OK, string
 console.log(user.age); // OK, number
 // console.log(user.gender); // Error: Property 'gender' does not exist on type 'User'.
@@ -302,22 +302,22 @@ let saferLength: number = mayBeNull?.length ?? 0;
 
 ```typescript
 // 没有 const 断言
-let x = "hello"; // type: string
+let x = 'hello'; // type: string
 let arr = [1, 2, 3]; // type: number[]
-let obj = { name: "Alice", age: 30 }; // type: { name: string; age: number; }
+let obj = { name: 'Alice', age: 30 }; // type: { name: string; age: number; }
 
 // 使用 const 断言
-let y = "world" as const; // type: "world"
+let y = 'world' as const; // type: "world"
 let tuple = [1, 2, 3] as const; // type: readonly [1, 2, 3]
-let constObj = { name: "Bob", age: 25 } as const; // type: { readonly name: "Bob"; readonly age: 25; }
+let constObj = { name: 'Bob', age: 25 } as const; // type: { readonly name: "Bob"; readonly age: 25; }
 
 // 应用：用于定义严格的配置对象或联合类型
-const colors = ["red", "green", "blue"] as const; // type: readonly ["red", "green", "blue"]
+const colors = ['red', 'green', 'blue'] as const; // type: readonly ["red", "green", "blue"]
 type Color = (typeof colors)[number]; // type: "red" | "green" | "blue"
 
 function setColor(color: Color) {}
-setColor("red"); // OK
-setColor("yellow"); // Error: Argument of type '"yellow"' is not assignable to parameter of type 'Color'.
+setColor('red'); // OK
+setColor('yellow'); // Error: Argument of type '"yellow"' is not assignable to parameter of type 'Color'.
 ```
 
 ## 4. 总结与最佳实践一览
@@ -336,12 +336,12 @@ setColor("yellow"); // Error: Argument of type '"yellow"' is not assignable to p
 1. **慎用原则**：类型断言是“逃离”类型检查的手段，应谨慎使用。**优先考虑改进代码设计或使用更安全的替代方案**（如类型守卫、可选链、空值合并）。
 2. **语法选择**：推荐使用 `as` 语法。
 3. **替代方案**：
-    - 对于联合类型，**优先使用类型守卫 (`is`)** 而不是断言。
-    - 对于可能为 `null/undefined` 的值，**优先使用可选链 (`?.`) 和空值合并 (`??`)** 而不是非空断言 (`!`)。
+   - 对于联合类型，**优先使用类型守卫 (`is`)** 而不是断言。
+   - 对于可能为 `null/undefined` 的值，**优先使用可选链 (`?.`) 和空值合并 (`??`)** 而不是非空断言 (`!`)。
 4. **明确场景**：
-    - 将 `any` 断言为具体类型是常见且有益的，可以收复失地，获得类型安全。
-    - 双重断言 (`as any as T`) 是**代码异味（Code Smell）**，应极力避免。
-    - `const` 断言是定义字面量类型和只读结构的强大工具。
+   - 将 `any` 断言为具体类型是常见且有益的，可以收复失地，获得类型安全。
+   - 双重断言 (`as any as T`) 是**代码异味（Code Smell）**，应极力避免。
+   - `const` 断言是定义字面量类型和只读结构的强大工具。
 
 通过深入理解并合理运用类型兼容性和类型断言，你可以在 TypeScript 的类型安全性和开发灵活性之间找到最佳平衡，编写出既健壮又高效的代码。
 

@@ -19,9 +19,9 @@
 ```typescript
 // 定义一个表示方向的数字枚举
 enum Direction {
-  Up,    // 默认值为 0
-  Down,  // 自动递增为 1
-  Left,  // 自动递增为 2
+  Up, // 默认值为 0
+  Down, // 自动递增为 1
+  Left, // 自动递增为 2
   Right, // 自动递增为 3
 }
 
@@ -82,7 +82,7 @@ console.log(currentPath); // 输出: "/about"
 // 不推荐：异构枚举
 enum BooleanLikeHeterogeneousEnum {
   No = 0,
-  Yes = "YES",
+  Yes = 'YES',
 }
 ```
 
@@ -140,15 +140,15 @@ if (level === LogLevel.Error) {
 
 1. **替代魔法值**: 当你有一组相关的、有限的、在编译时已知的常量时。
 
-    ```typescript
-    // 坏
-    if (status === 200) { ... }
-    if (permission === 'rw') { ... }
+   ```typescript
+   // 坏
+   if (status === 200) { ... }
+   if (permission === 'rw') { ... }
 
-    // 好
-    if (status === HttpStatus.Success) { ... }
-    if (permission === FilePermission.ReadWrite) { ... }
-    ```
+   // 好
+   if (status === HttpStatus.Success) { ... }
+   if (permission === FilePermission.ReadWrite) { ... }
+   ```
 
 2. **提高代码可读性**: 枚举成员的名称清晰地表达了其含义。
 3. **确保类型安全**: TypeScript 会检查赋值和比较操作，避免无效的值。
@@ -164,29 +164,29 @@ if (level === LogLevel.Error) {
 
 - 当你**需要**在运行时访问枚举对象时（例如，需要根据枚举值动态获取其名称，或者需要遍历所有枚举值）。
 
-    ```typescript
-    enum UserRole {
-      Admin = 'admin',
-      Editor = 'editor',
-      User = 'user',
-    }
+  ```typescript
+  enum UserRole {
+    Admin = 'admin',
+    Editor = 'editor',
+    User = 'user',
+  }
 
-    // 需要运行时获取所有角色列表
-    const allRoles: UserRole[] = Object.values(UserRole);
-    console.log(allRoles); // ['admin', 'editor', 'user']
+  // 需要运行时获取所有角色列表
+  const allRoles: UserRole[] = Object.values(UserRole);
+  console.log(allRoles); // ['admin', 'editor', 'user']
 
-    // 或者根据值获取键
-    function getRoleName(role: UserRole): string {
-      // 注意：字符串枚举没有反向映射，需要自己实现
-      for (const [key, value] of Object.entries(UserRole)) {
-        if (value === role) {
-          return key;
-        }
+  // 或者根据值获取键
+  function getRoleName(role: UserRole): string {
+    // 注意：字符串枚举没有反向映射，需要自己实现
+    for (const [key, value] of Object.entries(UserRole)) {
+      if (value === role) {
+        return key;
       }
-      return 'Unknown';
     }
-    console.log(getRoleName(UserRole.Admin)); // "Admin"
-    ```
+    return 'Unknown';
+  }
+  console.log(getRoleName(UserRole.Admin)); // "Admin"
+  ```
 
 - 当你的项目配置无法启用 `--isolatedModules` 且枚举需要在多个文件中被使用时（这是一个较旧的约束，现代工具链中较少见）。
 
@@ -213,14 +213,14 @@ log('Hello', 'info'); // 直接使用字符串，无需导入枚举
 
 **选择枚举还是联合类型？**
 
-| 特性 | 枚举 (`enum`) | 常量枚举 (`const enum`) | 字面量联合类型 |
-| :--- | :--- | :--- | :--- |
-| **运行时存在** | 是 | 否 | 否（纯类型） |
-| **内联值** | 否 | 是 | 是（本身就是值） |
-| **命名空间** | 有 | 无（编译后） | 无 |
-| **可遍历** | 是 | 否 | 否 |
-| **需要导入** | 是 | 是（类型位置） | 否（如果同文件） |
-| **JS 中使用** | 可以 | 不可以（需编译） | 可以（但无类型检查） |
+| 特性           | 枚举 (`enum`) | 常量枚举 (`const enum`) | 字面量联合类型       |
+| :------------- | :------------ | :---------------------- | :------------------- |
+| **运行时存在** | 是            | 否                      | 否（纯类型）         |
+| **内联值**     | 否            | 是                      | 是（本身就是值）     |
+| **命名空间**   | 有            | 无（编译后）            | 无                   |
+| **可遍历**     | 是            | 否                      | 否                   |
+| **需要导入**   | 是            | 是（类型位置）          | 否（如果同文件）     |
+| **JS 中使用**  | 可以          | 不可以（需编译）        | 可以（但无类型检查） |
 
 **建议：**
 
@@ -230,12 +230,12 @@ log('Hello', 'info'); // 直接使用字符串，无需导入枚举
 
 ## 6. 总结
 
-| 特性 | 普通枚举 (`enum`) | 常量枚举 (`const enum`) |
-| :--- | :--- | :--- |
-| **编译结果** | 生成一个运行时对象 | 完全移除（默认） |
-| **反向映射** | 数字枚举有 | 无 |
-| **性能/体积** | 有运行时开销 | **无开销，体积更小** |
-| **适用场景** | 需要运行时访问枚举 | 仅需编译时类型安全 |
+| 特性          | 普通枚举 (`enum`)  | 常量枚举 (`const enum`) |
+| :------------ | :----------------- | :---------------------- |
+| **编译结果**  | 生成一个运行时对象 | 完全移除（默认）        |
+| **反向映射**  | 数字枚举有         | 无                      |
+| **性能/体积** | 有运行时开销       | **无开销，体积更小**    |
+| **适用场景**  | 需要运行时访问枚举 | 仅需编译时类型安全      |
 
 **核心最佳实践：**
 

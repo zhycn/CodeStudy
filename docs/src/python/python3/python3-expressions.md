@@ -248,22 +248,22 @@ Python 遵循特定的操作符优先级规则，可以使用括号明确求值�
 
 ### 3.1 操作符优先级表（从高到低）
 
-| 操作符 | 描述 |
-|--------|------|
-| `()` | 括号分组 |
-| `**` | 指数 |
-| `+x`, `-x`, `~x` | 正、负、按位非 |
-| `*`, `/`, `//`, `%` | 乘、除、地板除、取模 |
-| `+`, `-` | 加、减 |
-| `<<`, `>>` | 位移 |
-| `&` | 按位与 |
-| `^` | 按位异或 |
-| `\|` | 按位或 |
-| `==`, `!=`, `>`, `>=`, `<`, `<=`, `is`, `is not`, `in`, `not in` | 比较、身份、成员 |
-| `not` | 逻辑非 |
-| `and` | 逻辑与 |
-| `or` | 逻辑或 |
-| `:=` | 赋值表达式 |
+| 操作符                                                           | 描述                 |
+| ---------------------------------------------------------------- | -------------------- |
+| `()`                                                             | 括号分组             |
+| `**`                                                             | 指数                 |
+| `+x`, `-x`, `~x`                                                 | 正、负、按位非       |
+| `*`, `/`, `//`, `%`                                              | 乘、除、地板除、取模 |
+| `+`, `-`                                                         | 加、减               |
+| `<<`, `>>`                                                       | 位移                 |
+| `&`                                                              | 按位与               |
+| `^`                                                              | 按位异或             |
+| `\|`                                                             | 按位或               |
+| `==`, `!=`, `>`, `>=`, `<`, `<=`, `is`, `is not`, `in`, `not in` | 比较、身份、成员     |
+| `not`                                                            | 逻辑非               |
+| `and`                                                            | 逻辑与               |
+| `or`                                                             | 逻辑或               |
+| `:=`                                                             | 赋值表达式           |
 
 ```python
 # 优先级示例
@@ -303,7 +303,7 @@ print(result)  # 输出: [0, 16, 36, 64]
 def process_large_data(data):
     # 使用生成器表达式避免内存溢出
     processed = (transform(item) for item in data if should_process(item))
-    
+
     for result in processed:
         yield result
 
@@ -346,9 +346,9 @@ status = "active" if user.is_authenticated else "inactive"
 
 # 不适合复杂的多分支逻辑
 # 不推荐 - 难以阅读
-message = ("Success" if status == 200 else 
-           "Not Found" if status == 404 else 
-           "Server Error" if status >= 500 else 
+message = ("Success" if status == 200 else
+           "Not Found" if status == 404 else
+           "Server Error" if status >= 500 else
            "Unknown")
 
 # 推荐 - 使用字典或普通if-else

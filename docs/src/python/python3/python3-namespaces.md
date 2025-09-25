@@ -52,7 +52,7 @@ def outer_func():
     # 封闭作用域 (E)
     x = 'enclosing x'
     y = 'enclosing y'
-    
+
     def inner_func():
         # 局部作用域 (L)
         x = 'local x'
@@ -60,7 +60,7 @@ def outer_func():
         print(y)        # 输出: enclosing y (L 中没有，找到 E)
         print(z)        # 输出: global z (L, E 中没有，找到 G)
         # print(a)      # 取消注释会引发 NameError (L, E, G, B 中都未找到)
-    
+
     inner_func()
     print(f"Outer function sees x as: {x}") # 输出: Outer function sees x as: enclosing x
 
@@ -116,15 +116,15 @@ increment() # 引发 UnboundLocalError
 ```python
 def outer():
     state = "Start"  # 封闭作用域变量
-    
+
     def inner():
         nonlocal state  # 声明我们要修改封闭作用域的 state
         previous_state = state
         state = "Finished"
         print(f"Changed from '{previous_state}' to '{state}'")
-    
+
     inner()
-    print(f"Outer sees: {state}") 
+    print(f"Outer sees: {state}")
 
 outer()
 # 输出:
@@ -140,57 +140,57 @@ outer()
 ## 4. 最佳实践与常见陷阱
 
 1. **避免滥用全局变量**
-    - **问题**：全局变量使得程序状态难以追踪和推理，降低了代码的模块化和可测试性。
-    - **实践**：优先将变量作为函数参数传递，而不是依赖全局状态。如果必须使用全局常量，通常用全大写命名（如 `CONFIG_VALUE`）。
+   - **问题**：全局变量使得程序状态难以追踪和推理，降低了代码的模块化和可测试性。
+   - **实践**：优先将变量作为函数参数传递，而不是依赖全局状态。如果必须使用全局常量，通常用全大写命名（如 `CONFIG_VALUE`）。
 
 2. **优先使用函数返回值而非修改外部变量**
 
-    ```python
-    # 不推荐
-    results = []
-    def process_data(data):
-        global results
-        results.extend(complicated_processing(data))
-    
-    # 推荐
-    def process_data(data):
-        return complicated_processing(data)
-    
-    results = process_data(my_data)
-    ```
+   ```python
+   # 不推荐
+   results = []
+   def process_data(data):
+       global results
+       results.extend(complicated_processing(data))
+
+   # 推荐
+   def process_data(data):
+       return complicated_processing(data)
+
+   results = process_data(my_data)
+   ```
 
 3. **理解闭包中的变量绑定**
-    - 闭包可以记住并访问其词法作用域中的变量，即使函数是在其作用域之外执行的。
-    - 使用 `nonlocal` 可以安全地修改封闭变量。
+   - 闭包可以记住并访问其词法作用域中的变量，即使函数是在其作用域之外执行的。
+   - 使用 `nonlocal` 可以安全地修改封闭变量。
 
 4. **小心可变默认参数**
-    - 这是一个与命名空间生命周期相关的经典陷阱。默认参数在函数定义时被创建并绑定到函数的 `__defaults__` 属性中，只创建一次。
+   - 这是一个与命名空间生命周期相关的经典陷阱。默认参数在函数定义时被创建并绑定到函数的 `__defaults__` 属性中，只创建一次。
 
-    ```python
-    # 错误示范
-    def append_to(item, my_list=[]): # 默认列表只创建一次
-        my_list.append(item)
-        return my_list
-    
-    print(append_to(1)) # 输出: [1]
-    print(append_to(2)) # 输出: [1, 2] 而不是预期的 [2]
-    
-    # 正确做法
-    def append_to_fixed(item, my_list=None):
-        if my_list is None:
-            my_list = [] # 每次调用都创建一个新列表
-        my_list.append(item)
-        return my_list
-    ```
+   ```python
+   # 错误示范
+   def append_to(item, my_list=[]): # 默认列表只创建一次
+       my_list.append(item)
+       return my_list
+
+   print(append_to(1)) # 输出: [1]
+   print(append_to(2)) # 输出: [1, 2] 而不是预期的 [2]
+
+   # 正确做法
+   def append_to_fixed(item, my_list=None):
+       if my_list is None:
+           my_list = [] # 每次调用都创建一个新列表
+       my_list.append(item)
+       return my_list
+   ```
 
 ## 总结
 
-| 概念 | 描述 | 关键点 |
-| :--- | :--- | :--- |
-| **命名空间** | 名称到对象的映射容器。 | 分内置、全局、局部。生命周期各异。 |
-| **作用域** | 可直接访问命名空间的代码区域。 | 静态作用域，遵循 LEGB 查找规则。 |
-| **`global`** | 用于在函数内部修改**全局**变量。 | 慎用，通常有更好的设计。 |
-| **`nonlocal`** | 用于在嵌套函数中修改**封闭**变量。 | 实现闭包和状态维护的关键。 |
+| 概念           | 描述                               | 关键点                             |
+| :------------- | :--------------------------------- | :--------------------------------- |
+| **命名空间**   | 名称到对象的映射容器。             | 分内置、全局、局部。生命周期各异。 |
+| **作用域**     | 可直接访问命名空间的代码区域。     | 静态作用域，遵循 LEGB 查找规则。   |
+| **`global`**   | 用于在函数内部修改**全局**变量。   | 慎用，通常有更好的设计。           |
+| **`nonlocal`** | 用于在嵌套函数中修改**封闭**变量。 | 实现闭包和状态维护的关键。         |
 
 掌握命名空间和作用域，能够帮助你写出更清晰、更健壮、更易于调试的代码。始终牢记最小化变量的作用范围是提高代码质量的有效原则。当你遇到意外的 `UnboundLocalError` 或变量值被“神秘”修改时，首先就应该从作用域和命名空间的角度来排查问题。
 

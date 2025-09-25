@@ -143,7 +143,7 @@ class Person:
     def __init__(self, name, age):
         self.name = name
         self.age = age
-    
+
     def __repr__(self):
         return f"Person(name='{self.name}', age={self.age})"
 
@@ -168,11 +168,11 @@ class CustomClass:
     def __init__(self, value):
         self.value = value
         self.computed = self.value * 2  # 派生属性
-    
+
     def __reduce__(self):
         # 返回一个元组：(可调用对象, 可调用对象的参数元组)
         return (self.__class__, (self.value,))
-    
+
     def __repr__(self):
         return f"CustomClass(value={self.value}, computed={self.computed})"
 
@@ -258,13 +258,13 @@ print(f"Original size: {len(pickled_data)}, Optimized size: {len(optimized_data)
 
 ## 8. 替代方案比较
 
-| 特性 | pickle | json | marshal |
-|------|--------|------|---------|
-| 安全性 | 不安全 | 安全 | 不安全 |
-| Python 专用 | 是 | 否 | 是 |
-| 支持复杂对象 | 是 | 有限 | 有限 |
-| 跨版本兼容性 | 好 | 好 | 差 |
-| 性能 | 高 | 中 | 高 |
+| 特性         | pickle | json | marshal |
+| ------------ | ------ | ---- | ------- |
+| 安全性       | 不安全 | 安全 | 不安全  |
+| Python 专用  | 是     | 否   | 是      |
+| 支持复杂对象 | 是     | 有限 | 有限    |
+| 跨版本兼容性 | 好     | 好   | 差      |
+| 性能         | 高     | 中   | 高      |
 
 ## 9. 最佳实践总结
 

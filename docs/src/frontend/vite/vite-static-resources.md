@@ -20,12 +20,12 @@ Vite 可以解析多种静态资源的 URL，包括图像、字体、视频等�
 
 ```javascript
 // 在 JavaScript 或组件中
-import imgUrl from './img/avatar.png'
+import imgUrl from './img/avatar.png';
 
 // 使用该 URL
-const image = document.createElement('img')
-image.src = imgUrl
-document.body.appendChild(image)
+const image = document.createElement('img');
+image.src = imgUrl;
+document.body.appendChild(image);
 ```
 
 在上述例子中，`imgUrl` 在开发阶段会是 `/src/img/avatar.png`，在生产构建后则会是一个带有哈希值的文件名（如 `assets/avatar.2e2e2e2e.png`），并可能被输出到 `assets` 目录。
@@ -37,7 +37,7 @@ document.body.appendChild(image)
 ```jsx
 // React JSX
 function Header() {
-  return 
+  return;
 }
 ```
 
@@ -49,17 +49,17 @@ Vite 的开发服务器会识别这个资源请求并正确地提供服务。在
 
 存放在项目根目录 `public` 下的资源会被完全静态化复制，不会被 Vite 处理或哈希化。
 
-* **使用场景**：适用于需要完全保持原样文件名和路径的资源（如 `robots.txt`），或通过绝对路径显式引用的资源（如 `/icons/avatar.png`）。
-* **引用方式**：使用根绝对路径直接引用。
+- **使用场景**：适用于需要完全保持原样文件名和路径的资源（如 `robots.txt`），或通过绝对路径显式引用的资源（如 `/icons/avatar.png`）。
+- **引用方式**：使用根绝对路径直接引用。
 
 ```html
 
 ```
 
-* **注意事项**：
-  * 资源必须放在 `public` 目录下，例如 `public/icons/avatar.png`。
-  * 引用时不要包含 `public`。Vite 在开发和生产构建时会自动将其映射为根路径。
-  * 其中的资源不会被 Bundled（打包优化）。
+- **注意事项**：
+  - 资源必须放在 `public` 目录下，例如 `public/icons/avatar.png`。
+  - 引用时不要包含 `public`。Vite 在开发和生产构建时会自动将其映射为根路径。
+  - 其中的资源不会被 Bundled（打包优化）。
 
 #### 1.2.2 JSON
 
@@ -67,12 +67,12 @@ JSON 文件可以被直接导入，支持具名导入和默认导入。
 
 ```javascript
 // 导入整个对象
-import jsonData from './data.json'
+import jsonData from './data.json';
 
 // 具名导入 (Tree-shakable
-import { name } from './data.json'
+import { name } from './data.json';
 
-console.log(jsonData, name)
+console.log(jsonData, name);
 ```
 
 ### 1.3 资源转换与优化
@@ -82,9 +82,9 @@ console.log(jsonData, name)
 通过显式添加 `?url` 后缀，可以强制将资源作为一个 URL 字符串导入。这在某些需要直接获取 URL 字符串的场景下有用。
 
 ```javascript
-import workerURL from './worker.js?url'
+import workerURL from './worker.js?url';
 
-const worker = new Worker(workerURL, { type: 'module' })
+const worker = new Worker(workerURL, { type: 'module' });
 ```
 
 #### 1.3.2 资源作为字符串 (`?raw`)
@@ -92,9 +92,9 @@ const worker = new Worker(workerURL, { type: 'module' })
 通过添加 `?raw` 后缀，可以将资源作为原始字符串导入。适用于需要内联的 SVG 或 GLSL 着色器等。
 
 ```javascript
-import svgString from './circle.svg?raw'
+import svgString from './circle.svg?raw';
 
-document.body.innerHTML = svgString
+document.body.innerHTML = svgString;
 ```
 
 #### 1.3.3 WebAssembly (`?init`)
@@ -102,11 +102,11 @@ document.body.innerHTML = svgString
 Vite 对 `.wasm` 文件提供了实验性支持。使用 `?init` 后缀可以导入一个返回 `WebAssembly.Instance` 的 Promise 的初始化函数。
 
 ```javascript
-import init from './module.wasm?init'
+import init from './module.wasm?init';
 
 init().then((instance) => {
-  instance.exports.test()
-})
+  instance.exports.test();
+});
 ```
 
 ### 1.4 动态资源引入
@@ -116,17 +116,17 @@ init().then((instance) => {
 ```javascript
 // 正确：Vite 能处理并优化这些资源
 function getImageUrl(name) {
-  return new URL(`./dir/${name}.png`, import.meta.url).href
+  return new URL(`./dir/${name}.png`, import.meta.url).href;
 }
 
-const imageUrl = getImageUrl('my-image')
+const imageUrl = getImageUrl('my-image');
 ```
 
 **重要**：避免使用运行时拼接的纯字符串路径，因为 Vite 的静态分析无法识别它们，可能导致资源丢失或未优化。
 
 ```javascript
 // 不推荐：Vite 可能无法正确识别和处理此路径
-const riskyUrl = `./images/${imageName}.png`
+const riskyUrl = `./images/${imageName}.png`;
 ```
 
 ## 第二部分：样式处理
@@ -137,7 +137,7 @@ Vite 原生支持 CSS 文件的导入。直接在 JavaScript 中 `import` CSS �
 
 ```javascript
 // 在 main.js 或组件中
-import './style.css'
+import './style.css';
 ```
 
 导入的 CSS 将会通过 `<style>` 标签被自动注入到你的 HTML 中，并在 HMR 时热更新。
@@ -154,9 +154,9 @@ import './style.css'
 ```
 
 ```javascript
-import styles from './style.module.css'
+import styles from './style.module.css';
 
-document.getElementById('app').className = styles.className
+document.getElementById('app').className = styles.className;
 ```
 
 编译后，类名会被转换为哈希字符串，确保样式的局部作用域，避免全局污染。
@@ -179,7 +179,7 @@ npm install -D stylus
 安装后，即可直接导入这些文件。
 
 ```javascript
-import './custom.scss'
+import './custom.scss';
 ```
 
 Vite 会自动调用安装的预处理器来编译这些文件。
@@ -214,9 +214,9 @@ npm install -D autoprefixer
 // postcss.config.js
 module.exports = {
   plugins: {
-    autoprefixer: {}
-  }
-}
+    autoprefixer: {},
+  },
+};
 ```
 
 ### 2.6 CSS 代码分割
@@ -230,7 +230,7 @@ module.exports = {
 // 当路由切换到 '/about' 时，这个组件及其样式会被异步加载
 export default {
   // ...
-}
+};
 ```
 
 对应的 CSS 会被提取到 `assets/about.[hash].css`。
@@ -239,10 +239,10 @@ export default {
 
 ### 2.7 样式作用域与最佳实践
 
-* **全局样式**：在主入口文件（如 `main.js`）导入的 CSS 通常是全局的。谨慎使用，避免样式冲突。
-* **CSS Modules**：对于组件级样式，**强烈推荐使用 CSS Modules**。它提供了可靠的局部作用域，是避免样式冲突的最佳方案。
-* **CSS-in-JS**：Vite 对 CSS-in-JS 库（如 styled-components）有良好的支持。这些库通常在运行时注入样式，因此 Vite 不会直接处理它们。但它们的 Babel 插件或 Vite 插件通常能与 Vite 的 HMR 良好协作。
-* **现代 CSS 特性**：考虑使用原生 CSS 变量 (`--var`)、`:where()` 和 `:is()` 等伪类来简化选择器和实现更干净的 CSS 架构。
+- **全局样式**：在主入口文件（如 `main.js`）导入的 CSS 通常是全局的。谨慎使用，避免样式冲突。
+- **CSS Modules**：对于组件级样式，**强烈推荐使用 CSS Modules**。它提供了可靠的局部作用域，是避免样式冲突的最佳方案。
+- **CSS-in-JS**：Vite 对 CSS-in-JS 库（如 styled-components）有良好的支持。这些库通常在运行时注入样式，因此 Vite 不会直接处理它们。但它们的 Babel 插件或 Vite 插件通常能与 Vite 的 HMR 良好协作。
+- **现代 CSS 特性**：考虑使用原生 CSS 变量 (`--var`)、`:where()` 和 `:is()` 等伪类来简化选择器和实现更干净的 CSS 架构。
 
 ## 第三部分：高级特性与最佳实践总结
 
@@ -252,56 +252,57 @@ export default {
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   assetsInclude: ['**/*.gltf', '**/*.glb'], // 将 glTF 文件视为静态资源
-})
+});
 ```
 
 ### 3.2 SVG 的特殊处理
 
 SVG 既是一种静态资源，也可以被转换为 React/Vue 组件，这提供了更大的灵活性。
 
-* **作为资源使用**：`import svgUrl from './icon.svg'`
-* **作为组件使用 (需要插件)**：
-  * **React**: 使用 <https://github.com/pd4d10/vite-plugin-svgr>
-  * **Vue**: 使用 <https://github.com/jpkleemans/vite-svg-loader>
+- **作为资源使用**：`import svgUrl from './icon.svg'`
+- **作为组件使用 (需要插件)**：
+  - **React**: 使用 <https://github.com/pd4d10/vite-plugin-svgr>
+  - **Vue**: 使用 <https://github.com/jpkleemans/vite-svg-loader>
 
 安装配置插件后，即可：
 
 ```jsx
-import { ReactComponent as Logo } from './logo.svg?react' // React with vite-plugin-svgr
-import Icon from './icon.svg?component' // Vue with vite-svg-loader
+import { ReactComponent as Logo } from './logo.svg?react'; // React with vite-plugin-svgr
+import Icon from './icon.svg?component'; // Vue with vite-svg-loader
 
 function App() {
   return (
     <div>
       <Logo />
     </div>
-  )
+  );
 }
 ```
 
 ### 3.3 最佳实践总结
 
 1. **静态资源**：
-    * 优先使用 `import` 进行显式导入，让 Vite 处理优化和哈希。
-    * 对于绝对路径引用的、无需处理的文件（如 `favicon.ico`），使用 `public` 目录。
-    * **动态资源一律使用 `new URL(url, import.meta.url)` 模式**。
-    * 善用 `?url` 和 `?raw` 后缀满足特定场景需求。
+   - 优先使用 `import` 进行显式导入，让 Vite 处理优化和哈希。
+   - 对于绝对路径引用的、无需处理的文件（如 `favicon.ico`），使用 `public` 目录。
+   - **动态资源一律使用 `new URL(url, import.meta.url)` 模式**。
+   - 善用 `?url` 和 `?raw` 后缀满足特定场景需求。
 
 2. **样式**：
-    * **组件样式强烈推荐使用 CSS Modules (`*.module.css`)** 来获得可靠的局部作用域。
-    * 根据项目需要安装对应的预处理器（`sass`, `less`）。
-    * 使用 PostCSS 和 Autoprefixer 确保浏览器兼容性。
-    * 利用 Vite 自动进行的 CSS `@import` 内联和代码分割功能，无需手动优化。
+   - **组件样式强烈推荐使用 CSS Modules (`*.module.css`)** 来获得可靠的局部作用域。
+   - 根据项目需要安装对应的预处理器（`sass`, `less`）。
+   - 使用 PostCSS 和 Autoprefixer 确保浏览器兼容性。
+   - 利用 Vite 自动进行的 CSS `@import` 内联和代码分割功能，无需手动优化。
 
 3. **配置**：
-    * 在 `vite.config.js` 中设置清晰的 `build.assetsDir`（如 `'assets'`）来组织输出结构。
-    * 使用 `build.assetsInlineLimit` 控制小资源是内联为 base64 还是作为文件输出（默认阈值为 `4KB`）。
+   - 在 `vite.config.js` 中设置清晰的 `build.assetsDir`（如 `'assets'`）来组织输出结构。
+   - 使用 `build.assetsInlineLimit` 控制小资源是内联为 base64 还是作为文件输出（默认阈值为 `4KB`）。
 
 通过遵循这些模式和最佳实践，你可以充分利用 Vite 在静态资源和样式处理上的强大能力，构建出高效、可维护的现代 Web 应用程序。
 
 ---
-*本文内容综合参考并总结了 Vite 官方文档、Web.dev、CSS-Tricks、Smashing Magazine 以及多位社区技术领袖的博客文章，以确保方案的准确性和最佳实践。*
+
+_本文内容综合参考并总结了 Vite 官方文档、Web.dev、CSS-Tricks、Smashing Magazine 以及多位社区技术领袖的博客文章，以确保方案的准确性和最佳实践。_

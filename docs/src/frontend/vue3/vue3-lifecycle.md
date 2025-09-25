@@ -28,14 +28,14 @@ flowchart TD
     J --> K[创建渲染效果<br>追踪响应式依赖]
     K --> L[挂载DOM]
     L --> M("mounted")
-    
+
     M --> N[等待状态变更]
     N --> O["beforeUpdate<br>(重渲染)"]
     O --> P[生成新的VNode]
     P --> Q[Diff & Patch DOM]
     Q --> R("updated")
     R --> N
-    
+
     N --> S["beforeUnmount<br>(父组件移除/条件渲染)"]
     S --> T[卸载Watchers & 子组件<br>清理DOM事件]
     T --> U("unmounted")
@@ -47,21 +47,21 @@ Vue 3 的生命周期可以分为四个主要阶段：**创建（Creation）**�
 
 ### 选项式 API 与 组合式 API 生命周期钩子对照表
 
-| 选项式 API Hook        | 组合式 API Hook         | 触发时机与用途                                                                 |
-| :--------------------- | :---------------------- | :----------------------------------------------------------------------------- |
-| `beforeCreate`         | `setup()` 内部          | 在实例初始化之后、响应式数据和事件配置之前调用。                               |
-| `created`              | `setup()` 内部          | 在实例处理完所有状态相关的选项（响应式数据、计算属性、方法等）后调用。           |
-| `beforeMount`          | `onBeforeMount`         | 在组件被挂载到 DOM 之前调用。                                                  |
-| `mounted`              | `onMounted`             | 在组件被挂载到 DOM 之后调用。                                                  |
-| `beforeUpdate`         | `onBeforeUpdate`        | 在组件即将因响应式状态变更而更新其 DOM 树之前调用。                            |
-| `updated`              | `onUpdated`             | 在组件因响应式状态变更而更新其 DOM 树之后调用。                                |
-| `beforeUnmount`        | `onBeforeUnmount`       | 在组件实例被卸载之前调用。                                                     |
-| `unmounted`            | `onUnmounted`           | 在组件实例被卸载之后调用。                                                     |
-| `errorCaptured`        | `onErrorCaptured`       | 在捕获了后代组件传递的错误时调用。                                             |
-| `renderTracked` (Dev)  | `onRenderTracked` (Dev) | 在组件渲染过程中追踪到响应式依赖时调用（仅用于开发模式）。                       |
-| `renderTriggered` (Dev)| `onRenderTriggered` (Dev)| 在响应式依赖触发组件重新渲染时调用（仅用于开发模式）。                           |
-| `activated`            | `onActivated`           | 被 `<KeepAlive>` 缓存的组件激活时调用。                                        |
-| `deactivated`          | `onDeactivated`         | 被 `<KeepAlive>` 缓存的组件失活时调用。                                        |
+| 选项式 API Hook         | 组合式 API Hook           | 触发时机与用途                                                         |
+| :---------------------- | :------------------------ | :--------------------------------------------------------------------- |
+| `beforeCreate`          | `setup()` 内部            | 在实例初始化之后、响应式数据和事件配置之前调用。                       |
+| `created`               | `setup()` 内部            | 在实例处理完所有状态相关的选项（响应式数据、计算属性、方法等）后调用。 |
+| `beforeMount`           | `onBeforeMount`           | 在组件被挂载到 DOM 之前调用。                                          |
+| `mounted`               | `onMounted`               | 在组件被挂载到 DOM 之后调用。                                          |
+| `beforeUpdate`          | `onBeforeUpdate`          | 在组件即将因响应式状态变更而更新其 DOM 树之前调用。                    |
+| `updated`               | `onUpdated`               | 在组件因响应式状态变更而更新其 DOM 树之后调用。                        |
+| `beforeUnmount`         | `onBeforeUnmount`         | 在组件实例被卸载之前调用。                                             |
+| `unmounted`             | `onUnmounted`             | 在组件实例被卸载之后调用。                                             |
+| `errorCaptured`         | `onErrorCaptured`         | 在捕获了后代组件传递的错误时调用。                                     |
+| `renderTracked` (Dev)   | `onRenderTracked` (Dev)   | 在组件渲染过程中追踪到响应式依赖时调用（仅用于开发模式）。             |
+| `renderTriggered` (Dev) | `onRenderTriggered` (Dev) | 在响应式依赖触发组件重新渲染时调用（仅用于开发模式）。                 |
+| `activated`             | `onActivated`             | 被 `<KeepAlive>` 缓存的组件激活时调用。                                |
+| `deactivated`           | `onDeactivated`           | 被 `<KeepAlive>` 缓存的组件失活时调用。                                |
 
 ## 3. 生命周期钩子详解与代码示例
 
@@ -83,7 +83,7 @@ import { ref, reactive } from 'vue';
 
 export default {
   props: {
-    title: String
+    title: String,
   },
   setup(props, context) {
     // 此时相当于 beforeCreate 和 created 阶段
@@ -103,11 +103,11 @@ export default {
     return {
       count,
       user,
-      increment
+      increment,
     };
-  }
+  },
   // beforeCreate 和 created 钩子在此选项式 API 中不再需要定义
-}
+};
 </script>
 ```
 
@@ -262,8 +262,8 @@ export default {
     });
 
     return { message, textElement, changeMessage };
-  }
-}
+  },
+};
 </script>
 ```
 
@@ -340,8 +340,8 @@ export default {
     onUnmounted(() => {
       console.log('组件已被卸载。');
     });
-  }
-}
+  },
+};
 </script>
 ```
 
@@ -358,31 +358,32 @@ export default {
 ## 4. 最佳实践与常见陷阱
 
 1. **数据获取在哪进行？**
-    * **`created` / `setup()`**：如果数据获取不需要依赖 DOM，应优先在此阶段进行，可以更早地发起请求。
-    * **`mounted`**：如果操作必须依赖 DOM，则在此进行。
+   - **`created` / `setup()`**：如果数据获取不需要依赖 DOM，应优先在此阶段进行，可以更早地发起请求。
+   - **`mounted`**：如果操作必须依赖 DOM，则在此进行。
 
 2. **避免在 `updated` 中改变状态**：
-    这很容易导致无限更新循环。如果必须，请添加条件判断来阻止循环。
+   这很容易导致无限更新循环。如果必须，请添加条件判断来阻止循环。
 
 3. **务必清理副作用**：
-    在 `onBeforeUnmount` (或选项式 API 的 `beforeUnmount`) 中清理定时器 (`setInterval`, `setTimeout`)、事件监听器 (如 `window.addEventListener`)、第三方库实例等。这是防止内存泄漏的关键。
+   在 `onBeforeUnmount` (或选项式 API 的 `beforeUnmount`) 中清理定时器 (`setInterval`, `setTimeout`)、事件监听器 (如 `window.addEventListener`)、第三方库实例等。这是防止内存泄漏的关键。
 
 4. **模板引用 (`ref`) 的访问时机**：
-    在 `setup()` 中，模板引用 (`ref`) 的初始值是 `null`。只有在 `onMounted` 及之后的生命周期钩子中才能访问到对应的 DOM 元素或组件实例。
+   在 `setup()` 中，模板引用 (`ref`) 的初始值是 `null`。只有在 `onMounted` 及之后的生命周期钩子中才能访问到对应的 DOM 元素或组件实例。
 
 5. **组合式 API 的优势**：
-    组合式 API 的钩子 (`onXxx`) 可以多次调用，并且逻辑相关的代码（数据、方法、生命周期）可以组织在一起，大大提高了代码的可读性和可维护性。对于新项目，强烈推荐使用组合式 API。
+   组合式 API 的钩子 (`onXxx`) 可以多次调用，并且逻辑相关的代码（数据、方法、生命周期）可以组织在一起，大大提高了代码的可读性和可维护性。对于新项目，强烈推荐使用组合式 API。
 
 ## 5. 总结
 
 Vue 3 的生命周期钩子为你提供了在组件不同阶段执行代码的能力。理解每个钩子的触发时机和适用场景是编写高效、无内存泄漏 Vue 应用的关键。
 
-* **创建阶段 (`setup`)**: 初始化响应式状态和事件。
-* **挂载阶段 (`onMounted`)**: 访问 DOM，集成第三方库。
-* **更新阶段 (谨慎使用 `onUpdated`)**: 响应状态变化后的 DOM 操作。
-* **卸载阶段 (`onBeforeUnmount`)**: **清理副作用，防止内存泄漏**。
+- **创建阶段 (`setup`)**: 初始化响应式状态和事件。
+- **挂载阶段 (`onMounted`)**: 访问 DOM，集成第三方库。
+- **更新阶段 (谨慎使用 `onUpdated`)**: 响应状态变化后的 DOM 操作。
+- **卸载阶段 (`onBeforeUnmount`)**: **清理副作用，防止内存泄漏**。
 
 根据你的逻辑需求，选择正确的钩子函数，并遵循本文提到的最佳实践，将帮助你构建出更加稳健的 Vue 应用程序。
 
 ---
+
 **版权声明**：本文内容部分参考并总结了 <https://vuejs.org/guide/essentials/lifecycle.html> 及社区最佳实践，旨在提供清晰的学习指南。

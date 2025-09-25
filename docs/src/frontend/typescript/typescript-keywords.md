@@ -20,7 +20,7 @@ TypeScript 作为 JavaScript 的超集，引入了一套强大的类型系统和
 
 ```typescript
 type UserID = number;
-type UserRole = "admin" | "editor" | "viewer";
+type UserRole = 'admin' | 'editor' | 'viewer';
 ```
 
 ### `interface`
@@ -48,7 +48,7 @@ enum LogLevel {
   Error = 0,
   Warn = 1,
   Info = 2,
-  Debug = 3
+  Debug = 3,
 }
 ```
 
@@ -57,7 +57,7 @@ enum LogLevel {
 最宽松的类型，应谨慎使用：
 
 ```typescript
-let uncertainValue: any = "could be anything";
+let uncertainValue: any = 'could be anything';
 uncertainValue = 42; // 有效
 ```
 
@@ -68,7 +68,7 @@ uncertainValue = 42; // 有效
 ```typescript
 let userInput: unknown = fetchUserInput();
 
-if (typeof userInput === "string") {
+if (typeof userInput === 'string') {
   console.log(userInput.toUpperCase());
 }
 ```
@@ -131,7 +131,7 @@ type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
 
 ```typescript
 function isAdmin(user: User): user is Admin {
-  return "permissions" in user;
+  return 'permissions' in user;
 }
 ```
 
@@ -167,8 +167,11 @@ function example() {
 
 ```typescript
 class UserAccount {
-  constructor(public id: number, public name: string) {}
-  
+  constructor(
+    public id: number,
+    public name: string
+  ) {}
+
   greet() {
     return `Hello, ${this.name}!`;
   }
@@ -183,7 +186,7 @@ class UserAccount {
 class SecureUser {
   private secret: string;
   protected token: string;
-  
+
   public constructor(secret: string) {
     this.secret = secret;
   }
@@ -196,7 +199,7 @@ class SecureUser {
 
 ```typescript
 class Config {
-  readonly apiUrl: string = "https://api.example.com";
+  readonly apiUrl: string = 'https://api.example.com';
 }
 ```
 
@@ -207,7 +210,7 @@ class Config {
 ```typescript
 class MathHelper {
   static PI = 3.14;
-  
+
   static circleArea(radius: number) {
     return this.PI * radius * radius;
   }
@@ -227,7 +230,7 @@ class Circle extends Shape {
   constructor(public radius: number) {
     super();
   }
-  
+
   area() {
     return Math.PI * this.radius ** 2;
   }
@@ -245,7 +248,7 @@ interface Printable {
 
 class Report implements Printable {
   print() {
-    console.log("Printing report...");
+    console.log('Printing report...');
   }
 }
 ```
@@ -257,7 +260,7 @@ class Report implements Printable {
 类型断言：
 
 ```typescript
-const input = document.getElementById("user-input") as HTMLInputElement;
+const input = document.getElementById('user-input') as HTMLInputElement;
 ```
 
 ### `satisfies`（TS 4.9+）
@@ -266,8 +269,8 @@ const input = document.getElementById("user-input") as HTMLInputElement;
 
 ```typescript
 const user = {
-  name: "Alice",
-  age: 30
+  name: 'Alice',
+  age: 30,
 } satisfies Record<string, string | number>;
 ```
 
@@ -276,7 +279,7 @@ const user = {
 获取值或变量的类型：
 
 ```typescript
-const defaultUser = { name: "Guest", role: "viewer" };
+const defaultUser = { name: 'Guest', role: 'viewer' };
 type DefaultUser = typeof defaultUser;
 ```
 
@@ -299,7 +302,7 @@ namespace Validation {
 环境声明：
 
 ```typescript
-declare module "*.svg" {
+declare module '*.svg' {
   const content: string;
   export default content;
 }
@@ -327,10 +330,10 @@ interface DB {
    ```typescript
    // 不推荐
    function parse(data: any) {}
-   
+
    // 推荐
    function safeParse(data: unknown) {
-     if (typeof data === "string") {
+     if (typeof data === 'string') {
        return JSON.parse(data);
      }
    }
@@ -339,8 +342,8 @@ interface DB {
 3. **利用 `as const` 进行字面量推断**
 
    ```typescript
-   const routes = ["/home", "/users", "/settings"] as const;
-   type Route = typeof routes[number]; // "/home" | "/users" | "/settings"
+   const routes = ['/home', '/users', '/settings'] as const;
+   type Route = (typeof routes)[number]; // "/home" | "/users" | "/settings"
    ```
 
 4. **组合关键字创建高级类型**
@@ -348,7 +351,7 @@ interface DB {
    ```typescript
    // 条件类型与 infer
    type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
-   
+
    // 映射类型与 keyof
    type Nullable<T> = {
      [K in keyof T]: T[K] | null;
@@ -359,17 +362,17 @@ interface DB {
 
    ```typescript
    const config = {
-     theme: "dark",
-     timeout: 5000
+     theme: 'dark',
+     timeout: 5000,
    } satisfies Record<string, string | number>;
-   
+
    // 正确推断 theme 为 string，timeout 为 number
    ```
 
 TypeScript 关键字系统提供了强大的工具集，使开发者能够在编译时捕获错误并表达复杂的类型关系。通过掌握这些关键字及其组合使用，您可以显著提高代码质量和开发效率。
 
-> 官方资源推荐：  
+> 官方资源推荐：
 >
-> - <https://www.typescriptlang.org/docs/handbook>  
-> - <https://www.typescriptlang.org/play>  
+> - <https://www.typescriptlang.org/docs/handbook>
+> - <https://www.typescriptlang.org/play>
 > - <https://github.com/microsoft/TypeScript>

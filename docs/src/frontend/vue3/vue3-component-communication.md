@@ -10,15 +10,15 @@
 
 Vue 3 中的组件通信可以根据组件关系大致分为以下几类：
 
-| 通信方式 | 关系 | 数据流向 | 特点 |
-| :--- | :--- | :--- | :--- |
-| **Props / Events** | 父组件 ↔ 子组件 | 单向（父到子） / 反向（子到父） | 最基础、最常用的父子通信方式 |
-| **v-model** | 父组件 ↔ 子组件 | 双向同步 | 语法糖，简化双向数据绑定 |
-| **透传 Attributes (`$attrs`)** | 父组件 → 子组件/更深层组件 | 单向 | 传递未声明的 Props 和事件监听器 |
-| **Refs 与模板引用** | 父组件 → 子组件 | 单向 | 父组件直接访问子组件实例或 DOM 元素 |
-| **Provide / Inject** | 祖先组件 → 后代组件 | 单向 | 跨层级组件数据传递 |
-| **事件总线 (Event Bus)** | 任意组件间 | 双向 | 基于 Vue 3 的 `mitt` 或 `tiny-emitter` 库，实现全局事件监听与触发 |
-| **状态管理 (Pinia)** | 任意组件间 | 双向 | 集中式状态管理，解决复杂应用的数据流问题 |
+| 通信方式                       | 关系                       | 数据流向                        | 特点                                                              |
+| :----------------------------- | :------------------------- | :------------------------------ | :---------------------------------------------------------------- |
+| **Props / Events**             | 父组件 ↔ 子组件           | 单向（父到子） / 反向（子到父） | 最基础、最常用的父子通信方式                                      |
+| **v-model**                    | 父组件 ↔ 子组件           | 双向同步                        | 语法糖，简化双向数据绑定                                          |
+| **透传 Attributes (`$attrs`)** | 父组件 → 子组件/更深层组件 | 单向                            | 传递未声明的 Props 和事件监听器                                   |
+| **Refs 与模板引用**            | 父组件 → 子组件            | 单向                            | 父组件直接访问子组件实例或 DOM 元素                               |
+| **Provide / Inject**           | 祖先组件 → 后代组件        | 单向                            | 跨层级组件数据传递                                                |
+| **事件总线 (Event Bus)**       | 任意组件间                 | 双向                            | 基于 Vue 3 的 `mitt` 或 `tiny-emitter` 库，实现全局事件监听与触发 |
+| **状态管理 (Pinia)**           | 任意组件间                 | 双向                            | 集中式状态管理，解决复杂应用的数据流问题                          |
 
 ## 2. 父子组件通信
 
@@ -134,11 +134,7 @@ const onInput = (event) => {
 ```vue
 <template>
   <div>
-    <ChildComponent 
-      @send-message="handleMessage" 
-      @update:modelValue="value = $event"
-      :modelValue="value"
-    />
+    <ChildComponent @send-message="handleMessage" @update:modelValue="value = $event" :modelValue="value" />
     <p>来自子组件的消息: {{ receivedMessage }}</p>
     <p>v-model 绑定的值: {{ value }}</p>
   </div>
@@ -173,13 +169,9 @@ const handleMessage = (message) => {
   <div>
     <!-- 单个 v-model -->
     <CustomInput v-model="username" />
-    
+
     <!-- 多个 v-model -->
-    <UserProfile
-      v-model:name="user.name"
-      v-model:age="user.age"
-      v-model:email="user.email"
-    />
+    <UserProfile v-model:name="user.name" v-model:age="user.age" v-model:email="user.email" />
   </div>
 </template>
 
@@ -192,7 +184,7 @@ const username = ref('');
 const user = reactive({
   name: '',
   age: null,
-  email: ''
+  email: '',
 });
 </script>
 ```
@@ -201,10 +193,7 @@ const user = reactive({
 
 ```vue
 <template>
-  <input
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
-  />
+  <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
 </template>
 
 <script setup>
@@ -243,11 +232,7 @@ defineEmits(['update:name', 'update:age', 'update:email']);
 
 ```vue
 <template>
-  <ChildComponent 
-    data-tooltip="This is a tooltip" 
-    class="custom-class" 
-    @click="handleClick" 
-  />
+  <ChildComponent data-tooltip="This is a tooltip" class="custom-class" @click="handleClick" />
 </template>
 ```
 
@@ -262,8 +247,8 @@ defineEmits(['update:name', 'update:age', 'update:email']);
 <script>
 // 选项式 API 中关闭自动透传
 export default {
-  inheritAttrs: false
-}
+  inheritAttrs: false,
+};
 </script>
 
 <!-- 组合式 API 写法 -->
@@ -289,7 +274,7 @@ console.log(attrs); // { data-tooltip: '...', class: '...', onClick: ... }
 <script setup>
 // 组合式 API 中，需要显式设置 inheritAttrs: false
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 });
 </script>
 ```
@@ -310,10 +295,10 @@ defineOptions({
   <div>
     <!-- 引用 DOM 元素 -->
     <input ref="inputRef" />
-    
+
     <!-- 引用子组件实例 -->
     <ChildComponent ref="childComponentRef" />
-    
+
     <button @click="focusInput">Focus Input</button>
     <button @click="callChildMethod">Call Child Method</button>
   </div>
@@ -367,7 +352,7 @@ const someMethod = () => {
 // 父组件 ref 将只能访问到暴露出来的这些内容
 defineExpose({
   someMethod,
-  childData
+  childData,
 });
 </script>
 ```
@@ -551,14 +536,15 @@ export const useCounterStore = defineStore('counter', {
   // State 是一个函数，返回初始状态
   state: () => ({
     count: 0,
-    name: 'Eduardo'
+    name: 'Eduardo',
   }),
   // Getters 等同于计算属性
   getters: {
     doubleCount: (state) => state.count * 2,
-    doubleCountPlusOne() { // 可以使用 this 访问整个 store 实例
+    doubleCountPlusOne() {
+      // 可以使用 this 访问整个 store 实例
       return this.doubleCount + 1;
-    }
+    },
   },
   // Actions 是方法，用于处理业务逻辑和异步操作
   actions: {
@@ -567,10 +553,10 @@ export const useCounterStore = defineStore('counter', {
     },
     async incrementAsync() {
       // 可以执行异步操作
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       this.increment();
-    }
-  }
+    },
+  },
 });
 ```
 
@@ -599,7 +585,7 @@ app.mount('#app');
     <p>Double: {{ counterStore.doubleCount }}</p>
     <button @click="counterStore.increment()">Increment</button>
     <button @click="counterStore.incrementAsync()">Increment Async</button>
-    
+
     <!-- 使用解构保持响应性 -->
     <p>Count (destructured): {{ count }}</p>
     <button @click="increment">Increment (destructured)</button>
@@ -632,15 +618,15 @@ const { increment } = counterStore;
 
 ## 8. 总结与选型建议
 
-| 场景 | 推荐方式 | 备注 |
-| :--- | :--- | :--- |
-| **父子组件简单通信** | **Props / Events** | 基础且必须掌握的方式，符合单向数据流原则。 |
-| **父子组件表单双向绑定** | **`v-model`** | 语法糖，简化代码，意图清晰。 |
-| **父组件调用子组件方法** | **模板引用 (Refs)** | 应急方案，应优先考虑用 Props/Events 解决。 |
-| **祖孙组件跨层级传递** | **Provide / Inject** | 适用于主题、配置等，避免 Prop 逐级透传。 |
-| **任意组件间通信** | **Pinia (状态管理)** | 复杂应用数据流的核心，功能强大，易于调试。 |
-| **简单全局事件或与非 Vue 代码通信** | **事件总线 (Mitt)** | 谨慎使用，注意内存泄漏，Pinia 通常是更好选择。 |
-| **构建基础 UI 组件** | **透传 Attributes** | 使组件更像原生 HTML 元素，提升可复用性。 |
+| 场景                                | 推荐方式             | 备注                                           |
+| :---------------------------------- | :------------------- | :--------------------------------------------- |
+| **父子组件简单通信**                | **Props / Events**   | 基础且必须掌握的方式，符合单向数据流原则。     |
+| **父子组件表单双向绑定**            | **`v-model`**        | 语法糖，简化代码，意图清晰。                   |
+| **父组件调用子组件方法**            | **模板引用 (Refs)**  | 应急方案，应优先考虑用 Props/Events 解决。     |
+| **祖孙组件跨层级传递**              | **Provide / Inject** | 适用于主题、配置等，避免 Prop 逐级透传。       |
+| **任意组件间通信**                  | **Pinia (状态管理)** | 复杂应用数据流的核心，功能强大，易于调试。     |
+| **简单全局事件或与非 Vue 代码通信** | **事件总线 (Mitt)**  | 谨慎使用，注意内存泄漏，Pinia 通常是更好选择。 |
+| **构建基础 UI 组件**                | **透传 Attributes**  | 使组件更像原生 HTML 元素，提升可复用性。       |
 
 **核心原则：**
 

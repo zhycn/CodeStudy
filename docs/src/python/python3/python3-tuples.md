@@ -291,21 +291,21 @@ print(p[0], p[1]) # 输出: 10 20 (仍然可以通过索引访问)
 
 - **创建速度**： `tuple()` 的创建速度通常比 `list()` 快。
 
-    ```python
-    # 在 IPython 或 Jupyter 中使用 %timeit 测试
-    # %timeit tuple(range(1000))
-    # %timeit list(range(1000))
-    ```
+  ```python
+  # 在 IPython 或 Jupyter 中使用 %timeit 测试
+  # %timeit tuple(range(1000))
+  # %timeit list(range(1000))
+  ```
 
 - **内存占用**： 元组比列表更节省内存，因为其结构更简单固定。
 
-    ```python
-    import sys
-    my_list = [1, 2, 3, 'hello']
-    my_tuple = (1, 2, 3, 'hello')
-    print(sys.getsizeof(my_list))   # 输出值通常比下一行大
-    print(sys.getsizeof(my_tuple))
-    ```
+  ```python
+  import sys
+  my_list = [1, 2, 3, 'hello']
+  my_tuple = (1, 2, 3, 'hello')
+  print(sys.getsizeof(my_list))   # 输出值通常比下一行大
+  print(sys.getsizeof(my_tuple))
+  ```
 
 ## 10. 常见问题解答（FAQ）
 

@@ -27,7 +27,7 @@ const myPoint = { x: 10, y: 20, z: 30 }; // 注意：这里有一个额外的属
 printPoint(myPoint); // ✅ 完全有效！因为 myPoint 包含 x 和 y
 
 // 直接传入一个对象字面量时，会有额外属性检查（后面会详述）
-printPoint({ x: 10, y: 20, z: 30 }); 
+printPoint({ x: 10, y: 20, z: 30 });
 // ❌ 错误：Object literal may only specify known properties, and 'z' does not exist in type 'Point'.
 ```
 
@@ -38,12 +38,12 @@ printPoint({ x: 10, y: 20, z: 30 });
 
 为了更好地理解结构化类型，我们将其与更常见的名义类型进行对比。
 
-| 特性 | 结构化类型 (TypeScript, Go) | 名义类型 (Java, C#, C++) |
-| :--- | :--- | :--- |
-| **兼容性判断依据** | 类型的实际结构（属性/方法） | 类型的显式声明名称 |
-| **核心思想** | “如果它走路像鸭子，叫声像鸭子，那么它就是鸭子。” | “它必须被明确定义为一只鸭子，才是鸭子。” |
-| **灵活性** | 高，易于创建和使用符合结构的对象 | 低，需要严格的继承或实现关系 |
-| **例子** | `const duck = { walk: () => {}, quack: () => {} };` 可被当作 `Duck` 类型 | `class RealDuck { ... }`；必须 `instanceof RealDuck` |
+| 特性               | 结构化类型 (TypeScript, Go)                                              | 名义类型 (Java, C#, C++)                             |
+| :----------------- | :----------------------------------------------------------------------- | :--------------------------------------------------- |
+| **兼容性判断依据** | 类型的实际结构（属性/方法）                                              | 类型的显式声明名称                                   |
+| **核心思想**       | “如果它走路像鸭子，叫声像鸭子，那么它就是鸭子。”                         | “它必须被明确定义为一只鸭子，才是鸭子。”             |
+| **灵活性**         | 高，易于创建和使用符合结构的对象                                         | 低，需要严格的继承或实现关系                         |
+| **例子**           | `const duck = { walk: () => {}, quack: () => {} };` 可被当作 `Duck` 类型 | `class RealDuck { ... }`；必须 `instanceof RealDuck` |
 
 ### 在 TypeScript 中模拟名义类型
 
@@ -83,7 +83,7 @@ convertToEUR(eurBalance); // Type 'EUR' is not assignable to type 'USD'.
 ```typescript
 class USD {
   // 私有字段确保结构唯一性
-  private _brand!: 'USD'; 
+  private _brand!: 'USD';
   constructor(public amount: number) {}
 }
 
@@ -158,7 +158,7 @@ const mouseHandler = (event: MouseEvent) => {
 
 // 在 --strictFunctionTypes 关闭（默认旧行为）时是允许的（参数双向协变）
 // 但这不安全！因为 listenEvent 可能只传递一个普通的 Event（缺少 x 和 y）
-listenEvent('click', mouseHandler); 
+listenEvent('click', mouseHandler);
 
 // 更安全的做法是让 Handler 参数类型更通用
 const safeHandler = (event: Event) => {
@@ -203,7 +203,7 @@ let myConfig = { colour: 'red', width: 100 }; // 注意：colour 而不是 color
 createSquare(myConfig); // ✅ 兼容！结构化类型只看 width，myConfig 有 width。
 
 // 2. 直接传递对象字面量
-createSquare({ colour: 'red', width: 100 }); 
+createSquare({ colour: 'red', width: 100 });
 // ❌ 错误！Object literal may only specify known properties, but 'colour' does not exist in type 'SquareConfig'. Did you mean to write 'color'?
 ```
 
@@ -216,67 +216,67 @@ createSquare({ colour: 'red', width: 100 });
 ## 4. 最佳实践
 
 1. **优先使用接口定义契约**
-    使用 `interface` 或 `type` 来明确定义你的数据结构，而不是依赖隐式的匿名类型。这极大地提高了代码的可读性和可维护性。
+   使用 `interface` 或 `type` 来明确定义你的数据结构，而不是依赖隐式的匿名类型。这极大地提高了代码的可读性和可维护性。
 
-    ```typescript
-    // 👍 良好实践
-    interface UserProfile {
-      id: number;
-      username: string;
-      email?: string;
-    }
-    function updateProfile(profile: UserProfile) { ... }
+   ```typescript
+   // 👍 良好实践
+   interface UserProfile {
+     id: number;
+     username: string;
+     email?: string;
+   }
+   function updateProfile(profile: UserProfile) { ... }
 
-    // 👎 避免这样做
-    function updateProfile(profile: { id: number; username: string; email?: string }) { ... }
-    ```
+   // 👎 避免这样做
+   function updateProfile(profile: { id: number; username: string; email?: string }) { ... }
+   ```
 
 2. **开启严格模式 (`strict: true`)**
-    在 `tsconfig.json` 中启用严格模式家族的所有选项。这能迫使你写出更健壮、更安全的代码，尤其是 `strictFunctionTypes` 对函数参数安全性的保障。
+   在 `tsconfig.json` 中启用严格模式家族的所有选项。这能迫使你写出更健壮、更安全的代码，尤其是 `strictFunctionTypes` 对函数参数安全性的保障。
 
 3. **理解并接受结构化类型，而非对抗它**
-    不要试图处处模拟名义类型。利用其灵活性来编写通用和可重用的代码。例如，一个操作 `{ id: number }` 的函数可以处理任何拥有 `id` 属性的对象。
+   不要试图处处模拟名义类型。利用其灵活性来编写通用和可重用的代码。例如，一个操作 `{ id: number }` 的函数可以处理任何拥有 `id` 属性的对象。
 
 4. **谨慎处理对象字面量**
-    直接传递字面量时，要小心多余属性错误。这是一个重要的安全网，可以捕获拼写错误。如果确定需要额外属性，应首先考虑调整类型定义（如使用联合类型或继承）而不是盲目绕过检查。
+   直接传递字面量时，要小心多余属性错误。这是一个重要的安全网，可以捕获拼写错误。如果确定需要额外属性，应首先考虑调整类型定义（如使用联合类型或继承）而不是盲目绕过检查。
 
 5. **使用 `readonly` 和 `const` 断言来保护结构**
-    为了防止对象被意外修改，可以使用 `readonly` 修饰符或 `as const` 断言。
+   为了防止对象被意外修改，可以使用 `readonly` 修饰符或 `as const` 断言。
 
-    ```typescript
-    interface ImmutablePoint {
-      readonly x: number;
-      readonly y: number;
-    }
+   ```typescript
+   interface ImmutablePoint {
+     readonly x: number;
+     readonly y: number;
+   }
 
-    const myPoint = { x: 10, y: 20 } as const;
-    // myPoint.x = 5; // ❌ Cannot assign to 'x' because it is a read-only property.
+   const myPoint = { x: 10, y: 20 } as const;
+   // myPoint.x = 5; // ❌ Cannot assign to 'x' because it is a read-only property.
 
-    function usePoint(point: Readonly<ImmutablePoint>) { ... } // 使用内置工具类型
-    ```
+   function usePoint(point: Readonly<ImmutablePoint>) { ... } // 使用内置工具类型
+   ```
 
 6. **善用工具类型（Utility Types）**
-    TypeScript 提供了强大的工具类型来操作现有类型，这些工具类型完全基于结构化类型系统。
-    * `Partial<T>`：使所有属性变为可选。
-    * `Pick<T, K>`：从 T 中选择一组属性 K。
-    * `Omit<T, K>`：从 T 中省略一组属性 K。
-    * `Record<K, V>`：构造一个属性键为 K，值为 V 的对象类型。
+   TypeScript 提供了强大的工具类型来操作现有类型，这些工具类型完全基于结构化类型系统。
+   - `Partial<T>`：使所有属性变为可选。
+   - `Pick<T, K>`：从 T 中选择一组属性 K。
+   - `Omit<T, K>`：从 T 中省略一组属性 K。
+   - `Record<K, V>`：构造一个属性键为 K，值为 V 的对象类型。
 
-    ```typescript
-    interface User {
-      id: number;
-      name: string;
-      email: string;
-      age: number;
-    }
+   ```typescript
+   interface User {
+     id: number;
+     name: string;
+     email: string;
+     age: number;
+   }
 
-    // 创建一个用于更新的类型，所有字段可选
-    type UserUpdate = Partial<User>;
-    // 等价于 { id?: number; name?: string; email?: string; age?: number; }
+   // 创建一个用于更新的类型，所有字段可选
+   type UserUpdate = Partial<User>;
+   // 等价于 { id?: number; name?: string; email?: string; age?: number; }
 
-    // 创建一个基本信息的类型，只包含 name 和 email
-    type BasicUserInfo = Pick<User, 'name' | 'email'>;
-    ```
+   // 创建一个基本信息的类型，只包含 name 和 email
+   type BasicUserInfo = Pick<User, 'name' | 'email'>;
+   ```
 
 ## 总结
 

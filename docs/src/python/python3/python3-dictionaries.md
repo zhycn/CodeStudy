@@ -267,7 +267,7 @@ print(dict1) # Output: {'a': 1, 'b': 3, 'c': 4} (原字典被更新)
 valid_dict = {
     "name": "string",
     123: "integer",
-    (1, 2, 3): "tuple" 
+    (1, 2, 3): "tuple"
 }
 
 # 无效的键（运行时会抛出 TypeError: unhashable type）

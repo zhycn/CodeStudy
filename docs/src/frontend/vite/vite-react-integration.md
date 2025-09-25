@@ -101,17 +101,17 @@ Vite 的配置非常灵活。以下是一个针对 React 项目的常用配置�
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()], // 核心 React 插件，支持 HMR, JSX 等
   server: {
     port: 3000, // 自定义开发服务器端口
-    open: true,  // 启动后自动在浏览器中打开应用
+    open: true, // 启动后自动在浏览器中打开应用
   },
-})
+});
 ```
 
 ### 路径别名 (Path Aliases) 配置
@@ -120,9 +120,9 @@ export default defineConfig({
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path' // 需要安装 @types/node -> npm i -D @types/node
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path'; // 需要安装 @types/node -> npm i -D @types/node
 
 export default defineConfig({
   plugins: [react()],
@@ -133,7 +133,7 @@ export default defineConfig({
       '@assets': path.resolve(__dirname, './src/assets'),
     },
   },
-})
+});
 ```
 
 同时，您需要在 `tsconfig.json` (TypeScript) 或 `jsconfig.json` (JavaScript) 中配置相应的路径映射：
@@ -155,8 +155,8 @@ export default defineConfig({
 现在，您可以这样导入模块：
 
 ```jsx
-import MyComponent from '@/components/MyComponent'
-import logo from '@assets/logo.png'
+import MyComponent from '@/components/MyComponent';
+import logo from '@assets/logo.png';
 ```
 
 ### 环境变量 (Environment Variables)
@@ -191,8 +191,8 @@ console.log(import.meta.env.VITE_APP_TITLE);
 ```javascript
 export default defineConfig(({ mode }) => ({
   define: {
-    __APP_ENV__: process.env.VITE_API_BASE_URL
-  }
+    __APP_ENV__: process.env.VITE_API_BASE_URL,
+  },
 }));
 ```
 
@@ -209,30 +209,30 @@ npm install @reduxjs/toolkit react-redux
 2. **创建 Store (src/store/store.js)**
 
 ```javascript
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
   reducer: {},
-})
+});
 ```
 
 3. **用 Provider 包裹应用 (src/main.jsx)**
 
 ```jsx
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { Provider } from 'react-redux'
-import { store } from './store/store'
-import App from './App'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import App from './App';
+import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
 ```
 
 ### 路由 (React Router Dom)
@@ -246,9 +246,9 @@ npm install react-router-dom
 2. **配置路由 (src/App.jsx)**
 
 ```jsx
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import Home from './pages/Home'
-import About from './pages/About'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
 
 function App() {
   return (
@@ -261,10 +261,10 @@ function App() {
         <Route path="/about" element={<About />} />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 ### CSS 方案 (Tailwind CSS)
@@ -281,15 +281,16 @@ npx tailwindcss init -p
 ```javascript
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [ // 告诉 Tailwind 要扫描哪些文件中的类名
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+  content: [
+    // 告诉 Tailwind 要扫描哪些文件中的类名
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {},
   },
   plugins: [],
-}
+};
 ```
 
 3. **修改 src/index.css**
@@ -329,13 +330,13 @@ export default defineConfig({
             if (id.includes('lodash')) return 'vendor-lodash';
             return 'vendor';
           }
-        }
-      }
+        },
+      },
     },
     // 消除构建大小警告
     chunkSizeWarningLimit: 1000,
   },
-})
+});
 ```
 
 ### 部署
@@ -361,9 +362,9 @@ export default defineConfig({
      ```javascript
      export default defineConfig({
        define: {
-         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-       }
-     })
+         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+       },
+     });
      ```
 
 2. **HMR 不工作**
@@ -377,8 +378,8 @@ export default defineConfig({
      ```javascript
      module.exports = {
        moduleNameMapping: {
-         '^@/(.*)$': '<rootDir>/src/$1'
-       }
+         '^@/(.*)$': '<rootDir>/src/$1',
+       },
      };
      ```
 

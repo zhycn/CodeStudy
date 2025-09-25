@@ -23,11 +23,7 @@ Vue.js 提供了一系列强大的内置组件，它们无需注册即可在任�
 <template>
   <div>
     <!-- 通过按钮切换要渲染的组件 -->
-    <button 
-      v-for="tab in tabs" 
-      :key="tab" 
-      @click="currentTab = tab"
-    >
+    <button v-for="tab in tabs" :key="tab" @click="currentTab = tab">
       {{ tab }}
     </button>
 
@@ -37,23 +33,27 @@ Vue.js 提供了一系列强大的内置组件，它们无需注册即可在任�
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import Home from './Home.vue'
-import Posts from './Posts.vue'
-import Archive from './Archive.vue'
+import { ref, computed } from 'vue';
+import Home from './Home.vue';
+import Posts from './Posts.vue';
+import Archive from './Archive.vue';
 
-const tabs = ['Home', 'Posts', 'Archive']
-const currentTab = ref('Home')
+const tabs = ['Home', 'Posts', 'Archive'];
+const currentTab = ref('Home');
 
 const currentTabComponent = computed(() => {
   // 将 tab 名转换为对应的组件对象
   switch (currentTab.value) {
-    case 'Home': return Home
-    case 'Posts': return Posts
-    case 'Archive': return Archive
-    default: return Home
+    case 'Home':
+      return Home;
+    case 'Posts':
+      return Posts;
+    case 'Archive':
+      return Archive;
+    default:
+      return Home;
   }
-})
+});
 </script>
 ```
 
@@ -92,12 +92,11 @@ const currentTabComponent = computed(() => {
   <Child>
     <!-- 任何传入的内容都会替换默认的 <slot> 标签 -->
     <p>This is custom content from the parent.</p>
-    
   </Child>
 </template>
 
 <script setup>
-import Child from './Child.vue'
+import Child from './Child.vue';
 </script>
 ```
 
@@ -115,7 +114,8 @@ import Child from './Child.vue'
       <slot name="header"></slot>
     </header>
     <main>
-      <slot></slot> <!-- 隐式命名为 "default" -->
+      <slot></slot>
+      <!-- 隐式命名为 "default" -->
     </main>
     <footer>
       <slot name="footer"></slot>
@@ -166,8 +166,8 @@ import Child from './Child.vue'
 
 <script setup>
 defineProps({
-  todos: Array
-})
+  todos: Array,
+});
 </script>
 ```
 
@@ -188,21 +188,19 @@ defineProps({
   <!-- 使用 ES6 解构语法更清晰 -->
   <TodoList :todos="todos">
     <template #default="{ item, index }">
-      <span :class="{ completed: item.isCompleted }">
-        {{ index + 1 }}. {{ item.text }}
-      </span>
+      <span :class="{ completed: item.isCompleted }"> {{ index + 1 }}. {{ item.text }} </span>
     </template>
   </TodoList>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import TodoList from './TodoList.vue'
+import { ref } from 'vue';
+import TodoList from './TodoList.vue';
 
 const todos = ref([
   { id: 1, text: 'Learn Vue', isCompleted: true },
-  { id: 2, text: 'Build something awesome', isCompleted: false }
-])
+  { id: 2, text: 'Build something awesome', isCompleted: false },
+]);
 </script>
 ```
 
@@ -228,8 +226,8 @@ const todos = ref([
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const showModal = ref(false)
+import { ref } from 'vue';
+const showModal = ref(false);
 </script>
 
 <style scoped>
@@ -249,14 +247,15 @@ const showModal = ref(false)
 
 - **目标元素的存在性**：目标元素必须在挂载传送组件**之前**就存在于 DOM 中。通常会在 `public/index.html` 中提前创建好目标容器。
 
-    ```html
-    <!-- public/index.html -->
-    <body>
-      <div id="app"></div>
-      <div id="teleport-modal"></div> <!-- 专门用于传送的容器 -->
-      <div id="teleport-toast"></div>
-    </body>
-    ```
+  ```html
+  <!-- public/index.html -->
+  <body>
+    <div id="app"></div>
+    <div id="teleport-modal"></div>
+    <!-- 专门用于传送的容器 -->
+    <div id="teleport-toast"></div>
+  </body>
+  ```
 
 - **与组件一起使用**：`<teleport>` 的内容仍然是当前父组件逻辑的一部分，可以接收父组件的 props 和注入。
 - **禁用传送**：可以通过动态绑定 `:disabled="isDisabled"` 来条件性地禁用传送功能，内容将留在原位置渲染。
@@ -281,11 +280,11 @@ const showModal = ref(false)
 </template>
 
 <script setup>
-import { ref, shallowRef } from 'vue'
-import CompA from './CompA.vue'
-import CompB from './CompB.vue'
+import { ref, shallowRef } from 'vue';
+import CompA from './CompA.vue';
+import CompB from './CompB.vue';
 
-const currentView = shallowRef(CompA) // 使用 shallowRef 优化性能
+const currentView = shallowRef(CompA); // 使用 shallowRef 优化性能
 </script>
 ```
 
@@ -302,17 +301,17 @@ const currentView = shallowRef(CompA) // 使用 shallowRef 优化性能
 
 ```vue
 <script setup>
-import { onActivated, onDeactivated } from 'vue'
+import { onActivated, onDeactivated } from 'vue';
 
 onActivated(() => {
-  console.log('Component was activated')
+  console.log('Component was activated');
   // 重新建立连接、开始动画等
-})
+});
 
 onDeactivated(() => {
-  console.log('Component was deactivated')
+  console.log('Component was deactivated');
   // 清除定时器、取消订阅等
-})
+});
 </script>
 ```
 
@@ -336,8 +335,8 @@ onDeactivated(() => {
 <script setup>
 // 在 <script setup> 中定义 name
 defineOptions({
-  name: 'CompA'
-})
+  name: 'CompA',
+});
 </script>
 ```
 
@@ -359,16 +358,18 @@ Vue 提供了 `<transition>` 和 `<transition-group>` 组件，用于为元素�
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const show = ref(true)
+import { ref } from 'vue';
+const show = ref(true);
 </script>
 
 <style>
 /* 定义进入和离开的激活状态动画 */
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
@@ -406,18 +407,15 @@ Vue 在恰当的时机自动为元素添加/移除特定的 CSS 类名，共 6 �
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import gsap from 'gsap' // 引入 GSAP
+import { ref } from 'vue';
+import gsap from 'gsap'; // 引入 GSAP
 
-const show = ref(true)
+const show = ref(true);
 
 function onEnter(el, done) {
   // el 是被过渡的 DOM 元素
   // done 是回调函数，必须在动画完成后调用
-  gsap.fromTo(el,
-    { opacity: 0, scale: 0 },
-    { opacity: 1, scale: 1, duration: 1, onComplete: done }
-  )
+  gsap.fromTo(el, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 1, onComplete: done });
 }
 // ... 其他钩子函数
 </script>
@@ -441,17 +439,17 @@ function onEnter(el, done) {
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { shuffle as _shuffle } from 'lodash-es'
+import { ref } from 'vue';
+import { shuffle as _shuffle } from 'lodash-es';
 
 const items = ref([
   { id: 1, message: 'Foo' },
   { id: 2, message: 'Bar' },
-  { id: 3, message: 'Baz' }
-])
+  { id: 3, message: 'Baz' },
+]);
 
 function shuffle() {
-  items.value = _shuffle(items.value)
+  items.value = _shuffle(items.value);
 }
 </script>
 
@@ -472,18 +470,19 @@ function shuffle() {
 
 ## 总结
 
-| 组件 | 核心作用 | 关键 Props/指令 | 使用场景 |
-| :--- | :--- | :--- | :--- |
-| **`<component>`** | 动态渲染组件 | `:is` | Tab 切换、根据状态渲染不同组件 |
-| **`<slot>`** | 内容分发 | `name`, `v-slot` (`#`) | 组件布局、可复用容器组件、高阶组件 |
-| **`<teleport>`** | 将内容渲染到 DOM 其他位置 | `to`, `:disabled` | 模态框、通知、弹窗、全屏组件 |
-| **`<keep-alive>`** | 缓存非活跃组件实例 | `include`, `exclude`, `max` | 保留 Tab 页状态、优化频繁切换组件的性能 |
-| **`<transition>`** | 单元素/组件的过渡动画 | `name`, 事件钩子 | 元素的显示/隐藏动画、页面切换动画 |
-| **`<transition-group>`** | 列表元素的过渡动画 | `name`, `tag` | 排序动画、列表项的添加/删除动画 |
+| 组件                     | 核心作用                  | 关键 Props/指令             | 使用场景                                |
+| :----------------------- | :------------------------ | :-------------------------- | :-------------------------------------- |
+| **`<component>`**        | 动态渲染组件              | `:is`                       | Tab 切换、根据状态渲染不同组件          |
+| **`<slot>`**             | 内容分发                  | `name`, `v-slot` (`#`)      | 组件布局、可复用容器组件、高阶组件      |
+| **`<teleport>`**         | 将内容渲染到 DOM 其他位置 | `to`, `:disabled`           | 模态框、通知、弹窗、全屏组件            |
+| **`<keep-alive>`**       | 缓存非活跃组件实例        | `include`, `exclude`, `max` | 保留 Tab 页状态、优化频繁切换组件的性能 |
+| **`<transition>`**       | 单元素/组件的过渡动画     | `name`, 事件钩子            | 元素的显示/隐藏动画、页面切换动画       |
+| **`<transition-group>`** | 列表元素的过渡动画        | `name`, `tag`               | 排序动画、列表项的添加/删除动画         |
 
 熟练掌握这些内置组件，能够让你以更声明式、更高效的方式构建复杂且交互丰富的 Vue 应用程序。务必根据实际场景选择最合适的组件，并遵循文中的最佳实践，以达到最佳的开发体验和性能效果。
 
 ---
+
 **参考文献与扩展阅读**
 
 1. <https://vuejs.org/guide/built-ins/>

@@ -175,12 +175,12 @@ public class PerformanceAspect {
     @Around("execution(* com.example.service.*.*(..))")
     public Object measureMethodExecutionTime(ProceedingJoinPoint pjp) throws Throwable {
         long startTime = System.currentTimeMillis();
-        
+
         try {
             // 执行目标方法
             Object result = pjp.proceed();
             long executionTime = System.currentTimeMillis() - startTime;
-            
+
             System.out.println(pjp.getSignature() + " 执行耗时: " + executionTime + "ms");
             return result;
         } catch (Exception e) {
@@ -221,14 +221,14 @@ execution([修饰符] 返回类型 包.类.方法(参数))
 
 **常见用法示例**：
 
-| 表达式示例 | 匹配目标 |
-|---------|---------|
-| `execution(* com.example.service.*.*(..))` | `com.example.service` 包下所有类的所有方法 |
-| `execution(public * com.example.*.User.*(..))` | `com.example` 包下所有子包中 `User` 类的所有 public 方法 |
-| `execution(* com.example.dao.*.*(String, *))` | `com.example.dao` 包下所有类的方法，且第一个参数为 `String`，第二个参数任意 |
-| `execution(* save*(..))` | 所有类中方法名以 `save` 开头的方法 |
-| `execution(* com.example..*.*(..))` | `com.example` 包及其所有子包下所有类的所有方法 |
-| `execution(* *(int, ..))` | 所有方法中第一个参数为 `int` 类型，后续参数任意 |
+| 表达式示例                                     | 匹配目标                                                                    |
+| ---------------------------------------------- | --------------------------------------------------------------------------- |
+| `execution(* com.example.service.*.*(..))`     | `com.example.service` 包下所有类的所有方法                                  |
+| `execution(public * com.example.*.User.*(..))` | `com.example` 包下所有子包中 `User` 类的所有 public 方法                    |
+| `execution(* com.example.dao.*.*(String, *))`  | `com.example.dao` 包下所有类的方法，且第一个参数为 `String`，第二个参数任意 |
+| `execution(* save*(..))`                       | 所有类中方法名以 `save` 开头的方法                                          |
+| `execution(* com.example..*.*(..))`            | `com.example` 包及其所有子包下所有类的所有方法                              |
+| `execution(* *(int, ..))`                      | 所有方法中第一个参数为 `int` 类型，后续参数任意                             |
 
 ### 4.2 @annotation 表达式
 
@@ -264,15 +264,15 @@ public class UserService {
 
 ### 4.3 其他常用切点表达式
 
-| 表达式 | 说明 |
-|-------|------|
-| `within(包.类)` | 匹配指定包或类下的所有方法（粗粒度） |
-| `this(接口)` | 匹配代理对象实现了指定接口的 Bean |
-| `target(接口)` | 匹配目标对象实现了指定接口的 Bean |
-| `args(参数类型)` | 匹配方法参数为指定类型的方法 |
-| `@within(注解类)` | 匹配类上带有指定注解的所有方法 |
+| 表达式            | 说明                                   |
+| ----------------- | -------------------------------------- |
+| `within(包.类)`   | 匹配指定包或类下的所有方法（粗粒度）   |
+| `this(接口)`      | 匹配代理对象实现了指定接口的 Bean      |
+| `target(接口)`    | 匹配目标对象实现了指定接口的 Bean      |
+| `args(参数类型)`  | 匹配方法参数为指定类型的方法           |
+| `@within(注解类)` | 匹配类上带有指定注解的所有方法         |
 | `@target(注解类)` | 匹配目标对象类上带有指定注解的所有方法 |
-| `@args(注解类)` | 匹配方法参数类型上带有指定注解的方法 |
+| `@args(注解类)`   | 匹配方法参数类型上带有指定注解的方法   |
 
 ### 4.4 组合切点表达式
 
@@ -315,13 +315,13 @@ public Object getProxy() {
 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     // 执行前置逻辑
     beforeAdvice();
-    
+
     // 调用目标方法
     Object result = method.invoke(target, args);
-    
+
     // 执行后置逻辑
     afterAdvice();
-    
+
     return result;
 }
 ```
@@ -346,13 +346,13 @@ public Object intercept(Object obj, Method method, Object[] args, MethodProxy pr
 
 ### 5.3 JDK 代理与 CGLIB 代理对比
 
-| 特性 | JDK 动态代理 | CGLIB 代理 |
-|------|-------------|-----------|
-| **实现方式** | 接口代理 | 继承代理 |
-| **依赖** | 需要接口 | 无接口要求，但类不能为 `final` |
-| **方法调用** | 反射调用 | 直接调用（通过子类重写） |
-| **性能** | JDK 8+ 优化后接近 CGLIB | 生成代理类较慢，但调用更快 |
-| **兼容性** | 仅支持接口方法 | 支持代理类的所有非 `final` 方法 |
+| 特性         | JDK 动态代理            | CGLIB 代理                      |
+| ------------ | ----------------------- | ------------------------------- |
+| **实现方式** | 接口代理                | 继承代理                        |
+| **依赖**     | 需要接口                | 无接口要求，但类不能为 `final`  |
+| **方法调用** | 反射调用                | 直接调用（通过子类重写）        |
+| **性能**     | JDK 8+ 优化后接近 CGLIB | 生成代理类较慢，但调用更快      |
+| **兼容性**   | 仅支持接口方法          | 支持代理类的所有非 `final` 方法 |
 
 ### 5.4 Spring 中的默认行为与配置
 
@@ -427,12 +427,12 @@ public class TransactionAspect {
 ```java
 @Service
 public class UserService {
-    
+
     public void outerMethod() {
         // 自调用，不会触发 AOP
         this.innerMethod();
     }
-    
+
     public void innerMethod() {
         // 业务逻辑
     }
@@ -441,12 +441,12 @@ public class UserService {
 // 解决方案：通过AopContext获取代理对象
 @Service
 public class UserService {
-    
+
     public void outerMethod() {
         // 获取代理对象并调用
         ((UserService) AopContext.currentProxy()).innerMethod();
     }
-    
+
     public void innerMethod() {
         // 业务逻辑
     }
@@ -483,28 +483,28 @@ public @interface Monitor {
 @Component
 @Slf4j
 public class MonitoringAspect {
-    
+
     @Around("@annotation(monitor)")
     public Object monitorMethod(ProceedingJoinPoint pjp, Monitor monitor) throws Throwable {
         String methodName = pjp.getSignature().toShortString();
         long startTime = System.currentTimeMillis();
         boolean success = true;
         Object result = null;
-        
+
         try {
             // 记录方法入参
             if (monitor.recordParams()) {
                 log.info("方法 {} 调用参数: {}", methodName, Arrays.toString(pjp.getArgs()));
             }
-            
+
             // 执行目标方法
             result = pjp.proceed();
-            
+
             // 记录方法返回结果
             if (monitor.recordResult()) {
                 log.info("方法 {} 返回结果: {}", methodName, result);
             }
-            
+
             return result;
         } catch (Exception e) {
             success = false;
@@ -512,14 +512,14 @@ public class MonitoringAspect {
             throw e;
         } finally {
             long executionTime = System.currentTimeMillis() - startTime;
-            log.info("方法 {} 执行状态: {}, 耗时: {}ms", 
+            log.info("方法 {} 执行状态: {}, 耗时: {}ms",
                     methodName, success ? "成功" : "失败", executionTime);
-            
+
             // 这里可以添加监控数据上报逻辑
             reportMetrics(methodName, success, executionTime);
         }
     }
-    
+
     private void reportMetrics(String methodName, boolean success, long executionTime) {
         // 上报到监控系统（如 Prometheus, InfluxDB 等）
         // 实现省略
@@ -533,17 +533,17 @@ public class MonitoringAspect {
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
-    
+
     @GetMapping("/{id}")
     @Monitor(recordParams = true, recordResult = false)
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.findById(id);
         return ResponseEntity.ok(user);
     }
-    
+
     @PostMapping
     @Monitor(recordParams = false, recordResult = true)
     public ResponseEntity<User> createUser(@RequestBody User user) {

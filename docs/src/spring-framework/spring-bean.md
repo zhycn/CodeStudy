@@ -34,7 +34,7 @@ public class UserService {
 @Component
 public class UserService {
     private final UserRepository userRepository;
-    
+
     // 构造器注入，由Spring容器负责提供依赖
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -49,12 +49,12 @@ Spring Bean 的生命周期包含四个主要阶段，每个阶段都提供了�
 
 ### 2.1 生命周期四大阶段
 
-| 阶段 | 描述 | 核心操作 |
-|------|------|----------|
-| **实例化** | 创建 Bean 的实例 | 调用构造方法或工厂方法 |
-| **属性赋值** | 设置 Bean 的属性和依赖 | 依赖注入（DI） |
-| **初始化** | 执行初始化回调 | @PostConstruct, InitializingBean |
-| **销毁** | 容器关闭时清理资源 | @PreDestroy, DisposableBean |
+| 阶段         | 描述                   | 核心操作                         |
+| ------------ | ---------------------- | -------------------------------- |
+| **实例化**   | 创建 Bean 的实例       | 调用构造方法或工厂方法           |
+| **属性赋值** | 设置 Bean 的属性和依赖 | 依赖注入（DI）                   |
+| **初始化**   | 执行初始化回调         | @PostConstruct, InitializingBean |
+| **销毁**     | 容器关闭时清理资源     | @PreDestroy, DisposableBean      |
 
 **生活案例理解**：餐厅的「咖啡机」生命周期 ：
 
@@ -67,60 +67,60 @@ Spring Bean 的生命周期包含四个主要阶段，每个阶段都提供了�
 
 ```java
 @Component
-public class ExampleBean implements BeanNameAware, BeanFactoryAware, 
+public class ExampleBean implements BeanNameAware, BeanFactoryAware,
                                    ApplicationContextAware, InitializingBean, DisposableBean {
-    
+
     private String name;
-    
+
     public ExampleBean() {
         System.out.println("1. 实例化：调用构造方法创建Bean实例");
     }
-    
+
     @Autowired
     public void setDependency(OtherBean otherBean) {
         System.out.println("2. 属性赋值：依赖注入");
     }
-    
+
     @Override
     public void setBeanName(String name) {
         this.name = name;
         System.out.println("3. BeanNameAware：设置Bean名称 - " + name);
     }
-    
+
     @Override
     public void setBeanFactory(BeanFactory beanFactory) {
         System.out.println("4. BeanFactoryAware：设置BeanFactory");
     }
-    
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         System.out.println("5. ApplicationContextAware：设置ApplicationContext");
     }
-    
+
     @PostConstruct
     public void postConstruct() {
         System.out.println("6. @PostConstruct：初始化前处理");
     }
-    
+
     @Override
     public void afterPropertiesSet() {
         System.out.println("7. InitializingBean.afterPropertiesSet()：属性设置后初始化");
     }
-    
+
     public void customInit() {
         System.out.println("8. 自定义init-method：执行初始化方法");
     }
-    
+
     @PreDestroy
     public void preDestroy() {
         System.out.println("9. @PreDestroy：销毁前处理");
     }
-    
+
     @Override
     public void destroy() {
         System.out.println("10. DisposableBean.destroy()：执行销毁方法");
     }
-    
+
     public void customDestroy() {
         System.out.println("11. 自定义destroy-method：执行自定义销毁方法");
     }
@@ -134,7 +134,7 @@ public class ExampleBean implements BeanNameAware, BeanFactoryAware,
 ```java
 @Component
 public class CustomBeanPostProcessor implements BeanPostProcessor {
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         if (bean instanceof ExampleBean) {
@@ -142,7 +142,7 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
         }
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         if (bean instanceof ExampleBean) {
@@ -165,19 +165,19 @@ XML 是 Spring 最早提供的配置方式，适合配置无法修改源码的�
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
-    
+
     <!-- 简单Bean定义 -->
     <bean id="userService" class="com.example.UserService"/>
-    
+
     <!-- 构造器注入 -->
     <bean id="userRepository" class="com.example.UserRepositoryImpl"/>
-    
+
     <bean id="orderService" class="com.example.OrderService">
         <constructor-arg ref="userRepository"/>
     </bean>
-    
+
     <!-- 属性注入 -->
     <bean id="dataSource" class="com.example.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -185,7 +185,7 @@ XML 是 Spring 最早提供的配置方式，适合配置无法修改源码的�
         <property name="username" value="root"/>
         <property name="password" value="123456"/>
     </bean>
-    
+
     <!-- 集合类型注入 -->
     <bean id="complexBean" class="com.example.ComplexBean">
         <property name="list">
@@ -213,7 +213,7 @@ XML 是 Spring 最早提供的配置方式，适合配置无法修改源码的�
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    
+
     // 构造器注入（推荐）
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -230,7 +230,7 @@ public class UserRepositoryImpl implements UserRepository {
 @Configuration
 @ComponentScan("com.example")
 public class AppConfig {
-    
+
     @Bean
     @Scope("singleton")
     public DataSource dataSource() {
@@ -253,16 +253,16 @@ Java 配置结合了类型安全和灵活性，适合复杂配置场景 。
 @EnableTransactionManagement
 @PropertySource("classpath:app.properties")
 public class JavaConfig {
-    
+
     @Value("${db.url}")
     private String dbUrl;
-    
+
     @Value("${db.username}")
     private String username;
-    
+
     @Value("${db.password}")
     private String password;
-    
+
     @Bean
     @Scope("singleton")
     public DataSource dataSource() {
@@ -273,12 +273,12 @@ public class JavaConfig {
         dataSource.setMaximumPoolSize(20);
         return dataSource;
     }
-    
+
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
-    
+
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
@@ -288,11 +288,11 @@ public class JavaConfig {
 
 ### 3.4 不同配置方式对比
 
-| 配置方式 | 优点 | 缺点 | 适用场景 |
-|----------|------|------|----------|
-| **XML配置** | 集中管理、与代码分离、灵活性高 | 冗长、类型不安全、配置复杂 | 第三方库Bean、AOP配置、遗留项目 |
-| **注解配置** | 简洁、类型安全、开发效率高 | 与代码耦合、分散在各处 | 业务逻辑Bean、现代Spring项目 |
-| **Java配置** | 类型安全、灵活、可编程配置 | 配置较复杂、学习曲线 | 复杂配置、条件化Bean、基础设施 |
+| 配置方式     | 优点                           | 缺点                       | 适用场景                        |
+| ------------ | ------------------------------ | -------------------------- | ------------------------------- |
+| **XML配置**  | 集中管理、与代码分离、灵活性高 | 冗长、类型不安全、配置复杂 | 第三方库Bean、AOP配置、遗留项目 |
+| **注解配置** | 简洁、类型安全、开发效率高     | 与代码耦合、分散在各处     | 业务逻辑Bean、现代Spring项目    |
+| **Java配置** | 类型安全、灵活、可编程配置     | 配置较复杂、学习曲线       | 复杂配置、条件化Bean、基础设施  |
 
 **最佳实践建议**：采用**混合配置策略** ：
 
@@ -309,28 +309,28 @@ Spring 支持多种 Bean 作用域，满足不同场景的需求 。
 ```java
 @Configuration
 public class ScopeConfig {
-    
+
     // 默认单例作用域
     @Bean
     @Scope("singleton")  // 可省略，默认就是singleton
     public SingletonBean singletonBean() {
         return new SingletonBean();
     }
-    
+
     // 原型作用域：每次请求创建新实例
     @Bean
     @Scope("prototype")
     public PrototypeBean prototypeBean() {
         return new PrototypeBean();
     }
-    
+
     // 请求作用域（Web环境）
     @Bean
     @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public RequestScopedBean requestScopedBean() {
         return new RequestScopedBean();
     }
-    
+
     // 会话作用域（Web环境）
     @Bean
     @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -342,13 +342,13 @@ public class ScopeConfig {
 
 ### 4.2 作用域特性对比
 
-| 作用域 | 描述 | 生命周期 | 适用场景 |
-|--------|------|----------|----------|
-| **singleton** | 容器中只有一个实例 | 与容器生命周期相同 | 无状态Bean、工具类、配置类 |
-| **prototype** | 每次请求创建新实例 | 创建后由客户端负责销毁 | 有状态Bean、需要隔离的场景 |
-| **request** | 每个HTTP请求一个实例 | 请求开始到结束 | Web请求相关的状态 |
-| **session** | 每个HTTP会话一个实例 | 会话开始到结束 | 用户会话状态 |
-| **application** | ServletContext生命周期 | Web应用生命周期 | 应用级共享资源 |
+| 作用域          | 描述                   | 生命周期               | 适用场景                   |
+| --------------- | ---------------------- | ---------------------- | -------------------------- |
+| **singleton**   | 容器中只有一个实例     | 与容器生命周期相同     | 无状态Bean、工具类、配置类 |
+| **prototype**   | 每次请求创建新实例     | 创建后由客户端负责销毁 | 有状态Bean、需要隔离的场景 |
+| **request**     | 每个HTTP请求一个实例   | 请求开始到结束         | Web请求相关的状态          |
+| **session**     | 每个HTTP会话一个实例   | 会话开始到结束         | 用户会话状态               |
+| **application** | ServletContext生命周期 | Web应用生命周期        | 应用级共享资源             |
 
 ### 4.3 作用域代理模式
 
@@ -357,10 +357,10 @@ public class ScopeConfig {
 ```java
 @Component
 public class SingletonBean {
-    
+
     // 使用代理注入request作用域的Bean
     @Autowired
-    @Scope(value = WebApplicationContext.SCOPE_REQUEST, 
+    @Scope(value = WebApplicationContext.SCOPE_REQUEST,
            proxyMode = ScopedProxyMode.TARGET_CLASS)
     private RequestScopedBean requestScopedBean;
 }
@@ -375,21 +375,21 @@ public class SingletonBean {
 ```java
 @Component
 public class InjectionExample {
-    
+
     // 1. 字段注入（不推荐）
     @Autowired
     private DependencyA dependencyA;
-    
+
     private DependencyB dependencyB;
-    
+
     private final DependencyC dependencyC;
-    
+
     // 2. 构造器注入（推荐）
     @Autowired
     public InjectionExample(DependencyC dependencyC) {
         this.dependencyC = dependencyC;
     }
-    
+
     // 3. Setter注入
     @Autowired
     public void setDependencyB(DependencyB dependencyB) {
@@ -413,17 +413,17 @@ public class OrderService {
     private final UserService userService;
     private final PaymentService paymentService;
     private final InventoryService inventoryService;
-    
+
     // 构造器注入：依赖关系明确，不可变
     @Autowired
-    public OrderService(UserService userService, 
+    public OrderService(UserService userService,
                        PaymentService paymentService,
                        InventoryService inventoryService) {
         this.userService = userService;
         this.paymentService = paymentService;
         this.inventoryService = inventoryService;
     }
-    
+
     // 业务方法可以使用final依赖，无需空检查
     public Order createOrder(OrderRequest request) {
         User user = userService.getUser(request.getUserId()); // 安全调用
@@ -441,7 +441,7 @@ public class OrderService {
 @Service
 public class ServiceA {
     private final ServiceB serviceB;
-    
+
     @Autowired
     public ServiceA(ServiceB serviceB) {
         this.serviceB = serviceB;
@@ -451,7 +451,7 @@ public class ServiceA {
 @Service
 public class ServiceB {
     private final ServiceA serviceA;
-    
+
     @Autowired
     public ServiceB(ServiceA serviceA) {
         this.serviceA = serviceA;
@@ -470,7 +470,7 @@ public class ServiceB {
 @Service
 public class ServiceA {
     private final ServiceB serviceB;
-    
+
     @Autowired
     public ServiceA(@Lazy ServiceB serviceB) {
         this.serviceB = serviceB;
@@ -487,19 +487,19 @@ Spring 提供了强大的条件化装配机制，根据条件动态创建Bean �
 ```java
 @Configuration
 public class ConditionalConfig {
-    
+
     @Bean
     @Conditional(WindowsCondition.class)
     public SystemService windowsService() {
         return new WindowsService();
     }
-    
+
     @Bean
     @Conditional(LinuxCondition.class)
     public SystemService linuxService() {
         return new LinuxService();
     }
-    
+
     @Bean
     @Profile("dev")  // 基于Profile的条件装配
     public DataSource devDataSource() {
@@ -507,7 +507,7 @@ public class ConditionalConfig {
                 .setType(EmbeddedDatabaseType.H2)
                 .build();
     }
-    
+
     @Bean
     @Profile("prod")
     public DataSource prodDataSource() {
@@ -531,7 +531,7 @@ public class WindowsCondition implements Condition {
 ```java
 @Configuration
 public class LazyConfig {
-    
+
     @Bean
     @Lazy  // 延迟初始化，直到第一次被使用时才创建
     public HeavyResourceService heavyResourceService() {
@@ -541,11 +541,11 @@ public class LazyConfig {
 
 @Component
 public class UserService {
-    
+
     @Lazy
     @Autowired
     private HeavyResourceService heavyResourceService; // 使用时才初始化
-    
+
     public void processUserData() {
         // 第一次调用时才会初始化heavyResourceService
         heavyResourceService.process();
@@ -560,19 +560,19 @@ Spring 提供了灵活的Bean命名机制 。
 ```java
 @Configuration
 public class NamingConfig {
-    
+
     // 默认名称：方法名（userService）
     @Bean
     public UserService userService() {
         return new UserService();
     }
-    
+
     // 显式指定名称
     @Bean("customUserService")
     public UserService namedUserService() {
         return new UserService();
     }
-    
+
     // 多个名称（别名）
     @Bean(name = {"userServiceAlias", "userServiceBackup"})
     public UserService aliasedUserService() {
@@ -583,7 +583,7 @@ public class NamingConfig {
 // 使用@Qualifier指定具体Bean
 @Service
 public class OrderService {
-    
+
     @Autowired
     @Qualifier("customUserService")  // 指定注入特定名称的Bean
     private UserService userService;
@@ -625,7 +625,7 @@ public class UserService {
 public class RecommendedService {
     private final DependencyA dependencyA;
     private final DependencyB dependencyB;
-    
+
     @Autowired
     public RecommendedService(DependencyA dependencyA, DependencyB dependencyB) {
         this.dependencyA = dependencyA;
@@ -650,16 +650,16 @@ public class NotRecommendedService {
 ```java
 @Component
 public class ResourceIntensiveBean implements DisposableBean {
-    
+
     private final ExecutorService executorService = Executors.newFixedThreadPool(5);
     private Connection databaseConnection;
-    
+
     @PostConstruct
     public void init() {
         // 初始化资源
         this.databaseConnection = dataSource.getConnection();
     }
-    
+
     @PreDestroy
     @Override
     public void destroy() throws Exception {
@@ -668,7 +668,7 @@ public class ResourceIntensiveBean implements DisposableBean {
             executorService.shutdown();
             executorService.awaitTermination(5, TimeUnit.SECONDS);
         }
-        
+
         if (databaseConnection != null && !databaseConnection.isClosed()) {
             databaseConnection.close();
         }
@@ -688,15 +688,15 @@ public class PrototypeBean {
 @Component
 @Scope("singleton")
 public class SingletonBean {
-    
+
     // 错误：将原型Bean注入单例Bean会导致状态共享
     @Autowired
     private PrototypeBean prototypeBean;
-    
+
     // 正确：使用Provider按需获取原型实例
     @Autowired
     private Provider<PrototypeBean> prototypeBeanProvider;
-    
+
     public void usePrototype() {
         PrototypeBean prototype = prototypeBeanProvider.get(); // 每次获取新实例
         // 使用原型实例
@@ -713,13 +713,13 @@ public class SingletonBean {
 ```java
 @Configuration
 public class PerformanceConfig {
-    
+
     @Bean
     @Lazy  // 重型资源延迟初始化
     public HeavyResourceService heavyResourceService() {
         return new HeavyResourceService();
     }
-    
+
     @Bean
     @Scope("prototype")  // 有状态Bean使用原型作用域
     public StatefulService statefulService() {
@@ -738,7 +738,7 @@ Spring Bean 的设计应便于测试：
 public class UserService {
     private final UserRepository userRepository;
     private final EmailService emailService;
-    
+
     public UserService(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
@@ -747,16 +747,16 @@ public class UserService {
 
 // 测试代码：可以轻松注入模拟依赖
 class UserServiceTest {
-    
+
     @Test
     void testUserCreation() {
         // 创建模拟对象
         UserRepository mockRepo = mock(UserRepository.class);
         EmailService mockEmail = mock(EmailService.class);
-        
+
         // 注入依赖（无需Spring容器）
         UserService userService = new UserService(mockRepo, mockEmail);
-        
+
         // 测试业务逻辑
         // ...
     }

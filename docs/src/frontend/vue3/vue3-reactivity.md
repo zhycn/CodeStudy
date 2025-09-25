@@ -13,22 +13,22 @@ Vue3 使用 JavaScript 的 `Proxy` 对象来拦截对象操作，配合 `Reflect
 ```javascript
 const reactiveHandler = {
   get(target, key, receiver) {
-    track(target, key) // 依赖追踪
-    return Reflect.get(target, key, receiver)
+    track(target, key); // 依赖追踪
+    return Reflect.get(target, key, receiver);
   },
   set(target, key, value, receiver) {
-    const oldValue = target[key]
-    const result = Reflect.set(target, key, value, receiver)
+    const oldValue = target[key];
+    const result = Reflect.set(target, key, value, receiver);
     if (oldValue !== value) {
-      trigger(target, key) // 触发更新
+      trigger(target, key); // 触发更新
     }
-    return result
+    return result;
   },
   // 其他拦截操作...
-}
+};
 
 function reactive(obj) {
-  return new Proxy(obj, reactiveHandler)
+  return new Proxy(obj, reactiveHandler);
 }
 ```
 
@@ -44,19 +44,19 @@ function reactive(obj) {
 ### `reactive()` - 创建深层响应式对象
 
 ```javascript
-import { reactive } from 'vue'
+import { reactive } from 'vue';
 
 const state = reactive({
   count: 0,
   user: {
     name: 'Alice',
-    age: 30
-  }
-})
+    age: 30,
+  },
+});
 
 // 响应式修改
-state.count++ 
-state.user.age = 31
+state.count++;
+state.user.age = 31;
 ```
 
 **注意事项**：
@@ -68,14 +68,14 @@ state.user.age = 31
 ### `ref()` - 创建独立的响应式引用
 
 ```javascript
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-const count = ref(0)
-const user = ref({ name: 'Bob' })
+const count = ref(0);
+const user = ref({ name: 'Bob' });
 
 // 访问值需要通过 .value
-count.value++ 
-user.value.name = 'Charlie'
+count.value++;
+user.value.name = 'Charlie';
 
 // 在模板中自动解包
 // <div>{{ count }}</div> 无需 .value
@@ -90,14 +90,14 @@ user.value.name = 'Charlie'
 ### `computed()` - 声明式派生值
 
 ```javascript
-import { reactive, computed } from 'vue'
+import { reactive, computed } from 'vue';
 
-const state = reactive({ firstName: 'John', lastName: 'Doe' })
+const state = reactive({ firstName: 'John', lastName: 'Doe' });
 const fullName = computed(() => {
-  return `${state.firstName} ${state.lastName}`
-})
+  return `${state.firstName} ${state.lastName}`;
+});
 
-console.log(fullName.value) // "John Doe"
+console.log(fullName.value); // "John Doe"
 ```
 
 **性能优化**：
@@ -107,58 +107,58 @@ console.log(fullName.value) // "John Doe"
 
 ### 响应式工具函数
 
-| 函数 | 描述 | 示例 |
-|------|------|------|
-| `readonly()` | 创建只读代理 | `const copy = readonly(original)` |
-| `shallowRef()` | 浅层 ref | `const obj = shallowRef({ count: 0 })` |
-| `shallowReactive()` | 浅层响应式 | `const state = shallowReactive({ nested: { count: 0 } })` |
-| `toRef()` | 为响应式对象属性创建 ref | `const nameRef = toRef(state, 'name')` |
-| `toRefs()` | 转换响应式对象为普通对象，每个属性都是 ref | `const { count } = toRefs(state)` |
+| 函数                | 描述                                       | 示例                                                      |
+| ------------------- | ------------------------------------------ | --------------------------------------------------------- |
+| `readonly()`        | 创建只读代理                               | `const copy = readonly(original)`                         |
+| `shallowRef()`      | 浅层 ref                                   | `const obj = shallowRef({ count: 0 })`                    |
+| `shallowReactive()` | 浅层响应式                                 | `const state = shallowReactive({ nested: { count: 0 } })` |
+| `toRef()`           | 为响应式对象属性创建 ref                   | `const nameRef = toRef(state, 'name')`                    |
+| `toRefs()`          | 转换响应式对象为普通对象，每个属性都是 ref | `const { count } = toRefs(state)`                         |
 
 ## 响应式数据监听
 
 ### `watch()` - 精确控制的数据监听
 
 ```javascript
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
 
-const count = ref(0)
-const user = ref({ name: 'Alice' })
+const count = ref(0);
+const user = ref({ name: 'Alice' });
 
 // 监听单个 ref
 watch(count, (newVal, oldVal) => {
-  console.log(`Count changed from ${oldVal} to ${newVal}`)
-})
+  console.log(`Count changed from ${oldVal} to ${newVal}`);
+});
 
 // 监听深度嵌套对象
 watch(
-  () => user.value, 
+  () => user.value,
   (newUser, oldUser) => {
-    console.log('User changed:', newUser)
+    console.log('User changed:', newUser);
   },
   { deep: true, immediate: true }
-)
+);
 
 // 监听多个数据源
 watch([count, () => user.value.name], ([newCount, newName]) => {
-  console.log(`Count: ${newCount}, Name: ${newName}`)
-})
+  console.log(`Count: ${newCount}, Name: ${newName}`);
+});
 ```
 
 ### `watchEffect()` - 自动依赖收集的副作用
 
 ```javascript
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue';
 
-const count = ref(0)
-const double = ref(0)
+const count = ref(0);
+const double = ref(0);
 
 watchEffect(() => {
-  double.value = count.value * 2
-  console.log(`Double updated: ${double.value}`)
-})
+  double.value = count.value * 2;
+  console.log(`Double updated: ${double.value}`);
+});
 
-count.value = 5 // 输出: "Double updated: 10"
+count.value = 5; // 输出: "Double updated: 10"
 ```
 
 **与 watch 的区别**：
@@ -172,51 +172,51 @@ count.value = 5 // 输出: "Double updated: 10"
 ### 自定义响应式转换
 
 ```javascript
-import { customRef } from 'vue'
+import { customRef } from 'vue';
 
 function debouncedRef(value, delay = 200) {
-  let timeoutId
+  let timeoutId;
   return customRef((track, trigger) => {
     return {
       get() {
-        track()
-        return value
+        track();
+        return value;
       },
       set(newValue) {
-        clearTimeout(timeoutId)
+        clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-          value = newValue
-          trigger()
-        }, delay)
-      }
-    }
-  })
+          value = newValue;
+          trigger();
+        }, delay);
+      },
+    };
+  });
 }
 
 // 使用防抖 ref
-const searchQuery = debouncedRef('')
+const searchQuery = debouncedRef('');
 ```
 
 ### 响应式集合操作
 
 ```javascript
-import { reactive } from 'vue'
+import { reactive } from 'vue';
 
-const list = reactive([])
+const list = reactive([]);
 
 // 添加元素
-list.push('item') // 响应式更新
+list.push('item'); // 响应式更新
 
 // 删除元素
-list.splice(0, 1) // 响应式更新
+list.splice(0, 1); // 响应式更新
 
 // 使用 Map
-const map = reactive(new Map())
-map.set('key', 'value') // 响应式更新
+const map = reactive(new Map());
+map.set('key', 'value'); // 响应式更新
 
 // 使用 Set
-const set = reactive(new Set())
-set.add('value') // 响应式更新
+const set = reactive(new Set());
+set.add('value'); // 响应式更新
 ```
 
 ## 响应式系统最佳实践
@@ -233,52 +233,54 @@ set.add('value') // 响应式更新
 
 ```javascript
 // 错误：解构会丢失响应性
-const { count } = reactive({ count: 0 })
+const { count } = reactive({ count: 0 });
 
 // 正确：使用 toRefs
-const state = reactive({ count: 0 })
-const { count } = toRefs(state)
+const state = reactive({ count: 0 });
+const { count } = toRefs(state);
 ```
 
 **异步更新队列**：
 
 ```javascript
-const count = ref(0)
+const count = ref(0);
 
 // 连续修改只会触发一次更新
-count.value++
-count.value++
-count.value++
+count.value++;
+count.value++;
+count.value++;
 
 // 访问 DOM 更新后的状态
 nextTick(() => {
-  console.log('DOM updated')
-})
+  console.log('DOM updated');
+});
 ```
 
 ### 3. 性能优化技巧
 
 ```javascript
 // 1. 合理使用 shallowRef/shallowReactive
-const largeList = shallowRef([]) // 不跟踪内部变化
+const largeList = shallowRef([]); // 不跟踪内部变化
 
 // 2. 避免深层监听大型数据结构
 watch(
   () => largeList.value,
-  () => {/* ... */},
+  () => {
+    /* ... */
+  },
   { deep: false } // 默认即为 false
-)
+);
 
 // 3. 使用 computed 缓存计算
-const filteredList = computed(() => 
-  largeList.value.filter(item => item.active)
-)
+const filteredList = computed(() => largeList.value.filter((item) => item.active));
 
 // 4. 适时手动解除监听
-const stop = watchEffect(() => {/* ... */})
+const stop = watchEffect(() => {
+  /* ... */
+});
 
 // 组件卸载时
-onUnmounted(stop)
+onUnmounted(stop);
 ```
 
 ### 4. 响应式代码组织模式
@@ -286,35 +288,35 @@ onUnmounted(stop)
 ```javascript
 // 组合式函数示例
 export function useCounter(initialValue = 0) {
-  const count = ref(initialValue)
-  
+  const count = ref(initialValue);
+
   function increment() {
-    count.value++
+    count.value++;
   }
-  
-  const double = computed(() => count.value * 2)
-  
+
+  const double = computed(() => count.value * 2);
+
   return {
     count,
     double,
-    increment
-  }
+    increment,
+  };
 }
 
 // 组件中使用
-import { useCounter } from './counter'
+import { useCounter } from './counter';
 
 export default {
   setup() {
-    const { count, double, increment } = useCounter()
-    
+    const { count, double, increment } = useCounter();
+
     return {
       count,
       double,
-      increment
-    }
-  }
-}
+      increment,
+    };
+  },
+};
 ```
 
 ## 响应式原理深度解析
@@ -336,12 +338,12 @@ WeakMap
 
 ### 基于 Proxy 的优势
 
-| 特性 | Vue2 (Object.defineProperty) | Vue3 (Proxy) |
-|------|-----------------------------|-------------|
-| 数组变化检测 | 需要拦截7个数组方法 | 直接支持 |
-| 动态添加属性 | 需要 Vue.set | 直接支持 |
-| Map/Set 支持 | 不支持 | 完全支持 |
-| 性能 | 递归转换所有属性 | 按需转换访问属性 |
+| 特性         | Vue2 (Object.defineProperty) | Vue3 (Proxy)     |
+| ------------ | ---------------------------- | ---------------- |
+| 数组变化检测 | 需要拦截7个数组方法          | 直接支持         |
+| 动态添加属性 | 需要 Vue.set                 | 直接支持         |
+| Map/Set 支持 | 不支持                       | 完全支持         |
+| 性能         | 递归转换所有属性             | 按需转换访问属性 |
 
 ### 响应式系统执行时序
 
@@ -385,19 +387,19 @@ A：确保使用可变数组方法（push/pop/splice 等）或直接替换整个
 A：使用 Vue Devtools 或添加调试钩子：
 
 ```javascript
-import { onRenderTracked, onRenderTriggered } from 'vue'
+import { onRenderTracked, onRenderTriggered } from 'vue';
 
 export default {
   setup() {
     onRenderTracked((e) => {
-      console.log('Tracked dependency:', e)
-    })
-    
+      console.log('Tracked dependency:', e);
+    });
+
     onRenderTriggered((e) => {
-      console.log('Update triggered by:', e)
-    })
-  }
-}
+      console.log('Update triggered by:', e);
+    });
+  },
+};
 ```
 
 **Q：响应式系统如何处理循环引用？**  

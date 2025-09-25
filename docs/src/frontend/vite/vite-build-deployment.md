@@ -12,13 +12,13 @@
 
 ### 1.1 开发模式 vs. 生产模式
 
-| 特性 | 开发模式 (`vite`) | 生产模式 (`vite build`) |
-| :--- | :--- | :--- |
-| **目标** | 提供极速的开发和调试体验 | 生成优化后的静态资源，用于部署 |
-| **模块处理** | 使用原生 ESM，按需编译 | 使用 Rollup 进行打包和摇树优化 |
-| **输出** | 在内存中，由开发服务器提供 | 物理文件，位于 `dist` 目录 |
-| **优化** | 较少，侧重于速度 | 高度优化：代码分割、压缩、懒加载等 |
-| **环境变量** | 以 `MODE = 'development'` 加载 | 以 `MODE = 'production'` 加载 |
+| 特性         | 开发模式 (`vite`)              | 生产模式 (`vite build`)            |
+| :----------- | :----------------------------- | :--------------------------------- |
+| **目标**     | 提供极速的开发和调试体验       | 生成优化后的静态资源，用于部署     |
+| **模块处理** | 使用原生 ESM，按需编译         | 使用 Rollup 进行打包和摇树优化     |
+| **输出**     | 在内存中，由开发服务器提供     | 物理文件，位于 `dist` 目录         |
+| **优化**     | 较少，侧重于速度               | 高度优化：代码分割、压缩、懒加载等 |
+| **环境变量** | 以 `MODE = 'development'` 加载 | 以 `MODE = 'production'` 加载      |
 
 ### 1.2 执行生产构建
 
@@ -45,8 +45,8 @@ Vite 的构建行为通过在 `vite.config.js` (或 `.ts`) 文件中的 `build` 
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -68,7 +68,7 @@ export default defineConfig({
       },
     },
   },
-})
+});
 ```
 
 ### 2.2 代码分割与懒加载
@@ -77,19 +77,19 @@ Vite（基于 Rollup）默认提供了优秀的代码分割策略。要充分利
 
 ```javascript
 // 在 React Router v6 中的示例
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Suspense, lazy } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
 
 // 使用 lazy 和 import() 实现懒加载
-const Home = lazy(() => import('./pages/Home'))
-const About = lazy(() => import('./pages/About'))
-const Blog = lazy(() => import('./pages/Blog'))
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Blog = lazy(() => import('./pages/Blog'));
 
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/about', element: <About /> },
   { path: '/blog', element: <Blog /> },
-])
+]);
 
 function App() {
   return (
@@ -97,10 +97,10 @@ function App() {
     <Suspense fallback={<div>Loading...</div>}>
       <RouterProvider router={router} />
     </Suspense>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 
 ### 2.3 分包策略（Manual Chunks）
@@ -118,15 +118,15 @@ export default defineConfig({
             // 将 node_modules 中的依赖包拆分成单独的 chunk
             // 可以更细粒度地拆分，如将 React 相关库放一起
             if (id.includes('react') || id.includes('react-dom')) {
-              return 'vendor-react'
+              return 'vendor-react';
             }
-            return 'vendor' // 其他依赖
+            return 'vendor'; // 其他依赖
           }
         },
       },
     },
   },
-})
+});
 ```
 
 ### 2.4 处理环境变量
@@ -134,25 +134,25 @@ export default defineConfig({
 **永远不要**将敏感的环境变量硬编码在源代码中。使用 Vite 的环境变量模式。
 
 1. **创建环境文件**：
-    * `.env`：所有模式都会加载
-    * `.env.production`：仅在生产构建时加载
-    * `.env.development`：仅在开发模式时加载
+   - `.env`：所有模式都会加载
+   - `.env.production`：仅在生产构建时加载
+   - `.env.development`：仅在开发模式时加载
 
 2. **定义变量**：变量必须以 `VITE_` 为前缀才能被 Vite 暴露给客户端。
 
-    ```bash
-    # .env.production
-    VITE_API_BASE_URL=https://api.my-production-app.com
-    VITE_APP_TITLE=My Awesome App (Prod)
-    ```
+   ```bash
+   # .env.production
+   VITE_API_BASE_URL=https://api.my-production-app.com
+   VITE_APP_TITLE=My Awesome App (Prod)
+   ```
 
 3. **在代码中使用**：
 
-    ```javascript
-    console.log(import.meta.env.VITE_API_BASE_URL) // 输出：https://api.my-production-app.com
-    console.log(import.meta.env.VITE_APP_TITLE) // 输出：My Awesome App (Prod)
-    // import.meta.env.MODE 会是 'production'
-    ```
+   ```javascript
+   console.log(import.meta.env.VITE_API_BASE_URL); // 输出：https://api.my-production-app.com
+   console.log(import.meta.env.VITE_APP_TITLE); // 输出：My Awesome App (Prod)
+   // import.meta.env.MODE 会是 'production'
+   ```
 
 ### 2.5 现代化构建（Modern Build）
 
@@ -170,18 +170,14 @@ export default defineConfig({
       modernPolyfills: ['es.array.iterator'], // 可以更精细地控制 polyfill
     },
   },
-})
+});
 ```
 
 在 `package.json` 中指定浏览器版本提示，Vite 构建时会利用此信息。
 
 ```json
 {
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not dead"]
 }
 ```
 
@@ -191,32 +187,32 @@ export default defineConfig({
 
 1. **安装插件**：
 
-    ```bash
-    npm install --save-dev rollup-plugin-visualizer
-    ```
+   ```bash
+   npm install --save-dev rollup-plugin-visualizer
+   ```
 
 2. **配置 Vite**：
 
-    ```javascript
-    // vite.config.js
-    import { visualizer } from 'rollup-plugin-visualizer'
+   ```javascript
+   // vite.config.js
+   import { visualizer } from 'rollup-plugin-visualizer';
 
-    export default defineConfig({
-      plugins: [
-        // ... 其他插件
-        // 将其放在插件数组的最后
-        visualizer({
-          open: true, // 构建完成后自动打开可视化报告
-          filename: 'dist/stats.html', // 输出文件名
-          gzipSize: true, // 显示 gzip 后的大小
-          brotliSize: true, // 显示 brotli 后的大小
-        }),
-      ],
-      build: {
-        // ... 其他构建配置
-      },
-    })
-    ```
+   export default defineConfig({
+     plugins: [
+       // ... 其他插件
+       // 将其放在插件数组的最后
+       visualizer({
+         open: true, // 构建完成后自动打开可视化报告
+         filename: 'dist/stats.html', // 输出文件名
+         gzipSize: true, // 显示 gzip 后的大小
+         brotliSize: true, // 显示 brotli 后的大小
+       }),
+     ],
+     build: {
+       // ... 其他构建配置
+     },
+   });
+   ```
 
 3. **运行构建**：执行 `npm run build` 后，会自动生成一个 `stats.html` 文件并在浏览器中打开，你可以直观地看到每个模块的大小占比。
 
@@ -226,65 +222,65 @@ export default defineConfig({
 
 对于单页应用 (SPA)，如使用 React、Vue 构建的应用，你需要配置服务器将所有路由请求 fallback 到 `index.html`。
 
-* **Netlify**:
-    1. 将 `dist` 文件夹拖入 Netlify 界面。
-    2. 或连接你的 Git 仓库，构建命令为 `npm run build`，发布目录为 `dist`。
-    3. 创建一个 `_redirects` 文件在 `public` 目录下，内容为：
+- **Netlify**:
+  1. 将 `dist` 文件夹拖入 Netlify 界面。
+  2. 或连接你的 Git 仓库，构建命令为 `npm run build`，发布目录为 `dist`。
+  3. 创建一个 `_redirects` 文件在 `public` 目录下，内容为：
 
-        ```
-        /* /index.html 200
-        ```
+     ```
+     /* /index.html 200
+     ```
 
-        或者，在 `vite.config.js` 中配置：
+     或者，在 `vite.config.js` 中配置：
 
-        ```javascript
-        export default defineConfig({
-          build: {
-            outDir: 'dist',
-          },
-          // Netlify 会在部署时读取此配置
-          // 但显式创建 _redirects 文件更可靠
-        })
-        ```
+     ```javascript
+     export default defineConfig({
+       build: {
+         outDir: 'dist',
+       },
+       // Netlify 会在部署时读取此配置
+       // 但显式创建 _redirects 文件更可靠
+     });
+     ```
 
-* **Vercel**:
-    1. 连接 Git 仓库后，Vercel 会自动检测 Vite 项目并应用最佳配置。
-    2. 如需自定义，可创建 `vercel.json`：
+- **Vercel**:
+  1. 连接 Git 仓库后，Vercel 会自动检测 Vite 项目并应用最佳配置。
+  2. 如需自定义，可创建 `vercel.json`：
 
-        ```json
-        {
-          "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
-        }
-        ```
+     ```json
+     {
+       "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+     }
+     ```
 
-* **GitHub Pages**:
-    1. 需要正确设置 `base` 选项。
+- **GitHub Pages**:
+  1. 需要正确设置 `base` 选项。
 
-        ```javascript
-        // vite.config.js
-        export default defineConfig({
-          base: '/your-repo-name/', // 替换为你的仓库名
-        })
-        ```
+     ```javascript
+     // vite.config.js
+     export default defineConfig({
+       base: '/your-repo-name/', // 替换为你的仓库名
+     });
+     ```
 
-    2. 使用 `gh-pages` 包自动化部署：
+  2. 使用 `gh-pages` 包自动化部署：
 
-        ```bash
-        npm install --save-dev gh-pages
-        ```
+     ```bash
+     npm install --save-dev gh-pages
+     ```
 
-        在 `package.json` 中添加脚本：
+     在 `package.json` 中添加脚本：
 
-        ```json
-        {
-          "scripts": {
-            "predeploy": "npm run build",
-            "deploy": "gh-pages -d dist"
-          }
-        }
-        ```
+     ```json
+     {
+       "scripts": {
+         "predeploy": "npm run build",
+         "deploy": "gh-pages -d dist"
+       }
+     }
+     ```
 
-        运行 `npm run deploy` 即可。
+     运行 `npm run deploy` 即可。
 
 ### 4.2 部署到传统 Web 服务器（Nginx）
 
@@ -317,63 +313,63 @@ server {
 
 如果你使用 Vite 构建 SSR 应用（如 Nuxt、SvelteKit、SolidStart），部署策略会有所不同。
 
-* **输出结构**：构建通常会生成一个 `client` 目录（用于静态资源）和一个 `server` 目录（用于 SSR 入口）。
-* **部署平台**：需要能够运行 Node.js 的服务器或 serverless 环境（如 Vercel、Netlify Functions、AWS Lambda）。
-* **环境变量**：确保服务器的生产环境变量已正确设置。
+- **输出结构**：构建通常会生成一个 `client` 目录（用于静态资源）和一个 `server` 目录（用于 SSR 入口）。
+- **部署平台**：需要能够运行 Node.js 的服务器或 serverless 环境（如 Vercel、Netlify Functions、AWS Lambda）。
+- **环境变量**：确保服务器的生产环境变量已正确设置。
 
 一个简单的 Node.js 服务器示例（通常由框架提供）：
 
 ```javascript
 // server.js (示例)
-import express from 'express'
-import { createServer } from 'vite'
-import fs from 'fs'
+import express from 'express';
+import { createServer } from 'vite';
+import fs from 'fs';
 
-const isProduction = process.env.NODE_ENV === 'production'
-const app = express()
+const isProduction = process.env.NODE_ENV === 'production';
+const app = express();
 
 if (!isProduction) {
   // 开发模式：创建 Vite 开发服务器并配置中间件
   const vite = await createServer({
     server: { middlewareMode: true },
-    appType: 'custom'
-  })
-  app.use(vite.middlewares)
+    appType: 'custom',
+  });
+  app.use(vite.middlewares);
 } else {
   // 生产模式：提供静态资源并使用构建好的 SSR 入口
-  app.use(express.static('dist/client'))
+  app.use(express.static('dist/client'));
 }
 
 // SSR 请求处理
 app.get('*', async (req, res) => {
   try {
-    const url = req.originalUrl
-    let template, render
+    const url = req.originalUrl;
+    let template, render;
 
     if (!isProduction) {
       // 开发模式：从开发服务器读取模板和模块
-      template = fs.readFileSync('index.html', 'utf-8')
-      template = await vite.transformIndexHtml(url, template)
-      render = (await vite.ssrLoadModule('/src/entry-server.js')).render
+      template = fs.readFileSync('index.html', 'utf-8');
+      template = await vite.transformIndexHtml(url, template);
+      render = (await vite.ssrLoadModule('/src/entry-server.js')).render;
     } else {
       // 生产模式：直接使用构建好的文件
-      template = fs.readFileSync('dist/client/index.html', 'utf-8')
-      render = (await import('./dist/server/entry-server.js')).render
+      template = fs.readFileSync('dist/client/index.html', 'utf-8');
+      render = (await import('./dist/server/entry-server.js')).render;
     }
 
-    const appHtml = await render(url)
-    const html = template.replace(`<!--ssr-outlet-->`, appHtml)
-    res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
+    const appHtml = await render(url);
+    const html = template.replace(`<!--ssr-outlet-->`, appHtml);
+    res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
   } catch (e) {
-    !isProduction && vite.ssrFixStacktrace(e)
-    console.log(e.stack)
-    res.status(500).end(e.stack)
+    !isProduction && vite.ssrFixStacktrace(e);
+    console.log(e.stack);
+    res.status(500).end(e.stack);
   }
-})
+});
 
 app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000')
-})
+  console.log('Server is running on http://localhost:3000');
+});
 ```
 
 ## 5. 持续集成与部署（CI/CD）
@@ -387,41 +383,41 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run tests
-      run: npm test
+      - name: Run tests
+        run: npm test
 
-    - name: Build project
-      run: npm run build
-      env:
-        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }} # 注入生产环境变量
+      - name: Build project
+        run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }} # 注入生产环境变量
 
-    - name: Deploy to Server via SSH
-      uses: easingthemes/ssh-deploy@main
-      with:
-        SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        SOURCE: "dist/"
-        TARGET: "/path/to/your/app/"
+      - name: Deploy to Server via SSH
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          SOURCE: 'dist/'
+          TARGET: '/path/to/your/app/'
 ```
 
 ## 总结

@@ -21,12 +21,7 @@
 ```vue
 <!-- ParentComponent.vue -->
 <template>
-  <ChildComponent 
-    class="parent-class" 
-    style="color: red" 
-    data-custom="test"
-    @click="handleClick"
-  />
+  <ChildComponent class="parent-class" style="color: red" data-custom="test" @click="handleClick" />
 </template>
 
 <script setup>
@@ -49,9 +44,7 @@ const handleClick = () => {
 渲染结果：
 
 ```html
-<div class="parent-class" style="color: red" data-custom="test">
-  Click me!
-</div>
+<div class="parent-class" style="color: red" data-custom="test">Click me!</div>
 ```
 
 ### 多根节点组件透传处理
@@ -62,7 +55,8 @@ const handleClick = () => {
 <!-- MultiRootComponent.vue -->
 <template>
   <header>Header</header>
-  <main v-bind="$attrs">Main Content</main> <!-- 透传到此处 -->
+  <main v-bind="$attrs">Main Content</main>
+  <!-- 透传到此处 -->
   <footer>Footer</footer>
 </template>
 
@@ -79,12 +73,12 @@ console.log(attrs); // { class: 'parent-class', ... }
 
 ### 1. 合并策略
 
-| 属性类型 | 合并规则 | 示例 |
-|---------|---------|------|
-| `class` | 自动合并 | `<Child class="a"/>` + 子组件 `class="b"` → `class="a b"` |
-| `style` | 自动合并 | 父: `style="{color: red}"` + 子: `style="{fontSize: '16px'}"` → 合并样式 |
-| 其他属性 | 父组件覆盖子组件 | 父: `id="parent"` + 子: `id="child"` → `id="parent"` |
-| 事件监听器 | 同时触发父子事件 | 父 `@click` 和 子 `@click` 都会触发 |
+| 属性类型   | 合并规则         | 示例                                                                     |
+| ---------- | ---------------- | ------------------------------------------------------------------------ |
+| `class`    | 自动合并         | `<Child class="a"/>` + 子组件 `class="b"` → `class="a b"`                |
+| `style`    | 自动合并         | 父: `style="{color: red}"` + 子: `style="{fontSize: '16px'}"` → 合并样式 |
+| 其他属性   | 父组件覆盖子组件 | 父: `id="parent"` + 子: `id="child"` → `id="parent"`                     |
+| 事件监听器 | 同时触发父子事件 | 父 `@click` 和 子 `@click` 都会触发                                      |
 
 ### 2. 透传范围
 
@@ -131,11 +125,7 @@ const filteredAttrs = computed(() => {
 <template>
   <div class="input-wrapper">
     <label v-if="label">{{ label }}</label>
-    <input 
-      v-bind="inputAttrs" 
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-    >
+    <input v-bind="inputAttrs" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
   </div>
 </template>
 
@@ -144,7 +134,7 @@ import { computed, useAttrs } from 'vue';
 
 const props = defineProps({
   modelValue: [String, Number],
-  label: String
+  label: String,
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -156,7 +146,7 @@ const inputAttrs = computed(() => {
   const { class: _, style, ...rest } = attrs;
   return {
     class: 'form-input',
-    ...rest
+    ...rest,
   };
 });
 </script>
@@ -181,7 +171,7 @@ const attrs = useAttrs();
 const handleClick = (e) => {
   // 执行内部逻辑
   console.log('Card clicked');
-  
+
   // 触发父组件监听的事件（如果存在）
   if (attrs.onClick) {
     attrs.onClick(e);
@@ -195,7 +185,7 @@ const handleClick = (e) => {
 ```vue
 <script setup>
 defineOptions({
-  inheritAttrs: false // 禁用自动透传
+  inheritAttrs: false, // 禁用自动透传
 });
 
 // 手动处理部分属性
@@ -210,7 +200,7 @@ const { class: className, style, ...restAttrs } = useAttrs();
    ```vue
    <!-- 父组件 -->
    <ChildComponent @custom-event="handler" />
-   
+
    <!-- 子组件 -->
    <template>
      <div @click="$emit('custom-event')"></div>
@@ -222,9 +212,9 @@ const { class: className, style, ...restAttrs } = useAttrs();
    ```vue
    <script setup>
    import { useAttrs } from 'vue';
-   
+
    const attrs = useAttrs();
-   
+
    // 安全访问属性
    const customAttribute = attrs['data-custom'] || '';
    </script>
@@ -235,10 +225,10 @@ const { class: className, style, ...restAttrs } = useAttrs();
    ```vue
    <script setup>
    import { useAttrs, ref, onMounted } from 'vue';
-   
+
    const attrs = useAttrs();
    const root = ref(null);
-   
+
    onMounted(() => {
      // 直接操作DOM处理大量属性
      Object.entries(attrs).forEach(([key, value]) => {
@@ -254,13 +244,13 @@ const { class: className, style, ...restAttrs } = useAttrs();
 
    ```ts
    import type { HTMLAttributes } from 'vue';
-   
+
    // 声明透传属性类型
    interface ExtraAttrs extends HTMLAttributes {
      'data-custom'?: string;
      'aria-role'?: string;
    }
-   
+
    const attrs = useAttrs() as ExtraAttrs;
    ```
 
@@ -272,7 +262,7 @@ Vue3 的 Attributes 透传机制提供了强大的组件封装能力，合理运
 ✅ 减少不必要的 prop 声明  
 ✅ 保持组件接口简洁  
 ✅ 实现高阶组件封装模式  
-✅ 更好地与原生 HTML 元素集成  
+✅ 更好地与原生 HTML 元素集成
 
 在实际开发中，建议：
 

@@ -16,18 +16,18 @@ Git 钩子本质上是存储在 Git 仓库 `.git/hooks` 目录下的可执行脚
 
 Git 钩子分为两大类型：**客户端钩子**和**服务器端钩子**。客户端钩子在本地开发环境中触发，主要用于规范开发者的本地操作；服务器端钩子在远程仓库上触发，用于强制执行团队策略和自动化部署流程。
 
-*表：常见的 Git 钩子类型及其用途*
+_表：常见的 Git 钩子类型及其用途_
 
-| **钩子类型** | **触发时机** | **主要用途** | **执行环境** |
-|------------|------------|------------|------------|
-| `pre-commit` | 执行 `git commit` 前 | 代码质量检查、快速测试 | 客户端 |
-| `prepare-commit-msg` | 启动提交信息编辑器前 | 生成或修改提交信息模板 | 客户端 |
-| `commit-msg` | 提交信息保存后 | 验证提交信息格式 | 客户端 |
-| `post-commit` | 提交完成后 | 通知、记录日志 | 客户端 |
-| `pre-push` | 执行 `git push` 前 | 运行集成测试、检查远程状态 | 客户端 |
-| `pre-receive` | 服务器接收推送时 | 全局校验推送内容、权限控制 | 服务器端 |
-| `update` | 每个分支推送前 | 细粒度分支权限控制 | 服务器端 |
-| `post-receive` | 推送完成后 | 触发 CI/CD、自动部署 | 服务器端 |
+| **钩子类型**         | **触发时机**         | **主要用途**               | **执行环境** |
+| -------------------- | -------------------- | -------------------------- | ------------ |
+| `pre-commit`         | 执行 `git commit` 前 | 代码质量检查、快速测试     | 客户端       |
+| `prepare-commit-msg` | 启动提交信息编辑器前 | 生成或修改提交信息模板     | 客户端       |
+| `commit-msg`         | 提交信息保存后       | 验证提交信息格式           | 客户端       |
+| `post-commit`        | 提交完成后           | 通知、记录日志             | 客户端       |
+| `pre-push`           | 执行 `git push` 前   | 运行集成测试、检查远程状态 | 客户端       |
+| `pre-receive`        | 服务器接收推送时     | 全局校验推送内容、权限控制 | 服务器端     |
+| `update`             | 每个分支推送前       | 细粒度分支权限控制         | 服务器端     |
+| `post-receive`       | 推送完成后           | 触发 CI/CD、自动部署       | 服务器端     |
 
 ### 1.2 Git 钩子的执行环境与参数
 
@@ -414,10 +414,10 @@ echo "$(date): 开始执行 pre-commit 钩子" >> $LOG_FILE
 try {
     # 运行代码检查
     npm run lint || error_exit "ESLint 检查失败"
-    
+
     # 运行测试
     npm run test:unit || error_exit "单元测试失败"
-    
+
     echo "$(date): pre-commit 钩子执行成功" >> $LOG_FILE
     exit 0
 } catch {
@@ -453,15 +453,15 @@ declare -A BRANCH_PERMISSIONS=(
 while read oldrev newrev refname; do
     # 提取分支名
     branch=$(echo "$refname" | sed 's|refs/heads/||')
-    
+
     # 提取用户名
     user=$(echo $USER | awk '{print $1}')
-    
+
     # 检查分支权限
     allowed_teams=${BRANCH_PERMISSIONS[$branch]}
     if [ -n "$allowed_teams" ]; then
         user_team=$(git config --get user.team || echo "none")
-        
+
         if [[ " $allowed_teams " != *" $user_team "* ]] && [[ " $allowed_teams " != *" all "* ]]; then
             echo "错误：用户 $user (团队: $user_team) 无权限推送到分支 $branch"
             echo "允许的团队: $allowed_teams"
@@ -501,13 +501,13 @@ mkdir -p "$HOOKS_DIR"
 # 遍历源钩子目录中的所有钩子脚本
 for hook in $SRC_HOOKS_DIR/*; do
     hook_name=$(basename "$hook")
-    
+
     # 备份现有钩子
     if [ -f "$HOOKS_DIR/$hook_name" ]; then
         mv "$HOOKS_DIR/$hook_name" "$HOOKS_DIR/${hook_name}.backup"
         echo "已备份现有钩子: $hook_name"
     fi
-    
+
     # 复制新钩子
     cp "$hook" "$HOOKS_DIR/$hook_name"
     chmod +x "$HOOKS_DIR/$hook_name"

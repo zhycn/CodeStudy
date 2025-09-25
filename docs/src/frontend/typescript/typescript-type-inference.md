@@ -31,7 +31,7 @@ const numbers = [1, 2, 3, 4, 5];
 // 推断类型为 { name: string; age: number; }
 const person = {
   name: 'Alice',
-  age: 28
+  age: 28,
 };
 ```
 
@@ -60,7 +60,7 @@ function getValue(isString: boolean) {
 function createUser(name: string) {
   return {
     name, // 等价于 name: name
-    score: 100
+    score: 100,
   };
 }
 ```
@@ -87,7 +87,7 @@ names.forEach(function(name) {
 });
 
 // UI 框架中的常见例子（以 React 为例）
-<button onClick={(event) => { 
+<button onClick={(event) => {
   console.log(event.currentTarget.value); // event 被推断为 React.MouseEvent<HTMLButtonElement>
 }} />
 ```
@@ -107,7 +107,7 @@ let letString = 'hello'; // Type: string
 
 // 对象和数组的属性也会被拓宽
 const obj = {
-  counter: 0 // Property 'counter' is widened to type `number`, not `0`
+  counter: 0, // Property 'counter' is widened to type `number`, not `0`
 }; // Type: { counter: number; }
 
 obj.counter = 10; // 允许，因为类型是 number
@@ -123,8 +123,8 @@ letString = 'world'; // Error: Type '"world"' is not assignable to type '"hello"
 // 对象和数组的 const 断言
 const obj = {
   counter: 0,
-  name: 'Typescript'
-} as const; 
+  name: 'Typescript',
+} as const;
 // Type: { readonly counter: 0; readonly name: "Typescript"; }
 
 obj.counter = 10; // Error: Cannot assign to 'counter' because it is a read-only property.
@@ -141,91 +141,95 @@ array.push(4); // Error: Property 'push' does not exist on type 'readonly [1, 2,
 
 ```typescript
 // 推断类型为 (string | number)[]
-const mixedArray = [1, 'two', 3, 'four']; 
+const mixedArray = [1, 'two', 3, 'four'];
 
 // 推断类型为 { a: number; b: string; } | { a: string; b: number; }
 const mixedObjectArray = [
   { a: 1, b: 'x' },
-  { a: 'y', b: 2 }
+  { a: 'y', b: 2 },
 ];
 ```
 
 ## 5. 最佳实践
 
 1. **优先依赖类型推断**
-    对于简单的局部变量和明显的返回类型，让 TypeScript 来完成推断工作。这可以使代码更简洁，减少不必要的噪音。
+   对于简单的局部变量和明显的返回类型，让 TypeScript 来完成推断工作。这可以使代码更简洁，减少不必要的噪音。
 
-    ```typescript
-    // Good 👍 - 让 TypeScript 推断
-    const score = 100;
-    const message = `Your score is ${score}`;
-    function isAdult(age: number) { return age >= 18; }
+   ```typescript
+   // Good 👍 - 让 TypeScript 推断
+   const score = 100;
+   const message = `Your score is ${score}`;
+   function isAdult(age: number) {
+     return age >= 18;
+   }
 
-    // Not Necessary 👎 - 冗余的类型注解
-    const score: number = 100;
-    const message: string = `Your score is ${score}`;
-    function isAdult(age: number): boolean { return age >= 18; }
-    ```
+   // Not Necessary 👎 - 冗余的类型注解
+   const score: number = 100;
+   const message: string = `Your score is ${score}`;
+   function isAdult(age: number): boolean {
+     return age >= 18;
+   }
+   ```
 
 2. **显式注解函数参数和公共接口**
-    函数参数无法从上下文中推断，必须显式注解。对于导出（export）的函数、类方法和接口，显式注解返回类型和形状是一种良好的文档形式，并有助于捕获实现错误。
+   函数参数无法从上下文中推断，必须显式注解。对于导出（export）的函数、类方法和接口，显式注解返回类型和形状是一种良好的文档形式，并有助于捕获实现错误。
 
-    ```typescript
-    // Good 👍
-    export interface ApiResponse<T> {
-      data: T;
-      status: number;
-      error?: string;
-    }
+   ```typescript
+   // Good 👍
+   export interface ApiResponse<T> {
+     data: T;
+     status: number;
+     error?: string;
+   }
 
-    export function transformUserData(users: User[]): ApiResponse<TransformedUser[]> {
-      // ... 实现
-      // 如果错误地返回了 `string`，TS 会立即在此报错，而不是在使用此函数的地方报错
-      return {
-        data: transformedData,
-        status: 200
-      };
-    }
-    ```
+   export function transformUserData(users: User[]): ApiResponse<TransformedUser[]> {
+     // ... 实现
+     // 如果错误地返回了 `string`，TS 会立即在此报错，而不是在使用此函数的地方报错
+     return {
+       data: transformedData,
+       status: 200,
+     };
+   }
+   ```
 
 3. **在模糊时添加类型注解**
-    如果初始化一个变量为 `null` 或空数组，计划稍后填充它，你应该添加类型注解以避免它被推断为 `any` 或过于狭窄的类型。
+   如果初始化一个变量为 `null` 或空数组，计划稍后填充它，你应该添加类型注解以避免它被推断为 `any` 或过于狭窄的类型。
 
-    ```typescript
-    // Bad 👎 - 被推断为 any[]
-    const array = [];
-    array.push(1); // OK
-    array.push('string'); // OK，但这可能不是我们想要的
+   ```typescript
+   // Bad 👎 - 被推断为 any[]
+   const array = [];
+   array.push(1); // OK
+   array.push('string'); // OK，但这可能不是我们想要的
 
-    // Good 👍 - 显式注解为 number[]
-    const array: number[] = [];
-    array.push(1); // OK
-    array.push('string'); // Error: Argument of type 'string' is not assignable to parameter of type 'number'
+   // Good 👍 - 显式注解为 number[]
+   const array: number[] = [];
+   array.push(1); // OK
+   array.push('string'); // Error: Argument of type 'string' is not assignable to parameter of type 'number'
 
-    // 处理异步数据获取
-    let user: User | null = null; // 明确表示可能为 null
-    async function fetchUser() {
-      user = await getUserFromAPI(); // 现在赋值是安全的
-    }
-    ```
+   // 处理异步数据获取
+   let user: User | null = null; // 明确表示可能为 null
+   async function fetchUser() {
+     user = await getUserFromAPI(); // 现在赋值是安全的
+   }
+   ```
 
 4. **善用 `as const` 实现精确的类型**
-    当你希望字面量值被推断为精确的类型而不是基础类型时，使用 `as const`。
+   当你希望字面量值被推断为精确的类型而不是基础类型时，使用 `as const`。
 
-    ```typescript
-    // 配置对象
-    const SETTINGS = {
-      theme: 'dark',
-      refreshInterval: 30
-    } as const;
-    // SETTINGS.theme 的类型是 "dark", 而不是 string
+   ```typescript
+   // 配置对象
+   const SETTINGS = {
+     theme: 'dark',
+     refreshInterval: 30
+   } as const;
+   // SETTINGS.theme 的类型是 "dark", 而不是 string
 
-    // 与联合类型配合，实现类型安全的状态管理
-    function handleRequest(url: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE') { ... }
+   // 与联合类型配合，实现类型安全的状态管理
+   function handleRequest(url: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE') { ... }
 
-    const req = { url: 'https://example.com', method: 'GET' } as const;
-    handleRequest(req.url, req.method); // 安全！req.method 是类型 "GET"
-    ```
+   const req = { url: 'https://example.com', method: 'GET' } as const;
+   handleRequest(req.url, req.method); // 安全！req.method 是类型 "GET"
+   ```
 
 ## 6. 常见误区与解决方法
 
@@ -233,13 +237,19 @@ const mixedObjectArray = [
 
 ```typescript
 // 定义一个接受回调函数的函数
-function runCallback(cb: (value: number) => void) { cb(42); }
+function runCallback(cb: (value: number) => void) {
+  cb(42);
+}
 
 // 直接传入函数字面量：上下文推断正常工作
-runCallback((value) => { console.log(value.toFixed()); }); // value 被推断为 number
+runCallback((value) => {
+  console.log(value.toFixed());
+}); // value 被推断为 number
 
 // 先定义回调函数：失去了上下文，value 被推断为 any！
-const cb = (value) => { console.log(value.toFixed()); }; // Error: Parameter 'value' implicitly has an 'any' type.
+const cb = (value) => {
+  console.log(value.toFixed());
+}; // Error: Parameter 'value' implicitly has an 'any' type.
 runCallback(cb);
 ```
 
@@ -247,11 +257,15 @@ runCallback(cb);
 
 ```typescript
 // 解决方法 1: 为回调参数显式注解类型
-const cb = (value: number) => { console.log(value.toFixed()); };
+const cb = (value: number) => {
+  console.log(value.toFixed());
+};
 runCallback(cb);
 
 // 解决方法 2: 声明符合目标类型的变量
-const cb: (value: number) => void = (value) => { console.log(value.toFixed()); };
+const cb: (value: number) => void = (value) => {
+  console.log(value.toFixed());
+};
 runCallback(cb);
 ```
 

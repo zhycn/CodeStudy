@@ -37,7 +37,7 @@ import { ref } from 'vue';
 
 export default {
   props: {
-    title: String
+    title: String,
   },
   setup(props, context) {
     // 访问 props
@@ -53,9 +53,9 @@ export default {
 
     // 返回模板可用的内容
     return {
-      count
+      count,
     };
-  }
+  },
 };
 ```
 
@@ -74,7 +74,8 @@ export default {
 ```vue
 <template>
   <div>
-    <p>{{ count }}</p> <!-- 模板中无需 .value -->
+    <p>{{ count }}</p>
+    <!-- 模板中无需 .value -->
     <button @click="increment">Increment</button>
   </div>
 </template>
@@ -95,9 +96,9 @@ export default {
     // 暴露给模板
     return {
       count,
-      increment
+      increment,
     };
-  }
+  },
 };
 </script>
 ```
@@ -130,17 +131,17 @@ export default {
     const state = reactive({
       user: {
         name: 'Alice',
-        age: 30
-      }
+        age: 30,
+      },
     });
 
     // 直接修改属性
     // state.user.age = 31;
 
     return {
-      state // 返回整个对象
+      state, // 返回整个对象
     };
-  }
+  },
 };
 </script>
 ```
@@ -165,14 +166,14 @@ export default {
   setup() {
     const state = reactive({
       name: 'Vue',
-      version: 3
+      version: 3,
     });
 
     // 在返回时使用 toRefs，使模板可以解构
     return {
-      ...toRefs(state)
+      ...toRefs(state),
     };
-  }
+  },
 };
 ```
 
@@ -200,14 +201,14 @@ export default {
       get: () => `${firstName.value} ${lastName.value}`,
       set: (newValue) => {
         [firstName.value, lastName.value] = newValue.split(' ');
-      }
+      },
     });
 
     return {
       fullName,
-      writableFullName
+      writableFullName,
     };
-  }
+  },
 };
 ```
 
@@ -230,13 +231,17 @@ export default {
     const results = ref(null);
 
     // 使用 watch，明确侦听 searchQuery
-    watch(searchQuery, async (newQuery, oldQuery) => {
-      if (newQuery.trim() === '') {
-        results.value = null;
-        return;
-      }
-      results.value = await fetchResults(newQuery);
-    }, { immediate: true }); // 立即执行一次
+    watch(
+      searchQuery,
+      async (newQuery, oldQuery) => {
+        if (newQuery.trim() === '') {
+          results.value = null;
+          return;
+        }
+        results.value = await fetchResults(newQuery);
+      },
+      { immediate: true }
+    ); // 立即执行一次
 
     // 使用 watchEffect，自动追踪 searchQuery 和 results
     watchEffect((onCleanup) => {
@@ -253,9 +258,9 @@ export default {
 
     return {
       searchQuery,
-      results
+      results,
     };
-  }
+  },
 };
 ```
 
@@ -263,21 +268,21 @@ export default {
 
 组合式 API 提供了与选项式 API 等效的生命周期钩子，但名称前加了 `on`（如 `onMounted`）。它们接受一个回调函数，当钩子被组件调用时执行。
 
-| 选项式 API Hook | 组合式 API Hook |
-| :---------------- | :------------------- |
-| `beforeCreate`    | Not Needed*          |
-| `created`         | Not Needed*          |
-| `beforeMount`     | `onBeforeMount`      |
-| `mounted`         | `onMounted`          |
-| `beforeUpdate`    | `onBeforeUpdate`     |
-| `updated`         | `onUpdated`          |
-| `beforeUnmount`   | `onBeforeUnmount`    |
-| `unmounted`       | `onUnmounted`        |
-| `errorCaptured`   | `onErrorCaptured`    |
-| `renderTracked`   | `onRenderTracked`    |
-| `renderTriggered` | `onRenderTriggered`  |
+| 选项式 API Hook   | 组合式 API Hook     |
+| :---------------- | :------------------ |
+| `beforeCreate`    | Not Needed\*        |
+| `created`         | Not Needed\*        |
+| `beforeMount`     | `onBeforeMount`     |
+| `mounted`         | `onMounted`         |
+| `beforeUpdate`    | `onBeforeUpdate`    |
+| `updated`         | `onUpdated`         |
+| `beforeUnmount`   | `onBeforeUnmount`   |
+| `unmounted`       | `onUnmounted`       |
+| `errorCaptured`   | `onErrorCaptured`   |
+| `renderTracked`   | `onRenderTracked`   |
+| `renderTriggered` | `onRenderTriggered` |
 
-> *`setup()` 运行时间约等于 `beforeCreate` 和 `created`，所以在这两个钩子中编写的代码都应直接放在 `setup()` 函数中。
+> \*`setup()` 运行时间约等于 `beforeCreate` 和 `created`，所以在这两个钩子中编写的代码都应直接放在 `setup()` 函数中。
 
 ```javascript
 import { onMounted, onUnmounted } from 'vue';
@@ -297,7 +302,7 @@ export default {
     onUnmounted(() => {
       window.removeEventListener('resize', handleResize);
     });
-  }
+  },
 };
 ```
 
@@ -354,9 +359,9 @@ export default {
     // 其他逻辑...
     return {
       x,
-      y
+      y,
     };
-  }
+  },
 };
 </script>
 ```
@@ -397,13 +402,13 @@ watchEffect((onCleanup) => {
 
 ## 6. 与选项式 API 的对比与选择
 
-| 方面 | 选项式 API | 组合式 API |
-| :--- | :--- | :--- |
-| **代码组织** | 按选项类型分组 | 按逻辑功能分组 |
-| **逻辑复用** | `mixins`, 高阶组件 | 组合式函数 |
-| **TypeScript 支持** | 一般 | 极佳 |
-| **学习曲线** | 较低，更直观 | 较高，需要理解响应式系统 |
-| **适用场景** | 简单组件、低复杂度项目 | 大型应用、高复用性需求、TypeScript 项目 |
+| 方面                | 选项式 API             | 组合式 API                              |
+| :------------------ | :--------------------- | :-------------------------------------- |
+| **代码组织**        | 按选项类型分组         | 按逻辑功能分组                          |
+| **逻辑复用**        | `mixins`, 高阶组件     | 组合式函数                              |
+| **TypeScript 支持** | 一般                   | 极佳                                    |
+| **学习曲线**        | 较低，更直观           | 较高，需要理解响应式系统                |
+| **适用场景**        | 简单组件、低复杂度项目 | 大型应用、高复用性需求、TypeScript 项目 |
 
 **结论**：它们并非互斥，而是互补的。
 

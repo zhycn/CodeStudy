@@ -20,14 +20,14 @@
 
 `datetime` 模块包含以下几个主要类，它们都是不可变对象：
 
-| 类名 | 用途描述 | 是否包含时区信息 |
-| :--- | :--- | :--- |
-| `date` | 只包含日期（年、月、日） | 否 |
-| `time` | 只包含时间（时、分、秒、微秒） | **可以** (通过 `tzinfo`) |
-| `datetime` | **最常用**。包含日期和时间 | **可以** (通过 `tzinfo`) |
-| `timedelta` | 表示两个时间点之间的间隔（持续时间） | 不适用 |
-| `tzinfo` | 时区信息的抽象基类 | 不适用 |
-| `timezone` | 实现 `tzinfo` 的类，表示与 UTC 的固定偏移 | 不适用 |
+| 类名        | 用途描述                                  | 是否包含时区信息         |
+| :---------- | :---------------------------------------- | :----------------------- |
+| `date`      | 只包含日期（年、月、日）                  | 否                       |
+| `time`      | 只包含时间（时、分、秒、微秒）            | **可以** (通过 `tzinfo`) |
+| `datetime`  | **最常用**。包含日期和时间                | **可以** (通过 `tzinfo`) |
+| `timedelta` | 表示两个时间点之间的间隔（持续时间）      | 不适用                   |
+| `tzinfo`    | 时区信息的抽象基类                        | 不适用                   |
+| `timezone`  | 实现 `tzinfo` 的类，表示与 UTC 的固定偏移 | 不适用                   |
 
 **导入方式：**
 
@@ -152,27 +152,27 @@ print(new_dt)
 
 ### 创建感知型 (aware) 和简单型 (naive) 对象
 
-* **Naive Object (简单型)**：不包含时区信息的 `datetime` 对象。其含义取决于程序的上下文，应尽量避免在不同时区上下文中使用。
+- **Naive Object (简单型)**：不包含时区信息的 `datetime` 对象。其含义取决于程序的上下文，应尽量避免在不同时区上下文中使用。
 
-    ```python
-    naive_dt = datetime(2023, 10, 27, 14, 30) # 这是一个 naive 对象
-    print(naive_dt.tzinfo)  # None
-    ```
+  ```python
+  naive_dt = datetime(2023, 10, 27, 14, 30) # 这是一个 naive 对象
+  print(naive_dt.tzinfo)  # None
+  ```
 
-* **Aware Object (感知型)**：包含时区信息的 `datetime` 对象。可以明确对应到时间线上的一个时刻。
+- **Aware Object (感知型)**：包含时区信息的 `datetime` 对象。可以明确对应到时间线上的一个时刻。
 
-    ```python
-    from datetime import timezone, timedelta
+  ```python
+  from datetime import timezone, timedelta
 
-    # 创建 UTC 时区
-    utc_dt = datetime(2023, 10, 27, 14, 30, tzinfo=timezone.utc)
-    print(utc_dt)  # 2023-10-27 14:30:00+00:00
+  # 创建 UTC 时区
+  utc_dt = datetime(2023, 10, 27, 14, 30, tzinfo=timezone.utc)
+  print(utc_dt)  # 2023-10-27 14:30:00+00:00
 
-    # 创建具有特定偏移的时区 (例如 UTC+8)
-    beijing_tz = timezone(timedelta(hours=8))
-    beijing_dt = datetime(2023, 10, 27, 22, 30, tzinfo=beijing_tz)
-    print(beijing_dt)  # 2023-10-27 22:30:00+08:00
-    ```
+  # 创建具有特定偏移的时区 (例如 UTC+8)
+  beijing_tz = timezone(timedelta(hours=8))
+  beijing_dt = datetime(2023, 10, 27, 22, 30, tzinfo=beijing_tz)
+  print(beijing_dt)  # 2023-10-27 22:30:00+08:00
+  ```
 
 ### 时区转换
 
@@ -228,18 +228,18 @@ print(iso_str)  # '2023-10-27T14:30:15'
 
 **常用格式代码：**
 
-| 代码 | 含义 | 示例 |
-| :--- | :--- | :--- |
-| `%Y` | 四位数的年份 | 2023 |
-| `%m` | 两位数的月份（01-12） | 10 |
-| `%d` | 两位数的日期（01-31） | 27 |
-| `%H` | 24小时制的小时（00-23） | 14 |
-| `%M` | 分钟（00-59） | 30 |
-| `%S` | 秒（00-59） | 15 |
-| `%A` | 完整的星期名称 | Friday |
-| `%B` | 完整的月份名称 | October |
-| `%I` | 12小时制的小时（01-12） | 02 |
-| `%p` | AM 或 PM | PM |
+| 代码 | 含义                    | 示例    |
+| :--- | :---------------------- | :------ |
+| `%Y` | 四位数的年份            | 2023    |
+| `%m` | 两位数的月份（01-12）   | 10      |
+| `%d` | 两位数的日期（01-31）   | 27      |
+| `%H` | 24小时制的小时（00-23） | 14      |
+| `%M` | 分钟（00-59）           | 30      |
+| `%S` | 秒（00-59）             | 15      |
+| `%A` | 完整的星期名称          | Friday  |
+| `%B` | 完整的月份名称          | October |
+| `%I` | 12小时制的小时（01-12） | 02      |
+| `%p` | AM 或 PM                | PM      |
 
 ### `strptime` (从字符串解析)
 
@@ -296,23 +296,23 @@ print(difference.total_seconds()) # 2246400.0 (26 * 24 * 3600)
 ## 最佳实践总结
 
 1. **明确时区：始终使用感知型 (aware) 对象。**
-    * 内部存储和计算使用 **UTC** 时间 (`timezone.utc`)。
-    * 使用 `zoneinfo.ZoneInfo` (Py3.9+) 或 `pytz` 来处理带有时区名称（如 `"America/New_York"`）的转换，而不是手动计算偏移量。
-    * 在程序边界（如 API 输入/输出、数据库读写）进行时区转换。
+   - 内部存储和计算使用 **UTC** 时间 (`timezone.utc`)。
+   - 使用 `zoneinfo.ZoneInfo` (Py3.9+) 或 `pytz` 来处理带有时区名称（如 `"America/New_York"`）的转换，而不是手动计算偏移量。
+   - 在程序边界（如 API 输入/输出、数据库读写）进行时区转换。
 
 2. **使用 ISO 8601 格式进行序列化和交换**
-    * `obj.isoformat()` 用于序列化。
-    * `datetime.fromisoformat()` 用于解析（Py3.7+）。这是一种明确且广泛支持的标准。
+   - `obj.isoformat()` 用于序列化。
+   - `datetime.fromisoformat()` 用于解析（Py3.7+）。这是一种明确且广泛支持的标准。
 
 3. **小心“简单型”对象**
-    * 避免在不同上下文中混用简单型对象，除非你能 100% 确定其隐含的时区。
-    * 如果必须处理简单型对象，请尽早将其转换为感知型对象（例如，通过假设一个时区并调用 `.replace(tzinfo=...)`）。
+   - 避免在不同上下文中混用简单型对象，除非你能 100% 确定其隐含的时区。
+   - 如果必须处理简单型对象，请尽早将其转换为感知型对象（例如，通过假设一个时区并调用 `.replace(tzinfo=...)`）。
 
 4. **使用 `timedelta` 进行算术运算**
-    * 对 `date` 和 `datetime` 对象的加减操作应使用 `timedelta`，避免直接操作属性（如 `day + 1`）。
+   - 对 `date` 和 `datetime` 对象的加减操作应使用 `timedelta`，避免直接操作属性（如 `day + 1`）。
 
 5. **考虑性能**
-    * 创建 `datetime` 对象比解析字符串快得多。对于高性能场景，应尽量避免频繁的 `strptime` 操作。
+   - 创建 `datetime` 对象比解析字符串快得多。对于高性能场景，应尽量避免频繁的 `strptime` 操作。
 
 ## 常见问题与解决方案
 

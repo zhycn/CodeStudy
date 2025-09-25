@@ -37,7 +37,7 @@ interface User {
 // 使用类型注解
 const currentUser: User = {
   id: 1,
-  name: "Alice"
+  name: 'Alice',
 };
 
 // 定义了一个泛型函数
@@ -46,15 +46,15 @@ function getIdentity<T>(arg: T): T {
 }
 
 // 使用联合类型
-type Status = "success" | "error";
+type Status = 'success' | 'error';
 
 function logStatus(status: Status): void {
   console.log(status);
 }
 
 // 调用函数
-const result = getIdentity<string>("Hello");
-logStatus("success");
+const result = getIdentity<string>('Hello');
+logStatus('success');
 ```
 
 **编译后的 JavaScript (`.js`)**
@@ -63,7 +63,7 @@ logStatus("success");
 // 所有类型信息都被擦除
 const currentUser = {
   id: 1,
-  name: "Alice"
+  name: 'Alice',
 };
 
 // 泛型 <T> 被移除，函数变成普通函数
@@ -77,8 +77,8 @@ function logStatus(status) {
 }
 
 // 函数调用保持不变
-const result = getIdentity("Hello");
-logStatus("success");
+const result = getIdentity('Hello');
+logStatus('success');
 ```
 
 如你所见，`interface User`、类型注解 `: User`、泛型 `<T>`、`type Status` 等在编译后全部消失。它们仅在编译阶段被 TypeScript 编译器用于**类型检查**，一旦检查通过，它们的使命就完成了。
@@ -105,14 +105,15 @@ interface Dog {
 function speak(animal: Cat | Dog) {
   // 编译时：TypeScript 知道 animal 是 Cat 或 Dog
   // 运行时：JavaScript 只知道 animal 是一个对象
-  if (animal.meow) { // 这是一个常见的 JavaScript 检查方式，但不可靠
+  if (animal.meow) {
+    // 这是一个常见的 JavaScript 检查方式，但不可靠
     animal.meow();
   } else {
     (animal as Dog).bark(); // 需要类型断言，但运行时可能出错
   }
 }
 
-const myDog = { bark: () => console.log("Woof!") };
+const myDog = { bark: () => console.log('Woof!') };
 speak(myDog); // 正常运行，输出 "Woof!"
 
 const fakeCat = { meow: "I'm a string" }; // 这不是一个真正的 Cat
@@ -129,13 +130,13 @@ speak(fakeCat as Cat); // 编译通过（因为类型断言），但运行时报
 function createArray<T>(value: T, size: number): T[] {
   // 错误！运行时无法知道 T 是什么
   // if (typeof T === "string") { ... }
-  
+
   // 正确做法：通过传入 value 来推断，或者使用工厂函数
   return new Array(size).fill(value);
 }
 
-const stringArray = createArray("hello", 3); // 运行时数组里是 3 个 "hello"
-const numberArray = createArray(42, 3);      // 运行时数组里是 3 个 42
+const stringArray = createArray('hello', 3); // 运行时数组里是 3 个 "hello"
+const numberArray = createArray(42, 3); // 运行时数组里是 3 个 42
 // 运行时，这两个数组在 JavaScript 看来没有任何区别
 ```
 
@@ -153,16 +154,16 @@ function processInput(input: number): number;
 // 实现签名（运行时存在）
 function processInput(input: any): any {
   // 运行时，我们必须手动检查类型
-  if (typeof input === "string") {
+  if (typeof input === 'string') {
     return input.toUpperCase();
-  } else if (typeof input === "number") {
+  } else if (typeof input === 'number') {
     return input * 2;
   }
-  throw new Error("Invalid input");
+  throw new Error('Invalid input');
 }
 
-const a = processInput("hello"); // 运行时：调用 toUpperCase
-const b = processInput(10);      // 运行时：执行乘法
+const a = processInput('hello'); // 运行时：调用 toUpperCase
+const b = processInput(10); // 运行时：执行乘法
 // 编译后，只剩下一个 processInput 函数
 ```
 
@@ -181,13 +182,13 @@ const b = processInput(10);      // 运行时：执行乘法
 
 ```typescript
 // 安装：npm install zod
-import { z } from "zod";
+import { z } from 'zod';
 
 // 1. 定义一个与运行时验证规则对应的 Schema
 const UserSchema = z.object({
   id: z.number(),
   name: z.string(),
-  isAdmin: z.boolean().optional()
+  isAdmin: z.boolean().optional(),
 });
 
 // 2. 从 Schema 推断出 TypeScript 类型
@@ -202,8 +203,8 @@ async function fetchUser(userId: string): Promise<User> {
     // 运行时验证！如果 jsonData 不符合 Schema，这里会抛出错误
     return UserSchema.parse(jsonData);
   } catch (error) {
-    console.error("Invalid user data:", error);
-    throw new Error("Received data is not a valid User");
+    console.error('Invalid user data:', error);
+    throw new Error('Received data is not a valid User');
   }
 }
 ```
@@ -225,8 +226,7 @@ interface Dog {
 // 类型守卫函数
 function isCat(animal: Cat | Dog): animal is Cat {
   // 运行时检查：判断 'meow' 属性是否存在且是一个函数
-  return (animal as Cat).meow !== undefined && 
-         typeof (animal as Cat).meow === "function";
+  return (animal as Cat).meow !== undefined && typeof (animal as Cat).meow === 'function';
 }
 
 function speak(animal: Cat | Dog) {
@@ -247,16 +247,16 @@ function speak(animal: Cat | Dog) {
 
 ```typescript
 type Shape =
-  | { kind: "circle"; radius: number }    // 公共属性 kind: "circle"
-  | { kind: "square"; sideLength: number } // 公共属性 kind: "square"
+  | { kind: 'circle'; radius: number } // 公共属性 kind: "circle"
+  | { kind: 'square'; sideLength: number }; // 公共属性 kind: "square"
 
 function getArea(shape: Shape): number {
   // 运行时检查 shape.kind
   switch (shape.kind) {
-    case "circle":
+    case 'circle':
       // 在此分支，TypeScript 知道 shape 有 radius
       return Math.PI * shape.radius ** 2;
-    case "square":
+    case 'square':
       // 在此分支，TypeScript 知道 shape 有 sideLength
       return shape.sideLength ** 2;
   }
@@ -318,9 +318,9 @@ class ApiResponse<T = any> {
 // 使用时
 const userResponse = new ApiResponse(
   true,
-  "User found",
-  { id: 1, name: "Alice" },
-  "user" // 显式传递类型标签
+  'User found',
+  { id: 1, name: 'Alice' },
+  'user' // 显式传递类型标签
 );
 ```
 
@@ -328,13 +328,13 @@ const userResponse = new ApiResponse(
 
 TypeScript 的**类型擦除**是其架构的核心支柱，它带来了卓越的编译时安全性和完美的 JavaScript 兼容性，但也移除了运行时类型信息。
 
-| 特性 | 编译时 | 运行时 | 应对策略 |
-| :--- | :--- | :--- | :--- |
-| **类型注解** (`: Type`) | ✅ 用于检查 | ❌ 被擦除 | 无需特别处理 |
-| **接口/类型别名** (`interface`, `type`) | ✅ 用于检查 | ❌ 被擦除 | 无需特别处理 |
-| **泛型** (`<T>`) | ✅ 用于检查 | ❌ 被擦除 | 使用值传递或运行时标签 |
-| **外部数据** | ❌ 无法检查 | ✅ 实际存在 | **运行时验证** (Zod等) |
-| **类型辨别** | ✅ 可收窄类型 | ❌ 信息丢失 | **类型守卫**、**标签联合** |
+| 特性                                    | 编译时        | 运行时      | 应对策略                   |
+| :-------------------------------------- | :------------ | :---------- | :------------------------- |
+| **类型注解** (`: Type`)                 | ✅ 用于检查   | ❌ 被擦除   | 无需特别处理               |
+| **接口/类型别名** (`interface`, `type`) | ✅ 用于检查   | ❌ 被擦除   | 无需特别处理               |
+| **泛型** (`<T>`)                        | ✅ 用于检查   | ❌ 被擦除   | 使用值传递或运行时标签     |
+| **外部数据**                            | ❌ 无法检查   | ✅ 实际存在 | **运行时验证** (Zod等)     |
+| **类型辨别**                            | ✅ 可收窄类型 | ❌ 信息丢失 | **类型守卫**、**标签联合** |
 
 **核心最佳实践清单：**
 

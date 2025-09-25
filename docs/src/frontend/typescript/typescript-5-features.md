@@ -10,10 +10,10 @@ TypeScript 5 是 Microsoft 开发的 TypeScript 语言的一次重大版本升�
 
 TypeScript 5 的发布标志着一个新的里程碑。其核心目标围绕 **现代化 ECMAScript 装饰器标准**、**性能优化** 和 **开发体验提升** 展开。
 
-* **性能提升**： 通过引入新的代码架构、模块解析策略和更快的泛型类型推断，`tsc` 的编译速度和工程构建效率得到了显著提升。
-* **包体积减小**： 通过重构和优化，TypeScript 5 的 npm 包体积更小，下载和安装更快。
-* **新标准支持**： 全面支持最新的 ECMAScript 装饰器提案，使装饰器的使用更加规范和安全。
-* **类型系统增强**： 引入了 `const` 类型参数、`extends` 约束增强等特性，让类型推断更精确，代码更健壮。
+- **性能提升**： 通过引入新的代码架构、模块解析策略和更快的泛型类型推断，`tsc` 的编译速度和工程构建效率得到了显著提升。
+- **包体积减小**： 通过重构和优化，TypeScript 5 的 npm 包体积更小，下载和安装更快。
+- **新标准支持**： 全面支持最新的 ECMAScript 装饰器提案，使装饰器的使用更加规范和安全。
+- **类型系统增强**： 引入了 `const` 类型参数、`extends` 约束增强等特性，让类型推断更精确，代码更健壮。
 
 **升级意义**： 升级到 TypeScript 5 意味着更快的开发反馈循环、更符合未来标准的代码、更严格的类型检查以及更小的资源开销，这对于任何规模的项目都具有积极的长期价值。
 
@@ -52,14 +52,14 @@ function newDecorator(value: string, context: DecoratorContext) {
 }
 
 class NewClass {
-  @newDecorator("Hello")
+  @newDecorator('Hello')
   newMethod() {
-    console.log("Inside original method");
+    console.log('Inside original method');
   }
 }
 
 const instance = new NewClass();
-instance.newMethod(); 
+instance.newMethod();
 // 输出:
 // Decorating newMethod with value: Hello
 // Called decorated method with value: Hello
@@ -84,27 +84,27 @@ function getValueOld<T>(obj: { value: T }): T {
   return obj.value;
 }
 // 推断类型为 string
-const resultOld = getValueOld({ value: "hello" }); 
+const resultOld = getValueOld({ value: 'hello' });
 
 // TypeScript 5
 function getValueNew<const T>(obj: { value: T }): T {
   return obj.value;
 }
 // 推断类型为 "hello" (字面量类型)
-const resultNew = getValueNew({ value: "hello" }); 
+const resultNew = getValueNew({ value: 'hello' });
 
 // 在处理数组和对象时尤其有用
 function getValues<const T extends readonly unknown[]>(args: T): T {
   return args;
 }
 // 推断类型为 readonly ["a", 1, true]
-const values = getValues(["a", 1, true]); 
+const values = getValues(['a', 1, true]);
 ```
 
 **最佳实践**：
 
-* 在希望函数调用方传入的字面量被推断为最具体类型（而不是拓宽类型，如 `string` 或 `number`）时使用 `const` 类型参数。
-* 常用于工具函数、配置对象创建函数或需要精确类型推断的场景，可以减少手动声明字面量类型的需要。
+- 在希望函数调用方传入的字面量被推断为最具体类型（而不是拓宽类型，如 `string` 或 `number`）时使用 `const` 类型参数。
+- 常用于工具函数、配置对象创建函数或需要精确类型推断的场景，可以减少手动声明字面量类型的需要。
 
 ### 2.3 `extends` 约束支持多个配置文件
 
@@ -130,10 +130,10 @@ const values = getValues(["a", 1, true]);
 
 **最佳实践**：
 
-* 将通用配置（如严格模式、模块设置）提取到基础配置文件（如 `base.json`）中。
-* 为特定技术栈（如 React, Vue, Node.js）创建单独的配置文件。
-* 为项目特定的设置（如路径别名）创建本地配置文件。
-* 数组中的配置顺序很重要，后面的配置项会覆盖前面的。
+- 将通用配置（如严格模式、模块设置）提取到基础配置文件（如 `base.json`）中。
+- 为特定技术栈（如 React, Vue, Node.js）创建单独的配置文件。
+- 为项目特定的设置（如路径别名）创建本地配置文件。
+- 数组中的配置顺序很重要，后面的配置项会覆盖前面的。
 
 ### 2.4 所有枚举均为联合枚举
 
@@ -160,7 +160,7 @@ function logMessage(level: LogLevel, message: string) {
 }
 
 // 正确
-logMessage(LogLevel.Error, "This is an error");
+logMessage(LogLevel.Error, 'This is an error');
 
 // 错误: Argument of type 'LogLevel.Debug' is not assignable to parameter of type 'LogLevel.Error'.
 // logMessage(LogLevel.Debug, "This won't compile now");
@@ -168,8 +168,8 @@ logMessage(LogLevel.Error, "This is an error");
 
 **最佳实践**：
 
-* 利用此特性可以编写出更精确的函数重载和类型守卫。
-* 代码的类型安全性更高，可以防止传入错误的枚举值。
+- 利用此特性可以编写出更精确的函数重载和类型守卫。
+- 代码的类型安全性更高，可以防止传入错误的枚举值。
 
 ### 2.5 `--moduleResolution bundler`
 
@@ -182,7 +182,7 @@ logMessage(LogLevel.Error, "This is an error");
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "bundler", // 使用新的解析策略
-    "target": "ES2022",
+    "target": "ES2022"
     // ... 其他配置
   }
 }
@@ -190,8 +190,8 @@ logMessage(LogLevel.Error, "This is an error");
 
 **最佳实践**：
 
-* 如果你的项目使用 Vite、esbuild、Webpack 或 Parcel 等现代打包工具，建议将 `moduleResolution` 设置为 `bundler` 而不是 `node` 或 `node16`。
-* 它通常能更好地处理 `package.json` 中的 `exports` 和 `imports` 字段，提供更准确的模块解析体验。
+- 如果你的项目使用 Vite、esbuild、Webpack 或 Parcel 等现代打包工具，建议将 `moduleResolution` 设置为 `bundler` 而不是 `node` 或 `node16`。
+- 它通常能更好地处理 `package.json` 中的 `exports` 和 `imports` 字段，提供更准确的模块解析体验。
 
 ### 2.6 类型导出支持 `export type *`
 
@@ -201,7 +201,9 @@ logMessage(LogLevel.Error, "This is an error");
 
 ```typescript
 // types.ts
-export interface User { name: string; }
+export interface User {
+  name: string;
+}
 export type ID = number;
 
 // 旧方式：需要显式列出或使用 namespace 技巧
@@ -216,8 +218,8 @@ import { User, ID } from './index'; // 现在可以这样导入
 
 **最佳实践**：
 
-* 在创建聚合文件（Barrel files）或公共 API 入口时，使用 `export type *` 来简化代码并确保只导出类型。
-* 这有助于保持代码的整洁性和可维护性。
+- 在创建聚合文件（Barrel files）或公共 API 入口时，使用 `export type *` 来简化代码并确保只导出类型。
+- 这有助于保持代码的整洁性和可维护性。
 
 ### 2.7 `--verbatimModuleSyntax`
 
@@ -228,7 +230,7 @@ import { User, ID } from './index'; // 现在可以这样导入
 ```typescript
 // 开启 --verbatimModuleSyntax
 import { createApp } from 'vue'; // 这是一个值，会被保留
-import type { Ref } from 'vue';   // 这是一个类型，会在编译后被移除
+import type { Ref } from 'vue'; // 这是一个类型，会在编译后被移除
 
 // 混写会导致错误
 // import { createApp, type Ref } from 'vue'; // 在 --verbatimModuleSyntax 下不允许
@@ -240,8 +242,8 @@ import type { Ref } from 'vue';
 
 **最佳实践**：
 
-* 在新项目中开启此选项（`"verbatimModuleSyntax": true`），以强制实施更严格的导入分离，这有助于打包工具进行 Tree Shaking。
-* 对于现有大型项目，开启此选项可能需要进行大量重构，建议在评估后决定是否采用。
+- 在新项目中开启此选项（`"verbatimModuleSyntax": true`），以强制实施更严格的导入分离，这有助于打包工具进行 Tree Shaking。
+- 对于现有大型项目，开启此选项可能需要进行大量重构，建议在评估后决定是否采用。
 
 ## 3. 升级到 TypeScript 5 的指南
 
@@ -249,27 +251,27 @@ import type { Ref } from 'vue';
 
 1. **安装**：
 
-    ```bash
-    # 使用 npm
-    npm install -D typescript@latest
+   ```bash
+   # 使用 npm
+   npm install -D typescript@latest
 
-    # 使用 yarn
-    yarn add -D typescript@latest
+   # 使用 yarn
+   yarn add -D typescript@latest
 
-    # 使用 pnpm
-    pnpm add -D typescript@latest
-    ```
+   # 使用 pnpm
+   pnpm add -D typescript@latest
+   ```
 
 2. **验证版本**：
 
-    ```bash
-    tsc --version # 应输出 5.x.x
-    ```
+   ```bash
+   tsc --version # 应输出 5.x.x
+   ```
 
 3. **更新 `tsconfig.json`**：
-    * 检查并考虑启用新的标志，如 `"moduleResolution": "bundler"`。
-    * 如果你的项目不再需要旧的装饰器，可以移除 `"experimentalDecorators": true`。
-    * 考虑设置 `"verbatimModuleSyntax": true`（新项目推荐）。
+   - 检查并考虑启用新的标志，如 `"moduleResolution": "bundler"`。
+   - 如果你的项目不再需要旧的装饰器，可以移除 `"experimentalDecorators": true`。
+   - 考虑设置 `"verbatimModuleSyntax": true`（新项目推荐）。
 
 ### 3.2 潜在的重大变更与修复
 
@@ -281,9 +283,9 @@ TypeScript 5 包含一些更严格的类型检查改进，这可能会将之前�
 
 **应对策略**：
 
-* 运行 `tsc --noEmit` 进行完整编译检查。
-* 逐一修复暴露出的类型错误。大多数错误都是有益的，它们揭示了代码中潜在的问题。
-* 如果遇到暂时无法解决的兼容性问题，可以考虑暂时降低某些严格检查标志（如 `"strict": false`），但这应是临时措施。
+- 运行 `tsc --noEmit` 进行完整编译检查。
+- 逐一修复暴露出的类型错误。大多数错误都是有益的，它们揭示了代码中潜在的问题。
+- 如果遇到暂时无法解决的兼容性问题，可以考虑暂时降低某些严格检查标志（如 `"strict": false`），但这应是临时措施。
 
 ## 4. 总结与展望
 
@@ -291,8 +293,8 @@ TypeScript 5 是一次充满诚意的重大更新，它不仅在**性能**和**�
 
 **核心建议**：
 
-* **新项目**： 应直接基于 TypeScript 5 进行开发，并采用新的装饰器语法和 `bundler` 解析等推荐配置。
-* **现有项目**： 建议规划升级，享受性能红利和更先进的类型安全特性。升级过程通常是平滑的，只需注意处理少量因类型检查更严格而暴露的问题。
+- **新项目**： 应直接基于 TypeScript 5 进行开发，并采用新的装饰器语法和 `bundler` 解析等推荐配置。
+- **现有项目**： 建议规划升级，享受性能红利和更先进的类型安全特性。升级过程通常是平滑的，只需注意处理少量因类型检查更严格而暴露的问题。
 
 TypeScript 团队持续致力于提升语言的表现力和工具链的效率。随着 ECMAScript 标准的不断演进，我们可以期待 TypeScript 未来会带来更多令人兴奋的特性，如更完善的装饰器元数据、管道运算符等功能的类型支持。
 

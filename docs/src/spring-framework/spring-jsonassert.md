@@ -44,12 +44,12 @@ testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 JSONAssert 提供四种不同的比较模式，适应各种测试场景：
 
-| 模式 | 允许额外字段 | 数组顺序严格 | 描述 |
-|------|--------------|--------------|------|
-| STRICT | 否 | 是 | 最严格的模式，字段数量和顺序必须完全一致 |
-| LENIENT | 是 | 否 | 最宽松的模式，忽略额外字段和数组顺序 |
-| NON_EXTENSIBLE | 否 | 否 | 不允许额外字段，但数组顺序可以不同 |
-| STRICT_ORDER | 是 | 是 | 允许额外字段，但数组顺序必须一致 |
+| 模式           | 允许额外字段 | 数组顺序严格 | 描述                                     |
+| -------------- | ------------ | ------------ | ---------------------------------------- |
+| STRICT         | 否           | 是           | 最严格的模式，字段数量和顺序必须完全一致 |
+| LENIENT        | 是           | 否           | 最宽松的模式，忽略额外字段和数组顺序     |
+| NON_EXTENSIBLE | 否           | 否           | 不允许额外字段，但数组顺序可以不同       |
+| STRICT_ORDER   | 是           | 是           | 允许额外字段，但数组顺序必须一致         |
 
 ### 2.2 基本用法
 
@@ -66,10 +66,10 @@ public class BasicJsonAssertTest {
     public void testBasicJsonComparison() throws JSONException {
         String expected = "{\"id\":123,\"name\":\"John Doe\",\"active\":true}";
         String actual = "{\"id\":123,\"name\":\"John Doe\",\"active\":true,\"email\":\"john@example.com\"}";
-        
+
         // 使用宽松模式比较（推荐）
         JSONAssert.assertEquals(expected, actual, false);
-        
+
         // 使用严格模式比较（会失败，因为actual多了一个email字段）
         // JSONAssert.assertEquals(expected, actual, true);
     }
@@ -85,7 +85,7 @@ JSONAssert 能够处理复杂的嵌套 JSON 对象：
 public void testNestedJsonComparison() throws JSONException {
     String expected = "{user:{name:\"Alice\",address:{city:\"Beijing\",country:\"China\"}}}";
     String actual = "{user:{name:\"Alice\",age:30,address:{city:\"Beijing\",country:\"China\",postcode:\"100000\"}}}";
-    
+
     // 宽松模式下，嵌套对象的额外字段不会导致测试失败
     JSONAssert.assertEquals(expected, actual, false);
 }
@@ -145,7 +145,7 @@ public class UserJsonTest {
 Spring Boot 自动配置以下 JSON 测试器：
 
 - `JacksonTester`：用于 Jackson 序列化/反序列化测试
-- `GsonTester`：用于 Gson 序列化/反序列化测试  
+- `GsonTester`：用于 Gson 序列化/反序列化测试
 - `BasicJsonTester`：用于基本的 JSON 字符串测试
 
 ## 4 高级用法与最佳实践
@@ -166,9 +166,9 @@ public class DynamicFieldTest {
     public void testDynamicFields() throws Exception {
         String expected = "{\"id\":\"<<IGNORE>>\",\"name\":\"Product\",\"createdAt\":\"<<IGNORE>>\"}";
         String actual = "{\"id\":\"123e4567-e89b-12d3-a456-426614174000\",\"name\":\"Product\",\"createdAt\":\"2023-10-27T10:00:00Z\"}";
-        
+
         // 使用自定义比较器忽略特定字段
-        JSONAssert.assertEquals(expected, actual, 
+        JSONAssert.assertEquals(expected, actual,
             new CustomComparator(JSONCompareMode.LENIENT,
                 (o1, o2) -> true) // 自定义字段比较逻辑
         );
@@ -187,17 +187,17 @@ import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.skyscreamer.jsonassert.comparator.DefaultComparator;
 
 public class CustomJsonComparator extends DefaultComparator {
-    
+
     public CustomJsonComparator(JSONCompareMode mode) {
         super(mode);
     }
-    
+
     @Override
     protected void checkJsonObjectKeysExpectedInActual(String prefix, JSONObject expected, JSONObject actual, JSONCompareResult result) {
         // 移除非必要字段后再进行比较
         Set<String> keysToIgnore = new HashSet<>(Arrays.asList("id", "createdAt", "updatedAt"));
         keysToIgnore.forEach(expected::remove);
-        
+
         super.checkJsonObjectKeysExpectedInActual(prefix, expected, actual, result);
     }
 }
@@ -217,7 +217,7 @@ public void testArrayComparison() throws Exception {
     String expected = "[{\"name\":\"Alice\",\"age\":30},{\"name\":\"Bob\",\"age\":25}]";
     String actual = "[{\"name\":\"Alice\",\"age\":30},{\"name\":\"Bob\",\"age\":25}]";
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT_ORDER);
-    
+
     // 无序数组比较
     String expectedUnordered = "<<UNORDERED>>[{\"name\":\"Bob\",\"age\":25},{\"name\":\"Alice\",\"age\":30}]";
     JSONAssert.assertEquals(expectedUnordered, actual, JSONCompareMode.LENIENT);
@@ -233,7 +233,7 @@ public void testArrayComparison() throws Exception {
 public void testPartialJsonValidation() throws Exception {
     String fullJson = "{\"user\":{\"name\":\"Alice\",\"age\":30,\"email\":\"alice@example.com\"},\"metadata\":{\"version\":\"1.0\"}}";
     String expected = "{\"user\":{\"name\":\"Alice\",\"age\":30}}";
-    
+
     // 只验证user部分
     JSONAssert.assertEquals(expected, fullJson, false);
 }
@@ -266,7 +266,7 @@ public class RestAssuredIntegrationTest {
                 .statusCode(200)
                 .extract()
                 .response();
-        
+
         String expected = "{\"id\":123,\"name\":\"John Doe\",\"email\":\"john@example.com\"}";
         JSONAssert.assertEquals(expected, response.asString(), false);
     }
@@ -303,10 +303,10 @@ public class MockMvcIntegrationTest {
         MvcResult result = mockMvc.perform(get("/api/users/123"))
                 .andExpect(status().isOk())
                 .andReturn();
-        
+
         String expected = "{\"id\":123,\"name\":\"John Doe\"}";
         String actual = result.getResponse().getContentAsString();
-        
+
         JSONAssert.assertEquals(expected, actual, false);
     }
 }
@@ -322,7 +322,7 @@ public class MockMvcIntegrationTest {
 
 ```java
 public abstract class JsonTestUtils {
-    
+
     public static void assertJsonEquals(String expected, String actual) {
         try {
             JSONAssert.assertEquals(expected, actual, false);
@@ -330,7 +330,7 @@ public abstract class JsonTestUtils {
             throw new AssertionError("JSON comparison failed: " + e.getMessage(), e);
         }
     }
-    
+
     public static void assertJsonEquals(String expected, String actual, JSONCompareMode mode) {
         try {
             JSONAssert.assertEquals(expected, actual, mode);
@@ -338,7 +338,7 @@ public abstract class JsonTestUtils {
             throw new AssertionError("JSON comparison failed: " + e.getMessage(), e);
         }
     }
-    
+
     public static String readJsonFile(String path) {
         // 从类路径读取JSON文件的实现
     }
@@ -353,23 +353,23 @@ public abstract class JsonTestUtils {
 
 ```java
 public class IgnoringNonExistentFieldsComparator extends CustomComparator {
-    
+
     public IgnoringNonExistentFieldsComparator(JSONCompareMode mode, String... fieldsToIgnore) {
         super(mode, createCustomizations(fieldsToIgnore));
     }
-    
+
     private static Customization[] createCustomizations(String[] fieldsToIgnore) {
         return Arrays.stream(fieldsToIgnore)
                 .map(field -> new Customization(field, (o1, o2) -> true))
                 .toArray(Customization[]::new);
     }
-    
+
     @Override
     protected void checkJsonObjectKeysExpectedInActual(String prefix, JSONObject expected, JSONObject actual, JSONCompareResult result) {
         // 移除非必要字段后再进行比较
         Set<String> keysToIgnore = new HashSet<>(Arrays.asList("id", "createdAt"));
         keysToIgnore.forEach(expected::remove);
-        
+
         super.checkJsonObjectKeysExpectedInActual(prefix, expected, actual, result);
     }
 }

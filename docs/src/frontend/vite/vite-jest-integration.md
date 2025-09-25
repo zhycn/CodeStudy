@@ -19,9 +19,9 @@
 1. **模块系统不匹配 (ESM vs CJS)**：Jest 在 Node 环境中运行，无法直接理解 `import/export` 语法。需要将 ESM 语法转换为 CJS 语法。
 2. **文件转换 (Transformation)**：Jest 需要知道如何处理非 JavaScript 文件，如 `.ts`, `.tsx`, `.vue`, `.svg` 等。这需要通过转换器（transformer）来完成。
 3. **Vite 配置的模拟**：项目中使用的 Vite 特有功能，如：
-    * **路径别名 (`resolve.alias`)**：Jest 不认识你在 `vite.config.ts` 中配置的 `@/*` 等别名。
-    * **静态资源处理 (`?url`, `?raw`)**：Jest 无法处理这些特殊的资源查询。
-    * **环境变量 (`import.meta.env`)**：Jest 环境中不存在 Vite 的注入的环境变量。
+   - **路径别名 (`resolve.alias`)**：Jest 不认识你在 `vite.config.ts` 中配置的 `@/*` 等别名。
+   - **静态资源处理 (`?url`, `?raw`)**：Jest 无法处理这些特殊的资源查询。
+   - **环境变量 (`import.meta.env`)**：Jest 环境中不存在 Vite 的注入的环境变量。
 
 ## 3. 推荐集成方案：`jest-environment-jsdom` + `babel-jest` + `vite-jest`
 
@@ -244,39 +244,39 @@ export const env = import.meta.env;
 
 1. **安装依赖**：
 
-    ```bash
-    npm install -D @vue/test-utils
-    ```
+   ```bash
+   npm install -D @vue/test-utils
+   ```
 
 2. **编写 Vue 组件测试**：
 
-    ```vue
-    <!-- src/components/HelloWorld.vue -->
-    <script setup lang="ts">
-    defineProps<{ msg: string }>();
-    </script>
+   ```vue
+   <!-- src/components/HelloWorld.vue -->
+   <script setup lang="ts">
+   defineProps<{ msg: string }>();
+   </script>
 
-    <template>
-      <h1>{{ msg }}</h1>
-    </template>
-    ```
+   <template>
+     <h1>{{ msg }}</h1>
+   </template>
+   ```
 
-    ```typescript
-    // src/components/__tests__/HelloWorld.spec.ts
-    import { describe, it, expect } from 'vitest'; // 或者来自 '@jest/globals'
-    import { shallowMount } from '@vue/test-utils';
-    import HelloWorld from '../HelloWorld.vue';
+   ```typescript
+   // src/components/__tests__/HelloWorld.spec.ts
+   import { describe, it, expect } from 'vitest'; // 或者来自 '@jest/globals'
+   import { shallowMount } from '@vue/test-utils';
+   import HelloWorld from '../HelloWorld.vue';
 
-    describe('HelloWorld.vue', () => {
-      it('renders props.msg when passed', () => {
-        const msg = 'Hello Jest!';
-        const wrapper = shallowMount(HelloWorld, {
-          props: { msg },
-        });
-        expect(wrapper.text()).toMatch(msg);
-      });
-    });
-    ```
+   describe('HelloWorld.vue', () => {
+     it('renders props.msg when passed', () => {
+       const msg = 'Hello Jest!';
+       const wrapper = shallowMount(HelloWorld, {
+         props: { msg },
+       });
+       expect(wrapper.text()).toMatch(msg);
+     });
+   });
+   ```
 
 ### 4.3 测试 React 组件
 
@@ -284,37 +284,37 @@ export const env = import.meta.env;
 
 1. **安装依赖**：
 
-    ```bash
-    npm install -D @testing-library/react @testing-library/jest-dom
-    ```
+   ```bash
+   npm install -D @testing-library/react @testing-library/jest-dom
+   ```
 
 2. **配置 Babel**：确保已安装并配置 `@babel/preset-react`。
 
 3. **编写 React 组件测试**：
 
-    ```tsx
-    // src/components/Greeting.tsx
-    interface GreetingProps {
-      name: string;
-    }
-    export function Greeting({ name }: GreetingProps) {
-      return <h1>Hello, {name}</h1>;
-    }
-    ```
+   ```tsx
+   // src/components/Greeting.tsx
+   interface GreetingProps {
+     name: string;
+   }
+   export function Greeting({ name }: GreetingProps) {
+     return <h1>Hello, {name}</h1>;
+   }
+   ```
 
-    ```tsx
-    // src/components/__tests__/Greeting.spec.tsx
-    import { render, screen } from '@testing-library/react';
-    import '@testing-library/jest-dom'; // 用于扩展 expect(...).toBeInTheDocument()
-    import { Greeting } from '../Greeting';
+   ```tsx
+   // src/components/__tests__/Greeting.spec.tsx
+   import { render, screen } from '@testing-library/react';
+   import '@testing-library/jest-dom'; // 用于扩展 expect(...).toBeInTheDocument()
+   import { Greeting } from '../Greeting';
 
-    describe('Greeting', () => {
-      it('should render the greeting message', () => {
-        render(<Greeting name="World" />);
-        expect(screen.getByRole('heading')).toHaveTextContent('Hello, World');
-      });
-    });
-    ```
+   describe('Greeting', () => {
+     it('should render the greeting message', () => {
+       render(<Greeting name="World" />);
+       expect(screen.getByRole('heading')).toHaveTextContent('Hello, World');
+     });
+   });
+   ```
 
 ## 5. 替代方案：Vitest
 
@@ -322,10 +322,10 @@ export const env = import.meta.env;
 
 Vitest 是一个由 Vite 提供支持的极速单元测试框架。它被设计为与 Vite 共享配置、转换管道和插件系统，这意味着：
 
-* **零配置**：绝大部分 Vite 项目无需任何额外配置即可运行测试。
-* **兼容 Jest API**：Vitest 提供了与 Jest 高度兼容的 API，迁移成本极低。
-* **极致速度**：享受与 Vite 开发服务器一致的超快速度。
-* **一流的 ESM、TypeScript 和 JSX 支持**。
+- **零配置**：绝大部分 Vite 项目无需任何额外配置即可运行测试。
+- **兼容 Jest API**：Vitest 提供了与 Jest 高度兼容的 API，迁移成本极低。
+- **极致速度**：享受与 Vite 开发服务器一致的超快速度。
+- **一流的 ESM、TypeScript 和 JSX 支持**。
 
 **迁移到 Vitest 通常比配置 Jest 更简单**，强烈建议新项目直接采用 Vitest。
 
@@ -333,60 +333,60 @@ Vitest 是一个由 Vite 提供支持的极速单元测试框架。它被设计�
 
 1. **安装**：
 
-    ```bash
-    npm install -D vitest happy-dom @vitejs/plugin-vue # 根据你的技术栈选择插件
-    ```
+   ```bash
+   npm install -D vitest happy-dom @vitejs/plugin-vue # 根据你的技术栈选择插件
+   ```
 
 2. **配置 `vite.config.ts`**：
 
-    ```typescript
-    // vite.config.ts
-    import { defineConfig } from 'vite';
-    import vue from '@vitejs/plugin-vue';
-    import { configDefaults } from 'vitest/config';
+   ```typescript
+   // vite.config.ts
+   import { defineConfig } from 'vite';
+   import vue from '@vitejs/plugin-vue';
+   import { configDefaults } from 'vitest/config';
 
-    export default defineConfig({
-      plugins: [vue()],
-      test: {
-        environment: 'happy-dom', // 或 'jsdom'
-        // 排除 vitest 默认的覆盖范围，如果需要可以覆盖
-        coverage: {
-          exclude: [...configDefaults.coverage.exclude, 'path/to/exclude'],
-        },
-      },
-    });
-    ```
+   export default defineConfig({
+     plugins: [vue()],
+     test: {
+       environment: 'happy-dom', // 或 'jsdom'
+       // 排除 vitest 默认的覆盖范围，如果需要可以覆盖
+       coverage: {
+         exclude: [...configDefaults.coverage.exclude, 'path/to/exclude'],
+       },
+     },
+   });
+   ```
 
 3. **编写测试**：（语法与 Jest 几乎完全相同）
 
-    ```typescript
-    // sum.spec.ts
-    import { describe, it, expect } from 'vitest';
-    import { sum } from './sum';
+   ```typescript
+   // sum.spec.ts
+   import { describe, it, expect } from 'vitest';
+   import { sum } from './sum';
 
-    describe('sum function', () => {
-      it('should add two numbers', () => {
-        expect(sum(1, 2)).toBe(3);
-      });
-    });
-    ```
+   describe('sum function', () => {
+     it('should add two numbers', () => {
+       expect(sum(1, 2)).toBe(3);
+     });
+   });
+   ```
 
 4. **运行**：
 
-    ```bash
-    npx vitest
-    ```
+   ```bash
+   npx vitest
+   ```
 
 ## 6. 总结与最佳实践
 
-| 方面 | 最佳实践 |
-| :--- | :--- |
-| **方案选择** | **新项目强烈推荐直接使用 Vitest**，体验无缝集成和极致速度。现有 Jest 项目若想引入 Vite，可采用本文的 `babel-jest` + `vite-jest` 方案。 |
-| **配置管理** | 保持 Jest 配置（`moduleNameMapping`）与 `vite.config.ts` 中的 `resolve.alias` 同步，避免路径问题。 |
-| **环境变量** | 通过创建代理文件（如 `src/env.ts`）来导出 `import.meta.env`，以便在测试中轻松模拟。 |
-| **静态资源** | 使用 `__mocks__` 目录下的模拟文件来处理 `.css`, `.svg` 等资源的导入。 |
-| **类型安全** | 在 `tsconfig.json` 中添加 `"types": ["jest"]`，并确保测试文件和源码都遵循项目的 TypeScript 规则。 |
-| **关注点分离** | 使用 `setupFilesAfterEnv` 文件来放置全局的测试模拟、清理和配置代码，保持测试文件的简洁。 |
+| 方面           | 最佳实践                                                                                                                               |
+| :------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| **方案选择**   | **新项目强烈推荐直接使用 Vitest**，体验无缝集成和极致速度。现有 Jest 项目若想引入 Vite，可采用本文的 `babel-jest` + `vite-jest` 方案。 |
+| **配置管理**   | 保持 Jest 配置（`moduleNameMapping`）与 `vite.config.ts` 中的 `resolve.alias` 同步，避免路径问题。                                     |
+| **环境变量**   | 通过创建代理文件（如 `src/env.ts`）来导出 `import.meta.env`，以便在测试中轻松模拟。                                                    |
+| **静态资源**   | 使用 `__mocks__` 目录下的模拟文件来处理 `.css`, `.svg` 等资源的导入。                                                                  |
+| **类型安全**   | 在 `tsconfig.json` 中添加 `"types": ["jest"]`，并确保测试文件和源码都遵循项目的 TypeScript 规则。                                      |
+| **关注点分离** | 使用 `setupFilesAfterEnv` 文件来放置全局的测试模拟、清理和配置代码，保持测试文件的简洁。                                               |
 
 **最终建议**：除非有不可抗拒的原因（如公司技术栈强制要求 Jest），否则 **Vitest 是 Vite 项目测试的终极解决方案**。它将为你节省大量的配置时间和维护成本，让你专注于编写测试本身，而非环境搭建。
 

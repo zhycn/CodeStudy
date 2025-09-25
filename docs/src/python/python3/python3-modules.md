@@ -265,10 +265,10 @@ DEFAULT_TIMEOUT = 30
 # 6. 函数和类定义
 class DataProcessor:
     """数据处理类"""
-    
+
     def __init__(self, data):
         self.data = data
-    
+
     def process(self):
         """处理数据"""
         return [item.upper() for item in self.data]
@@ -402,7 +402,7 @@ importlib.reload(mymodule)
 # module_a.py
 import module_b
 
-# module_b.py  
+# module_b.py
 import module_a  # 循环导入！
 
 # 好的做法：在函数内部导入

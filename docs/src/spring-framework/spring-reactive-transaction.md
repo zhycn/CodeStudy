@@ -18,13 +18,13 @@ Spring Framework 从 5.2 版本开始提供了完整的响应式事务支持，�
 
 响应式事务与传统事务在设计理念上存在本质区别，下表对比了它们的主要特性：
 
-| **特性** | **传统事务** | **响应式事务** |
-|---------|------------|--------------|
-| **编程模型** | 同步阻塞 | 异步非阻塞 |
+| **特性**       | **传统事务**     | **响应式事务**   |
+| -------------- | ---------------- | ---------------- |
+| **编程模型**   | 同步阻塞         | 异步非阻塞       |
 | **上下文传播** | 基于 ThreadLocal | 基于响应式上下文 |
-| **事务边界** | 方法调用边界 | 订阅点边界 |
-| **资源管理** | 线程绑定连接 | 连接池复用 |
-| **性能特点** | 适合低并发 | 适合高并发 |
+| **事务边界**   | 方法调用边界     | 订阅点边界       |
+| **资源管理**   | 线程绑定连接     | 连接池复用       |
+| **性能特点**   | 适合低并发       | 适合高并发       |
 
 传统事务基于线程绑定和阻塞 API，而响应式事务则完全基于非阻塞模型，事务上下文通过订阅关系在流中传播。传统的 `PlatformTransactionManager` 接口及其实现（如 `DataSourceTransactionManager`）依赖 `ThreadLocal` 存储事务上下文，并在执行过程中阻塞当前线程。而 `ReactiveTransactionManager` 则采用完全不同的方式，通过响应式流传递事务上下文，避免了线程阻塞，从而提高了系统的并发处理能力。
 
@@ -57,11 +57,11 @@ R2DBC 支持多种数据库，包括 PostgreSQL、MySQL、Oracle、Microsoft SQL
 ```java
 public class R2dbcTransactionManager implements ReactiveTransactionManager {
     private final ConnectionFactory connectionFactory;
-    
+
     public R2dbcTransactionManager(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
-    
+
     @Override
     public Mono<ReactiveTransaction> getReactiveTransaction(TransactionDefinition definition) {
         return Mono.from(connectionFactory.create())
@@ -71,7 +71,7 @@ public class R2dbcTransactionManager implements ReactiveTransactionManager {
             })
             .flatMap(Function.identity());
     }
-    
+
     @Override
     public Mono<Void> commit(ReactiveTransaction transaction) {
         R2dbcTransaction tx = (R2dbcTransaction) transaction;
@@ -79,7 +79,7 @@ public class R2dbcTransactionManager implements ReactiveTransactionManager {
         return Mono.from(connection.commitTransaction())
             .then(Mono.from(connection.close()));
     }
-    
+
     @Override
     public Mono<Void> rollback(ReactiveTransaction transaction) {
         R2dbcTransaction tx = (R2dbcTransaction) transaction;
@@ -102,17 +102,17 @@ public class R2dbcTransactionManager implements ReactiveTransactionManager {
 @Configuration
 @EnableTransactionManagement
 public class R2dbcConfig {
-    
+
     @Bean
     public ConnectionFactory connectionFactory() {
         return ConnectionFactories.get("r2dbc:postgresql://localhost:5432/mydb");
     }
-    
+
     @Bean
     public ReactiveTransactionManager transactionManager(ConnectionFactory connectionFactory) {
         return new R2dbcTransactionManager(connectionFactory);
     }
-    
+
     @Bean
     public DatabaseClient databaseClient(ConnectionFactory connectionFactory) {
         return DatabaseClient.create(connectionFactory);
@@ -128,27 +128,27 @@ public class R2dbcConfig {
 @Configuration
 @EnableTransactionManagement
 public class MultipleDataSourceConfig {
-    
+
     @Bean
     @Primary
     @ConfigurationProperties("spring.r2dbc.primary")
     public ConnectionFactory primaryConnectionFactory() {
         return ConnectionFactories.get("r2dbc:postgresql://localhost:5432/primarydb");
     }
-    
+
     @Bean
     @ConfigurationProperties("spring.r2dbc.secondary")
     public ConnectionFactory secondaryConnectionFactory() {
         return ConnectionFactories.get("r2dbc:postgresql://localhost:5432/secondarydb");
     }
-    
+
     @Bean
     @Primary
     public ReactiveTransactionManager primaryTransactionManager(
             @Qualifier("primaryConnectionFactory") ConnectionFactory connectionFactory) {
         return new R2dbcTransactionManager(connectionFactory);
     }
-    
+
     @Bean
     public ReactiveTransactionManager secondaryTransactionManager(
             @Qualifier("secondaryConnectionFactory") ConnectionFactory connectionFactory) {
@@ -167,12 +167,12 @@ public class MultipleDataSourceConfig {
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    
+
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
+
     @Transactional
     public Mono<User> createUser(User user) {
         return userRepository.save(user)
@@ -228,18 +228,18 @@ public Mono<Account> transferMoney(String fromId, String toId, BigDecimal amount
 public class OrderService {
     private final ReactiveTransactionManager transactionManager;
     private final OrderRepository orderRepository;
-    
+
     @Autowired
-    public OrderService(ReactiveTransactionManager transactionManager, 
+    public OrderService(ReactiveTransactionManager transactionManager,
                        OrderRepository orderRepository) {
         this.transactionManager = transactionManager;
         this.orderRepository = orderRepository;
     }
-    
+
     public Mono<Order> createOrder(Order order) {
         // 创建事务操作符
         TransactionalOperator operator = TransactionalOperator.create(transactionManager);
-        
+
         return orderRepository.save(order)
             .flatMap(savedOrder -> {
                 // 业务逻辑
@@ -247,7 +247,7 @@ public class OrderService {
             })
             .as(operator::transactional); // 应用事务
     }
-    
+
     private Mono<Order> processPayment(Order order) {
         // 支付处理逻辑
         return Mono.just(order);
@@ -267,7 +267,7 @@ public Mono<User> createUserWithDetailedTransaction(User user) {
     definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     definition.setTimeout(30);
     definition.setReadOnly(false);
-    
+
     return TransactionalOperator.create(transactionManager, definition)
         .execute(status -> {
             return userRepository.save(user)
@@ -397,7 +397,7 @@ public Mono<Data> fetchDataWithTimeout(String id) {
 public Mono<Integer> processBatch(List<Item> items) {
     return Flux.fromIterable(items)
         .buffer(100) // 每100条处理一次
-        .flatMap(batch -> 
+        .flatMap(batch ->
             itemRepository.saveAll(batch)
                 .then(Mono.just(batch.size()))
         .reduce(0, Integer::sum);
@@ -416,7 +416,7 @@ public class BankTransferService {
     private final AccountRepository accountRepository;
     private final TransactionLogRepository logRepository;
     private final ReactiveTransactionManager transactionManager;
-    
+
     public BankTransferService(AccountRepository accountRepository,
                               TransactionLogRepository logRepository,
                               ReactiveTransactionManager transactionManager) {
@@ -424,12 +424,12 @@ public class BankTransferService {
         this.logRepository = logRepository;
         this.transactionManager = transactionManager;
     }
-    
+
     @Transactional
     public Mono<TransferResult> transferFunds(TransferRequest request) {
         return accountRepository.findByAccountNumber(request.getFromAccount())
             .switchIfEmpty(Mono.error(new AccountNotFoundException("转出账户不存在")))
-            .flatMap(fromAccount -> 
+            .flatMap(fromAccount ->
                 accountRepository.findByAccountNumber(request.getToAccount())
                     .switchIfEmpty(Mono.error(new AccountNotFoundException("转入账户不存在")))
                     .flatMap(toAccount -> {
@@ -437,18 +437,18 @@ public class BankTransferService {
                         if (fromAccount.getBalance().compareTo(request.getAmount()) < 0) {
                             return Mono.error(new InsufficientBalanceException("余额不足"));
                         }
-                        
+
                         // 执行转账
                         fromAccount.setBalance(fromAccount.getBalance().subtract(request.getAmount()));
                         toAccount.setBalance(toAccount.getBalance().add(request.getAmount()));
-                        
+
                         return accountRepository.save(fromAccount)
                             .then(accountRepository.save(toAccount))
                             .then(createTransactionLog(request))
                             .thenReturn(new TransferResult("转账成功", request.getAmount()));
                     }));
     }
-    
+
     private Mono<TransactionLog> createTransactionLog(TransferRequest request) {
         TransactionLog log = new TransactionLog();
         log.setFromAccount(request.getFromAccount());
@@ -456,7 +456,7 @@ public class BankTransferService {
         log.setAmount(request.getAmount());
         log.setTimestamp(Instant.now());
         log.setStatus("SUCCESS");
-        
+
         return logRepository.save(log);
     }
 }
@@ -474,7 +474,7 @@ public class OrderProcessingService {
     private final PaymentService paymentService;
     private final NotificationService notificationService;
     private final ReactiveTransactionManager transactionManager;
-    
+
     public OrderProcessingService(OrderRepository orderRepository,
                                  InventoryService inventoryService,
                                  PaymentService paymentService,
@@ -486,7 +486,7 @@ public class OrderProcessingService {
         this.notificationService = notificationService;
         this.transactionManager = transactionManager;
     }
-    
+
     @Transactional
     public Mono<Order> processOrder(Order order) {
         return validateOrder(order)
@@ -494,33 +494,33 @@ public class OrderProcessingService {
             .flatMap(orderWithInventory -> processPayment(orderWithInventory))
             .flatMap(paidOrder -> updateOrderStatus(paidOrder, "COMPLETED"))
             .flatMap(completedOrder -> sendConfirmation(completedOrder))
-            .onErrorResume(e -> 
+            .onErrorResume(e ->
                 updateOrderStatus(order, "FAILED")
                     .then(Mono.error(e)));
     }
-    
+
     private Mono<Order> validateOrder(Order order) {
         // 订单验证逻辑
         return Mono.just(order);
     }
-    
+
     private Mono<Order> reserveInventory(Order order) {
         // 库存预留逻辑
         return inventoryService.reserveItems(order)
             .thenReturn(order);
     }
-    
+
     private Mono<Order> processPayment(Order order) {
         // 支付处理逻辑
         return paymentService.processPayment(order)
             .thenReturn(order);
     }
-    
+
     private Mono<Order> updateOrderStatus(Order order, String status) {
         order.setStatus(status);
         return orderRepository.save(order);
     }
-    
+
     private Mono<Order> sendConfirmation(Order order) {
         // 发送确认通知
         return notificationService.sendOrderConfirmation(order)
@@ -539,7 +539,7 @@ public class OrderProcessingService {
 @Slf4j
 @Service
 public class DebuggableService {
-    
+
     @Transactional
     public Mono<Data> complexOperation(String input) {
         return preprocess(input)
@@ -563,12 +563,12 @@ public class DebuggableService {
 ```java
 @Configuration
 public class MetricsConfig {
-    
+
     @Bean
     public MeterRegistry meterRegistry() {
         return new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
     }
-    
+
     @Bean
     public TimedAspect timedAspect(MeterRegistry registry) {
         return new TimedAspect(registry);
@@ -577,7 +577,7 @@ public class MetricsConfig {
 
 @Service
 public class MonitoredService {
-    
+
     @Timed(value = "business_operation", longTask = true)
     @Transactional
     public Mono<Result> monitoredOperation(Input input) {

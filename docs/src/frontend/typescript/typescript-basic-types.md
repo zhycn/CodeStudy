@@ -19,7 +19,7 @@ TypeScript 的核心原则之一是对值所具有的**结构**进行类型检�
 表示文本数据。
 
 ```typescript
-let firstName: string = "Alice";
+let firstName: string = 'Alice';
 let sentence: string = `Hello, my name is ${firstName}.`; // 模板字符串
 ```
 
@@ -64,7 +64,7 @@ let n: null = null;
 
 ```typescript
 let sym1: symbol = Symbol();
-let sym2: symbol = Symbol("key"); // 可选的描述字符串
+let sym2: symbol = Symbol('key'); // 可选的描述字符串
 ```
 
 ### 2.6 `bigint` (ES2020)
@@ -100,7 +100,7 @@ const readOnlyList: ReadonlyArray<number> = [1, 2, 3];
 let x: [string, number];
 
 // 初始化
-x = ["hello", 10]; // OK
+x = ['hello', 10]; // OK
 // x = [10, "hello"]; // Error: Type 'number' is not assignable to type 'string'.
 
 // 访问已知索引的元素
@@ -108,7 +108,7 @@ console.log(x[0].substring(1)); // "ello"
 // console.log(x[2].toString()); // Error: Tuple type '[string, number]' of length '2' has no element at index '2'.
 
 // 越界元素（不推荐使用，最佳实践是保持固定长度）
-x.push("world"); // 在 TypeScript 早期版本中允许，但现在不推荐
+x.push('world'); // 在 TypeScript 早期版本中允许，但现在不推荐
 console.log(x); // ["hello", 10, "world"]
 // console.log(x[2]); // Error: Tuple type '[string, number]' of length '2' has no element at index '2'.
 ```
@@ -126,7 +126,7 @@ console.log(x); // ["hello", 10, "world"]
 
 ```typescript
 let notSure: any = 4;
-notSure = "maybe a string instead";
+notSure = 'maybe a string instead';
 notSure = false; // 可以重新赋值为任意类型
 notSure.toFixed(); // 编译时不会报错，但运行时可能出错！
 ```
@@ -142,13 +142,13 @@ notSure.toFixed(); // 编译时不会报错，但运行时可能出错！
 TypeScript 3.0 引入的类型安全的 `any`。任何值都可以赋给 `unknown`，但在将其赋值给其他类型或进行操作之前，必须进行类型检查或类型断言。
 
 ```typescript
-let uncertainValue: unknown = "hello world";
+let uncertainValue: unknown = 'hello world';
 
 // 直接操作会报错
 // uncertainValue.toUpperCase(); // Error: Object is of type 'unknown'.
 
 // 必须进行类型收窄 (Type Narrowing)
-if (typeof uncertainValue === "string") {
+if (typeof uncertainValue === 'string') {
   // 在这个块中，TypeScript 知道 `uncertainValue` 是 string 类型
   console.log(uncertainValue.toUpperCase()); // OK
 }
@@ -167,7 +167,7 @@ let certainString: string = (uncertainValue as string).toUpperCase();
 
 ```typescript
 function warnUser(): void {
-  console.log("This is a warning message");
+  console.log('This is a warning message');
   // 函数执行完毕，没有 return 语句，或只有 `return;`
 }
 ```
@@ -191,9 +191,9 @@ function infiniteLoop(): never {
 
 // 在类型收窄中，never 代表不可能出现的类型
 function handleEvent(event: string | number) {
-  if (typeof event === "string") {
+  if (typeof event === 'string') {
     // 处理 string
-  } else if (typeof event === "number") {
+  } else if (typeof event === 'number') {
     // 处理 number
   } else {
     // 这个分支的 event 类型是 never，代表所有情况都已处理完毕
@@ -212,8 +212,8 @@ function handleEvent(event: string | number) {
 
 ```typescript
 // 字符串字面量类型
-let direction: "left" | "right" | "up" | "down";
-direction = "left"; // OK
+let direction: 'left' | 'right' | 'up' | 'down';
+direction = 'left'; // OK
 // direction = "north"; // Error: Type '"north"' is not assignable to type '"left" | "right" | "up" | "down"'.
 
 // 数字字面量类型
@@ -247,10 +247,10 @@ let go: Direction = Direction.Up;
 
 // 字符串枚举
 enum LogLevel {
-  ERROR = "ERROR",
-  WARN = "WARN",
-  INFO = "INFO",
-  DEBUG = "DEBUG",
+  ERROR = 'ERROR',
+  WARN = 'WARN',
+  INFO = 'INFO',
+  DEBUG = 'DEBUG',
 }
 let level: LogLevel = LogLevel.ERROR;
 
@@ -296,14 +296,14 @@ function buildName(firstName: string, lastName?: string): string {
   if (lastName) return `${firstName} ${lastName}`;
   return firstName;
 }
-function buildName2(firstName: string, lastName: string = "Smith"): string {
+function buildName2(firstName: string, lastName: string = 'Smith'): string {
   // 参数默认值
   return `${firstName} ${lastName}`;
 }
 
 // 剩余参数
 function buildName3(firstName: string, ...restOfName: string[]): string {
-  return firstName + " " + restOfName.join(" ");
+  return firstName + ' ' + restOfName.join(' ');
 }
 ```
 
@@ -320,7 +320,7 @@ function buildName3(firstName: string, ...restOfName: string[]): string {
 TypeScript 非常智能，即使你不显式写类型，它也会尽可能地推断出类型。
 
 ```typescript
-let myName = "Alice"; // TypeScript 推断出 myName 的类型是 string
+let myName = 'Alice'; // TypeScript 推断出 myName 的类型是 string
 // myName = 123; // Error: Type 'number' is not assignable to type 'string'.
 
 let myArray = [1, 2, 3]; // 推断为 number[]

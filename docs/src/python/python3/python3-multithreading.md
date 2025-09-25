@@ -3,9 +3,11 @@
 ## 1. 多线程概述
 
 ### 1.1 什么是多线程
+
 多线程（Multithreading）是指在一个进程内同时运行多个线程的技术。每个线程可以执行不同的任务，共享相同的内存空间和资源，使得程序能够更高效地利用系统资源。
 
 ### 1.2 Python 中的全局解释器锁（GIL）
+
 Python 的全局解释器锁（Global Interpreter Lock, GIL）是一个重要的概念，它确保在任何时刻只有一个线程在执行 Python 字节码。这意味着：
 
 - **I/O 密集型任务**：多线程能显著提升性能（如网络请求、文件操作）
@@ -14,6 +16,7 @@ Python 的全局解释器锁（Global Interpreter Lock, GIL）是一个重要的
 ## 2. threading 模块核心组件
 
 ### 2.1 Thread 类
+
 `threading.Thread` 是创建和管理线程的主要类。
 
 ```python
@@ -51,12 +54,12 @@ class BankAccount:
     def __init__(self):
         self.balance = 1000
         self.lock = threading.Lock()
-    
+
     def deposit(self, amount):
         with self.lock:  # 自动获取和释放锁
             self.balance += amount
             print(f'存入 {amount}, 新余额: {self.balance}')
-    
+
     def withdraw(self, amount):
         with self.lock:
             if self.balance >= amount:
@@ -129,23 +132,23 @@ class ProducerConsumer:
         self.items = []
         self.max_size = 5
         self.condition = threading.Condition()
-    
+
     def produce(self, item):
         with self.condition:
             while len(self.items) >= self.max_size:
                 print('缓冲区已满，生产者等待')
                 self.condition.wait()
-            
+
             self.items.append(item)
             print(f'生产: {item}, 缓冲区: {self.items}')
             self.condition.notify_all()
-    
+
     def consume(self):
         with self.condition:
             while not self.items:
                 print('缓冲区为空，消费者等待')
                 self.condition.wait()
-            
+
             item = self.items.pop(0)
             print(f'消费: {item}, 缓冲区: {self.items}')
             self.condition.notify_all()
@@ -163,10 +166,10 @@ def consumer(pc, count):
 
 pc = ProducerConsumer()
 producer_thread = threading.Thread(
-    target=producer, 
+    target=producer,
     args=(pc, [f'item_{i}' for i in range(10)])
 consumer_thread = threading.Thread(
-    target=consumer, 
+    target=consumer,
     args=(pc, 10))
 
 producer_thread.start()
@@ -204,10 +207,10 @@ urls = [
 with ThreadPoolExecutor(max_workers=3) as executor:
     # 提交所有任务
     future_to_url = {
-        executor.submit(download_url, url): url 
+        executor.submit(download_url, url): url
         for url in urls
     }
-    
+
     # 获取完成的结果
     for future in as_completed(future_to_url):
         url = future_to_url[future]
@@ -230,19 +233,19 @@ class ProducerConsumerPattern:
     def __init__(self, max_size=5):
         self.queue = queue.Queue(max_size)
         self.lock = threading.Lock()
-    
+
     def producer(self, producer_id):
         for i in range(5):
             item = f'产品_{producer_id}_{i}'
             time.sleep(random.uniform(0.1, 0.5))
-            
+
             try:
                 self.queue.put(item, block=True, timeout=2)
                 with self.lock:
                     print(f'生产者 {producer_id} 生产: {item}')
             except queue.Full:
                 print(f'队列已满，生产者 {producer_id} 等待')
-    
+
     def consumer(self, consumer_id):
         while True:
             try:
@@ -259,11 +262,11 @@ pc = ProducerConsumerPattern(max_size=3)
 
 # 创建生产者和消费者线程
 producers = [
-    threading.Thread(target=pc.producer, args=(i,)) 
+    threading.Thread(target=pc.producer, args=(i,))
     for i in range(3)
 ]
 consumers = [
-    threading.Thread(target=pc.consumer, args=(i,)) 
+    threading.Thread(target=pc.consumer, args=(i,))
     for i in range(2)
 ]
 
@@ -297,7 +300,7 @@ print('所有任务完成')
    # 推荐
    with lock:
        # 临界区代码
-   
+
    # 不推荐
    lock.acquire()
    try:
@@ -312,7 +315,7 @@ print('所有任务完成')
    # 按固定顺序获取锁
    def transfer(account1, account2, amount):
        lock1, lock2 = sorted([account1.lock, account2.lock], key=id)
-       
+
        with lock1:
            with lock2:
                # 执行转账操作
@@ -322,10 +325,10 @@ print('所有任务完成')
 
    ```python
    import threading
-   
+
    # 创建线程局部数据
    thread_local = threading.local()
-   
+
    def worker():
        thread_local.data = threading.get_ident()
        print(f'线程 {threading.get_ident()} 数据: {thread_local.data}')
@@ -342,7 +345,7 @@ print('所有任务完成')
        for i in range(n):
            result += i * i
        return result
-   
+
    # 考虑使用多进程处理 CPU 密集型任务
    from multiprocessing import Pool
    ```
@@ -354,16 +357,16 @@ print('所有任务完成')
    class UnsafeCounter:
        def __init__(self):
            self.value = 0
-       
+
        def increment(self):
            self.value += 1  # 非原子操作
-   
+
    # 安全的计数器
    class SafeCounter:
        def __init__(self):
            self.value = 0
            self.lock = threading.Lock()
-       
+
        def increment(self):
            with self.lock:
                self.value += 1
@@ -375,10 +378,10 @@ print('所有任务完成')
 
    ```python
    import os
-   
+
    # I/O 密集型：可以设置较多线程
    io_bound_workers = 10
-   
+
    # CPU 密集型：通常设置为 CPU 核心数
    cpu_bound_workers = os.cpu_count()
    ```
@@ -392,12 +395,12 @@ print('所有任务完成')
            item = queue.get()
            if item is None:  # 终止信号
                break
-           
+
            batch.append(item)
            if len(batch) >= batch_size:
                process_batch(batch)
                batch = []
-       
+
        if batch:  # 处理剩余项目
            process_batch(batch)
    ```
@@ -416,15 +419,15 @@ logging.basicConfig(
 
 def debug_example():
     logging.debug('线程启动')
-    
+
     # 线程信息
     current_thread = threading.current_thread()
     logging.debug(f'线程ID: {current_thread.ident}')
     logging.debug(f'线程名称: {current_thread.name}')
-    
+
     # 活动线程数
     logging.debug(f'活动线程数: {threading.active_count()}')
-    
+
     logging.debug('线程结束')
 
 threads = []

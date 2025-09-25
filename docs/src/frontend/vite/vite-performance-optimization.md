@@ -14,12 +14,12 @@
 
 Vite 通过预构建将 CommonJS / UMD 转换为 ESM 并合并模块，以提升页面加载速度。
 
-* **原理与收益**：Vite 使用 esbuild 进行依赖预构建，这比基于 JavaScript 的打包器要快10-100倍。预构建的结果会被缓存，极大提升后续启动速度。
-* **手动优化配置**：您可以在 `vite.config.js` 中手动指定需要预构建的依赖或排除不需要的依赖。
+- **原理与收益**：Vite 使用 esbuild 进行依赖预构建，这比基于 JavaScript 的打包器要快10-100倍。预构建的结果会被缓存，极大提升后续启动速度。
+- **手动优化配置**：您可以在 `vite.config.js` 中手动指定需要预构建的依赖或排除不需要的依赖。
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   optimizeDeps: {
@@ -28,10 +28,10 @@ export default defineConfig({
     // 排除不需要预构建的依赖
     exclude: ['some-big-dependency'],
   },
-})
+});
 ```
 
-* **强制预构建或清除缓存**：当遇到依赖问题时，可以删除 `node_modules/.vite` 目录并重启开发服务器以强制重新预构建。
+- **强制预构建或清除缓存**：当遇到依赖问题时，可以删除 `node_modules/.vite` 目录并重启开发服务器以强制重新预构建。
 
 ### 1.2 调整开发服务器选项
 
@@ -39,7 +39,7 @@ export default defineConfig({
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   server: {
@@ -48,7 +48,7 @@ export default defineConfig({
     // 设置为 0.0.0.0 允许 LAN 访问
     host: true,
   },
-})
+});
 ```
 
 ## 2. 生产环境构建优化
@@ -59,160 +59,157 @@ export default defineConfig({
 
 “测量优于猜测”，首先需要分析打包结果。
 
-* **使用 Rollup 插件进行分析**：
-    1. **rollup-plugin-visualizer**: 生成可视化的打包分析图，帮助识别体积过大的模块。
+- **使用 Rollup 插件进行分析**：
+  1. **rollup-plugin-visualizer**: 生成可视化的打包分析图，帮助识别体积过大的模块。
 
-    ```bash
-    npm install --save-dev rollup-plugin-visualizer
-    ```
+  ```bash
+  npm install --save-dev rollup-plugin-visualizer
+  ```
 
-    ```javascript
-    // vite.config.js
-    import { defineConfig } from 'vite'
-    import visualizer from 'rollup-plugin-visualizer'
+  ```javascript
+  // vite.config.js
+  import { defineConfig } from 'vite';
+  import visualizer from 'rollup-plugin-visualizer';
 
-    export default defineConfig({
-      plugins: [
-        // 放在插件数组的最后
-        visualizer({
-          open: true, // 构建后自动打开报告
-          filename: 'dist/stats.html', // 输出文件名
-        }),
-      ],
-      build: {
-        // 其他构建配置...
-      },
-    })
-    ```
+  export default defineConfig({
+    plugins: [
+      // 放在插件数组的最后
+      visualizer({
+        open: true, // 构建后自动打开报告
+        filename: 'dist/stats.html', // 输出文件名
+      }),
+    ],
+    build: {
+      // 其他构建配置...
+    },
+  });
+  ```
 
-    2. **rollup-plugin-analyzer**: 在终端输出详细的模块大小分析报告。
+  2. **rollup-plugin-analyzer**: 在终端输出详细的模块大小分析报告。
 
-* **配置 Rollup 输出选项**：
+- **配置 Rollup 输出选项**：
 
-    ```javascript
-    // vite.config.js
-    export default defineConfig({
-      build: {
-        rollupOptions: {
-          output: {
-            // 对代码分割产生的 chunk 进行命名优化
-            chunkFileNames: 'js/[name]-[hash].js',
-            entryFileNames: 'js/[name]-[hash].js',
-            assetFileNames: 'assets/[name]-[hash][extname]',
-            // 手动拆分 vendor chunk
-            manualChunks: (id) => {
-              if (id.includes('node_modules')) {
-                // 将大的依赖库拆分成单独的 chunk
-                if (id.includes('lodash')) {
-                  return 'vendor-lodash'
-                }
-                if (id.includes('axios')) {
-                  return 'vendor-axios'
-                }
-                // 其余的 node_modules 依赖合并到 vendor 中
-                return 'vendor'
+  ```javascript
+  // vite.config.js
+  export default defineConfig({
+    build: {
+      rollupOptions: {
+        output: {
+          // 对代码分割产生的 chunk 进行命名优化
+          chunkFileNames: 'js/[name]-[hash].js',
+          entryFileNames: 'js/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash][extname]',
+          // 手动拆分 vendor chunk
+          manualChunks: (id) => {
+            if (id.includes('node_modules')) {
+              // 将大的依赖库拆分成单独的 chunk
+              if (id.includes('lodash')) {
+                return 'vendor-lodash';
               }
-            },
+              if (id.includes('axios')) {
+                return 'vendor-axios';
+              }
+              // 其余的 node_modules 依赖合并到 vendor 中
+              return 'vendor';
+            }
           },
         },
       },
-    })
-    ```
+    },
+  });
+  ```
 
 ### 2.2 代码分割与懒加载
 
 有效利用代码分割和懒加载可以显著减少初始加载资源的大小。
 
-* **动态导入 (Dynamic Import)**：Vite 天然支持 ESM 动态导入，这会自动进行代码分割。
+- **动态导入 (Dynamic Import)**：Vite 天然支持 ESM 动态导入，这会自动进行代码分割。
 
-    ```javascript
-    // 静态导入（会合并到主包中）
-    // import HeavyComponent from './HeavyComponent.vue'
+  ```javascript
+  // 静态导入（会合并到主包中）
+  // import HeavyComponent from './HeavyComponent.vue'
 
-    // 动态导入（会拆分成独立的 chunk，懒加载）
-    const HeavyComponent = () => import('./HeavyComponent.vue')
-    ```
+  // 动态导入（会拆分成独立的 chunk，懒加载）
+  const HeavyComponent = () => import('./HeavyComponent.vue');
+  ```
 
-* **使用 `import.meta.glob` 进行批量懒加载**：
+- **使用 `import.meta.glob` 进行批量懒加载**：
 
-    ```javascript
-    // 在 Vite 中，import.meta.glob 可以高效地批量导入模块
-    const modules = import.meta.glob('./components/*.vue')
+  ```javascript
+  // 在 Vite 中，import.meta.glob 可以高效地批量导入模块
+  const modules = import.meta.glob('./components/*.vue');
 
-    // 使用时按需加载
-    for (const path in modules) {
-      modules.then((mod) => {
-        console.log(mod.default)
-      })
-    }
-    ```
+  // 使用时按需加载
+  for (const path in modules) {
+    modules.then((mod) => {
+      console.log(mod.default);
+    });
+  }
+  ```
 
 ### 2.3 资源压缩与处理
 
 压缩资源是减少体积最直接有效的方法。
 
-* **Vite 内置构建优化**：Vite 默认会压缩代码并分割资源。
+- **Vite 内置构建优化**：Vite 默认会压缩代码并分割资源。
 
-    ```javascript
-    // vite.config.js
-    export default defineConfig({
-      build: {
-        // 构建输出目录
-        outDir: 'dist',
-        // 生成 sourcemap 文件（生产环境建议关闭以提升性能和安全）
-        sourcemap: false,
-        // 减小 chunk 大小警告限制
-        chunkSizeWarningLimit: 1000,
-      },
-    })
-    ```
+  ```javascript
+  // vite.config.js
+  export default defineConfig({
+    build: {
+      // 构建输出目录
+      outDir: 'dist',
+      // 生成 sourcemap 文件（生产环境建议关闭以提升性能和安全）
+      sourcemap: false,
+      // 减小 chunk 大小警告限制
+      chunkSizeWarningLimit: 1000,
+    },
+  });
+  ```
 
-* **使用 `vite-plugin-compression`**：此插件可生成 gzip 或 Brotli 压缩版本的文件，服务器可直接提供这些文件以减少传输时间。
+- **使用 `vite-plugin-compression`**：此插件可生成 gzip 或 Brotli 压缩版本的文件，服务器可直接提供这些文件以减少传输时间。
 
-    ```bash
-    npm install --save-dev vite-plugin-compression
-    ```
+  ```bash
+  npm install --save-dev vite-plugin-compression
+  ```
 
-    ```javascript
-    // vite.config.js
-    import viteCompression from 'vite-plugin-compression'
+  ```javascript
+  // vite.config.js
+  import viteCompression from 'vite-plugin-compression';
 
-    export default defineConfig({
-      plugins: [
-        viteCompression({
-          algorithm: 'gzip', // 可选 'brotliCompress'
-          ext: '.gz',
-        }),
-      ],
-    })
-    ```
+  export default defineConfig({
+    plugins: [
+      viteCompression({
+        algorithm: 'gzip', // 可选 'brotliCompress'
+        ext: '.gz',
+      }),
+    ],
+  });
+  ```
 
-* **图片资源优化**：使用 `vite-plugin-imagemin` 插件自动压缩图片。
+- **图片资源优化**：使用 `vite-plugin-imagemin` 插件自动压缩图片。
 
-    ```bash
-    npm install --save-dev vite-plugin-imagemin
-    ```
+  ```bash
+  npm install --save-dev vite-plugin-imagemin
+  ```
 
-    ```javascript
-    // vite.config.js
-    import viteImagemin from 'vite-plugin-imagemin'
+  ```javascript
+  // vite.config.js
+  import viteImagemin from 'vite-plugin-imagemin';
 
-    export default defineConfig({
-      plugins: [
-        viteImagemin({
-          gifsicle: { optimizationLevel: 7 },
-          mozjpeg: { quality: 80 },
-          pngquant: { quality: [0.8, 0.9] },
-          svgo: {
-            plugins: [
-              { name: 'removeViewBox' },
-              { name: 'removeEmptyAttrs', active: false },
-            ],
-          },
-        }),
-      ],
-    })
-    ```
+  export default defineConfig({
+    plugins: [
+      viteImagemin({
+        gifsicle: { optimizationLevel: 7 },
+        mozjpeg: { quality: 80 },
+        pngquant: { quality: [0.8, 0.9] },
+        svgo: {
+          plugins: [{ name: 'removeViewBox' }, { name: 'removeEmptyAttrs', active: false }],
+        },
+      }),
+    ],
+  });
+  ```
 
 ## 3. 高级优化技巧
 
@@ -220,49 +217,49 @@ export default defineConfig({
 
 通过将稳定的第三方库（如 Vue, React, lodash）外部化并通过 CDN 引入，可以显著减小构建体积，并利用浏览器缓存。
 
-* **使用 `vite-plugin-externals` 或 `vite-plugin-cdn-import`**：
+- **使用 `vite-plugin-externals` 或 `vite-plugin-cdn-import`**：
 
-    ```bash
-    # 以 vite-plugin-cdn-import 为例
-    npm install --save-dev vite-plugin-cdn-import
-    ```
+  ```bash
+  # 以 vite-plugin-cdn-import 为例
+  npm install --save-dev vite-plugin-cdn-import
+  ```
 
-    ```javascript
-    // vite.config.js
-    import { defineConfig } from 'vite'
-    import importToCDN from 'vite-plugin-cdn-import'
+  ```javascript
+  // vite.config.js
+  import { defineConfig } from 'vite';
+  import importToCDN from 'vite-plugin-cdn-import';
 
-    export default defineConfig({
-      plugins: [
-        importToCDN({
-          modules: [
-            {
-              name: 'vue',
-              var: 'Vue',
-              path: 'https://cdn.jsdelivr.net/npm/vue@3.2.31/dist/vue.global.prod.js',
-            },
-            {
-              name: 'axios',
-              var: 'axios',
-              path: 'https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js',
-            },
-          ],
-        }),
-      ],
-      build: {
-        // 告诉 Rollup 这些模块是外部的
-        rollupOptions: {
-          external: ['vue', 'axios'],
-          output: {
-            globals: {
-              vue: 'Vue',
-              axios: 'axios',
-            },
+  export default defineConfig({
+    plugins: [
+      importToCDN({
+        modules: [
+          {
+            name: 'vue',
+            var: 'Vue',
+            path: 'https://cdn.jsdelivr.net/npm/vue@3.2.31/dist/vue.global.prod.js',
+          },
+          {
+            name: 'axios',
+            var: 'axios',
+            path: 'https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js',
+          },
+        ],
+      }),
+    ],
+    build: {
+      // 告诉 Rollup 这些模块是外部的
+      rollupOptions: {
+        external: ['vue', 'axios'],
+        output: {
+          globals: {
+            vue: 'Vue',
+            axios: 'axios',
           },
         },
       },
-    })
-    ```
+    },
+  });
+  ```
 
 ### 3.2 PWA 离线缓存
 
@@ -274,8 +271,8 @@ npm install --save-dev vite-plugin-pwa workbox-core
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
@@ -300,7 +297,7 @@ export default defineConfig({
       },
     }),
   ],
-})
+});
 ```
 
 ### 3.3 使用现代构建格式
@@ -311,8 +308,8 @@ Vite 默认生成现代浏览器（支持原生 ESM）和旧版浏览器的两�
 
 优化前后需要进行量化测量。
 
-* **Lighthouse CI**: 将 Lighthouse 性能测试集成到您的 CI/CD 流程中，确保性能不退化。
-* **Web Vitals**: 在您的应用中集成 `web-vitals` 库，实时监控并上报用户实际体验指标（如 LCP, FID, CLS）。
+- **Lighthouse CI**: 将 Lighthouse 性能测试集成到您的 CI/CD 流程中，确保性能不退化。
+- **Web Vitals**: 在您的应用中集成 `web-vitals` 库，实时监控并上报用户实际体验指标（如 LCP, FID, CLS）。
 
 ```bash
 npm install web-vitals
@@ -320,26 +317,26 @@ npm install web-vitals
 
 ```javascript
 // 在您的应用入口文件中
-import { getCLS, getFID, getLCP } from 'web-vitals'
+import { getCLS, getFID, getLCP } from 'web-vitals';
 
-getCLS(console.log)
-getFID(console.log)
-getLCP(console.log)
+getCLS(console.log);
+getFID(console.log);
+getLCP(console.log);
 ```
 
 ## 总结
 
 Vite 提供了极其快速的开发体验，但通过上述优化策略，您可以将其性能潜力发挥到极致。下表总结了主要优化手段：
 
-| 场景 | 优化策略 | 推荐工具/配置 |
-| :--- | :--- | :--- |
-| **开发环境** | 依赖预构建 | `optimizeDeps.include/exclude` |
-| **构建分析** | 可视化分析包体积 | `rollup-plugin-visualizer` |
-| **代码分割** | 动态导入，手动分块 | `dynamic import`, `rollupOptions.output.manualChunks` |
-| **资源压缩** | JS/CSS 压缩，图片优化 | `vite-plugin-compression`, `vite-plugin-imagemin` |
-| **第三方库** | CDN 引入，外部化 | `vite-plugin-cdn-import`, `build.rollupOptions.external` |
-| **离线体验** | PWA 缓存 | `vite-plugin-pwa` |
-| **性能监控** | 量化测量与监控 | `Lighthouse CI`, `web-vitals` |
+| 场景         | 优化策略              | 推荐工具/配置                                            |
+| :----------- | :-------------------- | :------------------------------------------------------- |
+| **开发环境** | 依赖预构建            | `optimizeDeps.include/exclude`                           |
+| **构建分析** | 可视化分析包体积      | `rollup-plugin-visualizer`                               |
+| **代码分割** | 动态导入，手动分块    | `dynamic import`, `rollupOptions.output.manualChunks`    |
+| **资源压缩** | JS/CSS 压缩，图片优化 | `vite-plugin-compression`, `vite-plugin-imagemin`        |
+| **第三方库** | CDN 引入，外部化      | `vite-plugin-cdn-import`, `build.rollupOptions.external` |
+| **离线体验** | PWA 缓存              | `vite-plugin-pwa`                                        |
+| **性能监控** | 量化测量与监控        | `Lighthouse CI`, `web-vitals`                            |
 
 请记住，性能优化是一个持续的过程，应根据项目的具体特点和用户的实际数据来制定最合适的策略。最好的优化通常是那些能为您的真实用户带来最大体验提升的方案。
 

@@ -33,8 +33,8 @@ JTA 的关键接口包括 `UserTransaction`（提供开始、提交和回滚事�
 
 **2PC 协议的优缺点**：
 
-- *优点*：简单易实现，保证强一致性，确保所有参与者要么全部提交，要么全部回滚。
-- *缺点*：**同步阻塞**问题（在准备阶段后，参与者必须等待协调者的指令）、**单点故障**风险（协调者失败可能导致参与者长时间阻塞）、**性能开销**较大（需要多次网络往返和持久化操作）。
+- _优点_：简单易实现，保证强一致性，确保所有参与者要么全部提交，要么全部回滚。
+- _缺点_：**同步阻塞**问题（在准备阶段后，参与者必须等待协调者的指令）、**单点故障**风险（协调者失败可能导致参与者长时间阻塞）、**性能开销**较大（需要多次网络往返和持久化操作）。
 
 ## 2 Spring 与 JTA 集成配置
 
@@ -84,7 +84,7 @@ spring:
       max-pool-size: 20
       borrow-connection-timeout: 30
 
-  # 二级数据源配置  
+  # 二级数据源配置
   secondary:
     datasource:
       unique-resource-name: secondaryDS
@@ -160,7 +160,7 @@ public class JtaTransactionManagerConfig {
     public JtaTransactionManager transactionManager(
             UserTransactionManager atomikosTransactionManager,
             UserTransaction atomikosUserTransaction) {
-        JtaTransactionManager jtaTransactionManager = 
+        JtaTransactionManager jtaTransactionManager =
             new JtaTransactionManager();
         jtaTransactionManager.setTransactionManager(atomikosTransactionManager);
         jtaTransactionManager.setUserTransaction(atomikosUserTransaction);
@@ -184,10 +184,10 @@ public class JtaTransactionManagerConfig {
 @Configuration
 @EnableTransactionManagement
 public class TransactionConfig implements TransactionManagementConfigurer {
-    
+
     @Autowired
     private JtaTransactionManager jtaTransactionManager;
-    
+
     @Override
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return jtaTransactionManager;
@@ -204,16 +204,16 @@ public class TransactionConfig implements TransactionManagementConfigurer {
 ```java
 @Service
 public class ProgrammaticTransactionService {
-    
+
     @Autowired
     private JtaTransactionManager jtaTransactionManager;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     public void performDistributedOperation(User user, Order order) {
         TransactionStatus status = null;
         try {
@@ -221,13 +221,13 @@ public class ProgrammaticTransactionService {
             DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
             definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
             definition.setTimeout(300);
-            
+
             status = jtaTransactionManager.getTransaction(definition);
-            
+
             // 执行多个资源操作
             userRepository.save(user);
             orderRepository.save(order);
-            
+
             // 提交事务
             jtaTransactionManager.commit(status);
         } catch (Exception e) {
@@ -247,29 +247,29 @@ Spring 的声明式事务管理通过 `@Transactional` 注解简化事务配置�
 ```java
 @Service
 public class OrderProcessingService {
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Autowired
     private InventoryRepository inventoryRepository;
-    
-    @Transactional(value = "jtaTransactionManager", 
-                   timeout = 300, 
+
+    @Transactional(value = "jtaTransactionManager",
+                   timeout = 300,
                    rollbackFor = {Exception.class})
     public void processOrder(Order order, User user) {
         // 更新用户信息
         userRepository.updateBalance(user.getId(), order.getTotalAmount());
-        
+
         // 创建订单记录
         orderRepository.save(order);
-        
+
         // 减少库存
         inventoryRepository.decreaseStock(order.getProductId(), order.getQuantity());
-        
+
         // 如果任何操作抛出异常，所有操作都将回滚
     }
 }
@@ -280,19 +280,19 @@ public class OrderProcessingService {
 ```java
 @Service
 public class NestedTransactionService {
-    
+
     @Transactional(propagation = Propagation.REQUIRED)
     public void mainOperation() {
         // 主操作...
         nestedOperation();
     }
-    
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void nestedOperation() {
         // 此方法总是启动新事务
         // 如果外部事务回滚，此操作不会回滚
     }
-    
+
     @Transactional(propagation = Propagation.NESTED)
     public void nestedOperationWithSavepoint() {
         // 此方法在外部事务中创建保存点
@@ -317,12 +317,12 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String orderNumber;
     private BigDecimal totalAmount;
     private Long productId;
     private Integer quantity;
-    
+
     // getters and setters
 }
 
@@ -333,10 +333,10 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private Long productId;
     private Integer stockQuantity;
-    
+
     // getters and setters
 }
 ```
@@ -346,14 +346,14 @@ public class Inventory {
 ```java
 @Repository
 public class OrderRepository {
-    
+
     @PersistenceContext(unitName = "primaryPU")
     private EntityManager entityManager;
-    
+
     public void save(Order order) {
         entityManager.persist(order);
     }
-    
+
     public Order findById(Long id) {
         return entityManager.find(Order.class, id);
     }
@@ -361,20 +361,20 @@ public class OrderRepository {
 
 @Repository
 public class InventoryRepository {
-    
+
     @PersistenceContext(unitName = "secondaryPU")
     private EntityManager entityManager;
-    
+
     public void decreaseStock(Long productId, Integer quantity) {
         Inventory inventory = entityManager
             .createQuery("FROM Inventory WHERE productId = :productId", Inventory.class)
             .setParameter("productId", productId)
             .getSingleResult();
-        
+
         if (inventory.getStockQuantity() < quantity) {
             throw new RuntimeException("库存不足");
         }
-        
+
         inventory.setStockQuantity(inventory.getStockQuantity() - quantity);
         entityManager.merge(inventory);
     }
@@ -386,39 +386,39 @@ public class InventoryRepository {
 ```java
 @Service
 public class ECommerceService {
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Autowired
     private InventoryRepository inventoryRepository;
-    
-    @Transactional(transactionManager = "jtaTransactionManager", 
+
+    @Transactional(transactionManager = "jtaTransactionManager",
                    rollbackFor = Exception.class)
     public void placeOrder(Order order) {
         try {
             // 1. 创建订单
             orderRepository.save(order);
-            
+
             // 2. 更新库存
             inventoryRepository.decreaseStock(order.getProductId(), order.getQuantity());
-            
+
             // 3. 这里可以添加更多分布式操作...
-            
+
         } catch (Exception e) {
             // 记录日志
             System.err.println("订单处理失败: " + e.getMessage());
             throw e; // 重新抛出异常触发回滚
         }
     }
-    
+
     // 分布式查询方法
-    @Transactional(transactionManager = "jtaTransactionManager", 
+    @Transactional(transactionManager = "jtaTransactionManager",
                    readOnly = true)
     public OrderInfo getOrderInfo(Long orderId) {
         Order order = orderRepository.findById(orderId);
         Inventory inventory = inventoryRepository.findByProductId(order.getProductId());
-        
+
         return new OrderInfo(order, inventory);
     }
 }
@@ -431,12 +431,12 @@ public class ECommerceService {
 ```java
 @Service
 public class OrderServiceWithCustomRollback {
-    
+
     @Transactional(transactionManager = "jtaTransactionManager")
     public void processOrderWithCustomRollback(Order order) {
         try {
             // 业务操作...
-            
+
         } catch (BusinessException e) {
             // 记录业务异常，但不需要回滚
             log.warn("业务异常，继续提交事务", e);
@@ -456,15 +456,15 @@ public class OrderServiceWithCustomRollback {
 ```java
 @Service
 public class RetryableTransactionService {
-    
+
     @Autowired
     private JtaTransactionManager jtaTransactionManager;
-    
+
     @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void executeWithRetry(Runnable operation) {
         TransactionStatus status = jtaTransactionManager.getTransaction(
             new DefaultTransactionDefinition());
-        
+
         try {
             operation.run();
             jtaTransactionManager.commit(status);
@@ -520,14 +520,14 @@ spring:
 ```java
 @Service
 public class OptimizedTransactionService {
-    
+
     @Transactional(transactionManager = "jtaTransactionManager",
                    isolation = Isolation.READ_COMMITTED,
                    timeout = 30) // 30秒超时
     public void optimizedOperation() {
         // 短时间操作，使用较低的隔离级别
     }
-    
+
     @Transactional(transactionManager = "jtaTransactionManager",
                    isolation = Isolation.REPEATABLE_READ,
                    timeout = 120) // 120秒超时
@@ -569,20 +569,20 @@ public void step2InNewTransaction() {
 ```java
 // 注意：JTA不支持跨数据库的关联查询
 public class InvalidCrossDatabaseQuery {
-    
+
     // 错误示例 - 尝试跨库关联查询
     public void invalidQuery() {
         // 以下查询无法工作，因为order和inventory在不同数据库
         // String jql = "SELECT o FROM Order o, Inventory i WHERE o.productId = i.productId";
-        
+
         // 正确做法 - 分别查询并在应用层关联
         List<Order> orders = orderRepository.findAll();
         Set<Long> productIds = orders.stream()
             .map(Order::getProductId)
             .collect(Collectors.toSet());
-        
+
         List<Inventory> inventories = inventoryRepository.findByProductIdIn(productIds);
-        
+
         // 应用层关联处理
         Map<Long, Inventory> inventoryMap = inventories.stream()
             .collect(Collectors.toMap(Inventory::getProductId, Function.identity()));
@@ -597,19 +597,19 @@ public class InvalidCrossDatabaseQuery {
 ```java
 @Configuration
 public class TransactionMonitoringConfig {
-    
+
     @Bean
     public PlatformTransactionManager transactionManager(
             UserTransactionManager atomikosTransactionManager,
             UserTransaction atomikosUserTransaction) {
-        
-        JtaTransactionManager jtaTransactionManager = 
+
+        JtaTransactionManager jtaTransactionManager =
             new JtaTransactionManager(atomikosUserTransaction, atomikosTransactionManager);
-        
+
         // 启用事务监控
         jtaTransactionManager.setTransactionSynchronization(
             JtaTransactionManager.SYNCHRONIZATION_ALWAYS);
-        
+
         return jtaTransactionManager;
     }
 }
@@ -637,33 +637,33 @@ logging.level.org.springframework.transaction = DEBUG
 ```java
 @Service
 public class OrderSagaService {
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @Autowired
     private InventoryService inventoryService;
-    
+
     @Autowired
     private PaymentService paymentService;
-    
+
     @Saga
     public void placeOrderSaga(Order order) {
         SagaBuilder saga = SagaBuilder.create()
             .withCompensation(this::compensateOrder);
-        
+
         // 步骤1: 创建订单（可补偿）
         saga.step(() -> orderService.createOrder(order))
             .withCompensation(() -> orderService.cancelOrder(order.getId()));
-        
+
         // 步骤2: 减少库存（可补偿）
         saga.step(() -> inventoryService.reserveStock(order.getProductId(), order.getQuantity()))
             .withCompensation(() -> inventoryService.releaseStock(order.getProductId(), order.getQuantity()));
-        
+
         // 步骤3: 处理支付（可补偿）
         saga.step(() -> paymentService.processPayment(order.getTotalAmount(), order.getUserId()))
             .withCompensation(() -> paymentService.refundPayment(order.getTotalAmount(), order.getUserId()));
-        
+
         try {
             saga.execute();
         } catch (SagaException e) {
@@ -671,7 +671,7 @@ public class OrderSagaService {
             throw new OrderFailedException("订单处理失败，已执行补偿", e);
         }
     }
-    
+
     private void compensateOrder() {
         // 总体补偿逻辑
     }

@@ -14,13 +14,13 @@ TypeScript 的核心在于为 JavaScript 提供了可选的**静态类型系统*
 
 可以将它们的关系理解为：**TypeScript = JavaScript + 类型系统 + 先进的 ECMAScript 特性**。
 
-| 特性 | JavaScript | TypeScript |
-| :--- | :--- | :--- |
-| 语言类型 | 动态弱类型语言 | 静态弱类型语言（编译时进行类型检查） |
-| 学习曲线 | 易于上手 | 需要理解类型概念，但 JS 基础无缝过渡 |
-| 规模适用性 | 更适合中小型项目 | 为大型、复杂应用项目而设计 |
-| 错误发现 | 大部分错误在运行时才发现 | 大部分错误在编译时（写代码时）即可发现 |
-| 开发工具支持 | 良好 | **极其强大**（智能提示、重构、导航等） |
+| 特性         | JavaScript               | TypeScript                             |
+| :----------- | :----------------------- | :------------------------------------- |
+| 语言类型     | 动态弱类型语言           | 静态弱类型语言（编译时进行类型检查）   |
+| 学习曲线     | 易于上手                 | 需要理解类型概念，但 JS 基础无缝过渡   |
+| 规模适用性   | 更适合中小型项目         | 为大型、复杂应用项目而设计             |
+| 错误发现     | 大部分错误在运行时才发现 | 大部分错误在编译时（写代码时）即可发现 |
+| 开发工具支持 | 良好                     | **极其强大**（智能提示、重构、导航等） |
 
 ## 2. 为什么使用 TypeScript？
 
@@ -33,18 +33,18 @@ TypeScript 的核心在于为 JavaScript 提供了可选的**静态类型系统*
 ```typescript
 // 定义一个 user 对象
 const user = {
-  firstName: "Angela",
-  lastName: "Davis",
-  role: "Professor",
+  firstName: 'Angela',
+  lastName: 'Davis',
+  role: 'Professor',
 };
 
 // 尝试访问一个不存在的属性 ‘name’
-console.log(user.name); 
+console.log(user.name);
 // ^^^^^^^^^^^^^^^^^^
 // 编译错误：Property 'name' does not exist on type '{ firstName: string; lastName: string; role: string; }'.
 ```
 
-*如上例所示，TypeScript 会立即用红色波浪线提示错误，无需运行代码。*
+_如上例所示，TypeScript 会立即用红色波浪线提示错误，无需运行代码。_
 
 ### 2.2 卓越的开发工具支持（IDE）
 
@@ -61,7 +61,7 @@ console.log(user.name);
 ```typescript
 // 类型清晰地定义了函数契约
 function calculatePrice(quantity: number, unitPrice: number, discount: number = 0): number {
-  return (quantity * unitPrice) * (1 - discount);
+  return quantity * unitPrice * (1 - discount);
 }
 
 // 调用时，编辑器会提示参数类型
@@ -85,23 +85,23 @@ TypeScript 包含了所有 JavaScript 的基础类型（`number`, `string`, `boo
 ```typescript
 let isDone: boolean = false;
 let decimal: number = 6;
-let color: string = "blue";
+let color: string = 'blue';
 let list: number[] = [1, 2, 3]; // 数组类型
 let alternativeList: Array<number> = [1, 2, 3]; // 泛型数组语法
 
 // 元组：表示一个已知元素数量和类型的数组
 let tuple: [string, number];
-tuple = ["hello", 10]; // OK
-tuple = [10, "hello"]; // Error
+tuple = ['hello', 10]; // OK
+tuple = [10, 'hello']; // Error
 
 // Any：逃避类型检查的“逃生舱”，应谨慎使用
 let notSure: any = 4;
-notSure = "maybe a string instead";
+notSure = 'maybe a string instead';
 notSure = false;
 
 // Void：通常用于表示没有返回值的函数
 function warnUser(): void {
-  console.log("This is my warning message!");
+  console.log('This is my warning message!');
 }
 ```
 
@@ -126,7 +126,7 @@ function createUser(user: User): void {
 
 const newUser: User = {
   id: 1,
-  name: "Alice",
+  name: 'Alice',
   createdAt: new Date(),
 };
 
@@ -141,22 +141,22 @@ createUser(newUser);
 // 联合类型
 let id: number | string;
 id = 123; // OK
-id = "ABC123"; // OK
+id = 'ABC123'; // OK
 // id = true; // Error
 
 // 字面量类型（常与联合类型一起使用）
-type ResultStatus = "success" | "fail" | "pending";
+type ResultStatus = 'success' | 'fail' | 'pending';
 let status: ResultStatus;
-status = "success"; // OK
-status = "error"; // Error: Type '"error"' is not assignable to type 'ResultStatus'.
+status = 'success'; // OK
+status = 'error'; // Error: Type '"error"' is not assignable to type 'ResultStatus'.
 
 function processResult(result: ResultStatus) {
-  if (result === "success") {
-    console.log("Passed!");
-  } else if (result === "fail") {
-    console.log("Failed!");
+  if (result === 'success') {
+    console.log('Passed!');
+  } else if (result === 'fail') {
+    console.log('Failed!');
   } else {
-    console.log("Waiting...");
+    console.log('Waiting...');
   }
 }
 ```
@@ -181,7 +181,8 @@ interface Bear extends Animal {
 type Animal = {
   name: string;
 };
-type Bear = Animal & { // 使用交叉类型 &
+type Bear = Animal & {
+  // 使用交叉类型 &
   honey: boolean;
 };
 ```
@@ -202,10 +203,10 @@ function identity<T>(arg: T): T {
 }
 
 // 使用方式一：明确指定类型
-let output1 = identity<string>("myString");
+let output1 = identity<string>('myString');
 // 使用方式二：更常见，让类型推论自动确定类型
 let output2 = identity(42);
-let output3 = identity({ name: "TS" });
+let output3 = identity({ name: 'TS' });
 
 // 泛型接口
 interface GenericIdentityFn<T> {
@@ -227,13 +228,13 @@ TypeScript 代码不能直接运行，需要先通过 **TypeScript 编译器（T
 ```json
 {
   "compilerOptions": {
-    "target": "ES2015",       // 编译目标JS版本
-    "module": "commonjs",     // 模块系统
-    "strict": true,           // 启用所有严格类型检查选项
+    "target": "ES2015", // 编译目标JS版本
+    "module": "commonjs", // 模块系统
+    "strict": true, // 启用所有严格类型检查选项
     "esModuleInterop": true,
-    "outDir": "./dist"        // 输出目录
+    "outDir": "./dist" // 输出目录
   },
-  "include": ["src/**/*"]     // 要编译的文件
+  "include": ["src/**/*"] // 要编译的文件
 }
 ```
 

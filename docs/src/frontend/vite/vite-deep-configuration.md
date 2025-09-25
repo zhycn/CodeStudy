@@ -16,8 +16,8 @@ Vite 的核心配置定义在项目根目录下的 `vite.config.js` (或 `vite.c
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,16 +28,16 @@ export default defineConfig({
   // 开发服务器选项
   server: {
     port: 3000,
-    open: true // 启动后自动在浏览器打开
+    open: true, // 启动后自动在浏览器打开
   },
   // 构建选项
   build: {
-    outDir: 'dist'
-  }
-})
+    outDir: 'dist',
+  },
+});
 ```
 
-*推荐使用 `defineConfig` 以获得更好的 TypeScript 智能提示。*
+_推荐使用 `defineConfig` 以获得更好的 TypeScript 智能提示。_
 
 ### 1.2 配置智能提示与环境区分
 
@@ -45,19 +45,19 @@ Vite 的配置可以基于开发/生产环境进行条件性设置。通过导�
 
 ```javascript
 // vite.config.js
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ command, mode, ssrBuild }) => {
   // 根据当前工作目录中的 `mode` 加载 .env 文件
   // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
-  const env = loadEnv(mode, process.cwd(), '')
-  
+  const env = loadEnv(mode, process.cwd(), '');
+
   // 现在可以使用 process.env.VITE_xxx 或 env.VITE_xxx
-  console.log(env.VITE_APP_TITLE)
-  
+  console.log(env.VITE_APP_TITLE);
+
   // 根据命令（dev/serve 或 build）返回不同的配置
-  const isBuild = command === 'build'
-  
+  const isBuild = command === 'build';
+
   return {
     // 公共基础路径
     base: isBuild ? '/production-sub-path/' : '/',
@@ -66,11 +66,11 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       __APP_VERSION__: JSON.stringify('1.0.0'),
       // 注意：直接注入环境变量可能会导致敏感信息泄露到客户端代码中
       // 请确保只注入以 VITE_ 为前缀的变量
-      'process.env.VITE_APP_TITLE': JSON.stringify(env.VITE_APP_TITLE)
+      'process.env.VITE_APP_TITLE': JSON.stringify(env.VITE_APP_TITLE),
     },
     // ... 其他配置
-  }
-})
+  };
+});
 ```
 
 ## 2. 核心配置项深度解析
@@ -81,8 +81,8 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import path from 'path'
+import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
   resolve: {
@@ -90,15 +90,15 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
-      '@assets': path.resolve(__dirname, './src/assets')
+      '@assets': path.resolve(__dirname, './src/assets'),
     },
     // 导入时省略的扩展名列表
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
-  }
-})
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+  },
+});
 ```
 
-*配置后，在代码中即可使用：`import MyComponent from '@/components/MyComponent.vue'`。*
+_配置后，在代码中即可使用：`import MyComponent from '@/components/MyComponent.vue'`。_
 
 ### 2.2 服务器选项 (server)
 
@@ -124,27 +124,27 @@ export default defineConfig({
       '/api': {
         target: 'http://jsonplaceholder.typicode.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
       // 正则表达式写法
       '^/fallback/.*': {
         target: 'http://jsonplaceholder.typicode.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/fallback/, '')
+        rewrite: (path) => path.replace(/^\/fallback/, ''),
       },
       // 代理 websockets 或 socket.io
       '/socket.io': {
         target: 'ws://localhost:3000',
-        ws: true
-      }
+        ws: true,
+      },
     },
     // 配置 CORS。默认启用并允许任何源，但通过此配置可以提供一个对象或函数来精确控制行为
     cors: {
       origin: '*',
-      credentials: true
-    }
-  }
-})
+      credentials: true,
+    },
+  },
+});
 ```
 
 ### 2.3 构建选项 (build)
@@ -173,11 +173,11 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             // 将 node_modules 中的依赖拆分成不同的 chunk
             if (id.includes('vue')) {
-              return 'vendor-vue'
+              return 'vendor-vue';
             } else if (id.includes('lodash')) {
-              return 'vendor-lodash'
+              return 'vendor-lodash';
             }
-            return 'vendor' // 其他依赖
+            return 'vendor'; // 其他依赖
           }
         },
         // 用于命名代码拆分时创建的共享 chunk
@@ -185,21 +185,21 @@ export default defineConfig({
         // 用于输出入口点的 chunk 的文件名
         entryFileNames: 'static/js/[name]-[hash].js',
         // 用于命名静态资源文件
-        assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
-      }
+        assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
+      },
     },
     // @rollup/plugin-terser 用于最小化 chunk
     minify: 'terser', // 'esbuild' | 'terser' | false， esbuild 更快， terser 压缩率更好
     terserOptions: {
       compress: {
         drop_console: true, // 生产环境移除 console
-        drop_debugger: true // 生产环境移除 debugger
-      }
+        drop_debugger: true, // 生产环境移除 debugger
+      },
     },
     // 设置为 false 可以禁用生产环境构建，避免项目被构建
-    emptyOutDir: true
-  }
-})
+    emptyOutDir: true,
+  },
+});
 ```
 
 ### 2.4 预览选项 (preview)
@@ -215,11 +215,11 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  }
-})
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+});
 ```
 
 ### 2.5 依赖优化选项 (optimizeDeps)
@@ -235,9 +235,9 @@ export default defineConfig({
     // 排除不需要预构建的依赖
     exclude: ['some-big-dependency'],
     // 强制预构建，即使它们已经被优化过（例如，在手动更改了 node_modules 中的文件后）
-    force: true
-  }
-})
+    force: true,
+  },
+});
 ```
 
 ### 2.6 CSS 相关选项 (css)
@@ -254,7 +254,7 @@ export default defineConfig({
       // [name]: 文件名（不含扩展名）
       // [local]: 类名标识符
       // [hash:base64:5]: 基于类名计算的 5 位 hash
-      generateScopedName: '[name]__[local]___[hash:base64:5]'
+      generateScopedName: '[name]__[local]___[hash:base64:5]',
     },
     // 预处理器配置
     preprocessorOptions: {
@@ -263,19 +263,19 @@ export default defineConfig({
         additionalData: `
           @import "@assets/styles/variables.scss";
           @import "@assets/styles/mixins.scss";
-        `
+        `,
       },
       less: {
         math: 'always',
         globalVars: {
-          primary: '#1DA57A'
-        }
-      }
+          primary: '#1DA57A',
+        },
+      },
     },
     // 进行源码映射（对某些 CSS 插件调试有用）
-    devSourcemap: true
-  }
-})
+    devSourcemap: true,
+  },
+});
 ```
 
 ### 2.7 环境变量与模式 (env)
@@ -295,9 +295,9 @@ export default defineConfig({
   // define 选项用于定义全局常量替换
   // 注意：每项值都将被 JSON.stringify 包裹，除非使用 JSON.stringify 包裹整个值
   define: {
-    __APP_ENV__: JSON.stringify(process.env.VITE_APP_TITLE)
-  }
-})
+    __APP_ENV__: JSON.stringify(process.env.VITE_APP_TITLE),
+  },
+});
 ```
 
 在客户端代码中，可以使用 `import.meta.env.VITE_APP_TITLE` 来访问以 `VITE_` 开头的变量。
@@ -310,12 +310,12 @@ export default defineConfig({
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx' // Vue JSX 支持
-import legacy from '@vitejs/plugin-legacy' // 为传统浏览器提供支持
-import { VitePWA } from 'vite-plugin-pwa' // PWA 支持
-import { visualizer } from 'rollup-plugin-visualizer' // 打包分析
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx'; // Vue JSX 支持
+import legacy from '@vitejs/plugin-legacy'; // 为传统浏览器提供支持
+import { VitePWA } from 'vite-plugin-pwa'; // PWA 支持
+import { visualizer } from 'rollup-plugin-visualizer'; // 打包分析
 
 export default defineConfig({
   plugins: [
@@ -323,13 +323,13 @@ export default defineConfig({
     vueJsx(),
     // 传统浏览器插件，会为最终包生成对应的 legacy bundle
     legacy({
-      targets: ['defaults', 'not IE 11']
+      targets: ['defaults', 'not IE 11'],
     }),
     // PWA 配置
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
       },
       manifest: {
         name: 'My App',
@@ -340,18 +340,18 @@ export default defineConfig({
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
-          }
-        ]
-      }
+            type: 'image/png',
+          },
+        ],
+      },
     }),
     // 打包分析（默认只在 build 模式下运行）
     visualizer({
       filename: 'dist/stats.html',
-      open: true
-    })
-  ]
-})
+      open: true,
+    }),
+  ],
+});
 ```
 
 ### 3.2 自定义简单插件示例
@@ -366,18 +366,18 @@ export default defineConfig({
       name: 'my-custom-plugin',
       // Vite 独有钩子：在配置读取后、服务器启动前调用
       configResolved(resolvedConfig) {
-        console.log('Vite 配置已解析:', resolvedConfig.root)
+        console.log('Vite 配置已解析:', resolvedConfig.root);
       },
       // 通用 Rollup 钩子：转换每个模块
       transform(code, id) {
         if (id.endsWith('.vue')) {
           // 对 .vue 文件做一些简单的字符串操作（示例）
-          return code.replace('Hello', 'Hi')
+          return code.replace('Hello', 'Hi');
         }
-      }
-    }
-  ]
-})
+      },
+    },
+  ],
+});
 ```
 
 ## 4. 高级配置与技巧
@@ -388,7 +388,7 @@ export default defineConfig({
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 
 // 生成特定目标的配置
 const getConfig = (target) => {
@@ -398,7 +398,7 @@ const getConfig = (target) => {
         lib: {
           entry: path.resolve(__dirname, 'lib/main.js'),
           name: 'MyLib',
-          fileName: (format) => `my-lib.${format}.js`
+          fileName: (format) => `my-lib.${format}.js`,
         },
         rollupOptions: {
           // 确保外部化处理那些你不想打包进库的依赖
@@ -406,21 +406,21 @@ const getConfig = (target) => {
           output: {
             // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
             globals: {
-              vue: 'Vue'
-            }
-          }
-        }
-      }
-    })
+              vue: 'Vue',
+            },
+          },
+        },
+      },
+    });
   }
 
   // 默认应用配置
   return defineConfig({
     // ... 应用配置
-  })
-}
+  });
+};
 
-export default getConfig(process.env.BUILD_TARGET)
+export default getConfig(process.env.BUILD_TARGET);
 ```
 
 ### 4.2 性能优化配置
@@ -438,12 +438,12 @@ export default defineConfig({
       output: {
         globals: {
           vue: 'Vue',
-          react: 'React'
-        }
-      }
-    }
-  }
-})
+          react: 'React',
+        },
+      },
+    },
+  },
+});
 ```
 
 然后在你的 `index.html` 中通过 `<script>` 标签引入这些外部化的资源。

@@ -229,7 +229,7 @@ response = requests.get('https://api.github.com')
 if response.status_code == requests.codes.ok:
     print('Success!')
     # 响应内容（文本形式）
-    print(response.text[:100]) 
+    print(response.text[:100])
     # 如果响应是 JSON，直接解析为字典
     # data = response.json()
     # print(data['current_user_url'])
@@ -290,18 +290,18 @@ print(df[df['Age'] > 30])
 
 ## 3. 总结与建议
 
-| 模块 | 类别 | 主要用途 | 是否需要安装 |
-| :--- | :--- | :--- | :--- |
-| **`os`** | 内置 | 操作系统交互、文件路径操作 | 否 |
-| **`sys`** | 内置 | 访问解释器参数、命令行参数 | 否 |
-| **`json`** | 内置 | JSON 数据的序列化与反序列化 | 否 |
-| **`datetime`** | 内置 | 日期和时间处理 | 否 |
-| **`collections`** | 内置 | 高级容器数据类型（计数、默认字典等） | 否 |
-| **`logging`** | 内置 | 应用程序日志记录 | 否 |
-| **`requests`** | 第三方 | 发送 HTTP 请求，与 Web APIs 交互 | 是 (`pip install requests`) |
-| **`pandas`** | 第三方 | 数据分析和 manipulation | 是 (`pip install pandas`) |
-| **`numpy`** | 第三方 | 数值计算和数组操作 | 是 (`pip install numpy`) |
-| **`matplotlib`** | 第三方 | 数据可视化 | 是 (`pip install matplotlib`) |
+| 模块              | 类别   | 主要用途                             | 是否需要安装                  |
+| :---------------- | :----- | :----------------------------------- | :---------------------------- |
+| **`os`**          | 内置   | 操作系统交互、文件路径操作           | 否                            |
+| **`sys`**         | 内置   | 访问解释器参数、命令行参数           | 否                            |
+| **`json`**        | 内置   | JSON 数据的序列化与反序列化          | 否                            |
+| **`datetime`**    | 内置   | 日期和时间处理                       | 否                            |
+| **`collections`** | 内置   | 高级容器数据类型（计数、默认字典等） | 否                            |
+| **`logging`**     | 内置   | 应用程序日志记录                     | 否                            |
+| **`requests`**    | 第三方 | 发送 HTTP 请求，与 Web APIs 交互     | 是 (`pip install requests`)   |
+| **`pandas`**      | 第三方 | 数据分析和 manipulation              | 是 (`pip install pandas`)     |
+| **`numpy`**       | 第三方 | 数值计算和数组操作                   | 是 (`pip install numpy`)      |
+| **`matplotlib`**  | 第三方 | 数据可视化                           | 是 (`pip install matplotlib`) |
 
 ### 学习建议
 

@@ -23,8 +23,8 @@ TypeScript 作为 JavaScript 的超集，完全继承了 JavaScript 的字符串
 
 ```typescript
 // 变量类型注解
-let firstName: string = "Alice";
-let lastName = "Smith"; // 类型推断为 string
+let firstName: string = 'Alice';
+let lastName = 'Smith'; // 类型推断为 string
 
 // 函数参数与返回值类型注解
 function greet(name: string): string {
@@ -44,8 +44,8 @@ console.log(greeting); // 输出: Hello, Alice!
 
 ```typescript
 const user = {
-  firstName: "Bob",
-  hobby: "coding",
+  firstName: 'Bob',
+  hobby: 'coding',
 };
 
 // 1. 字符串插值
@@ -74,20 +74,20 @@ console.log(calculation); // 输出: Five plus ten is 15, not 20.
 TypeScript 可以完全访问 JavaScript 的所有字符串方法，并能在你错误使用时提供编译时错误提示。
 
 ```typescript
-const sampleString: string = "Hello, TypeScript!";
+const sampleString: string = 'Hello, TypeScript!';
 
 // 常用方法示例
 console.log(sampleString.length); // 输出: 19
 console.log(sampleString.toUpperCase()); // 输出: "HELLO, TYPESCRIPT!"
 console.log(sampleString.substring(0, 5)); // 输出: "Hello"
-console.log(sampleString.includes("Type")); // 输出: true
-console.log(sampleString.replace("TypeScript", "World")); // 输出: "Hello, World!"
+console.log(sampleString.includes('Type')); // 输出: true
+console.log(sampleString.replace('TypeScript', 'World')); // 输出: "Hello, World!"
 
 // TypeScript 会进行类型检查
 console.log(sampleString.substr(0, 5)); // 编译通过，但 substr 是旧方法，建议使用 substring 或 slice。
 
 // 下面的代码会在编译时报错
-console.log(sampleString.nonExistentMethod()); 
+console.log(sampleString.nonExistentMethod());
 // Error: Property 'nonExistentMethod' does not exist on type 'string'.
 ```
 
@@ -99,8 +99,8 @@ console.log(sampleString.nonExistentMethod());
 
 ```typescript
 // 将类型定义为特定的几个字符串值
-type EventType = "click" | "doubleClick" | "mouseover";
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
+type EventType = 'click' | 'doubleClick' | 'mouseover';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 function handleEvent(event: EventType): void {
   console.log(`Handling event: ${event}`);
@@ -111,14 +111,14 @@ function makeApiCall(method: HttpMethod, url: string): void {
 }
 
 // 正确用法
-handleEvent("click"); // OK
-makeApiCall("POST", "/api/users"); // OK
+handleEvent('click'); // OK
+makeApiCall('POST', '/api/users'); // OK
 
 // 错误用法：会在编译时立即报错
-handleEvent("scroll"); 
+handleEvent('scroll');
 // Error: Argument of type '"scroll"' is not assignable to parameter of type 'EventType'.
 
-makeApiCall("PATCH", "/api/users");
+makeApiCall('PATCH', '/api/users');
 // Error: Argument of type '"PATCH"' is not assignable to parameter of type 'HttpMethod'.
 ```
 
@@ -130,22 +130,22 @@ TypeScript 4.1 引入了模板字面量类型，它允许你基于字符串模�
 
 ```typescript
 // 基础示例：组合出所有可能的 CSS padding 方向
-type VerticalDirection = "top" | "bottom";
-type HorizontalDirection = "left" | "right";
+type VerticalDirection = 'top' | 'bottom';
+type HorizontalDirection = 'left' | 'right';
 type Direction = VerticalDirection | HorizontalDirection;
 type PaddingRule = `padding-${Direction}`;
 // 等价于: "padding-top" | "padding-bottom" | "padding-left" | "padding-right"
 
-const rule: PaddingRule = "padding-top"; // OK
-const invalidRule: PaddingRule = "padding-middle"; // Error
+const rule: PaddingRule = 'padding-top'; // OK
+const invalidRule: PaddingRule = 'padding-middle'; // Error
 
 // 高级示例：动态构建 API 端点路径
-type Entity = "user" | "post" | "comment";
+type Entity = 'user' | 'post' | 'comment';
 type ApiPath = `/api/v1/${Entity}/${number}` | `/api/v1/${Entity}`;
 
-const path1: ApiPath = "/api/v1/user/123"; // OK
-const path2: ApiPath = "/api/v1/post"; // OK
-const path3: ApiPath = "/api/v1/comment/abc"; 
+const path1: ApiPath = '/api/v1/user/123'; // OK
+const path2: ApiPath = '/api/v1/post'; // OK
+const path3: ApiPath = '/api/v1/comment/abc';
 // Error: Type 'string' is not assignable to type 'number'.
 ```
 
@@ -162,13 +162,13 @@ interface StringMap {
 }
 
 const scores: StringMap = {
-  "Alice": 100,
-  "Bob": 90,
+  Alice: 100,
+  Bob: 90,
 };
 
 // 2. keyof 和字符串
 const user = {
-  name: "Alice",
+  name: 'Alice',
   age: 30,
 };
 type UserKeys = keyof typeof user; // 等价于 type UserKeys = "name" | "age"
@@ -176,9 +176,9 @@ type UserKeys = keyof typeof user; // 等价于 type UserKeys = "name" | "age"
 function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
   return obj[key];
 }
-const userName: string = getProperty(user, "name"); // OK, 类型安全
-const userAge: number = getProperty(user, "age"); // OK, 类型安全
-const invalid = getProperty(user, "email"); 
+const userName: string = getProperty(user, 'name'); // OK, 类型安全
+const userAge: number = getProperty(user, 'age'); // OK, 类型安全
+const invalid = getProperty(user, 'email');
 // Error: Argument of type '"email"' is not assignable to parameter of type '"name" | "age"'.
 ```
 
@@ -186,37 +186,38 @@ const invalid = getProperty(user, "email");
 
 1. **混淆 `==` 和 `===`**：虽然这是 JavaScript 的问题，但 TypeScript 同样存在。始终使用 `===` 进行严格比较。
 
-    ```typescript
-    const input: string = "123";
-    if (input === 123) { // TypeScript 会提示错误：This condition will always return 'false'
-      // ... 
-    }
-    ```
+   ```typescript
+   const input: string = '123';
+   if (input === 123) {
+     // TypeScript 会提示错误：This condition will always return 'false'
+     // ...
+   }
+   ```
 
 2. **错误的方法调用**：TypeScript 会捕获这些错误。
 
-    ```typescript
-    let message: string = "Hello";
-    message(); 
-    // Error: This expression is not callable. Type 'String' has no call signatures.
-    ```
+   ```typescript
+   let message: string = 'Hello';
+   message();
+   // Error: This expression is not callable. Type 'String' has no call signatures.
+   ```
 
 3. **误以为字符串字面量类型是 `string`**：在需要更广泛的地方使用了受限的类型。
 
-    ```typescript
-    type Color = "red" | "blue";
-    function paint(color: Color) { ... }
+   ```typescript
+   type Color = "red" | "blue";
+   function paint(color: Color) { ... }
 
-    const myColor: string = getUserInput();
-    paint(myColor); 
-    // Error: Argument of type 'string' is not assignable to parameter of type 'Color'.
-    // 修复：需要进行类型收缩（Type Narrowing）
-    if (myColor === "red" || myColor === "blue") {
-      paint(myColor); // OK, 此时 TypeScript 知道 myColor 是 "red" | "blue"
-    }
-    // 或者使用类型断言（谨慎使用）
-    paint(myColor as Color);
-    ```
+   const myColor: string = getUserInput();
+   paint(myColor);
+   // Error: Argument of type 'string' is not assignable to parameter of type 'Color'.
+   // 修复：需要进行类型收缩（Type Narrowing）
+   if (myColor === "red" || myColor === "blue") {
+     paint(myColor); // OK, 此时 TypeScript 知道 myColor 是 "red" | "blue"
+   }
+   // 或者使用类型断言（谨慎使用）
+   paint(myColor as Color);
+   ```
 
 ## 最佳实践总结
 

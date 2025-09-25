@@ -25,25 +25,25 @@ BeanDefinition 是 Spring 中**最重要的接口之一**，它完整描述了�
 public interface BeanDefinition {
     // 设置 Bean 的类名
     void setBeanClassName(String beanClassName);
-    
+
     // 获取 Bean 的作用域
     String getScope();
-    
+
     // 设置 Bean 的作用域
     void setScope(String scope);
-    
+
     // 设置是否延迟初始化
     void setLazyInit(boolean lazyInit);
-    
+
     // 设置依赖的 Bean
     void setDependsOn(String... dependsOn);
-    
+
     // 设置初始化方法
     void setInitMethodName(String initMethodName);
-    
+
     // 设置销毁方法
     void setDestroyMethodName(String destroyMethodName);
-    
+
     // 设置构造函数参数值
     void setConstructorArgumentValues(ConstructorArgumentValues argumentValues);
 }
@@ -63,13 +63,13 @@ BeanDefinitionRegistry 接口用于**注册和管理** BeanDefinition：
 public interface BeanDefinitionRegistry {
     // 注册新的 BeanDefinition
     void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
-    
+
     // 移除已注册的 BeanDefinition
     void removeBeanDefinition(String beanName);
-    
+
     // 获取 BeanDefinition
     BeanDefinition getBeanDefinition(String beanName);
-    
+
     // 检查是否包含指定名称的 BeanDefinition
     boolean containsBeanDefinition(String beanName);
 }
@@ -85,16 +85,16 @@ BeanFactory 是 Spring IoC 容器的**顶层接口**，提供了基础的依赖�
 public interface BeanFactory {
     // 获取 Bean 实例
     Object getBean(String name) throws BeansException;
-    
+
     // 根据类型获取 Bean 实例
     <T> T getBean(Class<T> requiredType) throws BeansException;
-    
+
     // 检查是否包含指定名称的 Bean
     boolean containsBean(String name);
-    
+
     // 判断 Bean 是否为单例
     boolean isSingleton(String name) throws NoSuchBeanDefinitionException;
-    
+
     // 判断 Bean 是否为原型
     boolean isPrototype(String name) throws NoSuchBeanDefinitionException;
 }
@@ -114,16 +114,16 @@ ConfigurableBeanFactory 扩展了 BeanFactory 接口，提供了**配置 BeanFac
 public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, SingletonBeanRegistry {
     // 设置类加载器
     void setBeanClassLoader(ClassLoader beanClassLoader);
-    
+
     // 添加 BeanPostProcessor
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
-    
+
     // 注册作用域
     void registerScope(String scopeName, Scope scope);
-    
+
     // 注册别名
     void registerAlias(String beanName, String alias) throws BeanDefinitionStoreException;
-    
+
     // 销毁单例 Bean
     void destroySingletons();
 }
@@ -134,24 +134,24 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 ConfigurableListableBeanFactory 是大多数可列出的 BeanFactory 的配置接口，**在分析和修改 BeanDefinition 及预初始化单例时使用** 。
 
 ```java
-public interface ConfigurableListableBeanFactory 
+public interface ConfigurableListableBeanFactory
     extends ListableBeanFactory, AutowireCapableBeanFactory, ConfigurableBeanFactory {
-    
+
     // 忽略给定的依赖类型
     void ignoreDependencyType(Class<?> type);
-    
+
     // 忽略给定的依赖接口
     void ignoreDependencyInterface(Class<?> ifc);
-    
+
     // 注册可解析的依赖
     void registerResolvableDependency(Class<?> dependencyType, Object autowiredValue);
-    
+
     // 获取 BeanDefinition
     BeanDefinition getBeanDefinition(String beanName) throws NoSuchBeanDefinitionException;
-    
+
     // 冻结配置
     void freezeConfiguration();
-    
+
     // 预实例化单例
     void preInstantiateSingletons() throws BeansException;
 }
@@ -169,7 +169,7 @@ public interface BeanPostProcessor {
     default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
     }
-    
+
     // 在初始化之后调用
     default Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         return bean;
@@ -182,13 +182,13 @@ public interface BeanPostProcessor {
 ```java
 @Component
 public class CustomBeanPostProcessor implements BeanPostProcessor {
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         System.out.println("Before initialization: " + beanName);
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         System.out.println("After initialization: " + beanName);
@@ -214,7 +214,7 @@ public interface BeanFactoryPostProcessor {
 ```java
 @Component
 public class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
-    
+
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         BeanDefinition beanDefinition = beanFactory.getBeanDefinition("myBean");
@@ -246,13 +246,13 @@ public interface DisposableBean {
 ```java
 @Component
 public class ExampleBean implements InitializingBean, DisposableBean {
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         // 初始化逻辑
         System.out.println("Bean is being initialized");
     }
-    
+
     @Override
     public void destroy() throws Exception {
         // 清理逻辑
@@ -292,13 +292,13 @@ public interface BeanFactoryAware {
 public class AwareBean implements BeanNameAware, BeanFactoryAware {
     private String beanName;
     private BeanFactory beanFactory;
-    
+
     @Override
     public void setBeanName(String name) {
         this.beanName = name;
         System.out.println("Bean name is: " + name);
     }
-    
+
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
@@ -317,10 +317,10 @@ FactoryBean 是一种特殊的 Bean，用于**创建复杂的对象**，Spring �
 public interface FactoryBean<T> {
     // 返回由 FactoryBean 创建的对象实例
     T getObject() throws Exception;
-    
+
     // 返回 FactoryBean 创建的对象类型
     Class<?> getObjectType();
-    
+
     // 创建的对象是否是单例
     default boolean isSingleton() {
         return true;
@@ -333,13 +333,13 @@ public interface FactoryBean<T> {
 ```java
 @Component
 public class CustomFactoryBean implements FactoryBean<MyComplexObject> {
-    
+
     @Override
     public MyComplexObject getObject() throws Exception {
         // 创建复杂对象的逻辑
         return new MyComplexObject();
     }
-    
+
     @Override
     public Class<?> getObjectType() {
         return MyComplexObject.class;
@@ -357,7 +357,7 @@ public interface SmartFactoryBean<T> extends FactoryBean<T> {
     default boolean isEagerInit() {
         return false;
     }
-    
+
     // 是否原型模式
     default boolean isPrototype() {
         return false;
@@ -388,13 +388,13 @@ public interface BeanRegistrar {
 ```java
 @Component
 public class CustomBeanRegistrar implements BeanRegistrar {
-    
+
     @Override
     public void registerBeans(BeanDefinitionRegistry registry) {
         GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
         beanDefinition.setBeanClass(MyBean.class);
         beanDefinition.setScope(BeanDefinition.SCOPE_SINGLETON);
-        
+
         registry.registerBeanDefinition("myBean", beanDefinition);
     }
 }
@@ -418,57 +418,57 @@ Spring Beans 核心组件的协作主要体现在 **Bean 的生命周期管理**
 // 定义一个有完整生命周期的 Bean
 @Component
 @Scope("singleton")
-public class LifecycleBean implements BeanNameAware, BeanFactoryAware, 
+public class LifecycleBean implements BeanNameAware, BeanFactoryAware,
         InitializingBean, DisposableBean {
-    
+
     private String beanName;
     private BeanFactory beanFactory;
     private Dependency dependency;
-    
+
     // 构造器注入
     public LifecycleBean(Dependency dependency) {
         this.dependency = dependency;
         System.out.println("1. Bean实例化");
     }
-    
+
     // Setter 注入
     @Autowired
     public void setOtherDependency(OtherDependency other) {
         System.out.println("2. 属性注入");
     }
-    
+
     @Override
     public void setBeanName(String name) {
         this.beanName = name;
         System.out.println("3. BeanNameAware: " + name);
     }
-    
+
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory = beanFactory;
         System.out.println("4. BeanFactoryAware");
     }
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         System.out.println("6. InitializingBean.afterPropertiesSet");
     }
-    
+
     @PostConstruct
     public void init() {
         System.out.println("5. @PostConstruct 方法");
     }
-    
+
     @PreDestroy
     public void preDestroy() {
         System.out.println("8. @PreDestroy 方法");
     }
-    
+
     @Override
     public void destroy() throws Exception {
         System.out.println("9. DisposableBean.destroy");
     }
-    
+
     public void doSomething() {
         System.out.println("7. Bean使用中");
     }
@@ -477,7 +477,7 @@ public class LifecycleBean implements BeanNameAware, BeanFactoryAware,
 // 自定义 BeanPostProcessor
 @Component
 public class CustomBeanPostProcessor implements BeanPostProcessor {
-    
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         if (bean instanceof LifecycleBean) {
@@ -485,7 +485,7 @@ public class CustomBeanPostProcessor implements BeanPostProcessor {
         }
         return bean;
     }
-    
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         if (bean instanceof LifecycleBean) {
@@ -502,12 +502,12 @@ Spring Beans 模块的核心组件构成了 Spring 框架的**基础架构**，�
 
 在实际开发中，开发者应充分利用这些组件的扩展能力，同时遵循 Spring 的设计理念，编写出更加优雅、可维护的代码。
 
-| 组件类别 | 核心接口 | 主要功能 |
-|---------|---------|---------|
+| 组件类别 | 核心接口                               | 主要功能                   |
+| -------- | -------------------------------------- | -------------------------- |
 | Bean定义 | BeanDefinition, BeanDefinitionRegistry | 描述和注册Bean的配置元数据 |
-| Bean工厂 | BeanFactory, ConfigurableBeanFactory | Bean的创建、管理和访问 |
-| 生命周期 | BeanPostProcessor, InitializingBean | 管理Bean的初始化和销毁过程 |
-| 感知回调 | BeanNameAware, BeanFactoryAware | Bean获取容器信息 |
-| 特殊Bean | FactoryBean, SmartFactoryBean | 创建复杂对象 |
+| Bean工厂 | BeanFactory, ConfigurableBeanFactory   | Bean的创建、管理和访问     |
+| 生命周期 | BeanPostProcessor, InitializingBean    | 管理Bean的初始化和销毁过程 |
+| 感知回调 | BeanNameAware, BeanFactoryAware        | Bean获取容器信息           |
+| 特殊Bean | FactoryBean, SmartFactoryBean          | 创建复杂对象               |
 
 掌握这些核心组件，不仅有助于更好地使用 Spring 框架，也能为理解 Spring 的更高级特性（如 Spring Boot、Spring Cloud）奠定坚实基础。

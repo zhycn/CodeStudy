@@ -203,16 +203,16 @@ console.log(arr[5]); // ✅ OK (类型为 string | number | boolean | undefined)
 
 2. **不可变性 (Immutability)**：如果元组在创建后不应被修改，始终使用 `readonly` 修饰符或 `as const` 断言。这可以防止意外的更改并提高代码的可预测性。
 
-    ```typescript
-    // 推荐
-    function getConfig(): readonly [string, number] {
-      return ['mode', 1] as const;
-    }
-    ```
+   ```typescript
+   // 推荐
+   function getConfig(): readonly [string, number] {
+     return ['mode', 1] as const;
+   }
+   ```
 
 3. **谨慎选择元组 vs 对象**：
-    - 使用**元组**：当值的顺序具有内在意义且长度固定时（如坐标 `[x, y]`、`useState` 的返回值）。
-    - 使用**对象**：当每个值都有明确的含义且未来可能添加可选字段时（如配置项 `{ host: string, port: number }`）。对象通过属性名提供更多的上下文，不受参数顺序影响。
+   - 使用**元组**：当值的顺序具有内在意义且长度固定时（如坐标 `[x, y]`、`useState` 的返回值）。
+   - 使用**对象**：当每个值都有明确的含义且未来可能添加可选字段时（如配置项 `{ host: string, port: number }`）。对象通过属性名提供更多的上下文，不受参数顺序影响。
 
 4. **利用可选和剩余元素**：使用 `?` 和 `...` 语法来创建更灵活、更精确的元组类型，而不是回退到任何 `any`。
 
@@ -220,14 +220,14 @@ console.log(arr[5]); // ✅ OK (类型为 string | number | boolean | undefined)
 
 6. **为元组提供类型别名**：几乎总是为你定义的元组创建一个 `type` 或 `interface`。这使得代码更易于阅读、维护和重用。
 
-    ```typescript
-    // 不推荐 (魔法数字/字符串)
-    function calculate(a: [number, number, number]): number { ... }
+   ```typescript
+   // 不推荐 (魔法数字/字符串)
+   function calculate(a: [number, number, number]): number { ... }
 
-    // 推荐
-    type Coordinate3D = [number, number, number];
-    function calculate(a: Coordinate3D): number { ... }
-    ```
+   // 推荐
+   type Coordinate3D = [number, number, number];
+   function calculate(a: Coordinate3D): number { ... }
+   ```
 
 ## 结论
 

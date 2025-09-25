@@ -27,11 +27,11 @@ author: zhycn
 
 下表对比了端到端测试与其他测试类型的区别：
 
-| 测试类型 | 测试范围 | 执行速度 | 维护成本 | 主要目的 |
-|---------|---------|---------|---------|---------|
-| 单元测试 | 单个方法或类 | 快 | 低 | 验证代码逻辑正确性 |
-| 集成测试 | 模块间交互 | 中等 | 中等 | 验证模块集成是否正确 |
-| 端到端测试 | 整个系统 | 慢 | 高 | 验证完整业务流程 |
+| 测试类型   | 测试范围     | 执行速度 | 维护成本 | 主要目的             |
+| ---------- | ------------ | -------- | -------- | -------------------- |
+| 单元测试   | 单个方法或类 | 快       | 低       | 验证代码逻辑正确性   |
+| 集成测试   | 模块间交互   | 中等     | 中等     | 验证模块集成是否正确 |
+| 端到端测试 | 整个系统     | 慢       | 高       | 验证完整业务流程     |
 
 ## 2. Spring 端到端测试基础
 
@@ -276,13 +276,13 @@ public void testCompleteOrderProcess() {
     OrderResponse order = createOrder();
     PaymentResponse payment = processPayment(order.getId());
     OrderStatus status = checkOrderStatus(order.getId());
-    
+
     // 多维度断言
     assertAll("Order process verification",
         () -> assertNotNull(order.getId(), "Order ID should not be null"),
-        () -> assertEquals(PAYMENT_SUCCESS, payment.getStatus(), 
+        () -> assertEquals(PAYMENT_SUCCESS, payment.getStatus(),
                          "Payment should be successful"),
-        () -> assertEquals(OrderStatus.COMPLETED, status, 
+        () -> assertEquals(OrderStatus.COMPLETED, status,
                          "Order status should be completed")
     );
 }
@@ -305,7 +305,7 @@ public class SecureEndpointE2ETest {
     public void testAccessToProtectedResourceWithoutAuth() {
         ResponseEntity<String> response = restTemplate.getForEntity(
             "/api/protected", String.class);
-        
+
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
 
@@ -318,7 +318,7 @@ public class SecureEndpointE2ETest {
 
         ResponseEntity<String> response = restTemplate.exchange(
             "/api/protected", HttpMethod.GET, entity, String.class);
-        
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
@@ -351,13 +351,13 @@ public class BatchJobE2ETest {
         // 准备测试数据
         jdbcTemplate.update("DELETE FROM orders");
         jdbcTemplate.update("INSERT INTO orders VALUES (1, 'NEW', 100.0)");
-        
+
         // 执行批处理作业
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
-        
+
         // 验证结果
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-        
+
         Integer processedCount = jdbcTemplate.queryForObject(
             "SELECT COUNT(*) FROM processed_orders", Integer.class);
         assertEquals(1, processedCount.intValue());
@@ -393,10 +393,10 @@ public class MicroserviceE2ETest {
         // 调用API并验证响应
         ResponseEntity<ApiResponse> response = restTemplate.getForEntity(
             "/api/integrate/test", ApiResponse.class);
-        
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("test-data", response.getBody().getData());
-        
+
         // 验证服务调用
         verify(serviceClient, times(1)).getData("test");
     }
@@ -408,28 +408,28 @@ public class MicroserviceE2ETest {
 ### 7.1 测试环境问题
 
 1. **Mock 失效问题**：
-    - 现象：`@MockitoBean` 未生效，仍调用真实实现
-    - 解决方案：确保测试类有 `@SpringBootTest` 或相关切片测试注解，检查包扫描范围
+   - 现象：`@MockitoBean` 未生效，仍调用真实实现
+   - 解决方案：确保测试类有 `@SpringBootTest` 或相关切片测试注解，检查包扫描范围
 
 2. **循环依赖问题**：
-    - 现象：因 Mock 对象导致应用上下文初始化失败
-    - 解决方案：使用 `@Lazy` 注解延迟注入，或重构组件消除循环依赖
+   - 现象：因 Mock 对象导致应用上下文初始化失败
+   - 解决方案：使用 `@Lazy` 注解延迟注入，或重构组件消除循环依赖
 
 ### 7.2 数据一致性问题
 
 1. **测试间数据污染**：
-    - 解决方案：使用 `@DirtiesContext` 注解或在每个测试前清理数据库
-    - 示例：`@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)`
+   - 解决方案：使用 `@DirtiesContext` 注解或在每个测试前清理数据库
+   - 示例：`@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)`
 
 2. **事务管理问题**：
-    - 解决方案：明确配置测试事务行为
-    - 示例：`@Transactional(propagation = Propagation.NOT_SUPPORTED)`
+   - 解决方案：明确配置测试事务行为
+   - 示例：`@Transactional(propagation = Propagation.NOT_SUPPORTED)`
 
 ### 7.3 性能问题
 
 1. **测试执行缓慢**：
-    - 解决方案：使用测试切片(`@WebMvcTest`, `@DataJpaTest`)替代完整的 `@SpringBootTest`
-    - 使用嵌入式数据库而非真实数据库
+   - 解决方案：使用测试切片(`@WebMvcTest`, `@DataJpaTest`)替代完整的 `@SpringBootTest`
+   - 使用嵌入式数据库而非真实数据库
 
 ## 8. 持续集成中的端到端测试
 
@@ -453,18 +453,18 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Run E2E Tests
-      run: mvn test -Dtest=*E2ETest -Dspring.profiles.active=ci
-      env:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
-        SPRING_DATASOURCE_USERNAME: postgres
-        SPRING_DATASOURCE_PASSWORD: password
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Run E2E Tests
+        run: mvn test -Dtest=*E2ETest -Dspring.profiles.active=ci
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: password
 ```
 
 ## 9. 总结
@@ -480,12 +480,12 @@ jobs:
 
 ## 附录：常用注解参考
 
-| 注解 | 用途 | 示例 |
-|------|------|------|
-| `@SpringBootTest` | 加载完整应用上下文 | `@SpringBootTest(webEnvironment = RANDOM_PORT)` |
-| `@WebMvcTest` | 测试 MVC 控制器 | `@WebMvcTest(UserController.class)` |
-| `@DataJpaTest` | 测试 JPA 组件 | `@DataJpaTest` |
-| `@MockitoBean` | 创建并注入 Mock 对象 | `@MockitoBean UserService userService` |
-| `@Sql` | 执行 SQL 脚本 | `@Sql("/test-data.sql")` |
-| `@Transactional` | 配置测试事务 | `@Transactional(propagation = NOT_SUPPORTED)` |
-| `@TestPropertySource` | 指定测试属性源 | `@TestPropertySource(properties = "key=value")` |
+| 注解                  | 用途                 | 示例                                            |
+| --------------------- | -------------------- | ----------------------------------------------- |
+| `@SpringBootTest`     | 加载完整应用上下文   | `@SpringBootTest(webEnvironment = RANDOM_PORT)` |
+| `@WebMvcTest`         | 测试 MVC 控制器      | `@WebMvcTest(UserController.class)`             |
+| `@DataJpaTest`        | 测试 JPA 组件        | `@DataJpaTest`                                  |
+| `@MockitoBean`        | 创建并注入 Mock 对象 | `@MockitoBean UserService userService`          |
+| `@Sql`                | 执行 SQL 脚本        | `@Sql("/test-data.sql")`                        |
+| `@Transactional`      | 配置测试事务         | `@Transactional(propagation = NOT_SUPPORTED)`   |
+| `@TestPropertySource` | 指定测试属性源       | `@TestPropertySource(properties = "key=value")` |

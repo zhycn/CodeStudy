@@ -20,22 +20,22 @@ let user: {
 
 // 正确赋值
 user = {
-  name: "Alice",
+  name: 'Alice',
   age: 30,
   isActive: true,
 };
 
 // 错误示例 1: 缺少属性
 user = {
-  name: "Bob",
+  name: 'Bob',
   age: 25,
 };
 // Error: Property 'isActive' is missing in type '{ name: string; age: number; }' but required in type '{ name: string; age: number; isActive: boolean; }'.
 
 // 错误示例 2: 类型不匹配
 user = {
-  name: "Charlie",
-  age: "40", // 类型 'string' 不可分配给类型 'number'
+  name: 'Charlie',
+  age: '40', // 类型 'string' 不可分配给类型 'number'
   isActive: true,
 };
 ```
@@ -52,12 +52,12 @@ type User = {
 };
 
 let alice: User = {
-  name: "Alice",
+  name: 'Alice',
   age: 30, // 不提供 isActive 也不会报错
 };
 
 let bob: User = {
-  name: "Bob",
+  name: 'Bob',
   age: 25,
   isActive: false, // 也可以提供
 };
@@ -151,7 +151,7 @@ interface Bear extends Animal {
 }
 
 const bear: Bear = {
-  name: "Winnie",
+  name: 'Winnie',
   honey: true,
 };
 ```
@@ -170,7 +170,7 @@ type Bear = Animal & {
 };
 
 const bear: Bear = {
-  name: "Winnie",
+  name: 'Winnie',
   honey: true,
 };
 ```
@@ -199,9 +199,9 @@ interface SafeDictionary {
 }
 
 const data: SafeDictionary = {
-  name: "My Data",
+  name: 'My Data',
   value: 100, // OK
-  description: "Some text", // OK
+  description: 'Some text', // OK
 };
 ```
 
@@ -238,40 +238,40 @@ TypeScript 内置了许多常用的工具类型（Utility Types），如 `Partia
 ## 6. 最佳实践
 
 1. **优先使用 `interface` 或 `type` 进行显式定义**
-    避免大量使用匿名内联类型，这会使代码难以阅读和维护。为重要的数据结构命名。
+   避免大量使用匿名内联类型，这会使代码难以阅读和维护。为重要的数据结构命名。
 
 2. **保持属性不变性 (`readonly`)**
-    尽可能使用 `readonly` 标记那些不应在创建后被修改的属性。这可以使你的代码更容易推理，并防止意外的更改。
+   尽可能使用 `readonly` 标记那些不应在创建后被修改的属性。这可以使你的代码更容易推理，并防止意外的更改。
 
 3. **合理使用可选属性**
-    仔细考虑哪些属性是真正可选的。过多的可选属性可能会使处理对象的代码变得复杂，因为你需要不断检查它们是否存在。
+   仔细考虑哪些属性是真正可选的。过多的可选属性可能会使处理对象的代码变得复杂，因为你需要不断检查它们是否存在。
 
 4. **利用类型推断**
-    在声明变量并立即赋值时，通常不需要显式添加类型注解，TypeScript 可以很好地推断出来。
+   在声明变量并立即赋值时，通常不需要显式添加类型注解，TypeScript 可以很好地推断出来。
 
-    ```typescript
-    // 让 TypeScript 推断类型
-    const inferredUser = {
-      name: "Alice",
-      age: 30,
-    };
-    // inferredUser 的类型被推断为 { name: string; age: number; }
+   ```typescript
+   // 让 TypeScript 推断类型
+   const inferredUser = {
+     name: 'Alice',
+     age: 30,
+   };
+   // inferredUser 的类型被推断为 { name: string; age: number; }
 
-    // 只有在形状需要符合更抽象的类型时才需要注解
-    const explicitUser: User = {
-      name: "Bob",
-      age: 25,
-    };
-    ```
+   // 只有在形状需要符合更抽象的类型时才需要注解
+   const explicitUser: User = {
+     name: 'Bob',
+     age: 25,
+   };
+   ```
 
 5. `interface` 用于对象/类，`type` 用于联合/元组
-    遵循这个约定可以使代码意图更清晰。
+   遵循这个约定可以使代码意图更清晰。
 
 6. **使用索引签名要谨慎**
-    索引签名会放宽类型检查。确保它确实是必要的，或者考虑使用更精确的类型，如 `Record<string, number>`。
+   索引签名会放宽类型检查。确保它确实是必要的，或者考虑使用更精确的类型，如 `Record<string, number>`。
 
 7. **使用工具类型**
-    熟悉并使用 TypeScript 内置的工具类型（`Partial`, `Pick`, `Omit`, `ReturnType` 等）来减少重复代码。
+   熟悉并使用 TypeScript 内置的工具类型（`Partial`, `Pick`, `Omit`, `ReturnType` 等）来减少重复代码。
 
 ## 7. 常见问题与解决方案
 
@@ -284,19 +284,19 @@ interface DynamicObject {
   [key: string]: string | number;
 }
 const obj1: DynamicObject = {};
-obj1.name = "Alice";
+obj1.name = 'Alice';
 obj1.score = 100;
 
 // 方法 2: 使用 Record 工具类型
 const obj2: Record<string, string | number> = {};
-obj2.name = "Bob";
+obj2.name = 'Bob';
 obj2.age = 25;
 
 // 方法 3: 如果键是有限的集合，使用可选属性或联合类型更安全
-type KnownKeys = "name" | "score";
+type KnownKeys = 'name' | 'score';
 type SafeDynamicObject = Partial<Record<KnownKeys, string | number>>;
 const obj3: SafeDynamicObject = {};
-obj3.name = "Charlie";
+obj3.name = 'Charlie';
 // obj3.other = "something"; // Error: 'other' does not exist
 ```
 

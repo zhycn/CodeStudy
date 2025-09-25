@@ -66,17 +66,17 @@ drwxr-xr-x@   5 admin  admin     160 Jan  6  2025 refs
 
 - **refs/ 目录**：包含**引用指针**，用于管理分支、标签和远程引用。其子目录 `heads/` 存储本地分支，`tags/` 存储标签引用，`remotes/` 存储远程跟踪分支。
 
-*表：.git 目录主要组件及其功能概述*
+_表：.git 目录主要组件及其功能概述_
 
-| **组件** | **类型** | **主要功能** | **使用频率** |
-|----------|----------|--------------|--------------|
-| **HEAD** | 文件 | 指向当前活动分支或提交 | 高 |
-| **config** | 文件 | 存储仓库特定配置 | 中 |
-| **index** | 文件 | 暂存区信息记录 | 高 |
-| **hooks/** | 目录 | 事件触发脚本存储 | 低至中 |
-| **objects/** | 目录 | 数据对象存储 | 高 |
-| **refs/** | 目录 | 引用指针管理 | 高 |
-| **logs/** | 目录 | 引用变更历史记录 | 中 |
+| **组件**     | **类型** | **主要功能**           | **使用频率** |
+| ------------ | -------- | ---------------------- | ------------ |
+| **HEAD**     | 文件     | 指向当前活动分支或提交 | 高           |
+| **config**   | 文件     | 存储仓库特定配置       | 中           |
+| **index**    | 文件     | 暂存区信息记录         | 高           |
+| **hooks/**   | 目录     | 事件触发脚本存储       | 低至中       |
+| **objects/** | 目录     | 数据对象存储           | 高           |
+| **refs/**    | 目录     | 引用指针管理           | 高           |
+| **logs/**    | 目录     | 引用变更历史记录       | 中           |
 
 ## 3 Git 对象模型深入解析
 
@@ -109,7 +109,7 @@ git cat-file -p <object_hash>  # 查看对象内容
 echo "Hello Git" | git hash-object -w --stdin
 ```
 
-*图：Git 对象之间的关系和引用流程*
+_图：Git 对象之间的关系和引用流程_
 
 ```bash
 +----------+     +----------+     +----------+     +----------+
@@ -167,39 +167,39 @@ git gc --aggressive
 
 1. **定期进行垃圾回收**：使用 `git gc` 命令可以删除冗余对象、优化存储并打包松散对象。对于大型仓库，可以定期执行此操作：
 
-    ```bash
-    # 常规垃圾回收
-    git gc
-    
-    # 更积极的优化
-    git gc --aggressive
-    ```
+   ```bash
+   # 常规垃圾回收
+   git gc
+
+   # 更积极的优化
+   git gc --aggressive
+   ```
 
 2. **使用浅克隆减少体积**：对于只需要最新代码的场景，可以使用浅克隆大大减少下载体积和数据传输量：
 
-    ```bash
-    git clone --depth=1 https://github.com/example/repo.git
-    ```
+   ```bash
+   git clone --depth=1 https://github.com/example/repo.git
+   ```
 
 3. **管理大文件**：避免将大文件（如二进制资产、数据库转储）直接纳入 Git 管理。考虑使用 **Git LFS（Large File Storage）** 或将这些文件排除在版本控制之外：
 
-    ```bash
-    # 查找大对象
-    git verify-pack -v .git/objects/pack/*.idx | sort -k3 -n | tail -5
-    ```
+   ```bash
+   # 查找大对象
+   git verify-pack -v .git/objects/pack/*.idx | sort -k3 -n | tail -5
+   ```
 
 4. **智能使用忽略规则**：结合 `.gitignore` 文件和 `.git/info/exclude` 文件管理忽略模式。使用 `.gitignore` 用于团队共享的忽略规则，而 `.git/info/exclude` 用于个人本地忽略规则：
 
-    ```bash
-    # .git/info/exclude 示例内容
-    # 忽略个人IDE配置
-    .vscode/
-    *.swp
-    
-    # 忽略系统特定文件
+   ```bash
+   # .git/info/exclude 示例内容
+   # 忽略个人IDE配置
+   .vscode/
+   *.swp
+
+   # 忽略系统特定文件
 
    .DS_Store
-    ```
+   ```
 
 ### 4.3 安全与隐私考虑
 
@@ -233,35 +233,35 @@ git gc --aggressive
 
 1. **使用 reflog 恢复提交**：引用日志记录了分支和 HEAD 的移动历史，是恢复误操作的第一道防线：
 
-    ```bash
-    # 查看引用日志
-    git reflog
-    
-    # 恢复到之前的状态
-    git reset --hard HEAD@{1}
-    ```
+   ```bash
+   # 查看引用日志
+   git reflog
+
+   # 恢复到之前的状态
+   git reset --hard HEAD@{1}
+   ```
 
 2. **修复损坏的对象**：如果遇到对象损坏问题，可以尝试从远程仓库重新获取丢失的对象：
 
-    ```bash
-    # 检查仓库完整性
-    git fsck --full
-    
-    # 从远程重新获取
-    git fetch origin
-    git reset --hard origin/main
-    ```
+   ```bash
+   # 检查仓库完整性
+   git fsck --full
+
+   # 从远程重新获取
+   git fetch origin
+   git reset --hard origin/main
+   ```
 
 3. **完全重建**：在极端情况下，可以考虑完全重建 `.git` 目录：
 
-    ```bash
-    # 删除损坏的.git目录并重新初始化
-    rm -rf .git
-    git init
-    git remote add origin <repository-url>
-    git fetch --all
-    git reset --hard origin/main
-    ```
+   ```bash
+   # 删除损坏的.git目录并重新初始化
+   rm -rf .git
+   git init
+   git remote add origin <repository-url>
+   git fetch --all
+   git reset --hard origin/main
+   ```
 
 ## 5 高级主题与底层原理探讨
 
@@ -307,4 +307,4 @@ cat .git/packed-refs
 
 Git 是一个强大而复杂的工具，其设计哲学体现在 `.git` 目录的每个细节中。持续探索和实践将帮助你更有效地利用 Git 管理项目，提高开发效率，并能够在遇到问题时快速定位和解决。
 
-*"知其然，亦知其所以然"——对于 Git 而言，理解 `.git` 目录正是通往精通之路的关键所在。*
+_"知其然，亦知其所以然"——对于 Git 而言，理解 `.git` 目录正是通往精通之路的关键所在。_

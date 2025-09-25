@@ -65,26 +65,26 @@ Environment 接口提供了丰富的属性访问方法：
 ```java
 @Service
 public class ConfigService {
-    
+
     @Autowired
     private Environment env;
-    
+
     public void demonstratePropertyAccess() {
         // 基本属性获取
         String appName = env.getProperty("app.name");
-        
+
         // 带类型转换的属性获取
         Integer port = env.getProperty("server.port", Integer.class);
-        
+
         // 带默认值的属性获取
         String timeout = env.getProperty("request.timeout", "5000");
-        
+
         // 必需属性获取（属性不存在时抛出异常）
         String requiredProp = env.getRequiredProperty("db.url");
-        
+
         // 检查属性是否存在
         boolean hasProperty = env.containsProperty("feature.enabled");
-        
+
         // 占位符解析
         String resolved = env.resolvePlaceholders("JDBC URL: ${db.url}");
     }
@@ -179,7 +179,7 @@ spring:
     url: jdbc:h2:mem:devdb
 
 ---
-# 生产环境配置  
+# 生产环境配置
 spring:
   profiles: prod
   datasource:
@@ -233,7 +233,7 @@ public class DevStandaloneConfig {
     // 配置类
 }
 
-@Configuration  
+@Configuration
 @Profile("prod | staging")  // 生产或预发环境
 public class ProductionReadyConfig {
     // 配置类
@@ -258,7 +258,7 @@ spring.profiles.active=production
 ```java
 @Configuration
 public class DataSourceConfig {
-    
+
     @Bean
     @Profile("dev")
     public DataSource devDataSource() {
@@ -267,7 +267,7 @@ public class DataSourceConfig {
             .setType(EmbeddedDatabaseType.HSQL)
             .build();
     }
-    
+
     @Bean
     @Profile("prod")
     public DataSource prodDataSource() {
@@ -288,16 +288,16 @@ Spring 提供了三种主要的配置注入方式，各有适用场景。
 ```java
 @Component
 public class AppConfig {
-    
+
     @Value("${app.name:MyApp}")  // 带默认值
     private String appName;
-    
+
     @Value("${server.port}")
     private int serverPort;
-    
+
     @Value("#{systemProperties['user.region']}")  // SpEL表达式
     private String region;
-    
+
     @Value("#{${server.ports}}")  // 集合注入
     private List<Integer> ports;
 }
@@ -310,14 +310,14 @@ public class AppConfig {
 ```java
 @Service
 public class DynamicConfigService {
-    
+
     @Autowired
     private Environment env;
-    
+
     public void setupConnection() {
         // 动态获取配置
         String envType = env.getProperty("app.env", "dev");
-        
+
         if ("prod".equals(envType)) {
             String dbUrl = env.getRequiredProperty("prod.db.url");
             // 生产环境逻辑
@@ -325,7 +325,7 @@ public class DynamicConfigService {
             String dbUrl = env.getProperty("dev.db.url", "jdbc:h2:mem:testdb");
             // 开发环境逻辑
         }
-        
+
         // 类型安全转换
         Integer timeout = env.getProperty("connection.timeout", Integer.class, 5000);
         Boolean enabled = env.getProperty("feature.flag", Boolean.class, false);
@@ -343,24 +343,24 @@ public class DynamicConfigService {
 @Data  // Lombok注解，生成getter/setter
 @Validated  // 启用校验
 public class DataSourceProperties {
-    
+
     @NotBlank
     private String url;
-    
+
     @NotNull
     private String username;
-    
+
     private String password;
-    
+
     @Min(1)
     @Max(100)
     private int maxPoolSize = 10;
-    
+
     private Duration connectionTimeout = Duration.ofSeconds(30);
-    
+
     // 嵌套对象支持
     private Pool pool = new Pool();
-    
+
     @Data
     public static class Pool {
         private int minIdle = 0;
@@ -383,14 +383,14 @@ app:
 
 ### 4.4 三种方式对比总结
 
-| 特性 | `@Value` | `Environment` | `@ConfigurationProperties` |
-|------|----------|---------------|----------------------------|
-| **注入方式** | 字段/参数级 | 编程式 API 调用 | 类级批量绑定 |
-| **适合场景** | 简单单值注入 | 动态环境配置 | 结构化配置组 |
-| **类型安全** | ❌ | ❌ | ✅ |
-| **SpEL 支持** | ✅ | ❌ | ❌ |
-| **校验支持** | ❌ | ❌ | ✅ |
-| **性能特点** | 启动快、运行快 | 启动慢、运行中 | 启动慢、运行快 |
+| 特性          | `@Value`       | `Environment`   | `@ConfigurationProperties` |
+| ------------- | -------------- | --------------- | -------------------------- |
+| **注入方式**  | 字段/参数级    | 编程式 API 调用 | 类级批量绑定               |
+| **适合场景**  | 简单单值注入   | 动态环境配置    | 结构化配置组               |
+| **类型安全**  | ❌             | ❌              | ✅                         |
+| **SpEL 支持** | ✅             | ❌              | ❌                         |
+| **校验支持**  | ❌             | ❌              | ✅                         |
+| **性能特点**  | 启动快、运行快 | 启动慢、运行中  | 启动慢、运行快             |
 
 ## 5. 多环境配置实战
 
@@ -402,7 +402,7 @@ app:
 src/main/resources/
 ├── application.properties          # 通用配置
 ├── application-dev.properties      # 开发环境
-├── application-test.properties    # 测试环境  
+├── application-test.properties    # 测试环境
 └── application-prod.properties    # 生产环境
 ```
 
@@ -459,7 +459,7 @@ management.endpoints.web.exposure.include=health,info,metrics
 ```java
 @Configuration
 public class EnvironmentSpecificConfig {
-    
+
     @Configuration
     @Profile("dev")
     public static class DevConfig {
@@ -468,7 +468,7 @@ public class EnvironmentSpecificConfig {
             return new MockEmailService();  // 开发环境使用模拟邮件服务
         }
     }
-    
+
     @Configuration
     @Profile("prod")
     public static class ProdConfig {
@@ -487,11 +487,11 @@ public class EnvironmentSpecificConfig {
 @ConfigurationProperties(prefix = "app.features")
 @Data
 public class FeatureFlags {
-    
+
     private boolean newPaymentGateway = false;
     private boolean experimentalApi = false;
     private boolean auditLogging = true;
-    
+
     // 基于特性的条件化逻辑
     public boolean isFeatureEnabled(String featureName) {
         switch (featureName) {
@@ -504,10 +504,10 @@ public class FeatureFlags {
 
 @Service
 public class PaymentService {
-    
+
     @Autowired
     private FeatureFlags features;
-    
+
     public PaymentResult processPayment(PaymentRequest request) {
         if (features.isFeatureEnabled("payment-v2")) {
             return processWithNewGateway(request);
@@ -573,10 +573,10 @@ jasypt.encryptor.password=${JASYPT_PASSWORD:defaultKey}
 ```java
 @Service
 public class SecureConfigService {
-    
+
     @Value("${db.password}")
     private String decryptedPassword;  // 自动解密
-    
+
     public void connectDatabase() {
         // 使用解密后的密码
         DataSource dataSource = createDataSource(decryptedPassword);
@@ -609,10 +609,10 @@ spring:
 ```java
 @RestController
 public class ConfigController {
-    
+
     @Value("${DB_USERNAME}")
     private String username;
-    
+
     @GetMapping("/config")
     public String getConfig() {
         return "Database Username: " + username;
@@ -628,20 +628,20 @@ public class ConfigController {
 
 ```java
 public class DatabasePropertySource extends PropertySource<Map<String, String>> {
-    
+
     private Map<String, String> properties = new HashMap<>();
-    
+
     public DatabasePropertySource() {
         super("databasePropertySource");
         loadPropertiesFromDatabase();
     }
-    
+
     private void loadPropertiesFromDatabase() {
         // 从数据库加载配置
         properties.put("dynamic.config.value", "value-from-db");
         properties.put("refresh.interval", "30000");
     }
-    
+
     @Override
     public Object getProperty(String name) {
         return properties.get(name);
@@ -651,7 +651,7 @@ public class DatabasePropertySource extends PropertySource<Map<String, String>> 
 // 注册自定义PropertySource
 @Component
 public class PropertySourceConfig implements EnvironmentAware {
-    
+
     @Override
     public void setEnvironment(Environment environment) {
         ConfigurableEnvironment env = (ConfigurableEnvironment) environment;
@@ -668,10 +668,10 @@ public class PropertySourceConfig implements EnvironmentAware {
 @Component
 @RefreshScope  // 标记为可刷新的Bean
 public class RefreshableConfig {
-    
+
     @Value("${dynamic.config.value}")
     private String dynamicValue;
-    
+
     // 当配置更新时，此Bean会被重新创建
     public String getCurrentConfig() {
         return dynamicValue;
@@ -690,28 +690,28 @@ public class RefreshableConfig {
 @Validated
 @Data
 public class AppProperties {
-    
+
     @NotBlank
     private String name;
-    
+
     @URL
     private String website;
-    
+
     @Email
     private String supportEmail;
-    
+
     @Min(1024)
     @Max(65535)
     private int port;
-    
+
     @AssertTrue(message = "生产环境必须配置SSL")
     public boolean isProductionSslValid() {
-        return !"prod".equals(System.getProperty("spring.profiles.active")) || 
+        return !"prod".equals(System.getProperty("spring.profiles.active")) ||
                (ssl != null && ssl.isEnabled());
     }
-    
+
     private SslConfig ssl;
-    
+
     @Data
     public static class SslConfig {
         private boolean enabled = false;
@@ -741,11 +741,11 @@ public class AppProperties {
 
 **常见问题与解决方案**：
 
-| 问题现象 | 可能原因 | 解决方案 |
-|---------|---------|---------|
-| 配置未生效 | 属性源优先级问题 | 检查命令行参数 > 系统属性 > 环境变量的覆盖关系 |
-| Profile 不激活 | 配置位置错误 | 确保 `spring.profiles.active` 在非 Profile 特定文件中设置 |
-| 占位符解析失败 | 循环引用或属性不存在 | 使用 `env.resolvePlaceholders()` 调试解析过程 |
-| 类型转换错误 | 配置值格式不匹配 | 明确指定类型或提供合适的默认值 |
+| 问题现象       | 可能原因             | 解决方案                                                  |
+| -------------- | -------------------- | --------------------------------------------------------- |
+| 配置未生效     | 属性源优先级问题     | 检查命令行参数 > 系统属性 > 环境变量的覆盖关系            |
+| Profile 不激活 | 配置位置错误         | 确保 `spring.profiles.active` 在非 Profile 特定文件中设置 |
+| 占位符解析失败 | 循环引用或属性不存在 | 使用 `env.resolvePlaceholders()` 调试解析过程             |
+| 类型转换错误   | 配置值格式不匹配     | 明确指定类型或提供合适的默认值                            |
 
 通过掌握 Spring Environment 的核心概念和最佳实践，您将能够构建出更加灵活、安全且易于维护的 Spring 应用程序，轻松应对多环境部署的复杂需求。

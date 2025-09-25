@@ -70,8 +70,8 @@ Spring Boot Test 与 Mockito 提供了深度的集成，主要通过注解来简
 | 测试类型       | 描述                                          | 常用注解                                                       | 是否启动 Spring 容器 |
 | :------------- | :-------------------------------------------- | :------------------------------------------------------------- | :------------------- |
 | **纯单元测试** | 测试一个孤立的类，所有依赖都是 Mock。         | `@Mock`, `@InjectMocks`, `@ExtendWith(MockitoExtension.class)` | 否                   |
-| **切片测试**   | 只加载应用程序的一部分（如 Web 层、数据层）。 | `@WebMvcTest`, `@DataJpaTest`, `@JsonTest` + `@MockitoBean`       | 是（部分）           |
-| **集成测试**   | 加载完整的或几乎完整的应用程序上下文。        | `@SpringBootTest` + `@MockitoBean`                                | 是                   |
+| **切片测试**   | 只加载应用程序的一部分（如 Web 层、数据层）。 | `@WebMvcTest`, `@DataJpaTest`, `@JsonTest` + `@MockitoBean`    | 是（部分）           |
+| **集成测试**   | 加载完整的或几乎完整的应用程序上下文。        | `@SpringBootTest` + `@MockitoBean`                             | 是                   |
 
 ## 5. 常用操作与代码示例
 

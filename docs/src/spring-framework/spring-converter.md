@@ -68,19 +68,19 @@ public interface ConverterFactory<S, R> {
 
 ```java
 public class StringToNumberConverterFactory implements ConverterFactory<String, Number> {
-    
+
     @Override
     public <T extends Number> Converter<String, T> getConverter(Class<T> targetType) {
         return new StringToNumber<>(targetType);
     }
-    
+
     private static final class StringToNumber<T extends Number> implements Converter<String, T> {
         private final Class<T> targetType;
-        
+
         public StringToNumber(Class<T> targetType) {
             this.targetType = targetType;
         }
-        
+
         @Override
         public T convert(String source) {
             if (source.length() == 0) {
@@ -108,7 +108,7 @@ public class StringToNumberConverterFactory implements ConverterFactory<String, 
 public interface GenericConverter {
     Set<ConvertiblePair> getConvertibleTypes();
     Object convert(@Nullable Object source, TypeDescriptor sourceType, TypeDescriptor targetType);
-    
+
     final class ConvertiblePair {
         private final Class<?> sourceType;
         private final Class<?> targetType;
@@ -250,7 +250,7 @@ public class EmployeeConverter implements Converter<String, Employee> {
                 Integer gender = Integer.parseInt(vals[2]);
                 Department department = new Department();
                 department.setId(Integer.parseInt(vals[3]));
-                
+
                 Employee employee = new Employee(null, lastName, email, gender, department);
                 System.out.println(source + "--convert--" + employee);
                 return employee;
@@ -278,13 +278,13 @@ public interface ConditionalConverter {
 
 ```java
 public class ConditionalStringToDateConverter implements Converter<String, Date>, ConditionalConverter {
-    
+
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
         // 只在目标字段有特定注解时才进行转换
         return targetType.hasAnnotation(DateFormat.class);
     }
-    
+
     @Override
     public Date convert(String source) {
         // 转换逻辑
@@ -349,7 +349,7 @@ public class SafeStringToIntegerConverter implements Converter<String, Integer> 
 ```java
 @RestController
 public class UserController {
-    
+
     @GetMapping("/user")
     public User getUser(@RequestParam("user") User user) {
         return user;
@@ -375,7 +375,7 @@ public class StringToUserConverter implements Converter<String, User> {
 ```java
 @Controller
 public class MyController {
-    
+
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Person.class, new PropertyEditorSupport() {
@@ -399,7 +399,7 @@ public class MyController {
 public class AppProperties {
     private User user;
     // getter and setter
-    
+
     public static class User {
         private Long id;
         private String username;
@@ -423,27 +423,27 @@ public class StringToAppUserConverter implements Converter<String, AppProperties
 
 ```java
 public class StringToPersonConverterTest {
-    
+
     private StringToPersonConverter converter = new StringToPersonConverter();
-    
+
     @Test
     public void testConvertValidString() {
         String source = "张三,25";
         Person person = converter.convert(source);
-        
+
         assertNotNull(person);
         assertEquals("张三", person.getName());
         assertEquals(25, person.getAge());
     }
-    
+
     @Test
     public void testConvertEmptyString() {
         String source = "";
         Person person = converter.convert(source);
-        
+
         assertNull(person);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testConvertInvalidString() {
         String source = "invalid";

@@ -20,14 +20,14 @@ Spring 框架提供了多种 Bean 作用域，每种都有其特定的生命周�
 
 ### 2.1 标准作用域类型
 
-| 作用域类型 | 生命周期 | 适用场景 | 线程安全 | 配置方式 |
-|---------|---------|---------|---------|---------|
-| singleton | 容器启动时创建，容器关闭时销毁 | 无状态服务、工具类、配置类 | 是（无状态） | 默认，无需显式配置 |
-| prototype | 每次请求时创建新实例，容器不管理销毁 | 有状态对象、需要独立状态的组件 | 否（每个实例独立） | @Scope("prototype") |
-| request | 每个 HTTP 请求开始时创建，请求结束时销毁 | HTTP 请求级别的状态跟踪 | 是（天然隔离） | @Scope("request") |
-| session | 每个 HTTP 会话开始时创建，会话结束时销毁 | 用户会话级别的状态存储 | 是（会话隔离） | @Scope("session") |
-| application | 在整个 ServletContext 生命周期内创建一个实例，应用关闭时销毁 | 应用级别的全局数据，如配置、缓存 | 是（应用级共享） | @Scope("application") |
-| websocket | 每个 WebSocket 会话开始时创建，会话结束时销毁 | WebSocket 连接级别的状态管理 | 是（连接隔离） | @Scope("websocket") |
+| 作用域类型  | 生命周期                                                     | 适用场景                         | 线程安全           | 配置方式              |
+| ----------- | ------------------------------------------------------------ | -------------------------------- | ------------------ | --------------------- |
+| singleton   | 容器启动时创建，容器关闭时销毁                               | 无状态服务、工具类、配置类       | 是（无状态）       | 默认，无需显式配置    |
+| prototype   | 每次请求时创建新实例，容器不管理销毁                         | 有状态对象、需要独立状态的组件   | 否（每个实例独立） | @Scope("prototype")   |
+| request     | 每个 HTTP 请求开始时创建，请求结束时销毁                     | HTTP 请求级别的状态跟踪          | 是（天然隔离）     | @Scope("request")     |
+| session     | 每个 HTTP 会话开始时创建，会话结束时销毁                     | 用户会话级别的状态存储           | 是（会话隔离）     | @Scope("session")     |
+| application | 在整个 ServletContext 生命周期内创建一个实例，应用关闭时销毁 | 应用级别的全局数据，如配置、缓存 | 是（应用级共享）   | @Scope("application") |
+| websocket   | 每个 WebSocket 会话开始时创建，会话结束时销毁                | WebSocket 连接级别的状态管理     | 是（连接隔离）     | @Scope("websocket")   |
 
 ## 3. 标准作用域详解
 
@@ -54,12 +54,12 @@ public class UserService {
 public class CounterService {
     // 共享可变状态（风险）
     private int count = 0;
-    
+
     // 加锁保证原子性
     public synchronized int increment() {
         return ++count;
     }
-    
+
     // 推荐方案：使用线程安全的 AtomicInteger
     private AtomicInteger atomicCount = new AtomicInteger(0);
     public int safeIncrement() {
@@ -92,7 +92,7 @@ public class PrototypeScope implements Scope {
 @Component
 public class ShoppingCart {
     private List<Item> items = new ArrayList<>();
-    
+
     public void addItem(Item item) {
         items.add(item);
     }
@@ -113,13 +113,13 @@ public class ShoppingCart {
 **代码示例**：
 
 ```java
-@Scope(value = WebApplicationContext.SCOPE_REQUEST, 
+@Scope(value = WebApplicationContext.SCOPE_REQUEST,
        proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Component
 public class RequestContext {
     private String requestId;
     private Long userId;
-    
+
     // 存储请求相关信息
     public String getRequestId() {
         return requestId;
@@ -136,14 +136,14 @@ public class RequestContext {
 **代码示例**：
 
 ```java
-@Scope(value = WebApplicationContext.SCOPE_SESSION, 
+@Scope(value = WebApplicationContext.SCOPE_SESSION,
        proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Component
 public class UserSession {
     private Long userId;
     private String username;
     private ShoppingCart cart;
-    
+
     // 用户会话数据
     public boolean isLoggedIn() {
         return userId != null;
@@ -164,7 +164,7 @@ public class UserSession {
 @Component
 public class ApplicationConfig {
     private Map<String, Object> cache = new ConcurrentHashMap<>();
-    
+
     // 应用级别的缓存
     public void putToCache(String key, Object value) {
         cache.put(key, value);
@@ -184,7 +184,7 @@ public class ApplicationConfig {
 public class ChatSession {
     private String sessionId;
     private Set<WebSocketSession> participants = new HashSet<>();
-    
+
     // 实时通信状态管理
     public void addParticipant(WebSocketSession session) {
         participants.add(session);
@@ -231,9 +231,9 @@ public class AppConfig {
     public MySingletonBean singletonBean() {
         return new MySingletonBean();
     }
-    
+
     @Bean
-    @Scope(value = WebApplicationContext.SCOPE_REQUEST, 
+    @Scope(value = WebApplicationContext.SCOPE_REQUEST,
            proxyMode = ScopedProxyMode.TARGET_CLASS)
     public MyRequestBean requestBean() {
         return new MyRequestBean();
@@ -282,13 +282,13 @@ public class SingletonBean {
     // 错误方式：始终使用同一个原型实例
     @Autowired
     private PrototypeBean prototypeBean;
-    
+
     // 正确方式：使用方法注入
     @Lookup
     public PrototypeBean getPrototypeBean() {
         return null; // 由 Spring 实现
     }
-    
+
     public void businessMethod() {
         PrototypeBean prototypeBean = getPrototypeBean(); // 每次获取新实例
         // 使用原型 Bean
@@ -310,20 +310,20 @@ Spring 允许通过实现 `Scope` 接口定义自定义作用域。
 
 ```java
 public class ThreadScope implements Scope {
-    private final ThreadLocal<Map<String, Object>> threadLocal = 
+    private final ThreadLocal<Map<String, Object>> threadLocal =
         ThreadLocal.withInitial(HashMap::new);
-    
+
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
         Map<String, Object> scope = threadLocal.get();
         return scope.computeIfAbsent(name, k -> objectFactory.getObject());
     }
-    
+
     @Override
     public void registerDestructionCallback(String name, Runnable callback) {
         // 实现销毁回调
     }
-    
+
     // 其他方法实现...
 }
 
@@ -348,13 +348,13 @@ public class ThreadScopedBean {
 
 ### 7.1 作用域选择指南
 
-| 作用域类型 | 实例数量 | 生命周期 | 线程安全 | 典型应用 |
-|---------|---------|---------|---------|---------|
-| singleton | 每个容器一个 | 容器生命周期 | 需要保证 | 服务、DAO |
-| prototype | 每次请求新实例 | 使用期间 | 通常不需要 | 有状态 Bean |
-| request | 每个请求一个 | 请求期间 | 不需要 | Web 请求处理 |
-| session | 每个会话一个 | 会话期间 | 不需要 | 用户数据 |
-| application | 每个应用一个 | 应用生命周期 | 需要保证 | 全局资源 |
+| 作用域类型  | 实例数量       | 生命周期     | 线程安全   | 典型应用     |
+| ----------- | -------------- | ------------ | ---------- | ------------ |
+| singleton   | 每个容器一个   | 容器生命周期 | 需要保证   | 服务、DAO    |
+| prototype   | 每次请求新实例 | 使用期间     | 通常不需要 | 有状态 Bean  |
+| request     | 每个请求一个   | 请求期间     | 不需要     | Web 请求处理 |
+| session     | 每个会话一个   | 会话期间     | 不需要     | 用户数据     |
+| application | 每个应用一个   | 应用生命周期 | 需要保证   | 全局资源     |
 
 ### 7.2 线程安全设计原则
 
@@ -404,19 +404,19 @@ public class UserService {
 }
 
 // 会话作用域：购物车
-@Scope(value = WebApplicationContext.SCOPE_SESSION, 
+@Scope(value = WebApplicationContext.SCOPE_SESSION,
        proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Component
 public class ShoppingCart {
     private List<CartItem> items = new ArrayList<>();
-    
+
     public void addItem(CartItem item) {
         items.add(item);
     }
 }
 
 // 请求作用域：订单上下文
-@Scope(value = WebApplicationContext.SCOPE_REQUEST, 
+@Scope(value = WebApplicationContext.SCOPE_REQUEST,
        proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Component
 public class OrderContext {

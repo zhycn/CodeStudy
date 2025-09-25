@@ -90,7 +90,7 @@ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc; // 自动配置 MockMvc
-    
+
     @MockitoBean // 模拟服务层依赖
     private UserService userService;
 
@@ -118,7 +118,7 @@ class UserRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-    
+
     @Autowired
     private UserRepository userRepository;
 
@@ -148,13 +148,13 @@ Spring Boot 还提供了其他有用的切片测试注解：
 
 下表总结了 Spring Boot 3.x 中主要的测试注解及其用途：
 
-| **注解** | **测试范围** | **自动配置组件** | **适用场景** |
-|---------|------------|---------------|------------|
-| `@SpringBootTest` | 完整应用 | 所有 Bean | 集成测试、多组件协作测试 |
-| `@WebMvcTest` | Web MVC 层 | 控制器、过滤器、MVC 相关配置 | 控制器层测试、HTTP 接口验证 |
-| `@DataJpaTest` | JPA 持久层 | 实体管理器、仓库接口、内存数据库 | 数据库操作测试、JPA 查询验证 |
-| `@JsonTest` | JSON 序列化 | Jackson ObjectMapper | JSON 序列化/反序列化测试 |
-| `@RestClientTest` | REST 客户端 | REST 模板、Mock 服务器 | REST 客户端组件测试 |
+| **注解**          | **测试范围** | **自动配置组件**                 | **适用场景**                 |
+| ----------------- | ------------ | -------------------------------- | ---------------------------- |
+| `@SpringBootTest` | 完整应用     | 所有 Bean                        | 集成测试、多组件协作测试     |
+| `@WebMvcTest`     | Web MVC 层   | 控制器、过滤器、MVC 相关配置     | 控制器层测试、HTTP 接口验证  |
+| `@DataJpaTest`    | JPA 持久层   | 实体管理器、仓库接口、内存数据库 | 数据库操作测试、JPA 查询验证 |
+| `@JsonTest`       | JSON 序列化  | Jackson ObjectMapper             | JSON 序列化/反序列化测试     |
+| `@RestClientTest` | REST 客户端  | REST 模板、Mock 服务器           | REST 客户端组件测试          |
 
 ## 3 测试数据管理与事务控制
 
@@ -169,12 +169,12 @@ class TransactionalServiceTest {
 
     @Autowired
     private UserService userService;
-    
+
     @Test
     void createUser_WithValidData_ShouldPersist() {
         User user = new User("testUser");
         User savedUser = userService.createUser(user);
-        
+
         assertThat(savedUser.getId()).isNotNull();
         // 测试结束后，数据操作会自动回滚
     }
@@ -191,7 +191,7 @@ class SqlInitializationTest {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Test
     @Sql(scripts = "/test-data/users.sql") // 执行 SQL 脚本初始化数据
     @Sql(scripts = "/test-data/cleanup.sql", executionPhase = AFTER_TEST_METHOD) // 测试后清理
@@ -206,11 +206,11 @@ class SqlInitializationTest {
 
 根据测试需求，可以选择不同的数据库方案：
 
-| **方案** | **优点** | **缺点** | **适用场景** |
-|---------|---------|---------|------------|
-| H2 内存数据库 | 快速，无需外部依赖 | 与生产数据库语法差异 | 单元测试、简单集成测试 |
-| Testcontainers | 真实数据库环境 | 需要 Docker，启动较慢 | 集成测试、需要真实数据库功能 |
-| 生产数据库副本 | 完全一致的环境 | 数据污染风险 | 端到端测试、预生产环境测试 |
+| **方案**       | **优点**           | **缺点**              | **适用场景**                 |
+| -------------- | ------------------ | --------------------- | ---------------------------- |
+| H2 内存数据库  | 快速，无需外部依赖 | 与生产数据库语法差异  | 单元测试、简单集成测试       |
+| Testcontainers | 真实数据库环境     | 需要 Docker，启动较慢 | 集成测试、需要真实数据库功能 |
+| 生产数据库副本 | 完全一致的环境     | 数据污染风险          | 端到端测试、预生产环境测试   |
 
 ## 4 Mock 技术与依赖隔离
 
@@ -227,15 +227,15 @@ class MockBeanTest {
 
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockitoBean // 创建模拟的 UserService
     private UserService userService;
-    
+
     @Test
     void getUser_WhenNotExists_ShouldReturn404() throws Exception {
         // 配置模拟行为：当查询不存在的用户时返回空
         when(userService.getUserById(999L)).thenReturn(Optional.empty());
-        
+
         // 执行请求并验证响应
         mockMvc.perform(get("/api/users/999"))
                .andExpect(status().isNotFound());
@@ -247,12 +247,12 @@ class MockBeanTest {
 
 在测试中，可以使用 Mockito 的方法来配置模拟对象的行为：
 
-| **方法** | **描述** | **示例** |
-|---------|---------|---------|
-| `when().thenReturn()` | 设置方法调用返回值 | `when(userService.getUserById(1L)).thenReturn(user)` |
-| `when().thenThrow()` | 设置方法调用抛出异常 | `when(userService.getUserById(1L)).thenThrow(new UserNotFoundException())` |
-| `verify()` | 验证方法是否被调用 | `verify(userService, times(1)).getUserById(1L)` |
-| `@InjectMocks` | 将 mock 对象注入到被测试类 | `@InjectMocks private UserService userService` |
+| **方法**              | **描述**                   | **示例**                                                                   |
+| --------------------- | -------------------------- | -------------------------------------------------------------------------- |
+| `when().thenReturn()` | 设置方法调用返回值         | `when(userService.getUserById(1L)).thenReturn(user)`                       |
+| `when().thenThrow()`  | 设置方法调用抛出异常       | `when(userService.getUserById(1L)).thenThrow(new UserNotFoundException())` |
+| `verify()`            | 验证方法是否被调用         | `verify(userService, times(1)).getUserById(1L)`                            |
+| `@InjectMocks`        | 将 mock 对象注入到被测试类 | `@InjectMocks private UserService userService`                             |
 
 ## 5 测试断言与验证策略
 
@@ -265,20 +265,20 @@ JUnit 5 提供了 `Assertions` 类，包含多种断言方法：
 void basicAssertions() {
     // 相等断言
     assertEquals(expected, actual);
-    
+
     // 为空断言
     assertNull(object);
     assertNotNull(object);
-    
+
     // 条件断言
     assertTrue(condition);
     assertFalse(condition);
-    
+
     // 异常断言
     assertThrows(ExceptionClass.class, () -> {
         // 可能抛出异常的代码
     });
-    
+
     // 超时断言
     assertTimeout(Duration.ofSeconds(1), () -> {
         // 应在指定时间内完成的代码
@@ -294,20 +294,20 @@ Spring Boot 默认集成 AssertJ，提供更优雅的流式断言语法：
 @Test
 void assertJExamples() {
     String name = "Spring Boot";
-    
+
     // 字符串断言
     assertThat(name).isNotBlank()
                    .startsWith("Spring")
                    .endsWith("Boot")
                    .hasSize(10);
-    
+
     // 集合断言
     List<String> names = Arrays.asList("Alice", "Bob", "Charlie");
     assertThat(names).isNotEmpty()
                     .hasSize(3)
                     .contains("Alice")
                     .doesNotContain("David");
-    
+
     // 对象断言
     User user = new User("testUser");
     assertThat(user).isNotNull()
@@ -341,7 +341,7 @@ class TestConfigurationExample {
 
     @Autowired
     private UserService userService;
-    
+
     @TestConfiguration // 测试专用配置
     static class Config {
         @Bean
@@ -350,7 +350,7 @@ class TestConfigurationExample {
             return new TestUserRepository(); // 返回测试专用的实现
         }
     }
-    
+
     @Test
     void testWithCustomConfiguration() {
         // 使用测试配置中的 Bean 进行测试
@@ -369,14 +369,14 @@ class DynamicPropertySourceExample {
 
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:13");
-    
+
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
     }
-    
+
     @Test
     void testWithDynamicDatabase() {
         // 使用动态配置的数据库进行测试
@@ -428,12 +428,12 @@ class ProfileBasedTest {
 
 ### 7.4 常见问题与解决方案
 
-| **问题/错误** | **原因分析** | **解决方案** |
-|--------------|-------------|------------|
-| `NoSuchBeanDefinitionException` | 未正确 Mock 依赖 Bean | 添加 `@MockitoBean` 或 `@MockitoSpyBean` 注解 |
-| `LazyInitializationException` | 事务边界问题 | 添加 `@Transactional` 注解 |
-| `ApplicationContext not configured` | 测试配置加载失败 | 检查 `@SpringBootTest` 参数或主配置类 |
-| 测试执行缓慢 | 加载了不必要的组件 | 使用切片测试替代全上下文测试 |
+| **问题/错误**                       | **原因分析**          | **解决方案**                                  |
+| ----------------------------------- | --------------------- | --------------------------------------------- |
+| `NoSuchBeanDefinitionException`     | 未正确 Mock 依赖 Bean | 添加 `@MockitoBean` 或 `@MockitoSpyBean` 注解 |
+| `LazyInitializationException`       | 事务边界问题          | 添加 `@Transactional` 注解                    |
+| `ApplicationContext not configured` | 测试配置加载失败      | 检查 `@SpringBootTest` 参数或主配置类         |
+| 测试执行缓慢                        | 加载了不必要的组件    | 使用切片测试替代全上下文测试                  |
 
 ## 8 总结
 

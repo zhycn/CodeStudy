@@ -40,7 +40,7 @@ interface IteratorResult<T> {
 interface Iterator<T> {
   next(): IteratorResult<T>;
   return?(value?: any): IteratorResult<T>; // 可选，用于提前终止
-  throw?(e?: any): IteratorResult<T>;     // 可选，用于抛出异常
+  throw?(e?: any): IteratorResult<T>; // 可选，用于抛出异常
 }
 ```
 
@@ -59,7 +59,7 @@ function createRangeIterator(start: number, end: number, step: number = 1): Iter
         // 当迭代完毕，value 通常为 undefined
         return { value: undefined, done: true };
       }
-    }
+    },
   };
 }
 
@@ -120,10 +120,10 @@ function* interactiveGenerator(): Generator<number, void, number> {
 }
 
 const gen = interactiveGenerator();
-console.log(gen.next());    // { value: 1, done: false }
-console.log(gen.next(10));  // { value: 2, done: false }，参数 10 赋给了 first
-console.log(gen.next(20));  // { value: 3, done: false }，参数 20 赋给了 second
-console.log(gen.next());    // { value: undefined, done: true }
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next(10)); // { value: 2, done: false }，参数 10 赋给了 first
+console.log(gen.next(20)); // { value: 3, done: false }，参数 20 赋给了 second
+console.log(gen.next()); // { value: undefined, done: true }
 ```
 
 #### 2.2.2 委托生成 (`yield*`)
@@ -195,8 +195,8 @@ ES2018 引入了异步迭代，用于处理异步数据流（如分页 API、文
 
 ### 3.1 异步迭代协议
 
-* **异步可迭代协议 (AsyncIterable)**: 对象必须实现 `[Symbol.asyncIterator]` 方法。
-* **异步迭代器协议 (AsyncIterator)**: 对象必须实现 `next()` 方法，该方法返回一个 `Promise<IteratorResult<T>>`。
+- **异步可迭代协议 (AsyncIterable)**: 对象必须实现 `[Symbol.asyncIterator]` 方法。
+- **异步迭代器协议 (AsyncIterator)**: 对象必须实现 `next()` 方法，该方法返回一个 `Promise<IteratorResult<T>>`。
 
 ```typescript
 interface AsyncIterator<T> {
@@ -222,14 +222,11 @@ async function* asyncPaginationGenerator(pageSize: number = 2): AsyncGenerator<n
 
   while (hasMore) {
     // 模拟异步 API 调用
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // 模拟计算分页数据
-    const data = [
-      (page - 1) * pageSize + 1,
-      (page - 1) * pageSize + 2
-    ];
-    
+    const data = [(page - 1) * pageSize + 1, (page - 1) * pageSize + 2];
+
     // 假设第 3 页之后没有数据了
     if (page >= 3) {
       hasMore = false;
@@ -261,23 +258,23 @@ async function* asyncPaginationGenerator(pageSize: number = 2): AsyncGenerator<n
 
 1. **清晰的类型注解**: 始终为生成器函数和迭代器定义明确的 TypeScript 类型，以增强代码可读性和安全性。
 
-    ```typescript
-    // 好的做法
-    function* idGenerator(): Generator<number> {
-      let id = 0;
-      while (true) {
-        yield id++;
-      }
-    }
+   ```typescript
+   // 好的做法
+   function* idGenerator(): Generator<number> {
+     let id = 0;
+     while (true) {
+       yield id++;
+     }
+   }
 
-    // 避免
-    function* idGenerator() {
-      let id = 0;
-      while (true) {
-        yield id++;
-      }
-    }
-    ```
+   // 避免
+   function* idGenerator() {
+     let id = 0;
+     while (true) {
+       yield id++;
+     }
+   }
+   ```
 
 2. **资源清理**: 利用 `try...finally` 块确保在迭代提前终止（通过 `return()` 或 `throw()`）时，资源（如文件句柄、网络连接）能被正确释放。
 
@@ -291,65 +288,65 @@ async function* asyncPaginationGenerator(pageSize: number = 2): AsyncGenerator<n
 
 1. **惰性计算与无限序列**: 高效生成斐波那契数列、素数序列或唯一 ID。
 
-    ```typescript
-    function* fibonacci(): Generator<number> {
-      let [a, b] = [0, 1];
-      while (true) {
-        yield a;
-        [a, b] = [b, a + b];
-      }
-    }
+   ```typescript
+   function* fibonacci(): Generator<number> {
+     let [a, b] = [0, 1];
+     while (true) {
+       yield a;
+       [a, b] = [b, a + b];
+     }
+   }
 
-    const fib = fibonacci();
-    for (let i = 0; i < 10; i++) {
-      console.log(fib.next().value);
-    }
-    ```
+   const fib = fibonacci();
+   for (let i = 0; i < 10; i++) {
+     console.log(fib.next().value);
+   }
+   ```
 
 2. **按需分页/流处理**: 如前所示，异步生成器是处理分页 API 或数据流的理想选择。
 
 3. **状态机**: 生成器可以很方便地实现状态机，每个 `yield` 代表一个状态。
 
-    ```typescript
-    function* stateMachine(): Generator<string> {
-      yield 'State: START';
-      yield 'State: PROCESSING';
-      yield 'State: END';
-    }
-    ```
+   ```typescript
+   function* stateMachine(): Generator<string> {
+     yield 'State: START';
+     yield 'State: PROCESSING';
+     yield 'State: END';
+   }
+   ```
 
 4. **解耦生产与消费**: 生产者（生成器）和消费者（`for...of` 循环）可以独立编写和测试，通过迭代协议进行通信。
 
 5. **实现自定义数据结构**: 为你自己设计的集合类（如树、图、链表）实现 `[Symbol.iterator]` 方法，使其可以使用标准的循环和扩展运算符 (`...`)。
 
-    ```typescript
-    class TreeNode<T> {
-      constructor(public value: T, public children: TreeNode<T>[] = []) {}
-      
-      *: Generator<T> {
-        yield this.value;
-        for (const child of this.children) {
-          yield* child; // 委托迭代
-        }
-      }
-    }
+   ```typescript
+   class TreeNode<T> {
+     constructor(public value: T, public children: TreeNode<T>[] = []) {}
 
-    const tree = new TreeNode(1, [
-      new TreeNode(2, [new TreeNode(4)]),
-      new TreeNode(3)
-    ]);
+     *: Generator<T> {
+       yield this.value;
+       for (const child of this.children) {
+         yield* child; // 委托迭代
+       }
+     }
+   }
 
-    console.log([...tree]); // [1, 2, 4, 3]
-    ```
+   const tree = new TreeNode(1, [
+     new TreeNode(2, [new TreeNode(4)]),
+     new TreeNode(3)
+   ]);
+
+   console.log([...tree]); // [1, 2, 4, 3]
+   ```
 
 ## 5. 总结
 
-| 特性 | 迭代器 (Iterator) | 生成器 (Generator) |
-| :--- | :--- | :--- |
-| **核心** | 一个定义了 `next()` 方法的对象 | 一个使用 `function*` 声明、用于创建迭代器的函数 |
-| **价值** | 提供了一种标准的遍历集合的机制 | **极大简化**了迭代器的创建过程 |
-| **控制** | 需要手动维护状态 | 通过 `yield` 暂停和恢复执行，自动管理状态 |
-| **异步支持** | 异步迭代器 (`Symbol.asyncIterator`) | 异步生成器 (`async function*`) |
-| **主要用途** | 定义遍历行为 | 创建迭代器、惰性求值、异步流控制 |
+| 特性         | 迭代器 (Iterator)                   | 生成器 (Generator)                              |
+| :----------- | :---------------------------------- | :---------------------------------------------- |
+| **核心**     | 一个定义了 `next()` 方法的对象      | 一个使用 `function*` 声明、用于创建迭代器的函数 |
+| **价值**     | 提供了一种标准的遍历集合的机制      | **极大简化**了迭代器的创建过程                  |
+| **控制**     | 需要手动维护状态                    | 通过 `yield` 暂停和恢复执行，自动管理状态       |
+| **异步支持** | 异步迭代器 (`Symbol.asyncIterator`) | 异步生成器 (`async function*`)                  |
+| **主要用途** | 定义遍历行为                        | 创建迭代器、惰性求值、异步流控制                |
 
 TypeScript 通过对迭代协议和生成器的强大类型支持，使你能够以类型安全的方式利用这些强大的 JavaScript 特性。通过遵循本文概述的最佳实践，你可以编写出更清晰、更健壮、更易维护的代码，尤其是在处理复杂数据流和异步操作时。

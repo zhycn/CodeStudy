@@ -187,11 +187,11 @@ def query_employees(connection, department=None):
     """查询员工信息，可按部门筛选。"""
     query_sql = "SELECT id, name, department, salary FROM employees"
     params = ()
-    
+
     if department:
         query_sql += " WHERE department = %s"
         params = (department,)
-        
+
     try:
         with connection.cursor() as cursor:
             cursor.execute(query_sql, params)
@@ -229,7 +229,7 @@ def transfer_salary(connection, from_emp_id, to_emp_id, amount):
     """一个简单的事务示例：薪资转账。"""
     select_sql = "SELECT salary FROM employees WHERE id = %s FOR UPDATE"
     update_sql = "UPDATE employees SET salary = salary + %s WHERE id = %s"
-    
+
     try:
         connection.start_transaction() # 显式开始一个事务
         with connection.cursor() as cursor:
@@ -238,16 +238,16 @@ def transfer_salary(connection, from_emp_id, to_emp_id, amount):
             current_salary = cursor.fetchone()[0]
             if current_salary < amount:
                 raise ValueError("转出账户余额不足！")
-                
+
             # 执行转账：扣除
             cursor.execute(update_sql, (-amount, from_emp_id))
             # 执行转账：增加
             cursor.execute(update_sql, (amount, to_emp_id))
-            
+
         # 如果所有操作都成功，提交事务
         connection.commit()
         print("转账成功！")
-        
+
     except ValueError as ve:
         print(ve)
         connection.rollback() # 业务逻辑错误，回滚
@@ -284,7 +284,7 @@ def get_employee_from_pool(emp_id):
     try:
         # 从连接池获取一个连接
         connection = connection_pool.get_connection()
-        
+
         if connection.is_connected():
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM employees WHERE id = %s", (emp_id,))
@@ -327,13 +327,13 @@ Base = declarative_base()
 # 2. 定义映射的类
 class Employee(Base):
     __tablename__ = 'employees'
-    
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     department = Column(String(50))
     salary = Column(Float)
     created_at = Column(DateTime, default=datetime.now)
-    
+
     def __repr__(self):
         return f"<Employee(name='{self.name}', department='{self.department}', salary={self.salary})>"
 
@@ -349,30 +349,30 @@ Base.metadata.create_all(bind=engine)
 def orm_example():
     # 创建一个新会话
     session = SessionLocal()
-    
+
     try:
         # Create - 插入新记录
         new_emp = Employee(name='钱七', department='设计部', salary=8500.00)
         session.add(new_emp)
-        
+
         # Read - 查询记录
         emps = session.query(Employee).filter(Employee.department == '设计部').all()
         print("设计部员工:", emps)
-        
+
         # Update - 更新记录
         emp_to_update = session.query(Employee).filter_by(name='钱七').first()
         if emp_to_update:
             emp_to_update.salary = 8800.00
-            
+
         # Delete - 删除记录 (谨慎操作！)
         # emp_to_delete = session.query(Employee).filter_by(name='某员工').first()
         # if emp_to_delete:
         #     session.delete(emp_to_delete)
-            
+
         # 提交事务
         session.commit()
         print("操作成功！")
-        
+
     except Exception as e:
         session.rollback()
         print(f"发生错误: {e}")
@@ -408,13 +408,13 @@ async def async_query_example():
         charset='utf8mb4',
         autocommit=True
     )
-    
+
     async with pool.acquire() as conn:
         async with conn.cursor(aiomysql.DictCursor) as cur:
             await cur.execute("SELECT * FROM employees WHERE salary > %s", (7000,))
             result = await cur.fetchall()
             print(f"异步查询结果: {result}")
-            
+
     pool.close()
     await pool.wait_closed()
 
@@ -426,28 +426,28 @@ async def async_query_example():
 
 1. **永远使用参数化查询**：这是防止 SQL 注入攻击最重要、最有效的手段。不要用字符串格式化 (`%` 或 `f-string`) 拼接 SQL 和用户输入。
 2. **管理连接资源**：
-    * 始终使用 `with` 语句或 `try-finally` 块来确保 cursor 和 connection 被正确关闭。
-    * 在 Web 应用等长生命周期服务中，使用**连接池**。
+   - 始终使用 `with` 语句或 `try-finally` 块来确保 cursor 和 connection 被正确关闭。
+   - 在 Web 应用等长生命周期服务中，使用**连接池**。
 3. **明确处理事务**：
-    * 根据业务逻辑，显式地控制 `commit` 和 `rollback`。
-    * `autocommit` 模式虽然方便，但在复杂的多步骤操作中可能引发数据不一致。
+   - 根据业务逻辑，显式地控制 `commit` 和 `rollback`。
+   - `autocommit` 模式虽然方便，但在复杂的多步骤操作中可能引发数据不一致。
 4. **设置正确的字符集**：使用 `utf8mb4` 而不是 `utf8`，以支持完整的 Unicode（包括表情符号 Emoji）。
 5. **善用上下文管理器**：
 
-    ```python
-    # 好例子
-    with connection.cursor() as cursor:
-        cursor.execute(...)
-    # cursor 会自动关闭
-    ```
+   ```python
+   # 好例子
+   with connection.cursor() as cursor:
+       cursor.execute(...)
+   # cursor 会自动关闭
+   ```
 
 6. **ORM 的选择**：对于复杂项目，ORM 可以提高开发效率和代码可维护性。但对于极度追求性能的简单查询，手写 SQL 可能更优。
 7. **环境变量管理敏感信息**：不要将数据库密码等硬编码在代码中。使用环境变量或配置文件。
 
-    ```python
-    import os
-    password = os.getenv('DB_PASSWORD')
-    ```
+   ```python
+   import os
+   password = os.getenv('DB_PASSWORD')
+   ```
 
 8. **日志记录**：记录查询错误和慢查询，便于调试和优化。
 

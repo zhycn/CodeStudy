@@ -28,13 +28,13 @@ Python 的 `logging` 模块提供了一个灵活且强大的日志记录系统�
 
 虽然 `print()` 函数简单易用，但在生产环境中存在诸多局限性：
 
-| 特性 | print() | logging |
-|------|---------|---------|
-| 输出级别控制 | 无 | 多级别灵活控制 |
-| 输出目标 | 仅控制台 | 多种输出目标 |
-| 性能 | 每次调用都输出 | 可缓冲和异步处理 |
-| 上下文信息 | 需手动添加 | 自动记录时间、模块、行号等 |
-| 配置灵活性 | 硬编码 | 运行时动态配置 |
+| 特性         | print()        | logging                    |
+| ------------ | -------------- | -------------------------- |
+| 输出级别控制 | 无             | 多级别灵活控制             |
+| 输出目标     | 仅控制台       | 多种输出目标               |
+| 性能         | 每次调用都输出 | 可缓冲和异步处理           |
+| 上下文信息   | 需手动添加     | 自动记录时间、模块、行号等 |
+| 配置灵活性   | 硬编码         | 运行时动态配置             |
 
 ```python
 # 不推荐的方式
@@ -116,13 +116,13 @@ logger.info('This is an info message from named logger')
 
 Python logging 模块定义了以下日志级别：
 
-| 级别 | 数值 | 描述 |
-|------|------|------|
-| CRITICAL | 50 | 严重错误，可能导致应用程序崩溃 |
-| ERROR | 40 | 错误，但应用程序仍可运行 |
-| WARNING | 30 | 警告信息，表明潜在的问题 |
-| INFO | 20 | 信息性消息，记录正常运行状态 |
-| DEBUG | 10 | 调试信息，用于开发阶段 |
+| 级别     | 数值 | 描述                           |
+| -------- | ---- | ------------------------------ |
+| CRITICAL | 50   | 严重错误，可能导致应用程序崩溃 |
+| ERROR    | 40   | 错误，但应用程序仍可运行       |
+| WARNING  | 30   | 警告信息，表明潜在的问题       |
+| INFO     | 20   | 信息性消息，记录正常运行状态   |
+| DEBUG    | 10   | 调试信息，用于开发阶段         |
 
 ## 高级配置
 
@@ -226,7 +226,7 @@ logger = logging.getLogger(__name__)
 ```python
 def process_data(data):
     logger.debug("Starting data processing with input: %s", data)
-    
+
     try:
         result = complex_operation(data)
         logger.info("Data processing completed successfully")
@@ -260,7 +260,7 @@ try:
 except Exception as e:
     # 记录异常信息（包括堆栈跟踪）
     logger.error("Exception occurred", exc_info=True)
-    
+
     # 或者使用 exception 方法（自动包含异常信息）
     logger.exception("Exception occurred during risky operation")
 ```

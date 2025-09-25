@@ -10,10 +10,10 @@
 
 1. #安装前提
 2. #安装方式
-    * #通过-npm-在项目中安装推荐
-    * #通过-yarn-安装
-    * #通过-pnpm-安装
-    * #全局安装-typescript
+   - #通过-npm-在项目中安装推荐
+   - #通过-yarn-安装
+   - #通过-pnpm-安装
+   - #全局安装-typescript
 3. #验证安装
 4. #编辑器支持
 5. #创建并运行你的第一个-typescript-程序
@@ -24,18 +24,18 @@
 
 在安装 TypeScript 之前，请确保你的系统已安装 **Node.js**。TypeScript 编译器 (`tsc`) 需要 Node.js 运行时环境来执行。
 
-* **检查是否已安装 Node.js**：
-    在终端或命令提示符中运行以下命令：
+- **检查是否已安装 Node.js**：
+  在终端或命令提示符中运行以下命令：
 
-    ```bash
-    node --version
-    npm --version
-    ```
+  ```bash
+  node --version
+  npm --version
+  ```
 
-    如果命令返回了版本号（例如 `v18.17.0` 和 `9.6.7`），则说明已安装。请确保 Node.js 版本为 10.x 或更高。
+  如果命令返回了版本号（例如 `v18.17.0` 和 `9.6.7`），则说明已安装。请确保 Node.js 版本为 10.x 或更高。
 
-* **安装 Node.js**：
-    如果未安装，请访问 <https://nodejs.org/> 下载并安装最新的 **LTS（长期支持版本）**。安装包通常会自动包含 npm（Node Package Manager）。
+- **安装 Node.js**：
+  如果未安装，请访问 <https://nodejs.org/> 下载并安装最新的 **LTS（长期支持版本）**。安装包通常会自动包含 npm（Node Package Manager）。
 
 ## 安装方式
 
@@ -45,30 +45,30 @@
 
 1. **初始化你的项目**（如果你的项目还没有 `package.json` 文件）：
 
-    ```bash
-    # 创建一个新目录并进入
-    mkdir my-typescript-project
-    cd my-typescript-project
+   ```bash
+   # 创建一个新目录并进入
+   mkdir my-typescript-project
+   cd my-typescript-project
 
-    # 初始化一个新的 Node.js 项目，根据提示输入信息或直接回车使用默认值
-    npm init -y
-    ```
+   # 初始化一个新的 Node.js 项目，根据提示输入信息或直接回车使用默认值
+   npm init -y
+   ```
 
 2. **安装 TypeScript**：
 
-    ```bash
-    # 使用 --save-dev 或 -D 标志将其保存为开发依赖
-    npm install --save-dev typescript
-    ```
+   ```bash
+   # 使用 --save-dev 或 -D 标志将其保存为开发依赖
+   npm install --save-dev typescript
+   ```
 
-    安装完成后，你可以在 `package.json` 文件中的 `"devDependencies"` 部分看到 `typescript`。
+   安装完成后，你可以在 `package.json` 文件中的 `"devDependencies"` 部分看到 `typescript`。
 
 3. **安装 TypeScript 编译器 CLI**（可选但推荐）：
-    为了方便地运行本地的 TypeScript 编译器，你可以同时安装 `ts-node`，它提供了直接运行 `.ts` 文件的命令。
+   为了方便地运行本地的 TypeScript 编译器，你可以同时安装 `ts-node`，它提供了直接运行 `.ts` 文件的命令。
 
-    ```bash
-    npm install --save-dev ts-node
-    ```
+   ```bash
+   npm install --save-dev ts-node
+   ```
 
 ### 通过 Yarn 安装
 
@@ -76,15 +76,15 @@
 
 1. **初始化项目**（如果需要）：
 
-    ```bash
-    yarn init -y
-    ```
+   ```bash
+   yarn init -y
+   ```
 
 2. **安装 TypeScript**：
 
-    ```bash
-    yarn add --dev typescript
-    ```
+   ```bash
+   yarn add --dev typescript
+   ```
 
 ### 通过 pnpm 安装
 
@@ -92,15 +92,15 @@
 
 1. **初始化项目**（如果需要）：
 
-    ```bash
-    pnpm init
-    ```
+   ```bash
+   pnpm init
+   ```
 
 2. **安装 TypeScript**：
 
-    ```bash
-    pnpm add --save-dev typescript
-    ```
+   ```bash
+   pnpm add --save-dev typescript
+   ```
 
 ### 全局安装 TypeScript
 
@@ -120,81 +120,81 @@ sudo npm install -g typescript
 
 安装完成后，通过检查版本来验证安装是否成功。
 
-* **验证项目内安装**：
+- **验证项目内安装**：
 
-    ```bash
-    # 对于本地安装，使用 npx 来运行 node_modules 中的命令
-    npx tsc --version
-    # 或者使用项目路径
-    ./node_modules/.bin/tsc --version
-    ```
+  ```bash
+  # 对于本地安装，使用 npx 来运行 node_modules 中的命令
+  npx tsc --version
+  # 或者使用项目路径
+  ./node_modules/.bin/tsc --version
+  ```
 
-* **验证全局安装**：
+- **验证全局安装**：
 
-    ```bash
-    tsc --version
-    ```
+  ```bash
+  tsc --version
+  ```
 
-    以上命令均应输出已安装的 TypeScript 版本号，例如 `Version 5.9.7`。
+  以上命令均应输出已安装的 TypeScript 版本号，例如 `Version 5.9.7`。
 
 ## 编辑器支持
 
 强大的编辑器支持是 TypeScript 的核心优势之一。
 
-* **Visual Studio Code (VS Code)**：微软官方出品，对 TypeScript 提供了**一流的支持**，开箱即用。它内置了 TypeScript 语言服务，提供了智能感知（IntelliSense）、代码导航、实时错误检查、重构等功能。
-  * **建议安装**：无需额外安装插件即可获得完美体验。
+- **Visual Studio Code (VS Code)**：微软官方出品，对 TypeScript 提供了**一流的支持**，开箱即用。它内置了 TypeScript 语言服务，提供了智能感知（IntelliSense）、代码导航、实时错误检查、重构等功能。
+  - **建议安装**：无需额外安装插件即可获得完美体验。
 
-* **其他编辑器**（如 WebStorm, Sublime Text, Vim, Emacs 等）也都有优秀的 TypeScript 插件或内置支持。请参考相应编辑器的插件市场进行安装。
+- **其他编辑器**（如 WebStorm, Sublime Text, Vim, Emacs 等）也都有优秀的 TypeScript 插件或内置支持。请参考相应编辑器的插件市场进行安装。
 
 ## 创建并运行你的第一个 TypeScript 程序
 
 1. **创建 TypeScript 配置文件 (`tsconfig.json`)**：
-    在项目根目录下，运行以下命令来生成一个默认的配置文件：
+   在项目根目录下，运行以下命令来生成一个默认的配置文件：
 
-    ```bash
-    npx tsc --init
-    ```
+   ```bash
+   npx tsc --init
+   ```
 
-    这会创建一个包含所有编译选项（大部分被注释掉）的 `tsconfig.json` 文件。你可以根据需要修改这些配置。
+   这会创建一个包含所有编译选项（大部分被注释掉）的 `tsconfig.json` 文件。你可以根据需要修改这些配置。
 
 2. **创建一个简单的 `.ts` 文件**：
-    在 `src` 目录下（或其他你喜欢的目录），创建文件 `hello.ts`：
+   在 `src` 目录下（或其他你喜欢的目录），创建文件 `hello.ts`：
 
-    ```typescript
-    // src/hello.ts
-    function greet(person: string, date: Date): void {
-      console.log(`Hello ${person}, today is ${date.toDateString()}!`);
-    }
+   ```typescript
+   // src/hello.ts
+   function greet(person: string, date: Date): void {
+     console.log(`Hello ${person}, today is ${date.toDateString()}!`);
+   }
 
-    greet("TypeScript", new Date());
-    ```
+   greet('TypeScript', new Date());
+   ```
 
 3. **编译 TypeScript 代码**：
-    在终端中运行编译器。它会读取 `tsconfig.json` 并根据其中的配置进行编译。
+   在终端中运行编译器。它会读取 `tsconfig.json` 并根据其中的配置进行编译。
 
-    ```bash
-    npx tsc
-    ```
+   ```bash
+   npx tsc
+   ```
 
-    如果一切正常，这将在输出目录（默认为 `./dist`）下生成一个同名的 `.js` 文件 (`dist/hello.js`)。
+   如果一切正常，这将在输出目录（默认为 `./dist`）下生成一个同名的 `.js` 文件 (`dist/hello.js`)。
 
 4. **运行 JavaScript 代码**：
-    使用 Node.js 运行编译后的 JS 文件：
+   使用 Node.js 运行编译后的 JS 文件：
 
-    ```bash
-    node dist/hello.js
-    ```
+   ```bash
+   node dist/hello.js
+   ```
 
-    你应该能看到输出：`Hello TypeScript, today is Wed Sep 17 2025!`
+   你应该能看到输出：`Hello TypeScript, today is Wed Sep 17 2025!`
 
 5. **使用 `ts-node` 直接运行（替代步骤 3 和 4）**：
-    如果你安装了 `ts-node`，可以跳过编译步骤，直接运行 `.ts` 文件：
+   如果你安装了 `ts-node`，可以跳过编译步骤，直接运行 `.ts` 文件：
 
-    ```bash
-    npx ts-node src/hello.ts
-    ```
+   ```bash
+   npx ts-node src/hello.ts
+   ```
 
-    这会在内存中编译并立即执行代码，输出相同的结果，非常适合开发阶段的快速测试。
+   这会在内存中编译并立即执行代码，输出相同的结果，非常适合开发阶段的快速测试。
 
 ## 常见问题与解答
 
@@ -208,8 +208,8 @@ sudo npm install -g typescript
 **Q2: 运行 `tsc` 或 `ts-node` 命令提示“找不到命令”？**
 **A**: 这通常意味着：
 
-* 对于本地安装，请确保使用 `npx tsc` 或 `npx ts-node`。
-* 对于全局安装，请检查你的系统 `PATH` 环境变量是否包含 Node.js 全局包的安装路径。
+- 对于本地安装，请确保使用 `npx tsc` 或 `npx ts-node`。
+- 对于全局安装，请检查你的系统 `PATH` 环境变量是否包含 Node.js 全局包的安装路径。
 
 **Q3: 如何为现有 JavaScript 项目添加 TypeScript？**
 **A**: 参考官方文档的 <https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html> 指南。基本步骤是：
@@ -224,12 +224,12 @@ sudo npm install -g typescript
 
 ## 总结与最佳实践
 
-| 方面 | 推荐实践 |
-| :--- | :--- |
-| **安装方式** | **项目本地安装** (`npm install --save-dev typescript`)。避免使用全局安装进行项目开发。 |
-| **包管理器** | npm, Yarn 或 pnpm 均可。选择你的团队或项目正在使用的工具。 |
-| **编辑器** | **强烈推荐使用 VS Code**，以获得最佳的 TypeScript 开发体验。 |
-| **工作流程** | 在开发中使用 `ts-node` 进行快速测试，使用 `tsc` 进行正式构建。利用编辑器的实时错误提示功能。 |
+| 方面         | 推荐实践                                                                                                                                          |
+| :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **安装方式** | **项目本地安装** (`npm install --save-dev typescript`)。避免使用全局安装进行项目开发。                                                            |
+| **包管理器** | npm, Yarn 或 pnpm 均可。选择你的团队或项目正在使用的工具。                                                                                        |
+| **编辑器**   | **强烈推荐使用 VS Code**，以获得最佳的 TypeScript 开发体验。                                                                                      |
+| **工作流程** | 在开发中使用 `ts-node` 进行快速测试，使用 `tsc` 进行正式构建。利用编辑器的实时错误提示功能。                                                      |
 | **版本控制** | 将 `package.json` 和 `package-lock.json`（或 `yarn.lock`）纳入版本控制。**不要**将 `node_modules` 和编译输出的 JS 文件（如 `dist`）纳入版本控制。 |
 
 通过本文档，你应该已经成功安装了 TypeScript 并配置好了开发环境。接下来，你可以继续学习 TypeScript 的核心概念，如基础类型、接口、泛型等，开始享受类型安全带来的开发效率提升和代码健壮性。
@@ -240,8 +240,8 @@ Happy Coding!
 
 **参考资料来源**：
 
-* <https://www.typescriptlang.org/download>
-* <https://www.typescriptlang.org/docs/handbook/intro.html>
-* <https://docs.npmjs.com/downloading-and-installing-packages-locally>
-* <https://code.visualstudio.com/docs/languages/typescript>
-* 以及其他多篇社区技术博客和 Stack Overflow 的高票解答。
+- <https://www.typescriptlang.org/download>
+- <https://www.typescriptlang.org/docs/handbook/intro.html>
+- <https://docs.npmjs.com/downloading-and-installing-packages-locally>
+- <https://code.visualstudio.com/docs/languages/typescript>
+- 以及其他多篇社区技术博客和 Stack Overflow 的高票解答。

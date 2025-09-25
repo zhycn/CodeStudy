@@ -86,16 +86,16 @@ bar.render("my_first_chart.html")
 1. **Chart 类** (`Bar`, `Line`, `Pie`...): 每种图表都对应一个类，是创建图表的入口。
 2. **`add_xaxis` / `add_yaxis`**: 用于为图表添加数据。`add_xaxis` 添加类目轴（X 轴）数据，`add_yaxis` 添加系列数据（Y 轴数据）并指定系列名称。
 3. **`set_global_opts`**: 设置**全局配置项**，这些配置会影响整个图表，例如：
-    - `TitleOpts`: 标题和副标题。
-    - `LegendOpts`: 图例。
-    - `TooltipOpts`: 提示框组件。
-    - `ToolboxOpts`: 工具箱。
-    - `VisualMapOpts`: 视觉映射组件（用于分段着色等）。
-    - `DataZoomOpts`: 数据区域缩放组件。
+   - `TitleOpts`: 标题和副标题。
+   - `LegendOpts`: 图例。
+   - `TooltipOpts`: 提示框组件。
+   - `ToolboxOpts`: 工具箱。
+   - `VisualMapOpts`: 视觉映射组件（用于分段着色等）。
+   - `DataZoomOpts`: 数据区域缩放组件。
 4. **`set_series_opts`**: 设置**系列配置项**，这些配置只影响特定的数据系列，例如：
-    - `LabelOpts`: 系列数据点的标签。
-    - `ItemStyleOpts`: 系列图元的样式（如颜色、边框等）。
-    - `MarkPointOpts` / `MarkLineOpts`: 标记点和标记线。
+   - `LabelOpts`: 系列数据点的标签。
+   - `ItemStyleOpts`: 系列图元的样式（如颜色、边框等）。
+   - `MarkPointOpts` / `MarkLineOpts`: 标记点和标记线。
 
 **链式调用示例：**
 上面的第一个例子可以用更简洁的链式调用重写，这是推荐的做法。
@@ -189,7 +189,7 @@ pie = (
     )
     .set_series_opts(
         tooltip_opts=opts.TooltipOpts(
-            trigger="item", 
+            trigger="item",
             formatter="{a} <br/>{b}: {c} ({d}%)" # 自定义提示框格式
         ),
         label_opts=opts.LabelOpts(formatter="{b}: {d}%"), # 自定义标签格式，只显示名称和百分比
@@ -348,14 +348,14 @@ data = [('广东', 125), ('北京', 108), ('上海', 99), ('江西', 85), ('湖�
 map_china = (
     Map()
     .add(
-        series_name="数据分布", 
-        data_pair=data, 
+        series_name="数据分布",
+        data_pair=data,
         maptype="china"
     )
     .set_global_opts(
         title_opts=opts.TitleOpts(title="Map-中国地图"),
         visualmap_opts=opts.VisualMapOpts( # 视觉映射配置
-            max_=150, 
+            max_=150,
             is_piecewise=True, # 是否为分段型
         ),
     )
@@ -376,72 +376,72 @@ map_china.render("map_china.html")
 
 1. **编写一个生成图表配置的函数 (chart_maker.py):**
 
-    ```python
-    # chart_maker.py
-    from pyecharts.charts import Bar
-    from pyecharts import options as opts
+   ```python
+   # chart_maker.py
+   from pyecharts.charts import Bar
+   from pyecharts import options as opts
 
-    def create_bar() -> Bar:
-        bar = (
-            Bar()
-            .add_xaxis(["A", "B", "C"])
-            .add_yaxis("Series", [1, 2, 3])
-            .set_global_opts(title_opts=opts.TitleOpts(title="Flask集成示例"))
-        )
-        return bar
-    ```
+   def create_bar() -> Bar:
+       bar = (
+           Bar()
+           .add_xaxis(["A", "B", "C"])
+           .add_yaxis("Series", [1, 2, 3])
+           .set_global_opts(title_opts=opts.TitleOpts(title="Flask集成示例"))
+       )
+       return bar
+   ```
 
 2. **Flask 应用 (app.py):**
 
-    ```python
-    # app.py
-    from flask import Flask, render_template
-    from chart_maker import create_bar
+   ```python
+   # app.py
+   from flask import Flask, render_template
+   from chart_maker import create_bar
 
-    app = Flask(__name__)
+   app = Flask(__name__)
 
-    @app.route("/")
-    def index():
-        bar_chart = create_bar()
-        # 将图表的配置项（JSON）和依赖的 JavaScript 列表 dump 出来
-        chart_options = bar_chart.dump_options()
-        # chart_options 是一个 JSON 字符串，包含所有配置
-        # 也可以使用 bar_chart.dump_options_with_quotes() 处理引号问题
-        return render_template("index.html", chart_options=chart_options)
+   @app.route("/")
+   def index():
+       bar_chart = create_bar()
+       # 将图表的配置项（JSON）和依赖的 JavaScript 列表 dump 出来
+       chart_options = bar_chart.dump_options()
+       # chart_options 是一个 JSON 字符串，包含所有配置
+       # 也可以使用 bar_chart.dump_options_with_quotes() 处理引号问题
+       return render_template("index.html", chart_options=chart_options)
 
-    if __name__ == "__main__":
-        app.run(debug=True)
-    ```
+   if __name__ == "__main__":
+       app.run(debug=True)
+   ```
 
 3. **HTML 模板 (templates/index.html):**
 
-    ```html
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>PyEcharts with Flask</title>
-        <!-- 在头部引入 ECharts JS 库 -->
-        <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    </head>
-    <body>
-        <!-- 为图表准备一个具备大小的 DOM 容器 -->
-        <div id="chart" style="width: 1000px; height: 600px;"></div>
+   ```html
+   <!DOCTYPE html>
+   <html>
+     <head>
+       <meta charset="utf-8" />
+       <title>PyEcharts with Flask</title>
+       <!-- 在头部引入 ECharts JS 库 -->
+       <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+     </head>
+     <body>
+       <!-- 为图表准备一个具备大小的 DOM 容器 -->
+       <div id="chart" style="width: 1000px; height: 600px;"></div>
 
-        <script type="text/javascript">
-            // 基于准备好的 dom，初始化 echarts 实例
-            var chartDom = document.getElementById('chart');
-            var myChart = echarts.init(chartDom);
+       <script type="text/javascript">
+         // 基于准备好的 dom，初始化 echarts 实例
+         var chartDom = document.getElementById('chart');
+         var myChart = echarts.init(chartDom);
 
-            // 使用从 Flask 传递过来的配置项 (JSON 对象)
-            var option = {{ chart_options | safe }}; // 使用 Jinja2 的 safe 过滤器防止转义
+         // 使用从 Flask 传递过来的配置项 (JSON 对象)
+         var option = {{ chart_options | safe }}; // 使用 Jinja2 的 safe 过滤器防止转义
 
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-        </script>
-    </body>
-    </html>
-    ```
+         // 使用刚指定的配置项和数据显示图表。
+         myChart.setOption(option);
+       </script>
+     </body>
+   </html>
+   ```
 
 **方法二：服务端渲染图片（使用 make_snapshot）**
 适用于需要将图表以图片形式嵌入邮件、PDF 报告等场景。
@@ -486,30 +486,30 @@ bar.render_notebook() # 在单元格中直接渲染图表
 ## 7. 常见问题与解决方案 (FAQ)
 
 1. **Q: 地图显示不出来，只是一个灰色区域？**
-    **A:** 确保已安装相应的地图包（如 `echarts-china-provinces-pypkg`）。确保 `maptype` 参数正确（如 `'china'`）。检查浏览器控制台是否有 JavaScript 错误。
+   **A:** 确保已安装相应的地图包（如 `echarts-china-provinces-pypkg`）。确保 `maptype` 参数正确（如 `'china'`）。检查浏览器控制台是否有 JavaScript 错误。
 
 2. **Q: 提示 `Chart not initialized. Please call first`？**
-    **A:** 这通常是因为在 Jupyter 中运行了 `render()` 而不是 `render_notebook()`，或者在链式调用中漏掉了某个步骤。确保完整地构建了图表对象。
+   **A:** 这通常是因为在 Jupyter 中运行了 `render()` 而不是 `render_notebook()`，或者在链式调用中漏掉了某个步骤。确保完整地构建了图表对象。
 
 3. **Q: 如何自定义颜色？**
-    **A:** 在 `add_yaxis` 或 `set_series_opts` 中使用 `itemstyle_opts`。
+   **A:** 在 `add_yaxis` 或 `set_series_opts` 中使用 `itemstyle_opts`。
 
-    ```python
-    .add_yaxis("Series", data, color="red") # 简单设置
-    # 或者更详细的控制
-    .set_series_opts(itemstyle_opts=opts.ItemStyleOpts(color="#FF0000"))
-    # 或者为系列指定颜色列表
-    .add_yaxis("Series", data, color=["#FF0000", "#00FF00", "#0000FF"])
-    ```
+   ```python
+   .add_yaxis("Series", data, color="red") # 简单设置
+   # 或者更详细的控制
+   .set_series_opts(itemstyle_opts=opts.ItemStyleOpts(color="#FF0000"))
+   # 或者为系列指定颜色列表
+   .add_yaxis("Series", data, color=["#FF0000", "#00FF00", "#0000FF"])
+   ```
 
 4. **Q: 如何保存为高分辨率图片？**
-    **A:** 使用 `make_snapshot` 功能（见 6.1 章节），并设置 `pixel_ratio` 参数。在浏览器中使用工具箱的“下载图片”功能下载的是 PNG 格式，但分辨率取决于屏幕。
+   **A:** 使用 `make_snapshot` 功能（见 6.1 章节），并设置 `pixel_ratio` 参数。在浏览器中使用工具箱的“下载图片”功能下载的是 PNG 格式，但分辨率取决于屏幕。
 
 5. **Q: 文档和示例在哪里？**
-    **A:**
-    - **官方文档 (首选)**: <https://pyecharts.org>
-    - **GitHub 仓库**: <https://github.com/pyecharts/pyecharts>
-    - **示例 Gallery**: <https://gallery.pyecharts.org> (这里有大量可直接运行的代码示例！)
+   **A:**
+   - **官方文档 (首选)**: <https://pyecharts.org>
+   - **GitHub 仓库**: <https://github.com/pyecharts/pyecharts>
+   - **示例 Gallery**: <https://gallery.pyecharts.org> (这里有大量可直接运行的代码示例！)
 
 ## 8. 总结
 

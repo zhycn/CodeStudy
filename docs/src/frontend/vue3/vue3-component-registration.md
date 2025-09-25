@@ -4,7 +4,7 @@
 
 # Vue 3 组件注册详解与最佳实践
 
-组件是 Vue  𝗯最核心的概念之一，它允许我们将 UI 拆分成独立、可复用的代码片段。正确地注册和使用组件是构建可维护、高性能 Vue 应用的基础。本文将深入探讨 Vue 3 中的组件注册机制，并提供经过社区验证的最佳实践。
+组件是 Vue 𝗯最核心的概念之一，它允许我们将 UI 拆分成独立、可复用的代码片段。正确地注册和使用组件是构建可维护、高性能 Vue 应用的基础。本文将深入探讨 Vue 3 中的组件注册机制，并提供经过社区验证的最佳实践。
 
 ## 1. 组件名格式
 
@@ -32,20 +32,20 @@
 
 ```javascript
 // main.js
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 
 // 1. 导入要全局注册的组件
-import MyComponent from './components/MyComponent.vue'
-import AppHeader from './components/AppHeader.vue'
+import MyComponent from './components/MyComponent.vue';
+import AppHeader from './components/AppHeader.vue';
 
-const app = createApp(App)
+const app = createApp(App);
 
 // 2. 进行全局注册
-app.component('MyComponent', MyComponent) // 字符串注册名，组件实例
-app.component('AppHeader', AppHeader) // 注册名也可以和组件名一样
+app.component('MyComponent', MyComponent); // 字符串注册名，组件实例
+app.component('AppHeader', AppHeader); // 注册名也可以和组件名一样
 
-app.mount('#app')
+app.mount('#app');
 ```
 
 注册完成后，即可在任何组件的模板中直接使用。
@@ -97,8 +97,8 @@ app.mount('#app')
 
 <script setup>
 // 1. 导入组件
-import MyComponent from './MyComponent.vue'
-import AppHeader from './AppHeader.vue'
+import MyComponent from './MyComponent.vue';
+import AppHeader from './AppHeader.vue';
 
 // 2. 导入后即可直接在模板中使用，无需 components 选项
 </script>
@@ -119,16 +119,16 @@ import AppHeader from './AppHeader.vue'
 
 <script>
 // 1. 导入组件
-import MyComponent from './MyComponent.vue'
-import AppHeader from './AppHeader.vue'
+import MyComponent from './MyComponent.vue';
+import AppHeader from './AppHeader.vue';
 
 export default {
   // 2. 在 components 选项中局部注册
   components: {
     MyComponent, // ES6 属性简写: `MyComponent: MyComponent`
-    AppHeader
-  }
-}
+    AppHeader,
+  },
+};
 </script>
 ```
 
@@ -142,32 +142,30 @@ export default {
 
 ```javascript
 // main.js
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 
-const app = createApp(App)
+const app = createApp(App);
 
 // 使用 Vite 的 import.meta.globEager 或 import.meta.glob
 // 获取 ./components/global 目录下所有 .vue 文件
-const modules = import.meta.glob('./components/global/*.vue', { eager: true })
+const modules = import.meta.glob('./components/global/*.vue', { eager: true });
 
 // 遍历模块对象
 for (const path in modules) {
   // 获取组件配置
-  const componentConfig = modules[path]
+  const componentConfig = modules[path];
   // 剥去文件名开头的 `'./components/global/'` 和结尾的扩展名
-  const componentName = path
-    .replace(/^\.\/components\/global\//, '')
-    .replace(/\.vue$/, '')
-    // 可选：将形如 `MyComponent.vue` 的文件名转换为 PascalCase
-    // 这里简单使用原文件名，确保你的文件名本身就是 PascalCase
-    // 或者可以在这里写一个转换函数
+  const componentName = path.replace(/^\.\/components\/global\//, '').replace(/\.vue$/, '');
+  // 可选：将形如 `MyComponent.vue` 的文件名转换为 PascalCase
+  // 这里简单使用原文件名，确保你的文件名本身就是 PascalCase
+  // 或者可以在这里写一个转换函数
 
   // 全局注册组件
-  app.component(componentName, componentConfig.default || componentConfig)
+  app.component(componentName, componentConfig.default || componentConfig);
 }
 
-app.mount('#app')
+app.mount('#app');
 ```
 
 **注意**: 自动注册虽好，但仍需谨慎，确保只对真正需要全局使用的组件进行此操作。
@@ -189,11 +187,7 @@ app.mount('#app')
     <div>{{ data.title }}</div>
     <ul v-if="data.children && data.children.length">
       <!-- 组件通过它的 name 递归调用自己 -->
-      <recursive-item
-        v-for="child in data.children"
-        :key="child.id"
-        :data="child"
-      />
+      <recursive-item v-for="child in data.children" :key="child.id" :data="child" />
     </ul>
   </li>
 </template>
@@ -202,9 +196,9 @@ app.mount('#app')
 export default {
   name: 'RecursiveItem', // 显式声明 name 对于递归组件至关重要
   props: {
-    data: Object
-  }
-}
+    data: Object,
+  },
+};
 </script>
 ```
 
@@ -214,25 +208,21 @@ export default {
 <!-- RecursiveItem.vue -->
 <script>
 export default {
-  name: 'RecursiveItem'
-}
+  name: 'RecursiveItem',
+};
 </script>
 
 <script setup>
 defineProps({
-  data: Object
-})
+  data: Object,
+});
 </script>
 
 <template>
   <li>
     <div>{{ data.title }}</div>
     <ul v-if="data.children && data.children.length">
-      <RecursiveItem
-        v-for="child in data.children"
-        :key="child.id"
-        :data="child"
-      />
+      <RecursiveItem v-for="child in data.children" :key="child.id" :data="child" />
     </ul>
   </li>
 </template>
@@ -242,13 +232,13 @@ defineProps({
 
 ## 5. 最佳实践总结
 
-| 场景 | 推荐方式 | 理由 |
-| :--- | :--- | :--- |
-| **通用基础组件** (Button, Icon, Modal) | **全局注册** | 在整个应用中无处不在，全局注册避免重复导入。 |
-| **业务组件** (UserCard, ProductList) | **局部注册** | 使依赖关系明确，利于树摇优化，减少打包体积。 |
-| **组件命名** | **PascalCase** | 符合标准，与 HTML 元素清晰区分，便于识别。 |
-| **项目结构** | 将需全局注册的组件放入 `components/global/` 目录 | 结构清晰，便于配合脚本进行**自动全局注册**。 |
-| **递归组件** | **显式设置 `name` 选项** | 是组件递归调用自身的必要条件。 |
+| 场景                                   | 推荐方式                                         | 理由                                         |
+| :------------------------------------- | :----------------------------------------------- | :------------------------------------------- |
+| **通用基础组件** (Button, Icon, Modal) | **全局注册**                                     | 在整个应用中无处不在，全局注册避免重复导入。 |
+| **业务组件** (UserCard, ProductList)   | **局部注册**                                     | 使依赖关系明确，利于树摇优化，减少打包体积。 |
+| **组件命名**                           | **PascalCase**                                   | 符合标准，与 HTML 元素清晰区分，便于识别。   |
+| **项目结构**                           | 将需全局注册的组件放入 `components/global/` 目录 | 结构清晰，便于配合脚本进行**自动全局注册**。 |
+| **递归组件**                           | **显式设置 `name` 选项**                         | 是组件递归调用自身的必要条件。               |
 
 **核心原则**: 默认使用**局部注册**。只有在某个组件确实需要在任何地方都能被轻松调用时，才考虑将其提升为全局组件。
 

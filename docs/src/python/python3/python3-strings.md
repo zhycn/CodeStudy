@@ -322,40 +322,40 @@ pattern = r"\b[A-Z]+\b"  # 匹配全大写的单词
 
 2. **高效拼接字符串**：避免在循环中使用 `+` 或 `+=` 来拼接大量字符串，因为这会创建大量临时对象，导致性能低下（O(n²) 时间复杂度）。
 
-    ```python
-    # 不佳的做法 (在循环中使用 +)
-    result = ""
-    for i in range(10000):
-        result += str(i)  # 每次循环都创建新字符串
+   ```python
+   # 不佳的做法 (在循环中使用 +)
+   result = ""
+   for i in range(10000):
+       result += str(i)  # 每次循环都创建新字符串
 
-    # 最佳做法 (使用 str.join() 或列表推导式)
-    parts = []
-    for i in range(10000):
-        parts.append(str(i))
-    result = "".join(parts) # 只创建一次字符串
+   # 最佳做法 (使用 str.join() 或列表推导式)
+   parts = []
+   for i in range(10000):
+       parts.append(str(i))
+   result = "".join(parts) # 只创建一次字符串
 
-    # 或者使用生成器表达式
-    result = "".join(str(i) for i in range(10000))
-    ```
+   # 或者使用生成器表达式
+   result = "".join(str(i) for i in range(10000))
+   ```
 
 3. **使用 `in` 运算符进行成员检查**：检查子串是否存在时，`in` 运算符非常高效且可读。
 
-    ```python
-    s = "This is a sample string"
-    if "sample" in s:
-        print("Found it!")
-    ```
+   ```python
+   s = "This is a sample string"
+   if "sample" in s:
+       print("Found it!")
+   ```
 
 4. **善用字符串方法**：很多操作（如去除空白、分割）都有内置的优化方法，应优先使用它们而不是自己用切片等方式实现。
 
 5. **注意字符串驻留（Interning）**：Python 会对一些小字符串和标识符（如变量名）进行驻留优化，但不要依赖此特性进行身份检查（`is`），始终使用相等检查（`==`）。
 
-    ```python
-    a = "hello"
-    b = "hello"
-    print(a is b)  # Output: True (可能，但非保证，CPython 会对小字符串驻留)
-    print(a == b)  # Output: True (始终正确)
-    ```
+   ```python
+   a = "hello"
+   b = "hello"
+   print(a is b)  # Output: True (可能，但非保证，CPython 会对小字符串驻留)
+   print(a == b)  # Output: True (始终正确)
+   ```
 
 ## 9. 总结
 

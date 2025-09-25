@@ -94,7 +94,7 @@ public class Person {
     private String name;
     private int age;
     private String email;
-    
+
     // 构造方法、getter 和 setter 省略
 }
 
@@ -137,10 +137,10 @@ assertThatExceptionOfType(IOException.class)
 
 在 Spring 测试中，我们需要区分单元测试和集成测试：
 
-| 测试类型 | 特点 | 适用场景 |
-|---------|------|---------|
+| 测试类型 | 特点                                       | 适用场景         |
+| -------- | ------------------------------------------ | ---------------- |
 | 单元测试 | 不加载 Spring 上下文，完全隔离，执行速度快 | 测试单个类或方法 |
-| 集成测试 | 加载部分或全部 Spring 上下文，执行速度较慢 | 测试组件间协作 |
+| 集成测试 | 加载部分或全部 Spring 上下文，执行速度较慢 | 测试组件间协作   |
 
 ### 3.2 Spring MVC 控制器测试
 
@@ -153,19 +153,19 @@ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockitoBean
     private UserService userService;
-    
+
     @Test
     void getUserById_ShouldReturnUser() throws Exception {
         User mockUser = new User(1L, "John Doe");
         when(userService.findById(1L)).thenReturn(mockUser);
-        
+
         mockMvc.perform(get("/users/1"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value("John Doe"));
-            
+
         // 使用 AssertJ 验证服务调用
         verify(userService, times(1)).findById(1L);
         assertThat(mockUser.getName()).isEqualTo("John Doe");
@@ -184,16 +184,16 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Test
     void findByEmail_ShouldReturnUser() {
         // 准备数据
         User user = new User("John Doe", "john@example.com");
         userRepository.save(user);
-        
+
         // 执行查询
         Optional<User> foundUser = userRepository.findByEmail("john@example.com");
-        
+
         // 使用 AssertJ 断言
         assertThat(foundUser)
             .isPresent()
@@ -215,16 +215,16 @@ class ApplicationIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
-    
+
     @Test
     void contextLoads() {
         // 确保应用上下文加载成功
     }
-    
+
     @Test
     void getUserById_ShouldReturnUser() {
         ResponseEntity<User> response = restTemplate.getForEntity("/users/1", User.class);
-        
+
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody())
             .isNotNull()
@@ -303,7 +303,7 @@ assertThat(result)
 @Test
 void shouldHaveCorrectAge() {
     Person person = new Person("John", 25);
-    
+
     assertThat(person.getAge())
         .as("%s's age should be between 20 and 30", person.getName())
         .isBetween(20, 30);
@@ -325,7 +325,7 @@ class UserRepositoryTest {
     @Test
     void shouldReturnActiveUsers() {
         List<User> activeUsers = userRepository.findActiveUsers();
-        
+
         assertThat(activeUsers)
             .hasSize(2)
             .extracting(User::getName)
@@ -346,13 +346,13 @@ class UserRepositoryTest {
 @Test
 void softAssertionsExample() {
     SoftAssertions softly = new SoftAssertions();
-    
+
     String name = "John Doe";
     softly.assertThat(name).startsWith("J"); // 通过
     softly.assertThat(name).hasSize(8);      // 失败，但继续执行
     softly.assertThat(name).contains("Do");  // 通过
     softly.assertThat(name).endsWith("e");   // 通过
-    
+
     // 必须调用assertAll()来报告所有失败
     softly.assertAll();
 }
@@ -365,25 +365,25 @@ void softAssertionsExample() {
 ```java
 // 自定义断言类
 public class UserAssert extends AbstractAssert<UserAssert, User> {
-    
+
     public UserAssert(User actual) {
         super(actual, UserAssert.class);
     }
-    
+
     public static UserAssert assertThat(User actual) {
         return new UserAssert(actual);
     }
-    
+
     public UserAssert hasFullName(String expectedFullName) {
         isNotNull();
-        
+
         String actualFullName = actual.getFirstName() + " " + actual.getLastName();
-        
+
         if (!actualFullName.equals(expectedFullName)) {
-            failWithMessage("Expected user's full name to be <%s> but was <%s>", 
+            failWithMessage("Expected user's full name to be <%s> but was <%s>",
                 expectedFullName, actualFullName);
         }
-        
+
         return this;
     }
 }
@@ -405,7 +405,7 @@ void whenInvalidInput_thenThrowsException() {
     assertThatThrownBy(() -> userService.createUser(null))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("User must not be null");
-        
+
     // 验证异常属性
     assertThatExceptionOfType(ResourceNotFoundException.class)
         .isThrownBy(() -> userService.findById(999L))
@@ -424,20 +424,20 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-    
+
     @InjectMocks
     private UserService userService;
-    
+
     @Test
     void shouldCreateUser() {
         User user = new User("John Doe", "john@example.com");
         when(userRepository.save(any(User.class))).thenReturn(user);
-        
+
         User createdUser = userService.createUser(user);
-        
+
         // 验证方法调用
         verify(userRepository, times(1)).save(user);
-        
+
         // 使用 AssertJ 断言
         assertThat(createdUser)
             .isNotNull()

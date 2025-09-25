@@ -425,17 +425,17 @@ Python 的卸载与安装是开发中的基础操作，但需要谨慎执行以�
 
 ## 附录：有用的命令速查表
 
-| 操作 | 命令 |
-|------|------|
-| 检查 Python 版本 | `python --version` 或 `python -V` |
-| 检查 pip 版本 | `pip --version` 或 `pip -V` |
-| 更新 pip | `pip install --upgrade pip` |
-| 安装包 | `pip install package_name` |
-| 卸载包 | `pip uninstall package_name` |
-| 列出已安装包 | `pip list` |
-| 创建虚拟环境 | `python -m venv env_name` |
-| 激活虚拟环境（Linux/macOS） | `source env_name/bin/activate` |
-| 激活虚拟环境（Windows） | `env_name\Scripts\activate` |
-| 停用虚拟环境 | `deactivate` |
-| 导出依赖 | `pip freeze > requirements.txt` |
-| 安装依赖 | `pip install -r requirements.txt` |
+| 操作                        | 命令                              |
+| --------------------------- | --------------------------------- |
+| 检查 Python 版本            | `python --version` 或 `python -V` |
+| 检查 pip 版本               | `pip --version` 或 `pip -V`       |
+| 更新 pip                    | `pip install --upgrade pip`       |
+| 安装包                      | `pip install package_name`        |
+| 卸载包                      | `pip uninstall package_name`      |
+| 列出已安装包                | `pip list`                        |
+| 创建虚拟环境                | `python -m venv env_name`         |
+| 激活虚拟环境（Linux/macOS） | `source env_name/bin/activate`    |
+| 激活虚拟环境（Windows）     | `env_name\Scripts\activate`       |
+| 停用虚拟环境                | `deactivate`                      |
+| 导出依赖                    | `pip freeze > requirements.txt`   |
+| 安装依赖                    | `pip install -r requirements.txt` |

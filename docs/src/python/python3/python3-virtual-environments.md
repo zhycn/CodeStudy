@@ -12,9 +12,9 @@ Python 虚拟环境是一个自包含的目录树，它包含了特定 Python �
 
 **核心价值：**
 
-* **项目隔离**：确保每个项目都有其独立的运行环境，避免包版本冲突。
-* **依赖管理**：精确记录项目所需的依赖包及其版本，便于团队协作和部署。
-* **避免污染系统环境**：不会因为安装、升级或卸载某个项目的包而影响其他项目或操作系统自带的 Python 环境。
+- **项目隔离**：确保每个项目都有其独立的运行环境，避免包版本冲突。
+- **依赖管理**：精确记录项目所需的依赖包及其版本，便于团队协作和部署。
+- **避免污染系统环境**：不会因为安装、升级或卸载某个项目的包而影响其他项目或操作系统自带的 Python 环境。
 
 ## 2. 核心工具：`venv` vs `virtualenv`
 
@@ -122,17 +122,17 @@ venv\Scripts\Activate.ps1
 
 1. **包含精确版本**：使用 `pip freeze` 生成的版本是精确的（例如 `requests==2.25.1`），这确保了环境的一致性。
 2. **区分生产环境和开发环境**：
-    * `requirements.txt`：仅包含项目运行所必需的核心依赖。
-    * `requirements-dev.txt` 或 `dev-requirements.txt`：包含开发工具（如测试框架、代码格式化工具、linter 等）。可以通过 `-r requirements.txt` 来包含核心依赖。
+   - `requirements.txt`：仅包含项目运行所必需的核心依赖。
+   - `requirements-dev.txt` 或 `dev-requirements.txt`：包含开发工具（如测试框架、代码格式化工具、linter 等）。可以通过 `-r requirements.txt` 来包含核心依赖。
 
-    **`requirements-dev.txt` 示例：**
+   **`requirements-dev.txt` 示例：**
 
-    ```python
-    -r requirements.txt
-    black==22.3.0
-    isort==5.10.1
-    pytest==7.0.1
-    ```
+   ```python
+   -r requirements.txt
+   black==22.3.0
+   isort==5.10.1
+   pytest==7.0.1
+   ```
 
 3. **手动维护依赖**（可选）：对于库（Library）项目，有时会只指定最低版本要求，而不是锁定精确版本，以便与其他库有更好的兼容性。但这对于应用（Application）项目来说风险较高。
 
@@ -181,8 +181,8 @@ __pycache__/
 
 所有主流 IDE（PyCharm, VSCode, Sublime Text 等）都支持虚拟环境。
 
-* **PyCharm**：创建新项目时，它会自动为你创建虚拟环境。对于现有项目，可以在 `Preferences -> Project -> Python Interpreter` 中选择已存在的虚拟环境解释器（`.../venv/bin/python`）。
-* **VSCode**：使用 `Ctrl+Shift+P`（或 `Cmd+Shift+P`）打开命令面板，输入 `Python: Select Interpreter`，然后选择虚拟环境中的 Python 解释器。
+- **PyCharm**：创建新项目时，它会自动为你创建虚拟环境。对于现有项目，可以在 `Preferences -> Project -> Python Interpreter` 中选择已存在的虚拟环境解释器（`.../venv/bin/python`）。
+- **VSCode**：使用 `Ctrl+Shift+P`（或 `Cmd+Shift+P`）打开命令面板，输入 `Python: Select Interpreter`，然后选择虚拟环境中的 Python 解释器。
 
 ## 6. 与其他工具的结合
 
@@ -190,8 +190,8 @@ __pycache__/
 
 `pipenv` 和 `poetry` 是更高级别的工具，它们旨在将包管理（`pip`）和虚拟环境管理（`venv`）捆绑在一起，并提供更好的依赖解析、锁定和发布功能。
 
-* `pipenv`：旨在成为“神圣的 grail”，将 `pip` 和 `virtualenv` 结合，并引入 `Pipfile` 和 `Pipfile.lock`。
-* `poetry`：近年来更受欢迎，它提供了一个非常清晰的命令行工具来处理虚拟环境、依赖管理、**打包和发布**。它使用 `pyproject.toml` 文件。
+- `pipenv`：旨在成为“神圣的 grail”，将 `pip` 和 `virtualenv` 结合，并引入 `Pipfile` 和 `Pipfile.lock`。
+- `poetry`：近年来更受欢迎，它提供了一个非常清晰的命令行工具来处理虚拟环境、依赖管理、**打包和发布**。它使用 `pyproject.toml` 文件。
 
 对于新项目，尤其是需要打包分发的库，强烈建议尝试 `poetry`。
 
@@ -199,20 +199,20 @@ __pycache__/
 
 在 Docker 化 Python 应用时，你仍然可以在容器内部创建和使用虚拟环境。但这并非必需，因为 Docker 容器本身已经提供了一个隔离的环境。常见的做法是：
 
-* **使用虚拟环境**：可以使 Docker 镜像内的文件结构更清晰，并且更符合开发者的习惯。
-* **不使用虚拟环境**：因为容器已是隔离的，可以直接在系统层面安装包，从而减少镜像层和最终镜像大小。这是一个见仁见智的选择。
+- **使用虚拟环境**：可以使 Docker 镜像内的文件结构更清晰，并且更符合开发者的习惯。
+- **不使用虚拟环境**：因为容器已是隔离的，可以直接在系统层面安装包，从而减少镜像层和最终镜像大小。这是一个见仁见智的选择。
 
 ## 7. 总结与最佳实践清单
 
-| 最佳实践 | 说明 |
-| :--- | :--- |
-| **一个项目，一个环境** | 为每个独立的项目创建专属的虚拟环境。 |
-| **使用 `venv`** | Python 3.3+ 用户应优先使用标准库的 `venv`。 |
-| **激活环境** | 在开始工作前，务必先激活对应的虚拟环境。 |
-| **维护 `requirements.txt`** | 使用 `pip freeze > requirements.txt` 精确记录生产依赖。 |
-| **区分生产与开发依赖** | 使用单独的文件（如 `requirements-dev.txt`）管理开发工具。 |
-| **忽略虚拟环境目录** | 将 `venv/`、`env/` 等添加到 `.gitignore`，切勿提交它们。 |
-| **在 IDE 中配置解释器** | 确保你的代码编辑器和 IDE 使用的是虚拟环境中的 Python。 |
-| **考虑升级工具** | 对于复杂项目，可以评估并采用 `poetry` 等更现代的工具。 |
+| 最佳实践                    | 说明                                                      |
+| :-------------------------- | :-------------------------------------------------------- |
+| **一个项目，一个环境**      | 为每个独立的项目创建专属的虚拟环境。                      |
+| **使用 `venv`**             | Python 3.3+ 用户应优先使用标准库的 `venv`。               |
+| **激活环境**                | 在开始工作前，务必先激活对应的虚拟环境。                  |
+| **维护 `requirements.txt`** | 使用 `pip freeze > requirements.txt` 精确记录生产依赖。   |
+| **区分生产与开发依赖**      | 使用单独的文件（如 `requirements-dev.txt`）管理开发工具。 |
+| **忽略虚拟环境目录**        | 将 `venv/`、`env/` 等添加到 `.gitignore`，切勿提交它们。  |
+| **在 IDE 中配置解释器**     | 确保你的代码编辑器和 IDE 使用的是虚拟环境中的 Python。    |
+| **考虑升级工具**            | 对于复杂项目，可以评估并采用 `poetry` 等更现代的工具。    |
 
 通过遵循这些实践，你将能够构建稳定、可协作且易于部署的 Python 项目，彻底告别“在我机器上是好的”这类环境问题。

@@ -52,41 +52,41 @@ tsc --init
 
 ### 3.1 基础选项
 
-| 选项 | 类型 | 默认值 | 描述 | 最佳实践 |
-| :--- | :--- | :--- | :--- | :--- |
-| **`target`** | `string` | `ES3` | 指定编译后的 JavaScript 目标版本（如 `ES5`, `ES2015`, `ES2020`, `ESNext`）。 | 根据您的目标运行环境选择。现代 Node.js 应用可使用 `ES2022`；浏览器项目可能需要 `ES2017` 或更低版本以确保兼容性，并配合 Babel 和 polyfill。 |
-| **`module`** | `string` | `commonjs` (`target=ES3/5`) | 指定模块系统（如 `commonjs`, `es2015`, `esnext`, `umd`）。 | Node.js 项目常用 `commonjs`；现代前端项目（使用 Webpack, Vite 等）推荐使用 `esnext`，让打包器进行最终转换。 |
-| **`outDir`** | `string` | - | 指定编译后文件输出的目录。 | 通常设置为 `./dist` 或 `./build`，以将编译输出与源代码分离。 |
-| **`rootDir`** | `string` | - | 指定源文件的根目录。编译器会据此维护输出目录的结构。 | 通常设置为 `./src`。如果不设置，编译器可能会根据输入文件的结构生成嵌套的 `outDir`。 |
-| **`strict`** | `boolean` | `false` | 启用所有严格的类型检查选项。 | **强烈建议设置为 `true`**。这是 TypeScript 最大价值的体现，能在开发初期捕获绝大多数错误。 |
-| **`esModuleInterop`** | `boolean` | `false` | 为了兼容 CommonJS 和 ES Module 的默认导入 (`import React from 'react'`)。 | **始终设置为 `true`**。它还会自动启用 `allowSyntheticDefaultImports`。 |
+| 选项                  | 类型      | 默认值                      | 描述                                                                         | 最佳实践                                                                                                                                   |
+| :-------------------- | :-------- | :-------------------------- | :--------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`target`**          | `string`  | `ES3`                       | 指定编译后的 JavaScript 目标版本（如 `ES5`, `ES2015`, `ES2020`, `ESNext`）。 | 根据您的目标运行环境选择。现代 Node.js 应用可使用 `ES2022`；浏览器项目可能需要 `ES2017` 或更低版本以确保兼容性，并配合 Babel 和 polyfill。 |
+| **`module`**          | `string`  | `commonjs` (`target=ES3/5`) | 指定模块系统（如 `commonjs`, `es2015`, `esnext`, `umd`）。                   | Node.js 项目常用 `commonjs`；现代前端项目（使用 Webpack, Vite 等）推荐使用 `esnext`，让打包器进行最终转换。                                |
+| **`outDir`**          | `string`  | -                           | 指定编译后文件输出的目录。                                                   | 通常设置为 `./dist` 或 `./build`，以将编译输出与源代码分离。                                                                               |
+| **`rootDir`**         | `string`  | -                           | 指定源文件的根目录。编译器会据此维护输出目录的结构。                         | 通常设置为 `./src`。如果不设置，编译器可能会根据输入文件的结构生成嵌套的 `outDir`。                                                        |
+| **`strict`**          | `boolean` | `false`                     | 启用所有严格的类型检查选项。                                                 | **强烈建议设置为 `true`**。这是 TypeScript 最大价值的体现，能在开发初期捕获绝大多数错误。                                                  |
+| **`esModuleInterop`** | `boolean` | `false`                     | 为了兼容 CommonJS 和 ES Module 的默认导入 (`import React from 'react'`)。    | **始终设置为 `true`**。它还会自动启用 `allowSyntheticDefaultImports`。                                                                     |
 
 ### 3.2 类型检查严格性选项（极其重要）
 
 这些选项通常由 `strict: true` 统一启用，但也可以单独配置。
 
-| 选项 | 描述 | 最佳实践 |
-| :--- | :--- | :--- |
-| **`noImplicitAny`** | 禁止隐含的 `any` 类型。如果 TypeScript 无法推断出类型，必须显式声明。 | **启用**。迫使你为所有东西提供类型，极大提升代码质量。 |
-| **`strictNullChecks`** | 启用严格的 `null` 和 `undefined` 检查。 | **启用**。避免著名的 `cannot read property 'x' of undefined` 运行时错误。 |
-| **`strictFunctionTypes`** | 对函数类型参数进行更严格的检查（逆变检查）。 | **启用**。确保函数类型的安全性。 |
-| **`strictBindCallApply`** | 对 `bind`, `call`, `apply` 方法的参数进行严格检查。 | **启用**。 |
-| **`strictPropertyInitialization`** | 确保类的非 `undefined` 属性已在构造函数中初始化。 | **启用**。如需延迟初始化，可使用**明确赋值断言操作符** (`!`): `name!: string;`。 |
-| **`noUnusedLocals`** / **`noUnusedParameters`** | 报告未使用的局部变量和参数错误。 | **建议启用**。保持代码清洁，但有时在函数签名中预留参数以备将来使用是合理的，此时可酌情关闭。 |
-| **`exactOptionalPropertyTypes`** | 可选属性不能赋值为 `undefined`。 | 可根据团队规范选择，稍显严格。 |
+| 选项                                            | 描述                                                                  | 最佳实践                                                                                     |
+| :---------------------------------------------- | :-------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- |
+| **`noImplicitAny`**                             | 禁止隐含的 `any` 类型。如果 TypeScript 无法推断出类型，必须显式声明。 | **启用**。迫使你为所有东西提供类型，极大提升代码质量。                                       |
+| **`strictNullChecks`**                          | 启用严格的 `null` 和 `undefined` 检查。                               | **启用**。避免著名的 `cannot read property 'x' of undefined` 运行时错误。                    |
+| **`strictFunctionTypes`**                       | 对函数类型参数进行更严格的检查（逆变检查）。                          | **启用**。确保函数类型的安全性。                                                             |
+| **`strictBindCallApply`**                       | 对 `bind`, `call`, `apply` 方法的参数进行严格检查。                   | **启用**。                                                                                   |
+| **`strictPropertyInitialization`**              | 确保类的非 `undefined` 属性已在构造函数中初始化。                     | **启用**。如需延迟初始化，可使用**明确赋值断言操作符** (`!`): `name!: string;`。             |
+| **`noUnusedLocals`** / **`noUnusedParameters`** | 报告未使用的局部变量和参数错误。                                      | **建议启用**。保持代码清洁，但有时在函数签名中预留参数以备将来使用是合理的，此时可酌情关闭。 |
+| **`exactOptionalPropertyTypes`**                | 可选属性不能赋值为 `undefined`。                                      | 可根据团队规范选择，稍显严格。                                                               |
 
 ### 3.3 额外实用选项
 
-| 选项 | 描述 | 最佳实践 |
-| :--- | :--- | :--- |
-| **`declaration`** / **`declarationMap`** | 生成 `.d.ts` 类型声明文件和对应的 sourcemap。 | 在开发**库（Library）** 时**必须启用**，以便为使用者提供类型支持。 |
-| **`sourceMap`** | 生成 `.js.map` sourcemap 文件。 | **开发环境启用**，便于调试；生产环境可根据需要关闭。 |
-| **`removeComments`** | 删除编译输出中的注释。 | 生产环境可启用以减小文件体积。 |
-| **`incremental`** | 启用增量编译。 | **始终启用**。编译器会生成 `.tsbuildinfo` 文件来加速后续编译。 |
-| **`skipLibCheck`** | 跳过对 `.d.ts` 类型声明文件的类型检查。 | **建议启用**。可以显著缩短编译时间，尤其是在依赖较多的大型项目中。类型安全由 `node_modules` 中的包保证。 |
-| **`allowJs`** | 允许编译 JavaScript 文件。 | 在**渐进式迁移**项目中使用。 |
-| **`checkJs`** | 在 `.js` 文件中报告错误。 | 与 `allowJs` 配合使用，对 JS 文件也进行类型检查。 |
-| **`baseUrl`** / **`paths`** | 配置模块解析的基路径和路径别名。 | 强烈推荐使用，可以避免丑陋的相对路径 (`../../../`)。 |
+| 选项                                     | 描述                                          | 最佳实践                                                                                                 |
+| :--------------------------------------- | :-------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
+| **`declaration`** / **`declarationMap`** | 生成 `.d.ts` 类型声明文件和对应的 sourcemap。 | 在开发**库（Library）** 时**必须启用**，以便为使用者提供类型支持。                                       |
+| **`sourceMap`**                          | 生成 `.js.map` sourcemap 文件。               | **开发环境启用**，便于调试；生产环境可根据需要关闭。                                                     |
+| **`removeComments`**                     | 删除编译输出中的注释。                        | 生产环境可启用以减小文件体积。                                                                           |
+| **`incremental`**                        | 启用增量编译。                                | **始终启用**。编译器会生成 `.tsbuildinfo` 文件来加速后续编译。                                           |
+| **`skipLibCheck`**                       | 跳过对 `.d.ts` 类型声明文件的类型检查。       | **建议启用**。可以显著缩短编译时间，尤其是在依赖较多的大型项目中。类型安全由 `node_modules` 中的包保证。 |
+| **`allowJs`**                            | 允许编译 JavaScript 文件。                    | 在**渐进式迁移**项目中使用。                                                                             |
+| **`checkJs`**                            | 在 `.js` 文件中报告错误。                     | 与 `allowJs` 配合使用，对 JS 文件也进行类型检查。                                                        |
+| **`baseUrl`** / **`paths`**              | 配置模块解析的基路径和路径别名。              | 强烈推荐使用，可以避免丑陋的相对路径 (`../../../`)。                                                     |
 
 ```json
 {
@@ -101,7 +101,7 @@ tsc --init
 }
 ```
 
-*注意：如果使用路径别名，通常还需要在打包器（Webpack, Vite）或运行时（如 Node.js 的 `tsconfig-paths`）中进行相应配置。*
+_注意：如果使用路径别名，通常还需要在打包器（Webpack, Vite）或运行时（如 Node.js 的 `tsconfig-paths`）中进行相应配置。_
 
 ## 4. `include`, `exclude` 和 `files`
 
@@ -117,10 +117,7 @@ tsc --init
 
 ```json
 {
-  "references": [
-    {"path": "../shared-ui"},
-    {"path": "../shared-utils"}
-  ]
+  "references": [{ "path": "../shared-ui" }, { "path": "../shared-utils" }]
 }
 ```
 
@@ -162,10 +159,10 @@ tsc --init
     "moduleResolution": "node", // 明确指定 Node.js 的模块解析策略
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true, // 如果使用 NestJS 或需要装饰器
-    "emitDecoratorMetadata": true,  // 如果使用 NestJS 或需要装饰器元数据
-    "resolveJsonModule": true,      // 允许导入 JSON 模块
-    "incremental": true,            // 启用增量编译
-    "declaration": false            // 非库项目，通常不需要生成声明文件
+    "emitDecoratorMetadata": true, // 如果使用 NestJS 或需要装饰器元数据
+    "resolveJsonModule": true, // 允许导入 JSON 模块
+    "incremental": true, // 启用增量编译
+    "declaration": false // 非库项目，通常不需要生成声明文件
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
@@ -219,9 +216,9 @@ tsc --init
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "declaration": true,        // 关键：生成 .d.ts 文件
-    "declarationMap": true,     // 可选：为 .d.ts 生成 sourcemap
-    "sourceMap": true,          // 可选：生成 .js.map
+    "declaration": true, // 关键：生成 .d.ts 文件
+    "declarationMap": true, // 可选：为 .d.ts 生成 sourcemap
+    "sourceMap": true // 可选：生成 .js.map
     // 库的打包策略：同时生成多种格式（通常由工具如 tsup, rollup 完成）
     // 此处配置仅为类型检查
   },
@@ -244,11 +241,11 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking' // 更严格的规则
+    'plugin:@typescript-eslint/recommended-requiring-type-checking', // 更严格的规则
   ],
   parserOptions: {
-    project: './tsconfig.json' // 让 ESLint 知道你的 TS 配置
-  }
+    project: './tsconfig.json', // 让 ESLint 知道你的 TS 配置
+  },
 };
 ```
 

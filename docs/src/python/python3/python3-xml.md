@@ -10,11 +10,11 @@ XML (eXtensible Markup Language) 是一种广泛用于数据存储和传输的�
 
 Python 标准库提供了多种处理 XML 的模块，它们各有千秋，适用于不同的场景。
 
-| 解析方式 | 代表模块 | 优点 | 缺点 | 适用场景 |
-| :--- | :--- | :--- | :--- | :--- |
-| **DOM** | `xml.dom.minidom` | 整个文档树在内存中，可随机读写 | 耗内存，性能较差 | 小文件，需频繁修改结构 |
-| **SAX** | `xml.sax` | 基于事件驱动，边读边解析，内存友好 | 只能顺序读取，无法随机访问 | 大文件，只需读取数据 |
-| **ElementTree** | `xml.etree.ElementTree` | API 简洁易用，内存开销和性能均衡 | 功能不如 DOM 丰富 | **绝大多数场景的首选** |
+| 解析方式        | 代表模块                | 优点                               | 缺点                       | 适用场景               |
+| :-------------- | :---------------------- | :--------------------------------- | :------------------------- | :--------------------- |
+| **DOM**         | `xml.dom.minidom`       | 整个文档树在内存中，可随机读写     | 耗内存，性能较差           | 小文件，需频繁修改结构 |
+| **SAX**         | `xml.sax`               | 基于事件驱动，边读边解析，内存友好 | 只能顺序读取，无法随机访问 | 大文件，只需读取数据   |
+| **ElementTree** | `xml.etree.ElementTree` | API 简洁易用，内存开销和性能均衡   | 功能不如 DOM 丰富          | **绝大多数场景的首选** |
 
 **结论**：`xml.etree.ElementTree` (常简写为 `ET`) 在易用性和性能上取得了最佳平衡，是 Python 社区最推荐使用的 XML 解析库。
 
@@ -71,7 +71,7 @@ for child in root:
 first_book = root[0]
 title = first_book.find('title').text
 genre = first_book.find('genre').text
-print(f"第一本书：{title}, 类别：{genre}") 
+print(f"第一本书：{title}, 类别：{genre}")
 # 输出：第一本书：XML Developer's Guide, 类别：Computer
 
 # 遍历所有特定标签的元素
@@ -93,7 +93,7 @@ print(f"找到 {len(all_books)} 本书")
 # 查找特定 id 的 book
 specific_book = root.findall(".//book[@id='bk102']")[0]
 author = specific_book.find('author').text
-print(f"ID 为 bk102 的作者是: {author}") 
+print(f"ID 为 bk102 的作者是: {author}")
 # 输出：ID 为 bk102 的作者是: Ralls, Kim
 
 # 查找所有价格大于 10 的书
@@ -259,13 +259,13 @@ def parse_rss(url):
     # 获取 RSS 数据
     with request.urlopen(url) as response:
         rss_data = response.read().decode('utf-8')
-    
+
     # 解析 XML
     root = ET.fromstring(rss_data)
-    
+
     # RSS 2.0 通常使用此命名空间
     namespace = {'ns': 'http://purl.org/rss/1.0/modules/content/'}
-    
+
     items = []
     # 查找所有 item 元素
     for item in root.findall('.//item'):
@@ -277,14 +277,14 @@ def parse_rss(url):
         if description_elem is None:
             description_elem = item.find('description')
         description = description_elem.text if description_elem is not None else "无描述"
-        
+
         items.append({
             'title': title,
             'link': link,
             'pub_date': pub_date,
             'description': description[:200] + '...'  # 截取描述
         })
-    
+
     return items
 
 # 使用示例
@@ -297,11 +297,11 @@ def parse_rss(url):
 
 ## 总结与选择建议
 
-| 场景 | 推荐工具 | 理由 |
-| :--- | :--- | :--- |
-| **大多数常见需求** | `xml.etree.ElementTree` | API 友好，性能均衡，学习成本低 |
-| **处理超大 XML 文件** | `xml.sax` | 内存占用恒定，流式处理 |
-| **需要完整 DOM 接口** | `xml.dom.minidom` | 功能最全面，但性能最低 |
-| **处理用户输入/不可信数据** | `defusedxml` | 提供安全防护，避免 XML 攻击 |
+| 场景                        | 推荐工具                | 理由                           |
+| :-------------------------- | :---------------------- | :----------------------------- |
+| **大多数常见需求**          | `xml.etree.ElementTree` | API 友好，性能均衡，学习成本低 |
+| **处理超大 XML 文件**       | `xml.sax`               | 内存占用恒定，流式处理         |
+| **需要完整 DOM 接口**       | `xml.dom.minidom`       | 功能最全面，但性能最低         |
+| **处理用户输入/不可信数据** | `defusedxml`            | 提供安全防护，避免 XML 攻击    |
 
 **最终建议**：从 `xml.etree.ElementTree` 开始学习，它足以应对 90% 的日常开发场景。只有在遇到性能瓶颈（超大文件）或特殊需求时，才考虑使用 `SAX` 或 `DOM`。切记，处理外部数据时，务必优先考虑安全性。

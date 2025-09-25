@@ -131,8 +131,8 @@ const AsyncUserProfile = defineAsyncComponent({
 defineProps({
   error: {
     type: Error,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const emit = defineEmits(['retry']);
@@ -161,12 +161,12 @@ const retry = () => {
 defineProps({
   error: {
     type: Error,
-    required: true
+    required: true,
   },
   retry: {
     type: Function,
-    required: true
-  }
+    required: true,
+  },
 });
 </script>
 ```
@@ -197,9 +197,7 @@ Vue 3 引入了内置的 `Suspense` 组件，用于协调组件树中多个嵌�
 <script setup>
 import { defineAsyncComponent } from 'vue';
 
-const AsyncDashboard = defineAsyncComponent(() =>
-  import('./components/Dashboard.vue')
-);
+const AsyncDashboard = defineAsyncComponent(() => import('./components/Dashboard.vue'));
 </script>
 ```
 
@@ -225,9 +223,7 @@ const AsyncDashboard = defineAsyncComponent(() =>
 import { defineAsyncComponent } from 'vue';
 import UserProfile from './components/UserProfile.vue'; // 假设这也是一个异步组件或在 setup 中有异步操作
 
-const AsyncPosts = defineAsyncComponent(() =>
-  import('./components/Posts.vue')
-);
+const AsyncPosts = defineAsyncComponent(() => import('./components/Posts.vue'));
 </script>
 ```
 
@@ -247,23 +243,23 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue') // 会被自动代码分割
+    component: () => import('../views/Home.vue'), // 会被自动代码分割
   },
   {
     path: '/about',
     name: 'About',
-    component: () => import( '../views/About.vue') // 另一个独立的 chunk
+    component: () => import('../views/About.vue'), // 另一个独立的 chunk
   },
   {
     path: '/users/:id',
     name: 'UserProfile',
-    component: () => import( '../views/UserProfile.vue') // 按路由分割
-  }
+    component: () => import('../views/UserProfile.vue'), // 按路由分割
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 
 export default router;
@@ -292,9 +288,7 @@ import Modal from './Modal.vue';
 const showModal = ref(false);
 
 // 模态框内容只在模态框可能被打开时才加载
-const HeavyModalContent = defineAsyncComponent(() =>
-  import('./HeavyModalContent.vue')
-);
+const HeavyModalContent = defineAsyncComponent(() => import('./HeavyModalContent.vue'));
 </script>
 ```
 
@@ -308,7 +302,7 @@ const HeavyModalContent = defineAsyncComponent({
   loadingComponent: SkeletonScreenComponent,
   delay: 100,
   errorComponent: ErrorWithRetryComponent,
-  timeout: 5000
+  timeout: 5000,
 });
 ```
 
@@ -321,9 +315,7 @@ const HeavyModalContent = defineAsyncComponent({
 
 ```javascript
 // Webpack 魔法注释 (在 Webpack 环境中)
-const HeavyModalContent = defineAsyncComponent(() =>
-  import(/* webpackPreload: true */ './HeavyModalContent.vue')
-);
+const HeavyModalContent = defineAsyncComponent(() => import(/* webpackPreload: true */ './HeavyModalContent.vue'));
 
 // 在路由导航后预加载其他路由
 router.beforeResolve((to, from, next) => {
