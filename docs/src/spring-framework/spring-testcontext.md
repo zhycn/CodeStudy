@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 TestContext 测试上下文详解与最佳实践
+title: Spring TestContext 测试上下文详解与最佳实践
 description: 详细介绍 Spring TestContext 测试上下文的核心概念、架构、工作原理、核心注解、高级特性，并提供最佳实践。
 author: zhycn
 ---
 
-# Spring 框架 TestContext 测试上下文详解与最佳实践
+# Spring TestContext 测试上下文详解与最佳实践
 
 ## 1. 引言
 

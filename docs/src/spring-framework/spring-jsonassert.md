@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 JSONAssert 测试详解与最佳实践
+title: Spring JSONAssert 测试详解与最佳实践
 description: 本文深入探讨了 Spring 框架中 JSONAssert 测试的核心概念、机制和最佳实践。内容涵盖了 JSONAssert 简介、核心特性、依赖配置、比较模式、基本用法等方面。
 author: zhycn
 ---
 
-# Spring 框架 JSONAssert 测试详解与最佳实践
+# Spring JSONAssert 测试详解与最佳实践
 
 ## 1 JSONAssert 简介
 

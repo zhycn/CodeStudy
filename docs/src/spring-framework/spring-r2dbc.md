@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 R2DBC 数据访问支持详解与最佳实践
+title: Spring R2DBC 数据访问支持详解与最佳实践
 description: 本文深入探讨了 Spring 框架中 R2DBC 数据访问支持的核心概念、机制和最佳实践。内容涵盖了 R2DBC 规范、驱动实现、连接池、事务管理、批量操作、结果集映射等方面。
 author: zhycn
 ---
 
-# Spring 框架 R2DBC 数据访问支持详解与最佳实践
+# Spring R2DBC 数据访问支持详解与最佳实践
 
 - [Data Access with R2DBC](https://docs.spring.io/spring-framework/reference/data-access/r2dbc.html)
 

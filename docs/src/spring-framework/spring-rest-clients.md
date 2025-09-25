@@ -4,7 +4,7 @@ description: 本文详细介绍了 Spring Framework 中 REST Clients 的核心�
 author: zhycn
 ---
 
-# Spring 框架 REST Clients 详解与最佳实践
+# Spring REST Clients 详解与最佳实践
 
 ## 1. 概述
 

@@ -4,7 +4,7 @@ description: 本文详细介绍了 Spring Framework 中 WebSocket 协议的核�
 author: zhycn
 ---
 
-# Spring 框架 WebSocket 详解与最佳实践
+# Spring WebSocket 详解与最佳实践
 
 ## 1. 概述
 

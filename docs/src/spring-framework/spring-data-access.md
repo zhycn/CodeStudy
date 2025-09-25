@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Data Access 数据访问详解与最佳实践
+title: Spring Data Access 数据访问详解与最佳实践
 description: 本文深入探讨了 Spring 框架中数据访问层 (DAL) 的设计与实现，内容涵盖了统一的异常体系、模板方法模式、声明式事务管理以及资源管理等关键方面。
 author: zhycn
 ---
 
-# Spring 框架 Data Access 数据访问详解与最佳实践
+# Spring Data Access 数据访问详解与最佳实践
 
 - [Data Access](https://docs.spring.io/spring-framework/reference/data-access.html)
 

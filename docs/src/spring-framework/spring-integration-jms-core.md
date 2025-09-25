@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 JMS 核心组件详解与最佳实践
-description: 本文详细介绍了 Spring 框架 JMS 模块的核心组件、工作原理和最佳实践，帮助开发者理解和应用 JMS 技术。
+title: Spring JMS 核心组件详解与最佳实践
+description: 本文详细介绍了 Spring JMS 模块的核心组件、工作原理和最佳实践，帮助开发者理解和应用 JMS 技术。
 author: zhycn
 ---
 
-# Spring 框架 JMS 核心组件详解与最佳实践
+# Spring JMS 核心组件详解与最佳实践
 
 - [JMS 规范](https://javaee.github.io/jms-spec/)
 - [Apache ActiveMQ 官网](https://activemq.apache.org/)

@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Testcontainers 测试详解与最佳实践
+title: Spring Testcontainers 测试详解与最佳实践
 description: 本文深入探讨了 Spring 框架中 Testcontainers 的集成与最佳实践，内容涵盖基础概念、环境配置、基本用法、高级特性以及在持续集成环境中的应用。
 author: zhycn
 ---
 
-# Spring 框架 Testcontainers 测试详解与最佳实践
+# Spring Testcontainers 测试详解与最佳实践
 
 本文深入探讨了 Spring 框架中 Testcontainers 的集成与最佳实践，内容涵盖基础概念、环境配置、基本用法、高级特性以及在持续集成环境中的应用。
 

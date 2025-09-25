@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Type Conversion 类型转换详解与最佳实践
+title: Spring Type Conversion 类型转换详解与最佳实践
 description: 了解 Spring 框架的类型转换系统，包括核心接口、内置转换器、自定义转换器、与 Spring Boot 集成等。
 author: zhycn
 ---
 
-# Spring 框架 Type Conversion 类型转换详解与最佳实践
+# Spring Type Conversion 类型转换详解与最佳实践
 
 ## 1 概述
 

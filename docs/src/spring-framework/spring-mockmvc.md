@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 MockMvc 详解与最佳实践
+title: Spring MockMvc 详解与最佳实践
 description: 详细介绍 Spring MockMvc 的核心概念、架构、工作原理、核心注解、高级特性，并提供最佳实践。
 author: zhycn
 ---
 
-# Spring 框架 MockMvc 详解与最佳实践
+# Spring MockMvc 详解与最佳实践
 
 ## 1. 概述
 

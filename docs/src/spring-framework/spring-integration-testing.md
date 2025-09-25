@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Integration Testing 集成测试详解与最佳实践
+title: Spring Integration Testing 集成测试详解与最佳实践
 description: 详细介绍 Spring 集成测试的基础概念、重要性、核心组件、测试策略、数据管理、最佳实践和进阶技巧。
 author: zhycn
 ---
 
-# Spring 框架 Integration Testing 集成测试详解与最佳实践
+# Spring Integration Testing 集成测试详解与最佳实践
 
 ## 1. 引言
 

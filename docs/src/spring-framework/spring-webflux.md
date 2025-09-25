@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 WebFlux 详解与最佳实践
-description: 本教程详细介绍了 Spring 框架 WebFlux 技术，包括其核心概念、项目 Reactor 基础、WebFlux 组件、路由与处理、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 Web 应用程序。
+title: Spring WebFlux 详解与最佳实践
+description: 本教程详细介绍了 Spring WebFlux 技术，包括其核心概念、项目 Reactor 基础、WebFlux 组件、路由与处理、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 Web 应用程序。
 author: zhycn
 ---
 
-# Spring 框架 WebFlux 详解与最佳实践
+# Spring WebFlux 详解与最佳实践
 
 ## 1. 概述与核心概念
 

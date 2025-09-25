@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Resources 资源管理详解与最佳实践
+title: Spring Resources 资源管理详解与最佳实践
 description: 本文深入探讨 Spring 框架中的资源管理机制，涵盖 Resource 接口设计、各种资源实现、加载策略以及最佳实践方案。
 author: zhycn
 ---
 
-# Spring 框架 Resources 资源管理详解与最佳实践
+# Spring Resources 资源管理详解与最佳实践
 
 本文深入探讨 Spring 框架中的资源管理机制，涵盖 Resource 接口设计、各种资源实现、加载策略以及最佳实践方案。
 

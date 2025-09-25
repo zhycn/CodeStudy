@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Caching 集成详解与最佳实践
-description: 本教程详细介绍了 Spring 框架 Caching 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+title: Spring Caching 集成详解与最佳实践
+description: 本教程详细介绍了 Spring Caching 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
 author: zhycn
 ---
 
-# Spring 框架 Caching 集成详解与最佳实践
+# Spring Caching 集成详解与最佳实践
 
 - [Spring Cache Abstraction](https://docs.spring.io/spring-framework/reference/integration/cache.html) - 缓存抽象层，提供了统一的 API 来管理缓存。
 - [Caffeine](https://github.com/ben-manes/caffeine) - 基于 Java 8 的高性能缓存库，提供了本地缓存的解决方案。

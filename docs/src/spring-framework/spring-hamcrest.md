@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Hamcrest 测试详解与最佳实践
+title: Spring Hamcrest 测试详解与最佳实践
 description: 本文详细介绍了 Spring 框架中 Hamcrest 测试框架的使用方法、核心概念、配置技巧和最佳实践。通过实际示例，展示了如何利用 Hamcrest 提升测试代码的可读性和维护性。
 author: zhycn
 ---
 
-# Spring 框架 Hamcrest 测试详解与最佳实践
+# Spring Hamcrest 测试详解与最佳实践
 
 - [Hamcrest 官方网站](https://hamcrest.org/)
 - [Hamcrest GitHub 仓库](https://github.com/hamcrest/JavaHamcrest)

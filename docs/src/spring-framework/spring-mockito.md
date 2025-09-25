@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Mockito 测试框架详解与最佳实践
+title: Spring Mockito 测试框架详解与最佳实践
 description: 详细介绍 Spring Mockito 测试框架的核心概念、架构、工作原理、核心注解、高级特性，并提供最佳实践。
 author: zhycn
 ---
 
-# Spring 框架 Mockito 测试框架详解与最佳实践
+# Spring Mockito 测试框架详解与最佳实践
 
 - [Mockito 官方网站](https://site.mockito.org/)
 - [Mockito GitHub 仓库](https://github.com/mockito/mockito)

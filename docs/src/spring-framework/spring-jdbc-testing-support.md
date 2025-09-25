@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践
+title: Spring JDBC Testing Support 数据库测试支持详解与最佳实践
 description: 详细介绍 Spring JDBC 测试支持的核心功能、优势、项目配置与依赖，以及如何使用它来提升数据库测试的效率和质量。
 author: zhycn
 ---
 
-# Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践
+# Spring JDBC Testing Support 数据库测试支持详解与最佳实践
 
 ## 1. 概述
 

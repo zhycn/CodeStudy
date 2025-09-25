@@ -4,7 +4,7 @@ description: 本文详细介绍了 Spring Framework 中 SockJS 的核心概念�
 author: zhycn
 ---
 
-# Spring 框架 SockJS 详解与最佳实践
+# Spring SockJS 详解与最佳实践
 
 ## 1. 概述：为什么需要 SockJS？
 

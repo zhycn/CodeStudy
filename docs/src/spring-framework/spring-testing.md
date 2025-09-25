@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Testing 测试框架详解与最佳实践
+title: Spring Testing 测试框架详解与最佳实践
 description: 详细介绍 Spring 测试框架的使用方法、优势和最佳实践，帮助开发者编写高效、可靠的测试代码。
 author: zhycn
 ---
 
-# Spring 框架 Testing 测试框架详解与最佳实践
+# Spring Testing 测试框架详解与最佳实践
 
 - [Testing](https://docs.spring.io/spring-framework/reference/testing.html)
 - [Standard Annotation Support](https://docs.spring.io/spring-framework/reference/testing/annotations/integration-standard.html)

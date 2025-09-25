@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 ORM 数据访问支持详解与最佳实践
+title: Spring ORM 数据访问支持详解与最佳实践
 description: 本文深入探讨了 Spring 框架中 ORM 数据访问支持的核心概念、机制和最佳实践。内容涵盖了 ORM 框架的选择、配置、事务管理、批量操作、结果集映射等方面。
 author: zhycn
 ---
 
-# Spring 框架 ORM 数据访问支持详解与最佳实践
+# Spring ORM 数据访问支持详解与最佳实践
 
 - [Object Relational Mapping (ORM) Data Access](https://docs.spring.io/spring-framework/reference/data-access/orm.html)
 

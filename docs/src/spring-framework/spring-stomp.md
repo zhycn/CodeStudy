@@ -4,7 +4,7 @@ description: 本文详细介绍了 Spring Framework 中 STOMP Messaging 的核�
 author: zhycn
 ---
 
-# Spring 框架 STOMP Messaging 详解与最佳实践
+# Spring STOMP Messaging 详解与最佳实践
 
 ## 1. 引言：为什么选择 STOMP？
 

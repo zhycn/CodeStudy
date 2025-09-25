@@ -104,6 +104,8 @@ public interface MessageHandler {
 
 Spring 提供了丰富的 `MessageHandler` 实现，包括用于消息转换、过滤、路由等的处理器。
 
+- **ReactiveMessageHandler**：响应式消息处理器，用于处理响应式流中的消息。
+
 ### 2.4 消息转换器 (MessageConverter)
 
 `converter` 模块负责消息内容转换，支持消息与 String、JSON、byte 数组等格式之间的相互转换。`MessageConverter` 接口的核心方法是：

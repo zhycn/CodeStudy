@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践
+title: Spring JVM Checkpoint Restore 集成详解与最佳实践
 description: 本教程详细介绍了 Spring 框架与 JVM Checkpoint Restore (CRaC) 集成的技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
 author: zhycn
 ---
 
-# Spring 框架 JVM Checkpoint Restore 集成详解与最佳实践
+# Spring JVM Checkpoint Restore 集成详解与最佳实践
 
 ## 1. 概述与核心概念
 

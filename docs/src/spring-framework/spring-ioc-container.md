@@ -1,12 +1,14 @@
 ---
-title: Spring 框架 IoC 容器详解与最佳实践
+title: Spring IoC 容器详解与最佳实践
 description: 本文将通过理论讲解、代码示例和最佳实践，带你全面掌握 Spring IoC 容器的核心概念和应用技巧。
 author: zhycn
 ---
 
-# Spring 框架 IoC 容器详解与最佳实践
+# Spring IoC 容器详解与最佳实践
 
 本文将通过理论讲解、代码示例和最佳实践，带你全面掌握 Spring IoC 容器的核心概念和应用技巧。
+
+- [Spring IoC 容器](https://docs.spring.io/spring-framework/reference/core/beans.html)
 
 ## 1 IoC 与 DI 的基本概念
 

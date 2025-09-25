@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 SpEL 表达式语言详解与最佳实践
+title: Spring SpEL 表达式语言详解与最佳实践
 description: 了解 Spring 框架的 SpEL 表达式语言，包括核心语法、功能、应用场景、性能优化等。
 author: zhycn
 ---
 
-# Spring 框架 SpEL 表达式语言详解与最佳实践
+# Spring SpEL 表达式语言详解与最佳实践
 
 - SpEL 官方文档：[Spring Expression Language (SpEL)](https://docs.spring.io/spring-framework/reference/core/expressions.html)
 

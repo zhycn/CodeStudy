@@ -1,10 +1,12 @@
 ---
-title: Spring 框架 AOP 面向切面编程详解与最佳实践
-description: 本文详细介绍了 Spring 框架 AOP 面向切面编程的核心概念、价值和实现方式。通过示例代码和最佳实践，帮助开发者理解和应用 AOP 技术，提升代码的可维护性和可扩展性。
+title: Spring AOP 面向切面编程详解与最佳实践
+description: 本文详细介绍了 Spring AOP 面向切面编程的核心概念、价值和实现方式。通过示例代码和最佳实践，帮助开发者理解和应用 AOP 技术，提升代码的可维护性和可扩展性。
 author: zhycn
 ---
 
-# Spring 框架 AOP 面向切面编程详解与最佳实践
+# Spring AOP 面向切面编程详解与最佳实践
+
+- [Spring AOP APIs](https://docs.spring.io/spring-framework/reference/core/aop-api.html)
 
 ## 1. AOP 核心概念与价值
 

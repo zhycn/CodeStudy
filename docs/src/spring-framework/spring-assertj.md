@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 AssertJ 测试详解与最佳实践
+title: Spring AssertJ 测试详解与最佳实践
 description: 本文深入探讨了 Spring 框架中 AssertJ 的集成与最佳实践，内容涵盖基础概念、环境配置、基本用法、高级特性以及在持续集成环境中的应用。
 author: zhycn
 ---
 
-# Spring 框架 AssertJ 测试详解与最佳实践
+# Spring AssertJ 测试详解与最佳实践
 
 作为 Spring 开发者，编写高质量的测试是保证代码质量的关键。AssertJ 作为一个流式断言库，能显著提升测试代码的可读性和维护性。本文将全面介绍如何在 Spring 框架中使用 AssertJ 进行测试。
 

@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Validation 验证框架详解与最佳实践
+title: Spring Validation 验证框架详解与最佳实践
 description: 本文将详细介绍 Spring 框架中的 Validation 验证框架，包括其核心概念、常用注解、自定义验证器、国际化支持以及最佳实践。
 author: zhycn
 ---
 
-# Spring 框架 Validation 验证框架详解与最佳实践
+# Spring Validation 验证框架详解与最佳实践
 
 - [Bean Validation 2.0 (JSR 380) 规范](https://jcp.org/en/jsr/detail?id=380)
 - [Hibernate Validator 文档](https://hibernate.org/validator/)

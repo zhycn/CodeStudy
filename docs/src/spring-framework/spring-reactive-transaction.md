@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Reactive 响应式事务详解与最佳实践
+title: Spring Reactive 响应式事务详解与最佳实践
 description: 本文详细介绍了 Spring 框架中 Reactive 响应式事务的概念、基础架构、配置与实现，以及在实际项目中的最佳实践。通过理解 Reactive 响应式事务的工作原理和机制，开发人员可以有效地管理和协调跨多个资源的事务操作，确保数据的一致性和完整性。
 author: zhycn
 ---
 
-# Spring 框架 Reactive 响应式事务详解与最佳实践
+# Spring Reactive 响应式事务详解与最佳实践
 
 ## 1 响应式事务基础概念
 

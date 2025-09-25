@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 JUnit 测试框架详解与最佳实践
+title: Spring JUnit 测试框架详解与最佳实践
 description: 本文详细介绍了 Spring 框架中 JUnit 测试框架的使用方法、核心注解、最佳实践和注意事项。
 author: zhycn
 ---
 
-# Spring 框架 JUnit 测试框架详解与最佳实践
+# Spring JUnit 测试框架详解与最佳实践
 
 ## 1. 引言
 

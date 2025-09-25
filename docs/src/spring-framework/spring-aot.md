@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 AOT 详解与最佳实践
+title: Spring AOT 详解与最佳实践
 description: 本文详细介绍了 Spring 框架的 AOT（Ahead-of-Time）编译机制，包括其核心原理、优势和实现方式。通过示例代码和最佳实践，帮助开发者理解和应用 AOT 技术，提升应用程序的启动性能和运行时效率。
 author: zhycn
 ---
 
-# Spring 框架 AOT 详解与最佳实践
+# Spring AOT 详解与最佳实践
 
 ## 1 概述
 

@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 Reactive Streams 详解与最佳实践
-description: 本教程详细介绍了 Spring 框架 Reactive Streams 技术，包括其核心概念、项目 Reactor 基础、Reactive Streams 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的应用程序。
+title: Spring Reactive Streams 详解与最佳实践
+description: 本教程详细介绍了 Spring Reactive Streams 技术，包括其核心概念、项目 Reactor 基础、Reactive Streams 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的应用程序。
 author: zhycn
 ---
 
-# Spring 框架 Reactive Streams 详解与最佳实践
+# Spring Reactive Streams 详解与最佳实践
 
 ## 1. 引言：为什么需要响应式编程？
 

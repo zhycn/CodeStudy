@@ -1,10 +1,10 @@
 ---
-title: Spring 框架 DAO Support 数据访问支持详解与最佳实践
+title: Spring DAO Support 数据访问支持详解与最佳实践
 description: 本文深入探讨了 Spring 框架中 DAO Support 数据访问支持的核心概念、机制和最佳实践。内容涵盖了模板方法模式、一致的异常体系、资源管理、事务管理等方面。
 author: zhycn
 ---
 
-# Spring 框架 DAO Support 数据访问支持详解与最佳实践
+# Spring DAO Support 数据访问支持详解与最佳实践
 
 - [DAO Support](https://docs.spring.io/spring-framework/reference/data-access/dao.html)
 
