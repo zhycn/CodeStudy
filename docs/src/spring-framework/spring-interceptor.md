@@ -1,10 +1,10 @@
 ---
-title: Spring 拦截器详解与最佳实践
+title: Spring Interceptor 拦截器详解与最佳实践
 description: 本文详细介绍了 Spring 框架中拦截器（Interceptor）的核心概念、工作原理、使用场景以及最佳实践。拦截器是 Spring MVC 框架提供的一种动态拦截方法调用的机制，基于 AOP（面向切面编程）思想实现，用于在请求处理的不同阶段插入自定义逻辑。
 author: zhycn
 ---
 
-# Spring 拦截器详解与最佳实践
+# Spring Interceptor 拦截器详解与最佳实践
 
 ## 1 拦截器核心概念
 
