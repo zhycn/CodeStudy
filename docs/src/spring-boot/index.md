@@ -6,6 +6,7 @@ Spring Boot 是一个用于创建独立的、生产级的 Spring 应用程序的
 - Spring Boot 文档：<https://docs.spring.io/spring-boot/index.html>
 - Spring Boot 源码：<https://github.com/spring-projects/spring-boot>
 - Spring Boot API 文档：<https://docs.spring.io/spring-boot/api/java/index.html>
+- Spring Support: <https://spring.io/projects/generations>
 - Spring Initializr：<https://start.spring.io/>
 
 ## 官方指南
