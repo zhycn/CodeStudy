@@ -10,6 +10,7 @@ Spring Statemachine 是 Spring 生态系统中一个强大且灵活的基于状�
 - [Spring Statemachine 源码仓库](https://github.com/spring-projects/spring-statemachine)
 - [Spring Statemachine 状态机示例](https://docs.spring.io/spring-statemachine/docs/current/reference/index.html#statemachine-examples)
 - <https://www.baeldung.com/spring-state-machine>
+- <https://micrometer.io/>
 
 ## 文档目录
 
