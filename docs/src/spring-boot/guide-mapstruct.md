@@ -40,7 +40,7 @@ Spring Boot 3 要求 Java 17 或更高版本，并带来了以下相关特性：
 ```xml
 <properties>
     <java.version>17</java.version>
-    <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+    <org.mapstruct.version>1.6.3</org.mapstruct.version>
     <lombok.version>1.18.30</lombok.version>
     <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 </properties>
@@ -81,14 +81,14 @@ Spring Boot 3 要求 Java 17 或更高版本，并带来了以下相关特性：
                         <version>${lombok.version}</version>
                     </path>
                     <path>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok-mapstruct-binding</artifactId>
-                        <version>0.2.0</version>
-                    </path>
-                    <path>
                         <groupId>org.mapstruct</groupId>
                         <artifactId>mapstruct-processor</artifactId>
                         <version>${org.mapstruct.version}</version>
+                    </path>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-mapstruct-binding</artifactId>
+                        <version>0.2.0</version>
                     </path>
                 </annotationProcessorPaths>
                 <compilerArgs>
@@ -113,7 +113,7 @@ plugins {
 }
 
 ext {
-    mapstructVersion = "1.5.5.Final"
+    mapstructVersion = "1.6.3"
     lombokVersion = "1.18.30"
 }
 
@@ -637,7 +637,7 @@ MapStruct 与 Spring Boot 3 的集成为 Java 开发者提供了强大、高效�
 1. **正确配置** MapStruct 与 Spring Boot 3 的集成环境
 2. **使用基础和高阶特性**处理各种映射场景
 3. **遵循最佳实践**组织项目结构和优化性能
-4. **解决常见问题**如Lombok冲突和循环引用
+4. **解决常见问题**如 Lombok 冲突和循环引用
 5. **编写有效测试**确保映射的正确性
 
 MapStruct 的优势在于它的编译时代码生成，这提供了更好的性能性和类型安全性，是大型项目中对象映射的理想选择。

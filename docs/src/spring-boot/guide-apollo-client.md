@@ -39,7 +39,7 @@ Apollo（阿波罗）是携程框架部门研发的**开源分布式配置中心
 <dependency>
     <groupId>com.ctrip.framework.apollo</groupId>
     <artifactId>apollo-client</artifactId>
-    <version>2.0.1</version>
+    <version>2.4.0</version>
 </dependency>
 <!-- 引入 Spring Cloud 上下文依赖 -->
 <dependency>
@@ -57,7 +57,7 @@ Apollo（阿波罗）是携程框架部门研发的**开源分布式配置中心
         <dependency>
             <groupId>com.ctrip.framework.apollo</groupId>
             <artifactId>apollo-client</artifactId>
-            <version>2.0.1</version>
+            <version>2.4.0</version>
         </dependency>
         <!-- 管理 Spring Cloud 相关依赖版本，需匹配 Spring Boot 版本 -->
         <dependency>
@@ -105,7 +105,7 @@ apollo:
 对应 `application.properties` 配置：
 
 ```properties
-# 应用唯一标识符
+# 应用唯一标识符，与Apollo配置中心对应
 app.id=your-application-id
 
 # Apollo配置中心地址

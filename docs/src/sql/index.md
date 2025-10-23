@@ -204,30 +204,34 @@
 
 ### 数据库厂商与核心产品
 
-- MySQL - <https://www.mysql.com/> (Oracle 公司) - 世界上最流行的开源关系型数据库之一。
-- PostgreSQL - <https://www.postgresql.org/> (全球开发社区) - 功能强大的开源对象关系数据库系统。
-- Microsoft SQL Server - <https://www.microsoft.com/en-us/sql-server> - 微软推出的关系型数据库管理系统。
-- Oracle Database - <https://www.oracle.com/database/> - 甲骨文公司推出的高性能、高可用的多模型数据库管理系统。
-- MongoDB - <https://www.mongodb.com/> - 领先的面向文档的开源NoSQL数据库。
-- Redis - <https://redis.io/> - 开源的内存数据结构存储，用作数据库、缓存和消息代理。
-- Amazon Web Services (AWS) Databases - <https://aws.amazon.com/cn/products/databases/> - 亚马逊提供的关系型数据库、NoSQL 数据库、内存数据库等。
-- Google Cloud Database - <https://cloud.google.com/products/databases> - 谷歌云提供的全托管关系型数据库服务。
-- SQLite - <https://www.sqlite.org/index.html> - 嵌入式的、自包含的、无服务器的、零配置的 SQL 数据库引擎。
-- MariaDB - <https://mariadb.org/> - 由 MySQL 原始开发者维护的、与 MySQL 高度兼容的开源分支。
-- H2 - <https://www.h2database.com/html/main.html> - 内存数据库引擎，支持 JDBC 和 ODBC，用于测试和开发。
-- HBase - <https://hbase.apache.org/> - 分布式、可扩展的、面向列的 NoSQL 数据库，适用于海量数据存储。
-- Cassandra - <https://cassandra.apache.org/> - 分布式、高可用的 NoSQL 数据库，适用于大规模数据存储和实时分析。
-- Hive - <https://hive.apache.org/> - 基于 Hadoop 的数据仓库基础设施，用于处理大规模数据集。
-- Aliyun Database - <https://www.aliyun.com/product/outline/index> - 阿里云瑶池数据库：云原生一站式数据管理与服务。
-- Tencent Cloud Database - <https://cloud.tencent.com/solution/database> - 腾讯云提供的关系型数据库、NoSQL 数据库、内存数据库等。
+- [MySQL](https://www.mysql.com/) (Oracle 公司) - 世界上最流行的开源关系型数据库之一。
+- [PostgreSQL](https://www.postgresql.org/) (全球开发社区) - 功能强大的开源对象关系数据库系统。
+- [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server) - 微软推出的关系型数据库管理系统。
+- [Oracle Database](https://www.oracle.com/database/) - 甲骨文公司推出的高性能、高可用的多模型数据库管理系统。
+- [MongoDB](https://www.mongodb.com/) - 领先的面向文档的开源NoSQL数据库。
+- [Redis](https://redis.io/) - 开源的内存数据结构存储，用作数据库、缓存和消息代理。
+- [Amazon Web Services (AWS) Databases](https://aws.amazon.com/cn/products/databases/) - 亚马逊提供的关系型数据库、NoSQL 数据库、内存数据库等。
+- [Google Cloud Database](https://cloud.google.com/products/databases) - 谷歌云提供的全托管关系型数据库服务。
+- [SQLite](https://www.sqlite.org/index.html) - 嵌入式的、自包含的、无服务器的、零配置的 SQL 数据库引擎。
+- [MariaDB](https://mariadb.org/) - 由 MySQL 原始开发者维护的、与 MySQL 高度兼容的开源分支。
+- [H2 Database](https://www.h2database.com/html/main.html) - 内存数据库引擎，支持 JDBC 和 ODBC，用于测试和开发。
+- [HBase](https://hbase.apache.org/) - 分布式、可扩展的、面向列的 NoSQL 数据库，适用于海量数据存储。
+- [Cassandra](https://cassandra.apache.org/) - 分布式、高可用的 NoSQL 数据库，适用于大规模数据存储和实时分析。
+- [Hive](https://hive.apache.org/) - 基于 Hadoop 的数据仓库基础设施，用于处理大规模数据集。
+- [Aliyun Database](https://www.aliyun.com/product/outline/index) - 阿里云瑶池数据库：云原生一站式数据管理与服务。
+- [Tencent Cloud Database](https://cloud.tencent.com/solution/database) - 腾讯云提供的关系型数据库、NoSQL 数据库、内存数据库等。
 
 ### 数据库工具
 
-- MySQL Workbench - <https://www.mysql.com/products/workbench/> - MySQL 官方的可视化数据库设计、管理和开发工具。
-- PostgreSQL pgAdmin - <https://www.pgadmin.org/> - PostgreSQL 最流行的开源管理和开发平台。
-- DBeaver - <https://dbeaver.io/> - 免费的跨平台数据库工具，支持所有主流数据库（MySQL, PostgreSQL, SQLite, Oracle, DB2, SQL Server等）。
-- phpMyAdmin - <https://www.phpmyadmin.net/> - 用 PHP 编写的免费开源 Web 端 MySQL/MariaDB 管理工具。
-- Azure Data Studio - <https://learn.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio> - 跨平台的数据库工具，适用于使用 Azure 数据服务和本地数据库的数据专业人士。
-- Redis Insight - <https://redis.com/redis-enterprise/redis-insight/> - Redis 官方的可视化管理工具。
-- MongoDB Compass - <https://www.mongodb.com/products/compass> - MongoDB 官方的 GUI 交互工具。
-- SQL Developer - <https://www.oracle.com/database/sqldeveloper/technologies/download/> - Oracle 官方的 SQL 开发工具，支持所有主要数据库系统。
+- [MySQL Workbench](https://www.mysql.com/products/workbench/) - MySQL 官方的可视化数据库设计、管理和开发工具。
+- [PostgreSQL pgAdmin](https://www.pgadmin.org/) - PostgreSQL 最流行的开源管理和开发平台。
+- [DBeaver](https://dbeaver.io/) - 免费的跨平台数据库工具，支持所有主流数据库（MySQL, PostgreSQL, SQLite, Oracle, DB2, SQL Server等）。
+- [phpMyAdmin](https://www.phpmyadmin.net/) - 用 PHP 编写的免费开源 Web 端 MySQL/MariaDB 管理工具。
+- [Azure Data Studio](https://learn.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio) - 跨平台的数据库工具，适用于使用 Azure 数据服务和本地数据库的数据专业人士。
+- [Redis Insight](https://redis.com/redis-enterprise/redis-insight/) - Redis 官方的可视化管理工具。
+- [MongoDB Compass](https://www.mongodb.com/products/compass) - MongoDB 官方的 GUI 交互工具。
+- [Oracle SQL Developer](https://www.oracle.com/database/sqldeveloper/technologies/download/) - Oracle 官方的 SQL 开发工具，支持所有主要数据库系统。
+- [SQL Server Management Studio (SSMS)](https://learn.microsoft.com/en-us/ssms/) - Microsoft 官方的 SQL Server 管理工具。
+- [JetBrains DataGrip](https://www.jetbrains.com/datagrip/) - 跨平台的数据库管理工具，支持所有主要数据库系统。
+- [Navicat](https://www.navicat.com/en/) - 跨平台的数据库管理工具，支持所有主要数据库系统。
+- [HeidiSQL](https://www.heidisql.com/) - 免费的跨平台数据库管理工具，支持 MySQL, PostgreSQL, SQLite, Oracle, DB2, SQL Server 等。

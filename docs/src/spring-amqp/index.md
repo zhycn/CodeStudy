@@ -1,5 +1,3 @@
-# Spring AMQP
-
 # Spring AMQP 详解与最佳实践
 
 Spring AMQP 是基于 Spring 框架的 AMQP（高级消息队列协议）消息中间件集成解决方案，它针对 RabbitMQ 提供了高度抽象、声明式且易于使用的编程模型。本文将全面介绍 Spring AMQP 的核心概念、使用方式和最佳实践。
