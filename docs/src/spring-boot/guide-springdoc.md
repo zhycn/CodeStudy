@@ -7,13 +7,6 @@ description: 详细介绍了如何在 Spring Boot 3 项目中集成 Springdoc Op
 
 - Springdoc OpenAPI 官方文档: <https://springdoc.org/>
 
-| 项目                       | 内容                                      |
-| :------------------------- | :---------------------------------------- |
-| **目标框架**               | Spring Boot 3.x (基于 Spring Framework 6) |
-| **JDK 版本**               | JDK 17+                                   |
-| **Springdoc OpenAPI 版本** | 2.3.0+                                    |
-| **支持规范**               | OpenAPI 3.1                               |
-
 ## 1. 引言
 
 ### 1.1 什么是 OpenAPI？
