@@ -1,10 +1,10 @@
-好的，没有问题。作为 Spring 编程技术专家和 Markdown 技术文档大师，我将为您生成一篇详尽、专业且可立即使用的技术文档。
-
-在撰写本文之前，我已完成对超过 10 篇优质中英文技术文章、Spring 官方文档以及相关书籍章节的研读与分析，确保内容的准确性、先进性和实用性。
-
+---
+title: Spring Email 集成详解与最佳实践
+description: 本教程详细介绍了 Spring Email 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
-# Spring 框架 Email 集成详解与最佳实践
+# Spring Email 集成详解与最佳实践
 
 ## 1. 概述
 
@@ -23,25 +23,25 @@
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context-support</artifactId>
-    <version>5.3.23</version> <!-- 请使用你的 Spring 版本 -->
+    <version>6.2.10</version> <!-- 请使用你的 Spring 版本 -->
 </dependency>
 
 <!-- JavaMail API，Spring 邮件功能的底层实现 -->
 <dependency>
-    <groupId>com.sun.mail</groupId>
-    <artifactId>javax.mail</artifactId>
-    <version>1.6.2</version>
+    <groupId>org.eclipse.angus</groupId>
+    <artifactId>jakarta.mail</artifactId>
+    <version>2.0.4</version>
 </dependency>
 ```
 
-> **注意**：对于 Spring Boot 项目，只需添加 `spring-boot-starter-mail` 依赖即可，它会自动管理上述依赖的版本。
->
-> ```xml
-> <dependency>
->     <groupId>org.springframework.boot</groupId>
->     <artifactId>spring-boot-starter-mail</artifactId>
-> </dependency>
-> ```
+**注意**：对于 Spring Boot 项目，只需添加 `spring-boot-starter-mail` 依赖即可，它会自动管理上述依赖的版本。
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
 
 ### 2.2 配置 JavaMailSender
 
@@ -421,8 +421,6 @@ Spring Framework 的邮件抽象层极大地简化了 Java 应用中的邮件集
 
 遵循本文概述的最佳实践——特别是关于安全性、可靠性和异步处理的部分——将帮助你在生产环境中构建出高质量的邮件发送服务。
 
----
-
 ## 附录
 
 ### A. 常用 SMTP 服务器配置
@@ -434,7 +432,3 @@ Spring Framework 的邮件抽象层极大地简化了 Java 应用中的邮件集
 | **Outlook/Hotmail** | `smtp.office365.com` | 587  | STARTTLS |
 | **QQ 邮箱**         | `smtp.qq.com`        | 465  | SSL      |
 | **163 邮箱**        | `smtp.163.com`       | 465  | SSL      |
-
-### B. 完整可运行的示例代码
-
-请参考本章各节的代码片段，它们组成了一个完整的、可集成的示例。只需替换为你自己的邮箱配置即可运行。

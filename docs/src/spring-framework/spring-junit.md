@@ -1,6 +1,10 @@
-好的，请看这篇关于 Spring 框架 JUnit 测试的详细文档。
+---
+title: Spring JUnit 测试框架详解与最佳实践
+description: 本文详细介绍了 Spring 框架中 JUnit 测试框架的使用方法、核心注解、最佳实践和注意事项。
+author: zhycn
+---
 
-# Spring 框架 JUnit 测试框架详解与最佳实践
+# Spring JUnit 测试框架详解与最佳实践
 
 ## 1. 引言
 
@@ -15,29 +19,12 @@ JUnit 作为 Java 领域最流行的单元测试框架，与 Spring 强大的测
 ### 2.1 Maven 依赖
 
 ```xml
-<!-- Spring Test Context -->
 <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-test</artifactId>
-    <version>6.1.0</version> <!-- 请使用与你的 Spring 核心版本一致的版本 -->
-    <scope>test</scope>
-</dependency>
-
-<!-- JUnit Jupiter (JUnit 5) -->
-<dependency>
-    <groupId>org.junit.jupiter</groupId>
-    <artifactId>junit-jupiter</artifactId>
-    <version>5.10.0</version> <!-- 请使用最新稳定版 -->
-    <scope>test</scope>
-</dependency>
-
-<!-- 如果涉及数据库测试，可能需要 Spring Boot Test Starter (可选) -->
-<!-- <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-test</artifactId>
-    <version>3.1.0</version>
     <scope>test</scope>
-</dependency> -->
+    <!-- 版本由 spring-boot-starter-parent 管理 -->
+</dependency>
 ```
 
 **注意**： 从 Spring Framework 5.0 开始，官方推荐使用 JUnit 5 (JUnit Jupiter)。本文也将主要基于 JUnit 5 进行阐述。
@@ -123,12 +110,12 @@ public class UserServiceTest {
 }
 ```
 
-### 4.5 `@MockBean` 与 `@SpyBean` (Spring Boot)
+### 4.5 `@MockitoBean` 与 `@MockitoSpyBean` (Spring Boot)
 
 这些是 Spring Boot Test 提供的强大注解，用于向 ApplicationContext 中添加 Mockito 的 mock 或 spy 对象。它会 mock 掉该 Bean 的所有注入点。
 
-- `@MockBean`: 创建一个 Mockito mock 实例并替换掉 ApplicationContext 中的同名 Bean。
-- `@SpyBean`: 创建一个 Mockito spy 实例（部分 mock），包装真实的 Bean。
+- `@MockitoBean`: 创建一个 Mockito mock 实例并替换掉 ApplicationContext 中的同名 Bean。
+- `@MockitoSpyBean`: 创建一个 Mockito spy 实例（部分 mock），包装真实的 Bean。
 
 ```java
 @SpringJUnitConfig(TestConfig.class)
@@ -137,7 +124,7 @@ public class OrderServiceTest {
     @Autowired
     private OrderService orderService;
 
-    @MockBean
+    @MockitoBean
     private PaymentGateway paymentGateway; // 模拟外部支付接口
 
     @Test
@@ -250,21 +237,21 @@ public class UserServiceIntegrationTest {
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 // 只实例化 Web 层相关的 Bean (Controllers, WebMvcConfigurer等)
-// 其他 Bean (如 Service) 需要用 @MockBean 模拟
+// 其他 Bean (如 Service) 需要用 @MockitoBean 模拟
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc; // 模拟 MVC 环境的强大工具
 
-    @MockBean
+    @MockitoBean
     private UserService userService;
 
     @Test

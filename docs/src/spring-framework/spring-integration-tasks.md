@@ -1,8 +1,13 @@
-好的，请看这篇关于 Spring 框架 Tasks 集成详解与最佳实践的完整技术文档。
-
+---
+title: Spring Tasks 集成详解与最佳实践
+description: 本教程详细介绍了 Spring Tasks 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
-# Spring 框架 Tasks 集成详解与最佳实践
+# Spring Tasks 集成详解与最佳实践
+
+- [Task Execution and Scheduling](https://docs.spring.io/spring-framework/reference/integration/scheduling.html)
+- [Quartz Scheduler](https://www.quartz-scheduler.org/)
 
 ## 1. 概述
 
@@ -16,16 +21,17 @@ Spring Framework 提供了一个强大且易于使用的 **Task Execution and Sc
 
 `TaskExecutor` 是 Spring 对线程池的抽象，是 `java.util.concurrent.Executor` 的扩展。它提供了多种实现，用于执行异步任务。
 
-- **`SyncTaskExecutor`**: 同步执行器，不在新线程中执行，主要用于调试。
-- **`SimpleAsyncTaskExecutor`**: 每次执行都会创建一个新线程，不重用线程。
-- **`ThreadPoolTaskExecutor`**: **最常用** 的实现。它是 Java `ThreadPoolExecutor` 的包装，提供了高度可配置的线程池功能，支持线程复用、队列和拒绝策略。
-- **`ConcurrentTaskExecutor`**: 适配器，用于适配 Java 5 的 `Executor`。
+- **`SyncTaskExecutor`**: 同步执行器，不在新线程中执行，主要用于调试。任务会在调用者线程中同步执行。
+- **`SimpleAsyncTaskExecutor`**: 每次执行都会创建一个新线程，不重用线程。适用于少量短时间任务，不适合高并发场景，避免创建过多线程耗尽系统资源。
+- **`ThreadPoolTaskExecutor`**: **最常用** 的实现。它是 Java `ThreadPoolExecutor` 的包装，提供了高度可配置的线程池功能，支持线程复用、队列和拒绝策略。适合大多数生产环境，可根据业务需求调整线程池参数。
+- **`ConcurrentTaskExecutor`**: 适配器，用于适配 Java 5 的 `Executor`。可以将已有的 `Executor` 实例包装成 `TaskExecutor` 使用。
 
 ### 2.2 `TaskScheduler`
 
 `TaskScheduler` 用于定义和管理定时任务。它提供了多种方法来安排任务在未来的某个时间点执行，或按固定的周期重复执行。
 
-- **`ThreadPoolTaskScheduler`**: **最常用** 的实现。它内部持有一个 `ScheduledExecutorService`，可以高效地管理多个定时任务。
+- **`ThreadPoolTaskScheduler`**: **最常用** 的实现。它内部持有一个 `ScheduledExecutorService`，可以高效地管理多个定时任务。支持 cron 表达式、固定速率和固定延迟等多种调度方式。
+- **`ConcurrentTaskScheduler`**: 适配器，用于适配 Java 5 的 `ScheduledExecutorService`。可以将已有的 `ScheduledExecutorService` 包装成 `TaskScheduler` 使用。
 
 ### 2.3 注解驱动
 

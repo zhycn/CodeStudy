@@ -1,10 +1,12 @@
-好的，没有问题。作为 Spring 专家和技术文档工程师，我将为你生成一篇详尽、专业且实用的技术文档。
-
-在开始撰写前，我参考并分析了来自 Spring 官方文档、Baeldung、Spring Framework Guru、JavaTpoint 以及多位技术专家博客在内的十余篇优质文章，以确保内容的准确性、深度和最佳实践。
-
+---
+title: Spring DAO Support 数据访问支持详解与最佳实践
+description: 本文深入探讨了 Spring 框架中 DAO Support 数据访问支持的核心概念、机制和最佳实践。内容涵盖了模板方法模式、一致的异常体系、资源管理、事务管理等方面。
+author: zhycn
 ---
 
-# Spring 框架 DAO Support 数据访问支持详解与最佳实践
+# Spring DAO Support 数据访问支持详解与最佳实践
+
+- [DAO Support](https://docs.spring.io/spring-framework/reference/data-access/dao.html)
 
 ## 1. 引言
 

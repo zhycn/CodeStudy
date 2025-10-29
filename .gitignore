@@ -20,7 +20,6 @@ yarn-error.log*
 
 # 编辑器和IDE文件
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj

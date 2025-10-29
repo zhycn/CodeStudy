@@ -1,14 +1,14 @@
-好的，没有问题。作为一名 Spring 专家和 Markdown 文档工程师，我将为你呈现一篇详尽、专业且可立即上手的 Spring JMS 集成指南。
-
-在开始撰写前，我已通过联网搜索分析了来自 Spring 官方文档、Apache ActiveMQ 官方文档、IBM Developer、Baeldung、JavaWorld 等超过 10 篇中英文优质技术文章和教程，确保内容的准确性、时效性和最佳实践。
-
+---
+title: Spring JMS 集成详解与最佳实践
+description: 本教程详细介绍了 Spring JMS 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
-# Spring Framework JMS 集成详解与最佳实践
+# Spring JMS 集成详解与最佳实践
 
 ## 1. 引言
 
-在现代分布式企业级应用中，异步消息传递是解耦系统组件、提升可靠性、增强可扩展性的核心架构模式之一。Java Message Service (JMS) 作为 Java EE 规范的一部分，定义了一套通用的 API，用于在 Java 应用程序之间发送和接收消息。
+在现代分布式企业级应用中，异步消息传递是解耦系统组件、提升可靠性、增强可扩展性的核心架构模式之一。Java Message Service (JMS) 作为 Java EE （Jakarta EE）规范的一部分，定义了一套通用的 API，用于在 Java 应用程序之间发送和接收消息。
 
 Spring Framework 对 JMS 提供了强大的支持，通过其 `spring-jms` 模块，极大地简化了 JMS 的使用。它将 JMS 的复杂性封装起来，提供了与 Spring 事务管理、依赖注入等特性无缝集成的解决方案，允许开发者以更简洁、更符合 Spring 风格的方式进行消息驱动的开发。
 

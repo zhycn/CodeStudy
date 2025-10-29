@@ -1,6 +1,10 @@
 // Java 编程指南
 const javaSidebar = [
   {
+    text: 'Java 系列教程',
+    items: [{ text: 'Java 编程指南', link: '/java/' }],
+  },
+  {
     text: '语言基础与核心概念',
     items: [
       { text: 'Java 编程语言简介', link: '/java/java-introduction' },

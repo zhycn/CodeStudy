@@ -1,10 +1,18 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring 框架 Caching 集成详解与最佳实践的完整文档。
-
-本文档在撰写前，我已参考并分析了来自 Spring 官方文档、Baeldung、Spring.io Guides、JavaDocs 以及多位行业专家博客在内的十余篇优质技术文章，旨在为你提供最准确、最前沿且最具实践性的内容。
-
+---
+title: Spring Caching 集成详解与最佳实践
+description: 本教程详细介绍了 Spring Caching 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
-# Spring 框架 Caching 集成详解与最佳实践
+# Spring Caching 集成详解与最佳实践
+
+- [Spring Cache Abstraction](https://docs.spring.io/spring-framework/reference/integration/cache.html) - 缓存抽象层，提供了统一的 API 来管理缓存。
+- [Caffeine](https://github.com/ben-manes/caffeine) - 基于 Java 8 的高性能缓存库，提供了本地缓存的解决方案。
+- [Redisson](https://github.com/redisson/redisson) - 基于 Redis 的 Java 驻留对象缓存库，提供了分布式缓存的解决方案。
+- [Redis](https://redis.io/) - 基于内存的键值存储数据库，常用于缓存、会话存储、消息队列等场景。
+- [Ehcache](https://www.ehcache.org/) - 基于 Java 的本地缓存库，提供了简单、快速的缓存解决方案。
+- [Hazelcast](https://hazelcast.com/) - 基于内存的分布式缓存解决方案，提供了高可用性、可扩展性和 fault tolerance。
+- [Memcached](https://memcached.org/) - 基于内存的简单键值存储数据库，常用于缓存和会话存储。
 
 ## 1. 概述
 

@@ -1,10 +1,10 @@
-好的，没有问题。作为一名资深的 Spring 专家和技术文档工程师，我将为你撰写一篇关于 Spring JDBC Testing Support 的详尽指南。
-
-在开始之前，我参考并分析了来自 Spring 官方文档、Baeldung、Spring Framework Guru、JavaTpoint 等多个权威来源的优质文章和最佳实践，以确保内容的准确性、深度和实用性。
-
+---
+title: Spring JDBC Testing Support 数据库测试支持详解与最佳实践
+description: 详细介绍 Spring JDBC 测试支持的核心功能、优势、项目配置与依赖，以及如何使用它来提升数据库测试的效率和质量。
+author: zhycn
 ---
 
-# Spring 框架 JDBC Testing Support 数据库测试支持详解与最佳实践
+# Spring JDBC Testing Support 数据库测试支持详解与最佳实践
 
 ## 1. 概述
 
@@ -100,27 +100,30 @@ public class SpringJdbcTestApplicationTests {
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.sql.DataSource;
 
 @Configuration
 public class TestConfig {
 
-    @Bean
-    public DataSource dataSource() {
-        // 这里通常使用 EmbeddedDatabaseBuilder
-        // 对于 Spring Boot，配置在 application.properties 中，无需此 Bean
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("classpath:schema.sql")
-                .addScript("classpath:test-data.sql")
-                .build();
-    }
+  @Bean
+  public DataSource dataSource() {
+    // 这里通常使用 EmbeddedDatabaseBuilder
+    // 对于 Spring Boot，配置在 application.properties 中，无需此 Bean
+    return new EmbeddedDatabaseBuilder()
+      .setType(EmbeddedDatabaseType.H2)
+      .addScript("classpath:schema.sql")
+      .addScript("classpath:test-data.sql")
+      .build();
+  }
 
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
+  @Bean
+  public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    return new JdbcTemplate(dataSource);
+  }
 }
+
 ```
 
 ### 4.2 事务管理与回滚
@@ -129,28 +132,30 @@ public class TestConfig {
 
 ```java
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.test.annotation.Rollback;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringJUnitConfig
 @Transactional // 每个测试方法都在事务中执行
 public class UserRepositoryTest {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
 
-    @Test
-    void testInsertUser() {
-        String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
-        int rowsAffected = jdbcTemplate.update(sql, "Alice", "alice@example.com");
+  @Test
+  void testInsertUser() {
+    String sql = "INSERT INTO users (name, email) VALUES (?, ?)";
+    int rowsAffected = jdbcTemplate.update(sql, "Alice", "alice@example.com");
 
-        assertEquals(1, rowsAffected);
-        // 由于事务存在，此处可以查询到刚插入的数据
-        Integer id = jdbcTemplate.queryForObject("SELECT id FROM users WHERE email = ?", Integer.class, "alice@example.com");
-        assertEquals(1, id);
-    }
-    // 方法结束时，事务默认会自动回滚，数据库状态恢复到测试前
+    assertEquals(1, rowsAffected);
+    // 由于事务存在，此处可以查询到刚插入的数据
+    Integer id = jdbcTemplate.queryForObject("SELECT id FROM users WHERE email = ?", Integer.class, "alice@example.com");
+    assertEquals(1, id);
+  }
+  // 方法结束时，事务默认会自动回滚，数据库状态恢复到测试前
 }
 ```
 
@@ -296,12 +301,15 @@ void testWithCommit() {
 ## 6. 常见问题与解决方案 (FAQ)
 
 **Q: 测试时出现 `Table not found` 错误？**
+
 **A**: 确保 `schema.sql` 脚本被正确加载和执行。检查 `@Sql` 注解的路径是否正确，或检查 `DataSource` 配置是否正确使用了 `EmbeddedDatabaseBuilder` 并添加了脚本。
 
 **Q: 我想在测试中与生产环境使用同类型的数据库（如 MySQL），怎么办？**
+
 **A**: 虽然不推荐（因为慢），但有时是必要的。你可以使用 Docker 在测试环境中启动一个真实的 MySQL 实例，并通过 `Testcontainers` 等库与 Spring Boot 集成，实现高效的集成测试。
 
 **Q: `@Transactional` 和 `@Rollback` 失效了？**
+
 **A**: 首先检查是否正确配置了事务管理器。在 Spring Boot 中这是自动配置的。其次，确保你没有在测试中手动调用 `commit()` 或 `rollback()`。最后，检查数据库引擎是否支持事务（如 MySQL 的 InnoDB 支持，MyISAM 不支持）。
 
 ## 7. 总结

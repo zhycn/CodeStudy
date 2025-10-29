@@ -1,8 +1,12 @@
-好的，作为一名 Spring 专家和 Markdown 文档工程师，我将为你生成一篇详尽、专业的教程。本文档综合了主流最佳实践和官方文档精髓，旨在提供清晰、可操作的指导。
-
+---
+title: Spring Transactions 事务管理详解与最佳实践
+description: 本文深入探讨了 Spring 框架中事务管理的核心概念、机制和最佳实践。内容涵盖了事务的定义、传播行为、隔离级别、超时设置、回滚规则以及异常处理等方面。
+author: zhycn
 ---
 
-# Spring 框架 Transactions 事务管理详解与最佳实践
+# Spring Transactions 事务管理详解与最佳实践
+
+- [Transaction Management](https://docs.spring.io/spring-framework/reference/data-access/transaction.html)
 
 ## 1. 事务核心概念回顾
 
@@ -259,6 +263,7 @@ public void directTransactionControl(PlatformTransactionManager transactionManag
 ### 7.2 常见陷阱
 
 1. **自调用问题 (Self-Invocation)**: 在同一个类中，一个非事务方法 `A()` 调用一个事务方法 `B()`，事务将会**失效**。因为 `@Transactional` 是基于代理实现的，只有通过代理对象进行的调用才会被拦截。内部调用 (`this.B()`) 不会经过代理。
+
    **解决方案**: 将事务方法放到另一个 Service 中，或者使用 `AspectJ` 模式（而非代理模式）来实现 AOP。
 
 2. **异常被捕获 (Exception Caught and Handled)**: 如果在事务方法中捕获了异常并且没有重新抛出，事务管理器将不知道发生了异常，因此不会回滚事务。

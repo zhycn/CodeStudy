@@ -1,8 +1,13 @@
-好的，请看下面为您生成的关于 Spring 框架 Mockito 测试框架详解与最佳实践的完整技术文档。
-
+---
+title: Spring Mockito 测试框架详解与最佳实践
+description: 详细介绍 Spring Mockito 测试框架的核心概念、架构、工作原理、核心注解、高级特性，并提供最佳实践。
+author: zhycn
 ---
 
-# Spring 框架 Mockito 测试框架详解与最佳实践
+# Spring Mockito 测试框架详解与最佳实践
+
+- [Mockito 官方网站](https://site.mockito.org/)
+- [Mockito GitHub 仓库](https://github.com/mockito/mockito)
 
 ## 1. 引言
 
@@ -40,10 +45,13 @@ Mocking 是一种在测试中创建模拟对象（Mock Objects）的技术，这
 
 `spring-boot-starter-test` 会自动引入：
 
-- **JUnit 5**: 测试框架
-- **Mockito**: Mocking 框架
-- **AssertJ**: 流畅的断言库
-- **Spring Test & Spring Boot Test**: utilities for Spring 集成测试
+- **JUnit 5**: 现代 Java 测试框架，提供了丰富的测试注解和断言方法，支持参数化测试、动态测试等高级特性，是编写单元测试和集成测试的基础。
+- **Mockito**: 强大的 Mocking 框架，可用于创建和配置模拟对象，将测试目标与依赖隔离，方便进行单元测试，支持行为验证和方法打桩等功能。
+- **AssertJ**: 流畅的断言库，提供了易于阅读和编写的断言语法，支持链式调用，能够让测试代码更加清晰和简洁。
+- **Spring Test & Spring Boot Test**: 用于 Spring 集成测试的工具集，提供了一系列注解和工具类，可帮助开发者方便地启动 Spring 容器、模拟请求和测试 Spring 组件。
+- **Hamcrest**: 提供了一套匹配器库，可用于创建更灵活、更具描述性的断言，常与 JUnit 或其他测试框架结合使用。
+- **JSONAssert**: 用于验证 JSON 数据的断言库，支持对 JSON 对象和数组的内容、结构等进行验证，方便进行与 JSON 相关的测试。
+- **JsonPath**: 用于解析和提取 JSON 数据的工具，可通过类似 XPath 的语法快速定位和获取 JSON 中的特定值，在测试中常用于验证 API 返回的 JSON 响应。
 
 ## 4. 在 Spring 测试中使用 Mockito
 
@@ -51,10 +59,10 @@ Spring Boot Test 与 Mockito 提供了深度的集成，主要通过注解来简
 
 ### 4.1 关键注解
 
-- `@MockBean`: Spring Boot 提供的注解。用于在 Spring 的 `ApplicationContext` 中添加一个 Mockito Mock 对象。它会替换掉 Context 中任何现有的相同类型的 Bean。非常适合在集成测试中 Mock 如 `@Service`, `@Repository` 或 `@Controller` 等 Bean。
+- `@MockitoBean`: Spring Boot 提供的注解。用于在 Spring 的 `ApplicationContext` 中添加一个 Mockito Mock 对象。它会替换掉 Context 中任何现有的相同类型的 Bean。非常适合在集成测试中 Mock 如 `@Service`, `@Repository` 或 `@Controller` 等 Bean。
 - `@Mock`: 标准的 Mockito 注解，用于创建一个 Mock 对象。在纯单元测试中（不启动 Spring 容器）使用。
 - `@InjectMocks`: 标准的 Mockito 注解，它会创建该类的一个实例，并将其标注为 `@Mock`（或 `@Spy`）的字段自动注入（通过构造函数、setter 或字段反射）到其中。用于纯单元测试。
-- `@SpyBean`: Spring Boot 提供的注解，用于包装一个真实的 Spring Bean 成为一个 Spy。部分方法调用会被代理到真实对象，部分可以被 Stub（打桩）。类似于 `@MockBean`，但用于 Spy。
+- `@MockitoSpyBean`: Spring Boot 提供的注解，用于包装一个真实的 Spring Bean 成为一个 Spy。部分方法调用会被代理到真实对象，部分可以被 Stub（打桩）。类似于 `@MockitoBean`，但用于 Spy。
 - `@Spy`: 标准的 Mockito 注解，用于创建一个真实对象的 Spy。
 
 ### 4.2 测试类型与注解选择
@@ -62,8 +70,8 @@ Spring Boot Test 与 Mockito 提供了深度的集成，主要通过注解来简
 | 测试类型       | 描述                                          | 常用注解                                                       | 是否启动 Spring 容器 |
 | :------------- | :-------------------------------------------- | :------------------------------------------------------------- | :------------------- |
 | **纯单元测试** | 测试一个孤立的类，所有依赖都是 Mock。         | `@Mock`, `@InjectMocks`, `@ExtendWith(MockitoExtension.class)` | 否                   |
-| **切片测试**   | 只加载应用程序的一部分（如 Web 层、数据层）。 | `@WebMvcTest`, `@DataJpaTest`, `@JsonTest` + `@MockBean`       | 是（部分）           |
-| **集成测试**   | 加载完整的或几乎完整的应用程序上下文。        | `@SpringBootTest` + `@MockBean`                                | 是                   |
+| **切片测试**   | 只加载应用程序的一部分（如 Web 层、数据层）。 | `@WebMvcTest`, `@DataJpaTest`, `@JsonTest` + `@MockitoBean`    | 是（部分）           |
+| **集成测试**   | 加载完整的或几乎完整的应用程序上下文。        | `@SpringBootTest` + `@MockitoBean`                             | 是                   |
 
 ## 5. 常用操作与代码示例
 
@@ -131,14 +139,14 @@ public class UserServiceUnitTest {
 
 ### 5.2 集成测试 / 切片测试示例（启动 Spring Context）
 
-使用 `@MockBean` 在 Spring 管理的测试中替换真实的 Bean。
+使用 `@MockitoBean` 在 Spring 管理的测试中替换真实的 Bean。
 
 **Web 层切片测试 (`@WebMvcTest`)**:
 
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -150,7 +158,7 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc; // 注入模拟的 MVC 环境
 
-    @MockBean
+    @MockitoBean
     private UserService userService; // 替换掉真实的 UserService，Controller 会注入这个 Mock
 
     @Test
@@ -180,7 +188,7 @@ public class OrderServiceIntegrationTest {
     @Autowired
     private OrderService orderService; // 测试真实的 OrderService
 
-    @MockBean
+    @MockitoBean
     private PaymentGateway paymentGateway; // 但 Mock 掉外部的支付网关
 
     @Test
@@ -225,7 +233,7 @@ void testWithArgumentMatchers() {
 
 1. **优先选择单元测试**：单元测试运行速度极快，应作为测试金字塔的基石。尽量使用 `@Mock` 和 `@InjectMocks` 进行孤立测试。
 
-2. **明智地使用集成测试**：集成测试用于验证模块间的集成是否正确。使用 `@MockBean` 来替换掉缓慢、不稳定或不易构造的依赖（如数据库、第三方 API）。
+2. **明智地使用集成测试**：集成测试用于验证模块间的集成是否正确。使用 `@MockitoBean` 来替换掉缓慢、不稳定或不易构造的依赖（如数据库、第三方 API）。
 
 3. **遵循 Given-When-Then 模式**：这是行为驱动开发（BDD）的标准结构，能让测试逻辑异常清晰。
    - **Given**：设置前提条件，配置 Mock 行为。
@@ -238,19 +246,22 @@ void testWithArgumentMatchers() {
 
 6. **不要 Mock 所有东西**：值对象（如 `String`, `DTO`）、工具类等简单、稳定的对象通常不需要 Mock。Mock 那些具有复杂行为或外部交互的依赖。
 
-7. **谨慎使用 `@Spy`/`@SpyBean`**：有时你需要调用对象的真实方法。Spy 很有用，但它通常意味着你的类可能职责过多，考虑是否应该重构。
+7. **谨慎使用 `@Spy`/`@MockitoSpyBean`**：有时你需要调用对象的真实方法。Spy 很有用，但它通常意味着你的类可能职责过多，考虑是否应该重构。
 
 8. **保持测试的独立性**：每个测试方法都应该可以独立运行，不依赖于其他测试产生的状态或 Mock 配置。在 `@BeforeEach` 方法中重置 Mock 是一个好习惯（`Mockito.reset(mock1, mock2)`），但更好的设计是避免在测试间共享状态。
 
 ## 7. 常见问题与陷阱（FAQ）
 
-**Q: `@MockBean` 和 `@Mock` 有什么区别？**
-**A**: `@Mock` 是纯 Mockito 注解，在单元测试中由 `MockitoExtension` 管理。`@MockBean` 是 Spring Boot 注解，它不仅在测试类中创建一个 Mock，还会将这个 Mock 注册到 Spring 的测试 `ApplicationContext` 中，替换掉同类型的 Bean。它需要 Spring 测试上下文。
+**Q: `@MockitoBean` 和 `@Mock` 有什么区别？**
+
+**A**: `@Mock` 是纯 Mockito 注解，在单元测试中由 `MockitoExtension` 管理。`@MockitoBean` 是 Spring Boot 注解，它不仅在测试类中创建一个 Mock，还会将这个 Mock 注册到 Spring 的测试 `ApplicationContext` 中，替换掉同类型的 Bean。它需要 Spring 测试上下文。
 
 **Q: 什么时候用 `@SpringBootTest`，什么时候用 `@WebMvcTest`？**
+
 **A**: 使用 `@WebMvcTest` 当你只想测试 Controller 层，它加载的上下文更轻量，启动更快。使用 `@SpringBootTest` 当你需要进行完整的集成测试，需要测试多个层的交互或者自动配置。
 
 **Q: 如何测试 `void` 方法？**
+
 **A**: 你可以使用 `doNothing()`, `doThrow()`, `doAnswer()` 来为 `void` 方法配置行为。
 
 ```java
@@ -260,15 +271,12 @@ doNothing().when(notificationService).sendNotification(any());
 doThrow(new RuntimeException("Network error")).when(notificationService).sendNotification(any());
 ```
 
-**Q: 如何处理 Mockito 的 “`UnnecessaryStubbingException`”？
-**A\*\*: 这是一个很好的警告，表明你配置了 Mock 行为，但在测试中从未使用过。这通常是测试代码存在坏味道的标志，比如在 `@Before` 中设置了过于宽泛的 Stubbing。请检查你的测试逻辑，将 Stubbing 移到具体需要它的测试方法中，或者使用更严格的参数匹配。
+**Q: 如何处理 Mockito 的 “`UnnecessaryStubbingException`”？**
+
+**A**: 这是一个很好的警告，表明你配置了 Mock 行为，但在测试中从未使用过。这通常是测试代码存在坏味道的标志，比如在 `@Before` 中设置了过于宽泛的 Stubbing。请检查你的测试逻辑，将 Stubbing 移到具体需要它的测试方法中，或者使用更严格的参数匹配。
 
 ## 8. 总结
 
-Mockito 是 Spring 开发者测试工具箱中不可或缺的利器。通过理解其核心概念（Mock, Stub, Verify），熟练掌握 Spring 集成注解（`@MockBean`, `@SpyBean`），并遵循 Given-When-Then 和聚焦行为验证等最佳实践，你可以为 Spring 应用程序编写出高效、稳定且可维护的单元测试与集成测试。
+Mockito 是 Spring 开发者测试工具箱中不可或缺的利器。通过理解其核心概念（Mock, Stub, Verify），熟练掌握 Spring 集成注解（`@MockitoBean`, `@MockitoSpyBean`），并遵循 Given-When-Then 和聚焦行为验证等最佳实践，你可以为 Spring 应用程序编写出高效、稳定且可维护的单元测试与集成测试。
 
 记住，测试的最终目标是提升信心，促进开发，而不是成为负担。让 Mockito 帮助你构建一个坚固的测试安全网。
-
----
-
-**希望这份详细的文档能对您编写 Spring 测试有所帮助！**

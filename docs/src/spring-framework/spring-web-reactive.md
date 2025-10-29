@@ -1,10 +1,10 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring Web Reactive 的详尽教程。
-
-在开始撰写之前，我参考并分析了多篇来自 Spring 官方文档、知名技术博客（如 Baeldung、Spring.io）、开源项目（如 Reactor Core）以及技术社区（如 Stack Overflow）的优质文章和讨论，以确保内容的准确性、先进性和实用性。
-
+---
+title: Spring Web Reactive 详解与最佳实践
+description: 本教程详细介绍了 Spring Web Reactive 技术，包括其核心概念、项目 Reactor 基础、WebFlux 组件、路由与处理、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 Web 应用程序。
+author: zhycn
 ---
 
-# Spring Framework Web Reactive 详解与最佳实践
+# Spring Web Reactive 详解与最佳实践
 
 ## 1. 引言：为什么需要 Reactive？
 

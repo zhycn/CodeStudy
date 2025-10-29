@@ -17,8 +17,9 @@ features:
   - title: Java 编程指南
     details: 详细介绍 Java 编程语言的基础概念、语法和常用类库，帮助开发者快速入门。
     link: /java
-  - title: 优质资源整合
-    details: 精选国内外优质书籍、视频课程和工具资源，避免信息过载
+  - title: Git 版本控制
+    details: 详细介绍 Git 版本控制工具的使用方法、工作流程和常用命令，帮助开发者进行版本管理和协作开发。
+    link: /devtools/git
   - title: 实践驱动
     details: 结合真实项目案例，理论联系实际，提升动手能力和问题解决能力
 ---

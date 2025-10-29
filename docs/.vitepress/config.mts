@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import gitSidebar from './sidebar/git.mts';
 import javaSidebar from './sidebar/java.mts';
 
 export default defineConfig({
@@ -52,10 +53,12 @@ export default defineConfig({
     // 优化的导航菜单
     nav: [
       { text: '首页', link: '/' },
+      { text: '开发工具', link: '/devtools/', activeMatch: '/devtools/' },
       { text: 'Java', link: '/java/', activeMatch: '/java/' },
-      { text: 'Spring', link: '/spring-framework/', activeMatch: '/spring-' },
+      { text: 'Spring', link: '/spring-boot/', activeMatch: '/spring-' },
       { text: '前端开发', link: '/frontend/', activeMatch: '/frontend/' },
       { text: '编程指南', link: '/guides/', activeMatch: '/guides/' },
+      { text: 'Python3', link: '/python/python3/', activeMatch: '/python/python3/' },
       // { text: '书单推荐', link: '/books/', activeMatch: '/books/' },
       // { text: '视频课程', link: '/courses/', activeMatch: '/courses/' },
       // {
@@ -71,6 +74,7 @@ export default defineConfig({
     // 自动生成的侧边栏
     sidebar: {
       '/java/': javaSidebar,
+      '/devtools/git/': gitSidebar,
     },
 
     // 增强的社交链接

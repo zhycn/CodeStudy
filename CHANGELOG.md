@@ -14,6 +14,15 @@
 
 ## v2025.09
 
+- Added: [Spring 框架 IoC 容器详解与最佳实践](./docs/src/spring-framework/spring-ioc-container.md)
+- Added: [Spring 框架 Resources 资源管理详解与最佳实践](./docs/src/spring-framework/spring-resource.md)
+- Added: [Spring 框架 Validation 验证框架详解与最佳实践](./docs/src/spring-framework/spring-validation.md)
+- Added: [Spring 框架 Data Binding 数据绑定详解与最佳实践](./docs/src/spring-framework/spring-data-binding.md)
+- Added: [Spring 框架 Type Conversion 类型转换详解与最佳实践](./docs/src/spring-framework/spring-type-conversion.md)
+- Added: [Spring 框架 SpEL 表达式语言详解与最佳实践](./docs/src/spring-framework/spring-expression.md)
+- Added: [Spring 框架 AOP 面向切面编程详解与最佳实践](./docs/src/spring-framework/spring-aop.md)
+- Added: [Spring 框架 Events 事件机制详解与最佳实践](./docs/src/spring-framework/spring-event.md)
+- Added: [Spring 框架 AOT 详解与最佳实践](./docs/src/spring-framework/spring-aot.md)
 - Added: [Java this 和 super 关键字详解与最佳实践](./docs/src/java/java-this-super.md)
 - Added: [Java Number 详解与最佳实践](./docs/src/java/java-number.md)
 - Added: [Java Bean 详解与最佳实践](./docs/src/java/java-bean.md)
@@ -99,7 +108,7 @@
 - Added: [Java Record 记录类详解与最佳实践](./docs/src/java/java-record.md)
 - Added: [Java Reflection 反射详解与最佳实践](./docs/src/java/java-reflection.md)
 - Added: [Bun 详解与最佳实践](./docs/src/frontend/guide-bun.md)
-- Added: [Homebrew 详解与最佳实践](./docs/src/guides/guide-homebrew.md)
+- Added: [Homebrew 详解与最佳实践](./docs/src/devtools/guide-homebrew.md)
 - Added: [Java 基础语法详解](./docs/src/java/java-basic-syntax.md)
 - Added: [Java Package 包详解与最佳实践](./docs/src/java/java-package.md)
 - Added: [Java 运算符详解](./docs/src/java/java-operators.md)
@@ -119,9 +128,9 @@
 - Added: [Java Enum 枚举详解与最佳实践](./docs/src/java/java-enum.md)
 - Added: [Java Base64 详解与最佳实践](./docs/src/java/java-base64.md)
 - Added: [Apollo Client 与 Spring Boot 集成详解与最佳实践](./docs/src/guides/guide-apollo-client.md)
-- Added: [SDKMAN! 的使用指南与最佳实践](./docs/src/guides/guide-sdkman.md)
-- Added: [jEnv 详解与最佳实践](./docs/src/guides/guide-jenv.md)
-- Added: [Lombok 详解与最佳实践：全面提升 Java 开发效率](./docs/src/guides/guide-lombok.md)
+- Added: [SDKMAN! 的使用指南与最佳实践](./docs/src/devtools/guide-sdkman.md)
+- Added: [jEnv 详解与最佳实践](./docs/src/devtools/guide-jenv.md)
+- Added: [Lombok 详解与最佳实践：全面提升 Java 开发效率](./docs/src/devtools/guide-lombok.md)
 
 ## v2025.08
 

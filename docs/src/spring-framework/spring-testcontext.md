@@ -1,10 +1,10 @@
-好的，没有问题。作为 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇详尽、准确且实用的技术文档。
-
-在开始撰写之前，我已完成对 Spring 官方文档、Baeldung、JavaPoint、InfoQ 以及多位技术专家博客的调研与分析，并从中提炼出核心概念、最佳实践和最常见的陷阱。以下是为你准备的完整文档。
-
+---
+title: Spring TestContext 测试上下文详解与最佳实践
+description: 详细介绍 Spring TestContext 测试上下文的核心概念、架构、工作原理、核心注解、高级特性，并提供最佳实践。
+author: zhycn
 ---
 
-# Spring 框架 TestContext 测试上下文详解与最佳实践
+# Spring TestContext 测试上下文详解与最佳实践
 
 ## 1. 引言
 
@@ -310,7 +310,7 @@ INSERT INTO users (username, active) VALUES ('inactive_user', false);
      ```
 
 4. **使用 Mockito 等进行部分 Mock**
-   - Spring Test 与 Mockito 等 Mock 框架可以很好地结合。你可以使用 `@MockBean` 来为 ApplicationContext 中的某个 Bean 注入一个 Mock 对象。
+   - Spring Test 与 Mockito 等 Mock 框架可以很好地结合。你可以使用 `@MockitoBean` 来为 ApplicationContext 中的某个 Bean 注入一个 Mock 对象。
 
      ```java
      @SpringJUnitConfig(classes = AppConfig.class)
@@ -319,7 +319,7 @@ INSERT INTO users (username, active) VALUES ('inactive_user', false);
          @Autowired
          private MainService mainService;
 
-         @MockBean // Spring 会用一个 Mock 替换上下文中的 RemoteService Bean
+         @MockitoBean // Spring 会用一个 Mock 替换上下文中的 RemoteService Bean
          private RemoteService remoteService;
 
          @Test
@@ -345,16 +345,20 @@ INSERT INTO users (username, active) VALUES ('inactive_user', false);
 ## 7. 常见问题与解决方案 (FAQ)
 
 **Q: 我的测试上下文没有缓存，每次测试都重新加载，为什么？**
+
 **A:** 检查你的测试配置（`locations`, `classes`, `profiles` 等）是否完全相同。任何细微差别都会导致创建新的上下文。
 
 **Q: 在 `@Transactional` 测试中，为什么无法获取 `Hibernate` 的懒加载属性？**
+
 **A:** 这是因为事务在测试方法结束后就回滚了，`Hibernate Session` 也随之关闭。获取懒加载属性需要在事务范围内进行。可以通过在测试方法中执行所有操作，或者使用 `@Transactional` 修饰一个 `@BeforeEach` 方法来准备数据并触发加载来解决。
 
 **Q: 如何测试非事务性的代码？**
+
 **A:** 如果你需要测试的方法本身不包含事务声明（例如，它自己启动了新事务），那么你的测试类**不应该**使用 `@Transactional`，否则会改变被测代码的事务行为。你可能需要手动清理 `@Sql` 插入的数据。
 
-**Q: `@MockBean` 和普通的 Mockito `@Mock` 有什么区别？**
-**A:** `@MockBean` 会将 Mock 对象注入到 Spring 的 `ApplicationContext` 中，替换掉同名的原有 Bean。而普通的 `@Mock` 只是一个简单的 Mock 对象，需要你自己通过构造函数或 setter 方法将其注入到被测试的 Bean 中。
+**Q: `@MockitoBean` 和普通的 Mockito `@Mock` 有什么区别？**
+
+**A:** `@MockitoBean` 会将 Mock 对象注入到 Spring 的 `ApplicationContext` 中，替换掉同名的原有 Bean。而普通的 `@Mock` 只是一个简单的 Mock 对象，需要你自己通过构造函数或 setter 方法将其注入到被测试的 Bean 中。
 
 ## 8. 总结
 

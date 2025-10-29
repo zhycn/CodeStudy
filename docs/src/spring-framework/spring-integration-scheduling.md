@@ -1,10 +1,13 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring Scheduling 的详尽教程。
-
-在开始撰写前，我参考并分析了来自 Baeldung、Spring 官方文档、JavaCodeGeeks、Stack Overflow 精华帖、InfoQ、CSDN 和博客园等十余篇中英文优质文章和官方资料，以确保内容的准确性、先进性和实用性。
-
+---
+title: Spring Scheduling 集成详解与最佳实践
+description: 本教程详细介绍了 Spring Scheduling 集成技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
-# Spring 框架 Scheduling 集成详解与最佳实践
+# Spring Scheduling 集成详解与最佳实践
+
+- [Task Execution and Scheduling](https://docs.spring.io/spring-framework/reference/integration/scheduling.html)
+- [Quartz Scheduler](https://www.quartz-scheduler.org/)
 
 ## 1. 概述
 
@@ -37,7 +40,7 @@ Spring 框架提供了一个轻量级、功能丰富且易于使用的任务调�
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context</artifactId>
-    <version>5.3.23</version> <!-- 请使用最新版本 -->
+    <version>6.2.10</version> <!-- 请使用最新版本 -->
 </dependency>
 ```
 
@@ -195,8 +198,6 @@ public class CronTask {
     }
 }
 ```
-
-**提示**：可以使用在线工具（如 <https://www.cronmaker.com/）来生成和验证> cron 表达式。
 
 ## 4. 配置与自定义（TaskScheduler）
 

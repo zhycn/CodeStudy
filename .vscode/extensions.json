@@ -1,0 +1,35 @@
+{
+  "recommendations": [
+    // ========== 核心开发工具 ==========
+    "eamodio.gitlens", // Git增强
+    "esbenp.prettier-vscode", // 代码格式化
+    "dbaeumer.vscode-eslint", // JavaScript/TypeScript代码检查
+
+    // ========== 前端开发 ==========
+    "ms-vscode.vscode-typescript-next", // TypeScript支持
+    "bradlc.vscode-tailwindcss", // TailwindCSS支持
+    "vue.volar", // Vue开发支持
+    "ms-vscode.live-server", // 本地开发服务器
+
+    // ========== 后端开发 ==========
+    "redhat.java", // Java语言支持
+    "vmware.vscode-spring-boot", // Spring Boot支持
+    "vscjava.vscode-maven", // Maven项目管理
+    "vscjava.vscode-java-pack", // Java开发包（包含调试、测试等）
+    "gabrielbb.vscode-lombok", // Lombok支持
+    "redhat.vscode-xml", // XML文件支持
+    "redhat.vscode-yaml" // YAML文件支持
+
+    // ========== API工具 ==========
+    // "humao.rest-client", // RESTful API客户端
+    // "graphql.vscode-graphql", // GraphQL API客户端
+
+    // ========== 容器化 ==========
+    // "ms-azuretools.vscode-docker", // Docker支持
+    // "ms-kubernetes-tools.vscode-kubernetes-tools", // Kubernetes支持
+
+    // ========== 其他工具 ==========
+    // "ms-vscode.remote-containers", // 远程容器开发
+    // "ms-vscode.remote-ssh" // 远程SSH开发
+  ]
+}

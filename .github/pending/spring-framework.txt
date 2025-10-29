@@ -64,7 +64,7 @@
     *   **最佳实践**：使用 `@AspectJ` 注解风格；常见的切面应用（日志记录、性能监控、声明式事务原理、安全控制）；避免切面拦截失效；理解 AOP 的局限性。
 
 10. **《Spring 测试框架详解与最佳实践》**
-    *   **内容要点**：单元测试与集成测试。Spring TestContext 框架 (`@SpringJUnitConfig`, `@SpringJUnitWebConfig`)。Mock 环境 (`@MockBean`)。测试切片 (`@WebMvcTest`, `@DataJpaTest`, `@JsonTest`)。
+    *   **内容要点**：单元测试与集成测试。Spring TestContext 框架 (`@SpringJUnitConfig`, `@SpringJUnitWebConfig`)。Mock 环境 (`@MockitoBean`)。测试切片 (`@WebMvcTest`, `@DataJpaTest`, `@JsonTest`)。
     *   **最佳实践**：如何编写快速、隔离的单元测试；如何编写集成测试来验证配置和组件协作；使用 `Testcontainers` 进行数据库集成测试。
 
 11. **《Spring 表达式语言 (SpEL) 详解与最佳实践》**

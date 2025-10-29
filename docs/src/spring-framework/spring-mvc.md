@@ -1,7 +1,7 @@
-好的，没有问题。作为一名资深的 Spring 专家和技术文档工程师，我将为你呈现一篇详尽、专业且实用的 Spring MVC 教程。
-
-在开始之前，我已经综合分析了来自 Oracle、Spring 官方文档、Baeldung、Spring Guru 以及国内多位技术专家的多篇优质文章，以确保内容的准确性、先进性和实践性。
-
+---
+title: Spring Framework MVC 详解与最佳实践
+description: 本文详细介绍了 Spring Framework 中 MVC 模式的核心概念、配置方式、最佳实践以及实际应用场景。通过掌握这些知识，开发者可以在企业级应用中高效、一致地处理 HTTP 请求和响应，提升系统的可维护性和可扩展性。
+author: zhycn
 ---
 
 # Spring MVC 详解与最佳实践
@@ -381,7 +381,7 @@ public class WebConfig implements WebMvcConfigurer {
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -393,7 +393,7 @@ public class BookControllerTest {
     @Autowired
     private MockMvc mockMvc; // 模拟 MVC 环境
 
-    @MockBean
+    @MockitoBean
     private BookService bookService; // 模拟 Service
 
     @Test

@@ -1,6 +1,14 @@
-# Spring 框架 Resources 资源管理详解与最佳实践
+---
+title: Spring Resources 资源管理详解与最佳实践
+description: 本文深入探讨 Spring 框架中的资源管理机制，涵盖 Resource 接口设计、各种资源实现、加载策略以及最佳实践方案。
+author: zhycn
+---
+
+# Spring Resources 资源管理详解与最佳实践
 
 本文深入探讨 Spring 框架中的资源管理机制，涵盖 Resource 接口设计、各种资源实现、加载策略以及最佳实践方案。
+
+- [Spring Resources](https://docs.spring.io/spring-framework/reference/core/resources.html)
 
 ## 1. Spring 资源管理概述
 
@@ -521,6 +529,7 @@ public class CustomResourceLoader extends DefaultResourceLoader {
 ### 9.1 资源加载常见问题
 
 **Q: 为什么我的 CSS/JS 文件返回 404？**
+
 A: 可能的原因及解决方案：
 
 1. 文件不在配置的静态资源目录中 - 检查文件位置
@@ -528,19 +537,23 @@ A: 可能的原因及解决方案：
 3. URL 路径包含上下文路径 - 使用相对路径或添加上下文路径
 
 **Q: 如何加载外部配置文件（不在 resources 目录下）？**
+
 A: 使用 `file:` 前缀指定绝对路径，如 `file:/opt/config/app.properties`，或通过系统属性指定路径
 
 **Q: 读取资源文件时出现 IOException 怎么办？**
+
 A: 1) 检查文件是否存在；2) 确认应用有读取权限；3) 使用 try-with-resources 确保流正确关闭
 
 ### 9.2 性能相关问题
 
 **Q: 资源加载性能如何优化？**
+
 A: 1) 对频繁访问的资源进行缓存；2) 考虑使用内存映射文件；3) 合并多个小资源为一个大资源；4) 异步加载非关键资源
 
 ### 9.3 配置相关问题
 
 **Q: 如何在单元测试中模拟资源加载？**
+
 A: 使用 Mockito 模拟 ResourceLoader，或创建临时资源目录并配置测试环境使用该目录
 
 ```java
@@ -581,5 +594,3 @@ Spring 资源管理提供了一套强大而灵活的机制，用于统一处理�
 5. **性能优化**：通过缓存、异步加载等策略提升资源访问性能
 
 通过合理运用 Spring 的资源管理功能，可以构建出更加健壮、可维护且高效的应用程序。
-
-> 提示：本文示例基于 Spring Framework 5.3.x 版本，部分特性在早期版本中可能不可用。在实际使用时，请根据您使用的 Spring 版本调整相关配置和 API 调用。

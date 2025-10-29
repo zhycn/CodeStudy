@@ -1,8 +1,12 @@
-好的，作为一名 Spring 专家和技术文档工程师，我将为你生成一篇关于 Spring Data Access 的详尽教程。本文融合了 Spring 官方文档、行业实践和常见问题的最佳解决方案。
-
+---
+title: Spring Data Access 数据访问详解与最佳实践
+description: 本文深入探讨了 Spring 框架中数据访问层 (DAL) 的设计与实现，内容涵盖了统一的异常体系、模板方法模式、声明式事务管理以及资源管理等关键方面。
+author: zhycn
 ---
 
-# Spring 框架 Data Access 数据访问详解与最佳实践
+# Spring Data Access 数据访问详解与最佳实践
+
+- [Data Access](https://docs.spring.io/spring-framework/reference/data-access.html)
 
 ## 1. 概述
 
@@ -85,7 +89,7 @@ public class DevDataSourceConfig {
 
 ### 3.2 生产环境数据源
 
-生产环境通常使用连接池来管理数据库连接，以提高性能。常用的库有 **HikariCP**, **Apache Commons DBCP2**, **Tomcat JDBC Pool** 等。**HikariCP** 因其高性能和可靠性已成为 Spring Boot 的默认选择。
+生产环境通常使用连接池来管理数据库连接，以提高性能。常用的库有 **HikariCP**, **Apache Commons DBCP2**, **Tomcat JDBC Pool**, **Druid** 等。**HikariCP** 因其高性能和可靠性已成为 Spring Boot 的默认选择。
 
 **通过 Java Config 配置 HikariCP**：
 

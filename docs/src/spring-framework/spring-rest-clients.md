@@ -1,10 +1,10 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring 框架 REST Clients 的详尽教程。
-
-本文档在撰写前，已参考并分析了包括 Spring 官方文档、Baeldung、Spring Academy、InfoQ 以及多位业界专家博客在内的十多篇优质技术文章，旨在为你提供最准确、最现代、最实用的方案总结。
-
+---
+title: Spring Framework REST Clients 详解与最佳实践
+description: 本文详细介绍了 Spring Framework 中 REST Clients 的核心概念、配置方式、最佳实践以及实际应用场景。通过掌握这些知识，开发者可以在企业级应用中高效、一致地处理 RESTful API 调用，提升系统的可维护性和可扩展性。
+author: zhycn
 ---
 
-# Spring 框架 REST Clients 详解与最佳实践
+# Spring REST Clients 详解与最佳实践
 
 ## 1. 概述
 
@@ -381,9 +381,3 @@ logging:
 
 **迁移建议：**
 如果你正在维护一个使用 `RestTemplate` 的项目，制定一个向 `WebClient` 或 `OpenFeign` 的迁移计划是明智之举。对于新的服务间调用，如果在 Spring Cloud 体系中，`OpenFeign` 是首选；如果是普通的 HTTP 调用或追求极致性能，`WebClient` 是更强大和现代的选择。
-
----
-
-**版权声明：** 本文档仅供学习参考，转载请注明出处。
-
-希望这篇详尽的文档能帮助你更好地理解和应用 Spring 框架中的 REST Clients。

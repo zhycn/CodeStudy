@@ -1,6 +1,14 @@
-# Spring 框架 IoC 容器详解与最佳实践
+---
+title: Spring IoC 容器详解与最佳实践
+description: 本文将通过理论讲解、代码示例和最佳实践，带你全面掌握 Spring IoC 容器的核心概念和应用技巧。
+author: zhycn
+---
+
+# Spring IoC 容器详解与最佳实践
 
 本文将通过理论讲解、代码示例和最佳实践，带你全面掌握 Spring IoC 容器的核心概念和应用技巧。
+
+- [Spring IoC 容器](https://docs.spring.io/spring-framework/reference/core/beans.html)
 
 ## 1 IoC 与 DI 的基本概念
 
@@ -46,6 +54,7 @@ public class OrderService {
 ```
 
 **优点**：保证依赖不可变，确保依赖不为空，有利于单元测试。
+
 **缺点**：当依赖过多时，构造函数会变得冗长。
 
 #### 1.2.2 Setter 方法注入
@@ -69,6 +78,7 @@ public class ProductService {
 ```
 
 **优点**：灵活性高，适合可选依赖或需要动态变更依赖的场景。
+
 **缺点**：可能导致对象状态不一致，依赖检查延迟到使用阶段。
 
 #### 1.2.3 字段注入
@@ -86,6 +96,7 @@ public class UserService {
 ```
 
 **优点**：代码简洁，开发快速。
+
 **缺点**：可测试性差，容易违反单一职责原则，不推荐在生产代码中使用。
 
 ### 1.3 IoC 与 DI 的关系
@@ -231,6 +242,8 @@ XML 方式启用组件扫描：
 ```
 
 #### 3.2.3 依赖注入注解
+
+在 Spring 中，可使用 `@Autowired` 注解或 `@Resource` 注解进行依赖注入：
 
 ```java
 @Service

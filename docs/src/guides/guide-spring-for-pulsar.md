@@ -1,4 +1,14 @@
+---
+title: Spring for Apache Pulsar 详解与最佳实践
+description: 本指南详细介绍了如何在 Spring Boot 项目中使用 Apache Pulsar，包括核心概念、依赖配置、生产者、消费者、消息处理等内容。
+---
+
 # Spring for Apache Pulsar 详解与最佳实践
+
+- Spring for Apache Pulsar: <https://spring.io/projects/spring-pulsar>
+- 官方文档：<https://docs.spring.io/spring-pulsar/reference/>
+- API 文档：<https://docs.spring.io/spring-pulsar/docs/current/api/>
+- Apache Pulsar 官方文档：<https://pulsar.apache.org/>
 
 ## 1. 概述
 
@@ -27,16 +37,16 @@ Apache Pulsar 是一个开源的分布式发布-订阅消息系统，以其高�
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.springframework.pulsar</groupId>
-        <artifactId>spring-pulsar-spring-boot-starter</artifactId>
-        <version>1.0.0</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-pulsar</artifactId>
+        <version>1.2.10</version>
     </dependency>
 
     <!-- 如果需要响应式支持 -->
     <dependency>
-        <groupId>org.springframework.pulsar</groupId>
-        <artifactId>spring-pulsar-reactive-spring-boot-starter</artifactId>
-        <version>1.0.0</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-pulsar-reactive</artifactId>
+        <version>1.2.10</version>
     </dependency>
 </dependencies>
 ```

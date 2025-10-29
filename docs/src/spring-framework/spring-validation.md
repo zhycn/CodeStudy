@@ -1,6 +1,14 @@
-好的，我将为你生成一篇关于 Spring 框架 Validation 验证框架详解与最佳实践的完整文档。让我们开始吧！
+---
+title: Spring Validation 验证框架详解与最佳实践
+description: 本文将详细介绍 Spring 框架中的 Validation 验证框架，包括其核心概念、常用注解、自定义验证器、国际化支持以及最佳实践。
+author: zhycn
+---
 
-# Spring 框架 Validation 验证框架详解与最佳实践
+# Spring Validation 验证框架详解与最佳实践
+
+- [Bean Validation 2.0 (JSR 380) 规范](https://jcp.org/en/jsr/detail?id=380)
+- [Hibernate Validator 文档](https://hibernate.org/validator/)
+- [Spring Framework 参考文档 - Validation](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#validation)
 
 ## 1 引言
 
@@ -513,11 +521,3 @@ public class UserDTO {
 Spring Validation 提供了一个强大、灵活且易于使用的数据验证框架，通过声明式注解大大简化了数据验证的工作。结合 Spring MVC 的集成支持，可以轻松实现从控制器到业务层的全面数据验证。
 
 本文详细介绍了 Spring Validation 的核心注解、高级功能如分组校验和自定义校验规则，以及统一异常处理和测试验证的最佳实践。遵循这些实践可以帮助开发者构建更加健壮和安全的应用程序，同时提供更好的用户体验。
-
-### 更多资源
-
-- [Bean Validation 2.0 (JSR 380) 规范](https://jcp.org/en/jsr/detail?id=380)
-- [Hibernate Validator 文档](https://docs.jboss.org/hibernate/validator/7.0/reference/en-US/html_single/)
-- [Spring Framework 参考文档 - Validation](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#validation)
-
-> 注意：本文中的代码示例基于 Spring Boot 2.7.x 和 Java 11 编写，在不同版本中可能会有细微差异。

@@ -1,4 +1,8 @@
-好的，请看这篇关于 Spring Data Redis 的详细技术文档。
+---
+title: Spring Data Redis 详解与最佳实践
+description: 详细介绍了 Spring Data Redis 的核心概念、架构、配置和使用最佳实践。
+author: zhycn
+---
 
 # Spring Data Redis 详解与最佳实践
 
@@ -35,7 +39,7 @@ Spring Data Redis 是 Spring Data 家族的一部分，它提供了对 Redis 这
 
 ### 2.2 架构图
 
-```
+```bash
 +-------------------+    +-----------------------+
 |   Your Service    |    |   @Cacheable, @CacheEvict  |
 +-------------------+    +-----------------------+

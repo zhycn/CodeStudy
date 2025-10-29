@@ -1,18 +1,10 @@
-好的，我将为你生成一篇关于Spring框架单元测试的详细指南。文章的主要内容如下：
-
-- **单元测试基础概念与重要性**：介绍单元测试的定义、价值和其在软件开发中的重要性，包括一个对比表格。
-- **Spring测试框架核心组件**：详细说明Spring Test Context框架、JUnit 5集成和Mockito模拟框架，包含组件概述表格和代码示例。
-- **单元测试与集成测试策略**：探讨测试金字塔概念、纯单元测试实现和集成测试类型，使用代码示例和注意事项框。
-- **测试数据管理与事务控制**：介绍测试数据初始化、清理和事务管理策略，包含多种方法的代码示例和比较表格。
-- **测试最佳实践与常见陷阱**：列出测试命名规范、测试独立性和常见陷阱解决方案，使用表格和代码示例说明。
-- **进阶技巧与工具整合**：介绍Testcontainers、参数化测试和测试覆盖率分析，包含代码示例和工具比较表格。
-- **持续集成中的测试策略**：讨论CI流水线中的测试阶段、并行执行和质量门禁，包含最佳实践表格。
-
-接下来，我将开始撰写文章正文。
-
+---
+title: Spring Unit Testing 单元测试详解与最佳实践
+description: 详细介绍 Spring 单元测试的基础概念、重要性、核心组件、测试策略、数据管理、最佳实践和进阶技巧。
+author: zhycn
 ---
 
-# Spring 框架 Unit Testing 单元测试详解与最佳实践
+# Spring Unit Testing 单元测试详解与最佳实践
 
 ## 1 单元测试基础概念与重要性
 
@@ -244,7 +236,7 @@ public class UserControllerSliceTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private UserService userService;
 
     @Test
@@ -285,7 +277,7 @@ public class UserRepositoryTest {
 
 ⛔ **注意事项**：
 
-- 使用 `@MockBean` 会破坏应用程序上下文缓存，可能导致测试速度下降
+- 使用 `@MockitoBean` 会破坏应用程序上下文缓存，可能导致测试速度下降
 - 测试切片注解只自动配置特定部分的组件，其他组件需要手动模拟或排除
 
 ### 3.4 全栈集成测试
@@ -525,13 +517,13 @@ public class IndependentTest {
 
 _表：Spring 测试常见陷阱与解决方案_
 
-| **常见陷阱**         | **问题描述**                                | **解决方案**                                       |
-| -------------------- | ------------------------------------------- | -------------------------------------------------- |
-| **上下文缓存污染**   | 使用 @MockBean 导致上下文重建，减慢测试速度 | 合理组织测试类，将使用相同 Mock 配置的测试放在一起 |
-| **数据库序列化问题** | 测试并行执行时数据库序列冲突                | 使用不同的数据库序列初始值，或序列化测试执行       |
-| **网络依赖**         | 测试依赖外部服务，导致不稳定                | 使用 @MockBean 或 WireMock 模拟外部服务            |
-| **测试数据冲突**     | 测试间共享数据导致意外行为                  | 确保每个测试清理自己的数据，或使用随机数据         |
-| **配置遗漏**         | 测试环境缺少必要配置                        | 使用 @TestPropertySource 提供测试专用配置          |
+| **常见陷阱**         | **问题描述**                                   | **解决方案**                                       |
+| -------------------- | ---------------------------------------------- | -------------------------------------------------- |
+| **上下文缓存污染**   | 使用 @MockitoBean 导致上下文重建，减慢测试速度 | 合理组织测试类，将使用相同 Mock 配置的测试放在一起 |
+| **数据库序列化问题** | 测试并行执行时数据库序列冲突                   | 使用不同的数据库序列初始值，或序列化测试执行       |
+| **网络依赖**         | 测试依赖外部服务，导致不稳定                   | 使用 @MockitoBean 或 WireMock 模拟外部服务         |
+| **测试数据冲突**     | 测试间共享数据导致意外行为                     | 确保每个测试清理自己的数据，或使用随机数据         |
+| **配置遗漏**         | 测试环境缺少必要配置                           | 使用 @TestPropertySource 提供测试专用配置          |
 
 ## 6 进阶技巧与工具整合
 
@@ -629,7 +621,7 @@ public class ParameterizedUserTest {
                 <goal>prepare-agent</goal>
                 <goal>report</goal>
             </goals>
-        </execution>
+        </execution>ƒ
     </executions>
 </plugin>
 ```
@@ -645,10 +637,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'adopt'
       - name: Build with tests and coverage
         run: mvn test jacoco:report
@@ -683,7 +675,7 @@ jobs:
   test:
     strategy:
       matrix:
-        java: [11, 17]
+        java: [21, 17]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

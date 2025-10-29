@@ -1,10 +1,10 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring 框架 RSocket 的详尽教程。
-
-在开始撰写前，我参考并分析了多篇来自 Spring 官方博客、VMware Tanzu 开发者中心、RSocket 官方文档、知名技术社区（如 Baeldung, InfoQ）以及个人技术博主的优质文章，以确保内容的准确性、先进性和实用性。
-
+---
+title: Spring RSocket 详解与最佳实践
+description: 本教程详细介绍了 Spring RSocket 技术，包括其核心概念、项目 Reactor 基础、RSocket 组件、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 RSocket 服务。
+author: zhycn
 ---
 
-# Spring 框架 RSocket 详解与最佳实践
+# Spring RSocket 详解与最佳实践
 
 ## 1. 概述
 
@@ -60,7 +60,7 @@ RSocket 定义了四种核心的交互模型，这是其强大能力的基石。
 
 ### 3.1 环境准备与依赖
 
-首先，创建一个新的 Spring Boot 项目（例如使用 <https://start.spring.io），选择以下依赖：>
+首先，创建一个新的 Spring Boot 项目（例如使用 <https://start.spring.io>），选择以下依赖：
 
 - **RSocket**: 核心 RSocket 支持
 - **Lombok**: 简化 POJO 编写（可选但推荐）

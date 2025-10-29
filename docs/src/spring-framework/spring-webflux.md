@@ -1,10 +1,10 @@
-好的，作为一名 Spring 编程技术专家和 Markdown 技术文档大师，我将为你生成一篇关于 Spring WebFlux 的详尽教程。
-
-在开始撰写前，我综合分析了多篇来自 Spring 官方文档、Baeldung、Spring.io Blog、InfoQ 以及多位技术专家发布的优质文章和教程，确保内容的准确性、先进性和实用性。
-
+---
+title: Spring WebFlux 详解与最佳实践
+description: 本教程详细介绍了 Spring WebFlux 技术，包括其核心概念、项目 Reactor 基础、WebFlux 组件、路由与处理、异常处理、测试与调试等方面。通过本教程，你将能够构建出响应式、高吞吐量的 Web 应用程序。
+author: zhycn
 ---
 
-# Spring Framework WebFlux 详解与最佳实践
+# Spring WebFlux 详解与最佳实践
 
 ## 1. 概述与核心概念
 
@@ -343,7 +343,7 @@ public class UserEvent {
    @Import(UserService.class) // 需要导入相关依赖
    class UserControllerTest {
 
-       @MockBean
+       @MockitoBean
        private UserRepository userRepository;
 
        @Autowired

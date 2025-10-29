@@ -1,10 +1,10 @@
-好的，没有问题。作为一名资深的 Spring 技术专家和文档工程师，我将为你呈现一篇关于 Spring SockJS 的详尽教程。
-
-在开始撰写前，我综合分析了来自 Spring 官方文档、Baeldung、Spring.io Blog、InfoQ 以及多位技术专家博客的超过 10 篇优质文章，旨在为你提供最准确、最实用且遵循最佳实践的内容。
-
+---
+title: Spring Framework SockJS 详解与最佳实践
+description: 本文详细介绍了 Spring Framework 中 SockJS 的核心概念、配置方式、最佳实践以及实际应用场景。通过掌握这些知识，开发者可以在企业级应用中高效、一致地处理实时通信需求，提升系统的可维护性和可扩展性。
+author: zhycn
 ---
 
-# Spring 框架 SockJS 详解与最佳实践
+# Spring SockJS 详解与最佳实践
 
 ## 1. 概述：为什么需要 SockJS？
 

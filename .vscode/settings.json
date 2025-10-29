@@ -1,0 +1,189 @@
+{
+  // ========== Java + Spring Boot 配置 ==========
+  "spring-boot.ls.java.home": "/Users/Software/jdk-17.0.12.jdk/Contents/Home",
+  "java.format.settings.url": "${workspaceFolder}/config/styleguide/intellij-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
+  "java.format.enabled": true,
+  "java.debug.settings.onBuildFailureProceed": true,
+  "java.debug.settings.forceBuildBeforeLaunch": true,
+  "java.debug.settings.hotCodeReplace": "auto",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-17",
+      "path": "/Users/Software/jdk-17.0.12.jdk/Contents/Home",
+      "default": true
+    }
+  ],
+
+  // ========== Prettier 代码格式化配置 ==========
+  "prettier.disableLanguages": ["java", "xml"],
+  "prettier.useEditorConfig": true,
+
+  // ========== ESLint 配置 ==========
+  "eslint.format.enable": false, // 禁用 ESLint 格式化, 由 Prettier 处理
+  "eslint.codeActionsOnSave.mode": "all",
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue"],
+
+  // ========== 代码格式化配置 ==========
+  "editor.formatOnSave": true, // 保存时自动格式化
+  "editor.formatOnPaste": false, // 粘贴时不自动格式化
+  "editor.formatOnType": false, // 输入时不自动格式化
+  "editor.tabSize": 2, // 全局默认tab大小明确指定
+  "editor.insertSpaces": true, // 全局默认使用空格
+  "editor.detectIndentation": false, // 禁用自动检测（避免被文件内容影响）
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit", // 保存时组织导入语句
+    "source.fixAll": "explicit" // 保存时修复所有问题
+  },
+
+  // ========== JavaScript/TypeScript 配置 ==========
+  "typescript.preferences.autoImportFileExcludePatterns": ["react", "react-dom"],
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // ========== 文件排除配置 ==========
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/target": true,
+    "**/build": true,
+    "**/node_modules": true,
+    "**/*.class": true,
+    "**/*.flattened-pom.xml": true,
+    "**/.idea": true
+  },
+
+  // ========== 搜索配置 ==========
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/target": true,
+    "**/build": true,
+    "**/*.jar": true,
+    "**/*.class": true,
+    "**/*.flattened-pom.xml": true
+  },
+
+  // ========== 调试配置 ==========
+  "debug.onTaskErrors": "showErrors",
+  "debug.internalConsoleOptions": "openOnSessionStart",
+
+  // ========== 工作区设置 ==========
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+
+  // ========== 语言特定设置 ==========
+  "[java]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true, // 明确指定使用空格
+    "editor.detectIndentation": false, // 禁用自动检测
+    "editor.defaultFormatter": "redhat.java"
+  },
+
+  "[xml]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true, // 明确指定
+    "editor.detectIndentation": false, // 禁用自动检测
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+
+  "[json]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[markdown]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[yaml]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+
+  "[javascriptreact]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+
+  "[typescriptreact]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+
+  "[vue]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[css]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[scss]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[less]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[html]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ========== 编辑器显示优化 ==========
+  "editor.minimap.enabled": true, // 右侧缩略图
+  "editor.renderWhitespace": "boundary", // 仅显示行首/行尾空白字符
+  "editor.renderControlCharacters": false, // 不显示控制字符
+  "editor.wordWrap": "off", // 不自动换行，保持行宽一致
+  "editor.smoothScrolling": true, // 平滑滚动
+  "editor.cursorBlinking": "blink", // 光标闪烁
+  "editor.fontSize": 14, // 字号 14px
+  "editor.lineHeight": 1.6, // 行高 1.6 倍，中文与英文混排更清晰
+  "editor.rulers": [100], // 在第 100 列显示标尺
+  "editor.bracketPairColorization.enabled": true, // 彩虹括号
+  "editor.guides.bracketPairs": true, // 括号对齐引导线
+
+  // ========== Git 配置 ==========
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.enableSmartCommit": true
+}

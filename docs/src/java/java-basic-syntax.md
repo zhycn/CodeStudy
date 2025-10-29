@@ -32,17 +32,20 @@ Java 是一种广泛使用的面向对象编程语言，由 Sun Microsystems（�
 2. **运行安装程序**：双击下载的 `.dmg` 文件，按照提示完成安装。JDK 通常会安装到 `/Library/Java/JavaVirtualMachines/` 目录下。
 3. **配置环境变量**：
    - 打开终端，编辑 `~/.zshrc`（如果使用 Zsh）或 `~/.bash_profile`（如果使用 Bash）文件。
+
    ```bash
    open ~/.zshrc
    ```
 
    - 在文件中添加以下内容（根据实际安装的 JDK 版本修改路径）：
+
    ```bash
    export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
    export PATH=$JAVA_HOME/bin:$PATH
    ```
 
    - 保存文件后，执行以下命令使配置生效：
+
    ```bash
    source ~/.zshrc
    ```
@@ -56,17 +59,20 @@ Java 是一种广泛使用的面向对象编程语言，由 Sun Microsystems（�
    ```
 3. **配置环境变量**：
    - 编辑 `/etc/profile` 文件：
+
    ```bash
    sudo vim /etc/profile
    ```
 
    - 在文件末尾添加以下内容（根据实际安装路径修改）：
+
    ```bash
    export JAVA_HOME=/usr/local/jdk-17
    export PATH=$JAVA_HOME/bin:$PATH
    ```
 
    - 保存文件后，执行以下命令使配置生效：
+
    ```bash
    source /etc/profile
    ```

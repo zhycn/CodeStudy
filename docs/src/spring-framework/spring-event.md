@@ -1,4 +1,10 @@
-# Spring 框架 Events 事件机制详解与最佳实践
+---
+title: Spring Events 事件机制详解与最佳实践
+description: 本文详细介绍了 Spring 框架的事件机制，包括事件驱动模型的优势、核心组件（如 ApplicationEvent、ApplicationEventPublisher、ApplicationListener）以及事件定义与实现。通过示例代码和最佳实践，帮助开发者理解和应用 Spring 事件机制，提升系统的可维护性和可扩展性。
+author: zhycn
+---
+
+# Spring Events 事件机制详解与最佳实践
 
 ## 1. 概述
 
@@ -318,7 +324,7 @@ class UserRegistrationTest {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    @MockBean
+    @MockitoBean
     private WelcomeEmailSender emailSender;
 
     @Test
