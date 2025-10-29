@@ -26,8 +26,8 @@ WHERE condition;
 
 ```sql
 -- 检索销售部门的所有员工
-SELECT FirstName, LastName 
-FROM Employees 
+SELECT FirstName, LastName
+FROM Employees
 WHERE Department = 'Sales';
 ```
 
@@ -43,14 +43,14 @@ WHERE 子句支持丰富的运算符体系，使您能够构建灵活多样的�
 
 比较运算符用于比较两个值之间的关系，是最基础的过滤条件。
 
-| 运算符 | 描述 | 示例 |
-|--------|------|------|
-| = | 等于 | `WHERE Salary = 50000` |
-| <> 或 != | 不等于 | `WHERE Department <> 'Sales'` |
-| > | 大于 | `WHERE Salary > 50000` |
-| < | 小于 | `WHERE Salary < 50000` |
-| >= | 大于等于 | `WHERE Salary >= 50000` |
-| <= | 小于等于 | `WHERE Salary <= 50000` |
+| 运算符   | 描述     | 示例                          |
+| -------- | -------- | ----------------------------- |
+| =        | 等于     | `WHERE Salary = 50000`        |
+| <> 或 != | 不等于   | `WHERE Department <> 'Sales'` |
+| >        | 大于     | `WHERE Salary > 50000`        |
+| <        | 小于     | `WHERE Salary < 50000`        |
+| >=       | 大于等于 | `WHERE Salary >= 50000`       |
+| <=       | 小于等于 | `WHERE Salary <= 50000`       |
 
 ### 2.2 逻辑运算符
 
@@ -59,21 +59,21 @@ WHERE 子句支持丰富的运算符体系，使您能够构建灵活多样的�
 **AND 运算符**：要求所有条件同时满足
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE Department = 'Sales' AND Salary > 50000;
 ```
 
 **OR 运算符**：要求至少一个条件满足
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE Department = 'Sales' OR Department = 'Marketing';
 ```
 
 **NOT 运算符**：否定条件
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE NOT Department = 'Sales';
 ```
 
@@ -82,21 +82,21 @@ WHERE NOT Department = 'Sales';
 **BETWEEN**：范围匹配
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE Salary BETWEEN 30000 AND 70000;
 ```
 
 **IN**：集合匹配
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE Department IN ('Sales', 'Marketing');
 ```
 
 **LIKE**：模式匹配（模糊查询）
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE LastName LIKE 'D%';  -- 以D开头的姓氏
 ```
 
@@ -107,14 +107,14 @@ WHERE LastName LIKE 'D%';  -- 以D开头的姓氏
 **IS NULL**：检查空值
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE ManagerID IS NULL;  -- 没有经理的员工
 ```
 
 **IS NOT NULL**：检查非空值
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE LastName IS NOT NULL;  -- 姓氏不为空的员工
 ```
 
@@ -129,7 +129,7 @@ WHERE LastName IS NOT NULL;  -- 姓氏不为空的员工
 **不明确的查询：**
 
 ```sql
-SELECT * FROM Products 
+SELECT * FROM Products
 WHERE Category = 'Electronics' OR Category = 'Books' AND Price > 100;
 ```
 
@@ -138,16 +138,16 @@ WHERE Category = 'Electronics' OR Category = 'Books' AND Price > 100;
 **明确的查询：**
 
 ```sql
-SELECT * FROM Products 
+SELECT * FROM Products
 WHERE (Category = 'Electronics' OR Category = 'Books') AND Price > 100;
 ```
 
 ### 3.2 复合条件示例
 
 ```sql
-SELECT * FROM Employees 
-WHERE (Department = 'Sales' OR Department = 'Marketing') 
-AND Salary > 50000 
+SELECT * FROM Employees
+WHERE (Department = 'Sales' OR Department = 'Marketing')
+AND Salary > 50000
 AND HireDate BETWEEN '2020-01-01' AND '2023-12-31';
 ```
 
@@ -160,14 +160,14 @@ AND HireDate BETWEEN '2020-01-01' AND '2023-12-31';
 **单行子查询：**
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE Salary > (SELECT AVG(Salary) FROM Employees);  -- 高于平均工资的员工
 ```
 
 **多行子查询：**
 
 ```sql
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE DepartmentID IN (SELECT DepartmentID FROM Departments WHERE RegionID = 2);
 ```
 
@@ -177,7 +177,7 @@ EXISTS 用于检查子查询是否返回结果，通常在关联子查询中使�
 
 ```sql
 -- 检索有订单的客户
-SELECT * FROM Customers c 
+SELECT * FROM Customers c
 WHERE EXISTS (SELECT 1 FROM Orders o WHERE o.CustomerID = c.CustomerID);
 ```
 
@@ -221,16 +221,16 @@ SQL 的逻辑系统基于三值逻辑：TRUE、FALSE 和 UNKNOWN。当比较操�
 
 **真值表：**
 
-| AND | TRUE | FALSE | UNKNOWN |
-|-----|------|-------|---------|
-| TRUE | TRUE | FALSE | UNKNOWN |
-| FALSE | FALSE | FALSE | FALSE |
+| AND     | TRUE    | FALSE | UNKNOWN |
+| ------- | ------- | ----- | ------- |
+| TRUE    | TRUE    | FALSE | UNKNOWN |
+| FALSE   | FALSE   | FALSE | FALSE   |
 | UNKNOWN | UNKNOWN | FALSE | UNKNOWN |
 
-| OR | TRUE | FALSE | UNKNOWN |
-|----|------|-------|---------|
-| TRUE | TRUE | TRUE | TRUE |
-| FALSE | TRUE | FALSE | UNKNOWN |
+| OR      | TRUE | FALSE   | UNKNOWN |
+| ------- | ---- | ------- | ------- |
+| TRUE    | TRUE | TRUE    | TRUE    |
+| FALSE   | TRUE | FALSE   | UNKNOWN |
 | UNKNOWN | TRUE | UNKNOWN | UNKNOWN |
 
 ### 5.2 NULL 处理最佳实践
@@ -239,11 +239,11 @@ SQL 的逻辑系统基于三值逻辑：TRUE、FALSE 和 UNKNOWN。当比较操�
 
 ```sql
 -- 将NULL值转换为默认值进行比较
-SELECT * FROM Products 
+SELECT * FROM Products
 WHERE COALESCE(Price, 0) > 100;
 
 -- MySQL中的等效写法
-SELECT * FROM Products 
+SELECT * FROM Products
 WHERE IFNULL(Price, 0) > 100;
 ```
 
@@ -254,7 +254,7 @@ WHERE IFNULL(Price, 0) > 100;
 SELECT * FROM table WHERE column IN (value1, value2, NULL);
 
 -- 如果需要包含NULL值，需额外添加条件
-SELECT * FROM table 
+SELECT * FROM table
 WHERE column IN (value1, value2) OR column IS NULL;
 ```
 
@@ -293,7 +293,7 @@ SELECT * FROM Employees WHERE Salary > 50000; -- 可能无法使用索引
 SELECT * FROM Orders WHERE YEAR(OrderDate) = 2023;
 
 -- 推荐的写法（可以使用索引）
-SELECT * FROM Orders 
+SELECT * FROM Orders
 WHERE OrderDate BETWEEN '2023-01-01' AND '2023-12-31';
 ```
 
@@ -313,12 +313,12 @@ SELECT * FROM Products WHERE Price > 100 / 1.1;
 
 ```sql
 -- 使用IN（可能较慢）
-SELECT * FROM Orders 
+SELECT * FROM Orders
 WHERE CustomerID IN (SELECT CustomerID FROM Customers WHERE Region = 'North');
 
 -- 使用EXISTS（通常更快）
-SELECT * FROM Orders o 
-WHERE EXISTS (SELECT 1 FROM Customers c 
+SELECT * FROM Orders o
+WHERE EXISTS (SELECT 1 FROM Customers c
               WHERE c.CustomerID = o.CustomerID AND c.Region = 'North');
 ```
 
@@ -326,12 +326,12 @@ WHERE EXISTS (SELECT 1 FROM Customers c
 
 ```sql
 -- 使用子查询
-SELECT * FROM Employees 
+SELECT * FROM Employees
 WHERE DepartmentID IN (SELECT DepartmentID FROM Departments WHERE Location = 'NY');
 
 -- 使用JOIN（通常更高效）
-SELECT e.* FROM Employees e 
-JOIN Departments d ON e.DepartmentID = d.DepartmentID 
+SELECT e.* FROM Employees e
+JOIN Departments d ON e.DepartmentID = d.DepartmentID
 WHERE d.Location = 'NY';
 ```
 
@@ -341,14 +341,14 @@ WHERE d.Location = 'NY';
 
 ```sql
 -- 复杂业务逻辑查询示例
-SELECT 
+SELECT
     OrderID,
     OrderDate,
     CustomerName,
     TotalAmount
 FROM Orders o
 JOIN Customers c ON o.CustomerID = c.CustomerID
-WHERE 
+WHERE
     o.OrderDate BETWEEN '2023-01-01' AND '2023-12-31'
     AND o.TotalAmount > 1000
     AND o.Status IN ('Completed', 'Shipped')
@@ -362,12 +362,12 @@ WHERE 子句在数据修改操作中同样重要，确保只更新或删除目�
 
 ```sql
 -- 条件更新
-UPDATE Employees 
-SET Salary = Salary * 1.1 
+UPDATE Employees
+SET Salary = Salary * 1.1
 WHERE Department = 'Engineering' AND PerformanceRating > 8;
 
 -- 条件删除
-DELETE FROM Orders 
+DELETE FROM Orders
 WHERE OrderDate < '2020-01-01' AND Status = 'Cancelled';
 ```
 
@@ -381,8 +381,8 @@ DECLARE @Department NVARCHAR(50) = 'Sales';
 DECLARE @MinSalary DECIMAL(10,2) = 50000;
 DECLARE @HireDateFrom DATE = '2020-01-01';
 
-SELECT * FROM Employees 
-WHERE 
+SELECT * FROM Employees
+WHERE
     (Department = @Department OR @Department IS NULL)
     AND (Salary >= @MinSalary OR @MinSalary IS NULL)
     AND (HireDate >= @HireDateFrom OR @HireDateFrom IS NULL);

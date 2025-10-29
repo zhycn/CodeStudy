@@ -15,9 +15,9 @@
 **基本语法**：
 
 ```sql
-SELECT column1, column2, ... 
-INTO new_table 
-FROM source_table 
+SELECT column1, column2, ...
+INTO new_table
+FROM source_table
 [WHERE condition];
 ```
 
@@ -27,9 +27,9 @@ FROM source_table
 
 ```sql
 -- 创建新表并复制数据
-SELECT id, name, salary 
-INTO high_salary_employees 
-FROM employees 
+SELECT id, name, salary
+INTO high_salary_employees
+FROM employees
 WHERE salary > 5000;
 ```
 
@@ -37,15 +37,15 @@ WHERE salary > 5000;
 
 ```sql
 -- PostgreSQL 中的 SELECT INTO 用法
-SELECT id, name, salary 
-INTO high_salary_employees 
-FROM employees 
+SELECT id, name, salary
+INTO high_salary_employees
+FROM employees
 WHERE salary > 5000;
 
 -- 或者使用 CREATE TABLE AS 语法（PostgreSQL 推荐）
-CREATE TABLE high_salary_employees AS 
-SELECT id, name, salary 
-FROM employees 
+CREATE TABLE high_salary_employees AS
+SELECT id, name, salary
+FROM employees
 WHERE salary > 5000;
 ```
 
@@ -83,7 +83,7 @@ SELECT * INTO external_db.backup_table FROM original_table;
 ```sql
 INSERT INTO target_table (column1, column2, ...)
 SELECT column1, column2, ...
-FROM source_table 
+FROM source_table
 [WHERE condition];
 ```
 
@@ -98,8 +98,8 @@ SELECT id, name, salary FROM employees WHERE salary > 5000;
 
 -- 插入常量值
 INSERT INTO reports (employee_id, report_type, generated_date)
-SELECT id, 'SALARY_REPORT', CURRENT_DATE 
-FROM employees 
+SELECT id, 'SALARY_REPORT', CURRENT_DATE
+FROM employees
 WHERE salary > 5000;
 ```
 
@@ -139,14 +139,14 @@ WHERE NOT EXISTS (
 
 ### 4.1 功能对比
 
-| 特性 | SELECT INTO FROM | INSERT INTO SELECT |
-|------|-------------------|---------------------|
-| **目标表要求** | 必须不存在 | 必须已存在 |
-| **表创建** | 自动创建新表 | 需要预先创建 |
-| **结构复制** | 自动复制基本结构 | 需要手动确保结构兼容 |
-| **约束处理** | 不复制约束和索引 | 需要满足现有约束 |
-| **性能** | 通常更快（批量操作） | 相对较慢（逐行插入） |
-| **使用场景** | 快速备份、创建临时表 | 数据追加、ETL 操作 |
+| 特性           | SELECT INTO FROM     | INSERT INTO SELECT   |
+| -------------- | -------------------- | -------------------- |
+| **目标表要求** | 必须不存在           | 必须已存在           |
+| **表创建**     | 自动创建新表         | 需要预先创建         |
+| **结构复制**   | 自动复制基本结构     | 需要手动确保结构兼容 |
+| **约束处理**   | 不复制约束和索引     | 需要满足现有约束     |
+| **性能**       | 通常更快（批量操作） | 相对较慢（逐行插入） |
+| **使用场景**   | 快速备份、创建临时表 | 数据追加、ETL 操作   |
 
 ### 4.2 性能考量
 
@@ -179,12 +179,12 @@ WHERE NOT EXISTS (
 
 ```sql
 -- 分批插入示例
-INSERT INTO large_table 
-SELECT * FROM source_table 
+INSERT INTO large_table
+SELECT * FROM source_table
 WHERE id BETWEEN 1 AND 10000;
 
-INSERT INTO large_table 
-SELECT * FROM source_table 
+INSERT INTO large_table
+SELECT * FROM source_table
 WHERE id BETWEEN 10001 AND 20000;
 ```
 
@@ -230,12 +230,12 @@ SELECT id, name FROM source_table;
 
 ```sql
 -- 创建月度备份
-SELECT * INTO sales_archive_202510 
-FROM sales 
+SELECT * INTO sales_archive_202510
+FROM sales
 WHERE sale_date BETWEEN '2025-10-01' AND '2025-10-31';
 
 -- 归档后删除原数据
-DELETE FROM sales 
+DELETE FROM sales
 WHERE sale_date BETWEEN '2025-10-01' AND '2025-10-31';
 ```
 
@@ -245,7 +245,7 @@ WHERE sale_date BETWEEN '2025-10-01' AND '2025-10-31';
 
 ```sql
 -- 创建销售汇总报表
-SELECT 
+SELECT
     salesperson_id,
     COUNT(*) as total_sales,
     SUM(amount) as total_amount
@@ -261,7 +261,7 @@ GROUP BY salesperson_id;
 
 ```sql
 -- 复制生产数据到测试环境（敏感信息脱敏）
-SELECT 
+SELECT
     id,
     name,
     '***' as sensitive_data,

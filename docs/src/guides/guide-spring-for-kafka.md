@@ -1,10 +1,14 @@
-好的，没有问题。作为一名资深的 Spring 和 Markdown 技术专家，我将为您生成一篇详尽、准确且遵循最佳实践的教程文档。
-
-在撰写本文之前，我综合分析了 Apache Kafka 官方文档、Spring 官方文档、多篇来自 Baeldung、Confluent Blog、Medium 等技术社区的深度文章，以及 GitHub 上的相关实战项目。本文旨在为您提供从入门到精通的系统化知识，并融入生产环境下的实战经验。
-
+---
+title: Spring for Apache Kafka 详解与最佳实践
+description: 本指南详细介绍了如何在 Spring Boot 项目中使用 Apache Kafka，包括核心概念、依赖配置、生产者、消费者、消息处理等内容。
 ---
 
 # Spring for Apache Kafka 详解与最佳实践
+
+- Spring for Apache Kafka: <https://spring.io/projects/spring-kafka>
+- 官方文档：<https://docs.spring.io/spring-kafka/reference/>
+- API 文档：<https://docs.spring.io/spring-kafka/docs/current/api/>
+- Apache Kafka 官方文档：<https://kafka.apache.org/>
 
 ## 1. 引言
 

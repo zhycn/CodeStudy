@@ -29,12 +29,12 @@ author: zhycn
 
 ```sql
 -- 计算每个客户的累计销售额（MySQL/PostgreSQL）
-SELECT 
+SELECT
     customer_id,
     order_date,
     order_amount,
     SUM(order_amount) OVER (
-        PARTITION BY customer_id 
+        PARTITION BY customer_id
         ORDER BY order_date
     ) AS cumulative_amount
 FROM orders;
@@ -42,11 +42,11 @@ FROM orders;
 
 ```sql
 -- 计算7天移动平均（PostgreSQL）
-SELECT 
+SELECT
     metric_date,
     metric_value,
     AVG(metric_value) OVER (
-        ORDER BY metric_date 
+        ORDER BY metric_date
         ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
     ) AS moving_avg_7days
 FROM metrics;
@@ -61,8 +61,8 @@ FROM metrics;
 SELECT * FROM sales WHERE DATE(sale_time) = '2023-01-01';
 
 -- 推荐的写法（可有效利用索引）
-SELECT * FROM sales 
-WHERE sale_time >= '2023-01-01 00:00:00' 
+SELECT * FROM sales
+WHERE sale_time >= '2023-01-01 00:00:00'
   AND sale_time < '2023-01-02 00:00:00';
 ```
 
@@ -83,7 +83,7 @@ SELECT
     month,
     revenue,
     LAG(revenue, 1) OVER (ORDER BY month) AS prev_month_revenue,
-    (revenue - LAG(revenue, 1) OVER (ORDER BY month)) / 
+    (revenue - LAG(revenue, 1) OVER (ORDER BY month)) /
     LAG(revenue, 1) OVER (ORDER BY month) * 100 AS mom_growth_pct
 FROM monthly_sales;
 ```
@@ -96,17 +96,17 @@ SELECT
     curr.revenue AS current_revenue,
     prev.revenue AS previous_revenue,
     (curr.revenue - prev.revenue) / prev.revenue * 100 AS yoy_growth_pct
-FROM 
-    (SELECT YEAR(order_date) as year, MONTH(order_date) as month, 
+FROM
+    (SELECT YEAR(order_date) as year, MONTH(order_date) as month,
             SUM(amount) as revenue
-     FROM orders 
-     WHERE YEAR(order_date) = 2023 
+     FROM orders
+     WHERE YEAR(order_date) = 2023
      GROUP BY YEAR(order_date), MONTH(order_date)) curr
 LEFT JOIN
-    (SELECT YEAR(order_date) as year, MONTH(order_date) as month, 
+    (SELECT YEAR(order_date) as year, MONTH(order_date) as month,
             SUM(amount) as revenue
-     FROM orders 
-     WHERE YEAR(order_date) = 2022 
+     FROM orders
+     WHERE YEAR(order_date) = 2022
      GROUP BY YEAR(order_date), MONTH(order_date)) prev
 ON curr.month = prev.month;
 ```
@@ -122,13 +122,13 @@ ON curr.month = prev.month;
 SELECT
     customer_id,
     order_amount,
-    CASE 
+    CASE
         WHEN order_amount < 100 THEN '低价值'
         WHEN order_amount BETWEEN 100 AND 500 THEN '中等价值'
         ELSE '高价值'
     END AS value_segment,
-    COUNT(*) OVER (PARTITION BY 
-        CASE 
+    COUNT(*) OVER (PARTITION BY
+        CASE
             WHEN order_amount < 100 THEN '低价值'
             WHEN order_amount BETWEEN 100 AND 500 THEN '中等价值'
             ELSE '高价值'
@@ -217,14 +217,14 @@ CREATE INDEX idx_orders_customer_date ON orders(customer_id, order_date);
 
 ```sql
 -- 避免使用 SELECT *，只选择需要的列
-SELECT customer_id, order_date, order_amount 
-FROM orders 
+SELECT customer_id, order_date, order_amount
+FROM orders
 WHERE order_date >= '2023-01-01';
 
 -- 使用 CTE 提高复杂查询的可读性和性能
 WITH regional_sales AS (
-    SELECT 
-        region, 
+    SELECT
+        region,
         SUM(amount) as total_sales
     FROM sales
     WHERE sale_date BETWEEN '2023-01-01' AND '2023-12-31'
@@ -235,7 +235,7 @@ top_regions AS (
     FROM regional_sales
     WHERE total_sales > 1000000
 )
-SELECT 
+SELECT
     r.region,
     p.product_name,
     SUM(s.amount) as product_sales
@@ -253,7 +253,7 @@ GROUP BY r.region, p.product_name;
 -- 使用递归 CTE 分析用户转化路径（PostgreSQL）
 WITH RECURSIVE user_journey AS (
     -- 起始事件：用户浏览
-    SELECT 
+    SELECT
         user_id,
         event_type,
         event_time,
@@ -261,11 +261,11 @@ WITH RECURSIVE user_journey AS (
         event_time AS journey_start
     FROM user_events
     WHERE event_type = 'browse'
-    
+
     UNION ALL
-    
+
     -- 递归部分：后续事件
-    SELECT 
+    SELECT
         ue.user_id,
         ue.event_type,
         ue.event_time,
@@ -277,7 +277,7 @@ WITH RECURSIVE user_journey AS (
       AND ue.event_time < uj.event_time + INTERVAL '1 hour'
       AND uj.step_number < 5  -- 限制路径长度
 )
-SELECT 
+SELECT
     user_id,
     STRING_AGG(event_type, ' -> ' ORDER BY step_number) AS journey_path,
     MAX(step_number) AS path_length,
@@ -315,7 +315,7 @@ seasonal_patterns AS (
     FROM sales_trends
     GROUP BY EXTRACT(MONTH FROM sales_month)
 )
-SELECT 
+SELECT
     st.sales_month,
     st.monthly_sales,
     st.trend_12ma,
@@ -332,12 +332,12 @@ ORDER BY st.sales_month;
 
 ### 6.1 MySQL 与 PostgreSQL 语法差异
 
-| 功能 | MySQL | PostgreSQL |
-|------|-------|------------|
-| 时间截断 | `DATE_FORMAT()` | `DATE_TRUNC()` |
-| 时间差 | `DATEDIFF()` | `EXTRACT(EPOCH FROM difference)` |
-| 分页 | `LIMIT offset, count` | `LIMIT count OFFSET offset` |
-| 正则表达式 | `REGEXP` | `~` |
+| 功能       | MySQL                 | PostgreSQL                       |
+| ---------- | --------------------- | -------------------------------- |
+| 时间截断   | `DATE_FORMAT()`       | `DATE_TRUNC()`                   |
+| 时间差     | `DATEDIFF()`          | `EXTRACT(EPOCH FROM difference)` |
+| 分页       | `LIMIT offset, count` | `LIMIT count OFFSET offset`      |
+| 正则表达式 | `REGEXP`              | `~`                              |
 
 ### 6.2 时区处理最佳实践
 
@@ -351,12 +351,12 @@ INSERT INTO events (event_time_utc, event_data)
 VALUES (UTC_NOW(), 'event_data');  -- PostgreSQL
 
 -- 查询时按需转换时区
-SELECT 
+SELECT
     event_time_utc AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Shanghai' AS local_time,
     event_data
 FROM events;  -- PostgreSQL
 
-SELECT 
+SELECT
     CONVERT_TZ(event_time_utc, '+00:00', '+08:00') AS local_time,
     event_data
 FROM events;  -- MySQL

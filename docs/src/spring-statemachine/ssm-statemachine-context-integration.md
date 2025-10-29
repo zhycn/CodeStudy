@@ -23,23 +23,23 @@ Spring Statemachine 是一个强大的状态机框架，它提供了丰富的功
 public interface StateContext<S, E> {
     // 获取状态机实例
     StateMachine<S, E> getStateMachine();
-    
+
     // 获取扩展状态
     ExtendedState getExtendedState();
-    
+
     // 获取当前消息（如果有）
     Message<E> getMessage();
-    
+
     // 获取转换信息
     Transition<S, E> getTransition();
-    
+
     // 获取源状态和目标状态
     State<S, E> getSource();
     State<S, E> getTarget();
-    
+
     // 获取异常信息（如果有）
     Exception getException();
-    
+
     // 获取当前阶段
     Stage getStage();
 }
@@ -54,21 +54,21 @@ public class OrderProcessingAction implements Action<String, String> {
         // 获取扩展状态变量
         ExtendedState extendedState = context.getExtendedState();
         Map<Object, Object> variables = extendedState.getVariables();
-        
+
         // 获取当前订单ID
         Long orderId = (Long) variables.get("orderId");
-        
+
         // 获取事件消息头
         Message<String> message = context.getMessage();
         String priority = (String) message.getHeaders().get("priority");
-        
+
         // 记录状态转换信息
         State<String, String> source = context.getSource();
         State<String, String> target = context.getTarget();
-        
-        System.out.println("Processing order " + orderId + " from " + 
+
+        System.out.println("Processing order " + orderId + " from " +
             source.getId() + " to " + target.getId() + " with priority " + priority);
-        
+
         // 设置处理结果到扩展状态
         extendedState.getVariables().put("processingResult", "SUCCESS");
     }
@@ -94,7 +94,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
             .state("COMPLETED")
             .state("ERROR");
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -112,30 +112,30 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
 // 使用 @WithStateMachine 注解的 Bean
 @WithStateMachine
 public class OrderProcessor {
-    
+
     @OnTransition
     public void anyTransition() {
         System.out.println("Transition occurred");
     }
-    
+
     @OnTransition(source = "START", target = "PROCESSING")
     public void startProcessing(StateContext<String, String> context) {
         ExtendedState extendedState = context.getExtendedState();
         Long orderId = (Long) extendedState.getVariables().get("orderId");
         System.out.println("Starting processing for order: " + orderId);
     }
-    
+
     @OnTransition(source = "PROCESSING", target = "COMPLETED")
     public void completeProcessing() {
         System.out.println("Order processing completed successfully");
     }
-    
+
     @OnTransition(source = "PROCESSING", target = "ERROR")
     public void processingError(StateContext<String, String> context) {
         Exception exception = context.getException();
         System.out.println("Processing error: " + exception.getMessage());
     }
-    
+
     @OnStateChanged(source = "PROCESSING")
     public void onProcessingState() {
         System.out.println("Now in PROCESSING state");
@@ -150,49 +150,49 @@ public class OrderProcessor {
 ```java
 @WithStateMachine
 public class ComprehensiveExample {
-    
+
     // 1. 基本状态变更通知
     @OnTransition
     public void onAnyTransition() {
         System.out.println("Any transition occurred");
     }
-    
+
     // 2. 带 StateContext 参数
     @OnTransition(source = "S1", target = "S2")
     public void onSpecificTransition(StateContext<String, String> context) {
         System.out.println("Transition from S1 to S2");
     }
-    
+
     // 3. 获取消息头
     @OnTransition
     public void withMessageHeaders(@EventHeaders Map<String, Object> headers) {
         System.out.println("Message headers: " + headers);
     }
-    
+
     // 4. 获取特定消息头
     @OnTransition
     public void withSpecificHeader(@EventHeader("orderId") Long orderId) {
         System.out.println("Order ID: " + orderId);
     }
-    
+
     // 5. 获取扩展状态
     @OnTransition
     public void withExtendedState(ExtendedState extendedState) {
         System.out.println("Extended state variables: " + extendedState.getVariables());
     }
-    
+
     // 6. 获取状态机实例
     @OnTransition
     public void withStateMachine(StateMachine<String, String> stateMachine) {
         System.out.println("Current state: " + stateMachine.getState().getId());
     }
-    
+
     // 7. 获取事件消息
     @OnTransition
     public void withMessage(Message<String> message) {
         System.out.println("Event payload: " + message.getPayload());
     }
-    
+
     // 8. 异常处理
     @OnTransition
     public void withException(Exception exception) {
@@ -200,13 +200,13 @@ public class ComprehensiveExample {
             System.out.println("Exception occurred: " + exception.getMessage());
         }
     }
-    
+
     // 9. 状态进入监听
     @OnStateEntry(source = "PROCESSING")
     public void onEntryToProcessing() {
         System.out.println("Entered PROCESSING state");
     }
-    
+
     // 10. 状态退出监听
     @OnStateExit(source = "PROCESSING")
     public void onExitFromProcessing() {
@@ -223,63 +223,63 @@ Spring Statemachine 提供了完整的监听器机制，允许监听状态机的
 
 ```java
 public class ComprehensiveStateMachineListener implements StateMachineListener<String, String> {
-    
+
     @Override
     public void stateChanged(State<String, String> from, State<String, String> to) {
-        System.out.println("State changed from " + (from != null ? from.getId() : "null") + 
+        System.out.println("State changed from " + (from != null ? from.getId() : "null") +
                           " to " + to.getId());
     }
-    
+
     @Override
     public void stateEntered(State<String, String> state) {
         System.out.println("Entered state: " + state.getId());
     }
-    
+
     @Override
     public void stateExited(State<String, String> state) {
         System.out.println("Exited state: " + state.getId());
     }
-    
+
     @Override
     public void eventNotAccepted(Message<String> event) {
         System.out.println("Event not accepted: " + event.getPayload());
     }
-    
+
     @Override
     public void transition(Transition<String, String> transition) {
         System.out.println("Transition: " + transition.getKind());
     }
-    
+
     @Override
     public void transitionStarted(Transition<String, String> transition) {
         System.out.println("Transition started: " + transition.getKind());
     }
-    
+
     @Override
     public void transitionEnded(Transition<String, String> transition) {
         System.out.println("Transition ended: " + transition.getKind());
     }
-    
+
     @Override
     public void stateMachineStarted(StateMachine<String, String> stateMachine) {
         System.out.println("State machine started");
     }
-    
+
     @Override
     public void stateMachineStopped(StateMachine<String, String> stateMachine) {
         System.out.println("State machine stopped");
     }
-    
+
     @Override
     public void extendedStateChanged(Object key, Object value) {
         System.out.println("Extended state changed - Key: " + key + ", Value: " + value);
     }
-    
+
     @Override
     public void stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
         System.out.println("State machine error: " + exception.getMessage());
     }
-    
+
     @Override
     public void stateContext(StateContext<String, String> stateContext) {
         System.out.println("State context stage: " + stateContext.getStage());
@@ -290,14 +290,14 @@ public class ComprehensiveStateMachineListener implements StateMachineListener<S
 @Configuration
 @EnableStateMachine
 public class ListenerConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<String, String> config) throws Exception {
         config
             .withConfiguration()
             .listener(stateMachineListener());
     }
-    
+
     @Bean
     public StateMachineListener<String, String> stateMachineListener() {
         return new ComprehensiveStateMachineListener();
@@ -312,27 +312,27 @@ Spring Statemachine 还会发布应用事件，可以通过 `@EventListener` 监
 ```java
 @Component
 public class ApplicationEventListener {
-    
+
     @EventListener
     public void onStateMachineStart(OnStateMachineStart event) {
         System.out.println("State machine started: " + event.getStateMachine().getId());
     }
-    
+
     @EventListener
     public void onStateMachineStop(OnStateMachineStop event) {
         System.out.println("State machine stopped: " + event.getStateMachine().getId());
     }
-    
+
     @EventListener
     public void onStateChanged(OnStateChangedEvent<String, String> event) {
         System.out.println("State changed: " + event.getState().getId());
     }
-    
+
     @EventListener
     public void onTransition(OnTransitionStartEvent<String, String> event) {
         System.out.println("Transition started: " + event.getTransition().getKind());
     }
-    
+
     @EventListener
     public void onExtendedStateChanged(OnExtendedStateChanged event) {
         System.out.println("Extended state changed: " + event.getKey() + " = " + event.getValue());
@@ -350,7 +350,7 @@ public class ApplicationEventListener {
 @Configuration
 @EnableStateMachine
 public class ExtendedStateConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
         states
@@ -359,7 +359,7 @@ public class ExtendedStateConfig extends StateMachineConfigurerAdapter<String, S
             .state("PROCESSING", extendedStateAction(), null)
             .state("COMPLETED");
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -371,19 +371,19 @@ public class ExtendedStateConfig extends StateMachineConfigurerAdapter<String, S
             .source("PROCESSING").target("COMPLETED").event("PROCESSING_COMPLETE")
             .action(processExtendedState());
     }
-    
+
     @Bean
     public Action<String, String> initializeExtendedState() {
         return new Action<String, String>() {
             @Override
             public void execute(StateContext<String, String> context) {
                 ExtendedState extendedState = context.getExtendedState();
-                
+
                 // 初始化扩展状态变量
                 extendedState.getVariables().put("startTime", System.currentTimeMillis());
                 extendedState.getVariables().put("attemptCount", 0);
                 extendedState.getVariables().put("processingResult", "PENDING");
-                
+
                 // 从消息头获取数据
                 Message<String> message = context.getMessage();
                 if (message != null) {
@@ -395,7 +395,7 @@ public class ExtendedStateConfig extends StateMachineConfigurerAdapter<String, S
             }
         };
     }
-    
+
     @Bean
     public Action<String, String> processExtendedState() {
         return new Action<String, String>() {
@@ -403,23 +403,23 @@ public class ExtendedStateConfig extends StateMachineConfigurerAdapter<String, S
             public void execute(StateContext<String, String> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 Map<Object, Object> variables = extendedState.getVariables();
-                
+
                 // 更新处理结果
                 variables.put("processingResult", "SUCCESS");
                 variables.put("endTime", System.currentTimeMillis());
-                
+
                 // 计算处理时间
                 Long startTime = (Long) variables.get("startTime");
                 Long endTime = (Long) variables.get("endTime");
                 Long duration = endTime - startTime;
                 variables.put("processingDuration", duration);
-                
-                System.out.println("Order " + variables.get("orderId") + 
+
+                System.out.println("Order " + variables.get("orderId") +
                                  " processed in " + duration + "ms");
             }
         };
     }
-    
+
     @Bean
     public Action<String, String> extendedStateAction() {
         return new Action<String, String>() {
@@ -433,7 +433,7 @@ public class ExtendedStateConfig extends StateMachineConfigurerAdapter<String, S
                 }
                 attemptCount++;
                 extendedState.getVariables().put("attemptCount", attemptCount);
-                
+
                 System.out.println("Processing attempt #" + attemptCount);
             }
         };
@@ -448,13 +448,13 @@ public class ExtendedStateConfig extends StateMachineConfigurerAdapter<String, S
 ```java
 @Component
 public class ExtendedStateChangeListener {
-    
+
     @EventListener
     public void onExtendedStateChange(OnExtendedStateChanged event) {
-        System.out.println("Extended state changed - Key: " + event.getKey() + 
+        System.out.println("Extended state changed - Key: " + event.getKey() +
                           ", Value: " + event.getValue());
     }
-    
+
     // 或者使用 StateMachineListener
     public class ExtendedStateListener extends StateMachineListenerAdapter<String, String> {
         @Override
@@ -490,25 +490,25 @@ Object orderId = extendedState.getVariables().get(StateMachineConstants.ORDER_ID
 ```java
 @Component
 public class StateMachineContextHelper {
-    
+
     public Long getOrderId(ExtendedState extendedState) {
         return (Long) extendedState.getVariables().get(StateMachineConstants.ORDER_ID);
     }
-    
+
     public void setOrderId(ExtendedState extendedState, Long orderId) {
         extendedState.getVariables().put(StateMachineConstants.ORDER_ID, orderId);
     }
-    
+
     public void incrementAttemptCount(ExtendedState extendedState) {
         Integer count = (Integer) extendedState.getVariables()
             .getOrDefault(StateMachineConstants.ATTEMPT_COUNT, 0);
         extendedState.getVariables().put(StateMachineConstants.ATTEMPT_COUNT, count + 1);
     }
-    
+
     public void setProcessingResult(ExtendedState extendedState, String result) {
         extendedState.getVariables().put(StateMachineConstants.PROCESSING_RESULT, result);
     }
-    
+
     public void setError(ExtendedState extendedState, String errorMessage) {
         extendedState.getVariables().put(StateMachineConstants.ERROR_MESSAGE, errorMessage);
         extendedState.getVariables().put(StateMachineConstants.PROCESSING_RESULT, "ERROR");
@@ -522,7 +522,7 @@ public class StateMachineContextHelper {
 @Configuration
 @EnableStateMachine
 public class ErrorHandlingConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
         states
@@ -532,7 +532,7 @@ public class ErrorHandlingConfig extends StateMachineConfigurerAdapter<String, S
             .state("COMPLETED")
             .state("ERROR", errorAction(), null);
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -546,7 +546,7 @@ public class ErrorHandlingConfig extends StateMachineConfigurerAdapter<String, S
             .source("PROCESSING").target("ERROR").event("PROCESSING_ERROR")
             .action(errorHandlingAction());
     }
-    
+
     @Bean
     public Action<String, String> errorHandlingAction() {
         return new Action<String, String>() {
@@ -554,16 +554,16 @@ public class ErrorHandlingConfig extends StateMachineConfigurerAdapter<String, S
             public void execute(StateContext<String, String> context) {
                 // 获取异常信息
                 Exception exception = context.getException();
-                
+
                 // 记录错误信息到扩展状态
                 ExtendedState extendedState = context.getExtendedState();
                 extendedState.getVariables().put("errorTimestamp", System.currentTimeMillis());
-                
+
                 if (exception != null) {
                     extendedState.getVariables().put("errorMessage", exception.getMessage());
                     extendedState.getVariables().put("errorType", exception.getClass().getSimpleName());
                 }
-                
+
                 // 可以根据异常类型进行不同的处理
                 if (exception instanceof TimeoutException) {
                     extendedState.getVariables().put("errorSeverity", "RETRYABLE");
@@ -573,7 +573,7 @@ public class ErrorHandlingConfig extends StateMachineConfigurerAdapter<String, S
             }
         };
     }
-    
+
     @Bean
     public Action<String, String> errorAction() {
         return new Action<String, String>() {
@@ -581,15 +581,15 @@ public class ErrorHandlingConfig extends StateMachineConfigurerAdapter<String, S
             public void execute(StateContext<String, String> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 Map<Object, Object> variables = extendedState.getVariables();
-                
+
                 System.out.println("Error occurred: " + variables.get("errorMessage"));
                 System.out.println("Error type: " + variables.get("errorType"));
                 System.out.println("Error severity: " + variables.get("errorSeverity"));
-                
+
                 // 可以在这里添加错误通知逻辑
                 notifyErrorHandlingTeam(variables);
             }
-            
+
             private void notifyErrorHandlingTeam(Map<Object, Object> errorDetails) {
                 // 实现错误通知逻辑
             }
@@ -616,33 +616,33 @@ extendedState.getVariables().put("dataReference", dataId);
 ```java
 public class TypedExtendedStateAccessor {
     private final ExtendedState extendedState;
-    
+
     public TypedExtendedStateAccessor(ExtendedState extendedState) {
         this.extendedState = extendedState;
     }
-    
+
     public Long getOrderId() {
         return get(StateMachineConstants.ORDER_ID, Long.class);
     }
-    
+
     public void setOrderId(Long orderId) {
         put(StateMachineConstants.ORDER_ID, orderId);
     }
-    
+
     public Integer getAttemptCount() {
         return get(StateMachineConstants.ATTEMPT_COUNT, Integer.class);
     }
-    
+
     public void incrementAttemptCount() {
         Integer count = getAttemptCount();
         put(StateMachineConstants.ATTEMPT_COUNT, count != null ? count + 1 : 1);
     }
-    
+
     private <T> T get(String key, Class<T> type) {
         Object value = extendedState.getVariables().get(key);
         return type.isInstance(value) ? type.cast(value) : null;
     }
-    
+
     private void put(String key, Object value) {
         extendedState.getVariables().put(key, value);
     }
@@ -656,14 +656,14 @@ public class TypedExtendedStateAccessor {
 ```java
 // 订单状态定义
 public enum OrderStates {
-    START, VALIDATION, PROCESSING_PAYMENT, INVENTORY_CHECK, 
+    START, VALIDATION, PROCESSING_PAYMENT, INVENTORY_CHECK,
     SHIPPING, COMPLETED, CANCELLED, ERROR
 }
 
 // 订单事件定义
 public enum OrderEvents {
-    START_PROCESSING, VALIDATION_SUCCESS, VALIDATION_FAILED, 
-    PAYMENT_SUCCESS, PAYMENT_FAILED, INVENTORY_AVAILABLE, 
+    START_PROCESSING, VALIDATION_SUCCESS, VALIDATION_FAILED,
+    PAYMENT_SUCCESS, PAYMENT_FAILED, INVENTORY_AVAILABLE,
     INVENTORY_UNAVAILABLE, SHIPPING_SUCCESS, SHIPPING_FAILED,
     RETRY, CANCEL
 }
@@ -672,7 +672,7 @@ public enum OrderEvents {
 @Configuration
 @EnableStateMachine
 public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderStates, OrderEvents> {
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) throws Exception {
         states
@@ -686,7 +686,7 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             .state(OrderStates.ERROR, errorAction(), null)
             .state(OrderStates.CANCELLED, cancellationAction(), null);
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) throws Exception {
         transitions
@@ -730,7 +730,7 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             .source(OrderStates.ERROR).target(OrderStates.CANCELLED).event(OrderEvents.CANCEL)
             .action(handleCancellation());
     }
-    
+
     @Bean
     public Action<OrderStates, OrderEvents> initializeOrderContext() {
         return new Action<OrderStates, OrderEvents>() {
@@ -738,32 +738,32 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             public void execute(StateContext<OrderStates, OrderEvents> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 Message<OrderEvents> message = context.getMessage();
-                
+
                 // 从消息头获取订单信息
                 Long orderId = (Long) message.getHeaders().get("orderId");
                 String customerId = (String) message.getHeaders().get("customerId");
-                
+
                 // 初始化订单上下文
                 extendedState.getVariables().put("orderId", orderId);
                 extendedState.getVariables().put("customerId", customerId);
                 extendedState.getVariables().put("startTime", System.currentTimeMillis());
                 extendedState.getVariables().put("attemptCount", 0);
                 extendedState.getVariables().put("processingHistory", new ArrayList<String>());
-                
+
                 addHistoryEntry(extendedState, "Order processing started");
             }
         };
     }
-    
+
     // 其他Action bean定义...
-    
+
     private void addHistoryEntry(ExtendedState extendedState, String entry) {
         @SuppressWarnings("unchecked")
         List<String> history = (List<String>) extendedState.getVariables()
             .getOrDefault("processingHistory", new ArrayList<String>());
         history.add(System.currentTimeMillis() + ": " + entry);
         extendedState.getVariables().put("processingHistory", history);
-    }   
+    }
 ```
 
 ---
@@ -776,17 +776,17 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             public void execute(StateContext<OrderStates, OrderEvents> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 TypedExtendedStateAccessor accessor = new TypedExtendedStateAccessor(extendedState);
-                
+
                 // 获取订单信息
                 Long orderId = accessor.getOrderId();
                 String customerId = accessor.getCustomerId();
-                
+
                 addHistoryEntry(extendedState, "Starting order validation");
-                
+
                 try {
                     // 模拟验证逻辑
                     boolean isValid = validateOrder(orderId, customerId);
-                    
+
                     if (isValid) {
                         addHistoryEntry(extendedState, "Order validation successful");
                         context.getStateMachine().sendEvent(OrderEvents.VALIDATION_SUCCESS);
@@ -801,14 +801,14 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
                     context.getStateMachine().sendEvent(OrderEvents.VALIDATION_FAILED);
                 }
             }
-            
+
             private boolean validateOrder(Long orderId, String customerId) {
                 // 实际项目中这里会调用验证服务
                 return orderId != null && customerId != null && orderId > 0;
             }
         };
     }
-    
+
     @Bean
     public Action<OrderStates, OrderEvents> handleValidationError() {
         return new Action<OrderStates, OrderEvents>() {
@@ -816,14 +816,14 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             public void execute(StateContext<OrderStates, OrderEvents> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 TypedExtendedStateAccessor accessor = new TypedExtendedStateAccessor(extendedState);
-                
+
                 // 增加尝试次数
                 accessor.incrementAttemptCount();
                 int attemptCount = accessor.getAttemptCount();
-                
+
                 String errorMessage = (String) extendedState.getVariables().get("validationError");
                 addHistoryEntry(extendedState, "Validation failed (attempt " + attemptCount + "): " + errorMessage);
-                
+
                 // 设置错误信息
                 extendedState.getVariables().put("lastError", "VALIDATION_ERROR");
                 extendedState.getVariables().put("lastErrorMessage", errorMessage);
@@ -831,25 +831,25 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             }
         };
     }
-    
+
     @Bean
     public Action<OrderStates, OrderEvents> prepareForRetry() {
         return new Action<OrderStates, OrderEvents>() {
             @Override
             public void execute(StateContext<OrderStates, OrderEvents> context) {
                 ExtendedState extendedState = context.getExtendedState();
-                
+
                 // 清除之前的错误信息但保留历史
                 extendedState.getVariables().remove("validationError");
                 extendedState.getVariables().remove("paymentError");
                 extendedState.getVariables().remove("inventoryError");
                 extendedState.getVariables().remove("shippingError");
-                
+
                 addHistoryEntry(extendedState, "Preparing for retry after error resolution");
             }
         };
     }
-    
+
     @Bean
     public Action<OrderStates, OrderEvents> completionAction() {
         return new Action<OrderStates, OrderEvents>() {
@@ -857,29 +857,29 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             public void execute(StateContext<OrderStates, OrderEvents> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 TypedExtendedStateAccessor accessor = new TypedExtendedStateAccessor(extendedState);
-                
+
                 // 计算总处理时间
                 Long startTime = accessor.getStartTime();
                 Long endTime = System.currentTimeMillis();
                 Long processingTime = endTime - startTime;
-                
+
                 extendedState.getVariables().put("completionTime", endTime);
                 extendedState.getVariables().put("totalProcessingTime", processingTime);
                 extendedState.getVariables().put("finalStatus", "COMPLETED_SUCCESSFULLY");
-                
+
                 addHistoryEntry(extendedState, "Order processing completed successfully in " + processingTime + "ms");
-                
+
                 // 这里可以触发后续操作，如发送通知、更新数据库等
                 sendCompletionNotification(accessor.getOrderId(), accessor.getCustomerId());
             }
-            
+
             private void sendCompletionNotification(Long orderId, String customerId) {
                 System.out.println("Sending completion notification for order: " + orderId + ", customer: " + customerId);
                 // 实际项目中这里会调用通知服务
             }
         };
     }
-    
+
     @Bean
     public Action<OrderStates, OrderEvents> errorAction() {
         return new Action<OrderStates, OrderEvents>() {
@@ -887,24 +887,24 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             public void execute(StateContext<OrderStates, OrderEvents> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 TypedExtendedStateAccessor accessor = new TypedExtendedStateAccessor(extendedState);
-                
+
                 // 记录错误发生时间
                 extendedState.getVariables().put("errorTime", System.currentTimeMillis());
                 extendedState.getVariables().put("finalStatus", "FAILED");
-                
+
                 addHistoryEntry(extendedState, "Order processing failed and entered ERROR state");
-                
+
                 // 触发错误处理流程
                 handleOrderError(accessor.getOrderId(), accessor.getCustomerId());
             }
-            
+
             private void handleOrderError(Long orderId, String customerId) {
                 System.out.println("Initiating error handling for order: " + orderId + ", customer: " + customerId);
                 // 实际项目中这里会调用错误处理服务
             }
         };
     }
-    
+
     @Bean
     public Action<OrderStates, OrderEvents> cancellationAction() {
         return new Action<OrderStates, OrderEvents>() {
@@ -912,74 +912,74 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
             public void execute(StateContext<OrderStates, OrderEvents> context) {
                 ExtendedState extendedState = context.getExtendedState();
                 TypedExtendedStateAccessor accessor = new TypedExtendedStateAccessor(extendedState);
-                
+
                 // 记录取消时间和原因
                 extendedState.getVariables().put("cancellationTime", System.currentTimeMillis());
                 extendedState.getVariables().put("finalStatus", "CANCELLED");
-                
+
                 String cancellationReason = (String) extendedState.getVariables().get("cancellationReason");
                 if (cancellationReason == null) {
                     cancellationReason = "User requested cancellation";
                 }
-                
+
                 addHistoryEntry(extendedState, "Order cancelled: " + cancellationReason);
-                
+
                 // 触发取消处理流程
                 handleOrderCancellation(accessor.getOrderId(), accessor.getCustomerId(), cancellationReason);
             }
-            
+
             private void handleOrderCancellation(Long orderId, String customerId, String reason) {
-                System.out.println("Processing cancellation for order: " + orderId + 
+                System.out.println("Processing cancellation for order: " + orderId +
                                  ", customer: " + customerId + ", reason: " + reason);
                 // 实际项目中这里会调用取消处理服务
             }
         };
     }
-    
+
     // 类型安全的扩展状态访问器
     public class TypedExtendedStateAccessor {
         private final ExtendedState extendedState;
-        
+
         public TypedExtendedStateAccessor(ExtendedState extendedState) {
             this.extendedState = extendedState;
         }
-        
+
         public Long getOrderId() {
             return get("orderId", Long.class);
         }
-        
+
         public String getCustomerId() {
             return get("customerId", String.class);
         }
-        
+
         public Long getStartTime() {
             return get("startTime", Long.class);
         }
-        
+
         public Integer getAttemptCount() {
             return get("attemptCount", Integer.class);
         }
-        
+
         public void incrementAttemptCount() {
             Integer count = getAttemptCount();
             put("attemptCount", count != null ? count + 1 : 1);
         }
-        
+
         @SuppressWarnings("unchecked")
         public List<String> getProcessingHistory() {
             return get("processingHistory", List.class);
         }
-        
+
         private <T> T get(String key, Class<T> type) {
             Object value = extendedState.getVariables().get(key);
             return type.isInstance(value) ? type.cast(value) : null;
         }
-        
+
         private void put(String key, Object value) {
             extendedState.getVariables().put(key, value);
         }
     }
-    
+
     private void addHistoryEntry(ExtendedState extendedState, String entry) {
         @SuppressWarnings("unchecked")
         List<String> history = (List<String>) extendedState.getVariables()
@@ -992,51 +992,51 @@ public class OrderProcessingConfig extends StateMachineConfigurerAdapter<OrderSt
 // 订单处理器（使用@WithStateMachine）
 @WithStateMachine
 public class OrderProcessor {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(OrderProcessor.class);
-    
+
     @OnTransition
     public void onAnyTransition(StateContext<OrderStates, OrderEvents> context) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Transition from {} to {}", 
-                context.getSource() != null ? context.getSource().getId() : "null", 
+            logger.debug("Transition from {} to {}",
+                context.getSource() != null ? context.getSource().getId() : "null",
                 context.getTarget() != null ? context.getTarget().getId() : "null");
         }
     }
-    
+
     @OnTransition(source = "START", target = "VALIDATION")
     public void onStartValidation(StateContext<OrderStates, OrderEvents> context) {
         ExtendedState extendedState = context.getExtendedState();
         Long orderId = (Long) extendedState.getVariables().get("orderId");
         logger.info("Starting validation for order: {}", orderId);
     }
-    
+
     @OnTransition(target = "ERROR")
     public void onErrorState(StateContext<OrderStates, OrderEvents> context) {
         ExtendedState extendedState = context.getExtendedState();
         Long orderId = (Long) extendedState.getVariables().get("orderId");
         String errorMessage = (String) extendedState.getVariables().get("lastErrorMessage");
-        
+
         logger.error("Order {} entered ERROR state: {}", orderId, errorMessage);
-        
+
         // 可以在这里添加错误通知逻辑
         sendErrorNotification(orderId, errorMessage);
     }
-    
+
     @OnTransition(target = "COMPLETED")
     public void onCompletion(StateContext<OrderStates, OrderEvents> context) {
         ExtendedState extendedState = context.getExtendedState();
         Long orderId = (Long) extendedState.getVariables().get("orderId");
         Long processingTime = (Long) extendedState.getVariables().get("totalProcessingTime");
-        
+
         logger.info("Order {} completed successfully in {}ms", orderId, processingTime);
     }
-    
+
     @OnExtendedStateChanged(key = "attemptCount")
     public void onAttemptCountChange(Object key, Object value) {
         logger.debug("Attempt count changed to: {}", value);
     }
-    
+
     private void sendErrorNotification(Long orderId, String errorMessage) {
         // 实现错误通知逻辑
         System.out.println("Sending error notification for order " + orderId + ": " + errorMessage);
@@ -1046,82 +1046,82 @@ public class OrderProcessor {
 // 订单服务
 @Service
 public class OrderService {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Autowired
     private StateMachinePersister<OrderStates, OrderEvents, String> persister;
-    
+
     public void processOrder(Long orderId, String customerId) {
         try {
             // 恢复或初始化状态机
             stateMachine.start();
-            
+
             // 准备消息头
             Message<OrderEvents> message = MessageBuilder
                 .withPayload(OrderEvents.START_PROCESSING)
                 .setHeader("orderId", orderId)
                 .setHeader("customerId", customerId)
                 .build();
-            
+
             // 发送启动事件
             stateMachine.sendEvent(message);
-            
+
             // 持久化状态
             persister.persist(stateMachine, "order_" + orderId);
-            
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to process order: " + orderId, e);
         }
     }
-    
+
     public void retryOrder(Long orderId) {
         try {
             // 恢复状态机
             persister.restore(stateMachine, "order_" + orderId);
-            
+
             // 发送重试事件
             stateMachine.sendEvent(OrderEvents.RETRY);
-            
+
             // 重新持久化状态
             persister.persist(stateMachine, "order_" + orderId);
-            
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to retry order: " + orderId, e);
         }
     }
-    
+
     public void cancelOrder(Long orderId, String reason) {
         try {
             // 恢复状态机
             persister.restore(stateMachine, "order_" + orderId);
-            
+
             // 设置取消原因
             stateMachine.getExtendedState().getVariables().put("cancellationReason", reason);
-            
+
             // 发送取消事件
             stateMachine.sendEvent(OrderEvents.CANCEL);
-            
+
             // 持久化最终状态
             persister.persist(stateMachine, "order_" + orderId);
-            
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to cancel order: " + orderId, e);
         }
     }
-    
+
     public Map<String, Object> getOrderStatus(Long orderId) {
         try {
             // 恢复状态机以获取当前状态
             persister.restore(stateMachine, "order_" + orderId);
-            
+
             Map<String, Object> status = new HashMap<>();
             status.put("currentState", stateMachine.getState().getId().toString());
             status.put("extendedState", stateMachine.getExtendedState().getVariables());
-            
+
             return status;
-            
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to get status for order: " + orderId, e);
         }
@@ -1137,56 +1137,56 @@ public class OrderService {
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderProcessingTest {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @Test
     public void testOrderProcessingFlow() {
         // 测试正常流程
         Long orderId = 12345L;
         String customerId = "customer-001";
-        
+
         orderService.processOrder(orderId, customerId);
-        
+
         // 验证状态机进入验证状态
         assertEquals(OrderStates.VALIDATION, stateMachine.getState().getId());
-        
+
         // 验证扩展状态
         assertNotNull(stateMachine.getExtendedState().getVariables().get("orderId"));
         assertEquals(orderId, stateMachine.getExtendedState().getVariables().get("orderId"));
-        
+
         // 模拟验证成功
         stateMachine.sendEvent(OrderEvents.VALIDATION_SUCCESS);
-        
+
         // 验证进入支付处理状态
         assertEquals(OrderStates.PROCESSING_PAYMENT, stateMachine.getState().getId());
     }
-    
+
     @Test
     public void testErrorHandling() {
         // 测试错误处理流程
         Long orderId = 12346L;
         String customerId = "customer-002";
-        
+
         orderService.processOrder(orderId, customerId);
-        
+
         // 模拟验证失败
         stateMachine.sendEvent(OrderEvents.VALIDATION_FAILED);
-        
+
         // 验证进入错误状态
         assertEquals(OrderStates.ERROR, stateMachine.getState().getId());
-        
+
         // 验证错误信息被记录
         assertNotNull(stateMachine.getExtendedState().getVariables().get("lastError"));
         assertNotNull(stateMachine.getExtendedState().getVariables().get("lastErrorMessage"));
-        
+
         // 测试重试机制
         stateMachine.sendEvent(OrderEvents.RETRY);
-        
+
         // 验证回到验证状态
         assertEquals(OrderStates.VALIDATION, stateMachine.getState().getId());
     }
@@ -1199,29 +1199,29 @@ public class OrderProcessingTest {
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderServiceIntegrationTest {
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @Test
     public void testCompleteOrderLifecycle() {
         Long orderId = 12347L;
         String customerId = "customer-003";
-        
+
         // 开始处理订单
         orderService.processOrder(orderId, customerId);
-        
+
         // 获取初始状态
         Map<String, Object> status = orderService.getOrderStatus(orderId);
         assertEquals("VALIDATION", status.get("currentState"));
-        
+
         // 模拟完成各个处理阶段
         orderService.retryOrder(orderId); // 触发重试机制
-        
+
         // 验证最终完成状态
         status = orderService.getOrderStatus(orderId);
         assertTrue(status.containsKey("extendedState"));
-        
+
         @SuppressWarnings("unchecked")
         Map<String, Object> extendedState = (Map<String, Object>) status.get("extendedState");
         assertTrue(extendedState.containsKey("processingHistory"));
@@ -1257,7 +1257,7 @@ Spring Statemachine 的上下文集成提供了强大的机制来管理复杂的
 
 ```java
 public class StateMachineContextUtils {
-    
+
     /**
      * 安全获取扩展状态值
      */
@@ -1265,7 +1265,7 @@ public class StateMachineContextUtils {
         Object value = extendedState.getVariables().get(key);
         return type.isInstance(value) ? type.cast(value) : null;
     }
-    
+
     /**
      * 安全获取消息头值
      */
@@ -1273,46 +1273,46 @@ public class StateMachineContextUtils {
         Object value = message.getHeaders().get(headerKey);
         return type.isInstance(value) ? type.cast(value) : null;
     }
-    
+
     /**
      * 创建状态历史记录条目
      */
     public static void addStateHistory(ExtendedState extendedState, String state, String action, String details) {
         @SuppressWarnings("unchecked")
-        List<Map<String, Object>> history = (List<Map<String, Object>>) 
+        List<Map<String, Object>> history = (List<Map<String, Object>>)
             extendedState.getVariables().getOrDefault("stateHistory", new ArrayList<>());
-        
+
         Map<String, Object> entry = new HashMap<>();
         entry.put("timestamp", System.currentTimeMillis());
         entry.put("state", state);
         entry.put("action", action);
         entry.put("details", details);
-        
+
         history.add(entry);
         extendedState.getVariables().put("stateHistory", history);
     }
-    
+
     /**
      * 获取状态机性能指标
      */
     public static Map<String, Object> getPerformanceMetrics(StateMachine<?, ?> stateMachine) {
         Map<String, Object> metrics = new HashMap<>();
         ExtendedState extendedState = stateMachine.getExtendedState();
-        
+
         Long startTime = getExtendedStateValue(extendedState, "startTime", Long.class);
         if (startTime != null) {
             metrics.put("uptime", System.currentTimeMillis() - startTime);
         }
-        
+
         Integer transitionCount = getExtendedStateValue(extendedState, "transitionCount", Integer.class);
         metrics.put("transitionCount", transitionCount != null ? transitionCount : 0);
-        
+
         @SuppressWarnings("unchecked")
         List<String> errorHistory = (List<String>) extendedState.getVariables().get("errorHistory");
         if (errorHistory != null) {
             metrics.put("errorCount", errorHistory.size());
         }
-        
+
         return metrics;
     }
 }

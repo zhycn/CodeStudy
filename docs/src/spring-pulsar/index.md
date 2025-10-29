@@ -61,13 +61,13 @@ docker run -it -p 6650:6650 -p 8080:8080 \
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    
+
     <!-- Spring for Apache Pulsar -->
     <dependency>
         <groupId>org.springframework.pulsar</groupId>
         <artifactId>spring-pulsar</artifactId>
     </dependency>
-    
+
     <!-- 或者使用官方客户端 -->
     <dependency>
         <groupId>org.apache.pulsar</groupId>
@@ -171,13 +171,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageProducer {
-    
+
     private final PulsarTemplate<String> pulsarTemplate;
-    
+
     public MessageProducer(PulsarTemplate<String> pulsarTemplate) {
         this.pulsarTemplate = pulsarTemplate;
     }
-    
+
     public void sendMessage(String message) {
         pulsarTemplate.send("your-topic", "Hello, Pulsar!");
     }
@@ -192,7 +192,7 @@ public class MessageProducer {
 public void sendKeyedMessage(String message) {
     pulsarTemplate.newMessage(message)
         .withMessageCustomizer((mb) -> mb.key("message-key"))
-        .withProducerCustomizer((pb) -> 
+        .withProducerCustomizer((pb) ->
             pb.enableChunking(true).enableBatching(false))
         .send();
 }
@@ -203,27 +203,27 @@ public void sendKeyedMessage(String message) {
 ```java
 @Service
 public class PulsarMessageProducer {
-    
+
     @Autowired
     private PulsarClient pulsarClient;
-    
+
     // 同步发送
     public void sendMessageSync(String content) throws PulsarClientException {
         Producer<String> producer = pulsarClient.newProducer(Schema.STRING)
             .topic("my-topic")
             .create();
-        
+
         MessageId messageId = producer.send(content);
         System.out.println("Message sent successfully. Message ID: " + messageId);
         producer.close();
     }
-    
+
     // 异步发送
     public CompletableFuture<MessageId> sendMessageAsync(String content) {
         Producer<String> producer = pulsarClient.newProducer(Schema.STRING)
             .topic("my-topic")
             .create();
-        
+
         CompletableFuture<MessageId> future = producer.sendAsync(content);
         future.thenAccept(messageId -> {
             System.out.println("Async message sent successfully. Message ID: " + messageId);
@@ -252,7 +252,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageConsumer {
-    
+
     @PulsarListener(topics = "your-topic")
     public void processMessage(String message) {
         System.out.println("Received message: " + message);
@@ -267,7 +267,7 @@ public class MessageConsumer {
 ```java
 @Service
 public class OrderConsumer {
-    
+
     @PulsarListener(
         subscriptionName = "order-processing",
         topics = "persistent://public/default/orders",
@@ -298,22 +298,22 @@ public class OrderConsumer {
 ```java
 @Service
 public class PulsarMessageConsumer implements CommandLineRunner {
-    
+
     @Autowired
     private PulsarClient pulsarClient;
-    
+
     @Override
     public void run(String... args) throws Exception {
         startConsumer();
     }
-    
+
     public void startConsumer() throws PulsarClientException {
         Consumer<String> consumer = pulsarClient.newConsumer(Schema.STRING)
             .topic("my-topic")
             .subscriptionName("my-subscription")
             .subscriptionType(SubscriptionType.Shared)
             .subscribe();
-        
+
         new Thread(() -> {
             while (true) {
                 try {
@@ -395,7 +395,7 @@ Pulsar 提供了事务支持，确保消息的原子性处理：
 ```java
 @Configuration
 public class TransactionConfig {
-    
+
     @Bean
     public PulsarTransactionManager pulsarTransactionManager(PulsarClient pulsarClient) {
         return new PulsarTransactionManager(pulsarClient);
@@ -405,13 +405,13 @@ public class TransactionConfig {
 @Service
 @Transactional
 public class TransactionalService {
-    
+
     @Autowired
     private Producer<byte[]> orderProducer;
-    
+
     @Autowired
     private Producer<byte[]> paymentProducer;
-    
+
     public void processTransaction(Order order, Payment payment) {
         // 在同一个事务中发送多条消息
         orderProducer.newMessage()
@@ -522,12 +522,12 @@ public void handleMessages(Message<byte[]> message) {
 ```java
 @Configuration
 public class PulsarPoolConfig {
-    
+
     @Bean
     public ProducerPool producerPool(PulsarClient client) {
         return new ProducerPool(client, 10); // 10个生产者连接池
     }
-    
+
     @Bean
     public ConsumerPool consumerPool(PulsarClient client) {
         return new ConsumerPool(client, 20); // 20个消费者连接池
@@ -584,7 +584,7 @@ spring:
       authentication:
         plugin-class-name: org.apache.pulsar.client.impl.auth.AuthenticationToken
         params:
-          token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSJ9.XXXXXXXX"
+          token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSJ9.XXXXXXXX'
 ```
 
 ### 8.3 健康检查
@@ -592,13 +592,13 @@ spring:
 ```java
 @Component
 public class PulsarHealthIndicator implements HealthIndicator {
-    
+
     private final PulsarClient client;
-    
+
     public PulsarHealthIndicator(PulsarClient client) {
         this.client = client;
     }
-    
+
     @Override
     public Health health() {
         try {
@@ -637,9 +637,9 @@ management:
 ```java
 @Service
 public class OrderProducer {
-    
+
     private final Producer<String> producer;
-    
+
     public OrderProducer(PulsarClient pulsarClient) throws PulsarClientException {
         this.producer = pulsarClient.newProducer()
             .topic("persistent://public/default/orders")
@@ -647,7 +647,7 @@ public class OrderProducer {
             .blockIfQueueFull(true)
             .create();
     }
-    
+
     public void sendOrder(Order order) {
         try {
             producer.newMessage()
@@ -667,7 +667,7 @@ public class OrderProducer {
 ```java
 @Service
 public class OrderConsumer {
-    
+
     @PulsarListener(
         subscriptionName = "order-processing",
         topics = "persistent://public/default/orders",
@@ -677,17 +677,17 @@ public class OrderConsumer {
         try {
             Order order = JsonUtils.fromJson(
                 new String(message.getData()), Order.class);
-            
+
             // 业务处理逻辑
             processOrderBusiness(order);
-            
+
             message.ack();
         } catch (Exception e) {
             log.error("Order processing failed", e);
             message.negativeAcknowledge();
         }
     }
-    
+
     private void processOrderBusiness(Order order) {
         // 订单处理逻辑
         // 1. 验证订单
@@ -704,10 +704,10 @@ public class OrderConsumer {
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    
+
     @Autowired
     private OrderProducer orderProducer;
-    
+
     @PostMapping
     public ResponseEntity<String> createOrder(@RequestBody Order order) {
         try {

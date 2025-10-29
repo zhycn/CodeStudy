@@ -30,8 +30,8 @@ CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'strong_password123!';
 CREATE USER 'remoteuser'@'%' IDENTIFIED BY 'another_strong_password456!';
 
 -- 创建用户时指定密码过期策略（MySQL 5.7.6+）
-CREATE USER 'appuser'@'localhost' 
-IDENTIFIED BY 'secure_pass789!' 
+CREATE USER 'appuser'@'localhost'
+IDENTIFIED BY 'secure_pass789!'
 PASSWORD EXPIRE INTERVAL 90 DAY;
 ```
 
@@ -79,8 +79,8 @@ GRANT ALL PRIVILEGES ON sales_db.* TO 'sales_admin'@'localhost';
 GRANT SELECT, INSERT ON sales_db.orders TO 'data_entry'@'%';
 
 -- 授予列级权限（仅允许访问特定列）
-GRANT SELECT (order_id, order_date, customer_id), 
-    UPDATE (order_status) 
+GRANT SELECT (order_id, order_date, customer_id),
+    UPDATE (order_status)
 ON sales_db.orders TO 'support_team'@'%';
 
 -- 授予执行存储过程的权限
@@ -140,8 +140,8 @@ SELECT * FROM mysql.db WHERE user = 'sales_admin';
 \du reporting_user
 
 -- 使用系统视图查询权限信息
-SELECT grantee, privilege_type, table_name 
-FROM information_schema.role_table_grants 
+SELECT grantee, privilege_type, table_name
+FROM information_schema.role_table_grants
 WHERE grantee = 'REPORTING_USER';
 ```
 
@@ -249,7 +249,7 @@ SELECT CURRENT_ROLE();
 
 -- 查看角色成员关系
 SELECT roleid::regrole, member, grantor, admin_option
-FROM pg_auth_members 
+FROM pg_auth_members
 WHERE roleid = 'read_only_role'::regrole;
 
 -- 查看当前用户的所有权限
@@ -426,12 +426,12 @@ CREATE TABLE users (
 
 -- 插入加密数据
 INSERT INTO users (username, credit_card, ssn)
-VALUES ('john_doe', 
+VALUES ('john_doe',
         AES_ENCRYPT('1234-5678-9012-3456', 'encryption_key_123'),
         AES_ENCRYPT('123-45-6789', 'encryption_key_123'));
 
 -- 查询和解密数据
-SELECT id, username, 
+SELECT id, username,
        AES_DECRYPT(credit_card, 'encryption_key_123') AS credit_card,
        AES_DECRYPT(ssn, 'encryption_key_123') AS ssn
 FROM users;
@@ -452,12 +452,12 @@ CREATE TABLE users (
 
 -- 插入加密数据
 INSERT INTO users (username, credit_card, ssn)
-VALUES ('john_doe', 
+VALUES ('john_doe',
         pgp_sym_encrypt('1234-5678-9012-3456', 'encryption_key_123'),
         pgp_sym_encrypt('123-45-6789', 'encryption_key_123'));
 
 -- 查询和解密数据
-SELECT id, username, 
+SELECT id, username,
        pgp_sym_decrypt(credit_card, 'encryption_key_123') AS credit_card,
        pgp_sym_decrypt(ssn, 'encryption_key_123') AS ssn
 FROM users;
@@ -503,7 +503,7 @@ print(f"Decrypted: {decrypted_ssn}")
 ```sql
 -- 创建脱敏视图（PostgreSQL 示例）
 CREATE VIEW masked_customers AS
-SELECT 
+SELECT
     id,
     username,
     -- 部分掩盖电子邮件
@@ -516,13 +516,13 @@ FROM customers;
 
 -- MySQL 脱敏函数示例
 CREATE VIEW masked_customers AS
-SELECT 
+SELECT
     id,
     username,
     -- 掩盖电子邮件
     CONCAT(
-        LEFT(email, 1), 
-        REPEAT('*', POSITION('@' IN email) - 2), 
+        LEFT(email, 1),
+        REPEAT('*', POSITION('@' IN email) - 2),
         SUBSTRING(email FROM POSITION('@' IN email))
     ) AS masked_email,
     -- 掩盖电话号码
@@ -549,12 +549,12 @@ BEGIN
         RETURN QUERY SELECT c.id, c.username, c.email, c.phone, c.ssn
                    FROM customers c WHERE c.id = p_customer_id;
     ELSIF p_user_role = 'support' THEN
-        RETURN QUERY SELECT c.id, c.username, c.email, 
+        RETURN QUERY SELECT c.id, c.username, c.email,
                             CONCAT(LEFT(c.phone, 3), '-***-', RIGHT(c.phone, 4)),
                             'xxx-xx-' || RIGHT(c.ssn, 4)
                    FROM customers c WHERE c.id = p_customer_id;
     ELSE
-        RETURN QUERY SELECT c.id, c.username, 
+        RETURN QUERY SELECT c.id, c.username,
                             regexp_replace(c.email, '(?<=.).(?=.*@)', 'x', 'g'),
                             CONCAT(LEFT(c.phone, 3), '-***-', RIGHT(c.phone, 4)),
                             'xxx-xx-xxxx'
@@ -575,8 +575,8 @@ $$ LANGUAGE plpgsql;
 SHOW VARIABLES LIKE '%ssl%';
 
 -- 要求用户使用 SSL 连接
-CREATE USER 'secure_user'@'%' 
-IDENTIFIED BY 'password123!' 
+CREATE USER 'secure_user'@'%'
+IDENTIFIED BY 'password123!'
 REQUIRE SSL;
 
 -- 修改现有用户要求 SSL
@@ -590,8 +590,8 @@ ALTER USER 'existing_user'@'%' REQUIRE SSL;
 # hostssl all all 0.0.0.0/0 md5 clientcert=1
 
 -- 检查连接是否加密
-SELECT usename, ssl, client_addr 
-FROM pg_stat_ssl 
+SELECT usename, ssl, client_addr
+FROM pg_stat_ssl
 JOIN pg_stat_activity ON pg_stat_ssl.pid = pg_stat_activity.pid;
 ```
 
@@ -646,16 +646,16 @@ SELECT * FROM pg_audit_log();
 
 ```sql
 -- 查看当前连接和活动
-SELECT user, host, db, command, state, time 
-FROM information_schema.processlist 
+SELECT user, host, db, command, state, time
+FROM information_schema.processlist
 WHERE command != 'Sleep';
 
 -- 查看失败登录尝试
-SELECT * FROM mysql.error_log 
+SELECT * FROM mysql.error_log
 WHERE error_message LIKE '%Access denied%';
 
 -- 查看用户权限变更历史
-SELECT * FROM mysql.general_log 
+SELECT * FROM mysql.general_log
 WHERE argument LIKE '%GRANT%' OR argument LIKE '%REVOKE%';
 ```
 
@@ -663,12 +663,12 @@ WHERE argument LIKE '%GRANT%' OR argument LIKE '%REVOKE%';
 
 ```sql
 -- 查看当前活动连接
-SELECT usename, client_addr, application_name, state, query 
-FROM pg_stat_activity 
+SELECT usename, client_addr, application_name, state, query
+FROM pg_stat_activity
 WHERE state = 'active';
 
 -- 查看连接尝试
-SELECT usename, datname, client_addr, backend_start 
+SELECT usename, datname, client_addr, backend_start
 FROM pg_stat_activity;
 
 -- 使用 pgBadger 进行日志分析（外部工具）
@@ -708,11 +708,11 @@ FROM mysql.user;
 
 ```sql
 -- 查看角色权限
-SELECT grantee, privilege_type, table_name 
+SELECT grantee, privilege_type, table_name
 FROM information_schema.role_table_grants;
 
 -- 查看模式权限
-SELECT grantee, privilege_type, schema_name 
+SELECT grantee, privilege_type, schema_name
 FROM information_schema.role_schema_grants;
 
 -- 查看所有角色及其属性

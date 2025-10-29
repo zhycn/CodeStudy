@@ -18,7 +18,7 @@ WITH cte_name (column1, column2, ...) AS (
     FROM source_table
     WHERE conditions
 )
-SELECT * 
+SELECT *
 FROM cte_name;
 ```
 
@@ -31,13 +31,13 @@ FROM cte_name;
 **传统嵌套查询（难以维护）：**
 
 ```sql
-SELECT * 
+SELECT *
 FROM (
-    SELECT user_id, SUM(amount) 
-    FROM orders 
+    SELECT user_id, SUM(amount)
+    FROM orders
     WHERE status = 'completed'
     GROUP BY user_id
-) AS subquery 
+) AS subquery
 WHERE subquery.sum > 1000;
 ```
 
@@ -45,13 +45,13 @@ WHERE subquery.sum > 1000;
 
 ```sql
 WITH CompletedOrders AS (
-    SELECT user_id, SUM(amount) AS total 
-    FROM orders 
+    SELECT user_id, SUM(amount) AS total
+    FROM orders
     WHERE status = 'completed'
     GROUP BY user_id
 )
-SELECT * 
-FROM CompletedOrders 
+SELECT *
+FROM CompletedOrders
 WHERE total > 1000;
 ```
 
@@ -60,7 +60,7 @@ WHERE total > 1000;
 通过 CTE 命名直接表达业务意图，使 SQL 具备自解释性。
 
 ```sql
-WITH 
+WITH
   ActiveUsers AS (SELECT * FROM users WHERE last_login > CURRENT_DATE - 30),
   HighValueOrders AS (SELECT * FROM orders WHERE amount > 1000)
 SELECT u.name, COUNT(o.order_id)
@@ -75,14 +75,14 @@ GROUP BY u.name;
 
 ```sql
 WITH RegionalSales AS (
-    SELECT region, SUM(sales) AS total 
-    FROM transactions 
+    SELECT region, SUM(sales) AS total
+    FROM transactions
     GROUP BY region
 )
-SELECT 
+SELECT
     region,
     total,
-    (total / SUM(total) OVER ()) * 100 AS percent 
+    (total / SUM(total) OVER ()) * 100 AS percent
 FROM RegionalSales;
 ```
 
@@ -101,11 +101,11 @@ FROM RegionalSales;
 WITH RECURSIVE cte_name AS (
     -- 基础查询（锚点成员）
     SELECT ... FROM ... WHERE ...
-    
+
     UNION ALL
-    
+
     -- 递归查询（递归成员）
-    SELECT ... FROM ... 
+    SELECT ... FROM ...
     JOIN cte_name ON ...
 )
 SELECT * FROM cte_name;
@@ -133,9 +133,9 @@ WITH RECURSIVE employee_hierarchy AS (
     SELECT id, name, manager_id, 1 AS level
     FROM employees
     WHERE manager_id IS NULL
-    
+
     UNION ALL
-    
+
     -- 递归查询：逐级查找下属员工
     SELECT e.id, e.name, e.manager_id, eh.level + 1
     FROM employees e
@@ -165,9 +165,9 @@ WITH RECURSIVE dept_tree AS (
     SELECT id, name, parent_id
     FROM departments
     WHERE id = 2
-    
+
     UNION ALL
-    
+
     -- 递归查询：选择其下的子部门
     SELECT d.id, d.name, d.parent_id
     FROM departments d
@@ -182,21 +182,21 @@ SELECT * FROM dept_tree;
 
 ```sql
 WITH RECURSIVE org_path AS (
-    SELECT 
-        id, 
-        name, 
-        parent_id, 
+    SELECT
+        id,
+        name,
+        parent_id,
         1 AS level,
         CAST(name AS VARCHAR(1000)) AS path
     FROM organization
     WHERE parent_id IS NULL
-    
+
     UNION ALL
-    
-    SELECT 
-        o.id, 
-        o.name, 
-        o.parent_id, 
+
+    SELECT
+        o.id,
+        o.name,
+        o.parent_id,
         op.level + 1,
         CONCAT(op.path, '->', o.name)
     FROM organization o
@@ -210,20 +210,20 @@ ORDER BY path;
 
 ```sql
 WITH RECURSIVE category_tree AS (
-    SELECT 
-        id, 
-        name, 
+    SELECT
+        id,
+        name,
         parent_id,
         1 AS level,
         CAST(id AS VARCHAR(1000)) AS path
     FROM categories
     WHERE parent_id IS NULL
-    
+
     UNION ALL
-    
-    SELECT 
-        c.id, 
-        c.name, 
+
+    SELECT
+        c.id,
+        c.name,
         c.parent_id,
         ct.level + 1,
         CONCAT(ct.path, ',', c.id)
@@ -270,8 +270,8 @@ SELECT * FROM infinite_loop; -- 危险：没有终止条件
 WITH RECURSIVE finite_series AS (
     SELECT 1 AS n
     UNION ALL
-    SELECT n + 1 
-    FROM finite_series 
+    SELECT n + 1
+    FROM finite_series
     WHERE n < 100 -- 明确的终止条件
 )
 SELECT * FROM finite_series;
@@ -284,7 +284,7 @@ SELECT * FROM finite_series;
 递归 CTE 可以将复杂的报表逻辑分解为清晰的步骤：
 
 ```sql
-WITH 
+WITH
 -- 第一步：筛选有效订单
 FilteredOrders AS (
     SELECT order_id, customer_id, amount, order_date
@@ -295,7 +295,7 @@ FilteredOrders AS (
 
 -- 第二步：按月聚合销售额
 MonthlySales AS (
-    SELECT 
+    SELECT
         customer_id,
         DATE_FORMAT(order_date, '%Y-%m') AS month,
         SUM(amount) AS monthly_total
@@ -305,19 +305,19 @@ MonthlySales AS (
 
 -- 第三步：计算累计销售额
 CumulativeSales AS (
-    SELECT 
+    SELECT
         customer_id,
         month,
         monthly_total,
         SUM(monthly_total) OVER (
-            PARTITION BY customer_id 
+            PARTITION BY customer_id
             ORDER BY month
         ) AS cumulative_total
     FROM MonthlySales
 )
 
 -- 主查询：生成最终报表
-SELECT 
+SELECT
     c.name AS customer_name,
     cs.month,
     cs.monthly_total,
@@ -334,18 +334,18 @@ ORDER BY c.name, cs.month;
 ```sql
 WITH RECURSIVE DataFlattening AS (
     -- 基础查询：选择根节点数据
-    SELECT 
+    SELECT
         id,
         parent_id,
         data_value,
         CAST(id AS VARCHAR(1000)) AS hierarchy_path
     FROM raw_data
     WHERE parent_id IS NULL
-    
+
     UNION ALL
-    
+
     -- 递归查询：逐级展开子节点
-    SELECT 
+    SELECT
         rd.id,
         rd.parent_id,
         rd.data_value,
@@ -354,7 +354,7 @@ WITH RECURSIVE DataFlattening AS (
     INNER JOIN DataFlattening df ON rd.parent_id = df.id
 )
 
-SELECT 
+SELECT
     id,
     data_value,
     hierarchy_path,
@@ -400,11 +400,11 @@ SELECT * FROM cte;
 ```sql
 WITH RECURSIVE OrgTree AS (
     SELECT id, name, parent_id, 1 AS depth
-    FROM departments 
+    FROM departments
     WHERE parent_id IS NULL
-    
+
     UNION ALL
-    
+
     SELECT d.id, d.name, d.parent_id, ot.depth + 1
     FROM departments d
     JOIN OrgTree ot ON d.parent_id = ot.id
@@ -417,11 +417,11 @@ SELECT * FROM OrgTree;
 
 根据实际基准测试（TPC-H 10GB数据集），递归 CTE 在不同数据库中的表现有所差异：
 
-| 数据库 | 递归 CTE 执行时间 | 临时表执行时间 | 差异率 |
-|--------|-------------------|----------------|---------|
-| PostgreSQL 15 | 342ms | 521ms | -34%↓ |
-| MySQL 8.0 | 897ms | 735ms | +22%↑ |
-| SQL Server 22 | 238ms | 410ms | -42%↓ |
+| 数据库        | 递归 CTE 执行时间 | 临时表执行时间 | 差异率 |
+| ------------- | ----------------- | -------------- | ------ |
+| PostgreSQL 15 | 342ms             | 521ms          | -34%↓  |
+| MySQL 8.0     | 897ms             | 735ms          | +22%↑  |
+| SQL Server 22 | 238ms             | 410ms          | -42%↓  |
 
 **关键发现：**
 
@@ -430,12 +430,12 @@ SELECT * FROM OrgTree;
 
 ### 5.3 递归 CTE 优化黄金法则
 
-| 场景 | 优化策略 | 预期收益 |
-|------|----------|----------|
-| 简单递归 CTE（<50行） | 依赖优化器内联 | 执行计划更简洁 |
-| 复杂递归 CTE（>1000行） | 强制物化 + 索引提示 | 避免重复计算 |
-| 递归查询 | 深度剪枝 + 尾递归优化 | 内存占用降低60% |
-| 分布式环境 | 分区键传播 + 本地化计算 | 网络开销减少40% |
+| 场景                    | 优化策略                | 预期收益        |
+| ----------------------- | ----------------------- | --------------- |
+| 简单递归 CTE（<50行）   | 依赖优化器内联          | 执行计划更简洁  |
+| 复杂递归 CTE（>1000行） | 强制物化 + 索引提示     | 避免重复计算    |
+| 递归查询                | 深度剪枝 + 尾递归优化   | 内存占用降低60% |
+| 分布式环境              | 分区键传播 + 本地化计算 | 网络开销减少40% |
 
 ## 6. 实际业务场景应用案例
 
@@ -449,9 +449,9 @@ WITH RECURSIVE UserDepartmentTree AS (
     FROM departments d
     JOIN users u ON d.id = u.department_id
     WHERE u.user_id = 123
-    
+
     UNION ALL
-    
+
     -- 递归查找所有下级部门
     SELECT child.id, child.name, child.parent_id
     FROM departments child
@@ -467,7 +467,7 @@ JOIN UserDepartmentTree udt ON u.department_id = udt.id;
 
 ```sql
 WITH RECURSIVE CategoryFullPath AS (
-    SELECT 
+    SELECT
         category_id,
         name,
         parent_category_id,
@@ -475,10 +475,10 @@ WITH RECURSIVE CategoryFullPath AS (
         1 AS level
     FROM product_categories
     WHERE parent_category_id IS NULL
-    
+
     UNION ALL
-    
-    SELECT 
+
+    SELECT
         pc.category_id,
         pc.name,
         pc.parent_category_id,
@@ -488,7 +488,7 @@ WITH RECURSIVE CategoryFullPath AS (
     JOIN CategoryFullPath cfp ON pc.parent_category_id = cfp.category_id
 )
 
-SELECT 
+SELECT
     category_id,
     name,
     full_path,
@@ -502,7 +502,7 @@ ORDER BY full_path;
 ```sql
 WITH RECURSIVE CommentThread AS (
     -- 顶层评论（没有父评论）
-    SELECT 
+    SELECT
         comment_id,
         user_id,
         content,
@@ -511,11 +511,11 @@ WITH RECURSIVE CommentThread AS (
         CAST(LPAD(comment_id, 10, '0') AS VARCHAR(1000)) AS sort_path
     FROM comments
     WHERE parent_comment_id IS NULL
-    
+
     UNION ALL
-    
+
     -- 回复评论
-    SELECT 
+    SELECT
         c.comment_id,
         c.user_id,
         c.content,
@@ -526,7 +526,7 @@ WITH RECURSIVE CommentThread AS (
     JOIN CommentThread ct ON c.parent_comment_id = ct.comment_id
 )
 
-SELECT 
+SELECT
     ct.comment_id,
     u.username,
     ct.content,
@@ -555,9 +555,9 @@ WITH RECURSIVE optimized_tree AS (
     SELECT id, name, parent_id, 1 AS level
     FROM large_hierarchy_table
     WHERE parent_id IS NULL
-    
+
     UNION ALL
-    
+
     SELECT child.id, child.name, child.parent_id, parent.level + 1
     FROM large_hierarchy_table child
     INNER JOIN optimized_tree parent ON child.parent_id = parent.id
@@ -577,17 +577,17 @@ SELECT * FROM optimized_tree;
 
 ```sql
 WITH RECURSIVE safe_recursion AS (
-    SELECT 
+    SELECT
         node_id,
         parent_node_id,
         CAST(node_id AS VARCHAR(1000)) AS path,
         1 AS level
     FROM graph_nodes
     WHERE node_id = 1 -- 起始节点
-    
+
     UNION ALL
-    
-    SELECT 
+
+    SELECT
         child.node_id,
         child.parent_node_id,
         CONCAT(parent.path, '->', child.node_id),

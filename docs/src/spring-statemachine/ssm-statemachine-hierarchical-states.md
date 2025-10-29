@@ -364,24 +364,24 @@ A: 确认使用的是 `SHALLOW` 还是 `DEEP` 历史。检查状态机退出时�
 1. **启用日志**: 在 `application.properties` 中设置 `logging.level.org.springframework.statemachine=DEBUG` 或 `TRACE`。
 2. **使用监听器**: 注入一个 `StateMachineListenerAdapter`，重写 `stateChanged`, `eventNotAccepted` 等方法，打印详细日志。
 
-    ```java
-    @Bean
-    public StateMachineListener<States, Events> listener() {
-        return new StateMachineListenerAdapter<States, Events>() {
-            @Override
-            public void eventNotAccepted(Message<Events> event) {
-                System.err.println("Event not accepted: " + event);
-            }
-            @Override
-            public void stateContext(StateContext<States, Events> stateContext) {
-                // TRACE 级别的信息
-                if (stateContext.getStage() == StateContext.Stage.STATE_ENTRY) {
-                    System.out.println("Entering: " + stateContext.getStateMachine().getState().getId());
-                }
-            }
-        };
-    }
-    ```
+   ```java
+   @Bean
+   public StateMachineListener<States, Events> listener() {
+       return new StateMachineListenerAdapter<States, Events>() {
+           @Override
+           public void eventNotAccepted(Message<Events> event) {
+               System.err.println("Event not accepted: " + event);
+           }
+           @Override
+           public void stateContext(StateContext<States, Events> stateContext) {
+               // TRACE 级别的信息
+               if (stateContext.getStage() == StateContext.Stage.STATE_ENTRY) {
+                   System.out.println("Entering: " + stateContext.getStateMachine().getState().getId());
+               }
+           }
+       };
+   }
+   ```
 
 3. **图形化可视化**: 考虑使用 Spring Statemachine 的 UML 导出功能，将配置生成状态图，直观地检查层次结构和转换关系。
 

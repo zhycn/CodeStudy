@@ -20,16 +20,16 @@
 public interface ExtendedState {
     // 获取存储所有变量的 Map
     Map<Object, Object> getVariables();
-    
+
     // 根据 Key 获取变量，可指定类型
     <T> T get(Object key, Class<T> type);
-    
+
     // 根据 Key 获取变量
     Object get(Object key);
-    
+
     // 设置一个变量
     void setVariable(Object key, Object value);
-    
+
     // 检查变量是否存在
     boolean contains(Object key);
 }
@@ -43,7 +43,7 @@ public interface ExtendedState {
 public interface StateContext<S, E> {
     // 获取扩展状态
     ExtendedState getExtendedState();
-    
+
     // 其他有用的信息，如事件消息、状态机实例、异常、过渡信息等
     Event<E> getEvent();
     Message<E> getMessage();
@@ -232,7 +232,7 @@ public class ExtendedStateChangeListener implements StateMachineListener<States,
     public void extendedStateChanged(Object key, Object value) {
         // 当任何扩展状态的键值发生变化时，此方法会被调用
         System.out.println("Extended State changed - Key: " + key + ", Value: " + value);
-        
+
         // 可以对特定的键做出反应
         if ("retryCount".equals(key)) {
             Integer count = (Integer) value;
@@ -292,14 +292,14 @@ public class OrderStatusService {
 
 1. **键的命名规范**：使用有明确意义的字符串作为键，避免魔法值。可以考虑使用常量类或枚举来定义所有可能的键。
 
-    ```java
-    public class ExtendedStateVariables {
-        public static final String RETRY_COUNT = "retryCount";
-        public static final String FORM_DATA = "formData";
-        public static final String CURRENT_USER = "currentUser";
-        public static final String ERROR_CAUSE = "errorCause";
-    }
-    ```
+   ```java
+   public class ExtendedStateVariables {
+       public static final String RETRY_COUNT = "retryCount";
+       public static final String FORM_DATA = "formData";
+       public static final String CURRENT_USER = "currentUser";
+       public static final String ERROR_CAUSE = "errorCause";
+   }
+   ```
 
 2. **类型安全**：使用 `extendedState.get(key, Class<T> type)` 方法获取值时指定类型，避免 ClassCastException。
 
@@ -311,11 +311,11 @@ public class OrderStatusService {
 
 ### 5.2 常见场景
 
-* **重试机制**：如上面的示例所示，使用计数器跟踪操作重试次数。
-* **表单验证**：存储用户提交的表单数据，并在多个状态中逐步验证和填充。
-* **业务流程上下文**：存储流程所需的业务对象 ID（如订单 ID、用户 ID），以便在不同状态的动作中访问。
-* **错误处理**：在发生错误时，将异常信息或错误码存入扩展状态，以便在错误状态中记录或返回给用户。
-* **条件路由**：在 Choice 伪状态中，根据扩展状态中的复杂条件决定下一步的流向。
+- **重试机制**：如上面的示例所示，使用计数器跟踪操作重试次数。
+- **表单验证**：存储用户提交的表单数据，并在多个状态中逐步验证和填充。
+- **业务流程上下文**：存储流程所需的业务对象 ID（如订单 ID、用户 ID），以便在不同状态的动作中访问。
+- **错误处理**：在发生错误时，将异常信息或错误码存入扩展状态，以便在错误状态中记录或返回给用户。
+- **条件路由**：在 Choice 伪状态中，根据扩展状态中的复杂条件决定下一步的流向。
 
 ```java
 // 在配置中定义 Choice 和 Junction
@@ -356,9 +356,9 @@ Spring Statemachine 的 **扩展状态（Extended State）** 是一个强大而�
 
 **核心要点回顾**：
 
-* **用途**：存储与状态机执行相关的上下文数据。
-* **访问**：通过 `StateContext.getExtendedState()` 在 Guard 和 Action 中访问和修改。
-* **监听**：通过实现 `StateMachineListener` 或使用 `@OnExtendedStateChanged` 注解来监听变化。
-* **实践**：遵循命名规范、注意类型安全和数据生命周期。
+- **用途**：存储与状态机执行相关的上下文数据。
+- **访问**：通过 `StateContext.getExtendedState()` 在 Guard 和 Action 中访问和修改。
+- **监听**：通过实现 `StateMachineListener` 或使用 `@OnExtendedStateChanged` 注解来监听变化。
+- **实践**：遵循命名规范、注意类型安全和数据生命周期。
 
 掌握扩展状态的使用，是构建高级 Spring Statemachine 应用的关键一步。

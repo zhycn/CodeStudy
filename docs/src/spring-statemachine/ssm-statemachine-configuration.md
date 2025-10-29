@@ -53,9 +53,9 @@ public enum OrderEvents {
 public class StateMachineConfig extends StateMachineConfigurerAdapter<OrderStates, OrderEvents> {
 
     @Override
-    public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) 
+    public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states)
         throws Exception {
-        
+
         states
             .withStates()
             .initial(OrderStates.INITIAL)
@@ -65,9 +65,9 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<OrderState
     }
 
     @Override
-    public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) 
+    public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions)
         throws Exception {
-        
+
         transitions
             .withExternal()
                 .source(OrderStates.INITIAL)
@@ -108,9 +108,9 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<OrderState
 
 ```java
 @Override
-public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) 
+public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states)
     throws Exception {
-    
+
     states
         .withStates()
         .initial(OrderStates.INITIAL)
@@ -132,9 +132,9 @@ public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> stat
 
 ```java
 @Override
-public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) 
+public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states)
     throws Exception {
-    
+
     states
         .withStates()
         .initial(OrderStates.INITIAL)
@@ -167,9 +167,9 @@ public Guard<OrderStates, OrderEvents> paymentValidationGuard() {
 }
 
 @Override
-public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) 
+public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions)
     throws Exception {
-    
+
     transitions
         .withExternal()
             .source(OrderStates.PAYMENT_PENDING)
@@ -188,20 +188,20 @@ public Action<OrderStates, OrderEvents> processPaymentAction() {
         Order order = context.getExtendedState().get("order", Order.class);
         // 处理支付逻辑
         paymentService.processPayment(order);
-        
+
         // 记录状态转换
         auditService.logStateChange(
-            order.getId(), 
-            OrderStates.PAYMENT_PENDING, 
+            order.getId(),
+            OrderStates.PAYMENT_PENDING,
             OrderStates.PAYED
         );
     };
 }
 
 @Override
-public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) 
+public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions)
     throws Exception {
-    
+
     transitions
         .withExternal()
             .source(OrderStates.PAYMENT_PENDING)
@@ -220,19 +220,19 @@ public Action<OrderStates, OrderEvents> errorAction() {
     return context -> {
         Exception exception = context.getException();
         log.error("状态机执行出错: {}", exception.getMessage());
-        
+
         // 发送错误通知
         notificationService.sendErrorNotification(
-            "状态机错误", 
+            "状态机错误",
             exception.getMessage()
         );
     };
 }
 
 @Override
-public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config) 
+public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config)
     throws Exception {
-    
+
     config
         .withConfiguration()
         .autoStartup(true)
@@ -283,7 +283,7 @@ public class RedisPersistenceConfig {
     @Bean
     public StateMachineRuntimePersister<OrderStates, OrderEvents, String> stateMachineRuntimePersister(
         RedisConnectionFactory connectionFactory) {
-        RedisStateMachineContextRepository<OrderStates, OrderEvents> repository = 
+        RedisStateMachineContextRepository<OrderStates, OrderEvents> repository =
             new RedisStateMachineContextRepository<>(connectionFactory);
         return new RedisPersistingStateMachineInterceptor<>(repository);
     }
@@ -301,8 +301,8 @@ public class OrderStateMachineListener implements StateMachineListener<OrderStat
 
     @Override
     public void stateChanged(State<OrderStates, OrderEvents> from, State<OrderStates, OrderEvents> to) {
-        log.info("状态变化: {} -> {}", 
-            from != null ? from.getId() : "NONE", 
+        log.info("状态变化: {} -> {}",
+            from != null ? from.getId() : "NONE",
             to.getId());
     }
 
@@ -323,8 +323,8 @@ public class OrderStateMachineListener implements StateMachineListener<OrderStat
 
     @Override
     public void transition(Transition<OrderStates, OrderEvents> transition) {
-        log.debug("转换开始: {} -> {}", 
-            transition.getSource().getId(), 
+        log.debug("转换开始: {} -> {}",
+            transition.getSource().getId(),
             transition.getTarget().getId());
     }
 
@@ -393,7 +393,7 @@ public class OrderStateMachineTest {
 
     @Test
     public void testOrderLifecycle() {
-        StateMachineTestPlan<OrderStates, OrderEvents> plan = 
+        StateMachineTestPlan<OrderStates, OrderEvents> plan =
             StateMachineTestPlanBuilder.<OrderStates, OrderEvents>builder()
                 .defaultAwaitTime(2)
                 .stateMachine(stateMachine)
@@ -417,7 +417,7 @@ public class OrderStateMachineTest {
 
     @Test
     public void testOrderCancellation() {
-        StateMachineTestPlan<OrderStates, OrderEvents> plan = 
+        StateMachineTestPlan<OrderStates, OrderEvents> plan =
             StateMachineTestPlanBuilder.<OrderStates, OrderEvents>builder()
                 .stateMachine(stateMachine)
                 .step()
@@ -445,7 +445,7 @@ public class OrderStateMachineTest {
    ```java
    // 推荐：使用枚举
    public enum OrderStates { INITIAL, PROCESSING, COMPLETED }
-   
+
    // 不推荐：使用字符串
    // .state("initial")...
    ```
@@ -477,7 +477,7 @@ public class OrderStateMachineTest {
    ```java
    // 对于无状态场景，使用单例
    @Scope(scopeName = "singleton")
-   
+
    // 对于有状态场景，使用会话或请求范围
    @Scope(scopeName = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
    ```
@@ -486,9 +486,9 @@ public class OrderStateMachineTest {
 
    ```java
    @Override
-   public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config) 
+   public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config)
        throws Exception {
-       
+
        config
            .withPersistence()
                .runtimePersister(stateMachineRuntimePersister())
@@ -505,9 +505,9 @@ public class OrderStateMachineTest {
 public class SecureStateMachineConfig extends StateMachineConfigurerAdapter<OrderStates, OrderEvents> {
 
     @Override
-    public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config) 
+    public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config)
         throws Exception {
-        
+
         config
             .withSecurity()
                 .enabled(true)
@@ -516,9 +516,9 @@ public class SecureStateMachineConfig extends StateMachineConfigurerAdapter<Orde
     }
 
     @Override
-    public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) 
+    public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions)
         throws Exception {
-        
+
         transitions
             .withExternal()
                 .source(OrderStates.INITIAL)
@@ -541,7 +541,7 @@ public class SecureStateMachineConfig extends StateMachineConfigurerAdapter<Orde
 @Bean
 public StateMachine<OrderStates, OrderEvents> stateMachine(
     StateMachineFactory<OrderStates, OrderEvents> factory) {
-    
+
     StateMachine<OrderStates, OrderEvents> stateMachine = factory.getStateMachine();
     stateMachine.start();  // 明确调用start()
     return stateMachine;
@@ -574,14 +574,14 @@ if (stateMachine.sendEvent(OrderEvents.PAY)) {
 public StateMachinePersister<OrderStates, OrderEvents, String> stateMachinePersister() {
     return new DefaultStateMachinePersister<>(new StateMachinePersist<OrderStates, OrderEvents, String>() {
         @Override
-        public void write(StateMachineContext<OrderStates, OrderEvents> context, String contextObj) 
+        public void write(StateMachineContext<OrderStates, OrderEvents> context, String contextObj)
             throws Exception {
             // 实现自定义持久化逻辑
             jpaRepository.save(context);
         }
 
         @Override
-        public StateMachineContext<OrderStates, OrderEvents> read(String contextObj) 
+        public StateMachineContext<OrderStates, OrderEvents> read(String contextObj)
             throws Exception {
             // 实现自定义读取逻辑
             return jpaRepository.findById(contextObj);

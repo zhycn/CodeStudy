@@ -28,13 +28,13 @@ ORDER BY column1 [ASC|DESC], column2 [ASC|DESC], ...;
 
 ```sql
 -- 升序排序（默认，可省略 ASC）
-SELECT employee_id, last_name, salary 
-FROM employees 
+SELECT employee_id, last_name, salary
+FROM employees
 ORDER BY salary ASC;
 
 -- 降序排序
-SELECT employee_id, last_name, salary 
-FROM employees 
+SELECT employee_id, last_name, salary
+FROM employees
 ORDER BY salary DESC;
 ```
 
@@ -69,7 +69,7 @@ ORDER BY commission_pct DESC NULLS LAST;
 -- 通用解决方案（MySQL、SQL Server等）
 SELECT employee_id, commission_pct
 FROM employees
-ORDER BY 
+ORDER BY
     CASE WHEN commission_pct IS NULL THEN 1 ELSE 0 END,
     commission_pct DESC;
 ```
@@ -80,7 +80,7 @@ ORDER BY
 -- 按自定义优先级排序
 SELECT product_name, category
 FROM products
-ORDER BY 
+ORDER BY
     CASE category
         WHEN 'Urgent' THEN 1
         WHEN 'High' THEN 2
@@ -214,8 +214,8 @@ CREATE INDEX idx_employees_covering ON employees(department_id, salary, employee
 
 ```sql
 -- 深度分页性能差：需要扫描前 1000000 条记录
-SELECT * FROM large_table 
-ORDER BY create_time DESC 
+SELECT * FROM large_table
+ORDER BY create_time DESC
 LIMIT 10 OFFSET 1000000;
 ```
 
@@ -223,9 +223,9 @@ LIMIT 10 OFFSET 1000000;
 
 ```sql
 -- 使用 WHERE 条件替代 OFFSET（推荐）
-SELECT * FROM large_table 
+SELECT * FROM large_table
 WHERE id > #{last_id}  -- 上一页最后一条记录的 ID
-ORDER BY id ASC 
+ORDER BY id ASC
 LIMIT 20;
 
 -- 实际应用示例
@@ -240,13 +240,13 @@ LIMIT 10;
 
 ```sql
 -- 先查询主键，再关联原表
-SELECT t1.* 
+SELECT t1.*
 FROM large_table t1
 INNER JOIN (
-    SELECT id 
-    FROM large_table 
+    SELECT id
+    FROM large_table
     WHERE category_id = 5
-    ORDER BY create_time DESC 
+    ORDER BY create_time DESC
     LIMIT 1000000, 20
 ) t2 ON t1.id = t2.id
 ORDER BY t1.create_time DESC;
@@ -256,15 +256,15 @@ ORDER BY t1.create_time DESC;
 
 ```sql
 -- 基于排序字段的游标分页
-SELECT * FROM orders 
+SELECT * FROM orders
 WHERE create_time < #{last_create_time}  -- 上一页最后的时间
-ORDER BY create_time DESC 
+ORDER BY create_time DESC
 LIMIT 20;
 
 -- 复合排序字段的游标分页
-SELECT * FROM orders 
+SELECT * FROM orders
 WHERE (create_time, order_id) < (#{last_create_time}, #{last_order_id})
-ORDER BY create_time DESC, order_id DESC 
+ORDER BY create_time DESC, order_id DESC
 LIMIT 20;
 ```
 
@@ -295,12 +295,12 @@ EXPLAIN ANALYZE SELECT * FROM employees ORDER BY salary DESC LIMIT 10;
 ```java
 public PageResult<User> getUsersByPage(int pageNo, int pageSize, String sortBy) {
     int offset = (pageNo - 1) * pageSize;
-    
+
     String sql = "SELECT u.*, COUNT(*) OVER() AS total_count " +
                  "FROM users u " +
                  "ORDER BY " + sortBy + " DESC " +
                  "LIMIT ? OFFSET ?";
-    
+
     // 使用 PreparedStatement 防止 SQL 注入
     // ... 执行查询并返回结果
 }
@@ -313,7 +313,7 @@ public PageResult<User> getUsersByPage(int pageNo, int pageSize, String sortBy) 
 SELECT product_id, product_name, price
 FROM products
 WHERE category_id = ?
-ORDER BY 
+ORDER BY
     CASE WHEN ? = 'price_asc' THEN price END ASC,
     CASE WHEN ? = 'price_desc' THEN price END DESC,
     CASE WHEN ? = 'name_asc' THEN product_name END ASC
@@ -329,8 +329,8 @@ LIMIT ? OFFSET ?;
 
 ```sql
 -- 添加主键作为辅助排序条件
-SELECT * FROM products 
-ORDER BY create_time DESC, product_id DESC 
+SELECT * FROM products
+ORDER BY create_time DESC, product_id DESC
 LIMIT 10 OFFSET 20;
 ```
 
@@ -347,12 +347,12 @@ long_query_time = 2  # 记录执行超过2秒的查询
 
 ### 4.3 不同场景下的分页策略
 
-| 场景类型 | 推荐方案 | 优点 | 缺点 |
-|---------|---------|------|------|
-| 中小数据量 | 传统 LIMIT/OFFSET | 实现简单、通用性强 | 深度分页性能差 |
-| 大数据量 | 游标分页 | 性能稳定、无深度分页问题 | 不能跳页、实现复杂 |
-| 实时性要求高 | 基于主键分页 | 性能最佳、数据一致性好 | 需要连续主键 |
-| 复杂查询 | 延迟关联 | 减少回表、优化IO | 实现复杂度高 |
+| 场景类型     | 推荐方案          | 优点                     | 缺点               |
+| ------------ | ----------------- | ------------------------ | ------------------ |
+| 中小数据量   | 传统 LIMIT/OFFSET | 实现简单、通用性强       | 深度分页性能差     |
+| 大数据量     | 游标分页          | 性能稳定、无深度分页问题 | 不能跳页、实现复杂 |
+| 实时性要求高 | 基于主键分页      | 性能最佳、数据一致性好   | 需要连续主键       |
+| 复杂查询     | 延迟关联          | 减少回表、优化IO         | 实现复杂度高       |
 
 ## 5. 总结与推荐实践
 
@@ -380,7 +380,7 @@ long_query_time = 2  # 记录执行超过2秒的查询
 ### 5.3 性能优化检查清单
 
 - [ ] 为 ORDER BY 字段创建索引
-- [ ] 避免 SELECT *，只查询需要的字段
+- [ ] 避免 SELECT \*，只查询需要的字段
 - [ ] 使用参数化查询防止注入
 - [ ] 深度分页使用游标分页替代传统分页
 - [ ] 定期分析慢查询日志

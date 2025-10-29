@@ -140,15 +140,15 @@ public class DistributedStateMachineConfig extends StateMachineConfigurerAdapter
 @Bean
 public StateMachineEnsemble<String, String> stateMachineEnsemble() throws Exception {
     CuratorFramework curatorClient = curatorClient();
-    
-    ZookeeperStateMachineEnsemble<String, String> ensemble = 
+
+    ZookeeperStateMachineEnsemble<String, String> ensemble =
         new ZookeeperStateMachineEnsemble<String, String>(curatorClient, "/statemachine/myApp");
-    
+
     // 配置高级选项
     ensemble.setCleanState(true); // 启动时清理状态
     ensemble.setLogSize(64);      // 日志大小（必须是2的幂）
     ensemble.setAppId("app01");   // 应用标识
-    
+
     return ensemble;
 }
 ```
@@ -163,21 +163,21 @@ public class DistributedStateMachineService {
 
     @Autowired
     private StateMachine<String, String> stateMachine;
-    
+
     public void processEvent(String event) {
         // 发送事件到状态机，会自动分布式同步
         stateMachine.sendEvent(event);
     }
-    
+
     public String getCurrentState() {
         return stateMachine.getState().getId();
     }
-    
+
     // 监听状态变化
     @EventListener
     public void onStateChange(StateChangedEvent<String, String> event) {
-        log.info("State changed from {} to {}", 
-            event.getSource().getId(), 
+        log.info("State changed from {} to {}",
+            event.getSource().getId(),
             event.getTarget().getId());
     }
 }
@@ -188,14 +188,14 @@ public class DistributedStateMachineService {
 ```java
 @Configuration
 public class DistributedStateMachineConfig {
-    
+
     @Bean
     public StateMachineEnsemble<String, String> stateMachineEnsemble() throws Exception {
         CuratorFramework curatorClient = curatorClient();
-        
-        ZookeeperStateMachineEnsemble<String, String> ensemble = 
+
+        ZookeeperStateMachineEnsemble<String, String> ensemble =
             new ZookeeperStateMachineEnsemble<String, String>(curatorClient, "/statemachine/myApp");
-        
+
         // 添加监听器处理连接问题
         curatorClient.getConnectionStateListenable().addListener((client, newState) -> {
             if (newState == ConnectionState.LOST) {
@@ -204,10 +204,10 @@ public class DistributedStateMachineConfig {
                 log.info("Zookeeper connection reestablished");
             }
         });
-        
+
         return ensemble;
     }
-    
+
     // 自定义状态序列化器
     @Bean
     public StateMachineContextSerializer<String, String> contextSerializer() {
@@ -228,11 +228,11 @@ public StateMachineEnsemble<String, String> stateMachineEnsemble() throws Except
         .retryPolicy(new RetryNTimes(3, 1000)) // 重试策略
         .namespace("myApp")            // 命名空间隔离
         .build();
-    
+
     curatorClient.start();
-    
+
     return new ZookeeperStateMachineEnsemble<String, String>(
-        curatorClient, 
+        curatorClient,
         "/statemachine",
         new DefaultStateMachineContextSerializer<>(),
         false,    // cleanState
@@ -249,10 +249,10 @@ public StateMachineEnsemble<String, String> stateMachineEnsemble() throws Except
 ```java
 @Component
 public class StateMachineHealthIndicator implements HealthIndicator {
-    
+
     @Autowired
     private StateMachineEnsemble<String, String> ensemble;
-    
+
     @Override
     public Health health() {
         try {
@@ -277,7 +277,7 @@ logging:
     org.springframework.statemachine: DEBUG
     org.springframework.statemachine.zookeeper: INFO
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
 ```
 
 ## 6. 实战案例：分布式订单处理
@@ -317,7 +317,7 @@ public enum OrderEvents {
 @Configuration
 @EnableStateMachine
 public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<OrderStates, OrderEvents> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config) throws Exception {
         config
@@ -328,7 +328,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .autoStartup(true)
             .machineId("orderProcessor");
     }
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) throws Exception {
         states
@@ -342,7 +342,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .state(OrderStates.CANCELLED)
             .state(OrderStates.FAILED);
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) throws Exception {
         transitions
@@ -359,7 +359,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .withExternal()
             .source(OrderStates.SHIPPING).target(OrderStates.COMPLETED).event(OrderEvents.SHIPPING_SUCCESS);
     }
-    
+
     @Bean
     public StateMachineEnsemble<OrderStates, OrderEvents> orderStateMachineEnsemble() throws Exception {
         CuratorFramework curatorClient = CuratorFrameworkFactory.builder()
@@ -368,9 +368,9 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .namespace("orders")
             .build();
         curatorClient.start();
-        
+
         return new ZookeeperStateMachineEnsemble<OrderStates, OrderEvents>(
-            curatorClient, 
+            curatorClient,
             "/statemachine/orders"
         );
     }
@@ -383,24 +383,24 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 @Service
 @Slf4j
 public class OrderProcessingService {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     public void processOrder(Long orderId) {
         try {
             Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
-            
+
             // 初始化状态机
             stateMachine.start();
-            
+
             // 处理订单流程
             stateMachine.sendEvent(OrderEvents.VALIDATE);
-            
+
             // 监听状态变化并更新订单
             stateMachine.addStateListener(new StateMachineListenerAdapter<OrderStates, OrderEvents>() {
                 @Override
@@ -410,13 +410,13 @@ public class OrderProcessingService {
                     log.info("Order {} state changed to {}", orderId, to.getId());
                 }
             });
-            
+
         } catch (Exception e) {
             log.error("Failed to process order {}", orderId, e);
             stateMachine.sendEvent(OrderEvents.CANCEL);
         }
     }
-    
+
     public OrderStates getOrderStatus(Long orderId) {
         return stateMachine.getState().getId();
     }
@@ -430,10 +430,10 @@ public class OrderProcessingService {
 ```java
 @Component
 public class EnsembleConnectionListener {
-    
+
     @Autowired
     private StateMachineEnsemble<String, String> ensemble;
-    
+
     @EventListener
     public void handleConnectionStateChange(ConnectionStateEvent event) {
         switch (event.getState()) {
@@ -463,13 +463,13 @@ public class EnsembleConnectionListener {
 ```java
 @Service
 public class StateRecoveryService {
-    
+
     @Autowired
     private StateMachineEnsemble<OrderStates, OrderEvents> ensemble;
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     public void recoverState(String machineId) {
         try {
             // 从分布式存储恢复状态

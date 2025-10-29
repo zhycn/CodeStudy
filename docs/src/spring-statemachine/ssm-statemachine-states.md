@@ -43,11 +43,11 @@ public enum States {
 
 一个伪状态，它允许根据守卫条件（Guard）动态地选择要转换到的目标状态。
 
-### 2.6.  junction 状态 (Junction State)
+### 2.6. junction 状态 (Junction State)
 
 功能上与选择状态类似，但允许多个传入转换。
 
-### 2.7.  Fork 与 Join 状态
+### 2.7. Fork 与 Join 状态
 
 用于处理正交区域（并行执行）：
 
@@ -82,12 +82,12 @@ public class SimpleStateMachineConfig extends StateMachineConfigurerAdapter<Stat
                 .states(EnumSet.allOf(States.class)) // 注册所有枚举状态
                 .end(States.SF);           // 定义结束状态
     }
-    
+
     // 后续会配置转换(Transitions)...
 }
 ```
 
-*代码 1：基础状态配置*
+_代码 1：基础状态配置_
 
 ### 3.2. 层次状态 (Hierarchical States)
 
@@ -113,7 +113,7 @@ public class HierarchicalStateMachineConfig extends StateMachineConfigurerAdapte
 }
 ```
 
-*代码 2：层次状态配置*
+_代码 2：层次状态配置_
 
 ### 3.3. 正交区域 (Orthogonal Regions)
 
@@ -147,7 +147,7 @@ public class RegionStateMachineConfig extends StateMachineConfigurerAdapter<Stat
 }
 ```
 
-*代码 3：带显式区域 ID 的正交区域配置*
+_代码 3：带显式区域 ID 的正交区域配置_
 
 ### 3.4. 伪状态配置
 
@@ -188,7 +188,7 @@ public class HistoryStateMachineConfig extends StateMachineConfigurerAdapter<Sta
 }
 ```
 
-*代码 4：历史状态配置*
+_代码 4：历史状态配置_
 
 #### 选择状态
 
@@ -237,7 +237,7 @@ public class ChoiceStateMachineConfig extends EnumStateMachineConfigurerAdapter<
 }
 ```
 
-*代码 5：选择状态配置*
+_代码 5：选择状态配置_
 
 ## 4. 状态行为：Actions
 
@@ -299,7 +299,7 @@ public class StateActionConfig extends EnumStateMachineConfigurerAdapter<States,
 }
 ```
 
-*代码 6：状态入口、出口及 State Action 配置*
+_代码 6：状态入口、出口及 State Action 配置_
 
 **State Action 策略**:
 
@@ -344,7 +344,7 @@ public Action<States, Events> errorAction() {
 }
 ```
 
-*代码 7：状态 Action 错误处理配置*
+_代码 7：状态 Action 错误处理配置_
 
 ## 5. 最佳实践
 
@@ -406,7 +406,7 @@ public class MyStateMachineTest {
 }
 ```
 
-*代码 8：使用 StateMachineTestPlan 进行测试*
+_代码 8：使用 StateMachineTestPlan 进行测试_
 
 ### 5.4. 可维护性
 

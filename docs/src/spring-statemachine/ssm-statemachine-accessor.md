@@ -128,7 +128,7 @@ public class DynamicConfigExample extends StateMachineConfigurerAdapter<String, 
         });
     }
 
-    public void addDynamicTransition(StateMachine<String, String> stateMachine, 
+    public void addDynamicTransition(StateMachine<String, String> stateMachine,
                                    String source, String target, String event) {
         stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
             // 动态添加新转移
@@ -146,23 +146,23 @@ StateMachineAccessor 允许在运行时动态添加或移除监听器，这对�
 public class RuntimeListenerManagement {
 
     private StateMachineListener<String, String> dynamicListener;
-    
+
     public void enableMonitoring(StateMachine<String, String> stateMachine) {
         dynamicListener = new StateMachineListenerAdapter<String, String>() {
             @Override
             public void stateChanged(State<String, String> from, State<String, String> to) {
                 System.out.println("State changed from " + from.getId() + " to " + to.getId());
             }
-            
+
             @Override
             public void eventNotAccepted(Message<String> event) {
                 System.out.println("Event not accepted: " + event.getPayload());
             }
         };
-        
+
         stateMachine.getStateMachineAccessor().addStateMachineListener(dynamicListener);
     }
-    
+
     public void disableMonitoring(StateMachine<String, String> stateMachine) {
         if (dynamicListener != null) {
             stateMachine.getStateMachineAccessor().removeStateMachineListener(dynamicListener);
@@ -191,7 +191,7 @@ public class ErrorHandlingExample {
             }
         );
     }
-    
+
     private void recoverFromError(StateMachine<String, String> stateMachine) {
         // 重置状态机到安全状态
         stateMachine.getStateMachineAccessor().resetStateMachine();
@@ -215,12 +215,12 @@ public class MultiRegionManagement {
             access.addStateMachineListener(createRegionListener());
         });
     }
-    
+
     public void manageSpecificRegion(StateMachine<String, String> stateMachine, String regionId) {
         // 通过区域ID访问特定区域
-        Collection<StateMachineAccess<String, String>> allRegions = 
+        Collection<StateMachineAccess<String, String>> allRegions =
             stateMachine.getStateMachineAccessor().withAllRegions();
-        
+
         for (StateMachineAccess<String, String> region : allRegions) {
             if (region.getRegion().getId().equals(regionId)) {
                 // 对特定区域执行操作
@@ -229,13 +229,13 @@ public class MultiRegionManagement {
             }
         }
     }
-    
+
     private StateMachineListener<String, String> createRegionListener() {
         return new StateMachineListenerAdapter<String, String>() {
             // 监听器实现
         };
     }
-    
+
     private StateMachineListener<String, String> createSpecificRegionListener() {
         return new StateMachineListenerAdapter<String, String>() {
             // 特定区域监听器实现
@@ -280,10 +280,10 @@ public class DynamicWorkflowEngine extends StateMachineConfigurerAdapter<String,
         stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
             // 添加新状态
             access.addState(stepName);
-            
+
             // 添加从 previousStep 到新状态的转移
             access.addTransition(previousStep, stepName, transitionEvent);
-            
+
             // 添加从新状态到 nextStep 的转移
             access.addTransition(stepName, nextStep, "NEXT_" + stepName);
         });
@@ -306,7 +306,7 @@ public class DynamicWorkflowEngine extends StateMachineConfigurerAdapter<String,
                 public void stateChanged(State<String, String> from, State<String, String> to) {
                     logWorkflowTransition(from.getId(), to.getId());
                 }
-                
+
                 @Override
                 public void transition(Transition<String, String> transition) {
                     logTransitionDetails(transition);
@@ -314,12 +314,12 @@ public class DynamicWorkflowEngine extends StateMachineConfigurerAdapter<String,
             }
         );
     }
-    
+
     private void logWorkflowTransition(String from, String to) {
         System.out.println("Workflow transition: " + from + " -> " + to);
         // 这里可以添加更复杂的日志逻辑，如写入数据库、发送通知等
     }
-    
+
     private void logTransitionDetails(Transition<String, String> transition) {
         // 记录转移的详细信息
     }
@@ -342,9 +342,9 @@ public class DynamicWorkflowEngine extends StateMachineConfigurerAdapter<String,
 
 ```java
 public class ThreadSafeAccessExample {
-    
+
     private final Object lock = new Object();
-    
+
     public void threadSafeOperation(StateMachine<String, String> stateMachine) {
         synchronized(lock) {
             stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
@@ -352,17 +352,17 @@ public class ThreadSafeAccessExample {
             });
         }
     }
-    
+
     // 或者使用并发集合
-    private final ConcurrentMap<String, StateMachineAccess<String, String>> regionCache = 
+    private final ConcurrentMap<String, StateMachineAccess<String, String>> regionCache =
         new ConcurrentHashMap<>();
-    
+
     public void cachedRegionAccess(StateMachine<String, String> stateMachine, String regionId) {
         StateMachineAccess<String, String> region = regionCache.computeIfAbsent(regionId, id -> {
             // 缓存区域访问对象
             return stateMachine.getStateMachineAccessor().withRegion();
         });
-        
+
         // 使用缓存的区域访问对象
         region.addStateMachineListener(createListener());
     }
@@ -373,7 +373,7 @@ public class ThreadSafeAccessExample {
 
 ```java
 public class RobustAccessExample {
-    
+
     public void robustRegionAccess(StateMachine<String, String> stateMachine) {
         try {
             stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
@@ -390,13 +390,13 @@ public class RobustAccessExample {
             handleAccessorException(e);
         }
     }
-    
+
     private void handleRegionException(StateMachineException e, StateMachineAccess<String, String> access) {
         // 区域异常处理逻辑
         System.err.println("Region operation failed: " + e.getMessage());
         // 可能的恢复操作
     }
-    
+
     private void handleAccessorException(Exception e) {
         // 访问器异常处理逻辑
         System.err.println("Accessor operation failed: " + e.getMessage());
@@ -446,37 +446,37 @@ public class StateMachineAccessorDemoApplication {
 
     @Component
     public static class StateMachineManager {
-        
+
         @Autowired
         private StateMachine<String, String> stateMachine;
-        
+
         private StateMachineListener<String, String> monitoringListener;
-        
+
         @PostConstruct
         public void init() {
             setupBasicMonitoring();
         }
-        
+
         // 基础监控设置
         private void setupBasicMonitoring() {
             monitoringListener = new StateMachineListenerAdapter<String, String>() {
                 @Override
                 public void stateChanged(State<String, String> from, State<String, String> to) {
-                    System.out.println("State changed: " + 
+                    System.out.println("State changed: " +
                         (from != null ? from.getId() : "null") + " -> " + to.getId());
                 }
-                
+
                 @Override
                 public void transitionStarted(Transition<String, String> transition) {
-                    System.out.println("Transition started: " + 
-                        transition.getSource().getId() + " -> " + 
+                    System.out.println("Transition started: " +
+                        transition.getSource().getId() + " -> " +
                         transition.getTarget().getId());
                 }
             };
-            
+
             stateMachine.getStateMachineAccessor().addStateMachineListener(monitoringListener);
         }
-        
+
         // 动态添加状态
         public void addState(String stateId) {
             stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
@@ -488,7 +488,7 @@ public class StateMachineAccessorDemoApplication {
                 }
             });
         }
-        
+
         // 动态添加转移
         public void addTransition(String source, String target, String event) {
             stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
@@ -500,7 +500,7 @@ public class StateMachineAccessorDemoApplication {
                 }
             });
         }
-        
+
         // 获取所有状态信息
         public void printAllStates() {
             stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
@@ -508,25 +508,25 @@ public class StateMachineAccessorDemoApplication {
                 System.out.println("States: " + access.getRegion().getStates());
             });
         }
-        
+
         // 启用详细监控
         public void enableDetailedMonitoring() {
-            StateMachineListener<String, String> detailedListener = 
+            StateMachineListener<String, String> detailedListener =
                 new StateMachineListenerAdapter<String, String>() {
                     @Override
                     public void eventNotAccepted(Message<String> event) {
                         System.out.println("Event not accepted: " + event.getPayload());
                     }
-                    
+
                     @Override
                     public void extendedStateChanged(Object key, Object value) {
                         System.out.println("Extended state changed: " + key + " = " + value);
                     }
                 };
-            
+
             stateMachine.getStateMachineAccessor().addStateMachineListener(detailedListener);
         }
-        
+
         // 重置状态机
         public void resetMachine() {
             stateMachine.getStateMachineAccessor().resetStateMachine();
@@ -537,13 +537,13 @@ public class StateMachineAccessorDemoApplication {
     @RestController
     @RequestMapping("/api/statemachine")
     public static class StateMachineController {
-        
+
         @Autowired
         private StateMachineManager stateMachineManager;
-        
+
         @Autowired
         private StateMachine<String, String> stateMachine;
-        
+
         @PostMapping("/event/{eventId}")
         public ResponseEntity<String> sendEvent(@PathVariable String eventId) {
             try {
@@ -554,7 +554,7 @@ public class StateMachineAccessorDemoApplication {
                     .body("Failed to send event: " + e.getMessage());
             }
         }
-        
+
         @PostMapping("/state/{stateId}")
         public ResponseEntity<String> addState(@PathVariable String stateId) {
             try {
@@ -565,7 +565,7 @@ public class StateMachineAccessorDemoApplication {
                     .body("Failed to add state: " + e.getMessage());
             }
         }
-        
+
         @GetMapping("/states")
         public ResponseEntity<String> getStates() {
             try {
@@ -576,7 +576,7 @@ public class StateMachineAccessorDemoApplication {
                     .body("Failed to get states: " + e.getMessage());
             }
         }
-        
+
         @PostMapping("/reset")
         public ResponseEntity<String> reset() {
             try {

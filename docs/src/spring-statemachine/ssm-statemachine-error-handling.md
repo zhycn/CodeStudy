@@ -100,7 +100,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
                 // 处理动作执行错误
                 Exception exception = context.getException();
                 log.error("Action error: {}", exception.getMessage());
-                
+
                 // 可以访问状态上下文信息
                 State<String, String> sourceState = context.getSource();
                 State<String, String> targetState = context.getTarget();
@@ -205,7 +205,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
             public void execute(StateContext<String, String> context) {
                 Exception exception = context.getException();
                 log.error("Guard evaluation error: {}", exception.getMessage());
-                
+
                 // 可以根据错误类型采取不同措施
                 if (exception instanceof RuntimeException) {
                     // 处理特定类型的错误
@@ -319,7 +319,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
             public Exception stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
                 // 全局错误处理
                 log.error("State machine error intercepted: {}", exception.getMessage());
-                
+
                 // 可以根据异常类型采取不同策略
                 if (exception instanceof IllegalStateException) {
                     // 处理特定异常
@@ -328,7 +328,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
                     // 处理运行时异常
                     stateMachine.sendEvent("HANDLE_RUNTIME_ERROR");
                 }
-                
+
                 // 返回处理后的异常（或null表示已处理）
                 return exception;
             }
@@ -529,19 +529,19 @@ public class StateMachineErrorHandlingTest {
     @Test
     public void testErrorHandling() {
         stateMachine.start();
-        
+
         // 测试正常流程
         stateMachine.sendEvent("START");
         assertThat(stateMachine.getState().getId()).isEqualTo("PROCESSING");
-        
+
         // 模拟错误发生
         stateMachine.sendEvent("ERROR_OCCURRED");
         assertThat(stateMachine.getState().getId()).isEqualTo("ERROR");
-        
+
         // 测试恢复流程
         stateMachine.sendEvent("ATTEMPT_RECOVERY");
         assertThat(stateMachine.getState().getId()).isEqualTo("RECOVERY");
-        
+
         // 测试成功恢复
         stateMachine.sendEvent("RECOVERY_SUCCESSFUL");
         assertThat(stateMachine.getState().getId()).isEqualTo("PROCESSING");
@@ -550,13 +550,13 @@ public class StateMachineErrorHandlingTest {
     @Test
     public void testActionErrorHandling() {
         stateMachine.start();
-        
+
         // 配置模拟错误
         stateMachine.getExtendedState().getVariables().put("simulateError", true);
-        
+
         // 发送事件，应该触发错误处理
         stateMachine.sendEvent("START");
-        
+
         // 验证进入了错误状态
         assertThat(stateMachine.getState().getId()).isEqualTo("ERROR");
     }

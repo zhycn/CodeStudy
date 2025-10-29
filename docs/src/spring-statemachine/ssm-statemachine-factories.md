@@ -82,13 +82,13 @@ public class FactoryStateMachineConfig extends StateMachineConfigurerAdapter<Str
 
 ### 2.3 对比总结
 
-| 特性 | @EnableStateMachine | @EnableStateMachineFactory |
-|------|---------------------|----------------------------|
-| 创建对象 | 单个状态机实例 | 状态机工厂 |
-| 适用场景 | 单例状态机 | 多实例状态机 |
-| 资源开销 | 较低 | 较高（需要管理多个实例） |
-| 灵活性 | 较低 | 较高 |
-| 实例管理 | 由 Spring 容器管理 | 需手动管理生命周期 |
+| 特性     | @EnableStateMachine | @EnableStateMachineFactory |
+| -------- | ------------------- | -------------------------- |
+| 创建对象 | 单个状态机实例      | 状态机工厂                 |
+| 适用场景 | 单例状态机          | 多实例状态机               |
+| 资源开销 | 较低                | 较高（需要管理多个实例）   |
+| 灵活性   | 较低                | 较高                       |
+| 实例管理 | 由 Spring 容器管理  | 需手动管理生命周期         |
 
 ## 3. 状态机工厂配置详解
 
@@ -222,13 +222,13 @@ public class OrderProcessService {
     public StateMachine<String, String> createStateMachine(String orderId) {
         // 使用订单ID作为机器ID
         StateMachine<String, String> stateMachine = stateMachineFactory.getStateMachine(orderId);
-        
+
         // 初始化状态机
         stateMachine.start();
-        
+
         // 存储状态机实例以便后续管理
         machines.put(orderId, stateMachine);
-        
+
         return stateMachine;
     }
 }
@@ -287,24 +287,24 @@ public class StateMachineManager {
 ```java
 // 状态枚举
 public enum OrderStates {
-    INITIAL, 
-    PAYMENT_PENDING, 
-    PAYMENT_APPROVED, 
-    PAYMENT_REJECTED, 
-    IN_PROCESS, 
-    SHIPPED, 
-    DELIVERED, 
+    INITIAL,
+    PAYMENT_PENDING,
+    PAYMENT_APPROVED,
+    PAYMENT_REJECTED,
+    IN_PROCESS,
+    SHIPPED,
+    DELIVERED,
     CANCELLED
 }
 
 // 事件枚举
 public enum OrderEvents {
-    PAY, 
-    PAYMENT_APPROVE, 
-    PAYMENT_REJECT, 
-    PROCESS, 
-    SHIP, 
-    DELIVER, 
+    PAY,
+    PAYMENT_APPROVE,
+    PAYMENT_REJECT,
+    PROCESS,
+    SHIP,
+    DELIVER,
     CANCEL
 }
 
@@ -363,7 +363,7 @@ public class OrderStateMachineFactoryConfig extends StateMachineConfigurerAdapte
         return new StateMachineListenerAdapter<OrderStates, OrderEvents>() {
             @Override
             public void stateChanged(State<OrderStates, OrderEvents> from, State<OrderStates, OrderEvents> to) {
-                System.out.println("Order state changed from " + 
+                System.out.println("Order state changed from " +
                     (from != null ? from.getId() : "null") + " to " + to.getId());
             }
         };
@@ -490,8 +490,8 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
     @Bean
     public Action<TicketStates, TicketEvents> logAction() {
         return context -> {
-            System.out.println("Transitioning from " + 
-                context.getSource().getId() + " to " + 
+            System.out.println("Transitioning from " +
+                context.getSource().getId() + " to " +
                 context.getTarget().getId());
         };
     }
@@ -550,17 +550,17 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
    ```java
    @Component
    public class StateMachinePool {
-       
+
        private final StateMachineFactory<String, String> factory;
        private final Queue<StateMachine<String, String>> pool = new ConcurrentLinkedQueue<>();
        private final int maxSize = 20;
-       
+
        @Autowired
        public StateMachinePool(StateMachineFactory<String, String> factory) {
            this.factory = factory;
            initializePool();
        }
-       
+
        private void initializePool() {
            for (int i = 0; i < maxSize; i++) {
                StateMachine<String, String> machine = factory.getStateMachine("pooled-" + i);
@@ -568,7 +568,7 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
                pool.offer(machine);
            }
        }
-       
+
        public StateMachine<String, String> borrowMachine() {
            StateMachine<String, String> machine = pool.poll();
            if (machine == null) {
@@ -577,7 +577,7 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
            }
            return machine;
        }
-       
+
        public void returnMachine(StateMachine<String, String> machine) {
            if (pool.size() < maxSize) {
                pool.offer(machine);
@@ -594,7 +594,7 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
    @Configuration
    @EnableAsync
    public class AsyncConfig implements AsyncConfigurer {
-       
+
        @Override
        public Executor getAsyncExecutor() {
            ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -606,10 +606,10 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
            return executor;
        }
    }
-   
+
    @Service
    public class AsyncStateMachineService {
-       
+
        @Async
        public CompletableFuture<Boolean> processAsync(String machineId, String event) {
            // 异步处理状态机事件
@@ -627,7 +627,7 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
    public StateMachineMonitor<String, String> stateMachineMonitor(MeterRegistry meterRegistry) {
        return new StateMachineMonitor<String, String>() {
            @Override
-           public void transition(StateMachine<String, String> stateMachine, 
+           public void transition(StateMachine<String, String> stateMachine,
                                 Transition<String, String> transition, long duration) {
                Timer.builder("statemachine.transition.duration")
                    .tag("source", transition.getSource().getId())
@@ -635,9 +635,9 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
                    .register(meterRegistry)
                    .record(duration, TimeUnit.MILLISECONDS);
            }
-           
+
            @Override
-           public void action(StateMachine<String, String> stateMachine, 
+           public void action(StateMachine<String, String> stateMachine,
                              Action<String, String> action, long duration) {
                Timer.builder("statemachine.action.duration")
                    .register(meterRegistry)
@@ -657,16 +657,16 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
            public void eventNotAccepted(Message<String> event) {
                log.warn("Event not accepted: {}", event.getPayload());
            }
-           
+
            @Override
            public void stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
                log.error("State machine error", exception);
            }
-           
+
            @Override
            public void stateChanged(State<String, String> from, State<String, String> to) {
-               log.info("State changed from {} to {}", 
-                   from == null ? "none" : from.getId(), 
+               log.info("State changed from {} to {}",
+                   from == null ? "none" : from.getId(),
                    to.getId());
            }
        };
@@ -684,29 +684,29 @@ public class TicketStateMachineConfig extends StateMachineConfigurerAdapter<Tick
 ```java
 @Component
 public class StateMachineCleanupService {
-    
+
     private final Map<String, WeakReference<StateMachine<?, ?>>> machines = new ConcurrentHashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    
+
     @PostConstruct
     public void init() {
         scheduler.scheduleAtFixedRate(this::cleanup, 1, 1, TimeUnit.HOURS);
     }
-    
+
     public void registerMachine(String id, StateMachine<?, ?> machine) {
         machines.put(id, new WeakReference<>(machine));
     }
-    
+
     private void cleanup() {
         machines.entrySet().removeIf(entry -> {
             StateMachine<?, ?> machine = entry.getValue().get();
             if (machine == null) {
                 return true; // 移除已被垃圾回收的机器
             }
-            
+
             // 检查状态机是否长时间处于空闲状态
             long lastActive = machine.getExtendedState().get("lastActive", Long.class);
-            if (lastActive != null && 
+            if (lastActive != null &&
                 System.currentTimeMillis() - lastActive > TimeUnit.HOURS.toMillis(2)) {
                 machine.stop();
                 return true;
@@ -714,7 +714,7 @@ public class StateMachineCleanupService {
             return false;
         });
     }
-    
+
     @PreDestroy
     public void shutdown() {
         scheduler.shutdown();
@@ -731,18 +731,18 @@ public class StateMachineCleanupService {
 ```java
 @Service
 public class ThreadSafeStateMachineService {
-    
+
     private final StateMachineFactory<String, String> factory;
     private final Map<String, Lock> machineLocks = new ConcurrentHashMap<>();
-    
+
     @Autowired
     public ThreadSafeStateMachineService(StateMachineFactory<String, String> factory) {
         this.factory = factory;
     }
-    
+
     public void processEventThreadSafe(String machineId, String event) {
         Lock lock = machineLocks.computeIfAbsent(machineId, id -> new ReentrantLock());
-        
+
         lock.lock();
         try {
             StateMachine<String, String> machine = factory.getStateMachine(machineId);
@@ -754,7 +754,7 @@ public class ThreadSafeStateMachineService {
             lock.unlock();
         }
     }
-    
+
     public void cleanupMachine(String machineId) {
         Lock lock = machineLocks.remove(machineId);
         if (lock != null) {

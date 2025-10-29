@@ -8,10 +8,10 @@
 
 ### 1.1 核心价值
 
-* **生命周期管理**： 提供 `acquireStateMachine` 和 `releaseStateMachine` 方法，负责状态机的创建、启动、停止和销毁。
-* **状态持久化**： 通过与 `StateMachinePersister` 集成，自动处理状态的保存与恢复，确保状态机在重启或分布式环境中的状态一致性。
-* **实例池化与缓存**： 可以有效减少频繁创建和销毁状态机所带来的性能开销。
-* **线程安全访问**： 为多线程环境下的状态机访问提供安全保证。
+- **生命周期管理**： 提供 `acquireStateMachine` 和 `releaseStateMachine` 方法，负责状态机的创建、启动、停止和销毁。
+- **状态持久化**： 通过与 `StateMachinePersister` 集成，自动处理状态的保存与恢复，确保状态机在重启或分布式环境中的状态一致性。
+- **实例池化与缓存**： 可以有效减少频繁创建和销毁状态机所带来的性能开销。
+- **线程安全访问**： 为多线程环境下的状态机访问提供安全保证。
 
 ### 1.2 核心接口
 
@@ -26,9 +26,9 @@ public interface StateMachineService<S, E> {
 }
 ```
 
-* `acquireStateMachine(String machineId)`: 获取或创建一个与指定 `machineId` 关联的状态机实例，并自动启动它。
-* `acquireStateMachine(String machineId, boolean start)`: 同上，但可通过 `start` 参数控制是否自动启动。
-* `releaseStateMachine(String machineId)`: 释放（停止）与指定 `machineId` 关联的状态机，并将其从服务中移除。
+- `acquireStateMachine(String machineId)`: 获取或创建一个与指定 `machineId` 关联的状态机实例，并自动启动它。
+- `acquireStateMachine(String machineId, boolean start)`: 同上，但可通过 `start` 参数控制是否自动启动。
+- `releaseStateMachine(String machineId)`: 释放（停止）与指定 `machineId` 关联的状态机，并将其从服务中移除。
 
 Spring 提供了该接口的默认实现：`DefaultStateMachineService`。
 
@@ -42,15 +42,15 @@ Spring 提供了该接口的默认实现：`DefaultStateMachineService`。
 ### 2.1 工作原理
 
 1. **获取状态机 (Acquire)**：
-    * 服务内部维护了一个 `Map<String, StateMachine<S, E>>` 来缓存状态机实例。
-    * 当调用 `acquireStateMachine(machineId)` 时，它首先检查缓存中是否已存在该 `machineId` 对应的状态机。
-    * **如果存在**： 直接返回缓存的状态机实例。
-    * **如果不存在**： 使用 `StateMachineFactory` 创建一个新的状态机。如果配置了 `StateMachinePersister`，则会调用 `persister.restore()` 方法尝试从持久化存储（如数据库、Redis）中恢复该状态机之前的状态。最后，启动状态机并将其放入缓存。
+   - 服务内部维护了一个 `Map<String, StateMachine<S, E>>` 来缓存状态机实例。
+   - 当调用 `acquireStateMachine(machineId)` 时，它首先检查缓存中是否已存在该 `machineId` 对应的状态机。
+   - **如果存在**： 直接返回缓存的状态机实例。
+   - **如果不存在**： 使用 `StateMachineFactory` 创建一个新的状态机。如果配置了 `StateMachinePersister`，则会调用 `persister.restore()` 方法尝试从持久化存储（如数据库、Redis）中恢复该状态机之前的状态。最后，启动状态机并将其放入缓存。
 2. **释放状态机 (Release)**：
-    * 当调用 `releaseStateMachine(machineId)` 时，服务从缓存中查找对应的状态机。
-    * 如果找到，首先调用 `StateMachine.stop()` 停止它。
-    * 如果配置了 `StateMachinePersister`，则会调用 `persister.persist()` 方法将当前状态持久化到存储中。
-    * 最后，将该状态机实例从缓存中移除。
+   - 当调用 `releaseStateMachine(machineId)` 时，服务从缓存中查找对应的状态机。
+   - 如果找到，首先调用 `StateMachine.stop()` 停止它。
+   - 如果配置了 `StateMachinePersister`，则会调用 `persister.persist()` 方法将当前状态持久化到存储中。
+   - 最后，将该状态机实例从缓存中移除。
 
 ## 3. 配置与使用方法
 
@@ -142,7 +142,7 @@ public class OrderService {
             stateMachine.sendEvent(Events.E1);
             // ... 一些业务逻辑
             stateMachine.sendEvent(Events.E2);
-            
+
             // 检查当前状态
             if (stateMachine.getState().getId() == States.S2) {
                 stateMachine.sendEvent(Events.EF);
@@ -188,7 +188,7 @@ public class PersistenceConfig {
             JpaStateMachineRepository repository) {
         return new JpaPersistingStateMachineInterceptor<>(repository);
     }
-    
+
     // 配置 H2 数据库（Spring Boot 通常会自动配置）
     @Bean
     public DataSource dataSource() {
@@ -226,31 +226,31 @@ public class ServiceConfig {
 
 完成上述配置后，`StateMachineService` 的行为将发生改变：
 
-* **`acquireStateMachine(orderId)`**： 会首先检查 JPA 仓库中是否存在 `orderId` 对应的持久化状态。如果存在，则创建一个新状态机并将其状态恢复至最新；如果不存在，则创建并初始化一个新状态机。
-* **`releaseStateMachine(orderId)`**： 在停止状态机后，会自动调用 `persist` 方法，将当前状态机的完整上下文（包括状态、扩展变量等）保存到数据库中。
+- **`acquireStateMachine(orderId)`**： 会首先检查 JPA 仓库中是否存在 `orderId` 对应的持久化状态。如果存在，则创建一个新状态机并将其状态恢复至最新；如果不存在，则创建并初始化一个新状态机。
+- **`releaseStateMachine(orderId)`**： 在停止状态机后，会自动调用 `persist` 方法，将当前状态机的完整上下文（包括状态、扩展变量等）保存到数据库中。
 
 这样，即使应用重启，通过相同的 `orderId` 获取状态机，也能恢复到之前的状态，实现了有状态业务流程的持久化。
 
 ## 5. 最佳实践
 
 1. **精心设计 `machineId`**：
-    * `machineId` 是状态机的唯一标识，应使用业务实体的唯一ID，如 `订单ID`、`用户ID_流程类型` 等。
-    * 确保其唯一性，避免不同业务实例的状态机发生冲突。
+   - `machineId` 是状态机的唯一标识，应使用业务实体的唯一ID，如 `订单ID`、`用户ID_流程类型` 等。
+   - 确保其唯一性，避免不同业务实例的状态机发生冲突。
 
 2. **谨慎使用 `release`**：
-    * `release` 会停止并移除状态机。对于需要频繁访问的长时间业务流程，避免过早释放，以减少重复的持久化读写操作。
-    * 可以考虑使用定时任务或根据业务活跃度策略性地释放闲置的状态机，防止内存泄漏。
+   - `release` 会停止并移除状态机。对于需要频繁访问的长时间业务流程，避免过早释放，以减少重复的持久化读写操作。
+   - 可以考虑使用定时任务或根据业务活跃度策略性地释放闲置的状态机，防止内存泄漏。
 
 3. **处理并发**：
-    * `DefaultStateMachineService` 本身是线程安全的。
-    * 然而，对单个 `StateMachine` 实例的操作（如 `sendEvent`）**不是线程安全的**。确保通过 `machineId` 获取到的状态机实例在单个线程中操作，或在外层使用同步机制（如 `synchronized` 块或分布式锁）。
+   - `DefaultStateMachineService` 本身是线程安全的。
+   - 然而，对单个 `StateMachine` 实例的操作（如 `sendEvent`）**不是线程安全的**。确保通过 `machineId` 获取到的状态机实例在单个线程中操作，或在外层使用同步机制（如 `synchronized` 块或分布式锁）。
 
 4. **监控与错误处理**：
-    * 状态机的持久化和恢复操作可能失败（如网络、数据库问题）。务必在代码中添加适当的异常处理（`try-catch`）和日志记录。
-    * 考虑使用 `StateMachineListener` 来监控状态机的生命周期事件和错误。
+   - 状态机的持久化和恢复操作可能失败（如网络、数据库问题）。务必在代码中添加适当的异常处理（`try-catch`）和日志记录。
+   - 考虑使用 `StateMachineListener` 来监控状态机的生命周期事件和错误。
 
 5. **性能考量**：
-    * 状态持久化（尤其是复杂的上下文）是 I/O 操作，有性能成本。在高并发场景下，需要评估数据库或 Redis 的负载，必要时进行性能调优（如使用缓存、异步持久化等）。
+   - 状态持久化（尤其是复杂的上下文）是 I/O 操作，有性能成本。在高并发场景下，需要评估数据库或 Redis 的负载，必要时进行性能调优（如使用缓存、异步持久化等）。
 
 ## 6. 总结
 

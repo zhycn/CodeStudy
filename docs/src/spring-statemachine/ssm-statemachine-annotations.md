@@ -104,14 +104,14 @@ public void onEventNotAccepted() {
 @EnableStateMachine
 @EnableWithStateMachine
 public class Config extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<String, String> config) throws Exception {
         config
             .withConfiguration()
             .autoStartup(true);
     }
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
         states
@@ -120,7 +120,7 @@ public class Config extends StateMachineConfigurerAdapter<String, String> {
             .state("S2")
             .state("S3");
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -143,17 +143,17 @@ public class Config extends StateMachineConfigurerAdapter<String, String> {
 @Component
 @WithStateMachine
 public class MyStateMachineListener {
-    
+
     @OnTransition
     public void anyTransition() {
         System.out.println("Transition occurred");
     }
-    
+
     @OnTransition(source = "S1", target = "S2")
     public void fromS1ToS2() {
         System.out.println("Transition from S1 to S2");
     }
-    
+
     @OnStateChanged(source = "S1", target = "S2")
     public void stateChangeFromS1ToS2() {
         System.out.println("State changed from S1 to S2");
@@ -168,27 +168,27 @@ public class MyStateMachineListener {
 ```java
 @WithStateMachine
 public class ContextAwareListener {
-    
+
     @OnTransition
     public void onTransition(StateContext<String, String> context) {
         // 获取消息头
         Map<String, Object> headers = context.getMessage().getHeaders();
-        
+
         // 获取扩展状态
         ExtendedState extendedState = context.getExtendedState();
-        
+
         // 获取状态机实例
         StateMachine<String, String> stateMachine = context.getStateMachine();
-        
+
         // 获取异常信息（如果有）
         Exception exception = context.getException();
     }
-    
+
     @OnTransition
     public void onTransitionWithHeaders(@EventHeaders Map<String, Object> headers) {
         // 直接获取事件头信息
     }
-    
+
     @OnTransition
     public void onTransitionWithExtendedState(ExtendedState extendedState) {
         // 直接获取扩展状态
@@ -219,7 +219,7 @@ public enum Events {
 
 @WithStateMachine
 public class TypedSafeListener {
-    
+
     @StatesOnTransition(source = States.S1, target = States.S2)
     public void fromS1ToS2() {
         System.out.println("Transition from S1 to S2");
@@ -238,12 +238,12 @@ public class TypedSafeListener {
 @Component
 @WithStateMachine(id = "orderStateMachine")
 public class OrderStateListener {
-    
+
     @OnTransition(source = "CREATED", target = "PAID")
     public void onOrderPaid() {
         System.out.println("Order paid, sending confirmation email");
     }
-    
+
     @OnTransition(source = "PAID", target = "SHIPPED")
     public void onOrderShipped() {
         System.out.println("Order shipped, updating inventory");
@@ -254,7 +254,7 @@ public class OrderStateListener {
 @Component
 @WithStateMachine(id = "paymentStateMachine")
 public class PaymentStateListener {
-    
+
     @OnTransition(source = "PENDING", target = "COMPLETED")
     public void onPaymentCompleted() {
         System.out.println("Payment completed, processing order");
@@ -269,13 +269,13 @@ public class PaymentStateListener {
 ```java
 @WithStateMachine
 public class ExceptionHandlingListener {
-    
+
     @OnStateMachineError
     public void onError(StateMachine<String, String> stateMachine, Exception exception) {
         System.err.println("State machine error: " + exception.getMessage());
         // 记录日志、发送警报等
     }
-    
+
     @OnTransition
     public void onTransition(StateContext<String, String> context) {
         try {
@@ -294,14 +294,14 @@ public class ExceptionHandlingListener {
 ```java
 @WithStateMachine
 public class OptimizedListener {
-    
+
     @Async // 使用异步处理
     @OnTransition(source = "S1", target = "S2")
     public void fromS1ToS2() {
         // 异步执行耗时操作
         processBackgroundTask();
     }
-    
+
     private void processBackgroundTask() {
         // 耗时操作
     }
@@ -314,7 +314,7 @@ public class OptimizedListener {
 @Configuration
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
-    
+
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -334,17 +334,17 @@ public class AsyncConfig implements AsyncConfigurer {
 ```java
 @SpringBootTest
 public class StateMachineListenerTest {
-    
+
     @Autowired
     private StateMachine<String, String> stateMachine;
-    
+
     @Autowired
     private MyStateMachineListener listener;
-    
+
     @Test
     public void testTransitionListener() {
         stateMachine.start();
-        
+
         // 添加测试监听器来验证注解方法被调用
         StateMachineListener<String, String> testListener = new StateMachineListenerAdapter<String, String>() {
             @Override
@@ -355,10 +355,10 @@ public class StateMachineListenerTest {
                 }
             }
         };
-        
+
         stateMachine.addStateListener(testListener);
         stateMachine.sendEvent("E1");
-        
+
         stateMachine.removeStateListener(testListener);
         stateMachine.stop();
     }
@@ -381,29 +381,29 @@ public enum OrderEvents {
 @Component
 @WithStateMachine(id = "orderStateMachine")
 public class OrderProcessListener {
-    
+
     @OnTransition(source = "CREATED", target = "PAID")
     public void onPaymentReceived(StateContext<OrderStates, OrderEvents> context) {
         String orderId = (String) context.getMessage().getHeaders().get("orderId");
         System.out.println("Order " + orderId + " paid successfully");
-        
+
         // 更新订单状态
         orderService.updateOrderStatus(orderId, OrderStates.PAID);
     }
-    
+
     @OnTransition(source = "PAID", target = "SHIPPED")
     public void onOrderShipped(StateContext<OrderStates, OrderEvents> context) {
         String orderId = (String) context.getMessage().getHeaders().get("orderId");
         System.out.println("Order " + orderId + " shipped");
-        
+
         // 发送发货通知
         notificationService.sendShippingNotification(orderId);
     }
-    
+
     @OnEventNotAccepted
     public void onEventNotAccepted(StateContext<OrderStates, OrderEvents> context) {
         System.out.println("Event " + context.getEvent() + " not accepted in current state");
-        
+
         // 处理无效事件，如已取消的订单不能发货
         if (context.getStateMachine().getState().getId() == OrderStates.CANCELLED) {
             throw new IllegalStateException("Cannot process event for cancelled order");
@@ -426,34 +426,34 @@ public enum ApprovalEvents {
 @Component
 @WithStateMachine(id = "approvalStateMachine")
 public class ApprovalWorkflowListener {
-    
+
     @OnStateEntry(source = "PENDING_APPROVAL")
     public void onPendingApproval(StateContext<ApprovalStates, ApprovalEvents> context) {
         String documentId = (String) context.getMessage().getHeaders().get("documentId");
-        
+
         // 通知审批人
         approvalService.notifyApprovers(documentId);
     }
-    
+
     @OnTransition(source = "PENDING_APPROVAL", target = "APPROVED")
     public void onApproved(StateContext<ApprovalStates, ApprovalEvents> context) {
         String documentId = (String) context.getMessage().getHeaders().get("documentId");
-        
+
         // 记录审批结果
         auditService.logApproval(documentId, "APPROVED");
-        
+
         // 执行后续操作
         workflowService.completeApproval(documentId);
     }
-    
+
     @OnTransition(source = "PENDING_APPROVAL", target = "REJECTED")
     public void onRejected(StateContext<ApprovalStates, ApprovalEvents> context) {
         String documentId = (String) context.getMessage().getHeaders().get("documentId");
         String reason = (String) context.getMessage().getHeaders().get("rejectionReason");
-        
+
         // 记录拒绝原因
         auditService.logRejection(documentId, reason);
-        
+
         // 通知申请人
         notificationService.notifyRejection(documentId, reason);
     }
@@ -468,10 +468,10 @@ public class ApprovalWorkflowListener {
 @Configuration
 @EnableStateMachine
 public class DistributedStateMachineConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Autowired
     private StateMachineRuntimePersister<String, String, String> stateMachineRuntimePersister;
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<String, String> config) throws Exception {
         config
@@ -483,17 +483,17 @@ public class DistributedStateMachineConfig extends StateMachineConfigurerAdapter
 @Component
 @WithStateMachine
 public class DistributedStateListener {
-    
+
     @OnTransition
     public void onDistributedTransition(StateContext<String, String> context) {
         // 在分布式环境中，确保操作是幂等的
         String transactionId = (String) context.getMessage().getHeaders().get("transactionId");
-        
+
         if (!distributedLockService.tryLock(transactionId)) {
             // 另一个节点已经处理了这个转换
             return;
         }
-        
+
         try {
             // 处理业务逻辑
             processBusinessLogic(context);
@@ -501,7 +501,7 @@ public class DistributedStateListener {
             distributedLockService.unlock(transactionId);
         }
     }
-    
+
     private void processBusinessLogic(StateContext<String, String> context) {
         // 实现业务逻辑
     }
@@ -546,13 +546,13 @@ public class MyListener {
 ```java
 @WithStateMachine
 public class OrderedListener {
-    
+
     @Order(1)
     @OnTransition
     public void firstListener() {
         System.out.println("This executes first");
     }
-    
+
     @Order(2)
     @OnTransition
     public void secondListener() {
@@ -574,14 +574,14 @@ public class OrderedListener {
 ```java
 @WithStateMachine
 public class PerformanceOptimizedListener {
-    
+
     @Async
     @OnTransition
     public void asyncProcessing(StateContext<String, String> context) {
         // 异步处理耗时操作
         heavyProcessingService.process(context);
     }
-    
+
     @OnTransition
     public void batchProcessing(StateContext<String, String> context) {
         // 批量处理状态转换
@@ -606,37 +606,37 @@ Spring Statemachine 的注解功能提供了强大而灵活的方式来定义和
 
 ### 注解列表
 
-| 注解名称 | 用途 | 示例 |
-|---------|------|------|
-| `@EnableStateMachine` | 用于启用状态机配置，通常用于配置类上（如果有多个状态机配置，应指定不同的名称） | `@Configuration @EnableStateMachine public class StateMachineConfig extends StateMachineConfigurerAdapter<String, String> {}` |
-| `@EnableWithStateMachine` | 用于启用状态机注解支持 | `@Configuration @EnableStateMachine @EnableWithStateMachine public class Config extends StateMachineConfigurerAdapter<String, String> {}` |
-| `@EnableStateMachineFactory` | 用于创建状态机工厂，适合需要多个状态机实例的场景 | `@Configuration @EnableStateMachineFactory public class StateMachineFactoryConfig extends StateMachineConfigurerAdapter<String, String> {}` |
-| `@WithStateMachine` | 标识类为状态机监听器 | `@WithStateMachine(name = "myStateMachine")` |
-| `@OnTransition` | 监听状态转换事件 | `@OnTransition(source = "S1", target = "S2")` |
-| `@OnTransitionStart` | 监听状态转换开始事件 | `@OnTransitionStart` |
-| `@OnTransitionEnd` | 监听状态转换结束事件 | `@OnTransitionEnd` |
-| `@OnStateChanged` | 监听状态变化事件 | `@OnStateChanged(source = "S1", target = "S2")` |
-| `@OnStateEntry` | 监听状态进入事件 | `@OnStateEntry(source = "S1")` |
-| `@OnStateExit` | 监听状态退出事件 | `@OnStateExit(source = "S1")` |
-| `@OnEventNotAccepted` | 监听事件被拒绝的情况 | `@OnEventNotAccepted(event = "E1")` |
-| `@OnStateMachineStart` | 监听状态机启动事件 | `@OnStateMachineStart` |
-| `@OnStateMachineStop` | 监听状态机停止事件 | `@OnStateMachineStop` |
-| `@OnStateMachineError` | 监听状态机错误事件 | `@OnStateMachineError` |
-| `@OnExtendedStateChanged` | 监听扩展状态变量变化 | `@OnExtendedStateChanged(key = "myVariable")` |
-| `@EventHeaders` | 获取事件头信息 |`@OnTransition public void method(@EventHeaders Map headers)` |
-| `@EventHeader` | 获取特定事件头 | `@OnTransition public void method(@EventHeader("myHeader") String value)` |
+| 注解名称                     | 用途                                                                           | 示例                                                                                                                                        |
+| ---------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@EnableStateMachine`        | 用于启用状态机配置，通常用于配置类上（如果有多个状态机配置，应指定不同的名称） | `@Configuration @EnableStateMachine public class StateMachineConfig extends StateMachineConfigurerAdapter<String, String> {}`               |
+| `@EnableWithStateMachine`    | 用于启用状态机注解支持                                                         | `@Configuration @EnableStateMachine @EnableWithStateMachine public class Config extends StateMachineConfigurerAdapter<String, String> {}`   |
+| `@EnableStateMachineFactory` | 用于创建状态机工厂，适合需要多个状态机实例的场景                               | `@Configuration @EnableStateMachineFactory public class StateMachineFactoryConfig extends StateMachineConfigurerAdapter<String, String> {}` |
+| `@WithStateMachine`          | 标识类为状态机监听器                                                           | `@WithStateMachine(name = "myStateMachine")`                                                                                                |
+| `@OnTransition`              | 监听状态转换事件                                                               | `@OnTransition(source = "S1", target = "S2")`                                                                                               |
+| `@OnTransitionStart`         | 监听状态转换开始事件                                                           | `@OnTransitionStart`                                                                                                                        |
+| `@OnTransitionEnd`           | 监听状态转换结束事件                                                           | `@OnTransitionEnd`                                                                                                                          |
+| `@OnStateChanged`            | 监听状态变化事件                                                               | `@OnStateChanged(source = "S1", target = "S2")`                                                                                             |
+| `@OnStateEntry`              | 监听状态进入事件                                                               | `@OnStateEntry(source = "S1")`                                                                                                              |
+| `@OnStateExit`               | 监听状态退出事件                                                               | `@OnStateExit(source = "S1")`                                                                                                               |
+| `@OnEventNotAccepted`        | 监听事件被拒绝的情况                                                           | `@OnEventNotAccepted(event = "E1")`                                                                                                         |
+| `@OnStateMachineStart`       | 监听状态机启动事件                                                             | `@OnStateMachineStart`                                                                                                                      |
+| `@OnStateMachineStop`        | 监听状态机停止事件                                                             | `@OnStateMachineStop`                                                                                                                       |
+| `@OnStateMachineError`       | 监听状态机错误事件                                                             | `@OnStateMachineError`                                                                                                                      |
+| `@OnExtendedStateChanged`    | 监听扩展状态变量变化                                                           | `@OnExtendedStateChanged(key = "myVariable")`                                                                                               |
+| `@EventHeaders`              | 获取事件头信息                                                                 | `@OnTransition public void method(@EventHeaders Map headers)`                                                                               |
+| `@EventHeader`               | 获取特定事件头                                                                 | `@OnTransition public void method(@EventHeader("myHeader") String value)`                                                                   |
 
 ### 方法参数注解
 
-| 参数类型 | 用途 | 示例 |
-|---------|------|------|
-| `StateContext<S, E>` | 获取完整的状态上下文 | `public void method(StateContext<String, String> context)` |
-| `Message<E>` | 获取事件消息 | `public void method(Message<String> message)` |
-| `ExtendedState` | 获取扩展状态 | `public void method(ExtendedState extendedState)` |
-| `StateMachine<S, E>` | 获取状态机实例 | `public void method(StateMachine<String, String> stateMachine)` |
-| `Map<String, Object>` + `@EventHeaders` | 获取所有事件头 | `public void method(@EventHeaders Map<String, Object> headers)` |
-| 特定类型 + `@EventHeader` | 获取特定事件头 | `public void method(@EventHeader("myHeader") String value)` |
-| `Exception` | 获取异常信息 | `public void method(Exception exception)` |
+| 参数类型                                | 用途                 | 示例                                                            |
+| --------------------------------------- | -------------------- | --------------------------------------------------------------- |
+| `StateContext<S, E>`                    | 获取完整的状态上下文 | `public void method(StateContext<String, String> context)`      |
+| `Message<E>`                            | 获取事件消息         | `public void method(Message<String> message)`                   |
+| `ExtendedState`                         | 获取扩展状态         | `public void method(ExtendedState extendedState)`               |
+| `StateMachine<S, E>`                    | 获取状态机实例       | `public void method(StateMachine<String, String> stateMachine)` |
+| `Map<String, Object>` + `@EventHeaders` | 获取所有事件头       | `public void method(@EventHeaders Map<String, Object> headers)` |
+| 特定类型 + `@EventHeader`               | 获取特定事件头       | `public void method(@EventHeader("myHeader") String value)`     |
+| `Exception`                             | 获取异常信息         | `public void method(Exception exception)`                       |
 
 ### 使用示例
 

@@ -14,12 +14,12 @@
 
 Spring Boot 生态中有多种验证码实现方案，以下是主流技术选型对比：
 
-| 验证码库 | 特点 | 适用场景 |
-|---------|------|---------|
-| **Kaptcha** | 配置丰富、灵活性高、传统文本验证码 | 传统Web应用、需要高度自定义验证码样式的场景 |
-| **Hutool Captcha** | 轻量级、API简洁、集成简单 | 快速开发、中小型项目、基础验证码需求 |
-| **EasyCaptcha** | 支持多种类型（GIF、中文、算术） | 需要多样化验证码形式的项目 |
-| **anji-captcha** | 支持滑块、点选等交互式验证码 | 现代Web应用、追求更好用户体验的场景 |
+| 验证码库           | 特点                               | 适用场景                                    |
+| ------------------ | ---------------------------------- | ------------------------------------------- |
+| **Kaptcha**        | 配置丰富、灵活性高、传统文本验证码 | 传统Web应用、需要高度自定义验证码样式的场景 |
+| **Hutool Captcha** | 轻量级、API简洁、集成简单          | 快速开发、中小型项目、基础验证码需求        |
+| **EasyCaptcha**    | 支持多种类型（GIF、中文、算术）    | 需要多样化验证码形式的项目                  |
+| **anji-captcha**   | 支持滑块、点选等交互式验证码       | 现代Web应用、追求更好用户体验的场景         |
 
 ### 2.2 选型考量因素
 
@@ -40,7 +40,7 @@ Spring Boot 生态中有多种验证码实现方案，以下是主流技术选�
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    
+
     <!-- Hutool 工具库 -->
     <dependency>
         <groupId>cn.hutool</groupId>
@@ -71,26 +71,26 @@ public class CaptchaProperties {
     private int width;
     private int height;
     private Session session = new Session();
-    
+
     public static class Session {
         private String key;
         private String time;
-        
+
         // Getter和Setter方法
         public String getKey() { return key; }
         public void setKey(String key) { this.key = key; }
-        
+
         public String getTime() { return time; }
         public void setTime(String time) { this.time = time; }
     }
-    
+
     // Getter和Setter方法
     public int getWidth() { return width; }
     public void setWidth(int width) { this.width = width; }
-    
+
     public int getHeight() { return height; }
     public void setHeight(int height) { this.height = height; }
-    
+
     public Session getSession() { return session; }
     public void setSession(Session session) { this.session = session; }
 }
@@ -101,44 +101,44 @@ public class CaptchaProperties {
 ```java
 @RestController
 public class CaptchaController {
-    
+
     private static final long VALID_TIMEOUT = 60 * 1000; // 1分钟有效期
-    
+
     @Autowired
     private CaptchaProperties captchaProperties;
-    
+
     @GetMapping("/getCaptcha")
     public void getCaptcha(HttpSession session, HttpServletResponse response) throws IOException {
         // 创建线段干扰的验证码
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(
-            captchaProperties.getWidth(), 
+            captchaProperties.getWidth(),
             captchaProperties.getHeight()
         );
-        
+
         // 获取验证码文本
         String code = lineCaptcha.getCode();
-        
+
         // 存储验证码和生成时间到Session
         session.setAttribute(captchaProperties.getSession().getKey(), code);
         session.setAttribute(captchaProperties.getSession().getTime(), System.currentTimeMillis());
-        
+
         // 设置响应头
         response.setContentType("image/jpeg");
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setDateHeader("Expires", 0);
-        
+
         // 输出图片流
         lineCaptcha.write(response.getOutputStream());
     }
-    
+
     @PostMapping("/verify")
     public ResponseEntity<Map<String, Object>> verifyCaptcha(
-            @RequestParam String code, 
+            @RequestParam String code,
             HttpSession session) {
-        
+
         Map<String, Object> result = new HashMap<>();
-        
+
         // 从Session中获取验证码和生成时间
         String storedCode = (String) session.getAttribute(
             captchaProperties.getSession().getKey()
@@ -146,38 +146,38 @@ public class CaptchaController {
         Long generateTime = (Long) session.getAttribute(
             captchaProperties.getSession().getTime()
         );
-        
+
         // 检查验证码是否存在
         if (storedCode == null) {
             result.put("success", false);
             result.put("message", "验证码已过期");
             return ResponseEntity.ok(result);
         }
-        
+
         // 检查验证码是否过期
         if (System.currentTimeMillis() - generateTime > VALID_TIMEOUT) {
             // 清除过期验证码
             session.removeAttribute(captchaProperties.getSession().getKey());
             session.removeAttribute(captchaProperties.getSession().getTime());
-            
+
             result.put("success", false);
             result.put("message", "验证码已过期");
             return ResponseEntity.ok(result);
         }
-        
+
         // 不区分大小写比对验证码
         if (storedCode.equalsIgnoreCase(code.trim())) {
             // 验证成功后清除验证码
             session.removeAttribute(captchaProperties.getSession().getKey());
             session.removeAttribute(captchaProperties.getSession().getTime());
-            
+
             result.put("success", true);
             result.put("message", "验证码正确");
         } else {
             result.put("success", false);
             result.put("message", "验证码错误");
         }
-        
+
         return ResponseEntity.ok(result);
     }
 }
@@ -200,35 +200,35 @@ public class CaptchaController {
 ```java
 @Configuration
 public class KaptchaConfig {
-    
+
     @Bean
     public DefaultKaptcha captchaProducer() {
         DefaultKaptcha captchaProducer = new DefaultKaptcha();
         Properties properties = new Properties();
-        
+
         // 图片样式配置
         properties.setProperty("kaptcha.image.width", "150");
         properties.setProperty("kaptcha.image.height", "50");
         properties.setProperty("kaptcha.border", "no");
-        
+
         // 文本配置
         properties.setProperty("kaptcha.textproducer.char.length", "4");
         properties.setProperty("kaptcha.textproducer.char.space", "3");
         properties.setProperty("kaptcha.textproducer.font.names", "Arial,Courier");
         properties.setProperty("kaptcha.textproducer.font.color", "blue");
         properties.setProperty("kaptcha.textproducer.font.size", "32");
-        
+
         // 干扰配置
         properties.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.DefaultNoise");
         properties.setProperty("kaptcha.noise.color", "gray");
-        
+
         // 背景配置
         properties.setProperty("kaptcha.background.clear.from", "white");
         properties.setProperty("kaptcha.background.clear.to", "white");
-        
+
         // 文字渲染器
         properties.setProperty("kaptcha.word.impl", "com.google.code.kaptcha.text.impl.DefaultWordRenderer");
-        
+
         Config config = new Config(properties);
         captchaProducer.setConfig(config);
         return captchaProducer;
@@ -242,12 +242,12 @@ public class KaptchaConfig {
 @RestController
 @RequestMapping("/api")
 public class CaptchaController {
-    
+
     @Autowired
     private DefaultKaptcha captchaProducer;
-    
+
     @GetMapping("/captcha")
-    public void generateCaptcha(HttpServletRequest request, 
+    public void generateCaptcha(HttpServletRequest request,
                                HttpServletResponse response) throws IOException {
         // 设置响应头
         response.setDateHeader("Expires", 0);
@@ -255,20 +255,20 @@ public class CaptchaController {
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
         response.setHeader("Pragma", "no-cache");
         response.setContentType("image/jpeg");
-        
+
         // 生成验证码文本
         String captchaText = captchaProducer.createText();
-        
+
         // 存入Session
         HttpSession session = request.getSession();
         session.setAttribute("captchaText", captchaText);
         session.setAttribute("captchaTime", System.currentTimeMillis());
-        
+
         // 生成图片并输出
         BufferedImage captchaImage = captchaProducer.createImage(captchaText);
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(captchaImage, "jpg", out);
-        
+
         try {
             out.flush();
         } finally {
@@ -285,33 +285,33 @@ public class CaptchaController {
 ```java
 @Service
 public class SmsCaptchaService {
-    
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    
+
     // 短信客户端（以阿里云为例）
     @Autowired
     private com.aliyun.dysmsapi20170525.Client smsClient;
-    
+
     private static final String SMS_CAPTCHA_PREFIX = "SMS_CAPTCHA:";
     private static final long SMS_CAPTCHA_EXPIRE = 5 * 60; // 5分钟
-    
+
     public boolean sendSmsCaptcha(String phoneNumber) {
         // 生成随机验证码
         String captcha = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
-        
+
         // 存储到Redis，并设置过期时间
         String key = SMS_CAPTCHA_PREFIX + phoneNumber;
         redisTemplate.opsForValue().set(key, captcha, SMS_CAPTCHA_EXPIRE, TimeUnit.SECONDS);
-        
+
         // 发送短信（实际实现需要接入短信服务商API）
         return sendSms(phoneNumber, captcha);
     }
-    
+
     public boolean verifySmsCaptcha(String phoneNumber, String captcha) {
         String key = SMS_CAPTCHA_PREFIX + phoneNumber;
         String storedCaptcha = redisTemplate.opsForValue().get(key);
-        
+
         if (storedCaptcha != null && storedCaptcha.equals(captcha)) {
             // 验证成功后删除验证码
             redisTemplate.delete(key);
@@ -319,7 +319,7 @@ public class SmsCaptchaService {
         }
         return false;
     }
-    
+
     private boolean sendSms(String phoneNumber, String captcha) {
         try {
             // 调用短信服务商API
@@ -338,37 +338,37 @@ public class SmsCaptchaService {
 ```java
 @Service
 public class EmailCaptchaService {
-    
+
     @Autowired
     private JavaMailSender mailSender;
-    
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    
+
     @Value("${spring.mail.username}")
     private String fromEmail;
-    
+
     private static final String EMAIL_CAPTCHA_PREFIX = "EMAIL_CAPTCHA:";
     private static final long EMAIL_CAPTCHA_EXPIRE = 10 * 60; // 10分钟
-    
+
     public void sendEmailCaptcha(String email) {
         // 生成验证码
         String captcha = generateCaptcha();
-        
+
         // 存储到Redis
         String key = EMAIL_CAPTCHA_PREFIX + email;
         redisTemplate.opsForValue().set(key, captcha, EMAIL_CAPTCHA_EXPIRE, TimeUnit.SECONDS);
-        
+
         // 发送邮件
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);
         message.setTo(email);
         message.setSubject("您的验证码");
         message.setText("您的验证码是：" + captcha + "，有效期为10分钟。");
-        
+
         mailSender.send(message);
     }
-    
+
     private String generateCaptcha() {
         return String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
     }
@@ -411,7 +411,7 @@ TOTP是一种开放标准，它根据共享密钥和当前时间生成一次性�
 ```java
 @Service
 public class TotpService {
-    
+
     // TOTP验证码有效期（秒），通常为30秒一个窗口
     private static final int TIME_STEP_SECONDS = 30;
     // 验证码长度
@@ -439,10 +439,10 @@ public class TotpService {
     public String generateCurrentCode(String secretKey) {
         Base32 base32 = new Base32();
         byte[] keyBytes = base32.decode(secretKey);
-        
+
         Instant now = Instant.now();
         long timeStep = now.getEpochSecond() / TIME_STEP_SECONDS;
-        
+
         HmacOneTimePasswordGenerator totp = new HmacOneTimePasswordGenerator(CODE_DIGITS, HmacOneTimePasswordGenerator.TOTP_ALGORITHM_HMAC_SHA1);
         try {
             return totp.generateOneTimePasswordString(keyBytes, timeStep);
@@ -458,7 +458,7 @@ public class TotpService {
         if (secretKey == null || userInputCode == null || userInputCode.length() != CODE_DIGITS) {
             return false;
         }
-        
+
         try {
             Base32 base32 = new Base32();
             byte[] keyBytes = base32.decode(secretKey);
@@ -507,7 +507,7 @@ public class TotpService {
 @RestController
 @RequestMapping("/api/2fa")
 public class TotpController {
-    
+
     @Autowired
     private TotpService totpService;
     // 假设有一个UserService来管理用户信息，包括其TOTP密钥
@@ -524,21 +524,21 @@ public class TotpController {
         String secretKey = totpService.generateSecretKey();
         // 2. 生成OTPAUTH URI
         String otpAuthUri = totpService.generateOtpAuthUri(secretKey, username, "YourAppName");
-        
+
         // 3. 生成二维码图片（Base64）
         String qrCodeBase64 = generateQrCodeBase64(otpAuthUri, 200, 200);
-        
+
         // 4. 将密钥临时保存或与用户状态关联（注意：在用户成功验证第一个代码前，不要最终启用）
         // userService.setTempTotpSecret(username, secretKey);
-        
+
         Map<String, Object> result = new HashMap<>();
         result.put("secretKey", secretKey); // 生产环境中可考虑不返回，让用户只能通过扫码方式获取
         result.put("qrCode", "data:image/png;base64," + qrCodeBase64);
         result.put("message", "请使用身份验证器应用扫描二维码。");
-        
+
         return ResponseEntity.ok(result);
     }
-    
+
     /**
      * 验证用户首次扫描后提供的代码，以确认绑定成功，并正式启用TOTP
      */
@@ -548,7 +548,7 @@ public class TotpController {
         // 从临时存储或用户记录中获取之前生成的密钥
         // String tempSecret = userService.getTempTotpSecret(username);
         String tempSecret = "从存储中获取的密钥"; // 此处为示例，需替换为实际逻辑
-        
+
         if (totpService.verifyCode(tempSecret, code)) {
             // 验证成功，将密钥正式与用户账户绑定，并启用2FA
             // userService.activateTotp(username, tempSecret);
@@ -572,7 +572,7 @@ public class TotpController {
         // 1. 根据用户名从数据库获取用户已激活的TOTP密钥
         // String userTotpSecret = userService.getTotpSecret(username);
         String userTotpSecret = "从数据库获取的用户TOTP密钥"; // 此处为示例，需替换为实际逻辑
-        
+
         if (userTotpSecret == null) {
             // 该用户未启用TOTP
             Map<String, Object> result = new HashMap<>();
@@ -580,7 +580,7 @@ public class TotpController {
             result.put("message", "该账户未启用双因素认证。");
             return ResponseEntity.badRequest().body(result);
         }
-        
+
         if (totpService.verifyCode(userTotpSecret, code)) {
             // TOTP验证成功，完成登录流程（例如，颁发JWT Token）
             Map<String, Object> result = new HashMap<>();
@@ -620,9 +620,9 @@ public class TotpController {
 
 #### 5.3.6 优缺点分析
 
-| 特性 | 说明 |
-| :--- | :--- |
-| **优点** | - **极高的安全性**：不依赖短信网络，避免了SIM卡交换攻击和短信拦截的风险。<br>- **离线工作**：一旦绑定，生成验证码无需网络连接。<br>- **标准化**：被众多认证器应用广泛支持。<br>- **成本低廉**：无需支付短信费用。 |
+| 特性     | 说明                                                                                                                                                                                                                             |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **优点** | - **极高的安全性**：不依赖短信网络，避免了SIM卡交换攻击和短信拦截的风险。<br>- **离线工作**：一旦绑定，生成验证码无需网络连接。<br>- **标准化**：被众多认证器应用广泛支持。<br>- **成本低廉**：无需支付短信费用。                |
 | **缺点** | - **用户体验有门槛**：需要用户安装额外的应用并进行初始配置。<br>- **设备依赖**：如果用户丢失了安装认证器应用的设备，且未备份恢复码，将难以登录。<br>- **时间同步要求**：服务器和用户设备的时间需要大致同步，否则会导致验证失败。 |
 
 ## 6 验证码安全增强实践
@@ -632,23 +632,23 @@ public class TotpController {
 ```java
 @Service
 public class CaptchaSecurityService {
-    
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-    
+
     private static final String CAPTCHA_ATTEMPT_PREFIX = "CAPTCHA_ATTEMPT:";
     private static final int MAX_ATTEMPTS = 5;
     private static final long LOCK_TIME = 15 * 60 * 1000; // 15分钟
-    
+
     public boolean isCaptchaLocked(String key) {
         String lockKey = CAPTCHA_ATTEMPT_PREFIX + key;
         Integer attempts = (Integer) redisTemplate.opsForValue().get(lockKey);
         return attempts != null && attempts >= MAX_ATTEMPTS;
     }
-    
+
     public void recordAttempt(String key, boolean success) {
         String lockKey = CAPTCHA_ATTEMPT_PREFIX + key;
-        
+
         if (success) {
             // 验证成功，清除尝试记录
             redisTemplate.delete(lockKey);
@@ -670,33 +670,33 @@ public class CaptchaSecurityService {
 ```java
 @RestController
 public class SecureCaptchaController {
-    
+
     @Autowired
     private CaptchaService captchaService;
-    
+
     @PostMapping("/secure-captcha")
     public ResponseEntity<Map<String, String>> getSecureCaptcha() {
         // 生成验证码
         SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);
         String verCode = specCaptcha.text().toLowerCase();
-        
+
         // 生成唯一密钥
         String key = UUID.randomUUID().toString();
-        
+
         // 存储到Redis（使用加密键值）
         String encryptedKey = encryptKey(key);
         redisTemplate.opsForValue().set(encryptedKey, verCode, 5, TimeUnit.MINUTES);
-        
+
         // 返回Base64编码的图片和加密密钥
         Map<String, String> result = new HashMap<>();
         result.put("key", key);
         result.put("image", specCaptcha.toBase64());
-        
+
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .body(result);
     }
-    
+
     private String encryptKey(String key) {
         // 实现密钥加密逻辑
         return DigestUtils.md5DigestAsHex(key.getBytes());
@@ -711,16 +711,16 @@ public class SecureCaptchaController {
 ```java
 @Configuration
 public class RedisConfig {
-    
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
-        
+
         // 使用Jackson序列化
-        Jackson2JsonRedisSerializer<Object> serializer = 
+        Jackson2JsonRedisSerializer<Object> serializer =
             new Jackson2JsonRedisSerializer<>(Object.class);
-        
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         mapper.activateDefaultTyping(
@@ -728,48 +728,48 @@ public class RedisConfig {
             ObjectMapper.DefaultTyping.NON_FINAL
         );
         serializer.setObjectMapper(mapper);
-        
+
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(serializer);
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
         template.afterPropertiesSet();
-        
+
         return template;
     }
 }
 
 @Service
 public class DistributedCaptchaService {
-    
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-    
+
     private static final String CAPTCHA_PREFIX = "CAPTCHA:";
-    
+
     public void storeCaptcha(String key, String captcha, long timeout, TimeUnit unit) {
         String redisKey = CAPTCHA_PREFIX + key;
         CaptchaInfo captchaInfo = new CaptchaInfo(captcha, System.currentTimeMillis());
         redisTemplate.opsForValue().set(redisKey, captchaInfo, timeout, unit);
     }
-    
+
     public boolean verifyCaptcha(String key, String inputCaptcha) {
         String redisKey = CAPTCHA_PREFIX + key;
         CaptchaInfo captchaInfo = (CaptchaInfo) redisTemplate.opsForValue().get(redisKey);
-        
+
         if (captchaInfo == null) {
             return false; // 验证码不存在或已过期
         }
-        
+
         // 验证成功后删除
         if (captchaInfo.getCaptcha().equalsIgnoreCase(inputCaptcha.trim())) {
             redisTemplate.delete(redisKey);
             return true;
         }
-        
+
         return false;
     }
-    
+
     @Data
     @AllArgsConstructor
     private static class CaptchaInfo {
@@ -827,11 +827,11 @@ Spring Boot 集成验证码是一个涉及安全、用户体验和系统架构�
 
 ### 方案对比总结
 
-| 特性/方案 | 图形验证码 | 短信验证码 | 邮箱验证码 | 滑动拼图验证码 | **TOTP验证码** |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **安全性** | 中 | 高 | 中高 | 高 | **极高** |
-| **实现复杂度** | 低 | 中 | 中 | 高 | 中高 |
-| **用户体验** | 简单，但可能难辨认 | 直接，但依赖网络 | 可能延迟，需查邮件 | 交互友好，体验佳 | 初始设置稍复杂，后续便捷 |
-| **适用场景** | 简单应用，防脚本 | 高安全性需求，手机验证 | 注册、找回密码等非实时场景 | 现代Web应用，防机器人 | **敏感系统、双因素认证、高安全等级要求** |
-| **成本** | 无 | 有（短信费用） | 无（自建邮件服务器） | 无 | 无 |
-| **是否需要第三方** | 否 | 是（短信服务商） | 否（自建邮件服务器） | 否 | 否（但用户需认证器App） |
+| 特性/方案          | 图形验证码         | 短信验证码             | 邮箱验证码                 | 滑动拼图验证码        | **TOTP验证码**                           |
+| :----------------- | :----------------- | :--------------------- | :------------------------- | :-------------------- | :--------------------------------------- |
+| **安全性**         | 中                 | 高                     | 中高                       | 高                    | **极高**                                 |
+| **实现复杂度**     | 低                 | 中                     | 中                         | 高                    | 中高                                     |
+| **用户体验**       | 简单，但可能难辨认 | 直接，但依赖网络       | 可能延迟，需查邮件         | 交互友好，体验佳      | 初始设置稍复杂，后续便捷                 |
+| **适用场景**       | 简单应用，防脚本   | 高安全性需求，手机验证 | 注册、找回密码等非实时场景 | 现代Web应用，防机器人 | **敏感系统、双因素认证、高安全等级要求** |
+| **成本**           | 无                 | 有（短信费用）         | 无（自建邮件服务器）       | 无                    | 无                                       |
+| **是否需要第三方** | 否                 | 是（短信服务商）       | 否（自建邮件服务器）       | 否                    | 否（但用户需认证器App）                  |

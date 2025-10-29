@@ -23,10 +23,10 @@ author: zhycn
 
 根据触发时机和方式，触发器分为三种主要类型：
 
-| 类型 | 触发时机 | 说明 |
-|------|----------|------|
-| BEFORE 触发器 | 在 DML 语句执行前触发 | 常用于数据验证、条件检查 |
-| AFTER 触发器 | 在 DML 语句执行后触发 | 常用于审计日志、级联操作 |
+| 类型              | 触发时机              | 说明                             |
+| ----------------- | --------------------- | -------------------------------- |
+| BEFORE 触发器     | 在 DML 语句执行前触发 | 常用于数据验证、条件检查         |
+| AFTER 触发器      | 在 DML 语句执行后触发 | 常用于审计日志、级联操作         |
 | INSTEAD OF 触发器 | 替代原始 DML 语句执行 | 主要用于视图更新、复杂操作重定向 |
 
 **触发器执行顺序**对于理解其行为至关重要：
@@ -59,7 +59,7 @@ BEFORE INSERT ON employees
 FOR EACH ROW
 BEGIN
     IF NEW.salary < 1000 OR NEW.salary > 100000 THEN
-        SIGNAL SQLSTATE '45000' 
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = '工资必须在1000-100000范围内';
     END IF;
 END//
@@ -169,11 +169,11 @@ CREATE TRIGGER update_inventory_after_order
 AFTER INSERT ON orders
 FOR EACH ROW
 BEGIN
-    UPDATE inventory 
+    UPDATE inventory
     SET quantity = quantity - NEW.quantity,
         last_restocked = NOW()
     WHERE product_id = NEW.product_id;
-    
+
     -- 当库存低于阈值时记录警告
     IF (SELECT quantity FROM inventory WHERE product_id = NEW.product_id) < 10 THEN
         INSERT INTO inventory_warnings (product_id, message, created_at)
@@ -187,11 +187,11 @@ DELIMITER ;
 
 在触发器内部，可以访问受操作影响的数据行：
 
-| 操作类型 | OLD 值可用性 | NEW 值可用性 |
-|---------|-------------|-------------|
-| INSERT | 不可用 | 包含新插入的数据 |
-| UPDATE | 包含更新前的数据 | 包含更新后的数据 |
-| DELETE | 包含删除前的数据 | 不可用 |
+| 操作类型 | OLD 值可用性     | NEW 值可用性     |
+| -------- | ---------------- | ---------------- |
+| INSERT   | 不可用           | 包含新插入的数据 |
+| UPDATE   | 包含更新前的数据 | 包含更新后的数据 |
+| DELETE   | 包含删除前的数据 | 不可用           |
 
 **使用示例**：
 
@@ -203,12 +203,12 @@ BEFORE UPDATE ON employees
 FOR EACH ROW
 BEGIN
     DECLARE max_increase DECIMAL(10,2) DEFAULT 0.2; -- 最大涨幅20%
-    
+
     IF NEW.salary > OLD.salary * (1 + max_increase) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = '工资涨幅超过20%限制';
     END IF;
-    
+
     -- 记录薪资变更历史
     IF NEW.salary != OLD.salary THEN
         INSERT INTO salary_history (employee_id, old_salary, new_salary, change_date)
@@ -228,7 +228,7 @@ INSTEAD OF 触发器**完全替代**原始 DML 操作，为复杂场景提供灵
 
 ```sql
 CREATE TRIGGER trigger_name
-INSTEAD OF {INSERT | UPDATE | DELETE} 
+INSTEAD OF {INSERT | UPDATE | DELETE}
 ON {table_name | view_name}
 AS
 BEGIN
@@ -243,7 +243,7 @@ INSTEAD OF 触发器最常见的应用是使复杂视图可更新。
 ```sql
 -- 创建包含员工和部门信息的视图
 CREATE VIEW employee_department_view AS
-SELECT 
+SELECT
     e.employee_id,
     e.first_name,
     e.last_name,
@@ -258,22 +258,22 @@ CREATE OR REPLACE FUNCTION update_employee_department()
 RETURNS TRIGGER AS $$
 BEGIN
     -- 更新员工表
-    UPDATE employees 
-    SET 
+    UPDATE employees
+    SET
         first_name = NEW.first_name,
         last_name = NEW.last_name,
         salary = NEW.salary,
-        department_id = (SELECT department_id FROM departments 
+        department_id = (SELECT department_id FROM departments
                         WHERE department_name = NEW.department_name)
     WHERE employee_id = NEW.employee_id;
-    
+
     -- 如果部门不存在则创建（根据业务需求）
-    IF NOT EXISTS (SELECT 1 FROM departments 
+    IF NOT EXISTS (SELECT 1 FROM departments
                   WHERE department_name = NEW.department_name) THEN
         INSERT INTO departments (department_name, location)
         VALUES (NEW.department_name, NEW.location);
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -294,36 +294,36 @@ FOR EACH ROW
 BEGIN
     DECLARE source_balance DECIMAL(15,2);
     DECLARE target_balance DECIMAL(15,2);
-    
+
     -- 获取源账户余额
-    SELECT balance INTO source_balance 
-    FROM accounts 
+    SELECT balance INTO source_balance
+    FROM accounts
     WHERE account_id = OLD.account_id;
-    
+
     -- 获取目标账户余额
-    SELECT balance INTO target_balance 
-    FROM accounts 
+    SELECT balance INTO target_balance
+    FROM accounts
     WHERE account_id = NEW.account_id;
-    
+
     -- 验证业务规则
     IF source_balance < NEW.transfer_amount THEN
-        SIGNAL SQLSTATE '45000' 
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = '余额不足';
     END IF;
-    
+
     IF NEW.transfer_amount > 10000 THEN
         -- 大额转账需要记录特殊审计
         INSERT INTO large_transfers (from_account, to_account, amount, transfer_time)
         VALUES (OLD.account_id, NEW.account_id, NEW.transfer_amount, NOW());
     END IF;
-    
+
     -- 执行实际转账操作
-    UPDATE accounts SET balance = balance - NEW.transfer_amount 
+    UPDATE accounts SET balance = balance - NEW.transfer_amount
     WHERE account_id = OLD.account_id;
-    
-    UPDATE accounts SET balance = balance + NEW.transfer_amount 
+
+    UPDATE accounts SET balance = balance + NEW.transfer_amount
     WHERE account_id = NEW.account_id;
-    
+
     -- 记录交易历史
     INSERT INTO transfer_history (from_account, to_account, amount, transfer_date)
     VALUES (OLD.account_id, NEW.account_id, NEW.transfer_amount, NOW());
@@ -348,7 +348,7 @@ BEGIN
     ELSE
         INSERT INTO employees_recent VALUES (NEW.*);
     END IF;
-    
+
     RETURN NULL; -- 阻止原始插入操作
 END;
 $$ LANGUAGE plpgsql;
@@ -397,7 +397,7 @@ DO
 
 -- 创建复杂调度事件
 CREATE EVENT complex_schedule_event
-ON SCHEDULE EVERY 1 WEEK 
+ON SCHEDULE EVERY 1 WEEK
     STARTS '2025-01-01 00:00:00'
     ENDS '2025-12-31 23:59:59'
 DO
@@ -437,30 +437,30 @@ ON SCHEDULE EVERY 1 DAY STARTS '2025-01-01 23:00:00'
 DO
 BEGIN
     DECLARE backup_count INT;
-    
+
     -- 备份当前数据
     INSERT INTO orders_backup
     SELECT * FROM orders WHERE order_date >= NOW() - INTERVAL 7 DAY;
-    
+
     -- 归档过期数据（超过1年）
     INSERT INTO orders_archive
     SELECT * FROM orders WHERE order_date < NOW() - INTERVAL 1 YEAR;
-    
+
     DELETE FROM orders WHERE order_date < NOW() - INTERVAL 1 YEAR;
-    
+
     -- 更新统计信息
     CALL update_order_statistics();
-    
+
     -- 检查备份数据完整性
-    SELECT COUNT(*) INTO backup_count FROM orders_backup 
+    SELECT COUNT(*) INTO backup_count FROM orders_backup
     WHERE backup_date >= NOW() - INTERVAL 1 DAY;
-    
+
     IF backup_count = 0 THEN
         -- 记录备份失败警告
         INSERT INTO system_warnings (warning_message, severity)
         VALUES ('每日订单备份可能失败', 'HIGH');
     END IF;
-    
+
     -- 发送通知（通过调用外部程序）
     -- CALL send_notification('每日数据管理任务完成');
 END//
@@ -517,10 +517,10 @@ DECLARE
     audit_config_record audit_config%ROWTYPE;
 BEGIN
     -- 获取审计配置
-    SELECT * INTO audit_config_record 
-    FROM audit_config 
+    SELECT * INTO audit_config_record
+    FROM audit_config
     WHERE table_name = TG_TABLE_NAME;
-    
+
     -- 检查是否启用审计
     IF audit_config_record.is_enabled THEN
         -- 根据操作类型记录审计日志
@@ -531,7 +531,7 @@ BEGIN
                 TG_TABLE_NAME, 'INSERT', NULL, row_to_json(NEW), current_user
             );
             RETURN NEW;
-            
+
         ELSIF TG_OP = 'UPDATE' AND audit_config_record.audit_update THEN
             INSERT INTO audit_system (
                 table_name, operation_type, old_data, new_data, changed_by
@@ -539,7 +539,7 @@ BEGIN
                 TG_TABLE_NAME, 'UPDATE', row_to_json(OLD), row_to_json(NEW), current_user
             );
             RETURN NEW;
-            
+
         ELSIF TG_OP = 'DELETE' AND audit_config_record.audit_delete THEN
             INSERT INTO audit_system (
                 table_name, operation_type, old_data, new_data, changed_by
@@ -549,7 +549,7 @@ BEGIN
             RETURN OLD;
         END IF;
     END IF;
-    
+
     RETURN CASE TG_OP WHEN 'DELETE' THEN OLD ELSE NEW END;
 END;
 $$ LANGUAGE plpgsql;
@@ -577,25 +577,25 @@ BEGIN
     INSERT INTO audit_statistics (
         statistic_date, total_operations, insert_count, update_count, delete_count
     )
-    SELECT 
+    SELECT
         CURRENT_DATE,
         COUNT(*),
         SUM(CASE WHEN operation_type = 'INSERT' THEN 1 ELSE 0 END),
         SUM(CASE WHEN operation_type = 'UPDATE' THEN 1 ELSE 0 END),
         SUM(CASE WHEN operation_type = 'DELETE' THEN 1 ELSE 0 END)
-    FROM audit_system 
+    FROM audit_system
     WHERE changed_at >= CURRENT_DATE - INTERVAL 1 DAY
-    ON DUPLICATE KEY UPDATE 
+    ON DUPLICATE KEY UPDATE
         total_operations = VALUES(total_operations),
         insert_count = VALUES(insert_count),
         update_count = VALUES(update_count),
         delete_count = VALUES(delete_count),
         last_updated = NOW();
-    
+
     -- 清理过期审计数据（保留2年）
-    DELETE FROM audit_system 
+    DELETE FROM audit_system
     WHERE changed_at < NOW() - INTERVAL 2 YEAR;
-    
+
     -- 优化审计表
     OPTIMIZE TABLE audit_system;
 END//
@@ -643,8 +643,8 @@ AFTER UPDATE ON employees
 FOR EACH ROW
 BEGIN
     -- 避免更新会再次触发其他触发器的表
-    UPDATE employee_statistics 
-    SET last_updated = NOW() 
+    UPDATE employee_statistics
+    SET last_updated = NOW()
     WHERE employee_id = NEW.employee_id;
 END;
 ```
@@ -666,11 +666,11 @@ BEGIN
         VALUES ('data_cleanup', '清理过程发生错误', NOW());
         -- 可以选择继续或终止
     END;
-    
+
     -- 执行实际清理操作
-    DELETE FROM temporary_sessions 
+    DELETE FROM temporary_sessions
     WHERE created_at < NOW() - INTERVAL 4 HOUR;
-    
+
     -- 记录执行日志
     INSERT INTO event_execution_log (event_name, execution_time, rows_affected)
     VALUES ('data_cleanup', NOW(), ROW_COUNT());
@@ -704,7 +704,7 @@ SHOW TRIGGERS;
 SHOW EVENTS;
 
 -- 检查触发器依赖关系
-SELECT 
+SELECT
     trigger_name,
     event_object_table,
     action_statement
@@ -724,7 +724,7 @@ BEGIN
     INSERT INTO trigger_performance_log (
         trigger_name, avg_execution_time, max_execution_time, sample_count
     )
-    SELECT 
+    SELECT
         trigger_name,
         AVG(execution_time) as avg_time,
         MAX(execution_time) as max_time,
@@ -732,9 +732,9 @@ BEGIN
     FROM trigger_execution_stats
     WHERE execution_time > 1000  -- 只关注执行时间超过1ms的触发器
     GROUP BY trigger_name;
-    
+
     -- 清理过时性能数据
-    DELETE FROM trigger_execution_stats 
+    DELETE FROM trigger_execution_stats
     WHERE logged_at < NOW() - INTERVAL 7 DAY;
 END;
 ```
@@ -743,11 +743,11 @@ END;
 
 ### 7.1 MySQL 与 PostgreSQL 语法对比
 
-| 功能 | MySQL 语法 | PostgreSQL 语法 |
-|------|------------|----------------|
+| 功能       | MySQL 语法                                                                    | PostgreSQL 语法                                                                                  |
+| ---------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | 创建触发器 | `CREATE TRIGGER name BEFORE/AFTER INSERT ON table FOR EACH ROW BEGIN ... END` | `CREATE TRIGGER name BEFORE/AFTER INSERT ON table FOR EACH ROW EXECUTE FUNCTION function_name()` |
-| 事件调度 | `CREATE EVENT name ON SCHEDULE ... DO ...` | 使用 `pg_cron` 扩展或操作系统级定时任务 |
-| 错误处理 | `DECLARE EXIT HANDLER FOR SQLEXCEPTION` | `EXCEPTION WHEN others THEN` |
+| 事件调度   | `CREATE EVENT name ON SCHEDULE ... DO ...`                                    | 使用 `pg_cron` 扩展或操作系统级定时任务                                                          |
+| 错误处理   | `DECLARE EXIT HANDLER FOR SQLEXCEPTION`                                       | `EXCEPTION WHEN others THEN`                                                                     |
 
 ### 7.2 兼容性适配示例
 
@@ -760,8 +760,8 @@ AFTER INSERT ON transactions
 FOR EACH ROW
 BEGIN
     INSERT INTO audit_log (table_name, operation, new_values, changed_by)
-    VALUES ('transactions', 'INSERT', 
-            JSON_OBJECT('id', NEW.id, 'amount', NEW.amount), 
+    VALUES ('transactions', 'INSERT',
+            JSON_OBJECT('id', NEW.id, 'amount', NEW.amount),
             USER());
 END//
 DELIMITER ;
@@ -771,8 +771,8 @@ CREATE OR REPLACE FUNCTION cross_platform_audit_function()
 RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO audit_log (table_name, operation, new_values, changed_by)
-    VALUES ('transactions', 'INSERT', 
-            json_build_object('id', NEW.id, 'amount', NEW.amount), 
+    VALUES ('transactions', 'INSERT',
+            json_build_object('id', NEW.id, 'amount', NEW.amount),
             current_user);
     RETURN NEW;
 END;

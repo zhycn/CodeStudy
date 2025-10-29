@@ -33,11 +33,11 @@ SQL **索引**是一种用于提高数据库查询性能的数据结构，它类
 
 数据库索引通常采用以下数据结构：
 
-| **结构类型** | **时间复杂度** | **适用场景** | **限制** |
-|------------|--------------|------------|---------|
-| B+树索引 | O(log n) | 范围查询、排序操作 | 深度取决于数据量 |
-| 哈希索引 | O(1) | 等值查询 | 不支持范围查询 |
-| 全文索引 | O(n) | 文本搜索、模糊匹配 | 对文本数据要求高 |
+| **结构类型** | **时间复杂度** | **适用场景**       | **限制**         |
+| ------------ | -------------- | ------------------ | ---------------- |
+| B+树索引     | O(log n)       | 范围查询、排序操作 | 深度取决于数据量 |
+| 哈希索引     | O(1)           | 等值查询           | 不支持范围查询   |
+| 全文索引     | O(n)           | 文本搜索、模糊匹配 | 对文本数据要求高 |
 
 ## 2 索引类型与原理
 
@@ -107,7 +107,7 @@ CREATE TABLE articles (
 );
 
 -- 使用全文索引查询
-SELECT * FROM articles 
+SELECT * FROM articles
 WHERE MATCH(title, content) AGAINST('database optimization');
 ```
 
@@ -127,7 +127,7 @@ WHERE MATCH(title, content) AGAINST('database optimization');
 
 ```sql
 -- 创建复合索引
-CREATE INDEX idx_employee_dept_salary 
+CREATE INDEX idx_employee_dept_salary
 ON employees(department_id, salary DESC, hire_date);
 ```
 
@@ -140,14 +140,14 @@ ON employees(department_id, salary DESC, hire_date);
 **示例分析**：
 假设有复合索引 `(name, age, city)`：
 
-| **查询条件** | **索引使用情况** | **说明** |
-|------------|----------------|---------|
-| `WHERE name = 'Alice'` | ✅ 完全利用 | 使用最左列 |
-| `WHERE name = 'Alice' AND age = 25` | ✅ 完全利用 | 连续匹配前两列 |
-| `WHERE name = 'Alice' AND age = 25 AND city = 'NY'` | ✅ 完全利用 | 匹配所有列 |
-| `WHERE age = 25` | ❌ 索引失效 | 跳过最左列 |
-| `WHERE name = 'Alice' AND city = 'NY'` | ⚠️ 部分利用 | 只使用 name 列，跳过了 age 列 |
-| `WHERE city = 'NY'` | ❌ 索引失效 | 跳过最左列 |
+| **查询条件**                                        | **索引使用情况** | **说明**                      |
+| --------------------------------------------------- | ---------------- | ----------------------------- |
+| `WHERE name = 'Alice'`                              | ✅ 完全利用      | 使用最左列                    |
+| `WHERE name = 'Alice' AND age = 25`                 | ✅ 完全利用      | 连续匹配前两列                |
+| `WHERE name = 'Alice' AND age = 25 AND city = 'NY'` | ✅ 完全利用      | 匹配所有列                    |
+| `WHERE age = 25`                                    | ❌ 索引失效      | 跳过最左列                    |
+| `WHERE name = 'Alice' AND city = 'NY'`              | ⚠️ 部分利用      | 只使用 name 列，跳过了 age 列 |
+| `WHERE city = 'NY'`                                 | ❌ 索引失效      | 跳过最左列                    |
 
 ### 3.3 范围查询对最左前缀的影响
 
@@ -155,7 +155,7 @@ ON employees(department_id, salary DESC, hire_date);
 
 ```sql
 -- 假设索引 (name, age, city)
-SELECT * FROM users 
+SELECT * FROM users
 WHERE name = 'Alice' AND age > 25 AND city = 'NY';
 ```
 
@@ -179,8 +179,8 @@ WHERE name = 'Alice' AND age > 25 AND city = 'NY';
 CREATE INDEX idx_covering ON employees(department_id, salary, hire_date);
 
 -- 使用覆盖索引的查询
-SELECT department_id, salary, hire_date 
-FROM employees 
+SELECT department_id, salary, hire_date
+FROM employees
 WHERE department_id = 5 AND salary > 50000;
 ```
 
@@ -222,8 +222,8 @@ ICP 可以**显著减少回表次数**，尤其对于联合索引中非最左列
 CREATE INDEX idx_dept_salary ON employees(department_id, salary DESC);
 
 -- 以下查询可以利用索引排序
-SELECT * FROM employees 
-WHERE department_id = 5 
+SELECT * FROM employees
+WHERE department_id = 5
 ORDER BY salary DESC;
 ```
 
@@ -355,7 +355,7 @@ ALTER INDEX index_name ON table_name REORGANIZE;
 
 ```sql
 -- SQL Server 查看索引碎片
-SELECT 
+SELECT
     index_id,
     avg_fragmentation_in_percent
 FROM sys.dm_db_index_physical_stats(
@@ -374,12 +374,12 @@ FROM sys.dm_db_index_physical_stats(
 
 ```sql
 -- PostgreSQL 查看索引使用统计
-SELECT 
+SELECT
     indexname,
     idx_scan as index_scans,
     idx_tup_read as tuples_read,
     idx_tup_fetch as tuples_fetched
-FROM pg_stat_user_indexes 
+FROM pg_stat_user_indexes
 WHERE tablename = 'table_name';
 
 -- MySQL 通过 Performance Schema 监控
@@ -390,7 +390,7 @@ SELECT * FROM performance_schema.table_io_waits_summary_by_index_usage;
 
 ```sql
 -- 查找可能未使用的索引（示例查询）
-SELECT 
+SELECT
     OBJECT_NAME(i.object_id) AS table_name,
     i.name AS index_name,
     i.type_desc AS index_type,
@@ -399,7 +399,7 @@ SELECT
     s.user_lookups,
     s.user_updates
 FROM sys.indexes i
-LEFT JOIN sys.dm_db_index_usage_stats s 
+LEFT JOIN sys.dm_db_index_usage_stats s
     ON s.object_id = i.object_id AND s.index_id = i.index_id
 WHERE OBJECTPROPERTY(i.object_id, 'IsUserTable') = 1
     AND i.index_id > 0
@@ -477,7 +477,7 @@ EXPLAIN FORMAT=JSON SELECT * FROM table WHERE condition;
 ANALYZE table_name;
 
 -- 使用部分索引减少索引大小
-CREATE INDEX idx_partial ON orders(status) 
+CREATE INDEX idx_partial ON orders(status)
 WHERE status IN ('pending', 'processing');
 
 -- 使用表达式索引
@@ -492,7 +492,7 @@ CREATE INDEX idx_expression ON users(LOWER(username));
 
 ```sql
 -- MySQL 执行计划分析
-EXPLAIN FORMAT=JSON 
+EXPLAIN FORMAT=JSON
 SELECT e.name, d.department_name, e.salary
 FROM employees e
 JOIN departments d ON e.department_id = d.id
@@ -502,11 +502,11 @@ ORDER BY e.salary DESC;
 
 **关键指标解读**：
 
-| **指标** | **优化目标** | **说明** |
-|---------|------------|---------|
-| **type** | const/ref/range | 避免 ALL（全表扫描） |
-| **key** | 使用索引 | 确保使用了合适的索引 |
-| **rows** | 最小化 | 减少扫描行数 |
+| **指标**  | **优化目标**                  | **说明**             |
+| --------- | ----------------------------- | -------------------- |
+| **type**  | const/ref/range               | 避免 ALL（全表扫描） |
+| **key**   | 使用索引                      | 确保使用了合适的索引 |
+| **rows**  | 最小化                        | 减少扫描行数         |
 | **Extra** | 避免 Using filesort/temporary | 避免额外排序和临时表 |
 
 ### 8.2 常见性能问题解决方案
@@ -518,8 +518,8 @@ ORDER BY e.salary DESC;
 SELECT * FROM logs ORDER BY create_time LIMIT 100000, 20;
 
 -- 优化分页（利用索引定位）
-SELECT * FROM logs 
-WHERE create_time > '2023-06-01' 
+SELECT * FROM logs
+WHERE create_time > '2023-06-01'
 ORDER BY create_time LIMIT 20;
 ```
 
@@ -527,7 +527,7 @@ ORDER BY create_time LIMIT 20;
 
 ```sql
 -- 低效子查询
-SELECT * FROM products 
+SELECT * FROM products
 WHERE category_id IN (
     SELECT id FROM categories WHERE type = 'ELECTRONICS'
 );
@@ -548,12 +548,12 @@ WHERE c.type = 'ELECTRONICS';
 2\. **原始查询**：
 
 ```sql
-SELECT * FROM products 
-WHERE category_id = 5 
+SELECT * FROM products
+WHERE category_id = 5
     AND price BETWEEN 100 AND 500
     AND status = 'active'
     AND name LIKE '%手机%'
-ORDER BY create_time DESC 
+ORDER BY create_time DESC
 LIMIT 50;
 ```
 
@@ -562,20 +562,20 @@ LIMIT 50;
 ```sql
 -- 创建复合索引覆盖查询条件
 CREATE INDEX idx_product_search ON products(
-    category_id, 
-    status, 
-    create_time DESC, 
-    price, 
+    category_id,
+    status,
+    create_time DESC,
+    price,
     name
 );
 
 -- 使用覆盖索引优化
 SELECT id, name, price, image -- 只选择必要字段
-FROM products 
-WHERE category_id = 5 
+FROM products
+WHERE category_id = 5
     AND status = 'active'
     AND create_time >= '2023-01-01' -- 避免前导通配符LIKE
-ORDER BY create_time DESC 
+ORDER BY create_time DESC
 LIMIT 50;
 ```
 

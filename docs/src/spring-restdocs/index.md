@@ -56,14 +56,14 @@ Swagger 是另一个流行的 API 文档工具，它与 Spring REST Docs 有着�
 
 下面的表格对比了两种工具的主要特性：
 
-| 特性 | Spring REST Docs | Swagger |
-|------|------------------|---------|
-| 文档生成方式 | 测试驱动 | 注解驱动 |
-| 代码侵入性 | 低 | 高 |
-| 文档准确性 | 高（与测试一致） | 中等（依赖注解维护） |
-| 交互式测试 | 不支持 | 支持 |
-| 输出格式 | HTML、PDF 等 | 主要为 HTML |
-| 学习曲线 | 较陡峭 | 相对平缓 |
+| 特性         | Spring REST Docs | Swagger              |
+| ------------ | ---------------- | -------------------- |
+| 文档生成方式 | 测试驱动         | 注解驱动             |
+| 代码侵入性   | 低               | 高                   |
+| 文档准确性   | 高（与测试一致） | 中等（依赖注解维护） |
+| 交互式测试   | 不支持           | 支持                 |
+| 输出格式     | HTML、PDF 等     | 主要为 HTML          |
+| 学习曲线     | 较陡峭           | 相对平缓             |
 
 ## 2. 环境搭建与配置
 
@@ -79,7 +79,7 @@ Swagger 是另一个流行的 API 文档工具，它与 Spring REST Docs 有着�
         <artifactId>spring-boot-starter-test</artifactId>
         <scope>test</scope>
     </dependency>
-    
+
     <!-- Spring REST Docs -->
     <dependency>
         <groupId>org.springframework.restdocs</groupId>
@@ -135,10 +135,10 @@ Spring REST Docs 与 JUnit 5 集成，需要通过扩展机制进行配置。以
 @WebMvcTest(YourController.class)
 @AutoConfigureRestDocs
 public class YourControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
-    
+
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
                       RestDocumentationContextProvider restDocumentation) {
@@ -185,7 +185,7 @@ Spring REST Docs 采用**测试驱动文档生成**机制，这意味着文档�
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.findUserById(id);
@@ -201,19 +201,19 @@ public class UserController {
 @WebMvcTest(UserController.class)
 @AutoConfigureRestDocs
 public class UserControllerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
-    
+
     @MockBean
     private UserService userService;
-    
+
     @Test
     public void getUserById() throws Exception {
         // 准备测试数据
         User user = new User(1L, "张三", "zhangsan@example.com");
         when(userService.findUserById(1L)).thenReturn(user);
-        
+
         // 执行测试并生成文档
         this.mockMvc.perform(get("/api/users/{id}", 1)
                 .accept(MediaType.APPLICATION_JSON))
@@ -234,7 +234,7 @@ public class UserControllerTest {
 @Test
 public void createUser() throws Exception {
     String userJson = "{\"name\":\"李四\",\"email\":\"lisi@example.com\"}";
-    
+
     this.mockMvc.perform(post("/api/users")
             .contentType(MediaType.APPLICATION_JSON)
             .content(userJson))
@@ -403,12 +403,12 @@ include::appendix.adoc[]
 // 用户相关 API 测试
 @Nested
 class UserApiTests {
-    
+
     @Test
     void getUserById() {
         // 测试逻辑
     }
-    
+
     @Test
     void createUser() {
         // 测试逻辑
@@ -418,7 +418,7 @@ class UserApiTests {
 // 产品相关 API 测试
 @Nested
 class ProductApiTests {
-    
+
     @Test
     void getProductById() {
         // 测试逻辑
@@ -430,9 +430,9 @@ class ProductApiTests {
 
 ```java
 public abstract class ApiDocumentationBase {
-    
+
     protected RequestSpecification documentationSpec;
-    
+
     @BeforeEach
     public void setUp(RestDocumentationContextProvider restDocumentation) {
         this.documentationSpec = new RequestSpecBuilder()
@@ -455,31 +455,31 @@ public class UserControllerTest extends ApiDocumentationBase {
 name: CI with Documentation
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'adopt'
-    - name: Build with Maven
-      run: mvn clean package
-    - name: Publish Documentation
-      run: |
-        git clone --branch gh-pages https://github.com/$GITHUB_REPOSITORY.git gh-pages
-        cp -R target/generated-docs/* gh-pages/
-        cd gh-pages
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git add .
-        git commit -m "Update documentation"
-        git push
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn clean package
+      - name: Publish Documentation
+        run: |
+          git clone --branch gh-pages https://github.com/$GITHUB_REPOSITORY.git gh-pages
+          cp -R target/generated-docs/* gh-pages/
+          cd gh-pages
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update documentation"
+          git push
 ```
 
 ### 6.4 文档质量保证
@@ -496,7 +496,7 @@ jobs:
 @Test
 public void getUserNotFound() throws Exception {
     when(userService.findUserById(999L)).thenThrow(new UserNotFoundException());
-    
+
     this.mockMvc.perform(get("/api/users/{id}", 999))
             .andExpect(status().isNotFound())
             .andDo(document("users/get-not-found",
@@ -514,11 +514,11 @@ public void getUserNotFound() throws Exception {
 Spring REST Docs 与 Spring Boot 版本之间存在兼容性要求。以下是一些常见的兼容配置：
 
 | Spring Boot 版本 | Spring REST Docs 版本 |
-|------------------|----------------------|
-| 2.5.x | 2.0.6.RELEASE |
-| 2.6.x | 2.0.7.RELEASE |
-| 2.7.x | 2.0.8.RELEASE |
-| 3.0.x | 3.0.0 |
+| ---------------- | --------------------- |
+| 2.5.x            | 2.0.6.RELEASE         |
+| 2.6.x            | 2.0.7.RELEASE         |
+| 2.7.x            | 2.0.8.RELEASE         |
+| 3.0.x            | 3.0.0                 |
 
 在项目中明确指定兼容的版本号可以避免大部分兼容性问题：
 

@@ -30,7 +30,7 @@ _本块内容提供官方文档的链接，用于学习和实践 Spring Boot 框
 - [Structuring Your Code / 结构化你的代码](https://docs.spring.io/spring-boot/reference/using/structuring-your-code.html)
 - [Configuration Classes / 配置类](https://docs.spring.io/spring-boot/reference/using/configuration-classes.html)
 - [Auto-configuration / 自动配置](https://docs.spring.io/spring-boot/reference/using/auto-configuration.html)
-- [Spring Beans and Dependency Injection / Spring  Bean 和依赖注入](https://docs.spring.io/spring-boot/reference/using/spring-beans-and-dependency-injection.html)
+- [Spring Beans and Dependency Injection / Spring Bean 和依赖注入](https://docs.spring.io/spring-boot/reference/using/spring-beans-and-dependency-injection.html)
 - [Using the @SpringBootApplication Annotation / 使用 @SpringBootApplication 注解](https://docs.spring.io/spring-boot/reference/using/using-the-springbootapplication-annotation.html)
 - [Running Your Application / 运行你的应用](https://docs.spring.io/spring-boot/reference/using/running-your-application.html)
 - [Developer Tools / 开发工具](https://docs.spring.io/spring-boot/reference/using/devtools.html)

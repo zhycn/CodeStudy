@@ -47,14 +47,14 @@ CREATE DATABASE [IF NOT EXISTS] database_name
 
 ```sql
 -- MySQL 示例
-CREATE DATABASE IF NOT EXISTS ecommerce 
-CHARACTER SET utf8mb4 
+CREATE DATABASE IF NOT EXISTS ecommerce
+CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 -- PostgreSQL 示例
-CREATE DATABASE ecommerce 
-ENCODING 'UTF8' 
-LC_COLLATE 'en_US.UTF-8' 
+CREATE DATABASE ecommerce
+ENCODING 'UTF8'
+LC_COLLATE 'en_US.UTF-8'
 LC_CTYPE 'en_US.UTF-8';
 ```
 
@@ -129,13 +129,13 @@ CREATE TABLE users (
 
 选择合适的数据类型对性能和存储效率至关重要：
 
-| **数据类型** | **MySQL** | **PostgreSQL** | **适用场景** |
-|------------|-----------|----------------|-------------|
-| 整数 | INT, BIGINT | INTEGER, BIGINT | 主键、计数器、年龄等 |
-| 浮点数 | DECIMAL, FLOAT | DECIMAL, REAL | 金额、精确计算 |
-| 字符串 | VARCHAR, TEXT | VARCHAR, TEXT | 姓名、描述、内容 |
-| 日期时间 | DATETIME, TIMESTAMP | TIMESTAMP, DATE | 创建时间、生日 |
-| 布尔值 | BOOLEAN, TINYINT | BOOLEAN | 状态标志、开关 |
+| **数据类型** | **MySQL**           | **PostgreSQL**  | **适用场景**         |
+| ------------ | ------------------- | --------------- | -------------------- |
+| 整数         | INT, BIGINT         | INTEGER, BIGINT | 主键、计数器、年龄等 |
+| 浮点数       | DECIMAL, FLOAT      | DECIMAL, REAL   | 金额、精确计算       |
+| 字符串       | VARCHAR, TEXT       | VARCHAR, TEXT   | 姓名、描述、内容     |
+| 日期时间     | DATETIME, TIMESTAMP | TIMESTAMP, DATE | 创建时间、生日       |
+| 布尔值       | BOOLEAN, TINYINT    | BOOLEAN         | 状态标志、开关       |
 
 ### 3.3 查看表结构信息
 
@@ -252,7 +252,7 @@ CREATE TABLE customers (
 ALTER TABLE users ADD COLUMN phone_number VARCHAR(15);
 
 -- 添加多列（MySQL 8.0.19+ 和 PostgreSQL 支持）
-ALTER TABLE users 
+ALTER TABLE users
 ADD COLUMN birth_date DATE,
 ADD COLUMN gender CHAR(1);
 ```
@@ -466,9 +466,9 @@ CREATE TABLE employees (
 
    ```sql
    -- 使用INPLACE算法减少锁表时间
-   ALTER TABLE users 
+   ALTER TABLE users
    ADD INDEX idx_email (email),
-   ALGORITHM=INPLACE, 
+   ALGORITHM=INPLACE,
    LOCK=NONE;
    ```
 
@@ -495,12 +495,12 @@ CREATE TABLE employees (
 
 ### 9.1 MySQL 与 PostgreSQL 语法差异
 
-| **操作** | **MySQL** | **PostgreSQL** |
-|---------|-----------|----------------|
-| 自增主键 | `AUTO_INCREMENT` | `SERIAL` 或 `GENERATED ALWAYS AS IDENTITY` |
-| 修改列类型 | `MODIFY COLUMN` | `ALTER COLUMN ... TYPE` |
-| 限制字符串长度 | `VARCHAR(255)` | `VARCHAR(255)` 或 `TEXT` |
-| 重命名列 | `CHANGE old new` | `RENAME COLUMN old TO new` |
+| **操作**       | **MySQL**        | **PostgreSQL**                             |
+| -------------- | ---------------- | ------------------------------------------ |
+| 自增主键       | `AUTO_INCREMENT` | `SERIAL` 或 `GENERATED ALWAYS AS IDENTITY` |
+| 修改列类型     | `MODIFY COLUMN`  | `ALTER COLUMN ... TYPE`                    |
+| 限制字符串长度 | `VARCHAR(255)`   | `VARCHAR(255)` 或 `TEXT`                   |
+| 重命名列       | `CHANGE old new` | `RENAME COLUMN old TO new`                 |
 
 ### 9.2 兼容性编写技巧
 

@@ -180,7 +180,7 @@ public interface OrderService {
 @RequiredArgsConstructor
 public class InventoryService {
     private final OrderService orderService; // 合法调用
-    
+
     public void checkInventory(String orderId) {
         OrderDetails order = orderService.getOrder(orderId);
         // 库存检查逻辑
@@ -199,11 +199,11 @@ Spring Modulith 强烈推荐使用 Spring 应用事件作为模块间的主要�
 @Service
 public class OrderService {
     private final ApplicationEventPublisher events;
-    
+
     public OrderService(ApplicationEventPublisher events) {
         this.events = events;
     }
-    
+
     @Transactional
     public void createOrder(Order order) {
         // 保存订单逻辑...
@@ -304,7 +304,7 @@ class OrderModuleTest {
     @Test
     void shouldCreateOrder(Scenario scenario) {
         Order order = new Order("test-order");
-        
+
         scenario.stimulate(() -> orderService.createOrder(order))
             .andWaitForEventOfType(OrderCreatedEvent.class)
             .toArise();
@@ -320,10 +320,10 @@ class OrderModuleTest {
 @Test
 void shouldPublishOrderEvent(PublishedEvents events) {
     Order order = orderService.create(new Order("test"));
-    
+
     var orderEvents = events.ofType(OrderCreated.class)
         .matching(e -> e.orderId().equals(order.getId()));
-    
+
     assertThat(orderEvents).hasSize(1);
 }
 ```
@@ -485,14 +485,14 @@ Spring Modulith 的一个关键优势是为未来可能的微服务拆分做好�
 public class CustomerService {
     private final ApplicationEventPublisher eventPublisher;
     private final MessageBrokerClient messageBroker; // 新增消息代理客户端
-    
+
     public void registerCustomer(Customer customer) {
         // 业务逻辑...
-        
+
         // 发布应用内事件
         CustomerRegisteredEvent event = new CustomerRegisteredEvent(customer.getId());
         eventPublisher.publishEvent(event);
-        
+
         // 同时发布到消息代理，为微服务迁移做准备
         messageBroker.publish("customer-events", event);
     }
@@ -503,7 +503,7 @@ public class CustomerService {
 @RequestMapping("/api/customers")
 public class CustomerApiController {
     private final CustomerService customerService;
-    
+
     @PostMapping
     public CustomerDto registerCustomer(@RequestBody CustomerRegistrationRequest request) {
         Customer customer = customerService.registerCustomer(request.toCustomer());

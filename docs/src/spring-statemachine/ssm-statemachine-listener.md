@@ -14,40 +14,40 @@ StateMachineListener 接口定义了多个回调方法，每个方法对应状�
 
 ```java
 public interface StateMachineListener<S, E> {
-    
+
     // 状态改变时触发
     void stateChanged(State<S, E> from, State<S, E> to);
-    
+
     // 状态进入时触发
     void stateEntered(State<S, E> state);
-    
+
     // 状态退出时触发
     void stateExited(State<S, E> state);
-    
+
     // 转换开始时触发
     void transitionStarted(Transition<S, E> transition);
-    
+
     // 转换结束时触发
     void transitionEnded(Transition<S, E> transition);
-    
+
     // 转换发生时触发
     void transition(Transition<S, E> transition);
-    
+
     // 状态机启动时触发
     void stateMachineStarted(StateMachine<S, E> stateMachine);
-    
+
     // 状态机停止时触发
     void stateMachineStopped(StateMachine<S, E> stateMachine);
-    
+
     // 事件未被接受时触发
     void eventNotAccepted(Message<E> event);
-    
+
     // 扩展状态改变时触发
     void extendedStateChanged(Object key, Object value);
-    
+
     // 状态机发生错误时触发
     void stateMachineError(StateMachine<S, E> stateMachine, Exception exception);
-    
+
     // 状态上下文变化时触发
     void stateContext(StateContext<S, E> stateContext);
 }
@@ -59,7 +59,7 @@ public interface StateMachineListener<S, E> {
 
 ```java
 public class CustomStateMachineListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void stateChanged(State<String, String> from, State<String, String> to) {
         if (from != null) {
@@ -68,12 +68,12 @@ public class CustomStateMachineListener extends StateMachineListenerAdapter<Stri
             System.out.println("State changed to " + to.getId());
         }
     }
-    
+
     @Override
     public void stateMachineStarted(StateMachine<String, String> stateMachine) {
         System.out.println("State machine started: " + stateMachine.getId());
     }
-    
+
     @Override
     public void stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
         System.err.println("State machine error: " + exception.getMessage());
@@ -97,7 +97,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
             .autoStartup(true)
             .listener(stateMachineListener());
     }
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
         states
@@ -107,7 +107,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
             .state("S2")
             .end("SF");
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -120,7 +120,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
             .withExternal()
             .source("S2").target("SF").event("E3");
     }
-    
+
     @Bean
     public StateMachineListener<String, String> stateMachineListener() {
         return new CustomStateMachineListener();
@@ -179,31 +179,31 @@ public void configure(StateMachineConfigurationConfigurer<String, String> config
 
 ```java
 public class StateChangeListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void stateChanged(State<String, String> from, State<String, String> to) {
         String fromId = (from != null) ? from.getId() : "初始状态";
         System.out.println("状态变化: " + fromId + " → " + to.getId());
-        
+
         // 记录状态变化时间
         StateContext<String, String> context = StateContext.getContext();
         context.getExtendedState().getVariables().put("lastStateChangeTime", System.currentTimeMillis());
     }
-    
+
     @Override
     public void stateEntered(State<String, String> state) {
         System.out.println("进入状态: " + state.getId());
-        
+
         // 状态进入时的特定操作
         if ("PROCESSING".equals(state.getId())) {
             startProcessingTimer();
         }
     }
-    
+
     @Override
     public void stateExited(State<String, String> state) {
         System.out.println("退出状态: " + state.getId());
-        
+
         // 状态退出时的清理操作
         if ("PROCESSING".equals(state.getId())) {
             stopProcessingTimer();
@@ -216,30 +216,30 @@ public class StateChangeListener extends StateMachineListenerAdapter<String, Str
 
 ```java
 public class TransitionListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void transitionStarted(Transition<String, String> transition) {
-        System.out.println("转换开始: " + 
-            transition.getSource().getId() + " → " + 
+        System.out.println("转换开始: " +
+            transition.getSource().getId() + " → " +
             transition.getTarget().getId());
     }
-    
+
     @Override
     public void transitionEnded(Transition<String, String> transition) {
-        System.out.println("转换完成: " + 
-            transition.getSource().getId() + " → " + 
+        System.out.println("转换完成: " +
+            transition.getSource().getId() + " → " +
             transition.getTarget().getId());
-        
+
         // 记录转换指标
         recordTransitionMetrics(transition);
     }
-    
+
     @Override
     public void transition(Transition<String, String> transition) {
         // 转换过程中的通用处理
         System.out.println("转换事件: " + transition.getKind());
     }
-    
+
     private void recordTransitionMetrics(Transition<String, String> transition) {
         // 实现转换指标记录逻辑
     }
@@ -250,11 +250,11 @@ public class TransitionListener extends StateMachineListenerAdapter<String, Stri
 
 ```java
 public class EventHandlingListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void eventNotAccepted(Message<String> event) {
         System.err.println("事件未被接受: " + event.getPayload());
-        
+
         // 处理未被接受的事件
         handleRejectedEvent(event);
     }
@@ -265,22 +265,22 @@ public class EventHandlingListener extends StateMachineListenerAdapter<String, S
 
 ```java
 public class ErrorHandlingListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
         System.err.println("状态机错误: " + exception.getMessage());
-        
+
         // 发送警报
         sendAlert("状态机错误: " + exception.getMessage());
-        
+
         // 记录错误详情
         logErrorDetails(stateMachine, exception);
     }
-    
+
     private void sendAlert(String message) {
         // 实现警报发送逻辑
     }
-    
+
     private void logErrorDetails(StateMachine<String, String> stateMachine, Exception exception) {
         // 实现错误日志记录逻辑
     }
@@ -291,11 +291,11 @@ public class ErrorHandlingListener extends StateMachineListenerAdapter<String, S
 
 ```java
 public class ExtendedStateListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void extendedStateChanged(Object key, Object value) {
         System.out.println("扩展状态变化: " + key + " = " + value);
-        
+
         // 基于扩展状态变化的业务逻辑
         if ("retryCount".equals(key) && (Integer) value > 3) {
             handleExcessiveRetries();
@@ -340,9 +340,9 @@ public enum OrderEvents {
 ```java
 @Component
 public class OrderStateMachineListener extends StateMachineListenerAdapter<OrderStates, OrderEvents> {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(OrderStateMachineListener.class);
-    
+
     @Override
     public void stateChanged(State<OrderStates, OrderEvents> from, State<OrderStates, OrderEvents> to) {
         if (from != null) {
@@ -350,74 +350,74 @@ public class OrderStateMachineListener extends StateMachineListenerAdapter<Order
         } else {
             logger.info("订单初始状态: {}", to.getId());
         }
-        
+
         // 记录状态变化历史
         recordStateChangeHistory(to.getId());
     }
-    
+
     @Override
     public void stateMachineStarted(StateMachine<OrderStates, OrderEvents> stateMachine) {
         logger.info("订单状态机启动");
-        
+
         // 初始化监控指标
         initializeMonitoringMetrics();
     }
-    
+
     @Override
     public void stateMachineStopped(StateMachine<OrderStates, OrderEvents> stateMachine) {
         logger.info("订单状态机停止");
-        
+
         // 清理资源
         cleanupResources();
     }
-    
+
     @Override
     public void eventNotAccepted(Message<OrderEvents> event) {
         logger.warn("订单事件未被接受: {}", event.getPayload());
-        
+
         // 通知相关人员
         notifyRejectedEvent(event.getPayload());
     }
-    
+
     @Override
     public void stateMachineError(StateMachine<OrderStates, OrderEvents> stateMachine, Exception exception) {
         logger.error("订单状态机错误: {}", exception.getMessage(), exception);
-        
+
         // 触发错误处理流程
         handleOrderProcessingError(stateMachine, exception);
     }
-    
+
     @Override
     public void extendedStateChanged(Object key, Object value) {
         logger.debug("订单扩展状态变化: {} = {}", key, value);
-        
+
         // 处理特定的扩展状态变化
         if ("paymentAttempts".equals(key) && (Integer) value >= 3) {
             handleExcessivePaymentAttempts();
         }
     }
-    
+
     // 辅助方法
     private void recordStateChangeHistory(OrderStates newState) {
         // 实现状态历史记录逻辑
     }
-    
+
     private void initializeMonitoringMetrics() {
         // 实现监控指标初始化逻辑
     }
-    
+
     private void cleanupResources() {
         // 实现资源清理逻辑
     }
-    
+
     private void notifyRejectedEvent(OrderEvents event) {
         // 实现事件拒绝通知逻辑
     }
-    
+
     private void handleOrderProcessingError(StateMachine<OrderStates, OrderEvents> stateMachine, Exception exception) {
         // 实现错误处理逻辑
     }
-    
+
     private void handleExcessivePaymentAttempts() {
         // 实现过多支付尝试处理逻辑
     }
@@ -433,7 +433,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 
     @Autowired
     private OrderStateMachineListener orderStateMachineListener;
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config) throws Exception {
         config
@@ -441,7 +441,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .autoStartup(true)
             .listener(orderStateMachineListener);
     }
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) throws Exception {
         states
@@ -457,7 +457,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .state(OrderStates.CANCELLED)
             .end(OrderStates.COMPLETED);
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) throws Exception {
         transitions
@@ -504,7 +504,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
        // 避免在监听器中执行数据库操作等阻塞任务
        saveToDatabase(from, to); // 可能影响状态机性能
    }
-   
+
    // 推荐 - 异步处理
    @Override
    public void stateChanged(State<String, String> from, State<String, String> to) {
@@ -534,7 +534,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
    @Override
    public void stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
        logger.error("状态机错误", exception);
-       
+
        // 根据错误类型采取不同的恢复策略
        if (exception instanceof TimeoutException) {
            handleTimeoutError(stateMachine);
@@ -552,7 +552,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
    @Override
    public void stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
        errorCount.incrementAndGet();
-       
+
        // 实现熔断机制
        if (errorCount.get() > MAX_ERROR_THRESHOLD) {
            enableCircuitBreaker();
@@ -572,7 +572,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
        logData.put("from_state", from != null ? from.getId() : null);
        logData.put("to_state", to.getId());
        logData.put("timestamp", Instant.now());
-       
+
        logger.info(JSON.toJSONString(logData));
    }
    ```
@@ -601,14 +601,14 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
        // 创建模拟对象
        State<String, String> fromState = mock(State.class);
        when(fromState.getId()).thenReturn("S1");
-       
+
        State<String, String> toState = mock(State.class);
        when(toState.getId()).thenReturn("S2");
-       
+
        // 测试监听器
        CustomStateMachineListener listener = new CustomStateMachineListener();
        listener.stateChanged(fromState, toState);
-       
+
        // 验证行为
        // 添加适当的断言
    }
@@ -619,17 +619,17 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
    ```java
    @SpringBootTest
    public class StateMachineListenerIntegrationTest {
-       
+
        @Autowired
        private StateMachine<String, String> stateMachine;
-       
+
        @Test
        public void testCompleteStateFlow() {
            // 测试完整的状态流程和监听器行为
            stateMachine.start();
            stateMachine.sendEvent("E1");
            stateMachine.sendEvent("E2");
-           
+
            // 验证监听器是否正确处理了所有状态变化
        }
    }
@@ -666,9 +666,9 @@ public class SecondListener extends StateMachineListenerAdapter<String, String> 
 ```java
 @Component
 public class AsyncStateMachineListener extends StateMachineListenerAdapter<String, String> {
-    
+
     private final ExecutorService asyncExecutor = Executors.newFixedThreadPool(4);
-    
+
     @Override
     public void stateChanged(State<String, String> from, State<String, String> to) {
         asyncExecutor.submit(() -> {
@@ -688,9 +688,9 @@ public class AsyncStateMachineListener extends StateMachineListenerAdapter<Strin
 ```java
 @Component
 public class SafeStateMachineListener extends StateMachineListenerAdapter<String, String> {
-    
+
     private final WeakReference<StateMachine<String, String>> stateMachineRef;
-    
+
     @Override
     public void stateMachineStopped(StateMachine<String, String> stateMachine) {
         // 清理资源

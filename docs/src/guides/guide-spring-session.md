@@ -52,11 +52,11 @@ Spring Session 3.0+ 版本基于 Spring Framework 6 构建，全面适配 Jakart
 
 Spring Session 的核心是 `SessionRepository<T extends Session>` 接口。它定义了会话的 CRUD 操作（创建、读取、保存、删除），不同的实现对应不同的存储后端。
 
-| 实现类                              | 描述                                                                          | 适用场景                                  |
-| :---------------------------------- | :---------------------------------------------------------------------------- | :---------------------------------------- |
-| **`RedisIndexedSessionRepository`** | **最常用**的实现。将会话数据存储在 Redis 中，支持基于哈希的高效存储和自动过期。 | 高性能、高可用的分布式环境。              |
-| **`JdbcIndexedSessionRepository`**  | 将会话数据存储在关系型数据库中。                                              | 基础设施中没有Redis，但已有数据库的环境。 |
-| `MapSessionRepository`              | 基于内存 `Map` 的实现，会话不持久化。                                           | 测试环境，单机开发。                      |
+| 实现类                              | 描述                                                                            | 适用场景                                    |
+| :---------------------------------- | :------------------------------------------------------------------------------ | :------------------------------------------ |
+| **`RedisIndexedSessionRepository`** | **最常用**的实现。将会话数据存储在 Redis 中，支持基于哈希的高效存储和自动过期。 | 高性能、高可用的分布式环境。                |
+| **`JdbcIndexedSessionRepository`**  | 将会话数据存储在关系型数据库中。                                                | 基础设施中没有Redis，但已有数据库的环境。   |
+| `MapSessionRepository`              | 基于内存 `Map` 的实现，会话不持久化。                                           | 测试环境，单机开发。                        |
 | `HazelcastSessionRepository`        | 使用 Hazelcast 分布式内存数据网格存储会话。                                     | 已使用 Hazelcast 作为缓存或数据网格的项目。 |
 
 ### 2.2 过滤器 (`SessionRepositoryFilter`)

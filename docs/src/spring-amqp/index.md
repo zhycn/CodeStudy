@@ -10,13 +10,13 @@ Spring AMQP 是 Spring 生态中用于集成 AMQP 消息中间件的核心框架
 
 Spring AMQP 的主要目标包括：
 
-| 目标 | 说明 |
-|------|------|
-| **简化开发** | 封装 Connection、Channel 管理复杂性 |
-| **声明式资源管理** | 使用 Java 或 XML 声明 Exchange、Queue、Binding |
-| **高级抽象** | 提供 `RabbitTemplate` 发送消息，`@RabbitListener` 接收消息 |
-| **异步消费支持** | 消息监听容器自动推送消息 |
-| **可扩展性** | 支持自定义 MessageConverter、Retry、ListenerAdapter 等 |
+| 目标               | 说明                                                       |
+| ------------------ | ---------------------------------------------------------- |
+| **简化开发**       | 封装 Connection、Channel 管理复杂性                        |
+| **声明式资源管理** | 使用 Java 或 XML 声明 Exchange、Queue、Binding             |
+| **高级抽象**       | 提供 `RabbitTemplate` 发送消息，`@RabbitListener` 接收消息 |
+| **异步消费支持**   | 消息监听容器自动推送消息                                   |
+| **可扩展性**       | 支持自定义 MessageConverter、Retry、ListenerAdapter 等     |
 
 ### 1.2 核心模块与依赖
 
@@ -47,12 +47,12 @@ spring:
     username: guest
     password: guest
     virtual-host: /
-    publisher-confirm-type: correlated  # 启用 Publisher Confirm
-    publisher-returns: true             # 启用 Return 回调
+    publisher-confirm-type: correlated # 启用 Publisher Confirm
+    publisher-returns: true # 启用 Return 回调
     listener:
       simple:
-        prefetch: 1                    # 控制预取消息数量
-        acknowledge-mode: manual       # 确认模式
+        prefetch: 1 # 控制预取消息数量
+        acknowledge-mode: manual # 确认模式
 ```
 
 ### 2.2 RabbitAdmin
@@ -63,17 +63,17 @@ RabbitAdmin 负责声明式管理 RabbitMQ 资源（Exchange、Queue、Binding�
 @Configuration
 @EnableRabbit
 public class RabbitConfig {
-    
+
     @Bean
     public Queue orderQueue() {
         return QueueBuilder.durable("order.queue").build();
     }
-    
+
     @Bean
     public TopicExchange orderExchange() {
         return new TopicExchange("order.events");
     }
-    
+
     @Bean
     public Binding orderBinding(Queue orderQueue, TopicExchange orderExchange) {
         return BindingBuilder.bind(orderQueue)
@@ -92,10 +92,10 @@ RabbitTemplate 是消息发送的核心组件，封装了 Channel 操作，支�
 ```java
 @Service
 public class OrderService {
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     public void sendOrderCreated(Order order) {
         String routingKey = "order.created";
         rabbitTemplate.convertAndSend("order.events", routingKey, order);
@@ -126,9 +126,9 @@ rabbitTemplate.send("order.events", "order.created", message);
 ```java
 @Component
 public class OrderConsumer {
-    
+
     @RabbitListener(queues = "order.queue")
-    public void handleOrder(Order order, Channel channel, @Header String deliveryTag) 
+    public void handleOrder(Order order, Channel channel, @Header String deliveryTag)
             throws IOException {
         try {
             System.out.println("处理订单: " + order.getOrderId());
@@ -151,12 +151,12 @@ MessageConverter 负责 Java 对象与 Message 之间的转换，推荐使用 JS
 ```java
 @Configuration
 public class MessageConverterConfig {
-    
+
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
-    
+
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
@@ -220,10 +220,10 @@ rabbitTemplate.setReturnsCallback(returned -> {
 ```java
 @SpringBootTest
 public class SpringAmqpTest {
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     @Test
     public void testSimpleQueue() {
         String queueName = "simple.queue";
@@ -238,7 +238,7 @@ public class SpringAmqpTest {
 ```java
 @Component
 public class SpringRabbitListener {
-    
+
     @RabbitListener(queues = "simple.queue")
     public void listenSimpleQueueMessage(String msg) {
         System.out.println("接收到消息: 【" + msg + "】");
@@ -257,7 +257,7 @@ public class SpringRabbitListener {
 public void workQueue() throws InterruptedException {
     String queueName = "simple.queue";
     String message = "Hello, Spring AMQP - ";
-    
+
     for (int i = 0; i < 50; i++) {
         rabbitTemplate.convertAndSend(queueName, message + i);
         Thread.sleep(20);  // 模拟消息堆积
@@ -270,13 +270,13 @@ public void workQueue() throws InterruptedException {
 ```java
 @Component
 public class SpringRabbitListener {
-    
+
     @RabbitListener(queues = "simple.queue")
     public void workQueue1(String message) throws InterruptedException {
         System.out.println("消费者1接收到消息: [" + message + "]");
         Thread.sleep(20);  // 消费者1处理能力强
     }
-    
+
     @RabbitListener(queues = "simple.queue")
     public void workQueue2(String message) throws InterruptedException {
         System.err.println("消费者2接收到消息: [" + message + "]");
@@ -292,7 +292,7 @@ spring:
   rabbitmq:
     listener:
       simple:
-        prefetch: 1  # 每次只能获取一条消息，处理完成才能获取下一个
+        prefetch: 1 # 每次只能获取一条消息，处理完成才能获取下一个
 ```
 
 通过设置 `prefetch=1` 可以实现能者多劳，避免消息平均分配导致的能力浪费。
@@ -310,27 +310,27 @@ Fanout Exchange 会将消息路由到所有绑定的队列：
 ```java
 @Configuration
 public class FanoutConfig {
-    
+
     @Bean
     public FanoutExchange fanoutExchange() {
         return new FanoutExchange("dcxuexi.fanout");
     }
-    
+
     @Bean
     public Queue fanoutQueue1() {
         return new Queue("fanout.queue1");
     }
-    
+
     @Bean
     public Queue fanoutQueue2() {
         return new Queue("fanout.queue2");
     }
-    
+
     @Bean
     public Binding bindingQueue1(Queue fanoutQueue1, FanoutExchange fanoutExchange) {
         return BindingBuilder.bind(fanoutQueue1).to(fanoutExchange);
     }
-    
+
     @Bean
     public Binding bindingQueue2(Queue fanoutQueue2, FanoutExchange fanoutExchange) {
         return BindingBuilder.bind(fanoutQueue2).to(fanoutExchange);
@@ -354,12 +354,12 @@ public void testFanoutExchange() {
 ```java
 @Component
 public class SpringRabbitListener {
-    
+
     @RabbitListener(queues = "fanout.queue1")
     public void listenFanoutQueue1(String msg) {
         System.out.println("消费者1接收到Fanout消息: 【" + msg + "】");
     }
-    
+
     @RabbitListener(queues = "fanout.queue2")
     public void listenFanoutQueue2(String msg) {
         System.out.println("消费者2接收到Fanout消息: 【" + msg + "】");
@@ -376,7 +376,7 @@ Direct Exchange 根据路由键进行精确匹配路由：
 ```java
 @Component
 public class DirectListener {
-    
+
     @RabbitListener(bindings = @QueueBinding(
         value = @Queue(name = "direct.queue1"),
         exchange = @Exchange(name = "dcxuexi.direct", type = ExchangeTypes.DIRECT),
@@ -385,7 +385,7 @@ public class DirectListener {
     public void listenDirectQueue1(String msg) {
         System.out.println("消费者接收到direct.queue1的消息: 【" + msg + "】");
     }
-    
+
     @RabbitListener(bindings = @QueueBinding(
         value = @Queue(name = "direct.queue2"),
         exchange = @Exchange(name = "dcxuexi.direct", type = ExchangeTypes.DIRECT),
@@ -424,7 +424,7 @@ Topic Exchange 支持通配符路由模式，提供更灵活的路由规则：
 ```java
 @Component
 public class TopicListener {
-    
+
     @RabbitListener(bindings = @QueueBinding(
         value = @Queue(name = "topic.queue1"),
         exchange = @Exchange(name = "dcxuexi.topic", type = ExchangeTypes.TOPIC),
@@ -433,7 +433,7 @@ public class TopicListener {
     public void listenTopicQueue1(String msg) {
         System.out.println("topic.queue1接收到消息: 【" + msg + "】");
     }
-    
+
     @RabbitListener(bindings = @QueueBinding(
         value = @Queue(name = "topic.queue2"),
         exchange = @Exchange(name = "dcxuexi.topic", type = ExchangeTypes.TOPIC),
@@ -456,22 +456,22 @@ public class TopicListener {
 ```java
 @Configuration
 public class RabbitConfig {
-    
+
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        
+
         template.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
                 // 消息成功到达 Broker
                 log.info("消息确认成功，ID: {}", correlationData.getId());
             } else {
                 // 消息发送失败
-                log.error("消息确认失败，ID: {}, 原因: {}", 
+                log.error("消息确认失败，ID: {}, 原因: {}",
                          correlationData.getId(), cause);
             }
         });
-        
+
         return template;
     }
 }
@@ -493,11 +493,11 @@ public void sendPersistentMessage() {
     MessageProperties props = MessagePropertiesBuilder.newInstance()
             .setDeliveryMode(MessageDeliveryMode.PERSISTENT)  // 消息持久化
             .build();
-    
+
     Message message = MessageBuilder.withBody(payload.getBytes())
             .andProperties(props)
             .build();
-    
+
     rabbitTemplate.send("exchange", "routingKey", message);
 }
 ```
@@ -518,8 +518,8 @@ spring:
 
 ```java
 @RabbitListener(queues = "order.queue")
-public void handleOrder(Order order, Channel channel, 
-                       @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) 
+public void handleOrder(Order order, Channel channel,
+                       @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag)
         throws IOException {
     try {
         // 业务处理逻辑
@@ -540,19 +540,19 @@ public void handleOrder(Order order, Channel channel,
 ```java
 @Configuration
 public class DlxConfig {
-    
+
     // 死信交换机
     @Bean
     public DirectExchange dlxExchange() {
         return new DirectExchange("dlx.exchange");
     }
-    
+
     // 死信队列
     @Bean
     public Queue dlxQueue() {
         return QueueBuilder.durable("dlx.queue").build();
     }
-    
+
     // 绑定死信队列
     @Bean
     public Binding dlxBinding() {
@@ -560,7 +560,7 @@ public class DlxConfig {
                 .to(dlxExchange())
                 .with("dlx.routingkey");
     }
-    
+
     // 业务队列配置死信交换机
     @Bean
     public Queue businessQueue() {
@@ -583,9 +583,9 @@ spring:
   rabbitmq:
     listener:
       simple:
-        concurrency: 5           # 最小消费者数量
-        max-concurrency: 10       # 最大消费者数量
-        prefetch: 10              # 每个消费者预取消息数量
+        concurrency: 5 # 最小消费者数量
+        max-concurrency: 10 # 最大消费者数量
+        prefetch: 10 # 每个消费者预取消息数量
 ```
 
 #### 4.3.2 连接池配置
@@ -595,10 +595,10 @@ spring:
 ```java
 @Configuration
 public class ConnectionPoolConfig {
-    
+
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = 
+        CachingConnectionFactory connectionFactory =
                 new CachingConnectionFactory("localhost");
         connectionFactory.setUsername("guest");
         connectionFactory.setPassword("guest");
@@ -618,15 +618,15 @@ public class ConnectionPoolConfig {
 ```java
 @Configuration
 public class MetricsConfig {
-    
+
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, 
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
                                         MeterRegistry meterRegistry) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        
+
         // 启用指标收集
         template.setObservationEnabled(true);
-        
+
         return template;
     }
 }
@@ -639,22 +639,22 @@ public class MetricsConfig {
 ```java
 @Component
 public class MessageTraceAspect {
-    
+
     @Around("execution(* org.springframework.amqp.rabbit.core.RabbitTemplate.convertAndSend(..))")
     public Object traceMessageSending(ProceedingJoinPoint joinPoint) throws Throwable {
         String exchange = (String) joinPoint.getArgs()[0];
         String routingKey = (String) joinPoint.getArgs()[1];
         Object message = joinPoint.getArgs()[2];
-        
+
         String messageId = UUID.randomUUID().toString();
-        log.info("发送消息 ID: {}, 交换机: {}, 路由键: {}", 
+        log.info("发送消息 ID: {}, 交换机: {}, 路由键: {}",
                  messageId, exchange, routingKey);
-        
+
         // 添加追踪ID到消息头
         if (message instanceof org.springframework.messaging.Message) {
             // 处理 Message 类型
         }
-        
+
         return joinPoint.proceed();
     }
 }
@@ -705,7 +705,7 @@ public class Order {
     private String customerId;
     private BigDecimal amount;
     private LocalDateTime createTime;
-    
+
     // 构造函数、getter、setter
 }
 ```
@@ -715,19 +715,19 @@ public class Order {
 ```java
 @Service
 public class OrderService {
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     public void createOrder(Order order) {
         // 保存订单到数据库
         orderRepository.save(order);
-        
+
         // 发送订单创建事件
-        rabbitTemplate.convertAndSend("order.events", 
-                                   "order.created", 
+        rabbitTemplate.convertAndSend("order.events",
+                                   "order.created",
                                    order);
-        
+
         log.info("订单创建消息已发送，订单ID: {}", order.getOrderId());
     }
 }
@@ -738,20 +738,20 @@ public class OrderService {
 ```java
 @Component
 public class OrderEventHandler {
-    
+
     @Autowired
     private InventoryService inventoryService;
-    
+
     @Autowired
     private NotificationService notificationService;
-    
+
     @RabbitListener(bindings = @QueueBinding(
         value = @Queue(name = "inventory.queue", durable = "true"),
         exchange = @Exchange(name = "order.events", type = "topic"),
         key = "order.created"
     ))
-    public void handleInventory(Order order, Channel channel, 
-                               @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) 
+    public void handleInventory(Order order, Channel channel,
+                               @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag)
             throws IOException {
         try {
             // 扣减库存
@@ -762,14 +762,14 @@ public class OrderEventHandler {
             channel.basicNack(deliveryTag, false, true);
         }
     }
-    
+
     @RabbitListener(bindings = @QueueBinding(
         value = @Queue(name = "notification.queue", durable = "true"),
         exchange = @Exchange(name = "order.events", type = "topic"),
         key = "order.created"
     ))
-    public void handleNotification(Order order, Channel channel, 
-                                  @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) 
+    public void handleNotification(Order order, Channel channel,
+                                  @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag)
             throws IOException {
         try {
             // 发送通知
@@ -787,15 +787,15 @@ public class OrderEventHandler {
 
 ### 6.1 开发实践建议
 
-| 实践领域 | 具体建议 |
-|---------|---------|
-| **序列化** | 使用 `Jackson2JsonMessageConverter` 替代默认序列化 |
-| **可靠性** | 启用 `publisher-confirm-type` 和 `publisher-returns` |
-| **消费模式** | 使用 `@RabbitListener` 而非手动创建容器 |
-| **并发控制** | 合理配置 `prefetch` 和 `concurrency` |
+| 实践领域     | 具体建议                                             |
+| ------------ | ---------------------------------------------------- |
+| **序列化**   | 使用 `Jackson2JsonMessageConverter` 替代默认序列化   |
+| **可靠性**   | 启用 `publisher-confirm-type` 和 `publisher-returns` |
+| **消费模式** | 使用 `@RabbitListener` 而非手动创建容器              |
+| **并发控制** | 合理配置 `prefetch` 和 `concurrency`                 |
 | **错误处理** | 使用 `RepublishMessageRecoverer` 实现重试 + 死信机制 |
-| **监控** | 集成 Micrometer + Prometheus 监控消费速率 |
-| **性能** | 避免在 Listener 中阻塞，使用线程池处理耗时任务 |
+| **监控**     | 集成 Micrometer + Prometheus 监控消费速率            |
+| **性能**     | 避免在 Listener 中阻塞，使用线程池处理耗时任务       |
 
 ### 6.2 常见问题解决方案
 
@@ -809,21 +809,21 @@ public class OrderEventHandler {
 ```java
 @SpringBootTest
 class OrderServiceTest {
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @Test
     void testOrderCreationAndMessageSending() {
         // 给定
         Order order = new Order("123", "customer1", new BigDecimal("100.00"));
-        
+
         // 当
         orderService.createOrder(order);
-        
+
         // 则
         Order receivedOrder = rabbitTemplate.receiveAndConvert("order.queue", 5000);
         assertThat(receivedOrder).isNotNull();

@@ -18,22 +18,22 @@ ESLint v9.0.0 最大的变化是默认配置格式从传统的 `.eslintrc.*` 文
 
 ```javascript
 // eslint.config.js (新的默认配置格式)
-import js from "@eslint/js";
+import js from '@eslint/js';
 
 export default [
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     rules: {
-      "no-unused-vars": "error",
-      "no-console": "warn"
-    }
+      'no-unused-vars': 'error',
+      'no-console': 'warn',
+    },
   },
   {
-    files: ["**/*.test.js"],
+    files: ['**/*.test.js'],
     rules: {
-      "no-unused-vars": "off"
-    }
-  }
+      'no-unused-vars': 'off',
+    },
+  },
 ];
 ```
 
@@ -84,39 +84,39 @@ npx eslint --init
 
 ```javascript
 // eslint.config.js
-import js from "@eslint/js";
-import globals from "globals";
+import js from '@eslint/js';
+import globals from 'globals';
 
 export default [
   {
     // 应用文件模式
-    files: ["src/**/*.js"],
-    
+    files: ['src/**/*.js'],
+
     // 语言选项
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "module",
+      sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.node
-      }
+        ...globals.node,
+      },
     },
-    
+
     // 使用的规则集
     rules: {
-      "no-unused-vars": "error",
-      "no-console": "warn",
-      "indent": ["error", 2]
-    }
+      'no-unused-vars': 'error',
+      'no-console': 'warn',
+      indent: ['error', 2],
+    },
   },
-  
+
   // 针对测试文件的特定配置
   {
-    files: ["**/*.test.js"],
+    files: ['**/*.test.js'],
     rules: {
-      "no-unused-vars": "off"
-    }
-  }
+      'no-unused-vars': 'off',
+    },
+  },
 ];
 ```
 
@@ -128,21 +128,19 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true
+    node: true,
   },
-  extends: [
-    "eslint:recommended"
-  ],
+  extends: ['eslint:recommended'],
   parserOptions: {
     ecmaVersion: 2022,
-    sourceType: "module"
+    sourceType: 'module',
   },
   rules: {
-    "indent": ["error", 2],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"]
+    indent: ['error', 2],
+    quotes: ['error', 'double'],
+    semi: ['error', 'always'],
   },
-  ignorePatterns: ["node_modules/", "dist/"]
+  ignorePatterns: ['node_modules/', 'dist/'],
 };
 ```
 
@@ -170,19 +168,19 @@ ESLint 规则分为三大类别 ：
 
 ```javascript
 // eslint.config.js
-import globals from "globals";
+import globals from 'globals';
 
 export default [
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     languageOptions: {
       globals: {
-        ...globals.browser,  // 浏览器全局变量（window, document等）
-        ...globals.es2021,   // ES2021 全局变量
-        myCustomGlobal: "readonly"  // 自定义全局变量
-      }
-    }
-  }
+        ...globals.browser, // 浏览器全局变量（window, document等）
+        ...globals.es2021, // ES2021 全局变量
+        myCustomGlobal: 'readonly', // 自定义全局变量
+      },
+    },
+  },
 ];
 ```
 
@@ -194,30 +192,30 @@ export default [
 // 常用规则配置示例
 export default [
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     rules: {
       // 缩进：2个空格，SwitchCase单独配置
-      "indent": ["error", 2, { "SwitchCase": 1 }],
-      
+      indent: ['error', 2, { SwitchCase: 1 }],
+
       // 引号：强制使用单引号，允许模板字符串
-      "quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
-      
+      quotes: ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
+
       // 分号：强制使用分号
-      "semi": ["error", "always"],
-      
+      semi: ['error', 'always'],
+
       // 禁止未使用变量（允许函数参数未使用）
-      "no-unused-vars": ["error", { "args": "none" }],
-      
+      'no-unused-vars': ['error', { args: 'none' }],
+
       // 控制台使用限制（允许warn和error）
-      "no-console": ["warn", { "allow": ["warn", "error"] }],
-      
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+
       // 优先使用const
-      "prefer-const": "error",
-      
+      'prefer-const': 'error',
+
       // 箭头函数括号规则
-      "arrow-parens": ["error", "as-needed"]
-    }
-  }
+      'arrow-parens': ['error', 'as-needed'],
+    },
+  },
 ];
 ```
 
@@ -229,11 +227,11 @@ ESLint v9.0.0 引入了有用的新规则：
 // 使用 no-useless-assignment 规则检测无用赋值
 export default [
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     rules: {
-      "no-useless-assignment": "error"  // 检测并标记无用赋值
-    }
-  }
+      'no-useless-assignment': 'error', // 检测并标记无用赋值
+    },
+  },
 ];
 ```
 
@@ -241,8 +239,8 @@ export default [
 
 ```javascript
 // 错误示例：无用的赋值
-let id = 1234;        // 赋值的1234从未被使用
-id = calculateId();   // 正确的赋值
+let id = 1234; // 赋值的1234从未被使用
+id = calculateId(); // 正确的赋值
 
 // 正确写法
 let id;
@@ -257,37 +255,37 @@ ESLint 支持丰富的插件生态系统，以下是一些常用插件的集成�
 
 ```javascript
 // eslint.config.js
-import js from "@eslint/js";
-import react from "eslint-plugin-react";
-import importPlugin from "eslint-plugin-import";
+import js from '@eslint/js';
+import react from 'eslint-plugin-react';
+import importPlugin from 'eslint-plugin-import';
 
 export default [
   // 基础JavaScript规则
   js.configs.recommended,
-  
+
   // React插件配置
   {
-    files: ["**/*.{js,jsx}"],
+    files: ['**/*.{js,jsx}'],
     plugins: {
-      react
+      react,
     },
     rules: {
-      "react/jsx-uses-react": "error",
-      "react/jsx-uses-vars": "error"
-    }
+      'react/jsx-uses-react': 'error',
+      'react/jsx-uses-vars': 'error',
+    },
   },
-  
+
   // import插件配置（处理ES6模块导入）
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     plugins: {
-      import: importPlugin
+      import: importPlugin,
     },
     rules: {
-      "import/no-unresolved": "error",
-      "import/named": "error"
-    }
-  }
+      'import/no-unresolved': 'error',
+      'import/named': 'error',
+    },
+  },
 ];
 ```
 
@@ -299,16 +297,13 @@ export default [
 // 扩展多个配置方案
 export default [
   {
-    files: ["**/*.js"],
-    extends: [
-      "eslint:recommended",
-      "plugin:react/recommended"
-    ],
+    files: ['**/*.js'],
+    extends: ['eslint:recommended', 'plugin:react/recommended'],
     rules: {
       // 可覆盖扩展配置中的特定规则
-      "react/prop-types": "off"  // 禁用prop-types检查
-    }
-  }
+      'react/prop-types': 'off', // 禁用prop-types检查
+    },
+  },
 ];
 ```
 
@@ -325,12 +320,7 @@ export default [
 ```json
 {
   "eslint.enable": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
@@ -368,8 +358,8 @@ coverage/
 // eslint.config.js
 export default [
   {
-    ignores: ["node_modules/", "dist/", "*.config.js"]
-  }
+    ignores: ['node_modules/', 'dist/', '*.config.js'],
+  },
 ];
 ```
 
@@ -396,15 +386,15 @@ npx eslint --ext .js,.jsx,.ts,.tsx src/
 // eslint.config.js
 export default [
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     // 仅启用必要的规则
     rules: {
       // 重要规则设为error
-      "no-unused-vars": "error",
+      'no-unused-vars': 'error',
       // 次要规则设为warn或off
-      "complexity": ["warn", 10]
-    }
-  }
+      complexity: ['warn', 10],
+    },
+  },
 ];
 ```
 
@@ -466,10 +456,7 @@ npm install --save-dev husky lint-staged
     "lint:staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "git add"
-    ]
+    "*.{js,jsx,ts,tsx}": ["eslint --fix", "git add"]
   }
 }
 ```
@@ -507,6 +494,7 @@ jobs:
 从旧版本迁移到 v9.0.0+ 的建议步骤：
 
 1. **升级 ESLint**：
+
    ```bash
    npm install eslint@^9.0.0 --save-dev
    ```
@@ -525,33 +513,33 @@ jobs:
 // 传统配置 (.eslintrc.js)
 module.exports = {
   env: { browser: true, es2021: true },
-  extends: ["eslint:recommended"],
+  extends: ['eslint:recommended'],
   rules: {
-    "no-unused-vars": "error",
-    "no-console": "warn"
-  }
+    'no-unused-vars': 'error',
+    'no-console': 'warn',
+  },
 };
 
 // 转换为扁平配置 (eslint.config.js)
-import js from "@eslint/js";
-import globals from "globals";
+import js from '@eslint/js';
+import globals from 'globals';
 
 export default [
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 2021,
-      sourceType: "module", 
+      sourceType: 'module',
       globals: {
-        ...globals.browser
-      }
+        ...globals.browser,
+      },
     },
     rules: {
       ...js.configs.recommended.rules,
-      "no-unused-vars": "error",
-      "no-console": "warn"
-    }
-  }
+      'no-unused-vars': 'error',
+      'no-console': 'warn',
+    },
+  },
 ];
 ```
 

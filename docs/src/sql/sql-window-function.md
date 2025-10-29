@@ -20,14 +20,14 @@ SQL 窗口函数（Window Function）是 ANSI SQL 2003 标准引入的强大分�
 
 为了更好地理解窗口函数的特性，下面通过表格对比两者的核心差异：
 
-| 特性 | 聚合函数 (Aggregate) | 窗口函数 (Window) |
-|------|-------------------|----------------|
-| 数据折叠 | 是，每组输出单行结果 | 否，保留所有原始行 |
-| 分区支持 | 通过 GROUP BY 实现 | 通过 PARTITION BY 实现 |
-| 排序支持 | 需配合子查询或变量 | 直接支持 ORDER BY |
-| 原始数据 | 无法保留明细行 | 明细与统计结果共存 |
-| 滑动窗口 | 不支持 | 通过 ROWS/RANGE 实现 |
-| 典型场景 | 汇总统计、图表聚合 | 排名、环比、累计值分析 |
+| 特性     | 聚合函数 (Aggregate) | 窗口函数 (Window)      |
+| -------- | -------------------- | ---------------------- |
+| 数据折叠 | 是，每组输出单行结果 | 否，保留所有原始行     |
+| 分区支持 | 通过 GROUP BY 实现   | 通过 PARTITION BY 实现 |
+| 排序支持 | 需配合子查询或变量   | 直接支持 ORDER BY      |
+| 原始数据 | 无法保留明细行       | 明细与统计结果共存     |
+| 滑动窗口 | 不支持               | 通过 ROWS/RANGE 实现   |
+| 典型场景 | 汇总统计、图表聚合   | 排名、环比、累计值分析 |
 
 **示例对比**：计算每个部门的平均工资
 
@@ -53,8 +53,8 @@ FROM employees;
 
 ```sql
 <窗口函数> OVER (
-    [PARTITION BY <分区表达式>] 
-    [ORDER BY <排序表达式> [ASC|DESC]] 
+    [PARTITION BY <分区表达式>]
+    [ORDER BY <排序表达式> [ASC|DESC]]
     [窗口帧子句]
 )
 ```
@@ -91,7 +91,7 @@ FROM employee;
 -- 计算最近3行的移动平均（包含前2行和当前行）
 SELECT order_date, sales_amount,
        AVG(sales_amount) OVER (
-           ORDER BY order_date 
+           ORDER BY order_date
            ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
        ) AS moving_avg
 FROM sales;
@@ -111,12 +111,12 @@ FROM employees;
 
 #### ROWS 与 RANGE 的核心差异
 
-| 特性 | `ROWS` | `RANGE` |
-|------|--------|---------|
-| 划分依据 | 物理行号（绝对位置） | 逻辑值范围（相对值） |
-| 适用场景 | 固定行数的滑动窗口 | 连续数值范围或时间间隔 |
-| 重复值处理 | 按行号区分，重复值视为不同行 | 相同值视为同一范围，全部包含 |
-| 性能 | 通常更优（按固定行数扫描） | 可能较慢（需扫描值范围内的所有行） |
+| 特性       | `ROWS`                       | `RANGE`                            |
+| ---------- | ---------------------------- | ---------------------------------- |
+| 划分依据   | 物理行号（绝对位置）         | 逻辑值范围（相对值）               |
+| 适用场景   | 固定行数的滑动窗口           | 连续数值范围或时间间隔             |
+| 重复值处理 | 按行号区分，重复值视为不同行 | 相同值视为同一范围，全部包含       |
+| 性能       | 通常更优（按固定行数扫描）   | 可能较慢（需扫描值范围内的所有行） |
 
 ## 3 窗口函数分类详解
 
@@ -128,11 +128,11 @@ FROM employees;
 
 三种排名函数的处理方式有重要区别：
 
-| 函数名 | 并列值处理 | 名次连续性 | 典型场景 |
-|--------|------------|-----------|----------|
-| `ROW_NUMBER()` | 否，始终生成唯一序号 | 连续 | 去重、唯一序号分配 |
-| `RANK()` | 是，并列占用相同名次 | 不连续，会跳号 | 学生成绩排名，允许并列 |
-| `DENSE_RANK()` | 是，并列占用相同名次 | 连续，不跳号 | 等级划分，如 A/B/C 档 |
+| 函数名         | 并列值处理           | 名次连续性     | 典型场景               |
+| -------------- | -------------------- | -------------- | ---------------------- |
+| `ROW_NUMBER()` | 否，始终生成唯一序号 | 连续           | 去重、唯一序号分配     |
+| `RANK()`       | 是，并列占用相同名次 | 不连续，会跳号 | 学生成绩排名，允许并列 |
+| `DENSE_RANK()` | 是，并列占用相同名次 | 连续，不跳号   | 等级划分，如 A/B/C 档  |
 
 **实际示例**：
 
@@ -193,7 +193,7 @@ WITH month_sum AS (
 SELECT shop_id, mon, amt,
        LAG(amt, 1) OVER (PARTITION BY shop_id ORDER BY mon) AS prev_amt,
        CASE WHEN LAG(amt, 1) OVER (PARTITION BY shop_id ORDER BY mon) IS NULL THEN NULL
-            ELSE ROUND( (amt - LAG(amt, 1) OVER (PARTITION BY shop_id ORDER BY mon)) * 100.0 
+            ELSE ROUND( (amt - LAG(amt, 1) OVER (PARTITION BY shop_id ORDER BY mon)) * 100.0
                  / LAG(amt, 1) OVER (PARTITION BY shop_id ORDER BY mon), 2)
        END AS mom_growth_rate
 FROM month_sum
@@ -230,7 +230,7 @@ FROM daily_sales;
 -- 计算3期移动平均
 SELECT order_date, sales_amount,
        AVG(sales_amount) OVER (
-           ORDER BY order_date 
+           ORDER BY order_date
            ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
        ) AS moving_avg_3period
 FROM sales;
@@ -262,7 +262,7 @@ WHERE rn <= 3;
 ```sql
 -- 计算员工在部门内的业绩贡献占比
 SELECT emp_id, emp_name, dept_id, month, sales_amount,
-       ROUND(sales_amount * 100.0 / SUM(sales_amount) OVER 
+       ROUND(sales_amount * 100.0 / SUM(sales_amount) OVER
              (PARTITION BY dept_id, month), 2) AS contribution_pct
 FROM sales;
 ```
@@ -273,8 +273,8 @@ FROM sales;
 -- 计算KPI连续达标天数
 SELECT emp_id, work_date, kpi_value,
        SUM(CASE WHEN kpi_value >= target THEN 1 ELSE 0 END) OVER (
-           PARTITION BY emp_id 
-           ORDER BY work_date 
+           PARTITION BY emp_id
+           ORDER BY work_date
            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
        ) AS consecutive_days
 FROM daily_kpi;
@@ -343,12 +343,12 @@ WindowAgg  (cost=... rows=...)
 
 ### 5.3 常见误区与避坑指南
 
-| 误区描述 | 正确做法 |
-|---------|---------|
-| 在 WHERE 子句中直接引用窗口函数别名 | 使用子查询或 CTE 先计算窗口列再过滤 |
-| 忽略 NULLS FIRST/LAST 导致排序不稳定 | 显式指定 NULL 顺序，确保结果可复现 |
-| 认为 DENSE_RANK 一定优于 RANK | 依据业务需求选择，等级划分用 DENSE_RANK，真实排名用 RANK |
-| 在 MySQL 5.x 使用窗口函数 | 升级至 8.0+ 或使用变量模拟（性能较差） |
+| 误区描述                             | 正确做法                                                 |
+| ------------------------------------ | -------------------------------------------------------- |
+| 在 WHERE 子句中直接引用窗口函数别名  | 使用子查询或 CTE 先计算窗口列再过滤                      |
+| 忽略 NULLS FIRST/LAST 导致排序不稳定 | 显式指定 NULL 顺序，确保结果可复现                       |
+| 认为 DENSE_RANK 一定优于 RANK        | 依据业务需求选择，等级划分用 DENSE_RANK，真实排名用 RANK |
+| 在 MySQL 5.x 使用窗口函数            | 升级至 8.0+ 或使用变量模拟（性能较差）                   |
 
 **正确过滤示例**：
 
@@ -396,7 +396,7 @@ WHERE rnk <= 5;
 窗口函数将 SQL 从"集合查询语言"推进到"数据分析语言"，极大增强了SQL处理复杂分析任务的能力。通过本文的详细讲解，我们可以看到窗口函数在以下场景中具有不可替代的优势：
 
 1. **排名与分位分析**：Top-N查询、绩效分档、百分比排名
-2. **时间序列分析**：环比、同比、移动平均、累计计算  
+2. **时间序列分析**：环比、同比、移动平均、累计计算
 3. **业务指标计算**：贡献度分析、完成率统计、连续达标检测
 4. **数据质量处理**：重复数据识别、数据差距分析
 

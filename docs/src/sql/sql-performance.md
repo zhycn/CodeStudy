@@ -55,15 +55,15 @@ GO
 
 执行计划中的访问类型按性能从高到低排列：
 
-| 访问类型 | 说明 | 性能评价 |
-|---------|------|----------|
-| system | 表只有一行 | 最优 |
-| const | 通过主键或唯一索引查询 | 最优 |
-| eq_ref | 关联查询中使用主键或唯一索引 | 很优 |
-| ref | 使用非唯一索引扫描 | 良好 |
-| range | 索引范围扫描 | 良好 |
-| index | 全索引扫描 | 一般 |
-| ALL | 全表扫描 | 最差（需优化） |
+| 访问类型 | 说明                         | 性能评价       |
+| -------- | ---------------------------- | -------------- |
+| system   | 表只有一行                   | 最优           |
+| const    | 通过主键或唯一索引查询       | 最优           |
+| eq_ref   | 关联查询中使用主键或唯一索引 | 很优           |
+| ref      | 使用非唯一索引扫描           | 良好           |
+| range    | 索引范围扫描                 | 良好           |
+| index    | 全索引扫描                   | 一般           |
+| ALL      | 全表扫描                     | 最差（需优化） |
 
 #### Extra 列关键信息
 
@@ -76,8 +76,8 @@ GO
 
 ```sql
 -- 案例：分析订单查询性能
-EXPLAIN SELECT o.order_id, u.name 
-FROM orders o JOIN users u ON o.user_id = u.id 
+EXPLAIN SELECT o.order_id, u.name
+FROM orders o JOIN users u ON o.user_id = u.id
 WHERE u.city = 'Shanghai' AND o.create_time > '2023-01-01';
 ```
 
@@ -94,12 +94,12 @@ WHERE u.city = 'Shanghai' AND o.create_time > '2023-01-01';
 
 ### 3.1 索引类型选择
 
-| 场景 | 推荐索引类型 |
-|------|-------------|
-| 精确匹配 | B-Tree 索引 |
-| 范围查询 | B-Tree 索引 |
-| 全文搜索 | 全文索引 |
-| 高频 JOIN 字段 | 复合索引 |
+| 场景           | 推荐索引类型 |
+| -------------- | ------------ |
+| 精确匹配       | B-Tree 索引  |
+| 范围查询       | B-Tree 索引  |
+| 全文搜索       | 全文索引     |
+| 高频 JOIN 字段 | 复合索引     |
 
 ### 3.2 复合索引与最左前缀原则
 
@@ -153,7 +153,7 @@ SELECT * FROM citys WHERE name LIKE '大连%';
 
 ## 4. 查询语句优化技巧
 
-### 4.1 避免 SELECT *，指定具体字段
+### 4.1 避免 SELECT \*，指定具体字段
 
 ```sql
 -- 不推荐：查询不必要字段
@@ -198,12 +198,12 @@ SELECT * FROM small_table s LEFT JOIN large_table l ON s.id = l.small_id;
 
 ```sql
 -- 不推荐：先分组后过滤
-SELECT job, AVG(salary) FROM employee 
+SELECT job, AVG(salary) FROM employee
 GROUP BY job
 HAVING job='develop' OR job='test';
 
 -- 推荐：先过滤后分组
-SELECT job, AVG(salary) FROM employee 
+SELECT job, AVG(salary) FROM employee
 WHERE job='develop' OR job='test'
 GROUP BY job;
 ```
@@ -283,7 +283,7 @@ SELECT * FROM users WHERE id = 1001;
 SELECT * FROM users FORCE INDEX(idx_users_email) WHERE email = 'test@example.com';
 
 -- Oracle指定连接方式
-SELECT /*+ USE_NL(employees departments) */ * 
+SELECT /*+ USE_NL(employees departments) */ *
 FROM employees JOIN departments [...].
 ```
 
@@ -293,8 +293,8 @@ FROM employees JOIN departments [...].
 
 ```sql
 -- 复杂查询优化前
-SELECT * FROM orders o 
-JOIN users u ON o.user_id = u.id 
+SELECT * FROM orders o
+JOIN users u ON o.user_id = u.id
 WHERE u.city = 'Shanghai' AND o.status = 'paid';
 
 -- 优化方案：拆分复杂查询
@@ -302,8 +302,8 @@ WHERE u.city = 'Shanghai' AND o.status = 'paid';
 SELECT id FROM users WHERE city = 'Shanghai';
 
 -- 第二步：使用子查询
-SELECT * FROM orders 
-WHERE user_id IN (SELECT id FROM users WHERE city = 'Shanghai') 
+SELECT * FROM orders
+WHERE user_id IN (SELECT id FROM users WHERE city = 'Shanghai')
 AND status = 'paid';
 ```
 
@@ -315,12 +315,12 @@ AND status = 'paid';
 -- 使用临时表优化复杂查询
 CREATE TEMPORARY TABLE temp_high_value_orders AS
 SELECT user_id, SUM(amount) as total_amount
-FROM orders 
+FROM orders
 WHERE order_date > '2023-01-01'
 GROUP BY user_id
 HAVING SUM(amount) > 10000;
 
-SELECT u.name, t.total_amount 
+SELECT u.name, t.total_amount
 FROM users u JOIN temp_high_value_orders t ON u.id = t.user_id;
 ```
 
@@ -350,17 +350,17 @@ interactive_timeout = 300
 
 ```sql
 -- 原始SQL（执行时间5.6秒）
-SELECT o.order_id, u.name 
-FROM orders o JOIN users u ON o.user_id = u.id 
+SELECT o.order_id, u.name
+FROM orders o JOIN users u ON o.user_id = u.id
 WHERE u.city = 'Shanghai' AND o.create_time > '2023-01-01';
 ```
 
 ### 8.2 执行计划分析
 
-| table | type | rows_examined | key_used | Extra |
-|-------|------|---------------|----------|-------|
-| users | ALL | 50000 | NULL | Using where |
-| orders | ALL | 1000000 | NULL | Using where |
+| table  | type | rows_examined | key_used | Extra       |
+| ------ | ---- | ------------- | -------- | ----------- |
+| users  | ALL  | 50000         | NULL     | Using where |
+| orders | ALL  | 1000000       | NULL     | Using where |
 
 **问题识别**：两表均全表扫描，扫描行数高达105万行。
 
@@ -376,10 +376,10 @@ CREATE INDEX idx_orders_userid_createtime ON orders(user_id, create_time);
 
 ### 8.4 优化后效果
 
-| 指标 | 优化前 | 优化后 |
-|------|--------|--------|
-| 执行时间 | 5.6秒 | 0.05秒 |
-| 扫描行数 | 105万 | 6000行 |
+| 指标     | 优化前 | 优化后 |
+| -------- | ------ | ------ |
+| 执行时间 | 5.6秒  | 0.05秒 |
+| 扫描行数 | 105万  | 6000行 |
 
 ## 9. 性能监控与维护
 
@@ -403,12 +403,12 @@ SQL性能优化是一个持续迭代的过程，需要遵循以下核心原则�
 
 ### 10.1 优化流程总结
 
-| 阶段 | 关键动作 |
-|------|----------|
-| 定位 | 慢查询日志 + EXPLAIN 分析 |
-| 分析 | 执行计划解读 + 索引覆盖分析 |
+| 阶段 | 关键动作                       |
+| ---- | ------------------------------ |
+| 定位 | 慢查询日志 + EXPLAIN 分析      |
+| 分析 | 执行计划解读 + 索引覆盖分析    |
 | 优化 | 索引优化 + SQL 重写 + 配置调整 |
-| 验证 | 性能指标对比 + 压力测试 |
+| 验证 | 性能指标对比 + 压力测试        |
 
 ### 10.2 优化箴言
 

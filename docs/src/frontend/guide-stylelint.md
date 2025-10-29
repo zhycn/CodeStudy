@@ -68,7 +68,7 @@ export default {
   extends: ['stylelint-config-standard'],
   rules: {
     // 项目特定规则
-  }
+  },
 };
 ```
 
@@ -117,7 +117,7 @@ export default {
   // 覆盖特定文件的配置
   overrides: [],
   // 默认严重级别
-  defaultSeverity: 'error'
+  defaultSeverity: 'error',
 };
 ```
 
@@ -129,22 +129,22 @@ export default {
 export default {
   extends: [
     'stylelint-config-standard',
-    'stylelint-config-prettier' // 兼容 Prettier
+    'stylelint-config-prettier', // 兼容 Prettier
   ],
   rules: {
     // 项目特定的规则覆盖
-  }
+  },
 };
 ```
 
 配置继承的优先级体系：
 
-| 配置来源 | 优先级 | 说明 |
-|---------|--------|------|
-| 当前配置的 rules | 最高 | 直接定义的规则具有最高优先级 |
-| 最后扩展的配置 | 高 | 数组后面的配置覆盖前面的 |
-| 中间扩展的配置 | 中 | 按扩展顺序依次应用 |
-| 最先扩展的配置 | 低 | 数组开头的配置优先级最低 |
+| 配置来源         | 优先级 | 说明                         |
+| ---------------- | ------ | ---------------------------- |
+| 当前配置的 rules | 最高   | 直接定义的规则具有最高优先级 |
+| 最后扩展的配置   | 高     | 数组后面的配置覆盖前面的     |
+| 中间扩展的配置   | 中     | 按扩展顺序依次应用           |
+| 最先扩展的配置   | 低     | 数组开头的配置优先级最低     |
 
 ### 3.3 规则配置（rules）
 
@@ -155,13 +155,13 @@ export default {
   rules: {
     // 1. 禁用规则
     'rule-name': null,
-    
+
     // 2. 启用规则（仅主选项）
     'rule-name': primaryOption,
-    
+
     // 3. 启用规则（主选项 + 次选项）
-    'rule-name': [primaryOption, secondaryOptions]
-  }
+    'rule-name': [primaryOption, secondaryOptions],
+  },
 };
 ```
 
@@ -174,24 +174,24 @@ export default {
     'color-hex-case': 'lower', // 十六进制颜色小写
     'color-hex-length': 'short', // 使用缩写的十六进制颜色
     'color-no-invalid-hex': true, // 禁止无效的十六进制颜色
-    
+
     // 字体相关
     'font-family-no-missing-generic-family-keyword': true, // 字体系列包含通用族类
-    
+
     // 单位相关
     'unit-no-unknown': true, // 禁止未知单位
     'unit-allowed-list': ['em', 'rem', '%', 's'], // 允许的单位列表
-    
+
     // 选择器
     'selector-class-pattern': '^[a-z][a-z0-9]*(-[a-z0-9]+)*$', // 类名必须kebab-case
-    
+
     // 声明块
     'declaration-block-trailing-semicolon': 'always', // 声明块尾部分号
     'block-no-empty': true, // 禁止空块
-    
+
     // 数字
-    'number-leading-zero': 'always' // 小数前导零
-  }
+    'number-leading-zero': 'always', // 小数前导零
+  },
 };
 ```
 
@@ -206,25 +206,25 @@ export default {
     'custom-property-pattern': [
       '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$',
       {
-        message: '自定义属性名称必须使用kebab-case格式'
-      }
+        message: '自定义属性名称必须使用kebab-case格式',
+      },
     ],
-    
+
     // 控制严重级别
     'number-max-precision': [
       2,
       {
         ignoreUnits: ['em'],
-        severity: 'warning' // 或 "error"
-      }
+        severity: 'warning', // 或 "error"
+      },
     ],
-    
+
     // 禁用自动修复
     'color-function-notation': ['modern', { disableFix: true }],
-    
+
     // 报告禁用注释
-    'color-no-invalid-hex': [true, { reportDisables: true }]
-  }
+    'color-no-invalid-hex': [true, { reportDisables: true }],
+  },
 };
 ```
 
@@ -235,29 +235,38 @@ export default {
 ```javascript
 export default {
   plugins: [
-    'stylelint-scss',    // SCSS 支持
-    'stylelint-order'   // 属性排序
+    'stylelint-scss', // SCSS 支持
+    'stylelint-order', // 属性排序
   ],
   rules: {
     // SCSS 规则
     'scss/dollar-variable-pattern': '^[a-z][a-z0-9]*(-[a-z0-9]+)*$',
     'scss/at-rule-no-unknown': true,
-    
+
     // 排序规则
-    'order/order': [
-      'custom-properties',
-      'dollar-variables',
-      'declarations',
-      'rules',
-      'at-rules'
-    ],
+    'order/order': ['custom-properties', 'dollar-variables', 'declarations', 'rules', 'at-rules'],
     'order/properties-order': [
-      'position', 'top', 'right', 'bottom', 'left',
-      'display', 'float', 'width', 'height',
-      'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-      'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left'
-    ]
-  }
+      'position',
+      'top',
+      'right',
+      'bottom',
+      'left',
+      'display',
+      'float',
+      'width',
+      'height',
+      'padding',
+      'padding-top',
+      'padding-right',
+      'padding-bottom',
+      'padding-left',
+      'margin',
+      'margin-top',
+      'margin-right',
+      'margin-bottom',
+      'margin-left',
+    ],
+  },
 };
 ```
 
@@ -274,20 +283,20 @@ export default {
       customSyntax: 'postcss-scss',
       rules: {
         'scss/at-rule-no-unknown': true,
-        'scss/selector-no-union-class-name': true
-      }
+        'scss/selector-no-union-class-name': true,
+      },
     },
     {
       files: ['**/components/**/*.css'],
       rules: {
-        'selector-max-specificity': '0,3,0'
-      }
+        'selector-max-specificity': '0,3,0',
+      },
     },
     {
       files: ['**/*.js', '**/*.ts'],
-      customSyntax: 'postcss-lit'
-    }
-  ]
+      customSyntax: 'postcss-lit',
+    },
+  ],
 };
 ```
 
@@ -329,13 +338,16 @@ test/
 /* stylelint-enable */
 
 /* 行内禁用 */
-#id { /* stylelint-disable-line */
+#id {
+  /* stylelint-disable-line */
   color: pink !important; /* stylelint-disable-line declaration-no-important */
 }
 
 /* 禁用下一行 */
 /* stylelint-disable-next-line declaration-no-important */
-#id { color: pink !important; }
+#id {
+  color: pink !important;
+}
 ```
 
 ## 4. 预处理器和特殊语法支持
@@ -357,8 +369,8 @@ export default {
   rules: {
     'scss/dollar-variable-pattern': '^[a-z][a-z0-9]*(-[a-z0-9]+)*$',
     'scss/at-rule-no-unknown': true,
-    'scss/operator-no-newline-after': null
-  }
+    'scss/operator-no-newline-after': null,
+  },
 };
 ```
 
@@ -376,8 +388,8 @@ export default {
   extends: ['stylelint-config-recommended-less'],
   customSyntax: 'postcss-less',
   rules: {
-    'less/color-no-invalid-hex': true
-  }
+    'less/color-no-invalid-hex': true,
+  },
 };
 ```
 
@@ -398,13 +410,13 @@ export default {
   overrides: [
     {
       files: ['**/*.vue'],
-      customSyntax: 'postcss-html'
+      customSyntax: 'postcss-html',
     },
     {
       files: ['**/*.jsx', '**/*.tsx'],
-      customSyntax: 'postcss-lit'
-    }
-  ]
+      customSyntax: 'postcss-lit',
+    },
+  ],
 };
 ```
 
@@ -452,9 +464,9 @@ export default {
       fix: true,
       cache: true,
       emitErrors: true,
-      failOnError: false
-    })
-  ]
+      failOnError: false,
+    }),
+  ],
 };
 ```
 
@@ -468,9 +480,9 @@ export default defineConfig({
   plugins: [
     stylelint({
       fix: true,
-      cache: false
-    })
-  ]
+      cache: false,
+    }),
+  ],
 });
 ```
 
@@ -487,10 +499,7 @@ npm install --save-dev husky lint-staged
 ```json
 {
   "lint-staged": {
-    "*.{html,vue,css,sass,scss,less}": [
-      "stylelint --fix",
-      "git add"
-    ]
+    "*.{html,vue,css,sass,scss,less}": ["stylelint --fix", "git add"]
   },
   "husky": {
     "hooks": {
@@ -515,8 +524,8 @@ export default {
   rules: {
     'color-no-hex': true,
     'selector-class-pattern': '^[a-z][a-z0-9]*(-[a-z0-9]+)*$',
-    'unit-allowed-list': ['em', 'rem', '%', 'vw', 'vh']
-  }
+    'unit-allowed-list': ['em', 'rem', '%', 'vw', 'vh'],
+  },
 };
 ```
 
@@ -529,7 +538,7 @@ npm install --save-dev stylelint-config-team
 ```javascript
 // stylelint.config.js
 export default {
-  extends: ['stylelint-config-team']
+  extends: ['stylelint-config-team'],
 };
 ```
 
@@ -544,8 +553,8 @@ export default {
   rules: {
     'no-empty-source': isProduction ? true : null,
     'declaration-no-important': isProduction ? true : 'warning',
-    'max-nesting-depth': isProduction ? 3 : 4
-  }
+    'max-nesting-depth': isProduction ? 3 : 4,
+  },
 };
 ```
 
@@ -561,20 +570,30 @@ export default {
      * - 使用现代颜色函数代替十六进制
      * - 提高颜色值的可读性
      */
-    'color-no-hex': [true, {
-      message: '请使用 rgb()、hsl() 或颜色名称代替十六进制颜色值'
-    }],
-    
+    'color-no-hex': [
+      true,
+      {
+        message: '请使用 rgb()、hsl() 或颜色名称代替十六进制颜色值',
+      },
+    ],
+
     /**
      * 单位使用规范
      * - 优先使用相对单位
      * - 限制绝对单位的使用
      */
-    'unit-allowed-list': ['em', 'rem', '%', 'vw', 'vh', {
-      severity: 'warning',
-      message: '建议使用相对单位以确保响应式设计'
-    }]
-  }
+    'unit-allowed-list': [
+      'em',
+      'rem',
+      '%',
+      'vw',
+      'vh',
+      {
+        severity: 'warning',
+        message: '建议使用相对单位以确保响应式设计',
+      },
+    ],
+  },
 };
 ```
 
@@ -586,22 +605,15 @@ export default {
 export default {
   // 1. 使用缓存提高检查速度
   cache: true,
-  
+
   // 2. 精确指定检查文件范围
-  ignoreFiles: [
-    '**/dist/**',
-    '**/node_modules/**',
-    '**/vendor/**',
-    '**/*.min.css'
-  ],
-  
+  ignoreFiles: ['**/dist/**', '**/node_modules/**', '**/vendor/**', '**/*.min.css'],
+
   // 3. 按需加载插件和配置
-  plugins: process.env.CI 
-    ? ['stylelint-order', 'stylelint-scss']
-    : ['stylelint-order'],
-    
+  plugins: process.env.CI ? ['stylelint-order', 'stylelint-scss'] : ['stylelint-order'],
+
   // 4. 开发环境使用宽松规则
-  rules: process.env.NODE_ENV === 'production' ? strictRules : devRules
+  rules: process.env.NODE_ENV === 'production' ? strictRules : devRules,
 };
 ```
 
@@ -619,8 +631,8 @@ export default {
   rules: {
     'at-rule-no-unknown': null,
     'scss/at-rule-no-unknown': true,
-    'scss/selector-no-union-class-name': true
-  }
+    'scss/selector-no-union-class-name': true,
+  },
 };
 ```
 
@@ -636,8 +648,8 @@ npm install --save-dev stylelint-config-prettier
 export default {
   extends: [
     'stylelint-config-standard',
-    'stylelint-config-prettier' // 必须放在最后
-  ]
+    'stylelint-config-prettier', // 必须放在最后
+  ],
 };
 ```
 
@@ -651,17 +663,17 @@ const stylelint = require('stylelint');
 
 const ruleName = 'plugin/color-naming-convention';
 const messages = stylelint.utils.ruleMessages(ruleName, {
-  expected: 'Expected color value to use named color or CSS variable'
+  expected: 'Expected color value to use named color or CSS variable',
 });
 
 export default stylelint.createPlugin(ruleName, (primaryOption) => {
   return (root, result) => {
     const validOptions = stylelint.utils.validateOptions(result, ruleName, {
-      actual: primaryOption
+      actual: primaryOption,
     });
-    
+
     if (!validOptions) return;
-    
+
     root.walkDecls((decl) => {
       if (decl.prop.includes('color')) {
         const value = decl.value;
@@ -671,7 +683,7 @@ export default stylelint.createPlugin(ruleName, (primaryOption) => {
             message: messages.expected,
             node: decl,
             result,
-            ruleName
+            ruleName,
           });
         }
       }
@@ -688,7 +700,7 @@ module.exports.messages = messages;
 Stylelint 是现代前端开发中不可或缺的代码质量工具。通过合理的配置和集成，它可以显著提升团队协作效率和代码可维护性。关键实践包括：
 
 1. **渐进采用**：从基础配置开始，逐步完善规则体系
-2. **团队统一**：建立共享配置，确保代码一致性  
+2. **团队统一**：建立共享配置，确保代码一致性
 3. **自动化集成**：融入开发工作流，降低使用门槛
 4. **持续优化**：定期审查规则配置，适应项目发展
 

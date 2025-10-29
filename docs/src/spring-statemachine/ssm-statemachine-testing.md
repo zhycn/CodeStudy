@@ -50,18 +50,18 @@ testImplementation 'org.springframework.statemachine:spring-statemachine-test:4.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class StateMachineTestBase {
-    
+
     @Autowired
     protected StateMachineFactory<String, String> stateMachineFactory;
-    
+
     protected StateMachine<String, String> stateMachine;
-    
+
     @Before
     public void setUp() {
         stateMachine = stateMachineFactory.getStateMachine();
         stateMachine.start();
     }
-    
+
     @After
     public void tearDown() {
         if (stateMachine != null) {
@@ -79,10 +79,10 @@ public class StateMachineTestBase {
 
 ```java
 public class BasicStateTransitionTest extends StateMachineTestBase {
-    
+
     @Test
     public void testInitialState() throws Exception {
-        StateMachineTestPlan<String, String> plan = 
+        StateMachineTestPlan<String, String> plan =
             StateMachineTestPlanBuilder.<String, String>builder()
                 .defaultAwaitTime(2)
                 .stateMachine(stateMachine)
@@ -90,13 +90,13 @@ public class BasicStateTransitionTest extends StateMachineTestBase {
                 .expectState("SI")
                 .and()
                 .build();
-        
+
         plan.test();
     }
-    
+
     @Test
     public void testStateTransition() throws Exception {
-        StateMachineTestPlan<String, String> plan = 
+        StateMachineTestPlan<String, String> plan =
             StateMachineTestPlanBuilder.<String, String>builder()
                 .defaultAwaitTime(2)
                 .stateMachine(stateMachine)
@@ -109,7 +109,7 @@ public class BasicStateTransitionTest extends StateMachineTestBase {
                 .expectStates("S1")
                 .and()
                 .build();
-        
+
         plan.test();
     }
 }
@@ -122,7 +122,7 @@ public class BasicStateTransitionTest extends StateMachineTestBase {
 ```java
 @Test
 public void testEventProcessing() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -135,7 +135,7 @@ public void testEventProcessing() throws Exception {
             .expectEventNotAccepted(true)
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -151,8 +151,8 @@ public void testEventProcessing() throws Exception {
 public void testGuardConditions() throws Exception {
     // 设置测试条件
     stateMachine.getExtendedState().getVariables().put("approval", true);
-    
-    StateMachineTestPlan<String, String> plan = 
+
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -162,7 +162,7 @@ public void testGuardConditions() throws Exception {
             .expectStates("APPROVED")
             .and()
             .build();
-    
+
     plan.test();
 }
 
@@ -170,8 +170,8 @@ public void testGuardConditions() throws Exception {
 public void testGuardConditionFailure() throws Exception {
     // 设置测试条件使守卫失败
     stateMachine.getExtendedState().getVariables().put("approval", false);
-    
-    StateMachineTestPlan<String, String> plan = 
+
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -181,7 +181,7 @@ public void testGuardConditionFailure() throws Exception {
             .expectStates("SI")   // 期望保持在初始状态
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -195,11 +195,11 @@ public void testGuardConditionFailure() throws Exception {
 public void testActionExecution() throws Exception {
     // 使用 Mockito 监视动作
     Action<String, String> mockAction = Mockito.mock(Action.class);
-    
+
     // 配置状态机使用模拟动作
     // 这里假设你有一种方式将mock动作注入状态机
-    
-    StateMachineTestPlan<String, String> plan = 
+
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -208,9 +208,9 @@ public void testActionExecution() throws Exception {
             .expectStateChanged(1)
             .and()
             .build();
-    
+
     plan.test();
-    
+
     // 验证动作被调用
     verify(mockAction, times(1)).execute(any(StateContext.class));
 }
@@ -223,7 +223,7 @@ public void testActionExecution() throws Exception {
 ```java
 @Test
 public void testExtendedStateVariables() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -236,7 +236,7 @@ public void testExtendedStateVariables() throws Exception {
             .expectVariableWith(hasEntry("key1", "value1"))
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -250,7 +250,7 @@ public void testExtendedStateVariables() throws Exception {
 ```java
 @Test
 public void testHierarchicalStates() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -262,7 +262,7 @@ public void testHierarchicalStates() throws Exception {
             .expectStates("S1", "S12") // 期望父状态不变，子状态变化
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -274,7 +274,7 @@ public void testHierarchicalStates() throws Exception {
 ```java
 @Test
 public void testParallelRegions() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -286,7 +286,7 @@ public void testParallelRegions() throws Exception {
             .expectStates("S1", "S12", "S21") // 只有第一个区域状态变化
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -298,7 +298,7 @@ public void testParallelRegions() throws Exception {
 ```java
 @Test
 public void testHistoryState() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -315,7 +315,7 @@ public void testHistoryState() throws Exception {
             .expectStates("S2") // 通过历史状态返回到 S2
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -329,7 +329,7 @@ public void testHistoryState() throws Exception {
 ```java
 @Test
 public void testTimerTrigger() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(5) // 增加等待时间以容纳定时器
             .stateMachine(stateMachine)
@@ -341,7 +341,7 @@ public void testTimerTrigger() throws Exception {
             .expectStates("S2")
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -355,10 +355,10 @@ public void testTimerTrigger() throws Exception {
 public void testAsyncAction() throws Exception {
     // 配置状态机使用异步任务执行器
     stateMachine.getStateMachineAccessor()
-        .doWithAllRegions(access -> 
+        .doWithAllRegions(access ->
             access.setTaskExecutor(taskExecutor));
-    
-    StateMachineTestPlan<String, String> plan = 
+
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(5)
             .stateMachine(stateMachine)
@@ -367,7 +367,7 @@ public void testAsyncAction() throws Exception {
             .expectStateChanged(1)
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -380,19 +380,19 @@ public void testAsyncAction() throws Exception {
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class StateMachineWithDependenciesTest {
-    
+
     @MockBean
     private ServiceLayer serviceLayer;
-    
+
     @Autowired
     private StateMachine<String, String> stateMachine;
-    
+
     @Test
     public void testWithMockedDependency() throws Exception {
         // 设置模拟行为
         when(serviceLayer.validate(any())).thenReturn(true);
-        
-        StateMachineTestPlan<String, String> plan = 
+
+        StateMachineTestPlan<String, String> plan =
             StateMachineTestPlanBuilder.<String, String>builder()
                 .defaultAwaitTime(2)
                 .stateMachine(stateMachine)
@@ -402,9 +402,9 @@ public class StateMachineWithDependenciesTest {
                 .expectStates("VALIDATED")
                 .and()
                 .build();
-        
+
         plan.test();
-        
+
         // 验证服务调用
         verify(serviceLayer, times(1)).validate(any());
     }
@@ -418,7 +418,7 @@ public class StateMachineWithDependenciesTest {
 ```java
 @TestConfiguration
 public class TestConfig {
-    
+
     @Bean
     public Action<String, String> testAction() {
         return context -> {
@@ -426,7 +426,7 @@ public class TestConfig {
             context.getExtendedState().getVariables().put("tested", true);
         };
     }
-    
+
     @Bean
     public Guard<String, String> testGuard() {
         return context -> {
@@ -483,16 +483,16 @@ public void testSI_onE1_expectS1() {
 
 ```java
 public class TestDataFactory {
-    
+
     public static StateMachineContext<String, String> createTestContext() {
         Map<String, Object> variables = new HashMap<>();
         variables.put("testId", UUID.randomUUID().toString());
         variables.put("timestamp", System.currentTimeMillis());
-        
+
         return new DefaultStateMachineContext<>(
-            Collections.singletonList("SI"), 
-            null, 
-            variables, 
+            Collections.singletonList("SI"),
+            null,
+            variables,
             null
         );
     }
@@ -506,7 +506,7 @@ public class TestDataFactory {
 ```java
 @Test
 public void testWithCustomTimeout() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(10) // 自定义超时时间
             .stateMachine(stateMachine)
@@ -516,7 +516,7 @@ public void testWithCustomTimeout() throws Exception {
             .expectStates("COMPLETED")
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -526,7 +526,7 @@ public void testWithCustomTimeout() throws Exception {
 ```java
 @Test
 public void testConcurrentEventProcessing() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(5)
             .stateMachine(stateMachine)
@@ -537,7 +537,7 @@ public void testConcurrentEventProcessing() throws Exception {
             .expectStates("S2")
             .and()
             .build();
-    
+
     plan.test();
 }
 ```
@@ -549,7 +549,7 @@ public void testConcurrentEventProcessing() throws Exception {
 ```java
 @Test
 public void testWithDetailedDiagnostics() throws Exception {
-    StateMachineTestPlan<String, String> plan = 
+    StateMachineTestPlan<String, String> plan =
         StateMachineTestPlanBuilder.<String, String>builder()
             .defaultAwaitTime(2)
             .stateMachine(stateMachine)
@@ -564,7 +564,7 @@ public void testWithDetailedDiagnostics() throws Exception {
             .expectStates("S2", "Expected to be in state S2")
             .and()
             .build();
-    
+
     try {
         plan.test();
     } catch (AssertionError e) {
@@ -585,15 +585,15 @@ public void testWithDetailedDiagnostics() throws Exception {
 @SpringBootTest
 @Slf4j
 public class PerformanceTest {
-    
+
     @Autowired
     private StateMachineFactory<String, String> stateMachineFactory;
-    
+
     @Test
     public void testStateTransitionPerformance() {
         int iterations = 1000;
         long startTime = System.currentTimeMillis();
-        
+
         for (int i = 0; i < iterations; i++) {
             StateMachine<String, String> sm = stateMachineFactory.getStateMachine();
             sm.start();
@@ -601,13 +601,13 @@ public class PerformanceTest {
             sm.sendEvent("E2");
             sm.stop();
         }
-        
+
         long duration = System.currentTimeMillis() - startTime;
         double average = (double) duration / iterations;
-        
+
         log.info("Processed {} iterations in {} ms", iterations, duration);
         log.info("Average time per iteration: {} ms", average);
-        
+
         assertThat(average).isLessThan(10.0); // 期望平均时间小于10ms
     }
 }
@@ -621,7 +621,7 @@ public void testConcurrentAccess() throws InterruptedException {
     int threadCount = 10;
     CountDownLatch latch = new CountDownLatch(threadCount);
     AtomicInteger successCount = new AtomicInteger(0);
-    
+
     for (int i = 0; i < threadCount; i++) {
         new Thread(() -> {
             try {
@@ -634,7 +634,7 @@ public void testConcurrentAccess() throws InterruptedException {
             }
         }).start();
     }
-    
+
     latch.await(5, TimeUnit.SECONDS);
     assertThat(successCount.get()).isEqualTo(threadCount);
 }
@@ -663,11 +663,11 @@ Spring Statemachine 测试框架提供了强大而灵活的工具来验证状态
 
 ## 附录：常用测试模式速查表
 
-| 测试场景 | 测试方法 | 示例 |
-|---------|---------|------|
-| 状态转换 | `expectStateChanged()` | `.expectStateChanged(1)` |
-| 特定状态 | `expectStates()` | `.expectStates("S1")` |
-| 扩展状态 | `expectVariable()` | `.expectVariable("key", "value")` |
-| 事件拒绝 | `expectEventNotAccepted()` | `.expectEventNotAccepted(true)` |
-| 多个状态机 | 多个 `stateMachine()` 调用 | 适用于分布式测试 |
-| 超时配置 | `defaultAwaitTime()` | `.defaultAwaitTime(5)` |
+| 测试场景   | 测试方法                   | 示例                              |
+| ---------- | -------------------------- | --------------------------------- |
+| 状态转换   | `expectStateChanged()`     | `.expectStateChanged(1)`          |
+| 特定状态   | `expectStates()`           | `.expectStates("S1")`             |
+| 扩展状态   | `expectVariable()`         | `.expectVariable("key", "value")` |
+| 事件拒绝   | `expectEventNotAccepted()` | `.expectEventNotAccepted(true)`   |
+| 多个状态机 | 多个 `stateMachine()` 调用 | 适用于分布式测试                  |
+| 超时配置   | `defaultAwaitTime()`       | `.defaultAwaitTime(5)`            |

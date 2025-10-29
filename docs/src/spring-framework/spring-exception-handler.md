@@ -21,9 +21,9 @@ Spring 框架提供了一套完整的异常处理机制，旨在将异常处理�
 ```java
 public interface HandlerExceptionResolver {
     ModelAndView resolveException(
-        HttpServletRequest request, 
-        HttpServletResponse response, 
-        Object handler, 
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Object handler,
         Exception ex
     );
 }
@@ -35,12 +35,12 @@ public interface HandlerExceptionResolver {
 
 Spring MVC 支持多个异常解析器构成处理链，通过 order 属性确定执行顺序（order 值越高，解析器位置越晚）。下表列出了常用的内置异常解析器：
 
-| 解析器类型 | 功能描述 | 适用场景 |
-|---------|---------|---------|
-| `ExceptionHandlerExceptionResolver` | 处理 `@ExceptionHandler` 注解方法 | 现代 Spring 应用首选 |
-| `ResponseStatusExceptionResolver` | 处理 `@ResponseStatus` 注解异常 | 基于 HTTP 状态码的简单异常 |
-| `DefaultHandlerExceptionResolver` | 处理 Spring MVC 内置异常 | 框架内部使用 |
-| `SimpleMappingExceptionResolver` | 异常类与视图名称映射 | 传统 JSP 应用 |
+| 解析器类型                          | 功能描述                          | 适用场景                   |
+| ----------------------------------- | --------------------------------- | -------------------------- |
+| `ExceptionHandlerExceptionResolver` | 处理 `@ExceptionHandler` 注解方法 | 现代 Spring 应用首选       |
+| `ResponseStatusExceptionResolver`   | 处理 `@ResponseStatus` 注解异常   | 基于 HTTP 状态码的简单异常 |
+| `DefaultHandlerExceptionResolver`   | 处理 Spring MVC 内置异常          | 框架内部使用               |
+| `SimpleMappingExceptionResolver`    | 异常类与视图名称映射              | 传统 JSP 应用              |
 
 ## 3. 异常解析器的四种实现方式
 
@@ -53,19 +53,19 @@ Spring MVC 支持多个异常解析器构成处理链，通过 order 属性确�
 ```java
 @Controller
 public class UserController {
-    
+
     @GetMapping("/users/{id}")
     public String getUser(@PathVariable Long id) {
         // 业务逻辑
         return "user/details";
     }
-    
+
     @ExceptionHandler(UserNotFoundException.class)
     public String handleUserNotFoundException(UserNotFoundException ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
         return "error/user-not-found";
     }
-    
+
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ErrorResponse> handleIOException(IOException ex) {
         ErrorResponse error = new ErrorResponse("FILE_ERROR", "文件操作失败");
@@ -82,14 +82,14 @@ public class UserController {
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     // 处理业务异常
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex) {
         ErrorResponse error = new ErrorResponse(ex.getErrorCode(), ex.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-    
+
     // 处理数据校验异常
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
@@ -98,11 +98,11 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
-        
+
         ErrorResponse error = new ErrorResponse("VALIDATION_ERROR", "参数校验失败", errors);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-    
+
     // 处理系统异常
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleSystemException(Exception ex) {
@@ -121,11 +121,11 @@ public class ErrorResponse {
     private String message;
     private List<String> details;
     private LocalDateTime timestamp;
-    
+
     public ErrorResponse(String errorCode, String message) {
         this(errorCode, message, null, LocalDateTime.now());
     }
-    
+
     public ErrorResponse(String errorCode, String message, List<String> details) {
         this(errorCode, message, details, LocalDateTime.now());
     }
@@ -139,18 +139,18 @@ public class ErrorResponse {
 ```java
 @Component
 public class CustomHandlerExceptionResolver implements HandlerExceptionResolver {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(CustomHandlerExceptionResolver.class);
-    
+
     @Override
-    public ModelAndView resolveException(HttpServletRequest request, 
-                                       HttpServletResponse response, 
-                                       Object handler, 
+    public ModelAndView resolveException(HttpServletRequest request,
+                                       HttpServletResponse response,
+                                       Object handler,
                                        Exception ex) {
-        
+
         // 判断请求类型（AJAX 或普通请求）
         boolean isAjax = isAjaxRequest(request);
-        
+
         if (ex instanceof BusinessException) {
             return handleBusinessException((BusinessException) ex, isAjax, response);
         } else if (ex instanceof AccessDeniedException) {
@@ -159,21 +159,21 @@ public class CustomHandlerExceptionResolver implements HandlerExceptionResolver 
             return handleSystemException(ex, isAjax, response);
         }
     }
-    
+
     private boolean isAjaxRequest(HttpServletRequest request) {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With")) ||
-               request.getHeader("Accept") != null && 
+               request.getHeader("Accept") != null &&
                request.getHeader("Accept").contains("application/json");
     }
-    
-    private ModelAndView handleBusinessException(BusinessException ex, boolean isAjax, 
+
+    private ModelAndView handleBusinessException(BusinessException ex, boolean isAjax,
                                                HttpServletResponse response) {
         if (isAjax) {
             try {
                 response.setContentType("application/json;charset=UTF-8");
                 response.setStatus(HttpStatus.BAD_REQUEST.value());
                 String jsonResponse = String.format(
-                    "{\"errorCode\":\"%s\",\"message\":\"%s\"}", 
+                    "{\"errorCode\":\"%s\",\"message\":\"%s\"}",
                     ex.getErrorCode(), ex.getMessage());
                 response.getWriter().write(jsonResponse);
                 return new ModelAndView();
@@ -181,13 +181,13 @@ public class CustomHandlerExceptionResolver implements HandlerExceptionResolver 
                 logger.error("处理AJAX异常时出错", e);
             }
         }
-        
+
         ModelAndView mv = new ModelAndView("error/business-error");
         mv.addObject("errorCode", ex.getErrorCode());
         mv.addObject("message", ex.getMessage());
         return mv;
     }
-    
+
     // 其他异常处理方法...
 }
 ```
@@ -211,7 +211,7 @@ public class CustomHandlerExceptionResolver implements HandlerExceptionResolver 
             <prop key="org.springframework.security.access.AccessDeniedException">error/access-denied</prop>
         </props>
     </property>
-    
+
     <!-- 定义不同异常对应的HTTP状态码 -->
     <property name="statusMappings">
         <props>
@@ -260,11 +260,11 @@ public abstract class BaseException extends RuntimeException {
     private final String message;
     private final Throwable cause;
     private final LocalDateTime timestamp;
-    
+
     public BaseException(String errorCode, String message) {
         this(errorCode, message, null);
     }
-    
+
     public BaseException(String errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
@@ -272,7 +272,7 @@ public abstract class BaseException extends RuntimeException {
         this.cause = cause;
         this.timestamp = LocalDateTime.now();
     }
-    
+
     // getter 方法
 }
 
@@ -281,7 +281,7 @@ public class BusinessException extends BaseException {
     public BusinessException(String errorCode, String message) {
         super(errorCode, message);
     }
-    
+
     public BusinessException(String errorCode, String message, Throwable cause) {
         super(errorCode, message, cause);
     }
@@ -292,7 +292,7 @@ public class SystemException extends BaseException {
     public SystemException(String errorCode, String message) {
         super(errorCode, message);
     }
-    
+
     public SystemException(String errorCode, String message, Throwable cause) {
         super(errorCode, message, cause);
     }
@@ -310,11 +310,11 @@ public class OrderNotFoundException extends BusinessException {
 
 合理的异常信息分层可以提高问题排查效率同时保证用户体验：
 
-| 信息层次 | 目标受众 | 内容要求 | 示例 |
-|---------|---------|---------|------|
-| 用户提示信息 | 最终用户 | 简洁明了，无技术术语 | "订单不存在，请检查订单号" |
-| 业务日志信息 | 开发/运维 | 包含业务上下文 | "订单ID:12345不存在，用户ID:67890" |
-| 调试详细信息 | 开发人员 | 完整堆栈和系统状态 | 完整异常堆栈、请求参数、系统环境 |
+| 信息层次     | 目标受众  | 内容要求             | 示例                               |
+| ------------ | --------- | -------------------- | ---------------------------------- |
+| 用户提示信息 | 最终用户  | 简洁明了，无技术术语 | "订单不存在，请检查订单号"         |
+| 业务日志信息 | 开发/运维 | 包含业务上下文       | "订单ID:12345不存在，用户ID:67890" |
+| 调试详细信息 | 开发人员  | 完整堆栈和系统状态   | 完整异常堆栈、请求参数、系统环境   |
 
 ### 4.3 AOP 切面异常处理
 
@@ -325,11 +325,11 @@ public class OrderNotFoundException extends BusinessException {
 @Component
 @Slf4j
 public class ExceptionLoggingAspect {
-    
+
     // 切入Service层方法
     @Pointcut("execution(* com.example.service..*.*(..))")
     public void serviceLayer() {}
-    
+
     @AfterThrowing(pointcut = "serviceLayer()", throwing = "ex")
     public void logServiceException(Exception ex) {
         if (ex instanceof BusinessException) {
@@ -338,26 +338,26 @@ public class ExceptionLoggingAspect {
         } else {
             // 系统异常记录错误级别日志
             log.error("系统异常: ", ex);
-            
+
             // 发送告警通知
             sendAlertNotification(ex);
         }
     }
-    
+
     // 切入Controller层方法
     @Pointcut("execution(* com.example.controller..*.*(..))")
     public void controllerLayer() {}
-    
+
     @AfterThrowing(pointcut = "controllerLayer()", throwing = "ex")
     public void logControllerException(Exception ex) {
         // 记录请求相关信息
-        HttpServletRequest request = ((ServletRequestAttributes) 
+        HttpServletRequest request = ((ServletRequestAttributes)
                 RequestContextHolder.currentRequestAttributes()).getRequest();
-        
-        log.error("控制器异常 - URL: {}, Method: {}", 
+
+        log.error("控制器异常 - URL: {}, Method: {}",
                  request.getRequestURL(), request.getMethod(), ex);
     }
-    
+
     private void sendAlertNotification(Exception ex) {
         // 实现告警逻辑（邮件、短信、钉钉等）
     }
@@ -379,8 +379,8 @@ public class ApiErrorResponse {
     private String message;
     private String detail;
     private List<ApiSubError> subErrors;
-    
-    public static ApiErrorResponse of(String errorCode, String message, 
+
+    public static ApiErrorResponse of(String errorCode, String message,
                                     HttpServletRequest request) {
         return ApiErrorResponse.builder()
                 .requestId(generateRequestId())
@@ -390,7 +390,7 @@ public class ApiErrorResponse {
                 .message(message)
                 .build();
     }
-    
+
     // 子错误信息（用于参数校验等场景）
     @Data
     @Builder
@@ -407,20 +407,20 @@ public class ApiErrorResponse {
 ```java
 @RestControllerAdvice
 public class RestApiExceptionHandler {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(RestApiExceptionHandler.class);
-    
+
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiErrorResponse> handleBusinessException(BusinessException ex, 
+    public ResponseEntity<ApiErrorResponse> handleBusinessException(BusinessException ex,
                                                                   HttpServletRequest request) {
         ApiErrorResponse errorResponse = ApiErrorResponse.of(
             ex.getErrorCode(), ex.getMessage(), request);
-        
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex, 
+    public ResponseEntity<ApiErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex,
                                                                   HttpServletRequest request) {
         List<ApiErrorResponse.ApiSubError> subErrors = ex.getBindingResult()
                 .getFieldErrors()
@@ -431,32 +431,32 @@ public class RestApiExceptionHandler {
                         .rejectedValue(error.getRejectedValue())
                         .build())
                 .collect(Collectors.toList());
-        
+
         ApiErrorResponse errorResponse = ApiErrorResponse.of(
             "VALIDATION_ERROR", "参数校验失败", request);
         errorResponse.setSubErrors(subErrors);
-        
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiErrorResponse> handleMessageNotReadable(HttpMessageNotReadableException ex, 
+    public ResponseEntity<ApiErrorResponse> handleMessageNotReadable(HttpMessageNotReadableException ex,
                                                                     HttpServletRequest request) {
         ApiErrorResponse errorResponse = ApiErrorResponse.of(
             "MALFORMED_JSON", "JSON格式错误", request);
         errorResponse.setDetail(ex.getMessage());
-        
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleAllExceptions(Exception ex, 
+    public ResponseEntity<ApiErrorResponse> handleAllExceptions(Exception ex,
                                                               HttpServletRequest request) {
         logger.error("未处理的系统异常", ex);
-        
+
         ApiErrorResponse errorResponse = ApiErrorResponse.of(
             "INTERNAL_SERVER_ERROR", "系统内部错误", request);
-        
+
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
@@ -469,25 +469,25 @@ public class RestApiExceptionHandler {
 ```java
 @Component
 public class PerformanceAwareExceptionResolver implements HandlerExceptionResolver {
-    
+
     private final Map<Class<?>, ExceptionHandler> handlerCache = new ConcurrentHashMap<>();
     private final AtomicLong exceptionCount = new AtomicLong(0);
     private final MeterRegistry meterRegistry;
-    
+
     public PerformanceAwareExceptionResolver(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
     }
-    
+
     @Override
-    public ModelAndView resolveException(HttpServletRequest request, 
-                                       HttpServletResponse response, 
+    public ModelAndView resolveException(HttpServletRequest request,
+                                       HttpServletResponse response,
                                        Object handler, Exception ex) {
-        
+
         long startTime = System.currentTimeMillis();
         try {
             ExceptionHandler exceptionHandler = handlerCache.computeIfAbsent(
                 ex.getClass(), this::findBestMatchHandler);
-                
+
             return exceptionHandler.handle(ex, request, response);
         } finally {
             long duration = System.currentTimeMillis() - startTime;
@@ -496,7 +496,7 @@ public class PerformanceAwareExceptionResolver implements HandlerExceptionResolv
             exceptionCount.incrementAndGet();
         }
     }
-    
+
     // 其他辅助方法...
 }
 ```
@@ -506,10 +506,10 @@ public class PerformanceAwareExceptionResolver implements HandlerExceptionResolv
 ```java
 @Component
 public class ExceptionContextCollector {
-    
+
     public Map<String, Object> collectContextInfo(HttpServletRequest request, Exception ex) {
         Map<String, Object> context = new LinkedHashMap<>();
-        
+
         // 请求信息
         context.put("timestamp", LocalDateTime.now());
         context.put("requestId", request.getHeader("X-Request-ID"));
@@ -517,24 +517,24 @@ public class ExceptionContextCollector {
         context.put("requestMethod", request.getMethod());
         context.put("clientIp", getClientIpAddress(request));
         context.put("userAgent", request.getHeader("User-Agent"));
-        
+
         // 用户信息
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             context.put("userId", authentication.getName());
         }
-        
+
         // 异常信息
         context.put("exceptionType", ex.getClass().getName());
         context.put("exceptionMessage", ex.getMessage());
-        
+
         // 系统信息
         context.put("serverHost", getServerHost());
         context.put("environment", getActiveProfile());
-        
+
         return context;
     }
-    
+
     // 其他辅助方法...
 }
 ```
@@ -547,10 +547,10 @@ public class ExceptionContextCollector {
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(UserController.class)
 public class ExceptionHandlerTest {
-    
+
     @Autowired
     private MockMvc mockMvc;
-    
+
     @Test
     public void testUserNotFoundException() throws Exception {
         mockMvc.perform(get("/api/users/9999")
@@ -559,7 +559,7 @@ public class ExceptionHandlerTest {
                 .andExpect(jsonPath("$.errorCode").value("USER_NOT_FOUND"))
                 .andExpect(jsonPath("$.message").value("用户不存在"));
     }
-    
+
     @Test
     public void testValidationException() throws Exception {
         mockMvc.perform(post("/api/users")
@@ -577,18 +577,18 @@ public class ExceptionHandlerTest {
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = {"spring.profiles.active=test"})
 public class ExceptionHandlingIntegrationTest {
-    
+
     @LocalServerPort
     private int port;
-    
+
     @Test
     public void testGlobalExceptionHandling() {
         RestTemplate restTemplate = new RestTemplate();
-        
+
         String url = "http://localhost:" + port + "/api/test/exception";
-        
+
         ResponseEntity<ApiErrorResponse> response = restTemplate.getForEntity(url, ApiErrorResponse.class);
-        
+
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         assertThat(response.getBody().getErrorCode()).isEqualTo("INTERNAL_SERVER_ERROR");
     }

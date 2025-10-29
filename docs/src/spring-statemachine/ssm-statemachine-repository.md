@@ -65,20 +65,20 @@ Spring Statemachine 支持两种类型的 Repository：
 @Entity
 @Table(name = "state_machine_config")
 public class StateMachineConfig {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "machine_id")
     private String machineId;
-    
+
     @Column(name = "state_config")
     private String stateConfig;
-    
+
     @Column(name = "transition_config")
     private String transitionConfig;
-    
+
     // Getters and setters
 }
 ```
@@ -87,9 +87,9 @@ public class StateMachineConfig {
 
 ```java
 public interface StateMachineConfigRepository extends JpaRepository<StateMachineConfig, Long> {
-    
+
     StateMachineConfig findByMachineId(String machineId);
-    
+
     List<StateMachineConfig> findAllByMachineId(String machineId);
 }
 ```
@@ -102,10 +102,10 @@ public interface StateMachineConfigRepository extends JpaRepository<StateMachine
 @EntityScan(basePackages = "com.example.entity")
 @EnableStateMachine
 public class StateMachineConfig {
-    
+
     @Autowired
     private StateMachineConfigRepository configRepository;
-    
+
     @Bean
     public StateMachineModelFactory<String, String> modelFactory() {
         return new RepositoryStateMachineModelFactory(configRepository);
@@ -121,15 +121,15 @@ public class StateMachineConfig {
 @Configuration
 @EnableStateMachine
 public class RedisStateMachineConfig {
-    
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory();
     }
-    
+
     @Bean
     public StateMachinePersister<String, String, String> redisStateMachinePersister() {
-        RedisStateMachineContextRepository<String, String> repository = 
+        RedisStateMachineContextRepository<String, String> repository =
             new RedisStateMachineContextRepository<>(redisConnectionFactory());
         return new RedisStateMachinePersister<>(repository);
     }
@@ -146,9 +146,9 @@ Spring Statemachine 提供了 `StateMachineContext` 类来封装状态机的运�
 
 ```java
 public interface StateMachinePersist<S, E, T> {
-    
+
     void write(StateMachineContext<S, E> context, T contextObj) throws Exception;
-    
+
     StateMachineContext<S, E> read(T contextObj) throws Exception;
 }
 ```
@@ -161,27 +161,27 @@ public interface StateMachinePersist<S, E, T> {
 @Entity
 @Table(name = "state_machine_context")
 public class StateMachineContextEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "machine_id")
     private String machineId;
-    
+
     @Column(name = "state")
     private String state;
-    
+
     @Lob
     @Column(name = "context_data")
     private byte[] contextData;
-    
+
     @Column(name = "created_date")
     private LocalDateTime createdDate;
-    
+
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
-    
+
     // Getters and setters
 }
 ```
@@ -190,9 +190,9 @@ public class StateMachineContextEntity {
 
 ```java
 public interface StateMachineContextRepository extends JpaRepository<StateMachineContextEntity, Long> {
-    
+
     StateMachineContextEntity findByMachineId(String machineId);
-    
+
     void deleteByMachineId(String machineId);
 }
 ```
@@ -202,35 +202,35 @@ public interface StateMachineContextRepository extends JpaRepository<StateMachin
 ```java
 @Component
 public class JpaStateMachinePersister implements StateMachinePersist<String, String, String> {
-    
+
     @Autowired
     private StateMachineContextRepository repository;
-    
+
     @Override
     public void write(StateMachineContext<String, String> context, String machineId) throws Exception {
         StateMachineContextEntity entity = repository.findByMachineId(machineId);
-        
+
         if (entity == null) {
             entity = new StateMachineContextEntity();
             entity.setMachineId(machineId);
             entity.setCreatedDate(LocalDateTime.now());
         }
-        
+
         entity.setState(context.getState());
         entity.setContextData(SerializationUtils.serialize(context));
         entity.setModifiedDate(LocalDateTime.now());
-        
+
         repository.save(entity);
     }
-    
+
     @Override
     public StateMachineContext<String, String> read(String machineId) throws Exception {
         StateMachineContextEntity entity = repository.findByMachineId(machineId);
-        
+
         if (entity != null && entity.getContextData() != null) {
             return (StateMachineContext<String, String>) SerializationUtils.deserialize(entity.getContextData());
         }
-        
+
         return null;
     }
 }
@@ -248,7 +248,7 @@ public class JpaStateMachinePersister implements StateMachinePersist<String, Str
 @Configuration
 @EnableCaching
 public class CacheConfig {
-    
+
     @Bean
     public CacheManager cacheManager() {
         return new ConcurrentMapCacheManager("stateMachineConfigs");
@@ -257,10 +257,10 @@ public class CacheConfig {
 
 @Service
 public class StateMachineConfigService {
-    
+
     @Autowired
     private StateMachineConfigRepository configRepository;
-    
+
     @Cacheable(value = "stateMachineConfigs", key = "#machineId")
     public StateMachineConfig getConfigByMachineId(String machineId) {
         return configRepository.findByMachineId(machineId);
@@ -275,12 +275,12 @@ public class StateMachineConfigService {
 ```java
 @Repository
 public interface StateMachineConfigRepository extends JpaRepository<StateMachineConfig, Long> {
-    
+
     @Modifying
     @Query("UPDATE StateMachineConfig c SET c.stateConfig = :stateConfig WHERE c.machineId = :machineId")
     @Transactional
     int updateStateConfig(@Param("machineId") String machineId, @Param("stateConfig") String stateConfig);
-    
+
     @Transactional
     default void batchInsert(List<StateMachineConfig> configs) {
         saveAll(configs);
@@ -296,16 +296,16 @@ public interface StateMachineConfigRepository extends JpaRepository<StateMachine
 @Service
 @Transactional
 public class StateMachineService {
-    
+
     @Autowired
     private StateMachineFactory<String, String> stateMachineFactory;
-    
+
     @Autowired
     private StateMachinePersister<String, String, String> persister;
-    
+
     public void processEvent(String machineId, String event) {
         StateMachine<String, String> stateMachine = stateMachineFactory.getStateMachine(machineId);
-        
+
         try {
             persister.restore(stateMachine, machineId);
             stateMachine.sendEvent(event);
@@ -324,13 +324,13 @@ public class StateMachineService {
 ```java
 @ControllerAdvice
 public class StateMachineExceptionHandler {
-    
+
     @ExceptionHandler(StateMachineException.class)
     public ResponseEntity<String> handleStateMachineException(StateMachineException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("State machine error: " + ex.getMessage());
     }
-    
+
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<String> handleDataAccessException(DataAccessException ex) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
@@ -346,7 +346,7 @@ public class StateMachineExceptionHandler {
 ```java
 @Configuration
 public class MetricsConfig {
-    
+
     @Bean
     public TimedAspect timedAspect(MeterRegistry registry) {
         return new TimedAspect(registry);
@@ -355,7 +355,7 @@ public class MetricsConfig {
 
 @Service
 public class StateMachineService {
-    
+
     @Timed(value = "statemachine.process.event", description = "Time taken to process state machine event")
     @Counted(value = "statemachine.event.count", description = "Number of state machine events processed")
     public void processEvent(String machineId, String event) {
@@ -398,15 +398,15 @@ public enum OrderEvents {
 @Configuration
 @EnableStateMachine
 public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<OrderStates, OrderEvents> {
-    
+
     @Autowired
     private StateMachineModelFactory<OrderStates, OrderEvents> modelFactory;
-    
+
     @Override
     public void configure(StateMachineModelConfigurer<OrderStates, OrderEvents> model) throws Exception {
         model.withModel().factory(modelFactory);
     }
-    
+
     @Bean
     public StateMachinePersist<OrderStates, OrderEvents, String> stateMachinePersist() {
         return new JpaStateMachinePersister();
@@ -420,38 +420,38 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 @Service
 @Transactional
 public class OrderService {
-    
+
     @Autowired
     private StateMachineService<OrderStates, OrderEvents> stateMachineService;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     public Order createOrder(Order order) {
         Order savedOrder = orderRepository.save(order);
-        
+
         // Initialize state machine for this order
-        StateMachine<OrderStates, OrderEvents> stateMachine = 
+        StateMachine<OrderStates, OrderEvents> stateMachine =
             stateMachineService.acquireStateMachine("order_" + savedOrder.getId());
-        
+
         stateMachine.start();
         stateMachineService.persistStateMachine(stateMachine, "order_" + savedOrder.getId());
-        
+
         return savedOrder;
     }
-    
+
     public void processOrderEvent(Long orderId, OrderEvents event) {
-        StateMachine<OrderStates, OrderEvents> stateMachine = 
+        StateMachine<OrderStates, OrderEvents> stateMachine =
             stateMachineService.acquireStateMachine("order_" + orderId);
-        
+
         stateMachine.sendEvent(event);
         stateMachineService.persistStateMachine(stateMachine, "order_" + orderId);
     }
-    
+
     public OrderStates getOrderStatus(Long orderId) {
-        StateMachine<OrderStates, OrderEvents> stateMachine = 
+        StateMachine<OrderStates, OrderEvents> stateMachine =
             stateMachineService.acquireStateMachine("order_" + orderId);
-        
+
         return stateMachine.getState().getId();
     }
 }
@@ -465,28 +465,28 @@ public class OrderService {
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class OrderStateMachineTest {
-    
+
     @Autowired
     private StateMachineService<OrderStates, OrderEvents> stateMachineService;
-    
+
     @Test
     public void testOrderPaymentFlow() {
-        StateMachine<OrderStates, OrderEvents> stateMachine = 
+        StateMachine<OrderStates, OrderEvents> stateMachine =
             stateMachineService.acquireStateMachine("test_order_1");
-        
+
         stateMachine.start();
-        
+
         // Initial state should be INITIAL
         assertEquals(OrderStates.INITIAL, stateMachine.getState().getId());
-        
+
         // Process payment received event
         stateMachine.sendEvent(OrderEvents.PAYMENT_RECEIVED);
         assertEquals(OrderStates.PAYMENT_RECEIVED, stateMachine.getState().getId());
-        
+
         // Process confirm order event
         stateMachine.sendEvent(OrderEvents.CONFIRM_ORDER);
         assertEquals(OrderStates.ORDER_CONFIRMED, stateMachine.getState().getId());
-        
+
         stateMachine.stop();
     }
 }
@@ -498,37 +498,37 @@ public class OrderStateMachineTest {
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 public class OrderStateMachineIntegrationTest {
-    
+
     @Container
-    private static final PostgreSQLContainer<?> postgreSQL = 
+    private static final PostgreSQLContainer<?> postgreSQL =
         new PostgreSQLContainer<>("postgres:13");
-    
+
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", postgreSQL::getJdbcUrl);
         registry.add("spring.datasource.username", postgreSQL::getUsername);
         registry.add("spring.datasource.password", postgreSQL::getPassword);
     }
-    
+
     @Autowired
     private TestRestTemplate restTemplate;
-    
+
     @Test
     public void testOrderLifecycle() {
         // Create order
         Order order = new Order();
         // Set order properties
-        
+
         ResponseEntity<Order> createResponse = restTemplate.postForEntity("/orders", order, Order.class);
         assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
-        
+
         Long orderId = createResponse.getBody().getId();
-        
+
         // Process payment
         ResponseEntity<Void> paymentResponse = restTemplate.postForEntity(
             "/orders/" + orderId + "/events/PAYMENT_RECEIVED", null, Void.class);
         assertEquals(HttpStatus.OK, paymentResponse.getStatusCode());
-        
+
         // Check status
         ResponseEntity<OrderStatus> statusResponse = restTemplate.getForEntity(
             "/orders/" + orderId + "/status", OrderStatus.class);

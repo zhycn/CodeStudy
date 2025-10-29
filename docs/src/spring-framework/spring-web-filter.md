@@ -48,7 +48,7 @@ Spring 框架提供了一系列开箱即用的过滤器，位于 `org.springfram
 ```java
 @Configuration
 public class FilterConfig {
-    
+
     @Bean
     public FormContentFilter formContentFilter() {
         return new FormContentFilter();
@@ -78,7 +78,7 @@ public class FilterConfig {
 ```java
 @Configuration
 public class WebConfig {
-    
+
     @Bean
     public ForwardedHeaderFilter forwardedHeaderFilter() {
         return new ForwardedHeaderFilter();
@@ -109,7 +109,7 @@ public class WebConfig {
 ```java
 @Configuration
 public class WebConfig {
-    
+
     @Bean
     public ShallowEtagHeaderFilter shallowEtagHeaderFilter() {
         return new ShallowEtagHeaderFilter();
@@ -131,7 +131,7 @@ public class WebConfig {
 ```java
 @Configuration
 public class WebConfig {
-    
+
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
@@ -139,10 +139,10 @@ public class WebConfig {
         config.addAllowedOrigin("https://example.com");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);
-        
+
         return new CorsFilter(source);
     }
 }
@@ -167,8 +167,8 @@ public class WebConfig {
 
 ```html
 <form method="post" action="/users/1">
-    <input type="hidden" name="_method" value="delete">
-    <button type="submit">删除用户</button>
+  <input type="hidden" name="_method" value="delete" />
+  <button type="submit">删除用户</button>
 </form>
 ```
 
@@ -177,7 +177,7 @@ public class WebConfig {
 ```java
 @Configuration
 public class WebConfig {
-    
+
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
@@ -203,29 +203,29 @@ Spring Boot 提供了多种配置过滤器的方式，每种方式各有适用�
 @Order(1)
 @WebFilter(filterName = "myFilter", urlPatterns = "/api/*")
 public class MyFilter implements Filter {
-    
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         log.info("过滤器初始化");
     }
-    
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, 
+    public void doFilter(ServletRequest request, ServletResponse response,
                        FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         log.info("请求URL: {}", httpRequest.getRequestURL());
-        
+
         // 前置处理
         long startTime = System.currentTimeMillis();
-        
+
         // 继续过滤器链
         chain.doFilter(request, response);
-        
+
         // 后置处理
         long duration = System.currentTimeMillis() - startTime;
         log.info("请求处理耗时: {} ms", duration);
     }
-    
+
     @Override
     public void destroy() {
         log.info("过滤器销毁");
@@ -259,9 +259,9 @@ public class Application {
 ```java
 public class CustomFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(CustomFilter.class);
-    
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, 
+    public void doFilter(ServletRequest request, ServletResponse response,
                        FilterChain chain) throws IOException, ServletException {
         // 过滤逻辑
         chain.doFilter(request, response);
@@ -270,20 +270,20 @@ public class CustomFilter implements Filter {
 
 @Configuration
 public class FilterConfig {
-    
+
     @Bean
     public FilterRegistrationBean<CustomFilter> customFilterRegistration() {
-        FilterRegistrationBean<CustomFilter> registration = 
+        FilterRegistrationBean<CustomFilter> registration =
             new FilterRegistrationBean<>();
-        
+
         registration.setFilter(new CustomFilter());
         registration.addUrlPatterns("/api/*");
         registration.setName("customFilter");
         registration.setOrder(1); // 数字越小优先级越高
-        
+
         // 可设置初始化参数
         registration.addInitParameter("param1", "value1");
-        
+
         return registration;
     }
 }
@@ -309,16 +309,16 @@ Spring 提供了一些过滤器基类，简化了特定场景的实现。
 @Component
 public class LoggingFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
-    
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) 
+    protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         long startTime = System.currentTimeMillis();
         logger.info("请求开始: {} {}", request.getMethod(), request.getRequestURI());
-        
+
         try {
             filterChain.doFilter(request, response);
         } finally {
@@ -338,15 +338,15 @@ public class LoggingFilter extends OncePerRequestFilter {
 ```java
 public class ConfigurableFilter extends GenericFilterBean {
     private String allowedPaths;
-    
+
     @Override
     protected void initFilterBean() throws ServletException {
         // 从Spring环境获取配置
         allowedPaths = getEnvironment().getProperty("filter.allowed-paths");
     }
-    
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, 
+    public void doFilter(ServletRequest request, ServletResponse response,
                        FilterChain chain) throws IOException, ServletException {
         // 过滤逻辑
         chain.doFilter(request, response);
@@ -366,13 +366,13 @@ public class ConfigurableFilter extends GenericFilterBean {
 public class AuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
-    
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) 
+    protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         String token = extractToken(request);
         if (token != null) {
             Authentication auth = userService.validateToken(token);
@@ -380,15 +380,15 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
-        
+
         if (requiresAuthentication(request) && !isAuthenticated()) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "需要认证");
             return;
         }
-        
+
         filterChain.doFilter(request, response);
     }
-    
+
     private String extractToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
@@ -396,13 +396,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-    
+
     private boolean requiresAuthentication(HttpServletRequest request) {
         return request.getRequestURI().startsWith("/api/secure/");
     }
-    
+
     private boolean isAuthenticated() {
-        return SecurityContextHolder.getContext().getAuthentication() != null 
+        return SecurityContextHolder.getContext().getAuthentication() != null
                 && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 }
@@ -418,34 +418,34 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 public class RateLimitFilter implements Filter {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    
+
     private static final int MAX_REQUESTS_PER_MINUTE = 100;
-    
+
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, 
+    public void doFilter(ServletRequest request, ServletResponse response,
                        FilterChain chain) throws IOException, ServletException {
-        
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        
+
         String clientIp = getClientIpAddress(httpRequest);
         String key = "rate_limit:" + clientIp;
-        
+
         Long count = redisTemplate.opsForValue().increment(key, 1);
         if (count != null && count == 1) {
             // 首次设置过期时间
             redisTemplate.expire(key, 60, TimeUnit.SECONDS);
         }
-        
+
         if (count != null && count > MAX_REQUESTS_PER_MINUTE) {
             httpResponse.setStatus(HttpServletResponse.SC_TOO_MANY_REQUESTS);
             httpResponse.getWriter().write("{\"code\":429,\"message\":\"请求过于频繁\"}");
             return;
         }
-        
+
         chain.doFilter(request, response);
     }
-    
+
     private String getClientIpAddress(HttpServletRequest request) {
         // 考虑代理情况获取真实IP
         String xForwardedFor = request.getHeader("X-Forwarded-For");
@@ -466,21 +466,21 @@ public class RateLimitFilter implements Filter {
 ```java
 public class DataMaskingFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) 
+    protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         if (requiresMasking(request)) {
-            ContentCachingResponseWrapper responseWrapper = 
+            ContentCachingResponseWrapper responseWrapper =
                 new ContentCachingResponseWrapper(response);
-            
+
             try {
                 filterChain.doFilter(request, responseWrapper);
             } finally {
                 byte[] content = responseWrapper.getContentAsByteArray();
                 if (content.length > 0) {
-                    String originalContent = new String(content, 
+                    String originalContent = new String(content,
                         response.getCharacterEncoding());
                     String maskedContent = maskSensitiveData(originalContent);
                     response.getWriter().write(maskedContent);
@@ -491,11 +491,11 @@ public class DataMaskingFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
     }
-    
+
     private boolean requiresMasking(HttpServletRequest request) {
         return request.getRequestURI().contains("/sensitive/");
     }
-    
+
     private String maskSensitiveData(String content) {
         // 实现手机号、身份证号等敏感信息脱敏逻辑
         return content.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2")
@@ -515,30 +515,30 @@ public class DataMaskingFilter extends OncePerRequestFilter {
 ```java
 @Configuration
 public class FilterConfig {
-    
+
     @Bean
     public FilterRegistrationBean<LoggingFilter> loggingFilter() {
-        FilterRegistrationBean<LoggingFilter> registration = 
+        FilterRegistrationBean<LoggingFilter> registration =
             new FilterRegistrationBean<>();
         registration.setFilter(new LoggingFilter());
         registration.addUrlPatterns("/*");
         registration.setOrder(1); // 最先执行
         return registration;
     }
-    
+
     @Bean
     public FilterRegistrationBean<AuthFilter> authFilter() {
-        FilterRegistrationBean<AuthFilter> registration = 
+        FilterRegistrationBean<AuthFilter> registration =
             new FilterRegistrationBean<>();
         registration.setFilter(new AuthFilter());
         registration.addUrlPatterns("/api/*");
         registration.setOrder(2); // 其次执行
         return registration;
     }
-    
+
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
-        FilterRegistrationBean<CorsFilter> registration = 
+        FilterRegistrationBean<CorsFilter> registration =
             new FilterRegistrationBean<>();
         registration.setFilter(new CorsFilter(corsConfigurationSource()));
         registration.addUrlPatterns("/*");
@@ -562,11 +562,11 @@ public class FilterConfig {
 ```java
 public class ExceptionHandlingFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) 
+    protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         try {
             filterChain.doFilter(request, response);
         } catch (BusinessException ex) {
@@ -589,26 +589,26 @@ public class ExceptionHandlingFilter extends OncePerRequestFilter {
 ```java
 @ExtendWith(MockitoExtension.class)
 class AuthenticationFilterTest {
-    
+
     @Mock
     private HttpServletRequest request;
-    
+
     @Mock
     private HttpServletResponse response;
-    
+
     @Mock
     private FilterChain filterChain;
-    
+
     @InjectMocks
     private AuthenticationFilter authenticationFilter;
-    
+
     @Test
     void testValidToken() throws Exception {
         when(request.getHeader("Authorization")).thenReturn("Bearer valid-token");
         when(request.getRequestURI()).thenReturn("/api/secure/data");
-        
+
         authenticationFilter.doFilter(request, response, filterChain);
-        
+
         verify(filterChain).doFilter(request, response);
     }
 }
@@ -618,13 +618,13 @@ class AuthenticationFilterTest {
 
 了解过滤器与拦截器的区别有助于正确选择技术方案。
 
-| 特性 | 过滤器(Filter) | 拦截器(Interceptor) |
-|------|---------------|-------------------|
-| **所属规范** | Servlet 规范 | Spring MVC 框架 |
-| **依赖注入** | 默认不支持（需特殊处理） | 完全支持 |
-| **执行时机** | 更早（在Servlet之前） | 较晚（在DispatcherServlet之后） |
-| **使用场景** | 跨域、日志、安全过滤等 | 业务相关拦截、权限检查等 |
-| **控制粒度** | 请求/响应级别 | 可精确到Controller方法 |
+| 特性         | 过滤器(Filter)           | 拦截器(Interceptor)             |
+| ------------ | ------------------------ | ------------------------------- |
+| **所属规范** | Servlet 规范             | Spring MVC 框架                 |
+| **依赖注入** | 默认不支持（需特殊处理） | 完全支持                        |
+| **执行时机** | 更早（在Servlet之前）    | 较晚（在DispatcherServlet之后） |
+| **使用场景** | 跨域、日志、安全过滤等   | 业务相关拦截、权限检查等        |
+| **控制粒度** | 请求/响应级别            | 可精确到Controller方法          |
 
 **选择建议**：
 

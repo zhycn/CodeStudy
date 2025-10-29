@@ -42,7 +42,7 @@ public class MyGuard implements Guard<String, String> {
 @Configuration
 @EnableStateMachine
 public class StateMachineConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -58,7 +58,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
                 .event("E2")
                 .guardExpression("extendedState.variables.get('myVar') == 'someValue'");
     }
-    
+
     @Bean
     public Guard<String, String> myGuard() {
         return new MyGuard();
@@ -74,7 +74,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
 @Configuration
 @EnableStateMachine
 public class StateMachineConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -102,7 +102,7 @@ Spring Statemachine 支持使用 Spring Expression Language (SpEL) 来定义 Gua
 @Configuration
 @EnableStateMachine
 public class StateMachineConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -125,13 +125,13 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
 
 在 SpEL 表达式中，可以直接访问以下对象：
 
-| 对象 | 描述 | 示例 |
-|------|------|------|
-| `state` | 当前状态 | `state.id == 'S1'` |
-| `event` | 当前事件 | `event.id == 'E1'` |
-| `extendedState` | 扩展状态 | `extendedState.variables.get('key')` |
-| `stateMachine` | 状态机实例 | `stateMachine.getState().getId()` |
-| `message` | 事件消息 | `message.headers.get('headerKey')` |
+| 对象            | 描述       | 示例                                 |
+| --------------- | ---------- | ------------------------------------ |
+| `state`         | 当前状态   | `state.id == 'S1'`                   |
+| `event`         | 当前事件   | `event.id == 'E1'`                   |
+| `extendedState` | 扩展状态   | `extendedState.variables.get('key')` |
+| `stateMachine`  | 状态机实例 | `stateMachine.getState().getId()`    |
+| `message`       | 事件消息   | `message.headers.get('headerKey')`   |
 
 ### 3.2 基于注解的 Guard 配置
 
@@ -140,12 +140,12 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<String, St
 ```java
 @WithStateMachine
 public class OrderGuards {
-    
+
     @OnTransition
     public boolean validateOrder(@EventHeaders Map<String, Object> headers,
                                ExtendedState extendedState) {
         // Guard逻辑
-        return headers.containsKey("userId") && 
+        return headers.containsKey("userId") &&
                extendedState.get("orderTotal", BigDecimal.class).compareTo(BigDecimal.ZERO) > 0;
     }
 }
@@ -174,7 +174,7 @@ public class InventoryAvailableGuard implements Guard<String, String> {
             .getVariables().get("availableStock", Integer.class);
         Integer requestedQuantity = context.getExtendedState()
             .getVariables().get("requestedQuantity", Integer.class);
-        return availableStock != null && requestedQuantity != null && 
+        return availableStock != null && requestedQuantity != null &&
                availableStock >= requestedQuantity;
     }
 }
@@ -186,13 +186,13 @@ public class InventoryAvailableGuard implements Guard<String, String> {
 
 ```java
 public class CompositeGuard implements Guard<String, String> {
-    
+
     private final List<Guard<String, String>> guards;
-    
+
     public CompositeGuard(List<Guard<String, String>> guards) {
         this.guards = guards;
     }
-    
+
     @Override
     public boolean evaluate(StateContext<String, String> context) {
         return guards.stream().allMatch(guard -> guard.evaluate(context));
@@ -217,23 +217,23 @@ Guard 可以与 Spring Bean 集成，调用业务服务：
 ```java
 @Component
 public class BusinessRuleGuard implements Guard<String, String> {
-    
+
     private final ValidationService validationService;
     private final SecurityService securityService;
-    
-    public BusinessRuleGuard(ValidationService validationService, 
+
+    public BusinessRuleGuard(ValidationService validationService,
                             SecurityService securityService) {
         this.validationService = validationService;
         this.securityService = securityService;
     }
-    
+
     @Override
     public boolean evaluate(StateContext<String, String> context) {
         String orderId = (String) context.getExtendedState()
             .getVariables().get("orderId");
         String userId = (String) context.getMessageHeaders().get("userId");
-        
-        return validationService.isOrderValid(orderId) && 
+
+        return validationService.isOrderValid(orderId) &&
                securityService.hasPermission(userId, "APPROVE_ORDER");
     }
 }
@@ -245,13 +245,13 @@ Guard 应该妥善处理异常，避免因异常导致状态机不可用：
 
 ```java
 public class SafeGuard implements Guard<String, String> {
-    
+
     private final Guard<String, String> delegate;
-    
+
     public SafeGuard(Guard<String, String> delegate) {
         this.delegate = delegate;
     }
-    
+
     @Override
     public boolean evaluate(StateContext<String, String> context) {
         try {
@@ -274,33 +274,33 @@ public class SafeGuard implements Guard<String, String> {
 
 ```java
 public class PaymentApprovedGuardTest {
-    
+
     @Test
     public void testGuardWithApprovedPayment() {
         // 准备
         PaymentApprovedGuard guard = new PaymentApprovedGuard();
         StateContext<String, String> context = mock(StateContext.class);
         ExtendedState extendedState = mock(ExtendedState.class);
-        
+
         when(context.getExtendedState()).thenReturn(extendedState);
         when(extendedState.getVariables()).thenReturn(
             Collections.singletonMap("paymentStatus", "APPROVED"));
-        
+
         // 执行和验证
         assertTrue(guard.evaluate(context));
     }
-    
+
     @Test
     public void testGuardWithRejectedPayment() {
         // 准备
         PaymentApprovedGuard guard = new PaymentApprovedGuard();
         StateContext<String, String> context = mock(StateContext.class);
         ExtendedState extendedState = mock(ExtendedState.class);
-        
+
         when(context.getExtendedState()).thenReturn(extendedState);
         when(extendedState.getVariables()).thenReturn(
             Collections.singletonMap("paymentStatus", "REJECTED"));
-        
+
         // 执行和验证
         assertFalse(guard.evaluate(context));
     }
@@ -315,26 +315,26 @@ public class PaymentApprovedGuardTest {
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrderStateMachineIntegrationTest {
-    
+
     @Autowired
     private StateMachineFactory<String, String> stateMachineFactory;
-    
+
     @Test
     public void testOrderApprovalFlowWithGuard() {
         StateMachine<String, String> stateMachine = stateMachineFactory.getStateMachine();
         stateMachine.start();
-        
+
         // 设置扩展状态变量
         stateMachine.getExtendedState().getVariables().put("paymentStatus", "PENDING");
         stateMachine.getExtendedState().getVariables().put("orderTotal", new BigDecimal("100.00"));
-        
+
         // 尝试转换 - 应该被Guard阻止
         stateMachine.sendEvent("APPROVE_ORDER");
         assertEquals("SUBMITTED", stateMachine.getState().getId());
-        
+
         // 更新状态以满足Guard条件
         stateMachine.getExtendedState().getVariables().put("paymentStatus", "APPROVED");
-        
+
         // 再次尝试转换 - 应该成功
         stateMachine.sendEvent("APPROVE_ORDER");
         assertEquals("APPROVED", stateMachine.getState().getId());
@@ -350,27 +350,27 @@ Guard 在状态转换路径上执行，频繁调用的 Guard 应该优化性能�
 
 ```java
 public class HighPerformanceGuard implements Guard<String, String> {
-    
+
     private final Cache<String, Boolean> validationCache;
-    
+
     public HighPerformanceGuard() {
         this.validationCache = Caffeine.newBuilder()
             .maximumSize(10_000)
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
     }
-    
+
     @Override
     public boolean evaluate(StateContext<String, String> context) {
         String orderId = (String) context.getExtendedState()
             .getVariables().get("orderId");
-        
+
         return validationCache.get(orderId, id -> {
             // 昂贵的验证逻辑
             return performExpensiveValidation(id);
         });
     }
-    
+
     private boolean performExpensiveValidation(String orderId) {
         // 模拟昂贵的操作
         try {
@@ -389,15 +389,15 @@ public class HighPerformanceGuard implements Guard<String, String> {
 
 ```java
 public class AsyncAwareGuard implements Guard<String, String> {
-    
+
     private final ValidationService validationService;
     private final Executor asyncExecutor;
-    
+
     public AsyncAwareGuard(ValidationService validationService, Executor asyncExecutor) {
         this.validationService = validationService;
         this.asyncExecutor = asyncExecutor;
     }
-    
+
     @Override
     public boolean evaluate(StateContext<String, String> context) {
         // 对于可能阻塞的操作，检查是否已经在异步上下文中
@@ -408,12 +408,12 @@ public class AsyncAwareGuard implements Guard<String, String> {
             return performValidation(context);
         }
     }
-    
+
     private boolean isAsyncContext(StateContext<String, String> context) {
         return Boolean.TRUE.equals(context.getMessageHeaders()
             .get("asyncContext", Boolean.class));
     }
-    
+
     private boolean performValidation(StateContext<String, String> context) {
         // 实际的验证逻辑
         String data = (String) context.getExtendedState()
@@ -438,31 +438,31 @@ public class AsyncAwareGuard implements Guard<String, String> {
 
 ```java
 public class DebuggableGuard implements Guard<String, String> {
-    
+
     private final Guard<String, String> delegate;
     private final Logger logger = LoggerFactory.getLogger(DebuggableGuard.class);
-    
+
     public DebuggableGuard(Guard<String, String> delegate) {
         this.delegate = delegate;
     }
-    
+
     @Override
     public boolean evaluate(StateContext<String, String> context) {
         boolean result = delegate.evaluate(context);
-        
+
         if (logger.isDebugEnabled()) {
             logger.debug("Guard evaluation: source={}, target={}, event={}, result={}",
                 context.getSource() != null ? context.getSource().getId() : "null",
                 context.getTarget() != null ? context.getTarget().getId() : "null",
                 context.getEvent() != null ? context.getEvent() : "null",
                 result);
-            
+
             // 记录扩展状态
             context.getExtendedState().getVariables().forEach((key, value) -> {
                 logger.debug("Extended state: {} = {}", key, value);
             });
         }
-        
+
         return result;
     }
 }
@@ -475,7 +475,7 @@ public class DebuggableGuard implements Guard<String, String> {
 ```java
 // 状态定义
 public enum OrderStates {
-    SUBMITTED, VALIDATED, PAYMENT_PENDING, PAYMENT_APPROVED, 
+    SUBMITTED, VALIDATED, PAYMENT_PENDING, PAYMENT_APPROVED,
     PAYMENT_REJECTED, FULFILLED, CANCELLED
 }
 
@@ -488,7 +488,7 @@ public enum OrderEvents {
 @Configuration
 @EnableStateMachine
 public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<OrderStates, OrderEvents> {
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) throws Exception {
         states
@@ -498,7 +498,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .end(OrderStates.FULFILLED)
                 .end(OrderStates.CANCELLED);
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) throws Exception {
         transitions
@@ -536,7 +536,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .target(OrderStates.CANCELLED)
                 .event(OrderEvents.CANCEL);
     }
-    
+
     @Bean
     public Guard<OrderStates, OrderEvents> orderValidationGuard() {
         return context -> {
@@ -544,12 +544,12 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .get("amount", BigDecimal.class);
             String customerId = context.getExtendedState()
                 .get("customerId", String.class);
-            
+
             return amount != null && amount.compareTo(BigDecimal.ZERO) > 0 &&
                    customerId != null && !customerId.trim().isEmpty();
         };
     }
-    
+
     @Bean
     public Guard<OrderStates, OrderEvents> paymentApprovedGuard() {
         return context -> {
@@ -558,7 +558,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             return "APPROVED".equals(paymentStatus);
         };
     }
-    
+
     @Bean
     public Guard<OrderStates, OrderEvents> inventoryAvailableGuard() {
         return context -> {
@@ -566,7 +566,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .get("productId", String.class);
             Integer quantity = context.getExtendedState()
                 .get("quantity", Integer.class);
-            
+
             // 这里应该是调用库存服务的逻辑
             // 简化示例中我们假设总是有库存
             return productId != null && quantity != null && quantity > 0;
@@ -577,41 +577,41 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 // 使用示例
 @Service
 public class OrderService {
-    
+
     private final StateMachineFactory<OrderStates, OrderEvents> factory;
-    
+
     public OrderService(StateMachineFactory<OrderStates, OrderEvents> factory) {
         this.factory = factory;
     }
-    
+
     public void processOrder(Order order) {
         StateMachine<OrderStates, OrderEvents> stateMachine = factory.getStateMachine();
         stateMachine.start();
-        
+
         // 设置订单数据到扩展状态
         stateMachine.getExtendedState().getVariables().put("orderId", order.getId());
         stateMachine.getExtendedState().getVariables().put("amount", order.getAmount());
         stateMachine.getExtendedState().getVariables().put("customerId", order.getCustomerId());
         stateMachine.getExtendedState().getVariables().put("productId", order.getProductId());
         stateMachine.getExtendedState().getVariables().put("quantity", order.getQuantity());
-        
+
         try {
             // 执行状态转换
             if (!stateMachine.sendEvent(OrderEvents.VALIDATE)) {
                 throw new IllegalStateException("订单验证失败");
             }
-            
+
             // 设置支付状态并尝试批准
             stateMachine.getExtendedState().getVariables().put("paymentStatus", "APPROVED");
             if (!stateMachine.sendEvent(OrderEvents.APPROVE_PAYMENT)) {
                 throw new IllegalStateException("支付批准失败");
             }
-            
+
             // 完成订单
             if (!stateMachine.sendEvent(OrderEvents.FULFILL)) {
                 throw new IllegalStateException("订单履行失败");
             }
-            
+
         } finally {
             stateMachine.stop();
         }

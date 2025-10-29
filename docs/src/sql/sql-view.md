@@ -21,12 +21,12 @@ SQL 视图是一种**虚拟表**，其内容由查询定义。与包含实际数
 
 ### 1.2 视图与基表的区别
 
-| 特性 | 视图 | 基表 |
-|------|------|------|
-| **数据存储** | 不存储数据，只存储查询定义 | 实际存储数据 |
-| **更新操作** | 部分视图可更新，但有严格限制 | 完全支持增删改查 |
-| **索引** | 普通视图不能创建索引，物化视图可以 | 可以创建索引优化查询 |
-| **存储空间** | 占用极少系统表空间存储定义 | 占用实际物理存储空间 |
+| 特性         | 视图                               | 基表                 |
+| ------------ | ---------------------------------- | -------------------- |
+| **数据存储** | 不存储数据，只存储查询定义         | 实际存储数据         |
+| **更新操作** | 部分视图可更新，但有严格限制       | 完全支持增删改查     |
+| **索引**     | 普通视图不能创建索引，物化视图可以 | 可以创建索引优化查询 |
+| **存储空间** | 占用极少系统表空间存储定义         | 占用实际物理存储空间 |
 
 ## 2 视图的创建与管理
 
@@ -71,11 +71,11 @@ DROP VIEW IF EXISTS sales_employees;
 SHOW CREATE VIEW sales_employees;
 
 -- PostgreSQL 查看视图定义
-SELECT definition FROM pg_views 
+SELECT definition FROM pg_views
 WHERE viewname = 'sales_employees';
 
 -- 查看所有视图
-SELECT table_name FROM information_schema.views 
+SELECT table_name FROM information_schema.views
 WHERE table_schema = 'public';
 ```
 
@@ -98,8 +98,8 @@ FROM employees
 WHERE status = 'Active';
 
 -- 可以执行更新（会影响基表 employees）
-UPDATE active_employees 
-SET department_id = 3 
+UPDATE active_employees
+SET department_id = 3
 WHERE employee_id = 101;
 
 -- 不可更新视图示例（包含聚合）
@@ -124,14 +124,14 @@ WITH CHECK OPTION;
 
 -- 这些操作会成功
 UPDATE high_salary_employees SET salary = 60000 WHERE employee_id = 101;
-INSERT INTO high_salary_employees (employee_id, first_name, last_name, salary, department_id) 
+INSERT INTO high_salary_employees (employee_id, first_name, last_name, salary, department_id)
 VALUES (201, 'John', 'Doe', 55000, 2);
 
 -- 这些操作会失败（违反 CHECK OPTION）
 UPDATE high_salary_employees SET salary = 40000 WHERE employee_id = 101;
 -- 错误：new row violates check option for view "high_salary_employees"
 
-INSERT INTO high_salary_employees (employee_id, first_name, last_name, salary, department_id) 
+INSERT INTO high_salary_employees (employee_id, first_name, last_name, salary, department_id)
 VALUES (202, 'Jane', 'Smith', 45000, 2);
 -- 错误：new row violates check option for view "high_salary_employees"
 ```
@@ -156,7 +156,7 @@ CREATE RECURSIVE VIEW employee_hierarchy AS
 WITH RECURSIVE org_tree AS (
     -- 锚点：最高层管理者
     SELECT employee_id, first_name, last_name, manager_id, 1 as level
-    FROM employees 
+    FROM employees
     WHERE manager_id IS NULL
     UNION ALL
     -- 递归成员：下属员工
@@ -174,20 +174,20 @@ SELECT * FROM employee_hierarchy ORDER BY level, employee_id;
 
 ### 4.1 物化视图 vs 普通视图
 
-| 特性 | 普通视图 | 物化视图 |
-|------|----------|----------|
-| **数据存储** | 不存储数据，每次查询动态生成 | 实际存储查询结果 |
-| **性能** | 每次查询都需要执行底层查询 | 查询直接访问存储的数据，速度快 |
-| **数据新鲜度** | 总是返回最新数据 | 数据可能不是最新的，需要刷新 |
-| **存储开销** | 无额外存储开销 | 需要占用存储空间 |
-| **更新机制** | 自动实时更新 | 需要手动或定期刷新 |
+| 特性           | 普通视图                     | 物化视图                       |
+| -------------- | ---------------------------- | ------------------------------ |
+| **数据存储**   | 不存储数据，每次查询动态生成 | 实际存储查询结果               |
+| **性能**       | 每次查询都需要执行底层查询   | 查询直接访问存储的数据，速度快 |
+| **数据新鲜度** | 总是返回最新数据             | 数据可能不是最新的，需要刷新   |
+| **存储开销**   | 无额外存储开销               | 需要占用存储空间               |
+| **更新机制**   | 自动实时更新                 | 需要手动或定期刷新             |
 
 ### 4.2 物化视图实践
 
 ```sql
 -- PostgreSQL 物化视图示例
 CREATE MATERIALIZED VIEW monthly_sales_summary AS
-SELECT 
+SELECT
     d.department_name,
     EXTRACT(YEAR FROM o.order_date) as year,
     EXTRACT(MONTH FROM o.order_date) as month,
@@ -200,9 +200,9 @@ JOIN departments d ON e.department_id = d.department_id
 GROUP BY d.department_name, year, month;
 
 -- 为物化视图创建索引优化查询
-CREATE UNIQUE INDEX idx_monthly_sales_unique 
+CREATE UNIQUE INDEX idx_monthly_sales_unique
 ON monthly_sales_summary (department_name, year, month);
-CREATE INDEX idx_monthly_sales_total 
+CREATE INDEX idx_monthly_sales_total
 ON monthly_sales_summary (total_sales DESC);
 
 -- 刷新物化视图
@@ -242,7 +242,7 @@ FROM employees e JOIN departments d ON e.department_id = d.department_id;
 
 CREATE VIEW recent_orders AS
 SELECT employee_id, COUNT(*) as order_count
-FROM orders 
+FROM orders
 WHERE order_date > CURRENT_DATE - INTERVAL '30 days'
 GROUP BY employee_id;
 ```
@@ -255,7 +255,7 @@ SELECT * FROM complex_view WHERE department_id = 5;
 
 -- 优化后：直接查询基表，利用索引
 SELECT e.employee_id, e.first_name, e.last_name, d.department_name
-FROM employees e 
+FROM employees e
 JOIN departments d ON e.department_id = d.department_id
 WHERE e.department_id = 5;  -- 可以直接使用索引
 ```
@@ -272,7 +272,7 @@ CREATE VIEW hr_limited_view AS
 SELECT employee_id, first_name, last_name, department_id, position
 FROM employees
 WHERE department_id IN (
-    SELECT department_id FROM departments 
+    SELECT department_id FROM departments
     WHERE hr_manager_id = CURRENT_USER  -- 只能查看自己管理的部门
 );
 
@@ -311,7 +311,7 @@ REVOKE ALL ON salaries FROM PUBLIC;
 -- PostgreSQL 列级权限控制
 CREATE VIEW secured_salary_view AS
 SELECT e.employee_id, e.first_name, e.last_name, e.department_id,
-       CASE 
+       CASE
            WHEN CURRENT_USER = 'hr_director' THEN s.base_salary
            ELSE NULL  -- 非HR总监看不到具体薪资
        END as base_salary
@@ -332,14 +332,14 @@ LEFT JOIN salaries s ON e.employee_id = s.employee_id;
 
 ```sql
 -- 使用注释记录视图用途和业务逻辑
-COMMENT ON VIEW monthly_sales_summary IS 
+COMMENT ON VIEW monthly_sales_summary IS
 '部门月度销售汇总视图，用于财务报表生成。
 更新策略：每月初刷新上月数据。
 依赖表：orders, order_details, employees, departments。
 注意事项：只包含已完成的订单。';
 
 -- MySQL 注释方式
-CREATE VIEW sales_employees 
+CREATE VIEW sales_employees
 COMMENT '销售部门员工视图，用于联系信息查询'
 AS SELECT ...;
 ```
@@ -351,13 +351,13 @@ AS SELECT ...;
 ```sql
 -- 陷阱：过度嵌套视图
 CREATE VIEW view1 AS SELECT * FROM table1 WHERE condition1;
-CREATE VIEW view2 AS SELECT * FROM view1 WHERE condition2;  
+CREATE VIEW view2 AS SELECT * FROM view1 WHERE condition2;
 CREATE VIEW view3 AS SELECT * FROM view2 WHERE condition3;
 -- 查询view3时可能执行多层嵌套查询，性能较差
 
 -- 改进：扁平化视图设计
 CREATE VIEW optimized_view AS
-SELECT * FROM table1 
+SELECT * FROM table1
 WHERE condition1 AND condition2 AND condition3;
 ```
 
@@ -365,7 +365,7 @@ WHERE condition1 AND condition2 AND condition3;
 
 ```sql
 -- PostgreSQL 查询执行计划分析
-EXPLAIN (ANALYZE, BUFFERS) 
+EXPLAIN (ANALYZE, BUFFERS)
 SELECT * FROM complex_view WHERE department_id = 5;
 
 -- MySQL 性能分析
@@ -373,8 +373,8 @@ EXPLAIN FORMAT=JSON
 SELECT * FROM complex_view WHERE department_id = 5;
 
 -- 查找性能瓶颈视图
-SELECT schemaname, viewname, definition 
-FROM pg_views 
+SELECT schemaname, viewname, definition
+FROM pg_views
 WHERE definition LIKE '%JOIN%JOIN%JOIN%';  -- 查找多表连接的复杂视图
 ```
 
@@ -384,22 +384,22 @@ WHERE definition LIKE '%JOIN%JOIN%JOIN%';  -- 查找多表连接的复杂视图
 
 ```sql
 -- PostgreSQL 查看视图依赖
-SELECT 
+SELECT
     dependent_ns.nspname as dependent_schema,
-    dependent_view.relname as dependent_view, 
+    dependent_view.relname as dependent_view,
     source_ns.nspname as source_schema,
     source_table.relname as source_table
-FROM pg_depend 
-JOIN pg_rewrite ON pg_depend.objid = pg_rewrite.oid 
-JOIN pg_class as dependent_view ON pg_rewrite.ev_class = dependent_view.oid 
-JOIN pg_class as source_table ON pg_depend.refobjid = source_table.oid 
+FROM pg_depend
+JOIN pg_rewrite ON pg_depend.objid = pg_rewrite.oid
+JOIN pg_class as dependent_view ON pg_rewrite.ev_class = dependent_view.oid
+JOIN pg_class as source_table ON pg_depend.refobjid = source_table.oid
 JOIN pg_namespace dependent_ns ON dependent_ns.oid = dependent_view.relnamespace
 JOIN pg_namespace source_ns ON source_ns.oid = source_table.relnamespace
 WHERE source_table.relname = 'employees';  -- 查找依赖employees表的视图
 
 -- 定期检查无效视图
-SELECT schemaname, viewname, definition 
-FROM pg_views 
+SELECT schemaname, viewname, definition
+FROM pg_views
 WHERE definition LIKE '%ERROR%';
 ```
 
@@ -426,7 +426,7 @@ CREATE VIEW customer_order_history AS ...;
 ```sql
 -- 1. 客户360度视图
 CREATE VIEW customer_360 AS
-SELECT 
+SELECT
     c.customer_id, c.first_name, c.last_name, c.email, c.join_date,
     COUNT(o.order_id) as total_orders,
     SUM(od.quantity * od.unit_price) as lifetime_value,
@@ -440,10 +440,10 @@ GROUP BY c.customer_id, c.first_name, c.last_name, c.email, c.join_date;
 
 -- 2. 库存预警视图
 CREATE VIEW inventory_alert AS
-SELECT 
-    p.product_id, p.product_name, p.category, 
+SELECT
+    p.product_id, p.product_name, p.category,
     i.quantity_in_stock, i.reorder_level,
-    CASE 
+    CASE
         WHEN i.quantity_in_stock <= i.reorder_level THEN 'CRITICAL'
         WHEN i.quantity_in_stock <= i.reorder_level * 1.5 THEN 'LOW'
         ELSE 'NORMAL'
@@ -458,12 +458,12 @@ GROUP BY p.product_id, p.product_name, p.category, i.quantity_in_stock, i.reorde
 
 -- 3. 员工绩效视图（WITH CHECK OPTION 保障数据质量）
 CREATE VIEW employee_performance AS
-SELECT 
+SELECT
     e.employee_id, e.first_name, e.last_name, d.department_name,
     COUNT(o.order_id) as processed_orders,
     SUM(od.quantity * od.unit_price) as total_sales,
-    CASE 
-        WHEN COUNT(o.order_id) > 0 
+    CASE
+        WHEN COUNT(o.order_id) > 0
         THEN SUM(od.quantity * od.unit_price) / COUNT(o.order_id)
         ELSE 0
     END as avg_order_value
@@ -487,7 +487,7 @@ CREATE INDEX idx_customers_join_date ON customers(join_date);
 
 -- 物化视图用于高频复杂查询
 CREATE MATERIALIZED VIEW daily_sales_dashboard AS
-SELECT 
+SELECT
     DATE(o.order_date) as sale_date,
     p.category,
     d.department_name,
@@ -503,7 +503,7 @@ WHERE o.order_date >= CURRENT_DATE - INTERVAL '365 days'
 GROUP BY sale_date, p.category, d.department_name;
 
 -- 创建物化视图索引
-CREATE UNIQUE INDEX idx_daily_sales_unique 
+CREATE UNIQUE INDEX idx_daily_sales_unique
 ON daily_sales_dashboard (sale_date, category, department_name);
 
 -- 设置定时刷新（使用cron作业或事件调度器）

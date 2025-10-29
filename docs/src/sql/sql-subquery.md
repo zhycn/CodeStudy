@@ -28,12 +28,12 @@ WHERE salary > (SELECT AVG(salary) FROM employees);
 
 根据返回结果的形式，子查询可分为以下几类：
 
-| 类型 | 返回结果 | 常用操作符 |
-|------|----------|------------|
+| 类型           | 返回结果           | 常用操作符                      |
+| -------------- | ------------------ | ------------------------------- |
 | **标量子查询** | 单行单列（单个值） | `=`, `>`, `<`, `>=`, `<=`, `<>` |
-| **列子查询** | 单列多行 | `IN`, `ANY`, `SOME`, `ALL` |
-| **行子查询** | 单行多列 | 行比较运算符 |
-| **表子查询** | 多行多列 | `FROM` 子句中的派生表 |
+| **列子查询**   | 单列多行           | `IN`, `ANY`, `SOME`, `ALL`      |
+| **行子查询**   | 单行多列           | 行比较运算符                    |
+| **表子查询**   | 多行多列           | `FROM` 子句中的派生表           |
 
 根据与外部查询的依赖关系，子查询可分为：
 
@@ -62,21 +62,21 @@ SELECT id FROM dept WHERE name = '销售部'; -- 假设返回部门ID=4
 SELECT * FROM emp WHERE dept_id = 4;
 
 -- 使用标量子查询一步完成
-SELECT * FROM emp 
+SELECT * FROM emp
 WHERE dept_id = (SELECT id FROM dept WHERE name = '销售部');
 ```
 
 **示例2：查询在"方东白"入职之后的员工信息**
 
 ```sql
-SELECT * FROM emp 
+SELECT * FROM emp
 WHERE entrydate > (SELECT entrydate FROM emp WHERE name = '方东白');
 ```
 
 **示例3：在SELECT列表中使用标量子查询**
 
 ```sql
-SELECT 
+SELECT
     employee_name,
     salary,
     (SELECT AVG(salary) FROM employees) as avg_salary,
@@ -92,15 +92,15 @@ FROM employees;
 
 ```sql
 -- 原查询（可能性能较差）
-SELECT 
-    e.ename, 
+SELECT
+    e.ename,
     e.sal,
     (SELECT d.dname FROM dept d WHERE d.deptno = e.deptno) as dname
 FROM emp e;
 
 -- 优化为连接查询
-SELECT 
-    e.ename, 
+SELECT
+    e.ename,
     e.sal,
     d.dname
 FROM emp e
@@ -120,10 +120,10 @@ LEFT JOIN dept d ON e.deptno = d.deptno;
 SELECT salary, managerid FROM emp WHERE name = '张无忌';
 
 -- 使用行子查询
-SELECT * FROM emp 
+SELECT * FROM emp
 WHERE (salary, managerid) = (
-    SELECT salary, managerid 
-    FROM emp 
+    SELECT salary, managerid
+    FROM emp
     WHERE name = '张无忌'
 );
 ```
@@ -148,10 +148,10 @@ WHERE e.salary > dept_avg.avg_salary;
 **示例2：查询与"鹿杖客"或"宋远桥"职位和薪资相同的员工**
 
 ```sql
-SELECT * FROM emp 
+SELECT * FROM emp
 WHERE (job, salary) IN (
-    SELECT job, salary 
-    FROM emp 
+    SELECT job, salary
+    FROM emp
     WHERE name IN ('鹿杖客', '宋远桥')
 );
 ```
@@ -168,8 +168,8 @@ WHERE (job, salary) IN (
 SELECT employee_name, department_id
 FROM employees
 WHERE department_id IN (
-    SELECT department_id 
-    FROM departments 
+    SELECT department_id
+    FROM departments
     WHERE location = 'New York'
 );
 ```
@@ -252,8 +252,8 @@ WHERE EXISTS (subquery);
 SELECT customer_id, customer_name
 FROM customers c
 WHERE EXISTS (
-    SELECT 1 
-    FROM orders o 
+    SELECT 1
+    FROM orders o
     WHERE o.customer_id = c.customer_id
 );
 
@@ -269,8 +269,8 @@ WHERE customer_id IN (SELECT customer_id FROM orders);
 SELECT customer_id, customer_name
 FROM customers c
 WHERE NOT EXISTS (
-    SELECT 1 
-    FROM orders o 
+    SELECT 1
+    FROM orders o
     WHERE o.customer_id = c.customer_id
 );
 ```
@@ -311,8 +311,8 @@ WHERE EXISTS (
 SELECT product_name, price
 FROM products
 WHERE category_id IN (
-    SELECT category_id 
-    FROM categories 
+    SELECT category_id
+    FROM categories
     WHERE category_name = 'Electronics'
 );
 
@@ -332,7 +332,7 @@ CTE 可以将复杂子查询模块化，提高代码可读性和维护性。
 ```sql
 -- 使用CTE重写复杂查询
 WITH department_stats AS (
-    SELECT 
+    SELECT
         department_id,
         AVG(salary) as avg_salary,
         MAX(salary) as max_salary
@@ -340,7 +340,7 @@ WITH department_stats AS (
     GROUP BY department_id
 ),
 high_earners AS (
-    SELECT 
+    SELECT
         e.employee_name,
         e.salary,
         e.department_id
@@ -374,7 +374,7 @@ WHERE e.salary > t.avg_salary;
 #### MySQL 优化建议
 
 1. 对子查询中的连接字段建立索引
-2. 使用 `EXISTS` 替代 `IN`  when possible
+2. 使用 `EXISTS` 替代 `IN` when possible
 3. 避免在 `SELECT` 列表中使用相关子查询
 
 #### PostgreSQL 优化建议
@@ -430,13 +430,13 @@ WHERE EXISTS (
 
 ### 7.2 选择子查询类型的指南
 
-| 场景 | 推荐方案 | 理由 |
-|------|----------|------|
+| 场景       | 推荐方案              | 理由                   |
+| ---------- | --------------------- | ---------------------- |
 | 检查存在性 | `EXISTS`/`NOT EXISTS` | 对 NULL 安全，性能更好 |
-| 单值比较 | 标量子查询 | 语义清晰，直观 |
-| 多值匹配 | `IN`/`JOIN` | 考虑数据量选择合适方案 |
-| 复杂逻辑 | CTE/临时表 | 提高可读性和维护性 |
-| 层次查询 | 递归CTE | 处理树状结构数据 |
+| 单值比较   | 标量子查询            | 语义清晰，直观         |
+| 多值匹配   | `IN`/`JOIN`           | 考虑数据量选择合适方案 |
+| 复杂逻辑   | CTE/临时表            | 提高可读性和维护性     |
+| 层次查询   | 递归CTE               | 处理树状结构数据       |
 
 ### 7.3 性能优化检查清单
 

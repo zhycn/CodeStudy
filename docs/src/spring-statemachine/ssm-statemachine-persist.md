@@ -50,12 +50,12 @@ Spring Statemachine 提供了多种持久化实现方案，满足不同场景的
 ```java
 @Configuration
 public class MemoryPersistenceConfig {
-    
+
     @Bean
     public StateMachineRuntimePersister<String, String, String> stateMachineRuntimePersister() {
         return new DefaultInMemoryPersistingStateMachineInterceptor();
     }
-    
+
     @Bean
     public StateMachineService<String, String> stateMachineService(
         StateMachineFactory<String, String> stateMachineFactory,
@@ -92,18 +92,18 @@ public class MemoryPersistenceConfig {
 @Entity
 @Table(name = "statemachine_context")
 public class JpaStateMachineContext {
-    
+
     @Id
     private String machineId;
-    
+
     @Lob
     private byte[] stateMachineContext;
-    
+
     private String state;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
-    
+
     // getters and setters
 }
 ```
@@ -124,13 +124,13 @@ public interface StateMachineContextRepository extends JpaRepository<JpaStateMac
 @EnableJpaRepositories(basePackages = "com.example.repository")
 @EnableTransactionManagement
 public class JpaPersistenceConfig {
-    
+
     @Bean
     public StateMachineRuntimePersister<String, String, String> stateMachineRuntimePersister(
         StateMachineContextRepository repository) {
         return new JpaPersistingStateMachineInterceptor<>(repository);
     }
-    
+
     @Bean
     public StateMachineService<String, String> stateMachineService(
         StateMachineFactory<String, String> stateMachineFactory,
@@ -163,7 +163,7 @@ public class JpaPersistenceConfig {
 ```java
 @Configuration
 public class RedisConfig {
-    
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
@@ -171,7 +171,7 @@ public class RedisConfig {
         config.setPort(6379);
         return new LettuceConnectionFactory(config);
     }
-    
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -188,11 +188,11 @@ public class RedisConfig {
 ```java
 @Configuration
 public class RedisPersistenceConfig {
-    
+
     @Bean
     public StateMachineRuntimePersister<String, String, String> stateMachineRuntimePersister(
         RedisConnectionFactory connectionFactory) {
-        RedisStateMachineContextRepository<String, String> repository = 
+        RedisStateMachineContextRepository<String, String> repository =
             new RedisStateMachineContextRepository<>(connectionFactory);
         return new RedisPersistingStateMachineInterceptor<>(repository);
     }
@@ -222,16 +222,16 @@ public class RedisPersistenceConfig {
 ```java
 @Document(collection = "statemachine_contexts")
 public class MongoStateMachineContext {
-    
+
     @Id
     private String machineId;
-    
+
     private String state;
-    
+
     private byte[] stateMachineContext;
-    
+
     private Instant lastUpdated;
-    
+
     // getters and setters
 }
 ```
@@ -241,7 +241,7 @@ public class MongoStateMachineContext {
 ```java
 @Configuration
 public class MongoPersistenceConfig {
-    
+
     @Bean
     public StateMachineRuntimePersister<String, String, String> stateMachineRuntimePersister(
         MongoTemplate mongoTemplate) {
@@ -258,7 +258,7 @@ public class MongoPersistenceConfig {
 
 ```java
 public enum OrderStates {
-    INITIAL, 
+    INITIAL,
     ORDER_CREATED,
     PAYMENT_PENDING,
     PAYMENT_RECEIVED,
@@ -285,10 +285,10 @@ public enum OrderEvents {
 @Configuration
 @EnableStateMachineFactory
 public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<OrderStates, OrderEvents> {
-    
+
     @Autowired
     private StateMachineRuntimePersister<OrderStates, OrderEvents, String> stateMachineRuntimePersister;
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<OrderStates, OrderEvents> config) throws Exception {
         config
@@ -299,7 +299,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .withPersistence()
             .runtimePersister(stateMachineRuntimePersister);
     }
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<OrderStates, OrderEvents> states) throws Exception {
         states
@@ -313,7 +313,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
             .state(OrderStates.ORDER_DELIVERED)
             .state(OrderStates.ORDER_CANCELLED);
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<OrderStates, OrderEvents> transitions) throws Exception {
         transitions
@@ -338,18 +338,18 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .event(OrderEvents.CANCEL_ORDER)
                 .action(orderCancelledAction());
     }
-    
+
     @Bean
     public StateMachineListener<OrderStates, OrderEvents> stateMachineListener() {
         return new StateMachineListenerAdapter<OrderStates, OrderEvents>() {
             @Override
             public void stateChanged(State<OrderStates, OrderEvents> from, State<OrderStates, OrderEvents> to) {
-                System.out.println("State changed from " + (from != null ? from.getId() : "null") 
+                System.out.println("State changed from " + (from != null ? from.getId() : "null")
                     + " to " + to.getId());
             }
         };
     }
-    
+
     // 各种 Action beans...
     @Bean
     public Action<OrderStates, OrderEvents> orderCreatedAction() {
@@ -367,62 +367,62 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 ```java
 @Service
 public class OrderService {
-    
+
     @Autowired
     private StateMachineService<OrderStates, OrderEvents> stateMachineService;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     public Order createOrder(Order order) {
         // 保存订单到数据库
         Order savedOrder = orderRepository.save(order);
-        
+
         // 获取状态机并发送创建事件
         StateMachine<OrderStates, OrderEvents> stateMachine = stateMachineService.acquireStateMachine(savedOrder.getId());
-        
+
         Message<OrderEvents> message = MessageBuilder
             .withPayload(OrderEvents.CREATE_ORDER)
             .setHeader("orderId", savedOrder.getId())
             .build();
-        
+
         stateMachine.sendEvent(message);
-        
+
         return savedOrder;
     }
-    
+
     public void processPayment(String orderId, Payment payment) {
         StateMachine<OrderStates, OrderEvents> stateMachine = stateMachineService.acquireStateMachine(orderId);
-        
+
         // 检查当前状态
         if (stateMachine.getState().getId() == OrderStates.PAYMENT_PENDING) {
             Message<OrderEvents> message = MessageBuilder
                 .withPayload(OrderEvents.PAYMENT_CONFIRMED)
                 .setHeader("payment", payment)
                 .build();
-            
+
             stateMachine.sendEvent(message);
-            
+
             // 更新订单支付信息
             orderRepository.updatePaymentStatus(orderId, PaymentStatus.CONFIRMED);
         }
     }
-    
+
     public OrderStates getOrderStatus(String orderId) {
         StateMachine<OrderStates, OrderEvents> stateMachine = stateMachineService.acquireStateMachine(orderId);
         return stateMachine.getState().getId();
     }
-    
+
     public void cancelOrder(String orderId) {
         StateMachine<OrderStates, OrderEvents> stateMachine = stateMachineService.acquireStateMachine(orderId);
-        
+
         Message<OrderEvents> message = MessageBuilder
             .withPayload(OrderEvents.CANCEL_ORDER)
             .setHeader("cancellationTime", Instant.now())
             .build();
-        
+
         stateMachine.sendEvent(message);
-        
+
         // 更新订单状态为已取消
         orderRepository.updateOrderStatus(orderId, OrderStatus.CANCELLED);
     }
@@ -435,37 +435,37 @@ public class OrderService {
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody OrderRequest request) {
         Order order = convertToOrder(request);
         Order createdOrder = orderService.createOrder(order);
         return ResponseEntity.ok(createdOrder);
     }
-    
+
     @PostMapping("/{orderId}/payment")
-    public ResponseEntity<Void> processPayment(@PathVariable String orderId, 
+    public ResponseEntity<Void> processPayment(@PathVariable String orderId,
                                               @RequestBody PaymentRequest request) {
         Payment payment = convertToPayment(request);
         orderService.processPayment(orderId, payment);
         return ResponseEntity.ok().build();
     }
-    
+
     @GetMapping("/{orderId}/status")
     public ResponseEntity<OrderStatusResponse> getOrderStatus(@PathVariable String orderId) {
         OrderStates status = orderService.getOrderStatus(orderId);
         return ResponseEntity.ok(new OrderStatusResponse(orderId, status));
     }
-    
+
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<Void> cancelOrder(@PathVariable String orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().build();
     }
-    
+
     // 辅助方法...
     private Order convertToOrder(OrderRequest request) {
         // 转换逻辑
@@ -496,7 +496,7 @@ public class OrderController {
    ```java
    @Configuration
    public class LazyLoadingConfig {
-       
+
        @Bean
        public StateMachineRuntimePersister<String, String, String> stateMachineRuntimePersister() {
            return new JpaPersistingStateMachineInterceptor<>(repository) {
@@ -520,7 +520,7 @@ public class OrderController {
    @Configuration
    @EnableCaching
    public class CacheConfig {
-       
+
        @Bean
        public CacheManager cacheManager() {
            ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager();
@@ -528,10 +528,10 @@ public class OrderController {
            return cacheManager;
        }
    }
-   
+
    @Service
    public class CachedOrderService {
-       
+
        @Cacheable(value = "statemachineContexts", key = "#orderId")
        public OrderStates getCachedStatus(String orderId) {
            return orderService.getOrderStatus(orderId);
@@ -544,11 +544,11 @@ public class OrderController {
    ```java
    @Service
    public class BatchOrderService {
-       
+
        @Transactional
        public void batchUpdateOrders(List<String> orderIds, OrderEvents event) {
            for (String orderId : orderIds) {
-               StateMachine<OrderStates, OrderEvents> stateMachine = 
+               StateMachine<OrderStates, OrderEvents> stateMachine =
                    stateMachineService.acquireStateMachine(orderId);
                stateMachine.sendEvent(event);
            }
@@ -563,20 +563,20 @@ public class OrderController {
    ```java
    @Configuration
    public class MonitoringConfig {
-       
+
        @Bean
        public StateMachineMonitor<OrderStates, OrderEvents> stateMachineMonitor() {
            return new StateMachineMonitor<OrderStates, OrderEvents>() {
                @Override
-               public void transition(StateMachine<OrderStates, OrderEvents> stateMachine, 
-                                     Transition<OrderStates, OrderEvents> transition, 
+               public void transition(StateMachine<OrderStates, OrderEvents> stateMachine,
+                                     Transition<OrderStates, OrderEvents> transition,
                                      long duration) {
                    log.info("Transition {} took {} ms", transition, duration);
                }
-               
+
                @Override
-               public void action(StateMachine<OrderStates, OrderEvents> stateMachine, 
-                                 Action<OrderStates, OrderEvents> action, 
+               public void action(StateMachine<OrderStates, OrderEvents> stateMachine,
+                                 Action<OrderStates, OrderEvents> action,
                                  long duration) {
                    log.info("Action {} took {} ms", action, duration);
                }
@@ -590,10 +590,10 @@ public class OrderController {
    ```java
    @Component
    public class StateMachineHealthIndicator implements HealthIndicator {
-       
+
        @Autowired
        private StateMachineService<OrderStates, OrderEvents> stateMachineService;
-       
+
        @Override
        public Health health() {
            // 实现健康检查逻辑
@@ -618,16 +618,16 @@ public class OrderController {
 ```java
 @Service
 public class ConcurrentOrderService {
-    
+
     @Autowired
     private StateMachineService<OrderStates, OrderEvents> stateMachineService;
-    
+
     @Transactional
     public void processOrderConcurrently(String orderId, OrderEvents event) {
         // 使用悲观锁
-        StateMachine<OrderStates, OrderEvents> stateMachine = 
+        StateMachine<OrderStates, OrderEvents> stateMachine =
             stateMachineService.acquireStateMachine(orderId, true); // 获取锁
-        
+
         try {
             if (isValidTransition(stateMachine.getState().getId(), event)) {
                 stateMachine.sendEvent(event);
@@ -648,23 +648,23 @@ public class ConcurrentOrderService {
 ```java
 @Service
 public class ConsistentOrderService {
-    
+
     @Autowired
     private StateMachineService<OrderStates, OrderEvents> stateMachineService;
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Transactional
     public void processOrderWithConsistency(String orderId, OrderEvents event) {
         // 更新业务数据
         orderRepository.updateOrderStatus(orderId, convertToOrderStatus(event));
-        
+
         // 更新状态机状态
-        StateMachine<OrderStates, OrderEvents> stateMachine = 
+        StateMachine<OrderStates, OrderEvents> stateMachine =
             stateMachineService.acquireStateMachine(orderId);
         stateMachine.sendEvent(event);
-        
+
         // 如果任何操作失败，整个事务将回滚
     }
 }
@@ -680,7 +680,7 @@ public class ConsistentOrderService {
 @Configuration
 @EnableAsync
 public class AsyncConfig {
-    
+
     @Bean
     public TaskExecutor stateMachineTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -694,10 +694,10 @@ public class AsyncConfig {
 
 @Service
 public class AsyncOrderService {
-    
+
     @Async("stateMachineTaskExecutor")
     public Future<OrderStates> processOrderAsync(String orderId, OrderEvents event) {
-        StateMachine<OrderStates, OrderEvents> stateMachine = 
+        StateMachine<OrderStates, OrderEvents> stateMachine =
             stateMachineService.acquireStateMachine(orderId);
         stateMachine.sendEvent(event);
         return new AsyncResult<>(stateMachine.getState().getId());

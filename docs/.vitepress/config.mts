@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress';
-import javaSidebar from './sidebar/java.mts';
 import gitSidebar from './sidebar/git.mts';
+import javaSidebar from './sidebar/java.mts';
 
 export default defineConfig({
   // 站点级核心配置

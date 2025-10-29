@@ -26,14 +26,14 @@ PostCSS 是一个用于处理 CSS 的 JavaScript 工具和插件生态系统，�
 
 ### 1.2 PostCSS 与预处理器的区别
 
-| 特性 | PostCSS | 预处理器（Sass/Less） |
-|------|---------|---------------------|
-| **定位** | CSS 后处理平台 | CSS 预处理语言 |
-| **语法** | 基于插件，可以是标准 CSS 或扩展语法 | 自定义语法（变量、嵌套等） |
-| **功能扩展** | 通过插件实现 | 内置于语言中 |
-| **灵活性** | 高（可以只使用需要的功能） | 中（通常使用全套功能） |
-| **性能** | 通常更快（尤其是针对特定任务） | 相对较慢（需要完整编译） |
-| **生态系统** | 分散的插件生态 | 统一的语言生态  |
+| 特性         | PostCSS                             | 预处理器（Sass/Less）      |
+| ------------ | ----------------------------------- | -------------------------- |
+| **定位**     | CSS 后处理平台                      | CSS 预处理语言             |
+| **语法**     | 基于插件，可以是标准 CSS 或扩展语法 | 自定义语法（变量、嵌套等） |
+| **功能扩展** | 通过插件实现                        | 内置于语言中               |
+| **灵活性**   | 高（可以只使用需要的功能）          | 中（通常使用全套功能）     |
+| **性能**     | 通常更快（尤其是针对特定任务）      | 相对较慢（需要完整编译）   |
+| **生态系统** | 分散的插件生态                      | 统一的语言生态             |
 
 ### 1.3 为什么选择 PostCSS？
 
@@ -85,11 +85,11 @@ npx postcss --init
 module.exports = {
   // 配置 source map
   map: process.env.NODE_ENV === 'development' ? 'inline' : false,
-  
+
   // 配置插件
   plugins: [
     // 插件将按顺序执行
-  ]
+  ],
 };
 ```
 
@@ -116,9 +116,9 @@ module.exports = {
   plugins: [
     require('autoprefixer')({
       // 配置目标浏览器范围
-      overrideBrowserslist: ['last 2 versions', '> 1%', 'ie >= 11']
-    })
-  ]
+      overrideBrowserslist: ['last 2 versions', '> 1%', 'ie >= 11'],
+    }),
+  ],
 };
 ```
 
@@ -128,7 +128,7 @@ module.exports = {
 /* 输入 CSS */
 .example {
   display: flex;
-  transition: all .5s;
+  transition: all 0.5s;
 }
 
 /* 输出 CSS */
@@ -136,8 +136,8 @@ module.exports = {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-transition: all .5s;
-  transition: all .5s;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
 }
 ```
 
@@ -145,11 +145,7 @@ module.exports = {
 
 ```json
 {
-  "browserslist": [
-    "last 2 versions",
-    "> 1%",
-    "not dead"
-  ]
+  "browserslist": ["last 2 versions", "> 1%", "not dead"]
 }
 ```
 
@@ -168,14 +164,14 @@ module.exports = {
       stage: 3,
       // 启用特定特性
       features: {
-        'nesting-rules': true,      // 嵌套规则
-        'custom-properties': true,  // 自定义属性（CSS变量）
-        'color-mod-function': true  // 颜色修改函数
+        'nesting-rules': true, // 嵌套规则
+        'custom-properties': true, // 自定义属性（CSS变量）
+        'color-mod-function': true, // 颜色修改函数
       },
       // 浏览器目标（可选，优先使用browserslist配置）
-      browsers: 'last 2 versions'
-    })
-  ]
+      browsers: 'last 2 versions',
+    }),
+  ],
 };
 ```
 
@@ -190,12 +186,12 @@ module.exports = {
 
 .card {
   background: var(--secondary-color);
-  
+
   /* 嵌套规则 */
   & .title {
     font-size: 1.5rem;
   }
-  
+
   &:hover {
     transform: scale(1.05);
   }
@@ -226,13 +222,16 @@ CSSnano 是一个模块化的 CSS 压缩工具，通过一系列优化来减小 
 module.exports = {
   plugins: [
     require('cssnano')({
-      preset: ['default', {
-        discardComments: { removeAll: true },
-        mergeIdents: false,
-        reduceIdents: false
-      }]
-    })
-  ]
+      preset: [
+        'default',
+        {
+          discardComments: { removeAll: true },
+          mergeIdents: false,
+          reduceIdents: false,
+        },
+      ],
+    }),
+  ],
 };
 ```
 
@@ -256,9 +255,9 @@ module.exports = {
   plugins: [
     require('postcss-nested')({
       // 指定需要"冒泡"的At规则
-      bubble: ['@media', '@supports', '@layer']
-    })
-  ]
+      bubble: ['@media', '@supports', '@layer'],
+    }),
+  ],
 };
 ```
 
@@ -273,15 +272,15 @@ nav {
     list-style: none;
   }
 
-  li { 
-    display: inline-block; 
+  li {
+    display: inline-block;
   }
 
   a {
     display: block;
     padding: 6px 12px;
     text-decoration: none;
-    
+
     /* 嵌套媒体查询 */
     @media (max-width: 768px) {
       padding: 4px 8px;
@@ -325,9 +324,9 @@ module.exports = {
   plugins: [
     require('postcss-import')({
       // 定义查找路径
-      path: ['node_modules', 'src/css']
-    })
-  ]
+      path: ['node_modules', 'src/css'],
+    }),
+  ],
 };
 ```
 
@@ -335,8 +334,8 @@ module.exports = {
 
 ```css
 /* main.css */
-@import 'normalize.css';        /* 从node_modules导入 */
-@import './variables.css';      /* 相对路径导入 */
+@import 'normalize.css'; /* 从node_modules导入 */
+@import './variables.css'; /* 相对路径导入 */
 @import './components/button.css';
 
 body {
@@ -372,14 +371,14 @@ module.exports = {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
-              modules: true // 启用CSS Modules（可选）
-            }
+              modules: true, // 启用CSS Modules（可选）
+            },
           },
-          'postcss-loader'
-        ]
-      }
-    ]
-  }
+          'postcss-loader',
+        ],
+      },
+    ],
+  },
 };
 ```
 
@@ -404,12 +403,10 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 
 function processCSS() {
-  const plugins = [
-    autoprefixer(),
-    cssnano()
-  ];
-  
-  return gulp.src('./src/**/*.css')
+  const plugins = [autoprefixer(), cssnano()];
+
+  return gulp
+    .src('./src/**/*.css')
     .pipe(sourcemaps.init())
     .pipe(postcss(plugins))
     .pipe(sourcemaps.write('.'))
@@ -431,8 +428,8 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   css: {
-    postcss: './postcss.config.js'
-  }
+    postcss: './postcss.config.js',
+  },
 });
 ```
 
@@ -452,8 +449,8 @@ npm install --save-dev postcss autoprefixer
 // postcss.config.js
 module.exports = {
   plugins: {
-    autoprefixer: {}
-  }
+    autoprefixer: {},
+  },
 };
 ```
 
@@ -476,24 +473,24 @@ module.exports = {
   plugins: [
     // 1. 文件处理
     require('postcss-import'),
-    
+
     // 2. 语法扩展
     require('postcss-preset-env')({
       stage: 3,
       features: {
         'nesting-rules': true,
-        'custom-media-queries': true
-      }
+        'custom-media-queries': true,
+      },
     }),
     require('postcss-nested'),
-    
+
     // 3. 兼容性处理
     require('postcss-flexbugs-fixes'),
     require('autoprefixer'),
-    
+
     // 4. 生产环境优化
-    process.env.NODE_ENV === 'production' && require('cssnano')
-  ].filter(Boolean) // 过滤掉false值（如条件为false的插件）
+    process.env.NODE_ENV === 'production' && require('cssnano'),
+  ].filter(Boolean), // 过滤掉false值（如条件为false的插件）
 };
 ```
 
@@ -508,32 +505,30 @@ const isDevelopment = !isProduction;
 
 module.exports = {
   map: isDevelopment ? 'inline' : false,
-  
+
   plugins: {
     'postcss-import': {},
-    
+
     'postcss-preset-env': {
       stage: 3,
       features: {
-        'nesting-rules': true
-      }
+        'nesting-rules': true,
+      },
     },
-    
-    'autoprefixer': {
-      overrideBrowserslist: [
-        'last 2 versions',
-        '> 1%',
-        'not dead'
-      ]
+
+    autoprefixer: {
+      overrideBrowserslist: ['last 2 versions', '> 1%', 'not dead'],
     },
-    
+
     // 仅在生产环境使用cssnano
-    ...(isProduction ? {
-      'cssnano': {
-        preset: 'default'
-      }
-    } : {})
-  }
+    ...(isProduction
+      ? {
+          cssnano: {
+            preset: 'default',
+          },
+        }
+      : {}),
+  },
 };
 ```
 
@@ -558,19 +553,19 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
           {
             loader: 'postcss-loader',
             options: {
-              cacheDirectory: true // 启用缓存
-            }
-          }
-        ]
-      }
-    ]
-  }
+              cacheDirectory: true, // 启用缓存
+            },
+          },
+        ],
+      },
+    ],
+  },
 };
 ```
 
@@ -593,16 +588,16 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: {
-                localIdentName: '[name]__[local]--[hash:base64:5]'
+                localIdentName: '[name]__[local]--[hash:base64:5]',
               },
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
-          'postcss-loader'
-        ]
-      }
-    ]
-  }
+          'postcss-loader',
+        ],
+      },
+    ],
+  },
 };
 ```
 
@@ -635,34 +630,34 @@ PostCSS 插件是一个返回函数的 JavaScript 函数，该函数接收并可
 ```javascript
 module.exports = (opts = {}) => {
   // 处理插件选项
-  const options = { 
+  const options = {
     // 默认选项
-    ...opts 
+    ...opts,
   };
-  
+
   // 返回处理函数
   return {
     postcssPlugin: 'my-plugin-name',
-    
+
     // 处理根节点
     Root(root, { result }) {
       // 处理整个CSS文件
     },
-    
+
     // 处理规则（选择器和声明块）
     Rule(rule, { result }) {
       // 处理每个CSS规则
     },
-    
+
     // 处理声明（属性和值）
     Declaration(decl, { result }) {
       // 处理每个CSS声明
     },
-    
+
     // 处理@media等条件规则
     AtRule(atRule, { result }) {
       // 处理每个@规则
-    }
+    },
   };
 };
 
@@ -678,48 +673,42 @@ module.exports.postcss = true;
 // postcss-px-to-rem.js
 module.exports = (opts = {}) => {
   const options = {
-    rootValue: 16,        // 1rem = 16px
-    unitPrecision: 5,     // 小数点后位数
-    propList: ['*'],      // 需要转换的属性
+    rootValue: 16, // 1rem = 16px
+    unitPrecision: 5, // 小数点后位数
+    propList: ['*'], // 需要转换的属性
     selectorBlackList: [], // 选择器黑名单
-    replace: true,        // 是否替换
-    mediaQuery: false,    // 是否在媒体查询中转换
-    minPixelValue: 0,     // 最小像素值
-    ...opts
+    replace: true, // 是否替换
+    mediaQuery: false, // 是否在媒体查询中转换
+    minPixelValue: 0, // 最小像素值
+    ...opts,
   };
-  
+
   return {
     postcssPlugin: 'postcss-px-to-rem',
-    
+
     Declaration(decl) {
       // 跳过不需要处理的属性
-      if (!options.propList.includes('*') && 
-          !options.propList.some(prop => decl.prop.includes(prop))) {
+      if (!options.propList.includes('*') && !options.propList.some((prop) => decl.prop.includes(prop))) {
         return;
       }
-      
+
       // 跳过黑名单中的选择器
-      if (options.selectorBlackList.some(selector => 
-          decl.parent.selector.includes(selector))) {
+      if (options.selectorBlackList.some((selector) => decl.parent.selector.includes(selector))) {
         return;
       }
-      
+
       // 替换值中的px为rem
-      decl.value = decl.value.replace(
-        /([\d.]+)px/g, 
-        (match, p1) => {
-          const pixels = parseFloat(p1);
-          
-          // 跳过小于最小像素值的值
-          if (pixels < options.minPixelValue) return match;
-          
-          // 转换为rem并保留指定小数位
-          const rems = (pixels / options.rootValue)
-            .toFixed(options.unitPrecision);
-          return `${rems}rem`;
-        }
-      );
-    }
+      decl.value = decl.value.replace(/([\d.]+)px/g, (match, p1) => {
+        const pixels = parseFloat(p1);
+
+        // 跳过小于最小像素值的值
+        if (pixels < options.minPixelValue) return match;
+
+        // 转换为rem并保留指定小数位
+        const rems = (pixels / options.rootValue).toFixed(options.unitPrecision);
+        return `${rems}rem`;
+      });
+    },
   };
 };
 
@@ -734,9 +723,9 @@ module.exports = {
   plugins: [
     require('./postcss-px-to-rem')({
       rootValue: 16,
-      propList: ['font-size', 'margin', 'padding']
-    })
-  ]
+      propList: ['font-size', 'margin', 'padding'],
+    }),
+  ],
 };
 ```
 
@@ -750,35 +739,35 @@ const postcss = require('postcss');
 module.exports = (opts = {}) => {
   return {
     postcssPlugin: 'my-advanced-plugin',
-    
+
     Rule(rule) {
       // 创建新规则
       const newRule = postcss.rule({ selector: '.new-class' });
-      
+
       // 创建新声明
-      const newDecl = postcss.decl({ 
-        prop: 'color', 
-        value: 'red' 
+      const newDecl = postcss.decl({
+        prop: 'color',
+        value: 'red',
       });
-      
+
       // 将声明添加到规则
       newRule.append(newDecl);
-      
+
       // 将新规则插入到当前规则之后
       rule.after(newRule);
     },
-    
+
     Declaration(decl) {
       // 修改声明
       if (decl.prop === 'color' && decl.value === 'red') {
         decl.value = 'blue';
       }
-      
+
       // 删除声明
       if (decl.prop === 'old-property') {
         decl.remove();
       }
-    }
+    },
   };
 };
 
@@ -797,13 +786,13 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   map: !isProduction ? { inline: false } : false,
-  
+
   plugins: [
     // 1. 导入处理
     require('postcss-import')({
-      path: ['src/css', 'node_modules']
+      path: ['src/css', 'node_modules'],
     }),
-    
+
     // 2. 高级CSS语法支持
     require('postcss-preset-env')({
       stage: 3,
@@ -812,35 +801,40 @@ module.exports = {
         'custom-properties': true,
         'color-mod-function': true,
         'logical-properties-and-values': true,
-        'media-query-ranges': true
+        'media-query-ranges': true,
       },
       autoprefixer: {
-        grid: 'autoplace'
-      }
+        grid: 'autoplace',
+      },
     }),
-    
+
     // 3. 额外语法扩展
     require('postcss-nested'),
     require('postcss-flexbugs-fixes'),
-    
+
     // 4. 自动前缀
     require('autoprefixer')({
-      flexbox: 'no-2009'
+      flexbox: 'no-2009',
     }),
-    
+
     // 5. 生产环境优化
-    isProduction && require('cssnano')({
-      preset: ['default', {
-        discardComments: { removeAll: true },
-        normalizeWhitespace: true
-      }]
-    }),
-    
+    isProduction &&
+      require('cssnano')({
+        preset: [
+          'default',
+          {
+            discardComments: { removeAll: true },
+            normalizeWhitespace: true,
+          },
+        ],
+      }),
+
     // 6. 样式检查
-    !isProduction && require('stylelint')({
-      configFile: '.stylelintrc'
-    })
-  ].filter(Boolean)
+    !isProduction &&
+      require('stylelint')({
+        configFile: '.stylelintrc',
+      }),
+  ].filter(Boolean),
 };
 ```
 
@@ -895,10 +889,13 @@ module.exports = {
 ```javascript
 // postcss.config.js
 module.exports = {
-  map: process.env.NODE_ENV === 'development' ? {
-    inline: false,
-    annotation: true
-  } : false,
+  map:
+    process.env.NODE_ENV === 'development'
+      ? {
+          inline: false,
+          annotation: true,
+        }
+      : false,
   // ... 其他配置
 };
 ```

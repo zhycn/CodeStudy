@@ -252,8 +252,8 @@ public class MyService {
 1. **明确需求**: 首先确定状态是需要全局共享、按实体隔离还是会话隔离。
 2. **首选工厂**: 对于任何非全局 Singleton 的需求，使用 `StateMachineFactory` 来创建和管理实例。
 3. **生命周期管理**:
-    - 使用 `stateMachine.start()` 启动状态机。
-    - 对于长时间存在的状态机（如 Session 或 Entity 关联的），要注意在适当的时候（如会话销毁、实体删除）调用 `stateMachine.stop()` 或 `stateMachine.setStateMachineError(...)` 来清理资源。Spring 会为 Session 和 Request 作用域的 Bean 自动处理销毁，但 Prototype 需要手动管理或通过监听上下文事件来清理。
+   - 使用 `stateMachine.start()` 启动状态机。
+   - 对于长时间存在的状态机（如 Session 或 Entity 关联的），要注意在适当的时候（如会话销毁、实体删除）调用 `stateMachine.stop()` 或 `stateMachine.setStateMachineError(...)` 来清理资源。Spring 会为 Session 和 Request 作用域的 Bean 自动处理销毁，但 Prototype 需要手动管理或通过监听上下文事件来清理。
 4. **状态机 ID**: 为通过工厂创建的状态机指定有意义的 ID（如订单号、用户 ID），便于调试和后期持久化。
 5. **持久化考虑**: 对于 Prototype 或 Session 作用域的状态机，如果需要持久化其状态到数据库（如 Redis, JPA），Spring Statemachine 提供了 `StateMachinePersister` 等工具，其作用域策略应与状态机实例的作用域相匹配。
 
@@ -283,7 +283,7 @@ public class MyService {
 @Controller
 public class MyController {
     @Autowired // 注入的是代理，而不是真实实例
-    private StateMachine<String, String> sessionStateMachine; 
+    private StateMachine<String, String> sessionStateMachine;
 }
 
 // 配置：定义 Bean 时指定代理
@@ -296,11 +296,11 @@ public StateMachine<String, String> sessionStateMachine(...) { ... }
 
 Spring Statemachine 的作用域机制通过与 Spring 容器无缝集成，提供了极大的灵活性来管理状态机的生命周期。
 
-| 作用域类型 | 配置方式 | 适用场景 | 注意事项 |
-| :--- | :--- | :--- | :--- |
-| **Singleton** | `@EnableStateMachine` (默认) | 全局状态，无状态处理 | 注意线程安全，特别是扩展状态变量 |
-| **Prototype** | `@EnableStateMachineFactory` + `getStateMachine()` | 订单、工单等独立实体 | 需要关注生命周期管理和内存泄漏 |
-| **Session** | `@Scope(SCOPE_SESSION)` + Proxy | Web 用户会话状态 | 与 HTTP Session 生命周期一致 |
-| **Request** | `@Scope(SCOPE_REQUEST)` + Proxy | 短期请求处理（较少使用） | 生命周期极短 |
+| 作用域类型    | 配置方式                                           | 适用场景                 | 注意事项                         |
+| :------------ | :------------------------------------------------- | :----------------------- | :------------------------------- |
+| **Singleton** | `@EnableStateMachine` (默认)                       | 全局状态，无状态处理     | 注意线程安全，特别是扩展状态变量 |
+| **Prototype** | `@EnableStateMachineFactory` + `getStateMachine()` | 订单、工单等独立实体     | 需要关注生命周期管理和内存泄漏   |
+| **Session**   | `@Scope(SCOPE_SESSION)` + Proxy                    | Web 用户会话状态         | 与 HTTP Session 生命周期一致     |
+| **Request**   | `@Scope(SCOPE_REQUEST)` + Proxy                    | 短期请求处理（较少使用） | 生命周期极短                     |
 
 **核心建议**: 熟练掌握 `StateMachineFactory` 的使用，它是构建复杂、多实例状态机应用的基石。根据你的业务实体生命周期，选择最匹配的作用域策略，才能构建出既高效又稳定的状态驱动型应用程序。

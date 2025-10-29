@@ -17,12 +17,12 @@
 
 ### 1.3 区域与分层状态的区别
 
-| 特性 | 区域 (Regions) | 分层状态 (Hierarchical States) |
-|------|----------------|----------------------------------|
-| 执行方式 | 并行执行 | 顺序执行 |
-| 状态关系 | 相互独立 | 父子关系 |
-| 事件处理 | 所有区域接收相同事件 | 事件由当前活跃状态处理 |
-| 使用场景 | 真正并行的业务流程 | 状态的有层次组织 |
+| 特性     | 区域 (Regions)       | 分层状态 (Hierarchical States) |
+| -------- | -------------------- | ------------------------------ |
+| 执行方式 | 并行执行             | 顺序执行                       |
+| 状态关系 | 相互独立             | 父子关系                       |
+| 事件处理 | 所有区域接收相同事件 | 事件由当前活跃状态处理         |
+| 使用场景 | 真正并行的业务流程   | 状态的有层次组织               |
 
 ## 2. 区域配置详解
 
@@ -215,7 +215,7 @@ public class RegionEventHandler {
     public void onStateChanged(StateChangedEvent<States, Events> event) {
         States sourceState = event.getSource().getId();
         States targetState = event.getTarget().getId();
-        
+
         System.out.println("State changed from " + sourceState + " to " + targetState);
     }
 }
@@ -359,14 +359,14 @@ public class OptimizedRegionConfig extends StateMachineConfigurerAdapter<String,
 ```java
 @Component
 public class RegionMonitor {
-    
+
     private final Map<String, List<String>> regionActivityLog = new ConcurrentHashMap<>();
 
     @EventListener
     public void onStateEntry(OnStateEntryEvent<String, String> event) {
         String stateId = event.getState().getId();
         String region = determineRegion(stateId);
-        
+
         regionActivityLog.computeIfAbsent(region, k -> new ArrayList<>())
                        .add("Entered state: " + stateId + " at " + new Date());
     }
@@ -375,7 +375,7 @@ public class RegionMonitor {
     public void onStateExit(OnStateExitEvent<String, String> event) {
         String stateId = event.getState().getId();
         String region = determineRegion(stateId);
-        
+
         regionActivityLog.computeIfAbsent(region, k -> new ArrayList<>())
                        .add("Exited state: " + stateId + " at " + new Date());
     }
@@ -657,18 +657,18 @@ public class OrderProcessingConfig extends EnumStateMachineConfigurerAdapter<Ord
 // 订单处理器
 @Component
 public class OrderProcessor {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     public void processNewOrder(Order order) {
         stateMachine.sendEvent(OrderEvents.PAYMENT_STARTED);
         stateMachine.sendEvent(OrderEvents.INVENTORY_CHECK_STARTED);
-        
+
         // 监控订单处理状态
         monitorOrderProcessing();
     }
-    
+
     private void monitorOrderProcessing() {
         // 监控逻辑实现
     }
@@ -701,7 +701,7 @@ public class RegionStateMachineTest {
         stateMachine.sendEvent(OrderEvents.PAYMENT_STARTED);
         assertThat(stateMachine.getState().getIds())
             .contains(OrderStates.PAYMENT_VERIFICATION);
-        
+
         stateMachine.sendEvent(OrderEvents.PAYMENT_VERIFIED);
         assertThat(stateMachine.getState().getIds())
             .contains(OrderStates.PAYMENT_COMPLETED);
@@ -713,7 +713,7 @@ public class RegionStateMachineTest {
         stateMachine.sendEvent(OrderEvents.INVENTORY_CHECK_STARTED);
         assertThat(stateMachine.getState().getIds())
             .contains(OrderStates.INVENTORY_CHECKING);
-        
+
         stateMachine.sendEvent(OrderEvents.INVENTORY_AVAILABLE);
         assertThat(stateMachine.getState().getIds())
             .contains(OrderStates.INVENTORY_RESERVED);
@@ -724,7 +724,7 @@ public class RegionStateMachineTest {
         // 测试区域并发操作
         stateMachine.sendEvent(OrderEvents.PAYMENT_STARTED);
         stateMachine.sendEvent(OrderEvents.INVENTORY_CHECK_STARTED);
-        
+
         // 验证两个区域都进入了处理状态
         assertThat(stateMachine.getState().getIds())
             .contains(OrderStates.PAYMENT_VERIFICATION, OrderStates.INVENTORY_CHECKING);
@@ -741,11 +741,11 @@ public class RegionStateMachineTest {
 
 Spring Statemachine 的 Regions 功能为建模复杂的并发业务流程提供了强大的工具。
 
-| 项目 | 说明 |
-| :--- | :--- |
-| **核心价值** | 分解复杂性，实现真正的并发状态流建模。 |
-| **配置关键** | 使用 `parent()` 和 `region(String id)` 定义多个并列的 `withStates()` 块。使用 `Fork` 和 `Join` 控制进入和退出。 |
+| 项目         | 说明                                                                                                                                                                   |
+| :----------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **核心价值** | 分解复杂性，实现真正的并发状态流建模。                                                                                                                                 |
+| **配置关键** | 使用 `parent()` 和 `region(String id)` 定义多个并列的 `withStates()` 块。使用 `Fork` 和 `Join` 控制进入和退出。                                                        |
 | **最佳实践** | 1. **始终显式设置 Region ID**。<br>2. 为不同 Region 使用不同的事件集，避免冲突。<br>3. 利用 Guards 进行精细化的流程控制。<br>4. 为每个 Region 设计独立的错误处理逻辑。 |
-| **适用场景** | 订单处理（支付/物流并行）、工作流审批、设备控制（多个独立子系统）等任何需要并发执行状态流的场景。 |
+| **适用场景** | 订单处理（支付/物流并行）、工作流审批、设备控制（多个独立子系统）等任何需要并发执行状态流的场景。                                                                      |
 
 通过遵循本文的指导和最佳实践，你可以有效地利用 Regions 来构建清晰、健壯且易于维护的并发状态机模型。

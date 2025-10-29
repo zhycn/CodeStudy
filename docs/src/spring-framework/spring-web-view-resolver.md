@@ -50,7 +50,7 @@ public interface ViewResolver {
 
 ```java
 public interface View {
-    void render(Map<String, ?> model, HttpServletRequest request, 
+    void render(Map<String, ?> model, HttpServletRequest request,
                 HttpServletResponse response) throws Exception;
 }
 ```
@@ -61,13 +61,13 @@ public interface View {
 
 Spring MVC 提供了多种视图解析器实现，适用于不同的视图技术：
 
-| 解析器类型 | 用途 | 适用场景 |
-|---------|------|---------|
-| InternalResourceViewResolver | JSP 视图解析 | 传统 JSP 项目 |
-| ThymeleafViewResolver | Thymeleaf 模板解析 | 现代 HTML5 应用 |
-| FreeMarkerViewResolver | FreeMarker 模板解析 | 动态内容生成 |
-| ResourceBundleViewResolver | 基于属性文件的解析 | 国际化应用 |
-| ContentNegotiatingViewResolver | 内容协商视图解析 | 多格式输出支持 |
+| 解析器类型                     | 用途                | 适用场景        |
+| ------------------------------ | ------------------- | --------------- |
+| InternalResourceViewResolver   | JSP 视图解析        | 传统 JSP 项目   |
+| ThymeleafViewResolver          | Thymeleaf 模板解析  | 现代 HTML5 应用 |
+| FreeMarkerViewResolver         | FreeMarker 模板解析 | 动态内容生成    |
+| ResourceBundleViewResolver     | 基于属性文件的解析  | 国际化应用      |
+| ContentNegotiatingViewResolver | 内容协商视图解析    | 多格式输出支持  |
 
 ## 3. 常用视图解析器详解
 
@@ -93,7 +93,7 @@ Spring MVC 提供了多种视图解析器实现，适用于不同的视图技术
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -190,12 +190,12 @@ FreeMarker 是一个强大的模板引擎，用于生成 HTML、电子邮件等�
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.freeMarker();
     }
-    
+
     @Bean
     public FreeMarkerConfigurer freeMarkerConfigurer() {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
@@ -256,14 +256,14 @@ public class WebConfig implements WebMvcConfigurer {
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Bean
     public ViewResolver beanNameViewResolver() {
         BeanNameViewResolver resolver = new BeanNameViewResolver();
         resolver.setOrder(0);  // 最高优先级
         return resolver;
     }
-    
+
     @Bean
     public ViewResolver internalResourceViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -286,19 +286,19 @@ Spring MVC 支持特殊的视图名称前缀，用于实现重定向和转发：
 ```java
 @Controller
 public class MyController {
-    
+
     // 重定向到其他 URL
     @RequestMapping("/redirect")
     public String redirectExample() {
         return "redirect:/newUrl";
     }
-    
+
     // 转发到其他视图
     @RequestMapping("/forward")
     public String forwardExample() {
         return "forward:/home";
     }
-    
+
     // 普通视图解析
     @RequestMapping("/normal")
     public String normalExample() {
@@ -339,7 +339,7 @@ public class MyController {
 
 ```java
 public class CustomViewResolver implements ViewResolver {
-    
+
     @Override
     public View resolveViewName(String viewName, Locale locale) throws Exception {
         // 自定义解析逻辑
@@ -352,20 +352,20 @@ public class CustomViewResolver implements ViewResolver {
 }
 
 public class CustomView implements View {
-    
+
     private String templatePath;
-    
+
     public CustomView(String templatePath) {
         this.templatePath = templatePath;
     }
-    
+
     @Override
-    public void render(Map<String, ?> model, HttpServletRequest request, 
+    public void render(Map<String, ?> model, HttpServletRequest request,
                       HttpServletResponse response) throws Exception {
         // 自定义渲染逻辑
         response.getWriter().write("Custom view: " + templatePath);
     }
-    
+
     @Override
     public String getContentType() {
         return "text/html";
@@ -403,10 +403,10 @@ public ViewResolver viewResolver() {
     InternalResourceViewResolver resolver = new InternalResourceViewResolver();
     resolver.setPrefix("/WEB-INF/views/");
     resolver.setSuffix(".jsp");
-    
+
     // 启用缓存（开发环境可禁用）
     resolver.setCache(true);
-    
+
     return resolver;
 }
 ```
@@ -416,7 +416,7 @@ public ViewResolver viewResolver() {
 ```java
 @ControllerAdvice
 public class ViewExceptionHandler {
-    
+
     @ExceptionHandler(Exception.class)
     public ModelAndView handleViewResolutionException(Exception ex) {
         ModelAndView mav = new ModelAndView("error");
@@ -430,12 +430,12 @@ public class ViewExceptionHandler {
 
 随着前后端分离架构的普及，考虑以下技术选择：
 
-| 场景 | 推荐技术 | 优势 |
-|------|---------|------|
-| 传统服务端渲染 | JSP + InternalResourceViewResolver | 成熟稳定 |
-| 现代服务端渲染 | Thymeleaf + ThymeleafViewResolver | 自然模板、前后端分离友好 |
-| 前后端完全分离 | 返回 JSON/XML（@RestController） | 彻底的前后端解耦 |
-| 多格式输出 | ContentNegotiatingViewResolver | 灵活支持多种客户端 |
+| 场景           | 推荐技术                           | 优势                     |
+| -------------- | ---------------------------------- | ------------------------ |
+| 传统服务端渲染 | JSP + InternalResourceViewResolver | 成熟稳定                 |
+| 现代服务端渲染 | Thymeleaf + ThymeleafViewResolver  | 自然模板、前后端分离友好 |
+| 前后端完全分离 | 返回 JSON/XML（@RestController）   | 彻底的前后端解耦         |
+| 多格式输出     | ContentNegotiatingViewResolver     | 灵活支持多种客户端       |
 
 ## 7. 常见问题与解决方案
 

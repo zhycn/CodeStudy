@@ -37,16 +37,16 @@ DispatcherServlet 的设计带来了三大核心优势：
 
 DispatcherServlet 通过一系列特殊 Bean 协作完成请求处理，这些组件共同构成了 Spring MVC 的骨架：
 
-| 组件名称 | 职责描述 | 常用实现类 |
-|---------|---------|-----------|
-| HandlerMapping | 将请求映射到处理器和拦截器链 | RequestMappingHandlerMapping, SimpleUrlHandlerMapping |
-| HandlerAdapter | 调用处理器方法，屏蔽不同类型处理器的差异 | RequestMappingHandlerAdapter, HttpRequestHandlerAdapter |
-| ViewResolver | 将逻辑视图名解析为具体 View 对象 | InternalResourceViewResolver, ThymeleafViewResolver |
-| HandlerExceptionResolver | 处理异常，映射到错误页面或统一响应 | ExceptionHandlerExceptionResolver, ResponseStatusExceptionResolver |
-| MultipartResolver | 处理文件上传请求 | CommonsMultipartResolver, StandardServletMultipartResolver |
-| LocaleResolver / LocalContextResolver | 解析客户端的区域设置 | AcceptHeaderLocaleResolver, SessionLocaleResolver |
-| ThemeResolver | 解析客户端的主题 | CookieThemeResolver, FixedThemeResolver |
-| FlashMapManager | 管理 Flash 属性（用于重定向场景） | SessionFlashMapManager |
+| 组件名称                              | 职责描述                                 | 常用实现类                                                         |
+| ------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------ |
+| HandlerMapping                        | 将请求映射到处理器和拦截器链             | RequestMappingHandlerMapping, SimpleUrlHandlerMapping              |
+| HandlerAdapter                        | 调用处理器方法，屏蔽不同类型处理器的差异 | RequestMappingHandlerAdapter, HttpRequestHandlerAdapter            |
+| ViewResolver                          | 将逻辑视图名解析为具体 View 对象         | InternalResourceViewResolver, ThymeleafViewResolver                |
+| HandlerExceptionResolver              | 处理异常，映射到错误页面或统一响应       | ExceptionHandlerExceptionResolver, ResponseStatusExceptionResolver |
+| MultipartResolver                     | 处理文件上传请求                         | CommonsMultipartResolver, StandardServletMultipartResolver         |
+| LocaleResolver / LocalContextResolver | 解析客户端的区域设置                     | AcceptHeaderLocaleResolver, SessionLocaleResolver                  |
+| ThemeResolver                         | 解析客户端的主题                         | CookieThemeResolver, FixedThemeResolver                            |
+| FlashMapManager                       | 管理 Flash 属性（用于重定向场景）        | SessionFlashMapManager                                             |
 
 ### 2.2 上下文层次结构
 
@@ -121,14 +121,14 @@ public class MyWebAppInitializer implements WebApplicationInitializer {
         // 创建根应用上下文
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(AppConfig.class);
-        
+
         // 管理根上下文生命周期
         servletContext.addListener(new ContextLoaderListener(rootContext));
-        
+
         // 创建 DispatcherServlet 的上下文
         AnnotationConfigWebApplicationContext dispatcherContext = new AnnotationConfigWebApplicationContext();
         dispatcherContext.register(WebMvcConfig.class);
-        
+
         // 注册 DispatcherServlet
         DispatcherServlet servlet = new DispatcherServlet(dispatcherContext);
         ServletRegistration.Dynamic registration = servletContext.addServlet("app", servlet);
@@ -183,47 +183,47 @@ protected void doDispatch(HttpServletRequest request, HttpServletResponse respon
     HttpServletRequest processedRequest = request;
     HandlerExecutionChain mappedHandler = null;
     boolean multipartRequestParsed = false;
-    
+
     try {
         ModelAndView mv = null;
         Exception dispatchException = null;
-        
+
         try {
             // 1. 检查文件上传请求
             processedRequest = checkMultipart(request);
             multipartRequestParsed = (processedRequest != request);
-            
+
             // 2. 确定处理请求的Handler
             mappedHandler = getHandler(processedRequest);
             if (mappedHandler == null) {
                 noHandlerFound(processedRequest, response);
                 return;
             }
-            
+
             // 3. 确定调用Handler的HandlerAdapter
             HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
-            
+
             // 4. 执行拦截器的预处理
             if (!mappedHandler.applyPreHandle(processedRequest, response)) {
                 return;
             }
-            
+
             // 5. 调用Handler处理请求，返回ModelAndView
             mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
-            
+
             // 6. 应用默认视图名（如果需要）
             applyDefaultViewName(processedRequest, mv);
-            
+
             // 7. 执行拦截器的后处理
             mappedHandler.applyPostHandle(processedRequest, response, mv);
-            
+
         } catch (Exception ex) {
             dispatchException = ex;
         }
-        
+
         // 8. 处理结果，包括渲染视图、处理异常等
         processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
-        
+
     } catch (Exception ex) {
         // 异常处理
         triggerAfterCompletion(processedRequest, response, mappedHandler, ex);
@@ -243,14 +243,14 @@ DispatcherServlet 通过 HandlerExceptionResolver 处理请求处理过程中出
 ```java
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
         ModelAndView modelAndView = new ModelAndView("error");
         modelAndView.addObject("message", ex.getMessage());
         return modelAndView;
     }
-    
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleResourceNotFoundException() {
@@ -269,14 +269,14 @@ HandlerMapping 负责将请求映射到相应的处理器：
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-    
+
     // 基于注解的映射配置（现代Spring MVC首选）
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/home").setViewName("home");
         registry.addViewController("/login").setViewName("login");
     }
-    
+
     // 显式配置 SimpleUrlHandlerMapping
     @Bean
     public SimpleUrlHandlerMapping simpleUrlHandlerMapping() {
@@ -286,7 +286,7 @@ public class WebConfig implements WebMvcConfigurer {
         mapping.setUrlMap(urlMap);
         return mapping;
     }
-    
+
     @Bean
     public HelloController helloController() {
         return new HelloController();
@@ -302,7 +302,7 @@ ViewResolver 负责将逻辑视图名解析为具体的 View 对象：
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Bean
     public ViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
@@ -310,7 +310,7 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setSuffix(".jsp");
         return resolver;
     }
-    
+
     // 配置多个视图解析器（顺序很重要）
     @Bean
     public ViewResolver thymeleafViewResolver() {
@@ -327,7 +327,7 @@ public class WebConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class FileUploadConfig {
-    
+
     @Bean
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
@@ -340,7 +340,7 @@ public class FileUploadConfig {
 // 控制器中处理文件上传
 @Controller
 public class FileUploadController {
-    
+
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
@@ -359,7 +359,7 @@ public class FileUploadController {
 
 ```java
 public class MultiDispatcherInitializer implements WebApplicationInitializer {
-    
+
     @Override
     public void onStartup(ServletContext servletContext) {
         // 第一个DispatcherServlet（管理后台）
@@ -368,7 +368,7 @@ public class MultiDispatcherInitializer implements WebApplicationInitializer {
         DispatcherServlet adminServlet = new DispatcherServlet(adminContext);
         ServletRegistration.Dynamic adminRegistration = servletContext.addServlet("admin", adminServlet);
         adminRegistration.addMapping("/admin/*");
-        
+
         // 第二个DispatcherServlet（API接口）
         AnnotationConfigWebApplicationContext apiContext = new AnnotationConfigWebApplicationContext();
         apiContext.register(ApiConfig.class);
@@ -387,27 +387,27 @@ public class MultiDispatcherInitializer implements WebApplicationInitializer {
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
-    
+
     @GetMapping
     public List<User> getUsers() {
         return userService.findAll();
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         User user = userService.findById(id);
         return ResponseEntity.ok(user);
     }
-    
+
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody @Valid User user) {
         User savedUser = userService.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
-    
+
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleUserNotFound(UserNotFoundException ex) {
@@ -427,13 +427,13 @@ public class UserController {
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         // 启用默认Servlet处理静态资源
         configurer.enable();
     }
-    
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 配置静态资源缓存

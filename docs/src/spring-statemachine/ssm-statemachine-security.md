@@ -42,7 +42,7 @@ public class StateMachineSecurityConfig extends StateMachineConfigurerAdapter<St
                 .eventAccessDecisionManager(eventAccessDecisionManager())
                 .transitionAccessDecisionManager(transitionAccessDecisionManager());
     }
-    
+
     @Bean
     public AccessDecisionManager eventAccessDecisionManager() {
         List<AccessDecisionVoter<?>> voters = new ArrayList<>();
@@ -50,7 +50,7 @@ public class StateMachineSecurityConfig extends StateMachineConfigurerAdapter<St
         voters.add(new EventExpressionVoter());
         return new UnanimousBased(voters);
     }
-    
+
     @Bean
     public AccessDecisionManager transitionAccessDecisionManager() {
         List<AccessDecisionVoter<?>> voters = new ArrayList<>();
@@ -321,8 +321,8 @@ public class SecureStateMachineController {
     @PreAuthorize("hasRole('ADMIN')")
     public void onTransition(StateContext<String, String> context) {
         // 只有 ADMIN 角色可以监听转换
-        System.out.println("Transition from " + 
-            context.getSource().getId() + " to " + 
+        System.out.println("Transition from " +
+            context.getSource().getId() + " to " +
             context.getTarget().getId());
     }
 }
@@ -399,12 +399,12 @@ public class AuditingSecurityConfig extends StateMachineConfigurerAdapter<String
         voters.add(new RoleVoter());
         voters.add(new EventExpressionVoter());
         voters.add(new AuditVoter()); // 自定义审计投票器
-        
+
         return new UnanimousBased(voters);
     }
 
     public static class AuditVoter implements AccessDecisionVoter<Object> {
-        
+
         @Override
         public boolean supports(ConfigAttribute attribute) {
             return true;
@@ -416,15 +416,15 @@ public class AuditingSecurityConfig extends StateMachineConfigurerAdapter<String
         }
 
         @Override
-        public int vote(Authentication authentication, Object object, 
+        public int vote(Authentication authentication, Object object,
                        Collection<ConfigAttribute> attributes) {
             // 记录安全决策审计日志
             logSecurityDecision(authentication, object, attributes);
             return ACCESS_GRANTED;
         }
-        
-        private void logSecurityDecision(Authentication authentication, 
-                                        Object object, 
+
+        private void logSecurityDecision(Authentication authentication,
+                                        Object object,
                                         Collection<ConfigAttribute> attributes) {
             // 实现审计日志记录
         }
@@ -460,13 +460,13 @@ public class DebugSecurityConfig extends StateMachineConfigurerAdapter<String, S
         List<AccessDecisionVoter<?>> voters = new ArrayList<>();
         voters.add(new DebugRoleVoter());
         voters.add(new DebugExpressionVoter());
-        
+
         return new UnanimousBased(voters);
     }
 
     public static class DebugRoleVoter extends RoleVoter {
         @Override
-        public int vote(Authentication authentication, Object object, 
+        public int vote(Authentication authentication, Object object,
                        Collection<ConfigAttribute> attributes) {
             int result = super.vote(authentication, object, attributes);
             System.out.println("RoleVoter decision: " + result);
@@ -476,7 +476,7 @@ public class DebugSecurityConfig extends StateMachineConfigurerAdapter<String, S
 
     public static class DebugExpressionVoter extends EventExpressionVoter {
         @Override
-        public int vote(Authentication authentication, Object object, 
+        public int vote(Authentication authentication, Object object,
                        Collection<ConfigAttribute> attributes) {
             int result = super.vote(authentication, object, attributes);
             System.out.println("ExpressionVoter decision: " + result);

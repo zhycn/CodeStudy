@@ -14,34 +14,34 @@ StateMachineInterceptor 接口定义了多个方法，覆盖了状态机的各�
 
 ```java
 public interface StateMachineInterceptor<S, E> {
-    
+
     // 事件预处理：在事件被处理之前调用
     Message<E> preEvent(Message<E> message, StateMachine<S, E> stateMachine);
-    
+
     // 状态变更预处理：在状态变更之前调用
     StateContext<S, E> preTransition(StateContext<S, E> stateContext);
-    
+
     // 状态变更前：在状态实际变更之前调用
-    void preStateChange(State<S, E> state, Message<E> message, 
+    void preStateChange(State<S, E> state, Message<E> message,
                        Transition<S, E> transition, StateMachine<S, E> stateMachine);
-    
+
     // 状态变更前（增强版）：提供根状态机信息
-    void preStateChange(State<S, E> state, Message<E> message, 
+    void preStateChange(State<S, E> state, Message<E> message,
                        Transition<S, E> transition, StateMachine<S, E> stateMachine,
                        StateMachine<S, E> rootStateMachine);
-    
+
     // 状态变更后处理：在状态变更之后调用
     StateContext<S, E> postTransition(StateContext<S, E> stateContext);
-    
+
     // 状态变更后：在状态实际变更之后调用
-    void postStateChange(State<S, E> state, Message<E> message, 
+    void postStateChange(State<S, E> state, Message<E> message,
                         Transition<S, E> transition, StateMachine<S, E> stateMachine);
-    
+
     // 状态变更后（增强版）：提供根状态机信息
-    void postStateChange(State<S, E> state, Message<E> message, 
+    void postStateChange(State<S, E> state, Message<E> message,
                         Transition<S, E> transition, StateMachine<S, E> stateMachine,
                         StateMachine<S, E> rootStateMachine);
-    
+
     // 状态机异常处理：当状态机发生异常时调用
     Exception stateMachineError(StateMachine<S, E> stateMachine, Exception exception);
 }
@@ -132,44 +132,44 @@ public void init() {
 
 ```java
 public class LoggingInterceptor implements StateMachineInterceptor<String, String> {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(LoggingInterceptor.class);
-    
+
     @Override
     public Message<String> preEvent(Message<String> message, StateMachine<String, String> stateMachine) {
         logger.info("Pre Event: {} for machine: {}", message.getPayload(), stateMachine.getId());
         return message;
     }
-    
+
     @Override
     public StateContext<String, String> preTransition(StateContext<String, String> stateContext) {
-        logger.info("Pre Transition: {} -> {} on event: {}", 
+        logger.info("Pre Transition: {} -> {} on event: {}",
                    stateContext.getSource().getId(),
                    stateContext.getTarget().getId(),
                    stateContext.getEvent());
         return stateContext;
     }
-    
+
     @Override
-    public void preStateChange(State<String, String> state, Message<String> message, 
+    public void preStateChange(State<String, String> state, Message<String> message,
                              Transition<String, String> transition, StateMachine<String, String> stateMachine) {
         logger.info("Pre State Change: {}", state.getId());
     }
-    
+
     @Override
     public StateContext<String, String> postTransition(StateContext<String, String> stateContext) {
-        logger.info("Post Transition: {} -> {} completed", 
+        logger.info("Post Transition: {} -> {} completed",
                    stateContext.getSource().getId(),
                    stateContext.getTarget().getId());
         return stateContext;
     }
-    
+
     @Override
-    public void postStateChange(State<String, String> state, Message<String> message, 
+    public void postStateChange(State<String, String> state, Message<String> message,
                               Transition<String, String> transition, StateMachine<String, String> stateMachine) {
         logger.info("Post State Change: {}", state.getId());
     }
-    
+
     @Override
     public Exception stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
         logger.error("State Machine Error: {}", exception.getMessage(), exception);
@@ -182,28 +182,28 @@ public class LoggingInterceptor implements StateMachineInterceptor<String, Strin
 
 ```java
 public class SecurityInterceptor implements StateMachineInterceptor<String, String> {
-    
+
     @Override
     public Message<String> preEvent(Message<String> message, StateMachine<String, String> stateMachine) {
         String userRole = (String) message.getHeaders().get("userRole");
-        
+
         if (!"ADMIN".equals(userRole) && "SENSITIVE_EVENT".equals(message.getPayload())) {
             throw new SecurityException("Unauthorized access to sensitive event");
         }
-        
+
         return message;
     }
-    
+
     @Override
     public StateContext<String, String> preTransition(StateContext<String, String> stateContext) {
         // 检查转换权限
         String targetState = stateContext.getTarget().getId();
         String userRole = (String) stateContext.getMessage().getHeaders().get("userRole");
-        
+
         if ("RESTRICTED_STATE".equals(targetState) && !"ADMIN".equals(userRole)) {
             throw new SecurityException("Unauthorized transition to restricted state");
         }
-        
+
         return stateContext;
     }
 }
@@ -213,37 +213,37 @@ public class SecurityInterceptor implements StateMachineInterceptor<String, Stri
 
 ```java
 public class MonitoringInterceptor implements StateMachineInterceptor<String, String> {
-    
+
     private final Map<String, Long> transitionStartTimes = new ConcurrentHashMap<>();
     private final MeterRegistry meterRegistry;
-    
+
     public MonitoringInterceptor(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
     }
-    
+
     @Override
     public StateContext<String, String> preTransition(StateContext<String, String> stateContext) {
         String transitionKey = generateTransitionKey(stateContext);
         transitionStartTimes.put(transitionKey, System.currentTimeMillis());
-        
+
         // 记录转换开始指标
-        meterRegistry.counter("statemachine.transition.start", 
+        meterRegistry.counter("statemachine.transition.start",
                             "source", stateContext.getSource().getId(),
                             "target", stateContext.getTarget().getId(),
                             "event", String.valueOf(stateContext.getEvent()))
                     .increment();
-        
+
         return stateContext;
     }
-    
+
     @Override
     public StateContext<String, String> postTransition(StateContext<String, String> stateContext) {
         String transitionKey = generateTransitionKey(stateContext);
         Long startTime = transitionStartTimes.remove(transitionKey);
-        
+
         if (startTime != null) {
             long duration = System.currentTimeMillis() - startTime;
-            
+
             // 记录转换耗时指标
             meterRegistry.timer("statemachine.transition.duration",
                              "source", stateContext.getSource().getId(),
@@ -251,13 +251,13 @@ public class MonitoringInterceptor implements StateMachineInterceptor<String, St
                              "event", String.valueOf(stateContext.getEvent()))
                         .record(duration, TimeUnit.MILLISECONDS);
         }
-        
+
         return stateContext;
     }
-    
+
     private String generateTransitionKey(StateContext<String, String> stateContext) {
-        return stateContext.getSource().getId() + "->" + 
-               stateContext.getTarget().getId() + ":" + 
+        return stateContext.getSource().getId() + "->" +
+               stateContext.getTarget().getId() + ":" +
                stateContext.getEvent();
     }
 }
@@ -305,14 +305,14 @@ Spring Statemachine 提供了 StateMachineInterceptorAdapter 类，它实现了 
 
 ```java
 public class CustomInterceptor extends StateMachineInterceptorAdapter<String, String> {
-    
+
     @Override
     public Message<String> preEvent(Message<String> message, StateMachine<String, String> stateMachine) {
         // 只实现需要的方法
         System.out.println("Event received: " + message.getPayload());
         return message;
     }
-    
+
     @Override
     public Exception stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
         // 错误处理逻辑
@@ -328,30 +328,30 @@ public class CustomInterceptor extends StateMachineInterceptorAdapter<String, St
 
 ```java
 public class DistributedStateInterceptor implements StateMachineInterceptor<String, String> {
-    
+
     private final DistributedStateService stateService;
-    
+
     public DistributedStateInterceptor(DistributedStateService stateService) {
         this.stateService = stateService;
     }
-    
+
     @Override
     public StateContext<String, String> preTransition(StateContext<String, String> stateContext) {
         // 在分布式环境中检查状态锁
         if (!stateService.acquireLock(stateContext.getStateMachine().getId())) {
             throw new ConcurrentModificationException("State machine is locked by another process");
         }
-        
+
         return stateContext;
     }
-    
+
     @Override
     public StateContext<String, String> postTransition(StateContext<String, String> stateContext) {
         // 释放分布式锁并同步状态
         stateService.releaseLock(stateContext.getStateMachine().getId());
-        stateService.synchronizeState(stateContext.getStateMachine().getId(), 
+        stateService.synchronizeState(stateContext.getStateMachine().getId(),
                                     stateContext.getTarget().getId());
-        
+
         return stateContext;
     }
 }
@@ -361,46 +361,46 @@ public class DistributedStateInterceptor implements StateMachineInterceptor<Stri
 
 ```java
 public class TransactionalInterceptor implements StateMachineInterceptor<String, String> {
-    
+
     private final PlatformTransactionManager transactionManager;
-    
+
     public TransactionalInterceptor(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
-    
+
     @Override
     public StateContext<String, String> preTransition(StateContext<String, String> stateContext) {
         // 开始事务
         TransactionStatus status = transactionManager.getTransaction(
             new DefaultTransactionDefinition());
-        
+
         stateContext.getExtendedState().getVariables().put("transactionStatus", status);
         return stateContext;
     }
-    
+
     @Override
     public StateContext<String, String> postTransition(StateContext<String, String> stateContext) {
         // 提交事务
-        TransactionStatus status = (TransactionStatus) 
+        TransactionStatus status = (TransactionStatus)
             stateContext.getExtendedState().getVariables().get("transactionStatus");
-        
+
         if (status != null && !status.isCompleted()) {
             transactionManager.commit(status);
         }
-        
+
         return stateContext;
     }
-    
+
     @Override
     public Exception stateMachineError(StateMachine<String, String> stateMachine, Exception exception) {
         // 回滚事务
-        TransactionStatus status = (TransactionStatus) 
+        TransactionStatus status = (TransactionStatus)
             stateMachine.getExtendedState().getVariables().get("transactionStatus");
-        
+
         if (status != null && !status.isCompleted()) {
             transactionManager.rollback(status);
         }
-        
+
         return exception;
     }
 }
@@ -440,23 +440,23 @@ public class SecondInterceptor extends StateMachineInterceptorAdapter<String, St
 
 ```java
 public class AsyncLoggingInterceptor extends StateMachineInterceptorAdapter<String, String> {
-    
+
     private final ExecutorService asyncExecutor = Executors.newFixedThreadPool(2);
-    
+
     @Override
-    public void postStateChange(State<String, String> state, Message<String> message, 
+    public void postStateChange(State<String, String> state, Message<String> message,
                               Transition<String, String> transition, StateMachine<String, String> stateMachine) {
         // 异步记录日志，不阻塞状态机执行
         asyncExecutor.execute(() -> {
             logStateChange(state, message, transition, stateMachine);
         });
     }
-    
-    private void logStateChange(State<String, String> state, Message<String> message, 
+
+    private void logStateChange(State<String, String> state, Message<String> message,
                               Transition<String, String> transition, StateMachine<String, String> stateMachine) {
         // 详细的日志记录逻辑
     }
-    
+
     @PreDestroy
     public void shutdown() {
         asyncExecutor.shutdown();
@@ -472,7 +472,7 @@ public class AsyncLoggingInterceptor extends StateMachineInterceptorAdapter<Stri
 
 ```java
 public class SafeInterceptor extends StateMachineInterceptorAdapter<String, String> {
-    
+
     @Override
     public Message<String> preEvent(Message<String> message, StateMachine<String, String> stateMachine) {
         try {
@@ -574,35 +574,35 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 
 ```java
 public class OrderAuditInterceptor implements StateMachineInterceptor<OrderStates, OrderEvents> {
-    
+
     private final OrderAuditService auditService;
-    
+
     public OrderAuditInterceptor(OrderAuditService auditService) {
         this.auditService = auditService;
     }
-    
+
     @Override
     public StateContext<OrderStates, OrderEvents> preTransition(StateContext<OrderStates, OrderEvents> stateContext) {
         String orderId = (String) stateContext.getMessage().getHeaders().get("orderId");
         OrderStates sourceState = stateContext.getSource().getId();
         OrderStates targetState = stateContext.getTarget().getId();
         OrderEvents event = stateContext.getEvent();
-        
+
         auditService.logTransitionStart(orderId, sourceState, targetState, event, new Date());
         return stateContext;
     }
-    
+
     @Override
     public StateContext<OrderStates, OrderEvents> postTransition(StateContext<OrderStates, OrderEvents> stateContext) {
         String orderId = (String) stateContext.getMessage().getHeaders().get("orderId");
         OrderStates sourceState = stateContext.getSource().getId();
         OrderStates targetState = stateContext.getTarget().getId();
         OrderEvents event = stateContext.getEvent();
-        
+
         auditService.logTransitionComplete(orderId, sourceState, targetState, event, new Date());
         return stateContext;
     }
-    
+
     @Override
     public Exception stateMachineError(StateMachine<OrderStates, OrderEvents> stateMachine, Exception exception) {
         String orderId = (String) stateMachine.getExtendedState().getVariables().get("orderId");
@@ -616,20 +616,20 @@ public class OrderAuditInterceptor implements StateMachineInterceptor<OrderState
 
 ```java
 public class OrderValidationInterceptor implements StateMachineInterceptor<OrderStates, OrderEvents> {
-    
+
     private final OrderService orderService;
     private final PaymentService paymentService;
-    
+
     public OrderValidationInterceptor(OrderService orderService, PaymentService paymentService) {
         this.orderService = orderService;
         this.paymentService = paymentService;
     }
-    
+
     @Override
     public Message<OrderEvents> preEvent(Message<OrderEvents> message, StateMachine<OrderStates, OrderEvents> stateMachine) {
         String orderId = (String) message.getHeaders().get("orderId");
         OrderEvents event = message.getPayload();
-        
+
         // 根据事件类型进行不同的验证
         switch (event) {
             case PAY:
@@ -645,10 +645,10 @@ public class OrderValidationInterceptor implements StateMachineInterceptor<Order
                 // 其他事件不需要特殊验证
                 break;
         }
-        
+
         return message;
     }
-    
+
     private void validateOrderForPayment(String orderId) {
         Order order = orderService.getOrder(orderId);
         if (order == null) {
@@ -658,7 +658,7 @@ public class OrderValidationInterceptor implements StateMachineInterceptor<Order
             throw new ValidationException("Invalid order amount: " + orderId);
         }
     }
-    
+
     private void validateOrderForShipping(String orderId) {
         Order order = orderService.getOrder(orderId);
         if (!paymentService.isPaymentConfirmed(orderId)) {
@@ -668,7 +668,7 @@ public class OrderValidationInterceptor implements StateMachineInterceptor<Order
             throw new ValidationException("Shipping address not set for order: " + orderId);
         }
     }
-    
+
     private void validateOrderForRefund(String orderId) {
         Order order = orderService.getOrder(orderId);
         if (!paymentService.isPaymentConfirmed(orderId)) {
@@ -688,33 +688,33 @@ public class OrderValidationInterceptor implements StateMachineInterceptor<Order
 ```java
 @ExtendWith(MockitoExtension.class)
 class LoggingInterceptorTest {
-    
+
     @Mock
     private StateMachine<String, String> stateMachine;
-    
+
     @Mock
     private Message<String> message;
-    
+
     @InjectMocks
     private LoggingInterceptor loggingInterceptor;
-    
+
     @Test
     void testPreEventLogging() {
         when(message.getPayload()).thenReturn("TEST_EVENT");
         when(stateMachine.getId()).thenReturn("test-machine");
-        
+
         Message<String> result = loggingInterceptor.preEvent(message, stateMachine);
-        
+
         assertEquals(message, result);
         // 验证日志输出可以通过捕获 System.out 或使用内存 appender
     }
-    
+
     @Test
     void testStateMachineErrorHandling() {
         Exception testException = new RuntimeException("Test error");
-        
+
         Exception result = loggingInterceptor.stateMachineError(stateMachine, testException);
-        
+
         assertEquals(testException, result);
     }
 }
@@ -726,18 +726,18 @@ class LoggingInterceptorTest {
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class OrderStateMachineIntegrationTest {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Autowired
     private OrderAuditService auditService;
-    
+
     @Test
     void testOrderCreationWithInterceptors() {
         // 准备测试数据
         String orderId = "test-order-123";
-        StateMachineTestPlan<OrderStates, OrderEvents> plan = 
+        StateMachineTestPlan<OrderStates, OrderEvents> plan =
             StateMachineTestPlanBuilder.<OrderStates, OrderEvents>builder()
                 .defaultAwaitTime(2)
                 .stateMachine(stateMachine)
@@ -752,9 +752,9 @@ class OrderStateMachineIntegrationTest {
                     .expectStates(OrderStates.ORDER_CREATED)
                 .and()
                 .build();
-        
+
         plan.test();
-        
+
         // 验证拦截器功能
         verify(auditService, times(1)).logTransitionStart(eq(orderId), any(), any(), any(), any());
         verify(auditService, times(1)).logTransitionComplete(eq(orderId), any(), any(), any(), any());

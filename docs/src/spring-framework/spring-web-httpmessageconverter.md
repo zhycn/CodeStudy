@@ -19,9 +19,9 @@ public interface HttpMessageConverter<T> {
     boolean canRead(Class<?> clazz, MediaType mediaType);
     boolean canWrite(Class<?> clazz, MediaType mediaType);
     List<MediaType> getSupportedMediaTypes();
-    T read(Class<? extends T> clazz, HttpInputMessage inputMessage) 
+    T read(Class<? extends T> clazz, HttpInputMessage inputMessage)
         throws IOException, HttpMessageNotReadableException;
-    void write(T t, MediaType contentType, HttpOutputMessage outputMessage) 
+    void write(T t, MediaType contentType, HttpOutputMessage outputMessage)
         throws IOException, HttpMessageNotWritableException;
 }
 ```
@@ -182,10 +182,10 @@ Spring Boot 自动配置了一系列常用的 HttpMessageConverter，具体取�
 ```java
 @RestController
 public class ConverterInfoController {
-    
+
     @Autowired
     private RequestMappingHandlerAdapter handlerAdapter;
-    
+
     @GetMapping("/converters")
     public List<String> getMessageConverters() {
         return handlerAdapter.getMessageConverters().stream()
@@ -208,7 +208,7 @@ public class ConverterInfoController {
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 添加自定义转换器
@@ -226,14 +226,14 @@ public class WebConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 在默认转换器列表基础上添加或修改
         // 例如，调整 Jackson 转换器的配置
         for (HttpMessageConverter<?> converter : converters) {
             if (converter instanceof MappingJackson2HttpMessageConverter) {
-                MappingJackson2HttpMessageConverter jsonConverter = 
+                MappingJackson2HttpMessageConverter jsonConverter =
                     (MappingJackson2HttpMessageConverter) converter;
                 ObjectMapper objectMapper = jsonConverter.getObjectMapper();
                 // 自定义 ObjectMapper 配置
@@ -251,7 +251,7 @@ public class WebConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class ConverterConfig {
-    
+
     @Bean
     public HttpMessageConverters customConverters() {
         // 创建自定义转换器
@@ -269,32 +269,32 @@ public class ConverterConfig {
 
 ```java
 public class CsvHttpMessageConverter implements HttpMessageConverter<Object> {
-    
+
     private static final MediaType MEDIA_TYPE = new MediaType("text", "csv");
-    
+
     @Override
     public boolean canRead(Class<?> clazz, MediaType mediaType) {
         return false; // 仅支持写入
     }
-    
+
     @Override
     public boolean canWrite(Class<?> clazz, MediaType mediaType) {
-        return Object.class.isAssignableFrom(clazz) && 
+        return Object.class.isAssignableFrom(clazz) &&
                MEDIA_TYPE.includes(mediaType);
     }
-    
+
     @Override
     public List<MediaType> getSupportedMediaTypes() {
         return Collections.singletonList(MEDIA_TYPE);
     }
-    
+
     @Override
     public Object read(Class<?> clazz, HttpInputMessage inputMessage) {
         throw new UnsupportedOperationException("Not supported");
     }
-    
+
     @Override
-    public void write(Object object, MediaType contentType, 
+    public void write(Object object, MediaType contentType,
                      HttpOutputMessage outputMessage) throws IOException {
         // 实现对象到 CSV 的转换逻辑
         try (OutputStream outputStream = outputMessage.getBody();
@@ -303,7 +303,7 @@ public class CsvHttpMessageConverter implements HttpMessageConverter<Object> {
             writer.write(convertToCsv(object));
         }
     }
-    
+
     private String convertToCsv(Object object) {
         // 实现转换逻辑
         return "csv,data,here";
@@ -315,23 +315,23 @@ public class CsvHttpMessageConverter implements HttpMessageConverter<Object> {
 
 ```java
 public class CsvHttpMessageConverter extends AbstractHttpMessageConverter<Object> {
-    
+
     public CsvHttpMessageConverter() {
         super(new MediaType("text", "csv"));
     }
-    
+
     @Override
     protected boolean supports(Class<?> clazz) {
         return Object.class.isAssignableFrom(clazz);
     }
-    
+
     @Override
     protected Object readInternal(Class<?> clazz, HttpInputMessage inputMessage) {
         throw new UnsupportedOperationException("Not supported");
     }
-    
+
     @Override
-    protected void writeInternal(Object object, HttpOutputMessage outputMessage) 
+    protected void writeInternal(Object object, HttpOutputMessage outputMessage)
             throws IOException {
         // 实现写入逻辑
         try (OutputStream outputStream = outputMessage.getBody();
@@ -339,7 +339,7 @@ public class CsvHttpMessageConverter extends AbstractHttpMessageConverter<Object
             writer.write(convertToCsv(object));
         }
     }
-    
+
     private String convertToCsv(Object object) {
         // 实现转换逻辑
         return "csv,data,here";
@@ -366,17 +366,17 @@ public class CsvHttpMessageConverter extends AbstractHttpMessageConverter<Object
 ```java
 @Configuration
 public class FastJsonConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 移除默认的 Jackson 转换器
-        converters.removeIf(converter -> 
+        converters.removeIf(converter ->
             converter instanceof MappingJackson2HttpMessageConverter);
-        
+
         // 创建并配置 FastJson 转换器
-        FastJsonHttpMessageConverter fastJsonConverter = 
+        FastJsonHttpMessageConverter fastJsonConverter =
             new FastJsonHttpMessageConverter();
-        
+
         FastJsonConfig config = new FastJsonConfig();
         config.setSerializerFeatures(
             SerializerFeature.PrettyFormat,
@@ -384,16 +384,16 @@ public class FastJsonConfig implements WebMvcConfigurer {
             SerializerFeature.WriteDateUseDateFormat
         );
         config.setDateFormat("yyyy-MM-dd HH:mm:ss");
-        
+
         fastJsonConverter.setFastJsonConfig(config);
         fastJsonConverter.setDefaultCharset(StandardCharsets.UTF_8);
-        
+
         // 设置支持的媒体类型
         fastJsonConverter.setSupportedMediaTypes(Arrays.asList(
             MediaType.APPLICATION_JSON,
             MediaType.APPLICATION_JSON_UTF8
         ));
-        
+
         converters.add(fastJsonConverter);
     }
 }
@@ -408,7 +408,7 @@ public class FastJsonConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class ConverterPriorityConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 将自定义转换器添加到列表开头，提高优先级
@@ -426,9 +426,9 @@ public class ConverterPriorityConfig implements WebMvcConfigurer {
 ```java
 RestTemplate restTemplate = new RestTemplate();
 ResponseEntity<List<User>> response = restTemplate.exchange(
-    url, 
-    HttpMethod.GET, 
-    null, 
+    url,
+    HttpMethod.GET,
+    null,
     new ParameterizedTypeReference<List<User>>() {}
 );
 List<User> users = response.getBody();
@@ -441,25 +441,25 @@ List<User> users = response.getBody();
 ```java
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         ErrorResponse error = new ErrorResponse("ERROR", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(error);
     }
-    
+
     public static class ErrorResponse {
         private String code;
         private String message;
         private Timestamp timestamp;
-        
+
         public ErrorResponse(String code, String message) {
             this.code = code;
             this.message = message;
             this.timestamp = new Timestamp(System.currentTimeMillis());
         }
-        
+
         // getters and setters
     }
 }
@@ -479,27 +479,27 @@ public class GlobalExceptionHandler {
 ```java
 @SpringBootTest
 class HttpMessageConverterTest {
-    
+
     @Autowired
     private RequestMappingHandlerAdapter handlerAdapter;
-    
+
     @Test
     void testCustomConverterExists() {
-        List<HttpMessageConverter<?>> converters = 
+        List<HttpMessageConverter<?>> converters =
             handlerAdapter.getMessageConverters();
-        
+
         boolean hasCustomConverter = converters.stream()
-            .anyMatch(converter -> 
+            .anyMatch(converter ->
                 converter instanceof MyCustomHttpMessageConverter);
-        
+
         assertTrue(hasCustomConverter);
     }
-    
+
     @Test
     void testConverterMediaTypes() {
         MyCustomHttpMessageConverter converter = new MyCustomHttpMessageConverter();
         List<MediaType> mediaTypes = converter.getSupportedMediaTypes();
-        
+
         assertTrue(mediaTypes.contains(MediaType.valueOf("text/csv")));
     }
 }
@@ -516,7 +516,7 @@ class HttpMessageConverterTest {
 ```java
 @Configuration
 public class CharsetConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.stream()
@@ -538,16 +538,16 @@ public class CharsetConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class DateFormatConfig {
-    
+
     @Bean
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
-        
+
         // 设置日期格式
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        
+
         converter.setObjectMapper(objectMapper);
         return converter;
     }
@@ -565,20 +565,20 @@ public class DateFormatConfig {
 public class User {
     private Long id;
     private String name;
-    
+
     @JsonIgnoreProperties("user")
     private List<Order> orders;
-    
+
     // getters and setters
 }
 
 public class Order {
     private Long id;
     private String orderNo;
-    
+
     @JsonIgnore
     private User user;
-    
+
     // getters and setters
 }
 

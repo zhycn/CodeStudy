@@ -19,13 +19,13 @@ SELECT 语句是 SQL 中用于**从数据库中检索数据**的核心命令。�
 SELECT 语句的完整语法包含多个子句，每个子句承担特定的功能：
 
 ```sql
-SELECT [DISTINCT] 列名/表达式/聚合函数  
-FROM 表名  
-[JOIN 关联表 ON 连接条件]  
-[WHERE 行过滤条件]  
-[GROUP BY 分组字段]  
-[HAVING 分组过滤条件]  
-[ORDER BY 排序字段 [ASC|DESC]]  
+SELECT [DISTINCT] 列名/表达式/聚合函数
+FROM 表名
+[JOIN 关联表 ON 连接条件]
+[WHERE 行过滤条件]
+[GROUP BY 分组字段]
+[HAVING 分组过滤条件]
+[ORDER BY 排序字段 [ASC|DESC]]
 [LIMIT 分页参数];
 ```
 
@@ -65,8 +65,8 @@ SELECT * FROM employees;
 为列指定别名可以使结果集更易读：
 
 ```sql
-SELECT 
-    employee_name AS "员工姓名", 
+SELECT
+    employee_name AS "员工姓名",
     salary AS "月薪",
     salary * 12 AS "年薪"
 FROM employees;
@@ -89,7 +89,7 @@ FROM employees;
 
 -- 条件表达式
 SELECT employee_name, salary,
-    CASE 
+    CASE
         WHEN salary <= 5000 THEN '低工资'
         WHEN salary > 5000 AND salary <= 8000 THEN '中工资'
         ELSE '高工资'
@@ -124,8 +124,8 @@ DISTINCT 可以与聚合函数结合使用，统计唯一值的数量：
 SELECT COUNT(DISTINCT department) FROM employees;
 
 -- 统计每个工资级别的唯一部门数
-SELECT salary, COUNT(DISTINCT department) 
-FROM employees 
+SELECT salary, COUNT(DISTINCT department)
+FROM employees
 GROUP BY salary;
 ```
 
@@ -161,18 +161,18 @@ ORDER BY 子句用于对查询结果进行排序：
 
 ```sql
 -- 单列排序
-SELECT employee_name, salary 
-FROM employees 
+SELECT employee_name, salary
+FROM employees
 ORDER BY salary DESC;
 
 -- 多列排序
-SELECT employee_name, department, salary 
-FROM employees 
+SELECT employee_name, department, salary
+FROM employees
 ORDER BY department ASC, salary DESC;
 
 -- 使用表达式排序
 SELECT employee_name, salary, commission
-FROM employees 
+FROM employees
 ORDER BY salary + COALESCE(commission, 0) DESC;
 ```
 
@@ -186,21 +186,21 @@ ORDER BY salary + COALESCE(commission, 0) DESC;
 
 ```sql
 -- 返回前10条记录
-SELECT employee_name, salary 
-FROM employees 
-ORDER BY salary DESC 
+SELECT employee_name, salary
+FROM employees
+ORDER BY salary DESC
 LIMIT 10;
 
 -- 分页查询（从第20行开始，返回10条记录）
-SELECT employee_name, salary 
-FROM employees 
-ORDER BY salary DESC 
+SELECT employee_name, salary
+FROM employees
+ORDER BY salary DESC
 LIMIT 20, 10;
 
 -- 另一种写法
-SELECT employee_name, salary 
-FROM employees 
-ORDER BY salary DESC 
+SELECT employee_name, salary
+FROM employees
+ORDER BY salary DESC
 LIMIT 10 OFFSET 20;
 ```
 
@@ -208,9 +208,9 @@ LIMIT 10 OFFSET 20;
 
 ```sql
 -- PostgreSQL 使用标准SQL语法
-SELECT employee_name, salary 
-FROM employees 
-ORDER BY salary DESC 
+SELECT employee_name, salary
+FROM employees
+ORDER BY salary DESC
 OFFSET 20 ROWS FETCH NEXT 10 ROWS ONLY;
 ```
 
@@ -222,15 +222,15 @@ OFFSET 20 ROWS FETCH NEXT 10 ROWS ONLY;
 
 ```sql
 -- 只返回前5条记录
-SELECT employee_name, salary 
-FROM employees 
+SELECT employee_name, salary
+FROM employees
 LIMIT 5;
 
 -- 与 WHERE 结合使用
-SELECT employee_name, salary 
-FROM employees 
-WHERE department = 'Sales' 
-ORDER BY salary DESC 
+SELECT employee_name, salary
+FROM employees
+WHERE department = 'Sales'
+ORDER BY salary DESC
 LIMIT 3;
 ```
 
@@ -241,12 +241,12 @@ LIMIT 3;
 WHERE 子句用于过滤满足条件的记录：
 
 ```sql
-SELECT employee_name, salary 
-FROM employees 
+SELECT employee_name, salary
+FROM employees
 WHERE salary > 5000;
 
-SELECT employee_name, department 
-FROM employees 
+SELECT employee_name, department
+FROM employees
 WHERE department <> 'HR';
 ```
 
@@ -258,18 +258,18 @@ WHERE department <> 'HR';
 
 ```sql
 -- AND 运算符
-SELECT employee_name, salary 
-FROM employees 
+SELECT employee_name, salary
+FROM employees
 WHERE salary > 5000 AND department = 'Sales';
 
 -- OR 运算符
-SELECT employee_name, department 
-FROM employees 
+SELECT employee_name, department
+FROM employees
 WHERE department = 'Sales' OR department = 'Marketing';
 
 -- NOT 运算符
-SELECT employee_name, department 
-FROM employees 
+SELECT employee_name, department
+FROM employees
 WHERE NOT department = 'HR';
 ```
 
@@ -280,16 +280,16 @@ WHERE NOT department = 'HR';
 **BETWEEN**（范围查询）：
 
 ```sql
-SELECT employee_name, salary 
-FROM employees 
+SELECT employee_name, salary
+FROM employees
 WHERE salary BETWEEN 4000 AND 6000;
 ```
 
 **IN**（匹配一组值）：
 
 ```sql
-SELECT employee_name, department 
-FROM employees 
+SELECT employee_name, department
+FROM employees
 WHERE department IN ('Sales', 'Marketing', 'HR');
 ```
 
@@ -297,30 +297,30 @@ WHERE department IN ('Sales', 'Marketing', 'HR');
 
 ```sql
 -- 以"张"开头的姓名
-SELECT employee_name 
-FROM employees 
+SELECT employee_name
+FROM employees
 WHERE employee_name LIKE '张%';
 
 -- 包含"明"的姓名
-SELECT employee_name 
-FROM employees 
+SELECT employee_name
+FROM employees
 WHERE employee_name LIKE '%明%';
 
 -- 第二个字符为"小"的姓名
-SELECT employee_name 
-FROM employees 
+SELECT employee_name
+FROM employees
 WHERE employee_name LIKE '_小%';
 ```
 
 **NULL 值处理**：
 
 ```sql
-SELECT employee_name 
-FROM employees 
+SELECT employee_name
+FROM employees
 WHERE manager_id IS NULL;
 
-SELECT employee_name 
-FROM employees 
+SELECT employee_name
+FROM employees
 WHERE manager_id IS NOT NULL;
 ```
 
@@ -336,11 +336,11 @@ SELECT COUNT(*) FROM employees;
 SELECT COUNT(DISTINCT department) FROM employees;
 
 -- 求和与平均值
-SELECT SUM(salary) AS total_salary, AVG(salary) AS avg_salary 
+SELECT SUM(salary) AS total_salary, AVG(salary) AS avg_salary
 FROM employees;
 
 -- 最大值与最小值
-SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary 
+SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary
 FROM employees;
 ```
 
@@ -351,19 +351,19 @@ GROUP BY 将结果集按一列或多列分组：
 ```sql
 -- 单列分组
 SELECT department, COUNT(*) AS employee_count
-FROM employees 
+FROM employees
 GROUP BY department;
 
 -- 多列分组
 SELECT department, job_title, COUNT(*) AS employee_count
-FROM employees 
+FROM employees
 GROUP BY department, job_title;
 
 -- 与聚合函数结合
-SELECT department, 
+SELECT department,
        AVG(salary) AS avg_salary,
        MAX(salary) AS max_salary
-FROM employees 
+FROM employees
 GROUP BY department;
 ```
 
@@ -376,15 +376,15 @@ HAVING 用于对分组后的结果进行过滤，类似于 WHERE 但针对分组
 ```sql
 -- 过滤平均工资大于5000的部门
 SELECT department, AVG(salary) AS avg_salary
-FROM employees 
-GROUP BY department 
+FROM employees
+GROUP BY department
 HAVING AVG(salary) > 5000;
 
 -- 多个条件组合
 SELECT department, COUNT(*) AS employee_count
-FROM employees 
+FROM employees
 WHERE hire_date > '2020-01-01'
-GROUP BY department 
+GROUP BY department
 HAVING COUNT(*) > 5;
 ```
 
@@ -545,7 +545,7 @@ WHERE NOT EXISTS (SELECT 1 FROM employees e WHERE e.department_id = d.department
    ```sql
    -- 不推荐
    SELECT * FROM employees WHERE YEAR(hire_date) = 2023;
-   
+
    -- 推荐
    SELECT * FROM employees WHERE hire_date BETWEEN '2023-01-01' AND '2023-12-31';
    ```
@@ -554,9 +554,9 @@ WHERE NOT EXISTS (SELECT 1 FROM employees e WHERE e.department_id = d.department
    了解查询执行方式，发现性能瓶颈：
 
    ```sql
-   EXPLAIN SELECT employee_name, salary 
-   FROM employees 
-   WHERE department = 'Sales' 
+   EXPLAIN SELECT employee_name, salary
+   FROM employees
+   WHERE department = 'Sales'
    ORDER BY salary DESC;
    ```
 
@@ -639,7 +639,7 @@ SELECT e.employee_id,
        e.employee_name,
        d.department_name,
        e.salary,
-       CASE 
+       CASE
            WHEN e.salary <= 5000 THEN '初级'
            WHEN e.salary <= 8000 THEN '中级'
            ELSE '高级'

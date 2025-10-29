@@ -96,7 +96,7 @@ public void sendEventWithHeaders() {
         .setHeader("orderId", "ORD-12345")
         .setHeader("userId", "user-67890")
         .build();
-    
+
     stateMachine.sendEvent(message);
 }
 ```
@@ -195,7 +195,7 @@ public void startProcessWithCustomTimeout() {
         .withPayload(Events.START_PROCESS)
         .setHeader(StateMachineMessageHeaders.HEADER_DO_ACTION_TIMEOUT, 5000L) // 动态设置超时为 5 秒
         .build();
-    
+
     stateMachine.sendEvent(message);
 }
 ```
@@ -428,13 +428,13 @@ public class OrderController {
 
 ## 5. 总结
 
-| 特性 | EventTrigger | TimerTrigger |
-| :--- | :--- | :--- |
-| **驱动方式** | 外部显式调用 `sendEvent()` | 内部自动基于时间调度 |
-| **主要用途** | 响应外部业务动作（用户支付、系统指令） | 处理超时、轮询、定期任务 |
-| **配置方式** | `.event(...)` | `.timer(...)` 或 `.timerOnce(...)` |
-| **数据传递** | 通过 `Message` 和消息头 | 主要通过扩展状态变量或业务上下文 |
-| **资源管理** | 无特殊要求 | 需注意任务取消和资源清理 |
+| 特性         | EventTrigger                           | TimerTrigger                       |
+| :----------- | :------------------------------------- | :--------------------------------- |
+| **驱动方式** | 外部显式调用 `sendEvent()`             | 内部自动基于时间调度               |
+| **主要用途** | 响应外部业务动作（用户支付、系统指令） | 处理超时、轮询、定期任务           |
+| **配置方式** | `.event(...)`                          | `.timer(...)` 或 `.timerOnce(...)` |
+| **数据传递** | 通过 `Message` 和消息头                | 主要通过扩展状态变量或业务上下文   |
+| **资源管理** | 无特殊要求                             | 需注意任务取消和资源清理           |
 
 **选择建议：**
 

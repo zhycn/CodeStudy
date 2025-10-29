@@ -14,7 +14,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-kafka</artifactId>
     </dependency>
-    
+
     <!-- 若需使用JSON序列化，建议引入Jackson -->
     <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -45,7 +45,7 @@ spring:
       auto-offset-reset: earliest
       enable-auto-commit: false
       properties:
-        spring.json.trusted.packages: "*"
+        spring.json.trusted.packages: '*'
 ```
 
 ### 1.3 使用 Docker 快速搭建 Kafka 环境
@@ -80,7 +80,7 @@ public class KafkaTopicConfig {
                 .replicas(1)
                 .build();
     }
-    
+
     @Bean
     public NewTopic logTopic() {
         return TopicBuilder.name("log-topic")
@@ -98,37 +98,37 @@ public class KafkaTopicConfig {
 ```java
 @Service
 public class KafkaProducerService {
-    
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    
+
     public KafkaProducerService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
-    
+
     // 同步发送消息
     public void sendMessageSync(String topic, Object message) {
         kafkaTemplate.send(topic, message);
     }
-    
+
     // 异步发送消息
     public void sendMessageAsync(String topic, Object message) {
-        ListenableFuture<SendResult<String, Object>> future = 
+        ListenableFuture<SendResult<String, Object>> future =
             kafkaTemplate.send(topic, message);
-        
+
         future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
             @Override
             public void onSuccess(SendResult<String, Object> result) {
-                System.out.println("Message sent successfully: " + 
+                System.out.println("Message sent successfully: " +
                     result.getRecordMetadata());
             }
-            
+
             @Override
             public void onFailure(Throwable ex) {
                 System.err.println("Failed to send message: " + ex.getMessage());
             }
         });
     }
-    
+
     // 发送带键的消息
     public void sendMessageWithKey(String topic, String key, Object message) {
         kafkaTemplate.send(topic, key, message);
@@ -141,13 +141,13 @@ public class KafkaProducerService {
 ```java
 @Component
 public class CustomPartitioner implements Partitioner {
-    
+
     @Override
-    public int partition(String topic, Object key, byte[] keyBytes, 
+    public int partition(String topic, Object key, byte[] keyBytes,
                         Object value, byte[] valueBytes, Cluster cluster) {
         List<PartitionInfo> partitions = cluster.partitionsForTopic(topic);
         int numPartitions = partitions.size();
-        
+
         if (keyBytes == null) {
             // 如果没有key，使用轮询策略
             return ThreadLocalRandom.current().nextInt(numPartitions);
@@ -156,10 +156,10 @@ public class CustomPartitioner implements Partitioner {
             return Math.abs(Utils.murmur2(keyBytes)) % numPartitions;
         }
     }
-    
+
     @Override
     public void close() {}
-    
+
     @Override
     public void configure(Map<String, ?> configs) {}
 }
@@ -172,20 +172,20 @@ public class CustomPartitioner implements Partitioner {
 ```java
 @Service
 public class KafkaConsumerService {
-    
+
     // 监听单个主题
     @KafkaListener(topics = "order-topic", groupId = "order-group")
     public void listenOrderTopic(ConsumerRecord<String, Object> record) {
-        System.out.printf("Received message: offset = %d, key = %s, value = %s%n", 
+        System.out.printf("Received message: offset = %d, key = %s, value = %s%n",
             record.offset(), record.key(), record.value());
     }
-    
+
     // 监听多个主题
     @KafkaListener(topics = {"order-topic", "log-topic"}, groupId = "multi-group")
     public void listenMultipleTopics(ConsumerRecord<String, Object> record) {
         String topic = record.topic();
         Object value = record.value();
-        
+
         switch(topic) {
             case "order-topic":
                 processOrder(value);
@@ -195,10 +195,10 @@ public class KafkaConsumerService {
                 break;
         }
     }
-    
+
     // 手动提交偏移量
     @KafkaListener(topics = "order-topic", groupId = "manual-commit-group")
-    public void listenWithManualCommit(ConsumerRecord<String, Object> record, 
+    public void listenWithManualCommit(ConsumerRecord<String, Object> record,
                                      Acknowledgment acknowledgment) {
         try {
             processOrder(record.value());
@@ -209,11 +209,11 @@ public class KafkaConsumerService {
             System.err.println("Failed to process message: " + e.getMessage());
         }
     }
-    
+
     private void processOrder(Object order) {
         // 订单处理逻辑
     }
-    
+
     private void processLog(Object log) {
         // 日志处理逻辑
     }
@@ -225,16 +225,16 @@ public class KafkaConsumerService {
 ```java
 @Service
 public class BatchConsumerService {
-    
+
     @KafkaListener(topics = "order-topic", groupId = "batch-consumer-group")
     public void listenBatch(List<ConsumerRecord<String, Object>> records,
                            Acknowledgment acknowledgment) {
         System.out.println("Received batch with " + records.size() + " messages");
-        
+
         List<Object> orders = records.stream()
             .map(ConsumerRecord::value)
             .collect(Collectors.toList());
-        
+
         try {
             // 批量处理订单
             batchProcessOrders(orders);
@@ -244,7 +244,7 @@ public class BatchConsumerService {
             System.err.println("Failed to process batch: " + e.getMessage());
         }
     }
-    
+
     private void batchProcessOrders(List<Object> orders) {
         // 批量处理逻辑
     }
@@ -260,20 +260,20 @@ public class BatchConsumerService {
 ```java
 @Configuration
 public class RetryConfig {
-    
+
     @Bean
     public RetryTemplate retryTemplate() {
         SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy(3);
-        
+
         ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
         backOffPolicy.setInitialInterval(1000L);
         backOffPolicy.setMultiplier(2.0);
         backOffPolicy.setMaxInterval(10000L);
-        
+
         RetryTemplate template = new RetryTemplate();
         template.setRetryPolicy(retryPolicy);
         template.setBackOffPolicy(backOffPolicy);
-        
+
         return template;
     }
 }
@@ -285,25 +285,25 @@ public class RetryConfig {
 @Configuration
 @EnableKafka
 public class KafkaDLQConfig {
-    
+
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object> 
+    public ConcurrentKafkaListenerContainerFactory<String, Object>
         kafkaListenerContainerFactory(ConsumerFactory<String, Object> consumerFactory,
                                     KafkaTemplate<String, Object> kafkaTemplate) {
-        
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory = 
+
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
-        
+
         // 配置死信队列
         factory.setErrorHandler(new SeekToCurrentErrorHandler(
-            new DeadLetterPublishingRecoverer(kafkaTemplate), 
+            new DeadLetterPublishingRecoverer(kafkaTemplate),
             new FixedBackOff(1000L, 5) // 重试5次，间隔1秒
         ));
-        
+
         return factory;
     }
-    
+
     // 死信队列消费者
     @KafkaListener(topics = "order-topic.DLT")
     public void handleDltMessage(ConsumerRecord<String, Object> record) {
@@ -320,30 +320,30 @@ Spring Kafka 提供了完善的事务支持，可以保证消息发送和数据�
 ```java
 @Service
 public class TransactionalService {
-    
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final OrderRepository orderRepository;
-    
+
     public TransactionalService(KafkaTemplate<String, Object> kafkaTemplate,
                                OrderRepository orderRepository) {
         this.kafkaTemplate = kafkaTemplate;
         this.orderRepository = orderRepository;
     }
-    
+
     @Transactional
     public void processOrderTransactionally(Order order) {
         // 数据库操作
         orderRepository.save(order);
-        
+
         // Kafka消息发送（在事务内）
         kafkaTemplate.send("order-topic", order.getId(), order);
-        
+
         // 如果后续操作失败，之前的所有操作都会回滚
         if (order.getAmount() < 0) {
             throw new IllegalArgumentException("Invalid order amount");
         }
     }
-    
+
     // 编程式事务
     public void processOrderInTransaction(Order order) {
         kafkaTemplate.executeInTransaction(operations -> {
@@ -362,22 +362,22 @@ Spring Kafka 支持在消息抵达消费者之前进行过滤。
 ```java
 @Configuration
 public class KafkaFilterConfig {
-    
+
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object> 
+    public ConcurrentKafkaListenerContainerFactory<String, Object>
         filterContainerFactory(ConsumerFactory<String, Object> consumerFactory) {
-        
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory = 
+
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
-        
+
         // 设置消息过滤策略
         factory.setRecordFilterStrategy(record -> {
             // 返回true表示过滤掉该消息
             String value = record.value().toString();
             return value.contains("ignore"); // 过滤包含"ignore"的消息
         });
-        
+
         return factory;
     }
 }
@@ -392,26 +392,26 @@ public class KafkaFilterConfig {
 ```java
 @Configuration
 public class HighThroughputProducerConfig {
-    
+
     @Bean
     public ProducerFactory<String, Object> highThroughputProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        
+
         configProps.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384 * 4); // 增大批次大小
         configProps.put(ProducerConfig.LINGER_MS_CONFIG, 20); // 等待20ms
         configProps.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy"); // 压缩算法
         configProps.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432); // 缓冲区大小
         configProps.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 5);
         configProps.put(ProducerConfig.ACKS_CONFIG, "1"); // 平衡吞吐量和可靠性
-        
+
         return new DefaultKafkaProducerFactory<>(configProps);
     }
-    
+
     @Bean
     public KafkaTemplate<String, Object> highThroughputKafkaTemplate() {
         return new KafkaTemplate<>(highThroughputProducerFactory());
     }
-    
+
     // 线程池配置用于异步发送
     @Bean("kafkaSenderThreadPool")
     public Executor kafkaSenderThreadPool() {
@@ -432,33 +432,33 @@ public class HighThroughputProducerConfig {
 @Configuration
 @EnableKafka
 public class HighThroughputConsumerConfig {
-    
+
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object> 
+    public ConcurrentKafkaListenerContainerFactory<String, Object>
         kafkaListenerContainerFactory(ConsumerFactory<String, Object> consumerFactory) {
-        
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory = 
+
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
-        
+
         // 设置并发消费者数量（通常等于分区数）
         factory.setConcurrency(16);
-        
+
         // 批量监听配置
         factory.setBatchListener(true);
         factory.getContainerProperties().setAckMode(AckMode.BATCH);
-        
+
         return factory;
     }
-    
+
     @Bean
     public ConsumerFactory<String, Object> highThroughputConsumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        
+
         configProps.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 500); // 每次拉取500条
         configProps.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, 50 * 1024 * 1024); // 50MB
         configProps.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 500); // 最大等待时间
-        
+
         return new DefaultKafkaConsumerFactory<>(configProps);
     }
 }
@@ -507,36 +507,36 @@ management:
 ```java
 @Component
 public class KafkaMetricsMonitor {
-    
+
     private final MeterRegistry meterRegistry;
     private final Counter successCounter;
     private final Counter failureCounter;
     private final Timer processingTimer;
-    
+
     public KafkaMetricsMonitor(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-        
+
         this.successCounter = Counter.builder("kafka.message.success")
                 .description("成功处理的消息数量")
                 .register(meterRegistry);
-                
+
         this.failureCounter = Counter.builder("kafka.message.failure")
                 .description("处理失败的消息数量")
                 .register(meterRegistry);
-                
+
         this.processingTimer = Timer.builder("kafka.message.processing.time")
                 .description("消息处理时间")
                 .register(meterRegistry);
     }
-    
+
     public void recordSuccess() {
         successCounter.increment();
     }
-    
+
     public void recordFailure() {
         failureCounter.increment();
     }
-    
+
     public Timer getProcessingTimer() {
         return processingTimer;
     }
@@ -567,13 +567,13 @@ public class OrderEvent {
 ```java
 @Service
 public class OrderProducer {
-    
+
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
-    
+
     public OrderProducer(KafkaTemplate<String, OrderEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
-    
+
     public void sendOrderEvent(OrderEvent orderEvent) {
         kafkaTemplate.send("order-topic", orderEvent.getOrderId(), orderEvent);
     }
@@ -585,7 +585,7 @@ public class OrderProducer {
 ```java
 @Service
 public class InventoryConsumer {
-    
+
     @KafkaListener(topics = "order-topic", groupId = "inventory-group")
     public void handleOrderEvent(OrderEvent orderEvent) {
         try {
@@ -595,7 +595,7 @@ public class InventoryConsumer {
             throw new RuntimeException("库存扣减失败", e);
         }
     }
-    
+
     private void deductInventory(OrderEvent orderEvent) {
         // 库存扣减逻辑
     }
@@ -609,20 +609,20 @@ public class InventoryConsumer {
 ```java
 @Service
 public class SeckillService {
-    
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    
+
     public SeckillService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
-    
+
     public void handleSeckillRequest(String userId, String productId) {
         SeckillRequest request = new SeckillRequest(userId, productId);
-        
+
         // 将秒杀请求发送到Kafka，快速返回响应
         kafkaTemplate.send("seckill-topic", userId, request);
     }
-    
+
     @KafkaListener(topics = "seckill-topic", groupId = "seckill-group")
     public void processSeckillRequest(SeckillRequest request) {
         // 按照系统处理能力消费秒杀请求
@@ -654,7 +654,7 @@ public class SeckillService {
 ```java
 @Service
 public class LogStorageConsumer {
-    
+
     @KafkaListener(topics = "log-topic", groupId = "log-storage-group")
     public void handleLogMessage(String logMessage) {
         // 将日志存储到Elasticsearch
@@ -668,7 +668,7 @@ public class LogStorageConsumer {
 ```java
 @Service
 public class LogMonitorConsumer {
-    
+
     @KafkaListener(topics = "log-topic", groupId = "log-monitor-group")
     public void handleLogForMonitoring(String logMessage) {
         if (logMessage.contains("ERROR") || logMessage.contains("Exception")) {

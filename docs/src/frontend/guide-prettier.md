@@ -99,29 +99,29 @@ Prettier 支持多种配置文件格式，优先级从高到低为：
 
 #### 2.3.1 格式控制选项
 
-| 选项 | 说明 | 默认值 | 示例 |
-|------|------|--------|------|
-| `printWidth` | 单行最大长度 | 80 | `printWidth: 100` |
-| `tabWidth` | 缩进空格数 | 2 | `tabWidth: 4` |
-| `useTabs` | 使用 Tab 缩进 | false | `useTabs: true` |
+| 选项         | 说明          | 默认值 | 示例              |
+| ------------ | ------------- | ------ | ----------------- |
+| `printWidth` | 单行最大长度  | 80     | `printWidth: 100` |
+| `tabWidth`   | 缩进空格数    | 2      | `tabWidth: 4`     |
+| `useTabs`    | 使用 Tab 缩进 | false  | `useTabs: true`   |
 
 **printWidth 示例对比**：
 
 ```javascript
 // printWidth: 80
-const message = "这是一条超级长的消息，它会在80字符后自动换行，让代码更易读";
+const message = '这是一条超级长的消息，它会在80字符后自动换行，让代码更易读';
 
-// printWidth: 120  
-const message = "这是一条超级长的消息，它会在120字符后自动换行，更适合大屏编辑器";
+// printWidth: 120
+const message = '这是一条超级长的消息，它会在120字符后自动换行，更适合大屏编辑器';
 ```
 
 #### 2.3.2 字符与语句风格
 
-| 选项 | 说明 | 默认值 | 示例 |
-|------|------|--------|------|
-| `semi` | 语句末尾分号 | true | `semi: false` |
-| `singleQuote` | 使用单引号 | false | `singleQuote: true` |
-| `trailingComma` | 多行结构尾随逗号 | "es5" | `trailingComma: "all"` |
+| 选项            | 说明             | 默认值 | 示例                   |
+| --------------- | ---------------- | ------ | ---------------------- |
+| `semi`          | 语句末尾分号     | true   | `semi: false`          |
+| `singleQuote`   | 使用单引号       | false  | `singleQuote: true`    |
+| `trailingComma` | 多行结构尾随逗号 | "es5"  | `trailingComma: "all"` |
 
 **semi 选项对比**：
 
@@ -130,26 +130,23 @@ const message = "这是一条超级长的消息，它会在120字符后自动换
 const a = 1;
 
 // semi: false
-const a = 1
+const a = 1;
 ```
 
 **trailingComma 选项对比**：
 
 ```javascript
 // none
-const arr = [1, 2, 3]
+const arr = [1, 2, 3];
 
-// es5  
+// es5
 const obj = {
   id: 1,
-  name: "Tom",
-}
+  name: 'Tom',
+};
 
 // all
-function foo(
-  a,
-  b,
-) {}
+function foo(a, b) {}
 ```
 
 #### 2.3.3 JSX/HTML 相关选项
@@ -168,15 +165,10 @@ function foo(
 
 ```html
 <!-- false -->
-<div
-  class="container"
->
-</div>
+<div class="container"></div>
 
 <!-- true -->
-<div
-  class="container">
-</div>
+<div class="container"></div>
 ```
 
 ### 2.4 高级配置技巧
@@ -189,30 +181,30 @@ module.exports = {
   // 基础配置
   printWidth: 80,
   tabWidth: 2,
-  
+
   // 根据文件类型差异化配置
   overrides: [
     {
-      files: "*.md",
+      files: '*.md',
       options: {
-        printWidth: 60,  // Markdown 文件行宽更窄
-        proseWrap: "always"
-      }
+        printWidth: 60, // Markdown 文件行宽更窄
+        proseWrap: 'always',
+      },
     },
     {
-      files: "*.json",
+      files: '*.json',
       options: {
         tabWidth: 2,
-        trailingComma: "none"  // JSON 不支持尾随逗号
-      }
+        trailingComma: 'none', // JSON 不支持尾随逗号
+      },
     },
     {
-      files: "*.vue",
+      files: '*.vue',
       options: {
-        htmlWhitespaceSensitivity: "ignore"
-      }
-    }
-  ]
+        htmlWhitespaceSensitivity: 'ignore',
+      },
+    },
+  ],
 };
 ```
 
@@ -223,18 +215,18 @@ module.exports = {
 module.exports = {
   // 根据环境变量动态调整
   printWidth: process.env.NODE_ENV === 'production' ? 100 : 80,
-  
+
   // 根据项目类型调整
   singleQuote: isVueProject ? true : false,
-  
+
   overrides: [
     {
       files: '*.test.js',
       options: {
-        printWidth: 100  // 测试文件允许更宽
-      }
-    }
-  ]
+        printWidth: 100, // 测试文件允许更宽
+      },
+    },
+  ],
 };
 ```
 
@@ -347,11 +339,7 @@ npm install --save-dev husky lint-staged
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,scss,md,vue}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ]
+    "*.{js,jsx,ts,tsx,json,css,scss,md,vue}": ["prettier --write", "eslint --fix", "git add"]
   }
 }
 ```
@@ -416,16 +404,16 @@ npm install --save-dev eslint-config-prettier eslint-plugin-prettier
 module.exports = {
   extends: [
     'eslint:recommended',
-    'plugin:prettier/recommended'  // 必须放在最后
+    'plugin:prettier/recommended', // 必须放在最后
   ],
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': 'error',
     // 禁用与 Prettier 冲突的规则
-    'indent': 'off',
-    'quotes': 'off',
-    'semi': 'off'
-  }
+    indent: 'off',
+    quotes: 'off',
+    semi: 'off',
+  },
 };
 ```
 
@@ -439,11 +427,11 @@ module.exports = {
   extends: [
     'eslint:recommended',
     // 专门用于关闭所有不必要或可能与 Prettier 冲突的规则
-    'prettier'  
+    'prettier',
   ],
   rules: {
     // 你的其他 ESLint 规则
-  }
+  },
 };
 ```
 
@@ -476,8 +464,8 @@ npm install --save-dev stylelint-config-prettier
 module.exports = {
   extends: [
     'stylelint-config-standard',
-    'stylelint-config-prettier'  // 关闭冲突规则
-  ]
+    'stylelint-config-prettier', // 关闭冲突规则
+  ],
 };
 ```
 
@@ -563,16 +551,19 @@ module.exports = {
 # 团队 Prettier 使用指南
 
 ## 1. 开发环境设置
+
 - 安装 VS Code 和 Prettier 插件
 - 克隆项目并运行 `npm install`
 - 验证配置：运行 `npm run format:check`
 
 ## 2. 日常开发流程
+
 - 代码修改后保存自动格式化
 - 提交前会自动格式化暂存区文件
 - 如遇到格式化问题，查看项目 Prettier 配置
 
 ## 3. 常见问题排查
+
 - 格式化不生效：检查编辑器默认格式化器设置
 - 规则冲突：确保已安装并配置 eslint-config-prettier
 - 文件被忽略：检查 .prettierignore 配置

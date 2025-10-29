@@ -43,15 +43,15 @@ author: zhycn
 - 需要极高的系统可用性和横向扩展能力
 - 业务能够容忍分布式事务的复杂性
 
-*表：分区与分表选择决策矩阵*
+_表：分区与分表选择决策矩阵_
 
-| **考虑因素** | **优先选择分区** | **优先选择分表** |
-|------------|----------------|----------------|
-| **数据量** | 千万到亿级 | 亿级以上且持续快速增长 |
-| **并发量** | 中等并发 | 高并发，单机无法承受 |
-| **查询模式** | 常使用分区键过滤 | 需要跨多个维度查询 |
-| **管理复杂度** | 希望保持简单管理 | 有能力处理分布式系统 |
-| **扩展需求** | 垂直扩展尚可满足 | 需要水平扩展 |
+| **考虑因素**   | **优先选择分区** | **优先选择分表**       |
+| -------------- | ---------------- | ---------------------- |
+| **数据量**     | 千万到亿级       | 亿级以上且持续快速增长 |
+| **并发量**     | 中等并发         | 高并发，单机无法承受   |
+| **查询模式**   | 常使用分区键过滤 | 需要跨多个维度查询     |
+| **管理复杂度** | 希望保持简单管理 | 有能力处理分布式系统   |
+| **扩展需求**   | 垂直扩展尚可满足 | 需要水平扩展           |
 
 ## 3 数据库分区策略详解
 
@@ -85,9 +85,9 @@ CREATE TABLE orders (
     amount DECIMAL(10,2)
 ) PARTITION BY RANGE (order_date);
 
-CREATE TABLE orders_2023_q1 PARTITION OF orders 
+CREATE TABLE orders_2023_q1 PARTITION OF orders
     FOR VALUES FROM ('2023-01-01') TO ('2023-04-01');
-CREATE TABLE orders_2023_q2 PARTITION OF orders 
+CREATE TABLE orders_2023_q2 PARTITION OF orders
     FOR VALUES FROM ('2023-04-01') TO ('2023-07-01');
 ```
 
@@ -124,9 +124,9 @@ CREATE TABLE sales (
     amount DECIMAL(10,2)
 ) PARTITION BY LIST (region);
 
-CREATE TABLE sales_north PARTITION OF sales 
+CREATE TABLE sales_north PARTITION OF sales
     FOR VALUES IN ('North America', 'Europe');
-CREATE TABLE sales_asia PARTITION OF sales 
+CREATE TABLE sales_asia PARTITION OF sales
     FOR VALUES IN ('Asia', 'Australia');
 ```
 
@@ -159,9 +159,9 @@ CREATE TABLE logs (
     created_at TIMESTAMP
 ) PARTITION BY HASH (log_id);
 
-CREATE TABLE logs_0 PARTITION OF logs 
+CREATE TABLE logs_0 PARTITION OF logs
     FOR VALUES WITH (MODULUS 4, REMAINDER 0);
-CREATE TABLE logs_1 PARTITION OF logs 
+CREATE TABLE logs_1 PARTITION OF logs
     FOR VALUES WITH (MODULUS 4, REMAINDER 1);
 ```
 
@@ -200,11 +200,11 @@ SUBPARTITIONS 4 (
 
 ```sql
 -- 只会扫描 p2022 分区
-SELECT * FROM orders 
+SELECT * FROM orders
 WHERE order_date BETWEEN '2022-01-01' AND '2022-12-31';
 
 -- 跨分区查询，性能较差
-SELECT * FROM orders 
+SELECT * FROM orders
 WHERE customer_id = 100 AND order_date BETWEEN '2021-01-01' AND '2022-12-31';
 ```
 
@@ -212,14 +212,14 @@ WHERE customer_id = 100 AND order_date BETWEEN '2021-01-01' AND '2022-12-31';
 在 MySQL 中使用 `EXPLAIN` 语句：
 
 ```sql
-EXPLAIN PARTITIONS 
+EXPLAIN PARTITIONS
 SELECT * FROM orders WHERE order_date >= '2022-01-01';
 ```
 
 在 PostgreSQL 中使用 `EXPLAIN`：
 
 ```sql
-EXPLAIN (ANALYZE, VERBOSE) 
+EXPLAIN (ANALYZE, VERBOSE)
 SELECT * FROM orders WHERE order_date >= '2022-01-01';
 ```
 
@@ -242,7 +242,7 @@ ALTER TABLE orders ADD PARTITION (
 );
 
 -- PostgreSQL 添加分区
-CREATE TABLE orders_2023_q3 PARTITION OF orders 
+CREATE TABLE orders_2023_q3 PARTITION OF orders
     FOR VALUES FROM ('2023-07-01') TO ('2023-10-01');
 ```
 
@@ -253,7 +253,7 @@ CREATE TABLE orders_2023_q3 PARTITION OF orders
 ALTER TABLE orders DROP PARTITION p2020;
 
 -- 将分区数据归档到历史表
-CREATE TABLE orders_archive_2020 AS 
+CREATE TABLE orders_archive_2020 AS
 SELECT * FROM orders PARTITION (p2020);
 ```
 
@@ -339,13 +339,13 @@ CREATE TABLE users_profile (
 public class ShardingDataSource {
     private int databaseCount = 4;
     private int tableCountPerDb = 8;
-    
+
     public RouteResult route(long userId) {
         int dbIndex = (int) (userId % databaseCount);
         int tableIndex = (int) (userId / databaseCount % tableCountPerDb);
         String databaseName = "db_" + dbIndex;
         String tableName = "users_" + tableIndex;
-        
+
         return new RouteResult(databaseName, tableName);
     }
 }
@@ -363,14 +363,14 @@ public class SnowflakeIdGenerator {
     private final long workerId;
     private long sequence = 0L;
     private long lastTimestamp = -1L;
-    
+
     public synchronized long nextId() {
         long timestamp = System.currentTimeMillis();
-        
+
         if (timestamp < lastTimestamp) {
             throw new RuntimeException("Clock moved backwards");
         }
-        
+
         if (lastTimestamp == timestamp) {
             sequence = (sequence + 1) & sequenceMask;
             if (sequence == 0) {
@@ -379,12 +379,12 @@ public class SnowflakeIdGenerator {
         } else {
             sequence = 0L;
         }
-        
+
         lastTimestamp = timestamp;
-        
+
         return ((timestamp - twepoch) << timestampLeftShift) |
                (datacenterId << datacenterIdShift) |
-               (workerId << workerIdShift) | 
+               (workerId << workerIdShift) |
                sequence;
     }
 }
@@ -401,11 +401,11 @@ CREATE TABLE id_generator (
 );
 
 -- 获取一批ID
-UPDATE id_generator 
-SET max_id = max_id + step, update_time = NOW() 
+UPDATE id_generator
+SET max_id = max_id + step, update_time = NOW()
 WHERE biz_tag = 'user_id';
 
-SELECT max_id - step as current_max_id FROM id_generator 
+SELECT max_id - step as current_max_id FROM id_generator
 WHERE biz_tag = 'user_id';
 ```
 
@@ -417,7 +417,7 @@ WHERE biz_tag = 'user_id';
 
 ```sql
 -- 跨分区查询，由数据库自动优化
-SELECT COUNT(*) FROM orders 
+SELECT COUNT(*) FROM orders
 WHERE order_date BETWEEN '2021-01-01' AND '2022-12-31';
 ```
 
@@ -441,7 +441,7 @@ SELECT * FROM users_0 UNION ALL SELECT * FROM users_1 ... -- 所有分表
 
 -- 推荐：分片预聚合
 -- 每个分片执行
-SELECT COUNT(*) as count, SUM(amount) as total 
+SELECT COUNT(*) as count, SUM(amount) as total
 FROM users_x WHERE condition;
 
 -- 应用层汇总结果
@@ -461,8 +461,8 @@ foreach ($shard_results as $result) {
 -- 或在应用层进行JOIN操作
 
 -- 分片内JOIN（可行）
-SELECT u.user_id, o.order_id 
-FROM users_0 u JOIN orders_0 o ON u.user_id = o.user_id 
+SELECT u.user_id, o.order_id
+FROM users_0 u JOIN orders_0 o ON u.user_id = o.user_id
 WHERE u.user_id IN (特定分片内的用户);
 ```
 
@@ -477,14 +477,14 @@ WHERE u.user_id IN (特定分片内的用户);
 3. **业务逻辑**：符合业务访问模式，减少跨分区查询
 4. **扩展性**：考虑未来数据增长和分布变化
 
-*表：分区键选择指南*
+_表：分区键选择指南_
 
-| **业务场景** | **推荐分区键** | **理由** |
-|------------|---------------|----------|
-| 时间序列数据 | 时间字段（创建时间、日期） | 天然适合范围查询和归档 |
-| 多租户系统 | 租户 ID | 隔离不同租户数据，按租户查询 |
-| 地理信息系统 | 地区编码、地理位置哈希 | 按地域分布数据，地域相关查询 |
-| 用户中心 | 用户 ID | 用户相关查询为主，均匀分布 |
+| **业务场景** | **推荐分区键**             | **理由**                     |
+| ------------ | -------------------------- | ---------------------------- |
+| 时间序列数据 | 时间字段（创建时间、日期） | 天然适合范围查询和归档       |
+| 多租户系统   | 租户 ID                    | 隔离不同租户数据，按租户查询 |
+| 地理信息系统 | 地区编码、地理位置哈希     | 按地域分布数据，地域相关查询 |
+| 用户中心     | 用户 ID                    | 用户相关查询为主，均匀分布   |
 
 ### 7.2 数据一致性保障
 
@@ -515,16 +515,16 @@ WHERE u.user_id IN (特定分片内的用户);
 ### 7.4 常见陷阱与规避策略
 
 1. **过度分区**：分区过多导致管理复杂和性能下降
-   - *规避*：根据实际数据量合理规划分区数量
+   - _规避_：根据实际数据量合理规划分区数量
 
 2. **选择不当的分区键**：导致数据倾斜和热点
-   - *规避*：分析业务查询模式，测试数据分布
+   - _规避_：分析业务查询模式，测试数据分布
 
 3. **忽略分区限制**：如唯一约束必须包含分区键
-   - *规避*：详细了解数据库分区限制和特性
+   - _规避_：详细了解数据库分区限制和特性
 
 4. **跨分片查询性能问题**：频繁跨分片操作导致性能低下
-   - *规避*：设计时尽量保证查询在分片内完成
+   - _规避_：设计时尽量保证查询在分片内完成
 
 ## 8 总结
 
@@ -538,28 +538,28 @@ WHERE u.user_id IN (特定分片内的用户);
 
 ### A. 主要数据库分区支持对比
 
-| **特性** | **MySQL** | **PostgreSQL** |
-|---------|-----------|----------------|
-| **分区类型** | RANGE, LIST, HASH, KEY, 复合分区 | RANGE, LIST, HASH |
-| **最大分区数** | 8192（MySQL 8.0） | 无硬性限制 |
-| **子分区** | 支持 | 支持 |
-| **索引管理** | 全局索引和局部索引 | 每个分区独立索引 |
-| **分区剪枝** | 支持 | 支持且优化较好 |
+| **特性**       | **MySQL**                        | **PostgreSQL**    |
+| -------------- | -------------------------------- | ----------------- |
+| **分区类型**   | RANGE, LIST, HASH, KEY, 复合分区 | RANGE, LIST, HASH |
+| **最大分区数** | 8192（MySQL 8.0）                | 无硬性限制        |
+| **子分区**     | 支持                             | 支持              |
+| **索引管理**   | 全局索引和局部索引               | 每个分区独立索引  |
+| **分区剪枝**   | 支持                             | 支持且优化较好    |
 
 ### B. 分区表管理常用 SQL
 
 ```sql
 -- 查看分区信息（MySQL）
-SELECT table_name, partition_name, table_rows 
-FROM information_schema.PARTITIONS 
+SELECT table_name, partition_name, table_rows
+FROM information_schema.PARTITIONS
 WHERE table_name = 'orders';
 
 -- 查看分区信息（PostgreSQL）
-SELECT * FROM pg_catalog.pg_partitions 
+SELECT * FROM pg_catalog.pg_partitions
 WHERE tablename = 'orders';
 
 -- 分区数据归档
-CREATE TABLE orders_archive AS 
+CREATE TABLE orders_archive AS
 SELECT * FROM orders WHERE order_date < '2020-01-01';
 
 -- 删除旧数据

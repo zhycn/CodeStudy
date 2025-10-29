@@ -24,7 +24,7 @@ author: zhycn
 
 ```sql
 -- 使用 CTE 分解复杂查询示例
-WITH 
+WITH
 regional_sales AS (
     SELECT region, SUM(amount) AS total_sales
     FROM orders
@@ -43,7 +43,7 @@ employee_sales AS (
     WHERE o.region IN (SELECT region FROM top_regions)
     GROUP BY e.employee_id, e.name
 )
-SELECT 
+SELECT
     es.employee_id,
     es.name,
     es.sales_amount,
@@ -63,8 +63,8 @@ CTE 不仅提高了查询的可读性，还允许数据库优化器更好地处�
 SELECT employee_id, name, department_id
 FROM employees
 WHERE department_id IN (
-    SELECT department_id 
-    FROM departments 
+    SELECT department_id
+    FROM departments
     WHERE location = 'New York'
 );
 
@@ -83,7 +83,7 @@ WHERE d.location = 'New York';
 
 ```sql
 -- 重构前：单一复杂查询
-SELECT 
+SELECT
     d.department_name,
     (SELECT COUNT(*) FROM employees e WHERE e.department_id = d.department_id) AS employee_count,
     (SELECT AVG(salary) FROM employees e WHERE e.department_id = d.department_id) AS avg_salary,
@@ -93,7 +93,7 @@ WHERE d.location = 'New York';
 
 -- 重构后：使用 CTE 和 JOIN
 WITH department_stats AS (
-    SELECT 
+    SELECT
         department_id,
         COUNT(*) AS employee_count,
         AVG(salary) AS avg_salary,
@@ -101,7 +101,7 @@ WITH department_stats AS (
     FROM employees
     GROUP BY department_id
 )
-SELECT 
+SELECT
     d.department_name,
     ds.employee_count,
     ds.avg_salary,
@@ -121,11 +121,11 @@ WHERE d.location = 'New York';
 
 ```sql
 -- 派生表基本示例
-SELECT 
+SELECT
     dept_stats.department_name,
     dept_stats.avg_salary
 FROM (
-    SELECT 
+    SELECT
         d.department_name,
         AVG(e.salary) AS avg_salary
     FROM departments d
@@ -137,18 +137,18 @@ WHERE dept_stats.avg_salary > 50000;
 
 ### 3.2 派生表与临时表的性能对比
 
-| 特性 | 派生表 | 临时表 |
-|------|--------|--------|
-| 生命周期 | 单次查询期间 | 会话期间或显式删除 |
-| 可见性 | 仅限于外部查询 | 会话内可见 |
-| 索引支持 | 有限（依赖数据库优化） | 支持创建索引 |
-| 重用性 | 不能重用 | 可多次查询 |
-| 适用场景 | 简单数据转换和过滤 | 复杂多步处理，大数据集 |
+| 特性     | 派生表                 | 临时表                 |
+| -------- | ---------------------- | ---------------------- |
+| 生命周期 | 单次查询期间           | 会话期间或显式删除     |
+| 可见性   | 仅限于外部查询         | 会话内可见             |
+| 索引支持 | 有限（依赖数据库优化） | 支持创建索引           |
+| 重用性   | 不能重用               | 可多次查询             |
+| 适用场景 | 简单数据转换和过滤     | 复杂多步处理，大数据集 |
 
 ```sql
 -- 临时表示例（MySQL）
 CREATE TEMPORARY TABLE temp_employee_stats AS
-SELECT 
+SELECT
     department_id,
     COUNT(*) AS employee_count,
     AVG(salary) AS avg_salary
@@ -159,7 +159,7 @@ GROUP BY department_id;
 CREATE INDEX idx_department_id ON temp_employee_stats(department_id);
 
 -- 使用临时表进行复杂查询
-SELECT 
+SELECT
     d.department_name,
     tes.employee_count,
     tes.avg_salary
@@ -174,14 +174,14 @@ DROP TEMPORARY TABLE temp_employee_stats;
 ### 3.3 派生表优化技巧
 
 1. **减少派生表的数据量**：在派生表内部使用 WHERE 条件过滤不必要的数据
-2. **仅选择必要字段**：避免 SELECT *，只选择外部查询需要的字段
+2. **仅选择必要字段**：避免 SELECT \*，只选择外部查询需要的字段
 3. **利用数据库优化特性**：如 MySQL 的派生条件下推（Derived Condition Pushdown）
 
 ```sql
 -- 优化前：派生表包含不必要数据
 SELECT *
 FROM (
-    SELECT 
+    SELECT
         employee_id,
         name,
         salary,
@@ -193,12 +193,12 @@ FROM (
 WHERE high_earners.department_id = 10;
 
 -- 优化后：减少派生表的数据量和字段
-SELECT 
+SELECT
     employee_id,
     name,
     salary
 FROM (
-    SELECT 
+    SELECT
         employee_id,
         name,
         salary,
@@ -218,7 +218,7 @@ WHERE high_earners.department_id = 10;
 ```sql
 -- 创建物化视图
 CREATE MATERIALIZED VIEW department_summary AS
-SELECT 
+SELECT
     d.department_name,
     COUNT(e.employee_id) AS employee_count,
     AVG(e.salary) AS avg_salary,
@@ -247,7 +247,7 @@ REFRESH MATERIALIZED VIEW department_summary;
 
 ```sql
 -- 基本数据透视示例：按产品和年份透视销售数据
-SELECT 
+SELECT
     product_id,
     SUM(CASE WHEN YEAR(sale_date) = 2022 THEN amount ELSE 0 END) AS sales_2022,
     SUM(CASE WHEN YEAR(sale_date) = 2023 THEN amount ELSE 0 END) AS sales_2023,
@@ -279,8 +279,8 @@ SELECT
   ) INTO @sql
 FROM sales;
 
-SET @sql = CONCAT('SELECT product_id, ', @sql, ', SUM(amount) AS total_sales 
-                   FROM sales 
+SET @sql = CONCAT('SELECT product_id, ', @sql, ', SUM(amount) AS total_sales
+                   FROM sales
                    GROUP BY product_id');
 
 PREPARE stmt FROM @sql;
@@ -298,7 +298,7 @@ CREATE EXTENSION IF NOT EXISTS tablefunc;
 SELECT *
 FROM crosstab(
     'SELECT product_id, EXTRACT(YEAR FROM sale_date) as year, SUM(amount) as total
-     FROM sales 
+     FROM sales
      GROUP BY product_id, year
      ORDER BY 1, 2',
     'SELECT DISTINCT EXTRACT(YEAR FROM sale_date) FROM sales ORDER BY 1'
@@ -378,7 +378,7 @@ SELECT * FROM recursive_cte_name;
 -- 员工层级查询：查找指定员工的所有下属（包括间接下属）
 WITH RECURSIVE employee_hierarchy AS (
     -- 锚点：查找指定员工
-    SELECT 
+    SELECT
         employee_id,
         name,
         manager_id,
@@ -386,11 +386,11 @@ WITH RECURSIVE employee_hierarchy AS (
         CAST(name AS VARCHAR(1000)) AS path
     FROM employees
     WHERE employee_id = 101  -- 从指定员工开始
-    
+
     UNION ALL
-    
+
     -- 递归：查找直接下属
-    SELECT 
+    SELECT
         e.employee_id,
         e.name,
         e.manager_id,
@@ -399,7 +399,7 @@ WITH RECURSIVE employee_hierarchy AS (
     FROM employees e
     INNER JOIN employee_hierarchy eh ON e.manager_id = eh.employee_id
 )
-SELECT 
+SELECT
     employee_id,
     name,
     manager_id,
@@ -417,7 +417,7 @@ ORDER BY level, employee_id;
 -- 产品组装结构递归查询
 WITH RECURSIVE product_assembly AS (
     -- 锚点：最终产品
-    SELECT 
+    SELECT
         component_id,
         parent_component_id,
         quantity,
@@ -426,11 +426,11 @@ WITH RECURSIVE product_assembly AS (
         CAST(component_name AS VARCHAR(1000)) AS assembly_path
     FROM product_components
     WHERE parent_component_id IS NULL  -- 最顶层组件
-    
+
     UNION ALL
-    
+
     -- 递归：查找子组件
-    SELECT 
+    SELECT
         pc.component_id,
         pc.parent_component_id,
         pc.quantity,
@@ -440,7 +440,7 @@ WITH RECURSIVE product_assembly AS (
     FROM product_components pc
     INNER JOIN product_assembly pa ON pc.parent_component_id = pa.component_id
 )
-SELECT 
+SELECT
     component_id,
     component_name,
     quantity,
@@ -461,17 +461,17 @@ ORDER BY level, component_id;
 ```sql
 -- 优化后的递归查询示例
 WITH RECURSIVE limited_hierarchy AS (
-    SELECT 
+    SELECT
         employee_id,
         name,
         manager_id,
         0 AS level
     FROM employees
     WHERE employee_id = 101
-    
+
     UNION ALL
-    
-    SELECT 
+
+    SELECT
         e.employee_id,
         e.name,
         e.manager_id,
@@ -499,7 +499,7 @@ CREATE INDEX idx_employees_manager_dept ON employees(manager_id, department_id);
 ```sql
 -- 分析查询执行计划
 EXPLAIN FORMAT=JSON
-SELECT e.employee_id, e.name, d.department_name, 
+SELECT e.employee_id, e.name, d.department_name,
        (SELECT COUNT(*) FROM orders o WHERE o.sales_person_id = e.employee_id) AS order_count
 FROM employees e
 INNER JOIN departments d ON e.department_id = d.department_id
@@ -547,8 +547,8 @@ CREATE INDEX idx_employees_dept_salary ON employees(department_id, salary);
 CREATE INDEX idx_orders_covering ON orders(customer_id, order_date, amount);
 
 -- 查询可使用覆盖索引
-SELECT customer_id, order_date, amount 
-FROM orders 
+SELECT customer_id, order_date, amount
+FROM orders
 WHERE customer_id = 1001 AND order_date >= '2023-01-01';
 
 -- 3. 函数索引处理表达式查询（PostgreSQL）
@@ -561,11 +561,11 @@ CREATE INDEX idx_high_salary_employees ON employees(salary) WHERE salary > 10000
 -- 5. 监控索引使用情况
 -- PostgreSQL
 SELECT schemaname, tablename, indexname, idx_scan, idx_tup_read, idx_tup_fetch
-FROM pg_stat_user_indexes 
+FROM pg_stat_user_indexes
 WHERE tablename = 'employees';
 
 -- MySQL
-SELECT * FROM sys.schema_index_statistics 
+SELECT * FROM sys.schema_index_statistics
 WHERE table_name = 'employees';
 ```
 
@@ -607,8 +607,8 @@ WHERE department_id IN (SELECT department_id FROM departments WHERE location = '
 -- 推荐
 SELECT e.employee_id, e.name
 FROM employees e
-WHERE EXISTS (SELECT 1 FROM departments d 
-              WHERE d.department_id = e.department_id 
+WHERE EXISTS (SELECT 1 FROM departments d
+              WHERE d.department_id = e.department_id
               AND d.location = 'New York');
 
 -- 5. 避免在 WHERE 子句中对索引列使用函数
@@ -682,7 +682,7 @@ SELECT * FROM users PARTITION (p0);
 
 ```sql
 -- 原始复杂查询（性能低下）
-SELECT 
+SELECT
     c.customer_id,
     c.customer_name,
     (SELECT COUNT(*) FROM orders o WHERE o.customer_id = c.customer_id) AS order_count,
@@ -701,7 +701,7 @@ LIMIT 100;
 ```sql
 -- 使用 CTE 和 JOIN 优化后的查询
 WITH customer_orders AS (
-    SELECT 
+    SELECT
         customer_id,
         COUNT(*) AS order_count,
         SUM(amount) AS total_spent,
@@ -738,7 +738,7 @@ sales_pivot AS (
     FROM quarterly_sales
     GROUP BY customer_id
 )
-SELECT 
+SELECT
     c.customer_id,
     c.customer_name,
     co.order_count,
@@ -772,7 +772,7 @@ CREATE INDEX idx_customers_registration ON customers(registration_date);
 
 -- 创建物化视图用于频繁查询（PostgreSQL）
 CREATE MATERIALIZED VIEW mv_customer_summary AS
-SELECT 
+SELECT
     c.customer_id,
     c.customer_name,
     -- ... 其他字段

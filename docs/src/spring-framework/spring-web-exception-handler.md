@@ -19,6 +19,7 @@ author: zhycn
 - **维护成本高**：异常处理逻辑分散在各处，修改异常处理策略需要改动大量代码
 
 **统一异常处理的核心价值**：
+
 > 将异常处理逻辑从业务代码中剥离，通过集中化机制实现"异常定义标准化、处理逻辑复用化、响应格式统一化"。
 
 ## 2. Spring 统一异常处理的核心机制
@@ -35,12 +36,12 @@ Spring 的异常处理采用"分层隔离"思想，形成完整的处理链路�
 
 Spring 提供了多种异常处理方式，每种方式各有适用场景：
 
-| 实现方式 | 适用场景 | 优点 | 缺点 |
-|---------|---------|------|------|
-| `@ControllerAdvice` + `@ExceptionHandler` | REST API 项目、前后端分离架构 | 配置简单、灵活性高、响应格式统一 | 仅处理 Controller 层异常 |
-| `HandlerExceptionResolver` 接口 | 传统 MVC 项目、页面渲染场景 | 可处理所有 Handler 的异常、支持页面跳转 | 配置相对复杂、不适合纯 API 项目 |
-| `ResponseEntityExceptionHandler` 继承 | 需要精细控制 HTTP 响应的场景 | 提供了 Spring 自带异常的默认处理 | 需要覆盖特定方法、扩展性一般 |
-| 控制器内部 `@ExceptionHandler` | 特定 Controller 需要特殊处理 | 优先级高、可定制性强 | 不能全局生效、代码重复 |
+| 实现方式                                  | 适用场景                      | 优点                                    | 缺点                            |
+| ----------------------------------------- | ----------------------------- | --------------------------------------- | ------------------------------- |
+| `@ControllerAdvice` + `@ExceptionHandler` | REST API 项目、前后端分离架构 | 配置简单、灵活性高、响应格式统一        | 仅处理 Controller 层异常        |
+| `HandlerExceptionResolver` 接口           | 传统 MVC 项目、页面渲染场景   | 可处理所有 Handler 的异常、支持页面跳转 | 配置相对复杂、不适合纯 API 项目 |
+| `ResponseEntityExceptionHandler` 继承     | 需要精细控制 HTTP 响应的场景  | 提供了 Spring 自带异常的默认处理        | 需要覆盖特定方法、扩展性一般    |
+| 控制器内部 `@ExceptionHandler`            | 特定 Controller 需要特殊处理  | 优先级高、可定制性强                    | 不能全局生效、代码重复          |
 
 **推荐方案**：对于现代 Spring Boot 项目，`@ControllerAdvice` + `@ExceptionHandler` 组合是最常用且最灵活的方案。
 
@@ -62,22 +63,22 @@ public class ApiResponse<T> {
     private String message;     // 提示信息
     private T data;            // 返回数据
     private long timestamp;    // 时间戳
-    
+
     public ApiResponse(String code, String message) {
         this.code = code;
         this.message = message;
         this.timestamp = System.currentTimeMillis();
     }
-    
+
     // 成功响应
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>("SUCCESS", "操作成功", data, System.currentTimeMillis());
     }
-    
+
     public static <T> ApiResponse<T> success(String message, T data) {
         return new ApiResponse<>("SUCCESS", message, data, System.currentTimeMillis());
     }
-    
+
     // 失败响应
     public static <T> ApiResponse<T> error(String code, String message) {
         return new ApiResponse<>(code, message, null, System.currentTimeMillis());
@@ -96,19 +97,19 @@ public class ApiResponse<T> {
 public class BaseException extends RuntimeException {
     private final String errorCode;
     private final String message;
-    
+
     public BaseException(String errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
         this.message = message;
     }
-    
+
     public BaseException(String errorCode, String message, Throwable cause) {
         super(message, cause);
         this.errorCode = errorCode;
         this.message = message;
     }
-    
+
     // Getter 方法
     public String getErrorCode() { return errorCode; }
     @Override public String getMessage() { return message; }
@@ -121,11 +122,11 @@ public class BusinessException extends BaseException {
     public BusinessException(String errorCode, String message) {
         super(errorCode, message);
     }
-    
+
     public BusinessException(String errorCode, String message, Throwable cause) {
         super(errorCode, message, cause);
     }
-    
+
     // 常用业务异常定义
     public static final String ORDER_NOT_FOUND = "ORDER_001";
     public static final String INSUFFICIENT_BALANCE = "ORDER_002";
@@ -136,14 +137,14 @@ public class BusinessException extends BaseException {
  */
 public class OrderNotFoundException extends BusinessException {
     public OrderNotFoundException(Long orderId) {
-        super(BusinessException.ORDER_NOT_FOUND, 
+        super(BusinessException.ORDER_NOT_FOUND,
               "订单不存在: " + orderId);
     }
 }
 
 public class InsufficientBalanceException extends BusinessException {
     public InsufficientBalanceException(BigDecimal balance) {
-        super(BusinessException.INSUFFICIENT_BALANCE, 
+        super(BusinessException.INSUFFICIENT_BALANCE,
               "余额不足，当前余额: " + balance);
     }
 }
@@ -160,152 +161,152 @@ public class InsufficientBalanceException extends BusinessException {
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     /**
      * 处理业务异常
      */
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(
             BusinessException ex, WebRequest request) {
-        
+
         log.warn("业务异常: 错误码={}, 消息={}", ex.getErrorCode(), ex.getMessage());
-        
+
         ApiResponse<Void> response = ApiResponse.error(
-            ex.getErrorCode(), 
+            ex.getErrorCode(),
             ex.getMessage()
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * 处理参数校验异常 - @Validated 注解触发
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationException(
             MethodArgumentNotValidException ex) {
-        
+
         log.warn("参数校验失败: {}", ex.getMessage());
-        
+
         // 提取字段级错误信息
         Map<String, String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .collect(Collectors.toMap(
                     FieldError::getField,
-                    fieldError -> fieldError.getDefaultMessage() != null ? 
+                    fieldError -> fieldError.getDefaultMessage() != null ?
                                 fieldError.getDefaultMessage() : ""
                 ));
-        
+
         ApiResponse<Map<String, String>> response = ApiResponse.error(
-            "VALIDATION_ERROR", 
+            "VALIDATION_ERROR",
             "参数校验失败"
         );
         response.setData(errors);
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * 处理约束违规异常 - @Valid 注解触发
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiResponse<List<String>>> handleConstraintViolationException(
             ConstraintViolationException ex) {
-        
+
         log.warn("约束违规: {}", ex.getMessage());
-        
+
         List<String> errors = ex.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
-        
+
         ApiResponse<List<String>> response = ApiResponse.error(
-            "CONSTRAINT_VIOLATION", 
+            "CONSTRAINT_VIOLATION",
             "参数约束违规"
         );
         response.setData(errors);
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * 处理参数类型不匹配异常
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiResponse<Void>> handleTypeMismatchException(
             MethodArgumentTypeMismatchException ex) {
-        
+
         log.warn("参数类型不匹配: {}", ex.getMessage());
-        
+
         String errorMessage = String.format("参数'%s'的值'%s'类型不正确,期望类型: %s",
-                ex.getName(), ex.getValue(), 
+                ex.getName(), ex.getValue(),
                 ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "未知");
-        
+
         ApiResponse<Void> response = ApiResponse.error(
-            "TYPE_MISMATCH", 
+            "TYPE_MISMATCH",
             errorMessage
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-    
+
     /**
      * 处理资源未找到异常（404）
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleNotFoundException(
             NoHandlerFoundException ex) {
-        
+
         log.warn("接口不存在: {} {}", ex.getHttpMethod(), ex.getRequestURL());
-        
+
         ApiResponse<Void> response = ApiResponse.error(
-            "ENDPOINT_NOT_FOUND", 
+            "ENDPOINT_NOT_FOUND",
             "请求接口不存在"
         );
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
-    
+
     /**
      * 处理权限不足异常
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<Void>> handleAccessDeniedException(
             AccessDeniedException ex) {
-        
+
         log.warn("权限不足: {}", ex.getMessage());
-        
+
         ApiResponse<Void> response = ApiResponse.error(
-            "ACCESS_DENIED", 
+            "ACCESS_DENIED",
             "权限不足，拒绝访问"
         );
-        
+
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
-    
+
     /**
      * 兜底异常处理
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleAllExceptions(
             Exception ex, WebRequest request) {
-        
+
         // 根据环境决定是否显示详细错误
-        String message = isProductionEnvironment() ? 
+        String message = isProductionEnvironment() ?
             "系统繁忙，请稍后重试" : ex.getMessage();
-        
+
         log.error("未处理异常: ", ex);
-        
+
         ApiResponse<Void> response = ApiResponse.error(
-            "INTERNAL_SERVER_ERROR", 
+            "INTERNAL_SERVER_ERROR",
             message
         );
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(response);
     }
-    
+
     private boolean isProductionEnvironment() {
         // 实际项目中可以从环境变量或配置中判断
         return "prod".equals(System.getProperty("spring.profiles.active"));
@@ -381,22 +382,22 @@ public class GlobalExceptionHandler {
 public ResponseEntity<ApiResponse<Void>> handleAllExceptions(Exception ex) {
     // 记录完整错误日志
     log.error("未处理异常: ", ex);
-    
+
     // 生产环境返回通用错误消息，开发环境返回详细错误
     String userMessage;
     if (isProductionEnvironment()) {
         userMessage = "系统繁忙，请稍后重试";
     } else {
-        userMessage = ex.getMessage() != null ? 
+        userMessage = ex.getMessage() != null ?
             ex.getMessage() : ex.getClass().getSimpleName();
     }
-    
+
     // 不暴露异常细节给客户端
     ApiResponse<Void> response = ApiResponse.error(
-        "INTERNAL_SERVER_ERROR", 
+        "INTERNAL_SERVER_ERROR",
         userMessage
     );
-    
+
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(response);
 }
@@ -409,32 +410,32 @@ public ResponseEntity<ApiResponse<Void>> handleAllExceptions(Exception ex) {
 ```java
 @RestControllerAdvice
 public class I18nExceptionHandler {
-    
+
     @Autowired
     private MessageSource messageSource;
-    
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(
             BusinessException ex, HttpServletRequest request) {
-        
+
         // 从请求头获取语言设置
         String acceptLanguage = request.getHeader("Accept-Language");
-        Locale locale = StringUtils.hasText(acceptLanguage) ? 
+        Locale locale = StringUtils.hasText(acceptLanguage) ?
                 Locale.forLanguageTag(acceptLanguage) : Locale.getDefault();
-        
+
         // 获取本地化错误消息
         String localizedMessage = messageSource.getMessage(
-                ex.getErrorCode(), 
-                new Object[]{}, 
+                ex.getErrorCode(),
+                new Object[]{},
                 ex.getMessage(), // 默认消息
                 locale
         );
-        
+
         ApiResponse<Void> response = ApiResponse.error(
-            ex.getErrorCode(), 
+            ex.getErrorCode(),
             localizedMessage
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
@@ -460,33 +461,33 @@ INSUFFICIENT_BALANCE=余额不足
 @Slf4j
 @RestControllerAdvice
 public class MonitoringExceptionHandler {
-    
+
     @Autowired
     private MetricsService metricsService;
-    
+
     @Autowired
     private AlertService alertService;
-    
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleAllExceptions(Exception ex) {
         // 记录异常指标
         metricsService.recordException(ex);
-        
+
         // 关键异常发送告警
         if (isCriticalException(ex)) {
             alertService.sendCriticalAlert("系统异常告警", ex.getMessage(), ex);
         }
-        
+
         // 记录错误日志
         log.error("系统异常已记录并告警", ex);
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("SYSTEM_ERROR", "系统内部错误"));
     }
-    
+
     private boolean isCriticalException(Exception ex) {
         // 定义关键异常类型（数据库连接异常、外部服务异常等）
-        return ex instanceof DataAccessException || 
+        return ex instanceof DataAccessException ||
                ex instanceof RemoteServiceException;
     }
 }
@@ -500,23 +501,23 @@ public class MonitoringExceptionHandler {
 @Aspect
 @Component
 public class ServiceExceptionAspect {
-    
+
     private static final Logger log = LoggerFactory.getLogger(ServiceExceptionAspect.class);
-    
+
     @Pointcut("execution(* com.example.service..*(..))")
     public void serviceMethods() {}
-    
+
     @AfterThrowing(pointcut = "serviceMethods()", throwing = "ex")
     public void logServiceException(Exception ex) {
         // 记录服务层异常，包含业务上下文
         log.error("Service层异常: {}", ex.getMessage(), ex);
-        
+
         // 发送服务层异常告警
         if (needsAlert(ex)) {
             alertService.sendServiceAlert(ex);
         }
     }
-    
+
     private boolean needsAlert(Exception ex) {
         // 根据异常类型和业务规则决定是否发送告警
         return ex instanceof CriticalBusinessException;
@@ -533,10 +534,10 @@ public class ServiceExceptionAspect {
 @RequestMapping("/api/orders")
 @Validated
 public class OrderController {
-    
+
     @Autowired
     private OrderService orderService;
-    
+
     /**
      * 创建订单 - 参数自动校验
      */
@@ -546,7 +547,7 @@ public class OrderController {
         OrderDTO order = orderService.createOrder(request);
         return ApiResponse.success("订单创建成功", order);
     }
-    
+
     /**
      * 查询订单 - 显式抛出业务异常
      */
@@ -556,12 +557,12 @@ public class OrderController {
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         return ApiResponse.success(order);
     }
-    
+
     /**
      * 支付订单 - 异常由全局处理器统一处理
      */
     @PostMapping("/{orderId}/pay")
-    public ApiResponse<Void> payOrder(@PathVariable Long orderId, 
+    public ApiResponse<Void> payOrder(@PathVariable Long orderId,
                                     @Valid @RequestBody PaymentRequest request) {
         // 如果支付失败，服务层会抛出相应的业务异常
         orderService.payOrder(orderId, request);
@@ -576,25 +577,25 @@ public class OrderController {
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {
-    
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Override
     public void payOrder(Long orderId, PaymentRequest request) {
         // 查询订单
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
-        
+
         // 检查用户余额
         BigDecimal balance = userService.getUserBalance(order.getUserId());
         if (balance.compareTo(order.getTotalAmount()) < 0) {
             throw new InsufficientBalanceException(balance);
         }
-        
+
         // 执行支付逻辑
         try {
             paymentGateway.pay(order, request);

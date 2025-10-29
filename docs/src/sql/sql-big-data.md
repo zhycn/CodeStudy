@@ -24,13 +24,13 @@ SQL 大数据处理的核心目标是：**在可接受的时间内，获得准�
 
 ```sql
 -- 低效的子查询排名方案：O(n²)复杂度
-SELECT 
-  dept_id, 
+SELECT
+  dept_id,
   name,
   salary,
-  (SELECT COUNT(*) + 1 
-   FROM employees e2 
-   WHERE e2.dept_id = e1.dept_id 
+  (SELECT COUNT(*) + 1
+   FROM employees e2
+   WHERE e2.dept_id = e1.dept_id
      AND e2.salary > e1.salary) AS rank
 FROM employees e1;
 ```
@@ -39,12 +39,12 @@ FROM employees e1;
 
 ```sql
 -- 高效的窗口函数方案：O(n log n)复杂度
-SELECT 
+SELECT
   dept_id,
   name,
   salary,
   DENSE_RANK() OVER (
-    PARTITION BY dept_id 
+    PARTITION BY dept_id
     ORDER BY salary DESC
   ) AS rank
 FROM employees;
@@ -74,9 +74,9 @@ CREATE INDEX idx_dept_salary ON employees(dept_id, salary DESC);
 SUM(sales) OVER(ORDER BY date)
 
 /* 高效：仅计算近3个月累计 */
-SUM(sales) OVER( 
-  ORDER BY date 
-  RANGE BETWEEN INTERVAL '3' MONTH PRECEDING AND CURRENT ROW 
+SUM(sales) OVER(
+  ORDER BY date
+  RANGE BETWEEN INTERVAL '3' MONTH PRECEDING AND CURRENT ROW
 )
 ```
 
@@ -89,7 +89,7 @@ WITH ranked_data AS (
   SELECT *, ROW_NUMBER() OVER(ORDER BY id) AS rn
   FROM billion_row_table
 )
-SELECT * FROM ranked_data 
+SELECT * FROM ranked_data
 WHERE rn BETWEEN 1000001 AND 1001000;
 ```
 
@@ -102,11 +102,11 @@ SELECT
   month,
   sales,
   /* 环比计算 */
-  (sales - LAG(sales, 1) OVER(ORDER BY month)) 
+  (sales - LAG(sales, 1) OVER(ORDER BY month))
     / LAG(sales, 1) OVER(ORDER BY month) * 100 AS mom_growth,
-  
+
   /* 同比计算 */
-  (sales - LAG(sales, 12) OVER(ORDER BY month)) 
+  (sales - LAG(sales, 12) OVER(ORDER BY month))
     / LAG(sales, 12) OVER(ORDER BY month) * 100 AS yoy_growth
 FROM monthly_sales;
 ```
@@ -117,16 +117,16 @@ FROM monthly_sales;
 
 ```sql
 SELECT * FROM (
-  SELECT 
+  SELECT
     dept_id,
     name,
     salary,
     DENSE_RANK() OVER(
-      PARTITION BY dept_id 
+      PARTITION BY dept_id
       ORDER BY salary DESC
     ) AS rank
   FROM employees
-) tmp 
+) tmp
 WHERE rank <= 3;
 ```
 
@@ -156,7 +156,7 @@ SELECT APPROX_AVG(A.a) FROM A SAMPLE 1000 ROWS
 
 ```sql
 -- PostgreSQL 随机采样示例
-SELECT AVG(salary) 
+SELECT AVG(salary)
 FROM employees TABLESAMPLE SYSTEM(1); -- 采集1%数据
 ```
 
@@ -169,11 +169,11 @@ FROM employees TABLESAMPLE SYSTEM(1); -- 采集1%数据
 WITH stratified_sample AS (
   SELECT *
   FROM (
-    SELECT *, 
+    SELECT *,
       ROW_NUMBER() OVER(PARTITION BY dept_id) as rn,
       COUNT(*) OVER(PARTITION BY dept_id) as total
     FROM employees
-  ) t 
+  ) t
   WHERE rn <= total * 0.05
 )
 SELECT dept_id, AVG(salary) as avg_salary
@@ -192,18 +192,18 @@ BlinkDB 系统使用类似技术处理稀疏数据问题。
 ```sql
 -- Bootstrap误差估计示例（伪代码）
 WITH bootstrap_samples AS (
-  SELECT 
+  SELECT
     sample_id,
     AVG(salary) as avg_salary
   FROM (
-    SELECT 
+    SELECT
       generate_series(1,100) as sample_id,
       random() as rand_val
     FROM employees
   ) t
   GROUP BY sample_id
 )
-SELECT 
+SELECT
   AVG(avg_salary) as estimate,
   STDDEV(avg_salary) as error_margin
 FROM bootstrap_samples;
@@ -217,7 +217,7 @@ Bootstrap 通用性强但计算成本较高。
 
 ```sql
 -- 基于CLT的误差估计
-SELECT 
+SELECT
   AVG(salary) as estimate,
   STDDEV(salary)/SQRT(COUNT(*)) as std_error
 FROM employees SAMPLE 10000 ROWS;
@@ -234,14 +234,14 @@ FROM employees SAMPLE 10000 ROWS;
 ```sql
 -- Wander Join 思路示例
 WITH wander_paths AS (
-  SELECT 
+  SELECT
     random() as path_id,
     t1.id as start_id
   FROM table1 t1
   LIMIT 1000  -- 采样路径数
 ),
 connected_samples AS (
-  SELECT 
+  SELECT
     wp.path_id,
     t1.col1,
     t2.col2
@@ -266,8 +266,8 @@ Wander Join 通过随机游走方式构建连接路径，使用 Horvitz-Thompson
 
 ```sql
 -- HiveQL 示例：部门员工统计
-SELECT department, COUNT(*) AS employee_count 
-FROM employees 
+SELECT department, COUNT(*) AS employee_count
+FROM employees
 GROUP BY department;
 ```
 
@@ -293,8 +293,8 @@ Presto 支持跨数据源联合查询，适合**交互式分析**。
 
 ```sql
 -- Spark SQL 结构化流处理示例
-SELECT 
-  window.start, 
+SELECT
+  window.start,
   COUNT(*) AS page_views
 FROM page_events
 GROUP BY window(event_time, '5 minutes');
@@ -335,7 +335,7 @@ FOR VALUES FROM ('2023-01-01') TO ('2023-04-01');
 
 ```sql
 -- 分析查询执行计划
-EXPLAIN (ANALYZE, BUFFERS) 
+EXPLAIN (ANALYZE, BUFFERS)
 SELECT o.order_id, c.customer_name
 FROM orders o
 JOIN customers c ON o.customer_id = c.customer_id
@@ -346,11 +346,11 @@ WHERE o.order_date > '2023-01-01';
 
 #### 5.1.2 常见性能问题与解决方案
 
-| 问题类型 | 症状 | 解决方案 |
-|---------|------|---------|
-| 全表扫描 | 查询耗时随数据量线性增长 | 为过滤条件字段添加索引 |
-| 嵌套循环连接 | 小表驱动大表时效率低 | 使用哈希连接或合并连接 |
-| 排序操作 | 大量数据排序消耗内存 | 增加工作内存或使用索引排序 |
+| 问题类型     | 症状                     | 解决方案                   |
+| ------------ | ------------------------ | -------------------------- |
+| 全表扫描     | 查询耗时随数据量线性增长 | 为过滤条件字段添加索引     |
+| 嵌套循环连接 | 小表驱动大表时效率低     | 使用哈希连接或合并连接     |
+| 排序操作     | 大量数据排序消耗内存     | 增加工作内存或使用索引排序 |
 
 ### 5.2 索引优化策略
 
@@ -358,11 +358,11 @@ WHERE o.order_date > '2023-01-01';
 
 ```sql
 -- 复合索引示例
-CREATE INDEX idx_orders_date_customer 
+CREATE INDEX idx_orders_date_customer
 ON orders(order_date DESC, customer_id);
 
 -- 覆盖索引避免回表
-CREATE INDEX idx_covering ON employees(dept_id, salary) 
+CREATE INDEX idx_covering ON employees(dept_id, salary)
 INCLUDE (name, hire_date);
 ```
 
@@ -379,10 +379,10 @@ INCLUDE (name, hire_date);
 REINDEX INDEX idx_orders_date_customer;
 
 -- 索引使用统计查询
-SELECT 
+SELECT
   schemaname, tablename, indexname,
   idx_scan, idx_tup_read, idx_tup_fetch
-FROM pg_stat_all_indexes 
+FROM pg_stat_all_indexes
 WHERE schemaname = 'public';
 ```
 
@@ -401,7 +401,7 @@ SELECT name, salary FROM employees WHERE dept_id = 10;
 SELECT * FROM orders WHERE DATE_FORMAT(order_date, '%Y-%m') = '2023-01';
 
 -- 高效：避免函数转换
-SELECT * FROM orders 
+SELECT * FROM orders
 WHERE order_date >= '2023-01-01' AND order_date < '2023-02-01';
 ```
 
@@ -413,11 +413,11 @@ INSERT INTO sales VALUES (1, 100);
 INSERT INTO sales VALUES (2, 200);
 
 -- 高效：批量插入
-INSERT INTO sales VALUES 
+INSERT INTO sales VALUES
 (1, 100), (2, 200), (3, 300);
 
 -- 批量更新（PostgreSQL）
-UPDATE employees 
+UPDATE employees
 SET salary = new_salaries.salary
 FROM new_salaries
 WHERE employees.id = new_salaries.employee_id;
@@ -435,7 +435,7 @@ WHERE employees.id = new_salaries.employee_id;
 
 ```sql
 -- 创建组合索引
-CREATE INDEX idx_orders_customer_date_amount 
+CREATE INDEX idx_orders_customer_date_amount
 ON orders(customer_id, order_date, order_amount);
 ```
 
@@ -460,15 +460,15 @@ FOR VALUES FROM ('2023-01-01') TO ('2023-02-01');
 ```sql
 -- 优化前：复杂子查询
 SELECT customer_id,
-       (SELECT SUM(order_amount) 
-        FROM orders o2 
+       (SELECT SUM(order_amount)
+        FROM orders o2
         WHERE o2.customer_id = o1.customer_id
         AND o2.order_date >= NOW() - INTERVAL '1 year') as total_amount
 FROM orders o1
 GROUP BY customer_id;
 
 -- 优化后：窗口函数+条件聚合
-SELECT 
+SELECT
   customer_id,
   SUM(order_amount) FILTER (
     WHERE order_date >= CURRENT_DATE - INTERVAL '1 year'

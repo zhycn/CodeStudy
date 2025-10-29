@@ -101,17 +101,17 @@ Oracle Database 是**功能全面的商业数据库**，被大型企业广泛采
 
 **适用场景**：大型企业关键业务系统、金融系统、高负载 OLTP 环境。
 
-*表：主流关系型数据库比较表*
+_表：主流关系型数据库比较表_
 
-| **特性** | **MySQL** | **PostgreSQL** | **SQL Server** | **Oracle** |
-|---------|-----------|----------------|----------------|------------|
-| **许可证** | 开源 | 开源 | 商业 | 商业 |
-| **ACID 支持** | 有限（取决于存储引擎） | 完整支持 | 完整支持 | 完整支持 |
-| **SQL 标准符合度** | 中等 | 高 | 中等 | 高 |
-| **性能** | 读操作优化 | 复杂查询优化 | 综合平衡 | 高并发优化 |
-| **扩展性** | 中等 | 高 | 中等 | 非常高 |
-| **成本** | 低 | 低 | 中高 | 高 |
-| **学习曲线** | 平缓 | 中等 | 中等 | 陡峭 |
+| **特性**           | **MySQL**              | **PostgreSQL** | **SQL Server** | **Oracle** |
+| ------------------ | ---------------------- | -------------- | -------------- | ---------- |
+| **许可证**         | 开源                   | 开源           | 商业           | 商业       |
+| **ACID 支持**      | 有限（取决于存储引擎） | 完整支持       | 完整支持       | 完整支持   |
+| **SQL 标准符合度** | 中等                   | 高             | 中等           | 高         |
+| **性能**           | 读操作优化             | 复杂查询优化   | 综合平衡       | 高并发优化 |
+| **扩展性**         | 中等                   | 高             | 中等           | 非常高     |
+| **成本**           | 低                     | 低             | 中高           | 高         |
+| **学习曲线**       | 平缓                   | 中等           | 中等           | 陡峭       |
 
 ## 3 数据库基本概念
 
@@ -194,7 +194,7 @@ CREATE TABLE employees (
     birth_date DATE COMMENT '出生日期',
     department_id INT COMMENT '部门ID',
     email VARCHAR(100) COMMENT '邮箱',
-    CONSTRAINT fk_department 
+    CONSTRAINT fk_department
         FOREIGN KEY (department_id) REFERENCES departments(department_id) COMMENT '部门ID外键'
 );
 
@@ -225,18 +225,18 @@ VALUES ('John', 'Doe', '1990-05-15', 1, 'john.doe@example.com');
 
 -- 批量插入
 INSERT INTO employees (first_name, last_name, department_id)
-VALUES 
+VALUES
     ('Jane', 'Smith', 2),
     ('Bob', 'Johnson', 1),
     ('Alice', 'Brown', 3);
 
 -- 更新数据
-UPDATE employees 
+UPDATE employees
 SET email = 'new.email@example.com'
 WHERE employee_id = 1;
 
 -- 删除数据
-DELETE FROM employees 
+DELETE FROM employees
 WHERE employee_id = 5;
 ```
 
@@ -261,7 +261,7 @@ WHERE department_id = 1
 ORDER BY last_name ASC, first_name ASC;
 
 -- 聚合函数与分组
-SELECT 
+SELECT
     department_id,
     COUNT(*) as employee_count,
     AVG(salary) as avg_salary
@@ -270,9 +270,9 @@ GROUP BY department_id
 HAVING COUNT(*) > 5;
 
 -- 多表连接查询
-SELECT 
-    e.first_name, 
-    e.last_name, 
+SELECT
+    e.first_name,
+    e.last_name,
     d.department_name,
     p.project_name
 FROM employees e
@@ -369,7 +369,7 @@ END IF;
    - 为复杂查询添加注释
 
 2. **性能优化**：
-   - 避免使用 SELECT *，明确指定需要的列
+   - 避免使用 SELECT \*，明确指定需要的列
    - 在 WHERE 子句条件列上创建索引
    - 避免在 WHERE 子句中对列使用函数
 

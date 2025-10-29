@@ -161,7 +161,7 @@ public class Config extends StateMachineConfigurerAdapter<States, Events> {
                 .action(transitionAction(), errorAction()); // 带错误处理的 Action
     }
 
-    // -- 定义各种 Action Beans -- 
+    // -- 定义各种 Action Beans --
     @Bean
     public Action<States, Events> initialAction() {
         return context -> System.out.println("[Initial] Machine is starting.");
@@ -256,53 +256,53 @@ stateMachine.sendEvent(message);
 ## 6. 最佳实践与常见陷阱
 
 1. **保持 Action 轻量且无状态**
-    - **原因**：Action 在执行时会阻塞状态机的处理线程（默认是单线程）。长时间运行的操作会阻塞整个状态机。
-    - **实践**：将耗时操作（如网络调用、数据库查询、复杂计算）提交到独立的线程池或使用异步服务。在 Action 中只做快速的逻辑判断和状态更新。
+   - **原因**：Action 在执行时会阻塞状态机的处理线程（默认是单线程）。长时间运行的操作会阻塞整个状态机。
+   - **实践**：将耗时操作（如网络调用、数据库查询、复杂计算）提交到独立的线程池或使用异步服务。在 Action 中只做快速的逻辑判断和状态更新。
 
 2. **优先使用扩展状态而非全局变量**
-    - **原因**：扩展状态是状态机实例的一部分，与状态机的生命周期绑定，是线程安全的。
-    - **实践**：使用 `context.getExtendedState().getVariables()` 来在多个 Action 和 Guard 之间传递业务数据，而不是使用 Spring 容器的单例 Bean 或静态变量，后者会引入并发问题。
+   - **原因**：扩展状态是状态机实例的一部分，与状态机的生命周期绑定，是线程安全的。
+   - **实践**：使用 `context.getExtendedState().getVariables()` 来在多个 Action 和 Guard 之间传递业务数据，而不是使用 Spring 容器的单例 Bean 或静态变量，后者会引入并发问题。
 
 3. **明智地发送新事件**
-    - **原因**：在 Action 中直接调用 `stateMachine.sendEvent()` 可能导致递归或难以调试的循环。
-    - **实践**：尽量避免。如果必须，考虑使用异步发送或利用 `@Async` 注解，以避免在当前状态机线程中立即处理新事件。
+   - **原因**：在 Action 中直接调用 `stateMachine.sendEvent()` 可能导致递归或难以调试的循环。
+   - **实践**：尽量避免。如果必须，考虑使用异步发送或利用 `@Async` 注解，以避免在当前状态机线程中立即处理新事件。
 
-    ```java
-    @Async // 确保在另一个线程中执行
-    public void triggerNextEvent(StateMachine<States, Events> stateMachine) {
-        stateMachine.sendEvent(Events.NEXT);
-    }
-    // 在 Action 中调用
-    myAsyncService.triggerNextEvent(context.getStateMachine());
-    ```
+   ```java
+   @Async // 确保在另一个线程中执行
+   public void triggerNextEvent(StateMachine<States, Events> stateMachine) {
+       stateMachine.sendEvent(Events.NEXT);
+   }
+   // 在 Action 中调用
+   myAsyncService.triggerNextEvent(context.getStateMachine());
+   ```
 
 4. **始终处理异常**
-    - **原因**：Action 中未捕获的异常会传播到状态机，可能导致状态不一致。
-    - **实践**：使用 `try-catch` 处理 Action 中可能出错的代码，或者配置专用的**错误 Action**。
-    - **示例**：见第 3 节 `errorAction()` 的配置方式。
+   - **原因**：Action 中未捕获的异常会传播到状态机，可能导致状态不一致。
+   - **实践**：使用 `try-catch` 处理 Action 中可能出错的代码，或者配置专用的**错误 Action**。
+   - **示例**：见第 3 节 `errorAction()` 的配置方式。
 
 5. **谨慎使用 `stateDoAction`**
-    - **原因**：`stateDoAction` 通常与计时器配合，如果不正确管理，可能导致资源泄漏或意外行为。
-    - **实践**：确保你了解其生命周期。使用 `StateDoActionPolicy.IMMEDIATE_CANCEL`（默认）或 `TIMEOUT_CANCEL` 来控制在状态退出时如何取消正在运行的 `stateDoAction`。
+   - **原因**：`stateDoAction` 通常与计时器配合，如果不正确管理，可能导致资源泄漏或意外行为。
+   - **实践**：确保你了解其生命周期。使用 `StateDoActionPolicy.IMMEDIATE_CANCEL`（默认）或 `TIMEOUT_CANCEL` 来控制在状态退出时如何取消正在运行的 `stateDoAction`。
 
-    ```java
-    @Override
-    public void configure(StateMachineConfigurationConfigurer<States, Events> config) throws Exception {
-        config
-            .withConfiguration()
-            .stateDoActionPolicy(StateDoActionPolicy.TIMEOUT_CANCEL)
-            .stateDoActionPolicyTimeout(10, TimeUnit.SECONDS); // 设置超时
-    }
-    ```
+   ```java
+   @Override
+   public void configure(StateMachineConfigurationConfigurer<States, Events> config) throws Exception {
+       config
+           .withConfiguration()
+           .stateDoActionPolicy(StateDoActionPolicy.TIMEOUT_CANCEL)
+           .stateDoActionPolicyTimeout(10, TimeUnit.SECONDS); // 设置超时
+   }
+   ```
 
 ## 7. 总结
 
-| 动作类型 | 配置方法 | 执行时机 | 适用场景 |
-| :--- | :--- | :--- | :--- |
-| **转换 Action** | `.action(...)` | 转换过程中 | 执行与特定状态转换紧密相关的逻辑 |
-| **进入 Action** | `.state(..., entryAction, ...)` | 进入一个状态后立即 | 状态初始化、资源分配 |
-| **退出 Action** | `.state(..., ..., exitAction)` | 退出一个状态前 | 资源清理、保存最终状态 |
-| **状态自身 Action** | `.stateDo(...)` | 状态活跃期间 | 轮询、等待、超时处理 |
-| **初始 Action** | `.initial(..., initialAction)` | 状态机/区域启动时 | 一次性初始化 |
+| 动作类型            | 配置方法                        | 执行时机           | 适用场景                         |
+| :------------------ | :------------------------------ | :----------------- | :------------------------------- |
+| **转换 Action**     | `.action(...)`                  | 转换过程中         | 执行与特定状态转换紧密相关的逻辑 |
+| **进入 Action**     | `.state(..., entryAction, ...)` | 进入一个状态后立即 | 状态初始化、资源分配             |
+| **退出 Action**     | `.state(..., ..., exitAction)`  | 退出一个状态前     | 资源清理、保存最终状态           |
+| **状态自身 Action** | `.stateDo(...)`                 | 状态活跃期间       | 轮询、等待、超时处理             |
+| **初始 Action**     | `.initial(..., initialAction)`  | 状态机/区域启动时  | 一次性初始化                     |
 
 通过深入理解和正确运用 Spring Statemachine 的 Actions，您可以清晰地将业务逻辑组织到状态机的各个生命周期阶段，构建出健壮、易维护、反应式的高质量应用程序。记住最佳实践，尤其是关于线程和异常处理的建议，将帮助您避免常见的陷阱。

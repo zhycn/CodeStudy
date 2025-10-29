@@ -26,24 +26,24 @@ author: zhycn
 
 ```sql
 -- 良好的格式示例
-SELECT 
+SELECT
     u.user_id,
     u.username,
     o.order_date,
     SUM(o.total_amount) AS total_spent
-FROM 
+FROM
     tbl_users AS u
     INNER JOIN tbl_orders AS o ON u.user_id = o.user_id
-WHERE 
+WHERE
     u.created_at >= '2024-01-01'
     AND o.status = 'completed'
-GROUP BY 
-    u.user_id, 
-    u.username, 
+GROUP BY
+    u.user_id,
+    u.username,
     o.order_date
-HAVING 
+HAVING
     SUM(o.total_amount) > 1000
-ORDER BY 
+ORDER BY
     total_spent DESC;
 ```
 
@@ -59,22 +59,22 @@ ORDER BY
 
 ```sql
 -- 计算活跃用户的总消费金额
-SELECT 
+SELECT
     user_id,
     SUM(amount) AS total_amount  -- 金额汇总
-FROM 
+FROM
     transactions
-WHERE 
+WHERE
     transaction_date >= CURRENT_DATE - INTERVAL '30 days'
     AND status = 'success'       -- 只统计成功交易
-/* 
+/*
  * 此查询用于生成用户活跃度报告
  * 创建日期：2024-01-15
  * 作者：DBA团队
  */
-GROUP BY 
+GROUP BY
     user_id
-HAVING 
+HAVING
     SUM(amount) > 1000;
 ```
 
@@ -89,12 +89,12 @@ HAVING
 SELECT * FROM employees;
 
 -- 推荐
-SELECT 
+SELECT
     employee_id,
     first_name,
     last_name,
     department_id
-FROM 
+FROM
     employees;
 ```
 
@@ -102,25 +102,25 @@ FROM
 
 ```sql
 -- 不推荐
-SELECT 
+SELECT
     department_id,
     AVG(salary) AS avg_salary
-FROM 
+FROM
     employees
-GROUP BY 
+GROUP BY
     department_id
-HAVING 
+HAVING
     department_id IN (10, 20);
 
 -- 推荐
-SELECT 
+SELECT
     department_id,
     AVG(salary) AS avg_salary
-FROM 
+FROM
     employees
-WHERE 
+WHERE
     department_id IN (10, 20)
-GROUP BY 
+GROUP BY
     department_id;
 ```
 
@@ -154,20 +154,20 @@ SELECT * FROM employees WHERE employee_id = 100;
 
 ```sql
 -- 不推荐（隐式连接）
-SELECT 
+SELECT
     e.name,
     d.department_name
-FROM 
-    employees e, 
+FROM
+    employees e,
     departments d
-WHERE 
+WHERE
     e.department_id = d.department_id;
 
 -- 推荐（显式连接）
-SELECT 
+SELECT
     e.name,
     d.department_name
-FROM 
+FROM
     employees e
     INNER JOIN departments d ON e.department_id = d.department_id;
 ```
@@ -176,14 +176,14 @@ FROM
 
 ```sql
 -- 不推荐
-SELECT * 
-FROM employees 
+SELECT *
+FROM employees
 WHERE department_id IN (SELECT department_id FROM departments WHERE location = 'NY');
 
 -- 推荐
-SELECT * 
+SELECT *
 FROM employees e
-WHERE EXISTS (SELECT 1 FROM departments d 
+WHERE EXISTS (SELECT 1 FROM departments d
               WHERE d.department_id = e.department_id AND d.location = 'NY');
 ```
 
@@ -205,8 +205,8 @@ CREATE TABLE orders (
     order_date DATE NOT NULL DEFAULT CURRENT_DATE,
     total_amount DECIMAL(10,2) CHECK (total_amount >= 0),
     status VARCHAR(20) CHECK (status IN ('pending', 'completed', 'cancelled')),
-    
-    CONSTRAINT fk_orders_customers 
+
+    CONSTRAINT fk_orders_customers
         FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
 ```
@@ -342,8 +342,8 @@ COMMIT TRANSACTION;
 
 ```sql
 CREATE OR REPLACE FUNCTION transfer_funds(
-    from_account INT, 
-    to_account INT, 
+    from_account INT,
+    to_account INT,
     amount DECIMAL
 ) RETURNS BOOLEAN AS $$
 DECLARE
@@ -354,19 +354,19 @@ BEGIN
         IF (SELECT balance FROM accounts WHERE account_id = from_account) < amount THEN
             RAISE EXCEPTION 'Insufficient funds';
         END IF;
-        
+
         -- 执行转账
         UPDATE accounts SET balance = balance - amount WHERE account_id = from_account;
         UPDATE accounts SET balance = balance + amount WHERE account_id = to_account;
-        
+
         v_success := TRUE;
         RETURN v_success;
-        
+
     EXCEPTION
         WHEN others THEN
             ROLLBACK;
             -- 记录错误日志
-            INSERT INTO error_logs (error_message, error_time) 
+            INSERT INTO error_logs (error_message, error_time)
             VALUES (SQLERRM, CURRENT_TIMESTAMP);
             RETURN FALSE;
     END;
@@ -409,12 +409,12 @@ CREATE TABLE users (
 );
 
 -- PostgreSQL示例
-INSERT INTO users (username, password_hash) 
+INSERT INTO users (username, password_hash)
 VALUES ('john_doe', crypt('my_password', gen_salt('bf')));
 
 -- 验证密码
-SELECT * FROM users 
-WHERE username = 'john_doe' 
+SELECT * FROM users
+WHERE username = 'john_doe'
 AND password_hash = crypt('input_password', password_hash);
 ```
 
@@ -440,20 +440,20 @@ AND password_hash = crypt('input_password', password_hash);
 
 ```sql
 EXPLAIN ANALYZE
-SELECT 
+SELECT
     e.first_name,
     e.last_name,
     d.department_name,
     COUNT(o.order_id) AS order_count
-FROM 
+FROM
     employees e
     JOIN departments d ON e.department_id = d.department_id
     LEFT JOIN orders o ON e.employee_id = o.sales_rep_id
-WHERE 
+WHERE
     e.hire_date > '2023-01-01'
-GROUP BY 
+GROUP BY
     e.employee_id, d.department_name
-HAVING 
+HAVING
     COUNT(o.order_id) > 5;
 ```
 

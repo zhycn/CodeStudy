@@ -55,7 +55,7 @@ public enum Events {
 @Configuration
 @EnableStateMachine
 public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States, Events> {
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<States, Events> states) throws Exception {
         states
@@ -63,7 +63,7 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States
             .initial(States.SI)    // 初始状态
             .states(EnumSet.allOf(States.class));
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<States, Events> transitions) throws Exception {
         transitions
@@ -156,7 +156,7 @@ implementation 'org.springframework.statemachine:spring-statemachine-starter:4.0
 @Configuration
 @EnableStateMachine
 public class SimpleStateMachineConfig extends EnumStateMachineConfigurerAdapter<States, Events> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<States, Events> config) throws Exception {
         config
@@ -164,7 +164,7 @@ public class SimpleStateMachineConfig extends EnumStateMachineConfigurerAdapter<
             .autoStartup(true)          // 自动启动
             .listener(stateMachineListener()); // 添加监听器
     }
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<States, Events> states) throws Exception {
         states
@@ -173,7 +173,7 @@ public class SimpleStateMachineConfig extends EnumStateMachineConfigurerAdapter<
             .end(States.SF)
             .states(EnumSet.allOf(States.class));
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<States, Events> transitions) throws Exception {
         transitions
@@ -186,7 +186,7 @@ public class SimpleStateMachineConfig extends EnumStateMachineConfigurerAdapter<
             .withExternal()
             .source(States.S2).target(States.SF).event(Events.E3);
     }
-    
+
     @Bean
     public StateMachineListener<States, Events> stateMachineListener() {
         return new StateMachineListenerAdapter<States, Events>() {
@@ -204,21 +204,21 @@ public class SimpleStateMachineConfig extends EnumStateMachineConfigurerAdapter<
 ```java
 @SpringBootApplication
 public class Application implements CommandLineRunner {
-    
+
     @Autowired
     private StateMachine<States, Events> stateMachine;
-    
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-    
+
     @Override
     public void run(String... args) throws Exception {
         // 发送事件触发状态转换
         stateMachine.sendEvent(Events.E1);
         stateMachine.sendEvent(Events.E2);
         stateMachine.sendEvent(Events.E3);
-        
+
         // 获取当前状态
         System.out.println("当前状态: " + stateMachine.getState().getId());
     }
@@ -291,17 +291,17 @@ public void configure(StateMachineStateConfigurer<States, Events> states) throws
 ```java
 @WithStateMachine
 public class StateMachineAnnotatedActions {
-    
+
     @OnTransition
     public void anyTransition() {
         System.out.println("发生状态转换");
     }
-    
+
     @OnTransition(source = "S1", target = "S2")
     public void fromS1ToS2() {
         System.out.println("从状态S1转换到S2");
     }
-    
+
     @OnStateChanged(source = States.S1)
     public void onStateS1() {
         System.out.println("进入状态S1");
@@ -323,7 +323,7 @@ public StateMachinePersister<States, Events, String> persister() {
         public void write(StateMachineContext<States, Events> context, String contextObj) throws Exception {
             // 实现状态机上下文持久化逻辑
         }
-        
+
         @Override
         public StateMachineContext<States, Events> read(String contextObj) throws Exception {
             // 实现状态机上下文恢复逻辑
@@ -341,14 +341,14 @@ Spring Statemachine 支持分布式状态机，可以在多个 JVM 实例间共�
 @Configuration
 @EnableStateMachine
 public class DistributedStateMachineConfig extends EnumStateMachineConfigurerAdapter<States, Events> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<States, Events> config) throws Exception {
         config
             .withDistributed()
             .ensemble(stateMachineEnsemble());
     }
-    
+
     @Bean
     public StateMachineEnsemble<States, Events> stateMachineEnsemble() {
         // 创建分布式状态机集群
@@ -366,7 +366,7 @@ Spring Statemachine 提供了完善的错误处理机制。
 @Configuration
 @EnableStateMachine
 public class ErrorHandlingConfig extends EnumStateMachineConfigurerAdapter<States, Events> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<States, Events> config) throws Exception {
         config

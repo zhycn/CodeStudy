@@ -79,8 +79,8 @@ SELECT MAX(salary) AS max_salary FROM employees; -- 最大值
 SELECT MIN(salary) AS min_salary FROM employees; -- 最小值
 
 -- 与 GROUP BY 结合使用
-SELECT department, AVG(salary) AS avg_salary 
-FROM employees 
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
 GROUP BY department;
 ```
 
@@ -154,8 +154,8 @@ FROM products;
 DELIMITER //
 CREATE PROCEDURE GetEmployeesByDepartment(IN dept_name VARCHAR(100))
 BEGIN
-    SELECT employee_id, name, salary 
-    FROM employees 
+    SELECT employee_id, name, salary
+    FROM employees
     WHERE department = dept_name;
 END //
 DELIMITER ;
@@ -168,7 +168,7 @@ CREATE OR REPLACE FUNCTION GetEmployeesByDepartment(dept_name VARCHAR)
 RETURNS TABLE(employee_id INT, name VARCHAR, salary DECIMAL) AS $$
 BEGIN
     RETURN QUERY
-    SELECT e.employee_id, e.name, e.salary 
+    SELECT e.employee_id, e.name, e.salary
     FROM employees e
     WHERE e.department = dept_name;
 END;
@@ -256,9 +256,9 @@ BEGIN
     SET clean_phone = REPLACE(clean_phone, '-', '');
     SET clean_phone = REPLACE(clean_phone, '(', '');
     SET clean_phone = REPLACE(clean_phone, ')', '');
-    
-    RETURN CONCAT(SUBSTRING(clean_phone, 1, 3), '-', 
-                 SUBSTRING(clean_phone, 4, 3), '-', 
+
+    RETURN CONCAT(SUBSTRING(clean_phone, 1, 3), '-',
+                 SUBSTRING(clean_phone, 4, 3), '-',
                  SUBSTRING(clean_phone, 7, 4));
 END //
 DELIMITER ;
@@ -287,7 +287,7 @@ RETURNS DECIMAL(10,2)
 DETERMINISTIC
 BEGIN
     DECLARE tax DECIMAL(10,2);
-    
+
     IF salary <= 3000 THEN
         SET tax = 0;
     ELSEIF salary <= 6000 THEN
@@ -295,7 +295,7 @@ BEGIN
     ELSE
         SET tax = 300 + (salary - 6000) * 0.2;
     END IF;
-    
+
     RETURN tax;
 END //
 DELIMITER ;
@@ -354,7 +354,7 @@ $$ LANGUAGE plpgsql;
 ```
 
 3. **合理使用索引**：
-确保函数操作的数据表上有合适的索引，但注意函数可能使索引失效。
+   确保函数操作的数据表上有合适的索引，但注意函数可能使索引失效。
 
 ### 5.2 可维护性设计
 
@@ -395,7 +395,7 @@ $$ LANGUAGE plpgsql;
 ```
 
 3. **保持函数简洁**：
-将复杂逻辑分解为多个小函数，每个函数只负责单一功能。
+   将复杂逻辑分解为多个小函数，每个函数只负责单一功能。
 
 ### 5.3 错误处理与调试
 
@@ -411,7 +411,7 @@ BEGIN
         RAISE NOTICE '除零错误，参数：%, %', numerator, denominator;
         RETURN NULL;
     END IF;
-    
+
     RETURN numerator / denominator;
 EXCEPTION
     WHEN OTHERS THEN
@@ -430,11 +430,11 @@ RETURNS DECIMAL(10,2)
 DETERMINISTIC
 BEGIN
     DECLARE result DECIMAL(10,2);
-    
+
     IF denominator = 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = '除数不能为零';
     END IF;
-    
+
     SET result = numerator / denominator;
     RETURN result;
 END //
@@ -447,12 +447,12 @@ DELIMITER ;
 
 ### 6.1 语法差异对比
 
-| 特性 | MySQL | PostgreSQL |
-|------|-------|------------|
-| **函数创建** | `CREATE FUNCTION` | `CREATE OR REPLACE FUNCTION` |
-| **语言指定** | 不需要显式指定 | 需要 `LANGUAGE` 子句 |
-| **分隔符更改** | 需要 `DELIMITER` | 使用 `$$` 或其他分隔符 |
-| **返回值结构** | 简单 `RETURNS` 子句 | 支持复杂返回类型 |
+| 特性           | MySQL               | PostgreSQL                   |
+| -------------- | ------------------- | ---------------------------- |
+| **函数创建**   | `CREATE FUNCTION`   | `CREATE OR REPLACE FUNCTION` |
+| **语言指定**   | 不需要显式指定      | 需要 `LANGUAGE` 子句         |
+| **分隔符更改** | 需要 `DELIMITER`    | 使用 `$$` 或其他分隔符       |
+| **返回值结构** | 简单 `RETURNS` 子句 | 支持复杂返回类型             |
 
 ### 6.2 具体实现差异
 
@@ -502,13 +502,13 @@ SELECT DATE('2024-12-31') - DATE('2024-01-01'); -- 日期差
 
 虽然函数和存储过程都是数据库编程的重要组件，但它们有显著区别。
 
-| 特性 | SQL 函数 | 存储过程 |
-|------|----------|----------|
-| **返回值** | 必须返回单个值或表 | 可以返回零个或多个结果集 |
+| 特性         | SQL 函数              | 存储过程                   |
+| ------------ | --------------------- | -------------------------- |
+| **返回值**   | 必须返回单个值或表    | 可以返回零个或多个结果集   |
 | **调用方式** | 在 SQL 语句中直接调用 | 使用 `CALL` 或 `EXEC` 命令 |
-| **事务控制** | 通常不支持事务 | 支持完整的事务控制 |
-| **使用场景** | 计算和数据处理 | 复杂业务逻辑和数据操作 |
-| **性能** | 相对较低 | 相对较高 |
+| **事务控制** | 通常不支持事务        | 支持完整的事务控制         |
+| **使用场景** | 计算和数据处理        | 复杂业务逻辑和数据操作     |
+| **性能**     | 相对较低              | 相对较高                   |
 
 ## 8. 实际案例研究
 
@@ -528,7 +528,7 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT 
+    SELECT
         p.name AS product_name,
         SUM(oi.quantity) AS total_units,
         SUM(oi.quantity * oi.unit_price) AS total_revenue,
@@ -560,7 +560,7 @@ BEGIN
     DECLARE clean_name VARCHAR(255);
     SET clean_name = TRIM(raw_name);
     SET clean_name = REGEXP_REPLACE(clean_name, '[0-9]', ''); -- 移除数字
-    SET clean_name = CONCAT(UPPER(SUBSTRING(clean_name, 1, 1)), 
+    SET clean_name = CONCAT(UPPER(SUBSTRING(clean_name, 1, 1)),
                            LOWER(SUBSTRING(clean_name, 2))); -- 首字母大写
     RETURN clean_name;
 END //

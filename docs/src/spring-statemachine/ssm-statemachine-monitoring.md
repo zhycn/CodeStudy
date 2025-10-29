@@ -82,14 +82,14 @@ Spring Statemachine 提供了多种监控指标：
 
 ### 4.1 内置指标
 
-| 指标名称 | 类型 | 描述 |
-|---------|------|------|
-| `ssm.transition.count` | Counter | 状态转换次数 |
-| `ssm.transition.duration` | Timer | 状态转换耗时 |
-| `ssm.action.duration` | Timer | 动作执行耗时 |
-| `ssm.guard.duration` | Timer | 守卫条件评估耗时 |
-| `ssm.state.entry.count` | Counter | 状态进入次数 |
-| `ssm.state.exit.count` | Counter | 状态退出次数 |
+| 指标名称                  | 类型    | 描述             |
+| ------------------------- | ------- | ---------------- |
+| `ssm.transition.count`    | Counter | 状态转换次数     |
+| `ssm.transition.duration` | Timer   | 状态转换耗时     |
+| `ssm.action.duration`     | Timer   | 动作执行耗时     |
+| `ssm.guard.duration`      | Timer   | 守卫条件评估耗时 |
+| `ssm.state.entry.count`   | Counter | 状态进入次数     |
+| `ssm.state.exit.count`    | Counter | 状态退出次数     |
 
 ### 4.2 自定义指标
 
@@ -106,8 +106,8 @@ public class CustomStateMachineMonitor extends StateMachineMonitorAdapter<String
     }
 
     @Override
-    public void transition(StateMachine<String, String> stateMachine, 
-                         Transition<String, String> transition, 
+    public void transition(StateMachine<String, String> stateMachine,
+                         Transition<String, String> transition,
                          long duration) {
         customTransitionCounter.increment();
         // 添加自定义逻辑
@@ -119,8 +119,8 @@ public class CustomStateMachineMonitor extends StateMachineMonitorAdapter<String
     }
 
     @Override
-    public void action(StateMachine<String, String> stateMachine, 
-                      Action<String, String> action, 
+    public void action(StateMachine<String, String> stateMachine,
+                      Action<String, String> action,
                       long duration) {
         customActionTimer.record(duration, TimeUnit.MILLISECONDS);
     }
@@ -247,7 +247,7 @@ public class StateMachineTelemetry {
             .setAttribute("source_state", source)
             .setAttribute("target_state", target)
             .startSpan();
-        
+
         try (Scope scope = span.makeCurrent()) {
             // 记录指标
             meter.counterBuilder("statemachine_transitions_total")
@@ -280,15 +280,15 @@ public class PerformanceMonitor extends StateMachineMonitorAdapter<String, Strin
     }
 
     @Override
-    public void transition(StateMachine<String, String> stateMachine, 
-                         Transition<String, String> transition, 
+    public void transition(StateMachine<String, String> stateMachine,
+                         Transition<String, String> transition,
                          long duration) {
         transitionDurationSummary.record(duration);
-        
+
         // 检测慢转换
         if (duration > 1000) { // 超过 1 秒认为是慢转换
             slowTransitionCounter.increment();
-            log.warn("Slow transition detected: {} -> {} took {}ms", 
+            log.warn("Slow transition detected: {} -> {} took {}ms",
                     transition.getSource().getId(),
                     transition.getTarget().getId(),
                     duration);
@@ -354,17 +354,17 @@ alerting:
       labels:
         severity: warning
       annotations:
-        summary: "State machine experiencing slow transitions"
-        description: "The state machine has more than 0.1 slow transitions per second for 5 minutes"
-    
+        summary: 'State machine experiencing slow transitions'
+        description: 'The state machine has more than 0.1 slow transitions per second for 5 minutes'
+
     - alert: StateMachineErrorRateHigh
       expr: rate(statemachine_transition_errors_total[5m]) / rate(statemachine_transitions_total[5m]) > 0.05
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "High error rate in state machine transitions"
-        description: "More than 5% of state machine transitions are failing"
+        summary: 'High error rate in state machine transitions'
+        description: 'More than 5% of state machine transitions are failing'
 ```
 
 ### 8.2 集成通知系统
@@ -376,7 +376,7 @@ public class StateMachineAlertNotifier {
     private final NotificationService notificationService;
     private final MeterRegistry meterRegistry;
 
-    public StateMachineAlertNotifier(NotificationService notificationService, 
+    public StateMachineAlertNotifier(NotificationService notificationService,
                                    MeterRegistry meterRegistry) {
         this.notificationService = notificationService;
         this.meterRegistry = meterRegistry;
@@ -388,7 +388,7 @@ public class StateMachineAlertNotifier {
             Counter counter = registry.counter("statemachine.slow.transitions");
             // 设置阈值检测
         };
-        
+
         slowTransitionBinder.bindTo(meterRegistry);
     }
 
@@ -396,7 +396,7 @@ public class StateMachineAlertNotifier {
     public void handleSlowTransitionEvent(SlowTransitionEvent event) {
         notificationService.sendAlert(
             "State Machine Slow Transition Alert",
-            String.format("Transition from %s to %s took %d ms", 
+            String.format("Transition from %s to %s took %d ms",
                          event.getSourceState(),
                          event.getTargetState(),
                          event.getDuration())
@@ -409,14 +409,14 @@ public class SlowTransitionEvent extends ApplicationEvent {
     private final String targetState;
     private final long duration;
 
-    public SlowTransitionEvent(Object source, String sourceState, 
+    public SlowTransitionEvent(Object source, String sourceState,
                               String targetState, long duration) {
         super(source);
         this.sourceState = sourceState;
         this.targetState = targetState;
         this.duration = duration;
     }
-    
+
     // getters
 }
 ```
@@ -537,12 +537,12 @@ public class OptimizedStateMachineConfig extends StateMachineConfigurerAdapter<S
 }
 
 public class PerformanceOptimizedListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void stateChanged(State<String, String> from, State<String, String> to) {
         // 优化状态变更处理
     }
-    
+
     @Override
     public void eventNotAccepted(Message<String> event) {
         // 优化事件处理
@@ -558,14 +558,14 @@ public class PerformanceOptimizedListener extends StateMachineListenerAdapter<St
 @Slf4j
 @Component
 public class DetailedStateMachineListener extends StateMachineListenerAdapter<String, String> {
-    
+
     @Override
     public void stateChanged(State<String, String> from, State<String, String> to) {
-        log.debug("State changed from {} to {}", 
-                 from != null ? from.getId() : "null", 
+        log.debug("State changed from {} to {}",
+                 from != null ? from.getId() : "null",
                  to.getId());
     }
-    
+
     @Override
     public void transition(Transition<String, String> transition) {
         log.debug("Transition: {}", transition);
@@ -587,7 +587,7 @@ public class StateMachineHealthIndicator implements HealthIndicator {
 
     @Override
     public Health health() {
-        if (stateMachine.getState() != null && 
+        if (stateMachine.getState() != null &&
             !stateMachine.getState().getId().equals("ERROR")) {
             return Health.up()
                 .withDetail("currentState", stateMachine.getState().getId())

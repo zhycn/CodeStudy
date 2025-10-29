@@ -42,10 +42,10 @@ INNER JOIN departments ON employees.department_id = departments.department_id;
 
 **结果示例：**
 
-| name | department_name |
-|------|----------------|
+| name  | department_name |
+| ----- | --------------- |
 | Alice | Human Resources |
-| Bob | IT |
+| Bob   | IT              |
 
 当两个表中存在匹配的 department_id 时，才会返回对应的员工和部门信息。
 
@@ -61,11 +61,11 @@ LEFT JOIN departments ON employees.department_id = departments.department_id;
 
 **结果示例：**
 
-| name | department_name |
-|------|----------------|
-| Alice | Human Resources |
-| Bob | IT |
-| Charlie | NULL |
+| name    | department_name |
+| ------- | --------------- |
+| Alice   | Human Resources |
+| Bob     | IT              |
+| Charlie | NULL            |
 
 Charlie 员工没有对应的部门信息，但依然出现在结果中。
 
@@ -81,11 +81,11 @@ RIGHT JOIN departments ON employees.department_id = departments.department_id;
 
 **结果示例：**
 
-| name | department_name |
-|------|----------------|
+| name  | department_name |
+| ----- | --------------- |
 | Alice | Human Resources |
-| Bob | IT |
-| NULL | Marketing |
+| Bob   | IT              |
+| NULL  | Marketing       |
 
 Marketing 部门没有员工，但仍会出现在结果中。
 
@@ -109,12 +109,12 @@ FROM employees RIGHT JOIN departments ON employees.department_id = departments.d
 
 **结果示例：**
 
-| name | department_name |
-|------|----------------|
-| Alice | Human Resources |
-| Bob | IT |
-| Charlie | NULL |
-| NULL | Marketing |
+| name    | department_name |
+| ------- | --------------- |
+| Alice   | Human Resources |
+| Bob     | IT              |
+| Charlie | NULL            |
+| NULL    | Marketing       |
 
 ### 2.5 CROSS JOIN（交叉连接）
 
@@ -208,7 +208,7 @@ for each row R1 in driving_table:
 
 ```sql
 -- 连接三个表
-SELECT 
+SELECT
     users.username,
     orders.order_date,
     products.product_name,
@@ -227,7 +227,7 @@ INNER JOIN products ON order_items.product_id = products.product_id;
 -- 多条件连接
 SELECT *
 FROM table1
-INNER JOIN table2 ON table1.col1 = table2.col1 
+INNER JOIN table2 ON table1.col1 = table2.col1
     AND table1.col2 = table2.col2
     AND table1.date >= table2.start_date
     AND table1.date <= table2.end_date;
@@ -235,7 +235,7 @@ INNER JOIN table2 ON table1.col1 = table2.col1
 -- 使用 OR 条件的连接（注意性能影响）
 SELECT *
 FROM employees e
-LEFT JOIN departments d ON e.dept_id = d.dept_id 
+LEFT JOIN departments d ON e.dept_id = d.dept_id
     OR (e.dept_id IS NULL AND d.dept_name = 'Unassigned');
 ```
 
@@ -280,7 +280,7 @@ INNER JOIN large_table1 t1 ON t2.id = t1.id;
 
 ```sql
 -- 推荐写法
-SELECT 
+SELECT
     e.employee_id,
     e.name,
     d.department_name,
@@ -339,7 +339,7 @@ SELECT * FROM employees CROSS JOIN departments; -- 明确意图
 
 ```sql
 -- 查询用户订单详情
-SELECT 
+SELECT
     u.username,
     o.order_id,
     o.order_date,
@@ -358,7 +358,7 @@ ORDER BY o.order_date DESC;
 
 ```sql
 -- 组织架构查询
-SELECT 
+SELECT
     e.name AS employee_name,
     m.name AS manager_name,
     d.department_name

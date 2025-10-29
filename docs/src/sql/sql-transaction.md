@@ -72,12 +72,12 @@ COMMIT;
 
 SQL标准定义了四个隔离级别，解决不同程度的并发问题：
 
-| 隔离级别 | 脏读 | 不可重复读 | 幻读 | 性能 | 适用场景 |
-|---------|------|------------|------|------|---------|
-| **读未提交** (READ UNCOMMITTED) | ❌ 允许 | ❌ 允许 | ❌ 允许 | 最佳 | 对数据一致性要求极低，统计近似值 |
-| **读已提交** (READ COMMITTED) | ✅ 防止 | ❌ 允许 | ❌ 允许 | 良好 | 多数OLTP系统，Oracle默认级别 |
-| **可重复读** (REPEATABLE READ) | ✅ 防止 | ✅ 防止 | ❌ 允许 | 中等 | 需要数据稳定视图，MySQL默认级别 |
-| **串行化** (SERIALIZABLE) | ✅ 防止 | ✅ 防止 | ✅ 防止 | 最差 | 金融交易等最高一致性要求 |
+| 隔离级别                        | 脏读    | 不可重复读 | 幻读    | 性能 | 适用场景                         |
+| ------------------------------- | ------- | ---------- | ------- | ---- | -------------------------------- |
+| **读未提交** (READ UNCOMMITTED) | ❌ 允许 | ❌ 允许    | ❌ 允许 | 最佳 | 对数据一致性要求极低，统计近似值 |
+| **读已提交** (READ COMMITTED)   | ✅ 防止 | ❌ 允许    | ❌ 允许 | 良好 | 多数OLTP系统，Oracle默认级别     |
+| **可重复读** (REPEATABLE READ)  | ✅ 防止 | ✅ 防止    | ❌ 允许 | 中等 | 需要数据稳定视图，MySQL默认级别  |
+| **串行化** (SERIALIZABLE)       | ✅ 防止 | ✅ 防止    | ✅ 防止 | 最差 | 金融交易等最高一致性要求         |
 
 **设置隔离级别的SQL语法：**
 
@@ -177,7 +177,7 @@ SELECT stock FROM inventory WHERE product_id = 'P001' FOR UPDATE;
 UPDATE inventory SET stock = stock - 1 WHERE product_id = 'P001';
 
 -- 记录订单
-INSERT INTO orders (order_id, product_id, quantity, order_date) 
+INSERT INTO orders (order_id, product_id, quantity, order_date)
 VALUES ('O001', 'P001', 1, CURRENT_DATE);
 
 COMMIT;
@@ -285,8 +285,8 @@ SELECT * FROM accounts WHERE account_id = 'A' FOR UPDATE;
 
 -- 使用乐观锁（读多写少场景）
 -- 表中添加version字段
-UPDATE accounts 
-SET balance = balance - 100, version = version + 1 
+UPDATE accounts
+SET balance = balance - 100, version = version + 1
 WHERE account_id = 'A' AND version = @current_version;
 ```
 
@@ -398,31 +398,31 @@ BEGIN;
 -- 1. 检查库存
 SELECT stock INTO @current_stock FROM products WHERE product_id = 'P001';
 IF @current_stock >= @order_quantity THEN
-    
+
     -- 2. 扣减库存（使用悲观锁防止超卖）
-    UPDATE products 
-    SET stock = stock - @order_quantity 
+    UPDATE products
+    SET stock = stock - @order_quantity
     WHERE product_id = 'P001' AND stock >= @order_quantity;
-    
+
     IF ROW_COUNT() = 0 THEN
         ROLLBACK;
         SELECT 'Insufficient stock' AS result;
     END IF;
-    
+
     -- 3. 创建订单
     INSERT INTO orders (order_id, user_id, product_id, quantity, total_amount, status)
     VALUES ('O001', 'U001', 'P001', @order_quantity, @total_amount, 'pending');
-    
+
     -- 4. 扣减用户余额
     UPDATE users SET balance = balance - @total_amount WHERE user_id = 'U001';
-    
+
     -- 5. 记录账务流水
     INSERT INTO accounting_entries (entry_id, order_id, amount, entry_type)
     VALUES ('E001', 'O001', @total_amount, 'expense');
-    
+
     COMMIT;
     SELECT 'Order created successfully' AS result;
-    
+
 ELSE
     ROLLBACK;
     SELECT 'Insufficient stock' AS result;
@@ -435,8 +435,8 @@ END IF;
 
    ```sql
    -- 将库存热点数据分离到独立表
-   UPDATE product_inventory 
-   SET stock = stock - 1 
+   UPDATE product_inventory
+   SET stock = stock - 1
    WHERE product_id = 'P001';
    ```
 

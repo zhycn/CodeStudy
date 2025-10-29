@@ -1,52 +1,204 @@
-# EditorConfig is awesome: https://EditorConfig.org
+# ============================================================================
+# EditorConfig for Java + Spring Boot Project
+# ============================================================================
+#
+# This file defines coding style rules for the project.
+# EditorConfig helps maintain consistent coding styles across different editors
+# and IDEs. For more information, visit: https://EditorConfig.org
+#
+# Project Standards:
+# - Java: Google Java Style Guide (2-space indentation)
+# - Spring Boot: Standard Spring conventions
+# - File Encoding: UTF-8
+# - Line Endings: LF (Unix-style)
+# ============================================================================
 
-# top-most EditorConfig file
+# Top-most EditorConfig file - this stops searching for other .editorconfig files
 root = true
 
-# 所有文件的默认配置
+# ============================================================================
+# GLOBAL SETTINGS (applies to all files unless overridden)
+# ============================================================================
+
 [*]
-indent_style = space           # 缩进风格：空格
-indent_size = 4               # 缩进大小：4空格
-end_of_line = lf             # 换行符：LF (Linux/macOS 兼容)
-charset = utf-8              # 字符集：UTF-8
-trim_trailing_whitespace = true    # 自动删除行尾空格
-insert_final_newline = true       # 文件末尾自动插入空行
-max_line_length = 120          # 单行长度限制（推荐值）
+# Unix-style newlines with a newline ending every file
+end_of_line = lf
+# Ensure every file ends with a newline
+insert_final_newline = true
+# Use UTF-8 character encoding
+charset = utf-8
+# Remove trailing whitespace from lines
+trim_trailing_whitespace = true
+# Maximum line width (soft limit, some tools may enforce stricter limits)
+max_line_length = 100
 
-# Java相关文件配置
-[*.{java,kt,gradle}]
-indent_size = 4               # Java系保持4空格缩进
+# ============================================================================
+# JAVA AND SPRING BOOT SPECIFIC CONFIGURATIONS
+# ============================================================================
 
-# 前端开发文件配置
-[*.{js,jsx,ts,tsx,cts,mts,vue}]
-indent_size = 2               # JS/TS推荐2空格缩进
+# Java source files
+[*.java]
+indent_style = space
+indent_size = 2
+# Tab width for display purposes
+tab_width = 2
 
-# 样式文件配置
-[*.{css,scss,less,sass}]
-indent_size = 2               # 样式文件统一2空格
+# Spring Boot configuration files
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+# YAML files are sensitive to indentation
 
-# HTML模板配置
-[*.{html,htm}]
-indent_size = 2               # HTML缩进2空格
+# Spring Boot properties files
+[*.properties]
+indent_style = space
+indent_size = 4
 
-# 配置文件格式
-[*.{json,yml,yaml}]
-indent_size = 2               # 配置文件缩进2空格
-
-# XML文件配置
-[*.{xml,xsd,xslt}]
+# Maven POM files and XML configuration
+[*.xml]
+indent_style = space
 indent_size = 2
 
-# Markdown特殊配置
+# Gradle build files
+[*.gradle]
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# WEB AND FRONTEND FILES
+# ============================================================================
+
+# JavaScript/TypeScript files (for frontend components)
+[*.{js,ts,jsx,tsx,vue,mjs}]
+indent_style = space
+indent_size = 2
+
+# HTML templates
+[*.html]
+indent_style = space
+indent_size = 2
+
+# CSS/Sass stylesheets
+[*.{css,scss,less}]
+indent_style = space
+indent_size = 2
+
+# JSON configuration files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# DOCUMENTATION AND MARKUP
+# ============================================================================
+
+# Markdown documentation files
 [*.md]
-trim_trailing_whitespace = false   # 保留行尾空格（MD换行需两个空格）
-insert_final_newline = true        # 仍需保留末尾空行
-max_line_length = 0             # 禁用行长限制（适合自由格式文本）
+# Don't trim trailing whitespace in markdown (affects line breaks)
+trim_trailing_whitespace = false
+indent_style = space
+indent_size = 2
 
-# 特定文件例外处理
+# AsciiDoc documentation
+[*.adoc]
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# BUILD AND CONFIGURATION FILES
+# ============================================================================
+
+# Makefiles require tab indentation
 [Makefile]
-indent_style = tab            # Makefile必须用制表符
+indent_style = tab
 
-[*.min.{js,css}]
-trim_trailing_whitespace = false   # 压缩文件不做格式处理
-insert_final_newline = false
+# Package.json for Node.js dependencies
+[package.json]
+indent_style = space
+indent_size = 2
+
+# Dockerfile
+[Dockerfile]
+indent_style = space
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# SPRING BOOT SPECIFIC FILE TYPES
+# ============================================================================
+
+# Spring Boot application properties
+[application*.properties]
+indent_style = space
+indent_size = 4
+
+# Spring Boot profile-specific properties
+[application-*.properties]
+indent_style = space
+indent_size = 4
+
+# Spring configuration XML
+[*-context.xml]
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# TEST AND QUALITY ASSURANCE FILES
+# ============================================================================
+
+# Test configuration files
+[*.{test,spec}.{java,js,ts}]
+indent_style = space
+indent_size = 2
+
+# Code quality configuration
+[checkstyle*.xml]
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# IDE SPECIFIC CONFIGURATIONS
+# ============================================================================
+
+# IntelliJ IDEA project files
+[*.iml]
+indent_style = space
+indent_size = 2
+
+# Eclipse project files
+[.project,.classpath]
+indent_style = space
+indent_size = 2
+
+# VS Code settings
+[.vscode/*]
+indent_style = space
+indent_size = 2
+
+# ============================================================================
+# ADDITIONAL FILE TYPE SUPPORT
+# ============================================================================
+
+# Python scripts (if needed for build automation)
+[*.py]
+indent_style = space
+indent_size = 4
+
+# SQL scripts
+[*.sql]
+indent_style = space
+indent_size = 2
+
+# Batch files (Windows)
+[*.bat]
+indent_style = space
+indent_size = 2
+
+# PowerShell scripts
+[*.ps1]
+indent_style = space
+indent_size = 2

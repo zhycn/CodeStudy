@@ -46,11 +46,11 @@ Spring Shell 是 Spring 生态系统中用于构建**交互式命令行应用**�
 
 ### 1.2 与其他框架对比
 
-| 框架 | 特点 |
-|------|------|
+| 框架         | 特点                                                    |
+| ------------ | ------------------------------------------------------- |
 | Spring Shell | 基于 Spring，适合 Java 生态，支持依赖注入和复杂业务逻辑 |
-| Picocli | 轻量级，适合纯 Java 命令行工具，无需 Spring |
-| JLine | 提供终端交互基础能力（如 Tab 补全），需自行实现命令逻辑 |
+| Picocli      | 轻量级，适合纯 Java 命令行工具，无需 Spring             |
+| JLine        | 提供终端交互基础能力（如 Tab 补全），需自行实现命令逻辑 |
 
 ## 2. 环境搭建与项目配置
 
@@ -74,17 +74,17 @@ Spring Shell 是 Spring 生态系统中用于构建**交互式命令行应用**�
 spring:
   shell:
     interactive:
-      enabled: true  # 启用交互式模式
+      enabled: true # 启用交互式模式
     command:
       stacktrace:
-        enabled: false  # 禁用详细堆栈信息
+        enabled: false # 禁用详细堆栈信息
 
 logging:
   level:
     root: INFO
-    com.example: DEBUG  # 设置项目包日志级别
+    com.example: DEBUG # 设置项目包日志级别
   pattern:
-    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %green(%m) %n"
+    console: '%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %green(%m) %n'
 ```
 
 ### 2.3 应用入口类
@@ -116,12 +116,12 @@ import org.springframework.shell.standard.ShellOption;
 
 @ShellComponent
 public class CustomerSheller {
-    
+
     @ShellMethod(value = "查询所有的客户")
     public void findAll() {
         // 业务逻辑
     }
-    
+
     @ShellMethod(key = {"customer", "insert"}, value = "新增用户")
     public void insert(@ShellOption(value = "-n", defaultValue = "unKnown") String name) {
         // 业务逻辑
@@ -143,21 +143,21 @@ import org.springframework.stereotype.Component;
 @Command(description = "客户管理命令集")
 @AllArgsConstructor
 public class CustomerCommander {
-    
+
     private final CustomerApplicationService service;
-    
+
     @Command(description = "查询所有的客户")
     public void findAll() {
         final Map<Integer, String> all = service.findAll();
         log.info("all: {}", all);
     }
-    
+
     @Command(command = {"customer", "insert"}, description = "新增用户")
     public void insert(@Option(shortNames = 'n', defaultValue = "unKnown") String name) {
         final Integer id = service.insert(name);
         log.info("id: {}, name: {}", id, name);
     }
-    
+
     @Command(command = {"customer", "update"}, description = "更新用户")
     public void update(@Option(shortNames = 'i') Integer id, @Option(shortNames = 'n') String name) {
         service.update(id, name);
@@ -168,13 +168,13 @@ public class CustomerCommander {
 
 ### 3.3 注解对比分析
 
-| 特性 | 旧版注解 | 新版注解 |
-|------|----------|----------|
-| 类级别注解 | `@ShellComponent` | `@Command` |
-| 方法级别注解 | `@ShellMethod` | `@Command` |
-| 参数注解 | `@ShellOption` | `@Option` |
-| 命令结构 | 通过key属性定义层级 | 通过command数组直接定义层级 |
-| 参数命名 | 使用value属性 | 使用shortNames/longNames |
+| 特性         | 旧版注解            | 新版注解                    |
+| ------------ | ------------------- | --------------------------- |
+| 类级别注解   | `@ShellComponent`   | `@Command`                  |
+| 方法级别注解 | `@ShellMethod`      | `@Command`                  |
+| 参数注解     | `@ShellOption`      | `@Option`                   |
+| 命令结构     | 通过key属性定义层级 | 通过command数组直接定义层级 |
+| 参数命名     | 使用value属性       | 使用shortNames/longNames    |
 
 新版注解的主要优势在于**更直观的命令层级定义**和**更符合标准命令行工具约定的参数命名方式**。
 
@@ -189,7 +189,7 @@ Spring Shell 提供了灵活的参数处理机制，支持多种参数传递方�
 ```java
 @Command(description = "参数演示命令")
 public class ParameterDemo {
-    
+
     @Command(description = "演示位置参数和命名参数")
     public String echo(int a, int b, int c) {
         return String.format("You said a=%d, b=%d, c=%d", a, b, c);
@@ -211,19 +211,19 @@ echo --a 1 2 3              # 混合方式
 ```java
 @Command(description = "高级参数演示")
 public class AdvancedParameterDemo {
-    
+
     // 可选参数与默认值
     @Command(description = "打招呼")
     public String greet(@Option(shortNames = 'w', defaultValue = "World") String who) {
         return "Hello " + who;
     }
-    
+
     // 多值参数
     @Command(description = "数字求和")
     public float add(@Option(shortNames = 'n', arity = 3) float[] numbers) {
         return numbers[0] + numbers[1] + numbers[2];
     }
-    
+
     // 布尔参数的特殊处理
     @Command(description = "系统关闭")
     public String shutdown(boolean force) {
@@ -246,7 +246,7 @@ Spring Shell 集成了 Bean Validation API，支持参数自动验证：
 ```java
 @Command(description = "参数验证演示")
 public class ValidationDemo {
-    
+
     @Command(description = "修改密码")
     public String changePassword(@Size(min = 8, max = 40) String password) {
         return "Password successfully set to " + password;
@@ -269,24 +269,24 @@ The following constraints were not met:
 ```java
 @Command(description = "连接管理")
 public class ConnectionCommands {
-    
+
     private boolean connected;
-    
+
     @Command(description = "连接服务器")
     public void connect(String user, String password) {
         // 连接逻辑
         connected = true;
     }
-    
+
     @Command(description = "下载数据")
     public void download() {
         // 下载逻辑
     }
-    
+
     // 动态可用性控制
     public Availability downloadAvailability() {
-        return connected ? 
-            Availability.available() : 
+        return connected ?
+            Availability.available() :
             Availability.unavailable("您尚未连接服务器");
     }
 }
@@ -311,7 +311,7 @@ import org.springframework.shell.jline.PromptProvider;
 
 @Configuration
 public class ShellConfiguration {
-    
+
     @Bean
     public PromptProvider promptProvider() {
         return () -> new AttributedString("my-shell:>");
@@ -360,13 +360,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Service
 public class CustomerApplicationService {
-    
+
     private final Map<Integer, String> customers = new ConcurrentHashMap<>();
-    
+
     public Map<Integer, String> findAll() {
         return ImmutableMap.copyOf(customers);
     }
-    
+
     public Integer insert(String name) {
         final Integer id = customers.keySet().stream()
                 .max(Comparator.naturalOrder())
@@ -374,16 +374,16 @@ public class CustomerApplicationService {
         customers.put(id, name);
         return id;
     }
-    
+
     public void update(Integer id, String name) {
         Validate.isTrue(customers.containsKey(id), "该ID: %s不存在".formatted(id));
         customers.put(id, name);
     }
-    
+
     public String findById(Integer id) {
         return customers.getOrDefault(id, "");
     }
-    
+
     public void delete(Integer id) {
         customers.remove(id);
     }
@@ -423,7 +423,7 @@ public class CustomerCommander {
     }
 
     @Command(command = {"customer", "update"}, description = "更新客户信息")
-    public void update(@Option(shortNames = 'i') Integer id, 
+    public void update(@Option(shortNames = 'i') Integer id,
                       @Option(shortNames = 'n') String name) {
         service.update(id, name);
         log.info("更新客户 ID: {}, 新姓名: {}", id, name);
@@ -485,7 +485,7 @@ public class SystemMonitorCommand {
         double cpuUsage = 0.0;
 
         if (osBean instanceof com.sun.management.OperatingSystemMXBean) {
-            com.sun.management.OperatingSystemMXBean sunOsBean = 
+            com.sun.management.OperatingSystemMXBean sunOsBean =
                 (com.sun.management.OperatingSystemMXBean) osBean;
             cpuUsage = sunOsBean.getProcessCpuLoad() * 100;
         } else {
@@ -565,9 +565,9 @@ my-shell:> find-all                # 最终验证
 ### 7.2 JDK 版本要求
 
 | Spring Shell 版本 | 最低 JDK 要求 | 推荐 JDK 版本 |
-|------------------|---------------|---------------|
-| 2.x | JDK 8 | JDK 11 或 17 |
-| 3.x | JDK 17 | JDK 21 |
+| ----------------- | ------------- | ------------- |
+| 2.x               | JDK 8         | JDK 11 或 17  |
+| 3.x               | JDK 17        | JDK 21        |
 
 ## 8. 性能优化与生产建议
 

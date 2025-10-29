@@ -18,14 +18,14 @@
 
 ### 3.1 状态信息
 
-* `State<S, E> getSource()`: 获取转换的**源状态**。在状态进入/退出时，此方法可能返回 `null`。
-* `State<S, E> getTarget()`: 获取转换的**目标状态**。在状态进入/退出时，此方法可能返回 `null`。
+- `State<S, E> getSource()`: 获取转换的**源状态**。在状态进入/退出时，此方法可能返回 `null`。
+- `State<S, E> getTarget()`: 获取转换的**目标状态**。在状态进入/退出时，此方法可能返回 `null`。
 
 ### 3.2 事件与消息
 
-* `Message<E> getMessage()`: 获取触发当前操作的 `Message` 对象。如果操作不是由事件直接触发的（例如定时器触发），则可能返回 `null`。
-* `E getEvent()`: 便捷方法，直接从 `getMessage()` 中提取事件 payload。等价于 `getMessage().getPayload()`。
-* `MessageHeaders getMessageHeaders()`: 获取伴随事件消息的所有头信息（Headers）。这是一个强大的功能，可以在事件传递时附加任意元数据。
+- `Message<E> getMessage()`: 获取触发当前操作的 `Message` 对象。如果操作不是由事件直接触发的（例如定时器触发），则可能返回 `null`。
+- `E getEvent()`: 便捷方法，直接从 `getMessage()` 中提取事件 payload。等价于 `getMessage().getPayload()`。
+- `MessageHeaders getMessageHeaders()`: 获取伴随事件消息的所有头信息（Headers）。这是一个强大的功能，可以在事件传递时附加任意元数据。
 
 ```java
 // 在发送事件时附加头信息
@@ -48,7 +48,7 @@ public Action<States, Events> processPaymentAction() {
 
 ### 3.3 扩展状态 (Extended State)
 
-* `ExtendedState getExtendedState()`: 获取状态机的扩展状态。扩展状态是一组存储在状态机内部的键值对（`Map<Object, Object>`），用于存储不属于状态定义本身但又会影响状态机行为的变量。
+- `ExtendedState getExtendedState()`: 获取状态机的扩展状态。扩展状态是一组存储在状态机内部的键值对（`Map<Object, Object>`），用于存储不属于状态定义本身但又会影响状态机行为的变量。
 
 ```java
 // 在 Action 中操作扩展状态变量
@@ -74,7 +74,7 @@ public Guard<States, Events> isMaxRetriesReachedGuard() {
 
 ### 3.4 状态机实例
 
-* `StateMachine<S, E> getStateMachine()`: 获取当前正在运行的状态机实例。这允许你在组件内部与状态机进行交互，例如发送新的事件。
+- `StateMachine<S, E> getStateMachine()`: 获取当前正在运行的状态机实例。这允许你在组件内部与状态机进行交互，例如发送新的事件。
 
 ```java
 public Action<States, Events> triggerRetryAction() {
@@ -90,12 +90,12 @@ public Action<States, Events> triggerRetryAction() {
 
 ### 3.5 转换信息
 
-* `Transition<S, E> getTransition()`: 获取与当前上下文相关的 `Transition` 对象。这在复杂的监听逻辑中非常有用。
+- `Transition<S, E> getTransition()`: 获取与当前上下文相关的 `Transition` 对象。这在复杂的监听逻辑中非常有用。
 
 ### 3.6 异常信息
 
-* `Exception getException()`: 如果在操作执行过程中发生异常，可以通过此方法获取异常对象。常用于错误处理 Action 中。
-* `Object getStage()`: (**Deprecated in later versions**) 获取当前操作所处的阶段（如 `TRANSITION_START`, `STATE_ENTRY`）。更推荐使用 `StateContext` 本身所传递的语义来推断阶段。
+- `Exception getException()`: 如果在操作执行过程中发生异常，可以通过此方法获取异常对象。常用于错误处理 Action 中。
+- `Object getStage()`: (**Deprecated in later versions**) 获取当前操作所处的阶段（如 `TRANSITION_START`, `STATE_ENTRY`）。更推荐使用 `StateContext` 本身所传递的语义来推断阶段。
 
 ## 4. 使用场景与代码示例
 
@@ -128,12 +128,12 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<States, Ev
         return context -> {
             // 1. 获取事件中的订单ID
             Long orderId = (Long) context.getMessageHeaders().get("orderId");
-            
+
             // 2. 访问扩展状态
             ExtendedState extendedState = context.getExtendedState();
             extendedState.getVariables().put("currentOrderId", orderId);
             extendedState.getVariables().put("processingStartTime", Instant.now());
-            
+
             // 3. 执行业务逻辑
             Order order = orderService.findById(orderId);
             try {
@@ -147,7 +147,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<States, Ev
             }
         };
     }
-    
+
     @Bean
     public Action<States, Events> retryAction() {
         return context -> {
@@ -187,10 +187,10 @@ public Guard<States, Events> processingSuccessGuard() {
         // 只有订单金额大于100且支付成功的订单才能进入SUCCESS
         Long orderId = context.getExtendedState().get("currentOrderId", Long.class);
         Order order = orderService.findById(orderId);
-        
+
         boolean isPaymentValid = paymentService.validatePayment(order);
         boolean isAmountLargeEnough = order.getAmount().compareTo(BigDecimal.valueOf(100)) > 0;
-        
+
         return isPaymentValid && isAmountLargeEnough;
     };
 }
@@ -226,12 +226,12 @@ public class StateMachineEventListener extends StateMachineListenerAdapter<State
     public void stateChanged(State<States, Events> from, State<States, Events> to) {
         // 状态改变监听
     }
-    
+
     @Override
     public void eventNotAccepted(Message<Events> event) {
         // 事件被拒绝监听
     }
-    
+
     // 更推荐使用 @WithStateMachine 和注解驱动监听，它们的方法参数可以直接注入 StateContext
 }
 ```
@@ -271,12 +271,12 @@ public class OrderStateListener {
 
 ## 6. 常见问题与陷阱 (FAQ)
 
-* **Q: `getSource()` 或 `getTarget()` 返回 `null`？**
-  * **A:** 这通常发生在状态进入（entry）或退出（exit）的 Action 中，因为这些 Action 并不直接关联于一个“转换”，而是关联于一个状态。此时应使用状态本身的ID或通过其他方式（如扩展状态）来获取所需信息。
-* **Q: `getMessage()` 返回 `null`？**
-  * **A:** 如果当前操作不是由显式发送的 `Message` 事件触发的（例如，由初始状态自动进入、定时器触发或历史状态恢复触发），则 `getMessage()` 会返回 `null`。你的代码需要能处理这种情况。
-* **Q: 如何在不同状态间共享复杂数据？**
-  * **A:** 最佳实践是使用 `ExtendedState`。将数据以键值对的形式存入，在需要的地方取出。对于复杂的对象，确保它是线程安全和可序列化的。
+- **Q: `getSource()` 或 `getTarget()` 返回 `null`？**
+  - **A:** 这通常发生在状态进入（entry）或退出（exit）的 Action 中，因为这些 Action 并不直接关联于一个“转换”，而是关联于一个状态。此时应使用状态本身的ID或通过其他方式（如扩展状态）来获取所需信息。
+- **Q: `getMessage()` 返回 `null`？**
+  - **A:** 如果当前操作不是由显式发送的 `Message` 事件触发的（例如，由初始状态自动进入、定时器触发或历史状态恢复触发），则 `getMessage()` 会返回 `null`。你的代码需要能处理这种情况。
+- **Q: 如何在不同状态间共享复杂数据？**
+  - **A:** 最佳实践是使用 `ExtendedState`。将数据以键值对的形式存入，在需要的地方取出。对于复杂的对象，确保它是线程安全和可序列化的。
 
 ## 7. 总结
 

@@ -61,18 +61,18 @@ public class StateMachineBuilderConfig {
     @Bean
     public StateMachine<String, String> stateMachine() throws Exception {
         Builder<String, String> builder = StateMachineBuilder.builder();
-        
+
         builder.configureConfiguration()
             .withConfiguration()
             .machineId("paymentProcessingMachine"); // 设置状态机 ID
-        
+
         builder.configureStates()
             .withStates()
             .initial("PAYMENT_PENDING")
             .state("PAYMENT_PROCESSING")
             .state("PAYMENT_COMPLETED")
             .state("PAYMENT_FAILED");
-        
+
         builder.configureTransitions()
             .withExternal()
                 .source("PAYMENT_PENDING").target("PAYMENT_PROCESSING").event("PROCESS_PAYMENT")
@@ -82,7 +82,7 @@ public class StateMachineBuilderConfig {
             .and()
             .withExternal()
                 .source("PAYMENT_PROCESSING").target("PAYMENT_FAILED").event("PAYMENT_FAILURE");
-        
+
         return builder.build();
     }
 }
@@ -137,19 +137,19 @@ public class StateMachineFactoryConfig extends StateMachineConfigurerAdapter<Str
 ```java
 @Service
 public class OrderService {
-    
+
     @Autowired
     private StateMachine<String, String> stateMachine;
-    
+
     public void processOrder(String orderId) {
         // 获取状态机 ID
         String machineId = stateMachine.getId();
         System.out.println("Processing order with state machine: " + machineId);
-        
+
         // 发送事件
         stateMachine.sendEvent("PROCESS");
     }
-    
+
     public String getMachineId() {
         return stateMachine.getId();
     }
@@ -161,22 +161,22 @@ public class OrderService {
 ```java
 @Component
 public class StateMachineEventListener extends StateMachineListenerAdapter<String, String> {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(StateMachineEventListener.class);
-    
+
     @Override
     public void stateChanged(State<String, String> from, State<String, String> to) {
         // 在日志中包含状态机 ID
-        logger.info("State machine [{}] changed from {} to {}", 
-                   to.getStateMachine().getId(), 
-                   (from != null ? from.getId() : "none"), 
+        logger.info("State machine [{}] changed from {} to {}",
+                   to.getStateMachine().getId(),
+                   (from != null ? from.getId() : "none"),
                    to.getId());
     }
-    
+
     @Override
     public void eventNotAccepted(Message<String> event) {
-        logger.warn("Event {} not accepted by state machine [{}]", 
-                   event.getPayload(), 
+        logger.warn("Event {} not accepted by state machine [{}]",
+                   event.getPayload(),
                    event.getHeaders().get(StateMachineMessageHeaders.HEADER_STATEMACHINE_ID));
     }
 }
@@ -193,16 +193,16 @@ public class DistributedStateMachineConfig extends StateMachineConfigurerAdapter
 
     @Bean
     public CuratorFramework curatorFramework() {
-        return CuratorFrameworkFactory.newClient("localhost:2181", 
+        return CuratorFrameworkFactory.newClient("localhost:2181",
                 new ExponentialBackoffRetry(1000, 3));
     }
-    
+
     @Bean
     public StateMachineEnsemble<String, String> stateMachineEnsemble() {
         return new ZookeeperStateMachineEnsemble<String, String>(
             curatorFramework(), "/statemachine");
     }
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<String, String> config) throws Exception {
         config
@@ -212,7 +212,7 @@ public class DistributedStateMachineConfig extends StateMachineConfigurerAdapter
             .withDistributed()
             .ensemble(stateMachineEnsemble());
     }
-    
+
     @Override
     public void configure(StateMachineStateConfigurer<String, String> states) throws Exception {
         states
@@ -222,7 +222,7 @@ public class DistributedStateMachineConfig extends StateMachineConfigurerAdapter
             .state("COMPLETED")
             .state("FAILED");
     }
-    
+
     @Override
     public void configure(StateMachineTransitionConfigurer<String, String> transitions) throws Exception {
         transitions
@@ -243,12 +243,12 @@ public class DistributedStateMachineConfig extends StateMachineConfigurerAdapter
 ```java
 @Service
 public class StateMachineManager {
-    
+
     @Autowired
     private StateMachineFactory<String, String> stateMachineFactory;
-    
+
     private Map<String, StateMachine<String, String>> machines = new ConcurrentHashMap<>();
-    
+
     public StateMachine<String, String> getStateMachine(String machineId) {
         return machines.computeIfAbsent(machineId, id -> {
             StateMachine<String, String> machine = stateMachineFactory.getStateMachine(id);
@@ -256,14 +256,14 @@ public class StateMachineManager {
             return machine;
         });
     }
-    
+
     public void removeStateMachine(String machineId) {
         StateMachine<String, String> machine = machines.remove(machineId);
         if (machine != null) {
             machine.stop();
         }
     }
-    
+
     public Collection<String> getAllMachineIds() {
         return Collections.unmodifiableSet(machines.keySet());
     }
@@ -278,37 +278,37 @@ public class StateMachineManager {
 @Entity
 @Table(name = "state_machine_context")
 public class StateMachineContextEntity {
-    
+
     @Id
     private String machineId;
-    
+
     @Lob
     private byte[] contextData;
-    
+
     private String state;
-    
+
     private Date lastUpdated;
-    
+
     // Constructors, getters and setters
     public StateMachineContextEntity() {}
-    
+
     public StateMachineContextEntity(String machineId, byte[] contextData, String state) {
         this.machineId = machineId;
         this.contextData = contextData;
         this.state = state;
         this.lastUpdated = new Date();
     }
-    
+
     // Getters and setters
     public String getMachineId() { return machineId; }
     public void setMachineId(String machineId) { this.machineId = machineId; }
-    
+
     public byte[] getContextData() { return contextData; }
     public void setContextData(byte[] contextData) { this.contextData = contextData; }
-    
+
     public String getState() { return state; }
     public void setState(String state) { this.state = state; }
-    
+
     public Date getLastUpdated() { return lastUpdated; }
     public void setLastUpdated(Date lastUpdated) { this.lastUpdated = lastUpdated; }
 }
@@ -319,45 +319,45 @@ public class StateMachineContextEntity {
 ```java
 @Component
 public class JpaStateMachinePersister implements StateMachinePersister<String, String, String> {
-    
+
     @Autowired
     private StateMachineContextRepository repository;
-    
+
     @Autowired
     private ObjectMapper objectMapper;
-    
+
     @Override
     public void persist(StateMachine<String, String> stateMachine, String contextObj) throws Exception {
         String machineId = stateMachine.getId();
         String currentState = stateMachine.getState().getId();
-        
+
         // 序列化状态机上下文
         StateMachineContext<String, String> context = new DefaultStateMachineContext<>(
             stateMachine.getState().getId(),
             null, // 不存储扩展变量以简化示例
             null,
             stateMachine.getStateMachineAccessor().withAllRegions());
-        
+
         byte[] serializedContext = objectMapper.writeValueAsBytes(context);
-        
+
         // 保存到数据库
         StateMachineContextEntity entity = new StateMachineContextEntity(
             machineId, serializedContext, currentState);
-        
+
         repository.save(entity);
     }
-    
+
     @Override
     public StateMachineContext<String, String> restore(StateMachine<String, String> stateMachine, String contextObj) throws Exception {
         String machineId = stateMachine.getId();
-        
+
         Optional<StateMachineContextEntity> entityOpt = repository.findById(machineId);
         if (entityOpt.isPresent()) {
             StateMachineContextEntity entity = entityOpt.get();
-            return objectMapper.readValue(entity.getContextData(), 
+            return objectMapper.readValue(entity.getContextData(),
                 new TypeReference<StateMachineContext<String, String>>() {});
         }
-        
+
         return null;
     }
 }
@@ -373,7 +373,7 @@ public class JpaStateMachinePersister implements StateMachinePersister<String, S
    // 好例子 - 与业务实体关联
    .machineId("order_" + orderId)
    .machineId("user_" + userId + "_session")
-   
+
    // 坏例子 - 无意义的标识符
    .machineId("machine_1")
    .machineId("state_machine_123")
@@ -386,12 +386,12 @@ public class JpaStateMachinePersister implements StateMachinePersister<String, S
 ```java
 @Service
 public class StateMachineLifecycleManager {
-    
+
     @Autowired
     private StateMachineFactory<String, String> stateMachineFactory;
-    
+
     private final Map<String, StateMachine<String, String>> activeMachines = new ConcurrentHashMap<>();
-    
+
     public StateMachine<String, String> acquireStateMachine(String machineId) {
         return activeMachines.computeIfAbsent(machineId, id -> {
             StateMachine<String, String> machine = stateMachineFactory.getStateMachine(id);
@@ -399,14 +399,14 @@ public class StateMachineLifecycleManager {
             return machine;
         });
     }
-    
+
     public void releaseStateMachine(String machineId) {
         StateMachine<String, String> machine = activeMachines.remove(machineId);
         if (machine != null) {
             machine.stop();
         }
     }
-    
+
     public void cleanupInactiveMachines(long inactiveTimeoutMs) {
         long currentTime = System.currentTimeMillis();
         activeMachines.entrySet().removeIf(entry -> {
@@ -427,10 +427,10 @@ public class StateMachineLifecycleManager {
 @RestController
 @RequestMapping("/api/statemachines")
 public class StateMachineMonitoringController {
-    
+
     @Autowired
     private StateMachineManager stateMachineManager;
-    
+
     @GetMapping
     public List<StateMachineInfo> getAllStateMachines() {
         return stateMachineManager.getAllMachineIds().stream()
@@ -445,7 +445,7 @@ public class StateMachineMonitoringController {
             })
             .collect(Collectors.toList());
     }
-    
+
     @GetMapping("/{machineId}")
     public StateMachineInfo getStateMachine(@PathVariable String machineId) {
         StateMachine<String, String> machine = stateMachineManager.getStateMachine(machineId);
@@ -456,28 +456,28 @@ public class StateMachineMonitoringController {
             machine.getExtendedState().getVariables()
         );
     }
-    
+
     @GetMapping("/{machineId}/history")
     public List<StateHistory> getStateHistory(@PathVariable String machineId) {
         // 实现状态历史查询逻辑
         return Collections.emptyList();
     }
-    
+
     public static class StateMachineInfo {
         private final String machineId;
         private final String currentState;
         private final Collection<String> allStates;
         private final Map<Object, Object> extendedState;
-        
+
         // Constructor, getters
     }
-    
+
     public static class StateHistory {
         private final String fromState;
         private final String toState;
         private final Date timestamp;
         private final String event;
-        
+
         // Constructor, getters
     }
 }
@@ -494,15 +494,15 @@ public class StateMachineMonitoringController {
 ```java
 @Component
 public class MachineIdGenerator {
-    
+
     public String generateOrderMachineId(String orderId) {
         return "order_" + orderId;
     }
-    
+
     public String generateUserSessionMachineId(String userId) {
         return "user_" + userId + "_session_" + System.currentTimeMillis();
     }
-    
+
     public String generateUniqueMachineId(String prefix) {
         return prefix + "_" + UUID.randomUUID().toString();
     }
@@ -518,16 +518,16 @@ public class MachineIdGenerator {
 ```java
 @Service
 public class DistributedIdGenerator {
-    
+
     @Autowired
     private ZooKeeper zooKeeper;
-    
+
     public String generateSequentialId(String pathPrefix) throws Exception {
-        String path = zooKeeper.create(pathPrefix + "-", 
-            new byte[0], 
-            ZooDefs.Ids.OPEN_ACL_UNSAFE, 
+        String path = zooKeeper.create(pathPrefix + "-",
+            new byte[0],
+            ZooDefs.Ids.OPEN_ACL_UNSAFE,
             CreateMode.EPHEMERAL_SEQUENTIAL);
-        
+
         return path.substring(pathPrefix.length() + 1);
     }
 }
@@ -606,29 +606,29 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 // 3. 服务类
 @Service
 public class OrderService {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     public void processOrder(String orderId) {
         System.out.println("Processing order: " + orderId);
         System.out.println("State machine ID: " + stateMachine.getId());
-        
+
         // 发送处理事件
         stateMachine.sendEvent(OrderEvents.PROCESS);
         System.out.println("Current state: " + stateMachine.getState().getId());
     }
-    
+
     public void shipOrder() {
         stateMachine.sendEvent(OrderEvents.SHIP);
         System.out.println("Current state: " + stateMachine.getState().getId());
     }
-    
+
     public void deliverOrder() {
         stateMachine.sendEvent(OrderEvents.DELIVER);
         System.out.println("Current state: " + stateMachine.getState().getId());
     }
-    
+
     public void cancelOrder() {
         stateMachine.sendEvent(OrderEvents.CANCEL);
         System.out.println("Current state: " + stateMachine.getState().getId());

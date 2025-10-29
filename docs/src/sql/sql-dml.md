@@ -30,11 +30,11 @@ INSERT INTO table_name (column1, column2, column3)
 VALUES (value1, value2, value3);
 
 -- 2. 不指定列名插入（需提供所有列的值）
-INSERT INTO table_name 
+INSERT INTO table_name
 VALUES (value1, value2, value3);
 
 -- 3. 批量插入
-INSERT INTO table_name (column1, column2) 
+INSERT INTO table_name (column1, column2)
 VALUES (value1, value2), (value3, value4), (value5, value6);
 ```
 
@@ -46,7 +46,7 @@ INSERT INTO employees (id, name, department, salary)
 VALUES (1, '张三', 'IT', 5000);
 
 -- 批量插入学生记录
-INSERT INTO students (name, age, class) 
+INSERT INTO students (name, age, class)
 VALUES ('李四', 20, '计算机科学'),
        ('王五', 22, '软件工程'),
        ('赵六', 21, '数据科学');
@@ -66,7 +66,7 @@ VALUES ('李四', 20, '计算机科学'),
 ```sql
 BEGIN TRANSACTION;
 
-INSERT INTO employees (name, department, salary) 
+INSERT INTO employees (name, department, salary)
 VALUES ('员工1', '技术部', 7000),
        ('员工2', '市场部', 6500),
        -- ... 更多记录
@@ -84,7 +84,7 @@ COMMIT;
 ```sql
 INSERT INTO employees (id, name, department, salary)
 VALUES (1, '张三', '技术部', 8000)
-ON DUPLICATE KEY UPDATE 
+ON DUPLICATE KEY UPDATE
     name = VALUES(name),
     department = VALUES(department),
     salary = VALUES(salary);
@@ -95,8 +95,8 @@ ON DUPLICATE KEY UPDATE
 ```sql
 INSERT INTO employees (id, name, department, salary)
 VALUES (1, '张三', '技术部', 8000)
-ON CONFLICT (id) 
-DO UPDATE SET 
+ON CONFLICT (id)
+DO UPDATE SET
     name = EXCLUDED.name,
     department = EXCLUDED.department,
     salary = EXCLUDED.salary;
@@ -111,7 +111,7 @@ USING (VALUES (1, '张三', '技术部', 8000)) AS source (id, name, department,
 WHEN MATCHED THEN
     UPDATE SET name = source.name, department = source.department, salary = source.salary
 WHEN NOT MATCHED THEN
-    INSERT (id, name, department, salary) 
+    INSERT (id, name, department, salary)
     VALUES (source.id, source.name, source.department, source.salary);
 ```
 
@@ -140,7 +140,7 @@ WHERE condition;
 SELECT * FROM employees WHERE department = 'IT' AND salary < 6000;
 
 -- 执行更新
-UPDATE employees 
+UPDATE employees
 SET salary = salary * 1.1  -- 涨薪10%
 WHERE department = 'IT' AND salary < 6000;
 ```
@@ -154,7 +154,7 @@ WHERE department = 'IT' AND salary < 6000;
 UPDATE employees e
 SET salary = salary * 1.05
 WHERE department_id IN (
-    SELECT department_id FROM departments 
+    SELECT department_id FROM departments
     WHERE location = '北京'
 );
 ```
@@ -191,9 +191,9 @@ END;
 
 ```sql
 -- 每次更新1000条记录，避免锁表时间过长
-UPDATE employees 
-SET status = 'active' 
-WHERE status = 'inactive' 
+UPDATE employees
+SET status = 'active'
+WHERE status = 'inactive'
 LIMIT 1000;
 ```
 
@@ -218,7 +218,7 @@ DELETE FROM table_name WHERE condition;
 
 ```sql
 -- 1. 先备份重要数据
-CREATE TABLE employees_backup AS 
+CREATE TABLE employees_backup AS
 SELECT * FROM employees WHERE department = '临时部门';
 
 -- 2. 开启事务
@@ -248,7 +248,7 @@ WHERE c.status = 'inactive';
 **使用子查询删除**：
 
 ```sql
-DELETE FROM products 
+DELETE FROM products
 WHERE category_id IN (
     SELECT id FROM categories WHERE discontinued = 1
 );
@@ -258,8 +258,8 @@ WHERE category_id IN (
 
 ```sql
 -- 每次删除1000条，避免事务过大
-DELETE FROM log_records 
-WHERE created_date < '2020-01-01' 
+DELETE FROM log_records
+WHERE created_date < '2020-01-01'
 LIMIT 1000;
 ```
 
@@ -273,7 +273,7 @@ ALTER TABLE employees ADD COLUMN is_deleted BOOLEAN DEFAULT FALSE;
 ALTER TABLE employees ADD COLUMN deleted_at TIMESTAMP;
 
 -- 逻辑删除：更新标记而非真正删除
-UPDATE employees 
+UPDATE employees
 SET is_deleted = TRUE, deleted_at = CURRENT_TIMESTAMP
 WHERE id = 123;
 
@@ -298,7 +298,7 @@ MERGE INTO target_table AS target
 USING source_table AS source
     ON target.key_column = source.key_column
 WHEN MATCHED THEN
-    UPDATE SET 
+    UPDATE SET
         target.column1 = source.column1,
         target.column2 = source.column2
 WHEN NOT MATCHED THEN
@@ -314,16 +314,16 @@ WHEN NOT MATCHED THEN
 -- 同步每日销售数据到汇总表
 MERGE INTO sales_summary AS target
 USING daily_sales AS source
-    ON target.product_id = source.product_id 
+    ON target.product_id = source.product_id
     AND target.sale_date = source.sale_date
 WHEN MATCHED THEN
-    UPDATE SET 
+    UPDATE SET
         target.quantity = target.quantity + source.quantity,
         target.revenue = target.revenue + source.revenue,
         target.last_updated = CURRENT_TIMESTAMP
 WHEN NOT MATCHED THEN
     INSERT (product_id, sale_date, quantity, revenue, last_updated)
-    VALUES (source.product_id, source.sale_date, source.quantity, 
+    VALUES (source.product_id, source.sale_date, source.quantity,
             source.revenue, CURRENT_TIMESTAMP);
 ```
 
@@ -341,7 +341,7 @@ UPDATE accounts SET balance = balance - 100 WHERE id = 1;
 UPDATE accounts SET balance = balance + 100 WHERE id = 2;
 
 -- 根据执行情况提交或回滚
-IF @@ERROR = 0 
+IF @@ERROR = 0
     COMMIT TRANSACTION;
 ELSE
     ROLLBACK TRANSACTION;
@@ -381,7 +381,7 @@ COMMIT TRANSACTION;
 
 3. **查询优化**：
    - 使用 EXPLAIN 分析执行计划
-   - 避免 SELECT *，明确指定需要的列
+   - 避免 SELECT \*，明确指定需要的列
    - 优化关联查询的联接条件
 
 ### 7.2 安全最佳实践
@@ -428,21 +428,21 @@ VALUES ('ORD20251003001', 12345, CURRENT_TIMESTAMP, 299.99);
 
 -- 2. 插入订单明细
 INSERT INTO order_items (order_id, product_id, quantity, price)
-VALUES 
+VALUES
     ('ORD20251003001', 101, 1, 199.99),
     ('ORD20251003001', 205, 2, 50.00);
 
 -- 3. 更新库存
-UPDATE products 
-SET stock_quantity = stock_quantity - 1 
+UPDATE products
+SET stock_quantity = stock_quantity - 1
 WHERE product_id = 101;
 
-UPDATE products 
-SET stock_quantity = stock_quantity - 2 
+UPDATE products
+SET stock_quantity = stock_quantity - 2
 WHERE product_id = 205;
 
 -- 4. 更新用户统计
-UPDATE customer_statistics 
+UPDATE customer_statistics
 SET total_orders = total_orders + 1,
     total_spent = total_spent + 299.99
 WHERE customer_id = 12345;
@@ -457,21 +457,21 @@ COMMIT TRANSACTION;
 BEGIN TRANSACTION;
 
 -- 1. 逻辑标记待归档数据
-UPDATE orders 
+UPDATE orders
 SET archive_flag = TRUE
-WHERE order_date < '2023-01-01' 
+WHERE order_date < '2023-01-01'
 AND archive_flag = FALSE;
 
 -- 2. 插入到归档表
-INSERT INTO orders_archive 
+INSERT INTO orders_archive
 SELECT * FROM orders WHERE archive_flag = TRUE;
 
 -- 3. 删除已归档数据（分批进行）
-DELETE FROM orders 
-WHERE archive_flag = TRUE 
+DELETE FROM orders
+WHERE archive_flag = TRUE
 AND order_id IN (
-    SELECT order_id FROM orders 
-    WHERE archive_flag = TRUE 
+    SELECT order_id FROM orders
+    WHERE archive_flag = TRUE
     LIMIT 1000
 );
 

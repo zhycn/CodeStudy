@@ -354,13 +354,13 @@ import java.util.Map;
 
 @Component
 public class InMemoryPersister {
-    
+
     private final Map<String, StateMachine<OrderStates, OrderEvents>> storage = new HashMap<>();
-    
+
     public void persist(StateMachine<OrderStates, OrderEvents> stateMachine, String orderId) {
         storage.put(orderId, stateMachine);
     }
-    
+
     public StateMachine<OrderStates, OrderEvents> restore(String orderId) {
         return storage.get(orderId);
     }

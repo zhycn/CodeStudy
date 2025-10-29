@@ -23,12 +23,12 @@ author: zhycn
 
 ### 1.2 存储过程 vs 函数 vs 触发器
 
-| 特性 | 存储过程 | 用户定义函数 | 触发器 |
-|------|---------|------------|--------|
-| 调用方式 | 显式调用 | 在表达式中调用 | 事件自动触发 |
-| 返回值 | 可返回多个结果集 | 返回单个值或表 | 无返回值 |
-| 事务控制 | 支持完整事务控制 | 通常不支持 | 依赖触发语句的事务 |
-| 参数类型 | 输入、输出参数 | 仅输入参数 | 特殊上下文参数 |
+| 特性     | 存储过程         | 用户定义函数   | 触发器             |
+| -------- | ---------------- | -------------- | ------------------ |
+| 调用方式 | 显式调用         | 在表达式中调用 | 事件自动触发       |
+| 返回值   | 可返回多个结果集 | 返回单个值或表 | 无返回值           |
+| 事务控制 | 支持完整事务控制 | 通常不支持     | 依赖触发语句的事务 |
+| 参数类型 | 输入、输出参数   | 仅输入参数     | 特殊上下文参数     |
 
 ## 2. 存储过程的创建与参数传递
 
@@ -79,8 +79,8 @@ CREATE PROCEDURE UpdateEmployeeSalary(
     IN p_salary_increase DECIMAL(10,2)
 )
 BEGIN
-    UPDATE employees 
-    SET salary = salary + p_salary_increase 
+    UPDATE employees
+    SET salary = salary + p_salary_increase
     WHERE employee_id = p_employee_id;
 END;
 ```
@@ -96,9 +96,9 @@ CREATE OR REPLACE FUNCTION CalculateDepartmentStats(
 )
 AS $$
 BEGIN
-    SELECT AVG(salary), COUNT(*) 
+    SELECT AVG(salary), COUNT(*)
     INTO p_avg_salary, p_employee_count
-    FROM employees 
+    FROM employees
     WHERE department_id = p_department_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -132,18 +132,18 @@ CREATE PROCEDURE CreateEmployee(
 )
 BEGIN
     DECLARE error_message VARCHAR(255);
-    
+
     -- 参数验证
     IF p_name IS NULL OR LENGTH(TRIM(p_name)) = 0 THEN
         SET error_message = '员工姓名不能为空';
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
     END IF;
-    
+
     IF p_salary < 0 THEN
         SET error_message = '工资不能为负数';
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = error_message;
     END IF;
-    
+
     -- 插入数据
     INSERT INTO employees (name, salary, department_id, created_at)
     VALUES (p_name, p_salary, p_department_id, NOW());
@@ -186,7 +186,7 @@ DELIMITER ;
 -- PostgreSQL 示例：员工等级评估
 CREATE OR REPLACE FUNCTION EvaluateEmployeeLevel(
     p_employee_id INTEGER
-) 
+)
 RETURNS VARCHAR(20) AS $$
 DECLARE
     v_performance_score INTEGER;
@@ -194,14 +194,14 @@ DECLARE
 BEGIN
     SELECT performance_score INTO v_performance_score
     FROM employees WHERE employee_id = p_employee_id;
-    
+
     v_employee_level := CASE
         WHEN v_performance_score >= 90 THEN '优秀'
         WHEN v_performance_score >= 80 THEN '良好'
         WHEN v_performance_score >= 70 THEN '合格'
         ELSE '待改进'
     END;
-    
+
     RETURN v_employee_level;
 END;
 $$ LANGUAGE plpgsql;
@@ -220,11 +220,11 @@ CREATE PROCEDURE GenerateTestData(
 )
 BEGIN
     DECLARE counter INT DEFAULT 0;
-    
+
     WHILE counter < p_record_count DO
         INSERT INTO test_table (name, value, created_at)
         VALUES (CONCAT('Test ', counter), RAND() * 100, NOW());
-        
+
         SET counter = counter + 1;
     END WHILE;
 END //
@@ -241,13 +241,13 @@ DELIMITER //
 CREATE PROCEDURE ProcessUntilCondition()
 BEGIN
     DECLARE counter INT DEFAULT 0;
-    
+
     my_loop: LOOP
         SET counter = counter + 1;
-        
+
         -- 执行处理逻辑
         UPDATE records SET processed = TRUE WHERE id = counter;
-        
+
         -- 退出条件
         IF counter >= 100 THEN
             LEAVE my_loop;
@@ -280,30 +280,30 @@ BEGIN
         ROLLBACK;
         RESIGNAL;
     END;
-    
+
     -- 开始事务
     START TRANSACTION;
-    
+
     -- 检查余额
-    SELECT balance INTO from_balance 
+    SELECT balance INTO from_balance
     FROM accounts WHERE account_id = p_from_account FOR UPDATE;
-    
+
     IF from_balance < p_transfer_amount THEN
-        SIGNAL SQLSTATE '45000' 
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = '余额不足';
     END IF;
-    
+
     -- 执行转账
-    UPDATE accounts SET balance = balance - p_transfer_amount 
+    UPDATE accounts SET balance = balance - p_transfer_amount
     WHERE account_id = p_from_account;
-    
-    UPDATE accounts SET balance = balance + p_transfer_amount 
+
+    UPDATE accounts SET balance = balance + p_transfer_amount
     WHERE account_id = p_to_account;
-    
+
     -- 记录交易
     INSERT INTO transactions (from_account, to_account, amount, transaction_time)
     VALUES (p_from_account, p_to_account, p_transfer_amount, NOW());
-    
+
     COMMIT;
 END //
 
@@ -327,32 +327,32 @@ BEGIN
         -- 开始事务块
         BEGIN
             -- 检查余额
-            SELECT balance INTO from_balance 
+            SELECT balance INTO from_balance
             FROM accounts WHERE account_id = p_from_account FOR UPDATE;
-            
+
             IF from_balance < p_amount THEN
                 RAISE EXCEPTION '余额不足';
             END IF;
-            
+
             -- 执行转账
-            UPDATE accounts SET balance = balance - p_amount 
+            UPDATE accounts SET balance = balance - p_amount
             WHERE account_id = p_from_account;
-            
-            UPDATE accounts SET balance = balance + p_amount 
+
+            UPDATE accounts SET balance = balance + p_amount
             WHERE account_id = p_to_account;
-            
+
             -- 记录交易
             INSERT INTO transactions (from_account, to_account, amount, transaction_time)
             VALUES (p_from_account, p_to_account, p_amount, NOW());
-            
+
             RETURN TRUE;
-            
+
         EXCEPTION
             WHEN others THEN
                 ROLLBACK;
                 RAISE;
         END;
-        
+
     END;
 END;
 $$ LANGUAGE plpgsql;
@@ -404,43 +404,43 @@ BEGIN
     INSERT INTO orders (customer_id, order_date, shipping_address, status)
     VALUES (p_customer_id, NOW(), p_shipping_address, 'pending')
     RETURNING order_id INTO v_order_id;
-    
+
     -- 解析产品列表
     v_product_data := string_to_array(p_product_list, ',');
-    
+
     FOREACH v_product_info SLICE 1 IN ARRAY v_product_data
     LOOP
         v_product_id := v_product_info[1]::INTEGER;
         v_quantity := v_product_info[2]::INTEGER;
-        
+
         -- 检查库存
         SELECT stock_quantity INTO v_stock_quantity
         FROM products WHERE product_id = v_product_id FOR UPDATE;
-        
+
         IF v_stock_quantity < v_quantity THEN
             RAISE EXCEPTION '产品 % 库存不足', v_product_id;
         END IF;
-        
+
         -- 添加订单详情
         INSERT INTO order_items (order_id, product_id, quantity, unit_price)
         SELECT v_order_id, v_product_id, v_quantity, price
         FROM products WHERE product_id = v_product_id;
-        
+
         -- 更新库存
-        UPDATE products 
+        UPDATE products
         SET stock_quantity = stock_quantity - v_quantity
         WHERE product_id = v_product_id;
     END LOOP;
-    
+
     -- 更新订单总额
-    UPDATE orders 
+    UPDATE orders
     SET total_amount = (
-        SELECT SUM(quantity * unit_price) 
-        FROM order_items 
+        SELECT SUM(quantity * unit_price)
+        FROM order_items
         WHERE order_id = v_order_id
     )
     WHERE order_id = v_order_id;
-    
+
     RETURN v_order_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -460,30 +460,30 @@ BEGIN
     DECLARE done INT DEFAULT FALSE;
     DECLARE customer_id_val INT;
     DECLARE customer_name_val VARCHAR(255);
-    DECLARE migration_cursor CURSOR FOR 
+    DECLARE migration_cursor CURSOR FOR
         SELECT id, name FROM old_customers WHERE migrated = FALSE LIMIT p_batch_size;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
+
     SET p_processed_count = 0;
-    
+
     OPEN migration_cursor;
-    
+
     migration_loop: LOOP
         FETCH migration_cursor INTO customer_id_val, customer_name_val;
         IF done THEN
             LEAVE migration_loop;
         END IF;
-        
+
         -- 数据转换和迁移逻辑
         INSERT INTO new_customers (customer_id, full_name, created_at)
         VALUES (customer_id_val, customer_name_val, NOW());
-        
+
         -- 标记为已迁移
         UPDATE old_customers SET migrated = TRUE WHERE id = customer_id_val;
-        
+
         SET p_processed_count = p_processed_count + 1;
     END LOOP;
-    
+
     CLOSE migration_cursor;
 END //
 
@@ -543,10 +543,10 @@ $$ LANGUAGE plpgsql;
    ```sql
    -- 不推荐：使用游标逐行处理
    DECLARE cur CURSOR FOR SELECT * FROM large_table;
-   
+
    -- 推荐：使用集合操作
-   UPDATE large_table 
-   SET processed = TRUE 
+   UPDATE large_table
+   SET processed = TRUE
    WHERE batch_id = p_batch_id;
    ```
 
@@ -559,7 +559,7 @@ $$ LANGUAGE plpgsql;
        IN p_end_date DATE
    )
    BEGIN
-       SELECT * FROM orders 
+       SELECT * FROM orders
        WHERE order_date BETWEEN p_start_date AND p_end_date;
    END;
    ```
@@ -580,7 +580,7 @@ $$ LANGUAGE plpgsql;
    -- 不安全：动态 SQL 拼接
    SET @sql = CONCAT('SELECT * FROM ', p_table_name, ' WHERE id = ', p_id);
    PREPARE stmt FROM @sql;
-   
+
    -- 安全：使用参数化查询
    SELECT * FROM orders WHERE order_id = p_order_id;
    ```
@@ -603,15 +603,15 @@ CREATE OR REPLACE FUNCTION GenerateSupplyChainReport(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT 
+    SELECT
         p.product_id,
         p.product_name,
         COALESCE(SUM(oi.quantity), 0)::INTEGER as total_ordered,
         COALESCE(SUM(CASE WHEN o.status = 'delivered' THEN oi.quantity ELSE 0 END), 0)::INTEGER as total_delivered,
-        CASE 
+        CASE
             WHEN COALESCE(SUM(oi.quantity), 0) = 0 THEN 0
             ELSE ROUND(
-                COALESCE(SUM(CASE WHEN o.status = 'delivered' THEN oi.quantity ELSE 0 END), 0) * 100.0 / 
+                COALESCE(SUM(CASE WHEN o.status = 'delivered' THEN oi.quantity ELSE 0 END), 0) * 100.0 /
                 COALESCE(SUM(oi.quantity), 1), 2
             )
         END as delivery_success_rate
@@ -641,14 +641,14 @@ BEGIN
     DECLARE product_name_val VARCHAR(255);
     DECLARE current_stock_val INT;
     DECLARE alert_message VARCHAR(500);
-    
+
     DECLARE inventory_cursor CURSOR FOR
         SELECT product_id, product_name, stock_quantity
         FROM products
         WHERE stock_quantity <= p_threshold_level;
-        
+
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
+
     -- 创建临时表存储预警结果
     CREATE TEMPORARY TABLE IF NOT EXISTS inventory_alerts (
         product_id INT,
@@ -657,30 +657,30 @@ BEGIN
         alert_message VARCHAR(500),
         alert_time DATETIME
     );
-    
+
     OPEN inventory_cursor;
-    
+
     read_loop: LOOP
         FETCH inventory_cursor INTO product_id_val, product_name_val, current_stock_val;
         IF done THEN
             LEAVE read_loop;
         END IF;
-        
+
         SET alert_message = CONCAT(
-            '产品 "', product_name_val, '" 库存不足。当前库存: ', 
+            '产品 "', product_name_val, '" 库存不足。当前库存: ',
             current_stock_val, ', 阈值: ', p_threshold_level
         );
-        
-        INSERT INTO inventory_alerts 
+
+        INSERT INTO inventory_alerts
         (product_id, product_name, current_stock, alert_message, alert_time)
         VALUES (product_id_val, product_name_val, current_stock_val, alert_message, NOW());
     END LOOP;
-    
+
     CLOSE inventory_cursor;
-    
+
     -- 返回预警结果
     SELECT * FROM inventory_alerts;
-    
+
     DROP TEMPORARY TABLE inventory_alerts;
 END //
 

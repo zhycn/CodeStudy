@@ -17,12 +17,12 @@ Spring Statemachine 中的延迟事件（Deferred Events）是一种特殊的事
 
 ### 1.3 延迟事件 vs 立即事件
 
-| 特性 | 立即事件 | 延迟事件 |
-|------|---------|---------|
-| 处理时机 | 立即处理 | 推迟到合适状态处理 |
-| 状态要求 | 必须在当前状态可处理 | 可在后续状态处理 |
-| 返回值 | 立即返回接受/拒绝 | 返回接受但延迟处理 |
-| 内存占用 | 无额外存储 | 需要存储事件数据 |
+| 特性     | 立即事件             | 延迟事件           |
+| -------- | -------------------- | ------------------ |
+| 处理时机 | 立即处理             | 推迟到合适状态处理 |
+| 状态要求 | 必须在当前状态可处理 | 可在后续状态处理   |
+| 返回值   | 立即返回接受/拒绝    | 返回接受但延迟处理 |
+| 内存占用 | 无额外存储           | 需要存储事件数据   |
 
 ## 2. 核心概念与工作原理
 
@@ -158,7 +158,7 @@ public void configure(StateMachineStateConfigurer<String, String> states) throws
     deferredEvents.add("DEFERRED_ALPHA");
     deferredEvents.add("DEFERRED_BETA");
     deferredEvents.add("DEFERRED_GAMMA");
-    
+
     states
         .withStates()
             .initial("SI")
@@ -175,24 +175,24 @@ public void configure(StateMachineStateConfigurer<String, String> states) throws
 ```java
 @Service
 public class EventService {
-    
+
     @Autowired
     private StateMachine<String, String> stateMachine;
-    
+
     public void processEvents() {
         // 启动状态机
         stateMachine.start();
-        
+
         // 发送事件E1 - 立即处理（转换到S1）
         stateMachine.sendEvent("E1");
         System.out.println("当前状态: " + stateMachine.getState().getId());
-        
+
         // 发送事件E2 - 在S1状态下被延迟
         stateMachine.sendEvent("E2");
         System.out.println("事件E2已发送，但被延迟处理");
         System.out.println("当前状态: " + stateMachine.getState().getId());
         System.out.println("延迟事件: " + stateMachine.getDeferredEvents());
-        
+
         // 发送事件E3 - 触发转换到S2，并处理延迟的E2事件
         stateMachine.sendEvent("E3");
         System.out.println("当前状态: " + stateMachine.getState().getId());
@@ -206,17 +206,17 @@ public class EventService {
 ```java
 @Service
 public class ManualDeferredEventService {
-    
+
     @Autowired
     private StateMachine<String, String> stateMachine;
-    
+
     public void manualDeferredEventManagement() {
         stateMachine.start();
-        
+
         // 检查是否有延迟事件
         Collection<Message<String>> deferredEvents = stateMachine.getDeferredEvents();
         System.out.println("延迟事件数量: " + deferredEvents.size());
-        
+
         // 手动处理特定延迟事件
         for (Message<String> event : deferredEvents) {
             if ("SPECIAL_EVENT".equals(event.getPayload())) {
@@ -226,13 +226,13 @@ public class ManualDeferredEventService {
                 }
             }
         }
-        
+
         // 清空所有延迟事件（谨慎使用）
         // stateMachine.getStateMachineAccessor().doWithAllRegions(access -> {
         //     access.resetDeferredEvents();
         // });
     }
-    
+
     private boolean shouldProcessNow(Message<String> event) {
         // 自定义逻辑决定是否现在处理延迟事件
         return true;
@@ -279,7 +279,7 @@ public class AdvancedDeferredConfig extends StateMachineConfigurerAdapter<String
                 .guard(dataProcessableGuard())
                 .action(processDataAction());
     }
-    
+
     @Bean
     public Action<String, String> checkResourceAvailability() {
         return context -> {
@@ -290,7 +290,7 @@ public class AdvancedDeferredConfig extends StateMachineConfigurerAdapter<String
             }
         };
     }
-    
+
     @Bean
     public Guard<String, String> resourceAvailableGuard() {
         return context -> {
@@ -298,7 +298,7 @@ public class AdvancedDeferredConfig extends StateMachineConfigurerAdapter<String
             return isResourceAvailable();
         };
     }
-    
+
     @Bean
     public Guard<String, String> dataProcessableGuard() {
         return context -> {
@@ -306,7 +306,7 @@ public class AdvancedDeferredConfig extends StateMachineConfigurerAdapter<String
             return isResourceAvailable() && isDataValid(context);
         };
     }
-    
+
     @Bean
     public Action<String, String> processDataAction() {
         return context -> {
@@ -314,12 +314,12 @@ public class AdvancedDeferredConfig extends StateMachineConfigurerAdapter<String
             System.out.println("处理数据: " + context.getMessage().getPayload());
         };
     }
-    
+
     private boolean isResourceAvailable() {
         // 实现资源检查逻辑
         return true; // 示例实现
     }
-    
+
     private boolean isDataValid(StateContext<String, String> context) {
         // 实现数据验证逻辑
         return true; // 示例实现
@@ -367,7 +367,7 @@ public class ExceptionHandlingConfig extends StateMachineConfigurerAdapter<Strin
                 .source("ERROR").event("PROCESS")
                 .action(logDeferredEventAction());
     }
-    
+
     @Bean
     public Action<String, String> processingAction() {
         return context -> {
@@ -381,7 +381,7 @@ public class ExceptionHandlingConfig extends StateMachineConfigurerAdapter<Strin
             }
         };
     }
-    
+
     @Bean
     public Guard<String, String> errorResolvedGuard() {
         return context -> {
@@ -389,7 +389,7 @@ public class ExceptionHandlingConfig extends StateMachineConfigurerAdapter<Strin
             return isErrorResolved();
         };
     }
-    
+
     @Bean
     public Action<String, String> logDeferredEventAction() {
         return context -> {
@@ -397,14 +397,14 @@ public class ExceptionHandlingConfig extends StateMachineConfigurerAdapter<Strin
             // 可以记录日志、通知监控系统等
         };
     }
-    
+
     private void processBusinessLogic() throws Exception {
         // 模拟业务逻辑处理
         if (Math.random() > 0.5) {
             throw new Exception("随机业务错误");
         }
     }
-    
+
     private boolean isErrorResolved() {
         // 检查错误是否已解决
         return true; // 示例实现
@@ -461,7 +461,7 @@ public class PerformanceOptimizedConfig extends StateMachineConfigurerAdapter<St
                 .source("PAUSED").event("PROCESS_DATA")
                 .action(logDeferredAction());
     }
-    
+
     @Bean
     public Action<String, String> processDataAction() {
         return context -> {
@@ -472,14 +472,14 @@ public class PerformanceOptimizedConfig extends StateMachineConfigurerAdapter<St
             }
         };
     }
-    
+
     @Bean
     public Action<String, String> logDeferredAction() {
         return context -> {
             // 记录延迟事件信息，但不处理大数据
             String event = context.getEvent();
             System.out.println("记录延迟事件: " + event);
-            
+
             // 对于大数据负载，只存储引用而非完整数据
             if (context.getMessage().getHeaders().containsKey("largeDataRef")) {
                 String dataRef = (String) context.getMessage().getHeaders().get("largeDataRef");
@@ -537,7 +537,7 @@ public class OrderStateMachineConfig extends EnumStateMachineConfigurerAdapter<O
                 .state(OrderStates.CANCELLED)
                 // 配置延迟事件
                 .state(OrderStates.VALIDATING, null, null, Collections.singleton(OrderEvents.CANCEL))
-                .state(OrderStates.PAYMENT_PENDING, null, null, 
+                .state(OrderStates.PAYMENT_PENDING, null, null,
                     Arrays.asList(OrderEvents.SHIP, OrderEvents.CANCEL))
                 .state(OrderStates.PROCESSING, null, null, Collections.singleton(OrderEvents.CANCEL));
     }
@@ -574,7 +574,7 @@ public class OrderStateMachineConfig extends EnumStateMachineConfigurerAdapter<O
                 .source(OrderStates.PROCESSING).event(OrderEvents.SHIP)
                 .action(shipOrderAction());
     }
-    
+
     @Bean
     public Action<OrderStates, OrderEvents> shipOrderAction() {
         return context -> {
@@ -590,30 +590,30 @@ public class OrderStateMachineConfig extends EnumStateMachineConfigurerAdapter<O
 ```java
 @Service
 public class OrderService {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     private Map<String, Object> orderContext = new ConcurrentHashMap<>();
-    
+
     public void createOrder(String orderId, Order orderDetails) {
         // 初始化订单上下文
         orderContext.put(orderId, orderDetails);
-        
+
         // 启动状态机并发送初始事件
         stateMachine.start();
         stateMachine.sendEvent(MessageBuilder
             .withPayload(OrderEvents.VALIDATE)
             .setHeader("orderId", orderId)
             .build());
-        
+
         System.out.println("订单创建并开始验证: " + orderId);
     }
-    
+
     public void processPayment(String orderId, Payment payment) {
         // 模拟支付处理
         boolean paymentSuccess = processPaymentLogic(payment);
-        
+
         if (paymentSuccess) {
             stateMachine.sendEvent(MessageBuilder
                 .withPayload(OrderEvents.PAYMENT_RECEIVED)
@@ -628,66 +628,66 @@ public class OrderService {
             System.out.println("支付失败: " + orderId);
         }
     }
-    
+
     public void requestShipment(String orderId) {
         // 发送发货请求（可能在支付完成前发送，会被延迟）
         stateMachine.sendEvent(MessageBuilder
             .withPayload(OrderEvents.SHIP)
             .setHeader("orderId", orderId)
             .build());
-        
+
         System.out.println("发货请求已发送: " + orderId);
         printDeferredEvents(orderId);
     }
-    
+
     public void cancelOrder(String orderId) {
         // 发送取消请求（可能在处理过程中发送，会被延迟）
         stateMachine.sendEvent(MessageBuilder
             .withPayload(OrderEvents.CANCEL)
             .setHeader("orderId", orderId)
             .build());
-        
+
         System.out.println("取消请求已发送: " + orderId);
         printDeferredEvents(orderId);
     }
-    
+
     private void printDeferredEvents(String orderId) {
         Collection<Message<OrderEvents>> deferredEvents = stateMachine.getDeferredEvents();
         if (!deferredEvents.isEmpty()) {
             System.out.println("订单 " + orderId + " 的延迟事件: ");
             for (Message<OrderEvents> event : deferredEvents) {
-                System.out.println(" - " + event.getPayload() + 
+                System.out.println(" - " + event.getPayload() +
                                  " (时间: " + event.getHeaders().getTimestamp() + ")");
             }
         }
     }
-    
+
     private boolean processPaymentLogic(Payment payment) {
         // 模拟支付处理逻辑
         return Math.random() > 0.2; // 80% 成功率
     }
-    
+
     @EventListener
     public void onStateChange(StateMachineEvent<OrderStates, OrderEvents> event) {
         // 监听状态变化，处理延迟事件
         if (event instanceof OnTransitionEndEvent) {
-            OnTransitionEndEvent<OrderStates, OrderEvents> transitionEvent = 
+            OnTransitionEndEvent<OrderStates, OrderEvents> transitionEvent =
                 (OnTransitionEndEvent<OrderStates, OrderEvents>) event;
-            
+
             String orderId = (String) transitionEvent.getStateMachine().getExtendedState()
                 .getVariables().get("orderId");
-            
+
             if (orderId != null) {
-                System.out.println("订单 " + orderId + " 状态变化: " + 
+                System.out.println("订单 " + orderId + " 状态变化: " +
                     transitionEvent.getTransition().getSource().getId() + " -> " +
                     transitionEvent.getTransition().getTarget().getId());
-                
+
                 // 检查并处理延迟事件
                 processDeferredEvents(orderId);
             }
         }
     }
-    
+
     private void processDeferredEvents(String orderId) {
         // 在实际应用中，这里可以添加特定的业务逻辑来处理延迟事件
         System.out.println("检查订单 " + orderId + " 的延迟事件...");
@@ -703,18 +703,18 @@ public class OrderService {
 ```java
 @Configuration
 public class DeferredEventMonitorConfig {
-    
+
     @Bean
     public StateMachineListener<OrderStates, OrderEvents> deferredEventMonitor() {
         return new StateMachineListenerAdapter<OrderStates, OrderEvents>() {
-            
+
             @Override
             public void eventNotAccepted(Message<OrderEvents> event) {
                 System.out.println("事件被拒绝: " + event.getPayload());
             }
-            
+
             @Override
-            public void stateChanged(State<OrderStates, OrderEvents> from, 
+            public void stateChanged(State<OrderStates, OrderEvents> from,
                                    State<OrderStates, OrderEvents> to) {
                 if (from != null && to != null) {
                     System.out.println("状态变化: " + from.getId() + " -> " + to.getId());
@@ -722,7 +722,7 @@ public class DeferredEventMonitorConfig {
                     checkDeferredEvents();
                 }
             }
-            
+
             private void checkDeferredEvents() {
                 // 在实际应用中，可以通过 StateMachineAccessor 访问延迟事件
                 // 这里只是示例
@@ -738,28 +738,28 @@ public class DeferredEventMonitorConfig {
 ```java
 @Component
 public class DeferredEventLogger {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(DeferredEventLogger.class);
-    
+
     @EventListener
     public void logDeferredEvents(StateMachineEvent<OrderStates, OrderEvents> event) {
         if (event instanceof OnEventNotAcceptedEvent) {
-            OnEventNotAcceptedEvent<OrderStates, OrderEvents> notAcceptedEvent = 
+            OnEventNotAcceptedEvent<OrderStates, OrderEvents> notAcceptedEvent =
                 (OnEventNotAcceptedEvent<OrderStates, OrderEvents>) event;
-            
+
             logger.info("事件未被接受，可能被延迟: {}", notAcceptedEvent.getEvent());
-            
+
             // 记录详细信息到审计日志
-            auditLogDeferredEvent(notAcceptedEvent.getEvent(), 
+            auditLogDeferredEvent(notAcceptedEvent.getEvent(),
                                 notAcceptedEvent.getStateMachine().getState().getId());
         }
     }
-    
+
     private void auditLogDeferredEvent(Message<OrderEvents> event, OrderStates currentState) {
         // 记录到审计数据库或文件
-        logger.debug("延迟事件审计 - 事件: {}, 当前状态: {}, 时间: {}", 
+        logger.debug("延迟事件审计 - 事件: {}, 当前状态: {}, 时间: {}",
                    event.getPayload(), currentState, new Date());
-        
+
         // 可以添加更多审计信息，如用户ID、订单ID等
         if (event.getHeaders().containsKey("orderId")) {
             String orderId = (String) event.getHeaders().get("orderId");
@@ -801,29 +801,29 @@ management:
 ```java
 @Component
 public class StateMachineHealthIndicator implements HealthIndicator {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Override
     public Health health() {
         // 检查延迟事件队列大小
         int deferredEventCount = stateMachine.getDeferredEvents().size();
-        
+
         // 构建健康状态信息
-        Health.Builder builder = deferredEventCount < 100 ? 
+        Health.Builder builder = deferredEventCount < 100 ?
             Health.up() : Health.down();
-        
+
         return builder
             .withDetail("current_state", stateMachine.getState().getId().toString())
             .withDetail("deferred_events_count", deferredEventCount)
             .withDetail("deferred_events", getDeferredEventDetails())
             .build();
     }
-    
+
     private List<String> getDeferredEventDetails() {
         return stateMachine.getDeferredEvents().stream()
-            .map(event -> event.getPayload() + " at " + 
+            .map(event -> event.getPayload() + " at " +
                  new Date(event.getHeaders().getTimestamp()))
             .collect(Collectors.toList());
     }
@@ -835,23 +835,23 @@ public class StateMachineHealthIndicator implements HealthIndicator {
 ```java
 @Configuration
 public class MetricsConfig {
-    
+
     @Autowired
     private MeterRegistry meterRegistry;
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @PostConstruct
     public void initMetrics() {
         // 注册延迟事件数量的指标
-        Gauge.builder("statemachine.deferred_events.count", 
+        Gauge.builder("statemachine.deferred_events.count",
                      stateMachine, sm -> sm.getDeferredEvents().size())
             .description("Number of deferred events in the state machine")
             .register(meterRegistry);
-        
+
         // 注册状态机状态的指标
-        Gauge.builder("statemachine.current_state", 
+        Gauge.builder("statemachine.current_state",
                      stateMachine, sm -> {
                          try {
                              return Double.parseDouble(sm.getState().getId().toString().replace("STATE_", ""));
@@ -877,16 +877,16 @@ public class MetricsConfig {
 @Configuration
 @EnableStateMachine
 public class MemorySafeConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     private static final int MAX_DEFERRED_EVENTS = 1000;
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<String, String> config) throws Exception {
         config
             .withConfiguration()
                 .listener(deferredEventMonitor());
     }
-    
+
     @Bean
     public StateMachineListener<String, String> deferredEventMonitor() {
         return new StateMachineListenerAdapter<String, String>() {
@@ -898,12 +898,12 @@ public class MemorySafeConfig extends StateMachineConfigurerAdapter<String, Stri
                     handleDeferredEventOverflow(sm);
                 }
             }
-            
+
             private void handleDeferredEventOverflow(StateMachine<String, String> stateMachine) {
                 // 1. 记录警告日志
-                log.warn("Deferred events queue overflow detected. Size: {}", 
+                log.warn("Deferred events queue overflow detected. Size: {}",
                         stateMachine.getDeferredEvents().size());
-                
+
                 // 2. 清理最旧的延迟事件
                 List<Message<String>> events = new ArrayList<>(stateMachine.getDeferredEvents());
                 if (!events.isEmpty()) {
@@ -913,7 +913,7 @@ public class MemorySafeConfig extends StateMachineConfigurerAdapter<String, Stri
                     });
                     log.warn("Removed oldest deferred event: {}", oldestEvent.getPayload());
                 }
-                
+
                 // 3. 发送警报或采取其他措施
                 sendAlertNotification();
             }
@@ -931,41 +931,41 @@ public class MemorySafeConfig extends StateMachineConfigurerAdapter<String, Stri
 ```java
 @Component
 public class PersistentDeferredEventService {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Autowired
     private DeferredEventRepository repository;
-    
+
     @EventListener
     public void onStateMachineStart(StateMachineStartEvent<OrderStates, OrderEvents> event) {
         // 状态机启动时恢复延迟事件
         restoreDeferredEvents();
     }
-    
+
     @EventListener
     public void onEventDeferred(OnEventDeferredEvent<OrderStates, OrderEvents> event) {
         // 事件被延迟时保存到持久化存储
         saveDeferredEvent(event.getMessage());
     }
-    
+
     @EventListener
     public void onEventProcessed(OnTransitionEndEvent<OrderStates, OrderEvents> event) {
         // 事件被处理时从持久化存储中移除
         removeProcessedEvents();
     }
-    
+
     private void saveDeferredEvent(Message<OrderEvents> event) {
         DeferredEventEntity entity = new DeferredEventEntity();
         entity.setEventType(event.getPayload().toString());
         entity.setEventData(serializeEventData(event));
         entity.setCreationTime(new Date());
         entity.setMachineId(stateMachine.getId());
-        
+
         repository.save(entity);
     }
-    
+
     private void restoreDeferredEvents() {
         List<DeferredEventEntity> events = repository.findByMachineId(stateMachine.getId());
         for (DeferredEventEntity entity : events) {
@@ -973,17 +973,17 @@ public class PersistentDeferredEventService {
             stateMachine.sendEvent(event);
         }
     }
-    
+
     private String serializeEventData(Message<OrderEvents> event) {
         // 实现事件数据的序列化逻辑
         return event.getPayload() + "|" + event.getHeaders().toString();
     }
-    
+
     private Message<OrderEvents> deserializeEventData(DeferredEventEntity entity) {
         // 实现事件数据的反序列化逻辑
         String[] parts = entity.getEventData().split("\\|");
         OrderEvents eventType = OrderEvents.valueOf(parts[0]);
-        
+
         return MessageBuilder.withPayload(eventType)
             .setHeader("restored", true)
             .setHeader("originalTime", entity.getCreationTime())
@@ -1002,7 +1002,7 @@ public class PersistentDeferredEventService {
 @Configuration
 @EnableStateMachine
 public class PriorityAwareConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<String, String> config) throws Exception {
         config
@@ -1010,20 +1010,20 @@ public class PriorityAwareConfig extends StateMachineConfigurerAdapter<String, S
                 .beanFactory(null)
                 .taskExecutor(createPriorityAwareExecutor());
     }
-    
+
     private TaskExecutor createPriorityAwareExecutor() {
         return new TaskExecutor() {
-            private final PriorityBlockingQueue<Runnable> priorityQueue = 
+            private final PriorityBlockingQueue<Runnable> priorityQueue =
                 new PriorityBlockingQueue<>(100, Comparator.comparingInt(this::getPriority));
-            
+
             private final ExecutorService executor = new ThreadPoolExecutor(
                 1, 1, 0L, TimeUnit.MILLISECONDS, priorityQueue);
-            
+
             @Override
             public void execute(Runnable task) {
                 executor.execute(task);
             }
-            
+
             private int getPriority(Runnable runnable) {
                 // 根据任务类型确定优先级
                 if (runnable.toString().contains("DeferredEvent")) {
@@ -1033,7 +1033,7 @@ public class PriorityAwareConfig extends StateMachineConfigurerAdapter<String, S
             }
         };
     }
-    
+
     @Bean
     public StateMachineListener<String, String> priorityEventListener() {
         return new StateMachineListenerAdapter<String, String>() {
@@ -1043,7 +1043,7 @@ public class PriorityAwareConfig extends StateMachineConfigurerAdapter<String, S
                 int priority = calculateEventPriority(event);
                 event.getHeaders().put("priority", priority);
             }
-            
+
             private int calculateEventPriority(Message<String> event) {
                 if ("URGENT".equals(event.getHeaders().get("type"))) {
                     return 1;
@@ -1065,7 +1065,7 @@ public class PriorityAwareConfig extends StateMachineConfigurerAdapter<String, S
 @Configuration
 @EnableStateMachine
 public class PerformanceOptimizedConfig extends StateMachineConfigurerAdapter<String, String> {
-    
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<String, String> config) throws Exception {
         config
@@ -1073,7 +1073,7 @@ public class PerformanceOptimizedConfig extends StateMachineConfigurerAdapter<St
                 .taskExecutor(createOptimizedExecutor())
                 .taskScheduler(createOptimizedScheduler());
     }
-    
+
     private TaskExecutor createOptimizedExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
@@ -1083,7 +1083,7 @@ public class PerformanceOptimizedConfig extends StateMachineConfigurerAdapter<St
         executor.initialize();
         return executor;
     }
-    
+
     private TaskScheduler createOptimizedScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(2);
@@ -1091,19 +1091,19 @@ public class PerformanceOptimizedConfig extends StateMachineConfigurerAdapter<St
         scheduler.initialize();
         return scheduler;
     }
-    
+
     @Bean
     public StateMachineListener<String, String> performanceMonitor() {
         return new StateMachineListenerAdapter<String, String>() {
             private final MeterRegistry meterRegistry = new SimpleMeterRegistry();
-            private final DistributionSummary deferredEventSize = 
+            private final DistributionSummary deferredEventSize =
                 DistributionSummary.builder("sm.deferred.size")
                     .register(meterRegistry);
-            
+
             @Override
             public void eventDeferred(Message<String> event) {
                 deferredEventSize.record(getStateMachine().getDeferredEvents().size());
-                
+
                 // 监控延迟事件处理时间
                 Timer.Sample sample = Timer.start(meterRegistry);
                 // ... 事件处理逻辑
@@ -1119,33 +1119,33 @@ public class PerformanceOptimizedConfig extends StateMachineConfigurerAdapter<St
 ```java
 @Component
 public class MemoryOptimizationService {
-    
+
     private static final int MAX_EVENT_HISTORY = 100;
     private final Map<String, LinkedList<Message<?>>> eventHistory = new ConcurrentHashMap<>();
-    
+
     @EventListener
     public void onEventDeferred(OnEventDeferredEvent<?, ?> event) {
         String machineId = event.getStateMachine().getId();
-        
+
         // 维护事件历史，防止内存泄漏
         LinkedList<Message<?>> history = eventHistory.computeIfAbsent(
             machineId, k -> new LinkedList<>());
-        
+
         history.add(event.getMessage());
-        
+
         // 清理过旧的历史记录
         while (history.size() > MAX_EVENT_HISTORY) {
             history.removeFirst();
         }
     }
-    
+
     @EventListener
     public void onStateMachineStop(StateMachineStopEvent<?, ?> event) {
         // 状态机停止时清理相关资源
         String machineId = event.getStateMachine().getId();
         eventHistory.remove(machineId);
     }
-    
+
     public List<Message<?>> getEventHistory(String machineId) {
         return Collections.unmodifiableList(
             eventHistory.getOrDefault(machineId, new LinkedList<>()));
@@ -1161,44 +1161,44 @@ public class MemoryOptimizationService {
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class DeferredEventTest {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Test
     public void testEventDeferral() {
         stateMachine.start();
-        
+
         // 发送应在当前状态被延迟的事件
         stateMachine.sendEvent(OrderEvents.SHIP);
-        
+
         // 验证事件被延迟
         assertEquals("事件应该被延迟", 1, stateMachine.getDeferredEvents().size());
         assertEquals("应该保持在当前状态", OrderStates.CREATED, stateMachine.getState().getId());
-        
+
         // 转换到可以处理延迟事件的状态
         stateMachine.sendEvent(OrderEvents.VALIDATE);
         stateMachine.sendEvent(OrderEvents.VALIDATION_SUCCESS);
         stateMachine.sendEvent(OrderEvents.REQUEST_PAYMENT);
         stateMachine.sendEvent(OrderEvents.PAYMENT_RECEIVED);
-        
+
         // 验证延迟事件已被处理
         assertEquals("延迟事件应该已被处理", 0, stateMachine.getDeferredEvents().size());
     }
-    
+
     @Test
     public void testDeferredEventOrder() {
         stateMachine.start();
-        
+
         // 发送多个事件，其中一些应该被延迟
         stateMachine.sendEvent(OrderEvents.SHIP);
         stateMachine.sendEvent(OrderEvents.CANCEL);
         stateMachine.sendEvent(OrderEvents.VALIDATE);
-        
+
         // 验证延迟事件的数量和顺序
         Collection<Message<OrderEvents>> deferredEvents = stateMachine.getDeferredEvents();
         assertEquals("应该有2个延迟事件", 2, deferredEvents.size());
-        
+
         // 验证事件顺序（需要根据具体实现调整）
         Iterator<Message<OrderEvents>> iterator = deferredEvents.iterator();
         assertEquals("第一个延迟事件应该是SHIP", OrderEvents.SHIP, iterator.next().getPayload());
@@ -1213,41 +1213,41 @@ public class DeferredEventTest {
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DeferredEventIntegrationTest {
-    
+
     @Autowired
     private TestRestTemplate restTemplate;
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Test
     public void testDeferredEventsInDistributedEnvironment() throws InterruptedException {
         // 模拟分布式环境下的延迟事件处理
         String orderId = "test-order-001";
-        
+
         // 创建订单
         ResponseEntity<String> createResponse = restTemplate.postForEntity(
             "/orders", new OrderRequest(orderId), String.class);
         assertEquals(200, createResponse.getStatusCodeValue());
-        
+
         // 发送应在当前状态被延迟的事件（发货请求）
         ResponseEntity<String> shipResponse = restTemplate.postForEntity(
             "/orders/" + orderId + "/ship", null, String.class);
         assertEquals(202, shipResponse.getStatusCodeValue()); // 请求被接受但延迟处理
-        
+
         // 验证订单状态
         ResponseEntity<OrderStatus> statusResponse = restTemplate.getForEntity(
             "/orders/" + orderId + "/status", OrderStatus.class);
         assertEquals(OrderStates.PAYMENT_PENDING, statusResponse.getBody().getState());
-        
+
         // 完成支付（应该触发延迟事件处理）
         ResponseEntity<String> paymentResponse = restTemplate.postForEntity(
             "/orders/" + orderId + "/payment", new PaymentRequest("100.00"), String.class);
         assertEquals(200, paymentResponse.getStatusCodeValue());
-        
+
         // 等待异步处理完成
         Thread.sleep(1000);
-        
+
         // 验证延迟事件已被处理
         statusResponse = restTemplate.getForEntity(
             "/orders/" + orderId + "/status", OrderStatus.class);
@@ -1262,32 +1262,32 @@ public class DeferredEventIntegrationTest {
 @SpringBootTest
 @ActiveProfiles("test")
 public class DeferredEventPerformanceTest {
-    
+
     @Autowired
     private StateMachine<OrderStates, OrderEvents> stateMachine;
-    
+
     @Test
     public void testDeferredEventThroughput() {
         stateMachine.start();
-        
+
         int eventCount = 1000;
         long startTime = System.currentTimeMillis();
-        
+
         // 发送大量事件
         for (int i = 0; i < eventCount; i++) {
             stateMachine.sendEvent(OrderEvents.SHIP);
         }
-        
+
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        
+
         System.out.println("Processed " + eventCount + " events in " + duration + "ms");
         System.out.println("Throughput: " + (eventCount * 1000 / duration) + " events/second");
-        
+
         // 性能断言
-        assertTrue("吞吐量应大于1000 events/second", 
+        assertTrue("吞吐量应大于1000 events/second",
                   (eventCount * 1000 / duration) > 1000);
-        assertTrue("延迟事件队列大小应合理", 
+        assertTrue("延迟事件队列大小应合理",
                   stateMachine.getDeferredEvents().size() <= eventCount);
     }
 }

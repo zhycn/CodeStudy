@@ -40,8 +40,8 @@ SUM() 函数计算数值列的总和，会自动忽略 NULL 值。
 SELECT SUM(salary) AS total_salary FROM employees;
 
 -- 按部门计算工资总额
-SELECT department_id, SUM(salary) AS department_salary 
-FROM employees 
+SELECT department_id, SUM(salary) AS department_salary
+FROM employees
 GROUP BY department_id;
 ```
 
@@ -63,11 +63,11 @@ MAX() 和 MIN() 分别返回列中的最大值和最小值，适用于数值、�
 
 ```sql
 -- 获取最高和最低工资
-SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary 
+SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary
 FROM employees;
 
 -- 获取最早和最晚的入职日期
-SELECT MIN(hire_date) AS earliest_hire, MAX(hire_date) AS latest_hire 
+SELECT MIN(hire_date) AS earliest_hire, MAX(hire_date) AS latest_hire
 FROM employees;
 ```
 
@@ -102,7 +102,7 @@ FROM employees;
 
 ### 2.3 聚合函数中的 NULL 处理
 
-大多数聚合函数会自动忽略 NULL 值，但 COUNT(*) 例外，它会计算所有行包括包含 NULL 的行。在处理可能包含 NULL 值的数据时，可以使用 COALESCE 或 IFNULL 函数提供默认值：
+大多数聚合函数会自动忽略 NULL 值，但 COUNT(\*) 例外，它会计算所有行包括包含 NULL 的行。在处理可能包含 NULL 值的数据时，可以使用 COALESCE 或 IFNULL 函数提供默认值：
 
 ```sql
 -- 将 NULL 工资视为 0 计算平均值
@@ -126,7 +126,7 @@ GROUP BY column_name;
 **示例：按部门分组统计员工信息**
 
 ```sql
-SELECT 
+SELECT
     department_id,
     COUNT(*) AS employee_count,
     AVG(salary) AS average_salary,
@@ -141,7 +141,7 @@ GROUP BY department_id;
 
 ```sql
 -- 按部门和职位分组统计
-SELECT 
+SELECT
     department_id,
     job_title,
     COUNT(*) AS employee_count,
@@ -159,7 +159,7 @@ GROUP BY department_id, job_title;
    SELECT department_id, job_title, COUNT(*)
    FROM employees
    GROUP BY department_id, job_title;
-   
+
    -- 错误写法（在某些数据库中将报错）
    SELECT department_id, job_title, COUNT(*)
    FROM employees
@@ -183,12 +183,12 @@ HAVING 和 WHERE 都用于过滤数据，但它们在执行时机和应用对象
 
 ### 4.1 执行时机和作用对象对比
 
-| 特性 | WHERE 子句 | HAVING 子句 |
-|------|------------|-------------|
-| **执行时机** | 在分组前执行 | 在分组后执行 |
-| **作用对象** | 过滤原始表中的行 | 过滤分组后的结果集 |
-| **聚合函数** | 不能直接使用聚合函数 | 可以使用聚合函数 |
-| **语法位置** | GROUP BY 之前 | GROUP BY 之后 |
+| 特性         | WHERE 子句           | HAVING 子句        |
+| ------------ | -------------------- | ------------------ |
+| **执行时机** | 在分组前执行         | 在分组后执行       |
+| **作用对象** | 过滤原始表中的行     | 过滤分组后的结果集 |
+| **聚合函数** | 不能直接使用聚合函数 | 可以使用聚合函数   |
+| **语法位置** | GROUP BY 之前        | GROUP BY 之后      |
 
 ### 4.2 实际应用示例
 
@@ -242,7 +242,7 @@ GROUPING SETS 允许在单个查询中指定多个分组方式，避免多次查
 
 ```sql
 -- 同时按部门、按性别、以及全公司统计员工数量
-SELECT 
+SELECT
     department,
     gender,
     COUNT(*) AS employee_count
@@ -261,7 +261,7 @@ ROLLUP 用于生成分层的小计和总计，特别适合制作汇总报表。
 
 ```sql
 -- 生成部门内职位的小计和部门总计
-SELECT 
+SELECT
     department,
     job_title,
     COUNT(*) AS employee_count,
@@ -276,7 +276,7 @@ CUBE 生成所有可能的组合汇总，比 ROLLUP 更全面（注：MySQL 不�
 
 ```sql
 -- PostgreSQL: 生成所有维度组合的汇总
-SELECT 
+SELECT
     department,
     gender,
     COUNT(*) AS employee_count
@@ -289,7 +289,7 @@ GROUP BY CUBE(department, gender);
 使用 GROUPING() 函数可以识别哪些行是汇总行。
 
 ```sql
-SELECT 
+SELECT
     department,
     job_title,
     GROUPING(department) AS is_department_total,
@@ -318,7 +318,7 @@ GROUP BY ROLLUP(department, job_title);
    ```sql
    -- 为分组列创建索引
    CREATE INDEX idx_employee_department ON employees(department_id);
-   
+
    -- 为分组和过滤列创建复合索引
    CREATE INDEX idx_orders_region_date ON orders(region, order_date);
    ```
@@ -328,7 +328,7 @@ GROUP BY ROLLUP(department, job_title);
    ```sql
    -- 不推荐
    SELECT * FROM employees GROUP BY department_id;
-   
+
    -- 推荐
    SELECT department_id, COUNT(*) FROM employees GROUP BY department_id;
    ```
@@ -339,7 +339,7 @@ GROUP BY ROLLUP(department, job_title);
 
    ```sql
    -- 明确处理 NULL 值
-   SELECT 
+   SELECT
        department_id,
        AVG(COALESCE(salary, 0)) AS avg_salary,
        COUNT(salary) AS employees_with_salary,
@@ -357,7 +357,7 @@ GROUP BY ROLLUP(department, job_title);
    JOIN orders o ON c.customer_id = o.customer_id
    JOIN order_items oi ON o.order_id = oi.order_id
    GROUP BY c.customer_id;
-   
+
    -- 正确：先聚合再关联
    WITH order_counts AS (
        SELECT customer_id, COUNT(*) AS order_count
@@ -373,7 +373,7 @@ GROUP BY ROLLUP(department, job_title);
 
    ```sql
    -- 统计各部门男女员工平均工资
-   SELECT 
+   SELECT
        department,
        AVG(CASE WHEN gender = 'M' THEN salary END) AS male_avg_salary,
        AVG(CASE WHEN gender = 'F' THEN salary END) AS female_avg_salary,
@@ -390,7 +390,7 @@ GROUP BY ROLLUP(department, job_title);
 ```sql
 -- 使用 CTE 组织复杂聚合逻辑
 WITH department_stats AS (
-    SELECT 
+    SELECT
         department,
         COUNT(*) AS employee_count,
         AVG(salary) AS avg_salary
@@ -398,12 +398,12 @@ WITH department_stats AS (
     GROUP BY department
 ),
 company_stats AS (
-    SELECT 
+    SELECT
         COUNT(*) AS total_employees,
         AVG(avg_salary) AS company_avg_salary
     FROM department_stats
 )
-SELECT 
+SELECT
     ds.department,
     ds.employee_count,
     ds.avg_salary,
@@ -420,7 +420,7 @@ WHERE ds.employee_count > 5;
 
 ```sql
 -- 综合电商数据分析查询
-SELECT 
+SELECT
     EXTRACT(YEAR FROM order_date) AS order_year,
     EXTRACT(MONTH FROM order_date) AS order_month,
     region,
@@ -444,8 +444,8 @@ ORDER BY order_year, order_month, region;
 
 ### 7.2 常见问题解答
 
-**Q: COUNT(*) 和 COUNT(列名) 有什么区别？**
-A: COUNT(*) 统计所有行数（包括 NULL），COUNT(列名) 只统计该列非 NULL 值的数量。
+**Q: COUNT(\*) 和 COUNT(列名) 有什么区别？**
+A: COUNT(\*) 统计所有行数（包括 NULL），COUNT(列名) 只统计该列非 NULL 值的数量。
 
 **Q: 能否在 WHERE 子句中使用聚合函数？**
 A: 不能，WHERE 子句在分组前执行，此时聚合函数尚未计算。应使用 HAVING 子句过滤聚合结果。
